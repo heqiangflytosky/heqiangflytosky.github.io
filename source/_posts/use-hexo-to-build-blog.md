@@ -39,6 +39,8 @@ deploy:
   type: git
   repository: https://github.com/heqiangflytosky/heqiangflytosky.github.io.git
   branch: master
+  name: heqiang
+  email: heqiangfly@163.com
 ```
 注意：每一项的填写，其:后面都要保留一个空格，下同。
 ### 发布到github

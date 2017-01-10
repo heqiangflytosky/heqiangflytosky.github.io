@@ -71,3 +71,5 @@ deploy:
   type: git
   repository: https://github.com/heqiangflytosky/heqiangflytosky.github.io.git
   branch: master
+  name: heqiang
+  email: heqiangfly@163.com
