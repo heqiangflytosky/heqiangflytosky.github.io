@@ -98,6 +98,30 @@ timezone: Asia/Shanghai
 ```
 $ npm install hexo-generator-feed --save
 ```
+### 添加百度sitemap
+站点地图，方便搜索引擎的收录
+```
+$ npm install hexo-generator-baidu-sitemap --save
+```
+### 添加CNZZ统计
+首先要在[CNZZ网站](http://i.umeng.com/signup)注册一个帐号，复制一种你喜欢的统计格式的代码，在themes/landscape/layout/_partial/新建文件cnzz.ejs，加入代码：
+```
+<% if (theme.cnzz){ %>
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261134288'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261134288' type='text/javascript'%3E%3C/script%3E"));</script>
+<% } %>
+```
+把第一行与最后一行之间的代码替换成你自己的代码。
+然后，在页面的某个位置添加你期望站长统计出现的位置，比如我是在footer.ejs里面加上以下代码：
+```
+<%- partial('cnzz') %>
+```
+然后在themes/landscape/_config.yml里面打开统计开关：
+添加代码：
+```
+#### Analytics
+cnzz: true
+```
+就会在页面左下角出现站长统计了。
 ### 主题
 博客的整体配置在D:\hexo\_config.yml文件中进行。默认使用的主题是landscape，主题的配置在D:\hexo\themes\landscape\_config.yml。
 
