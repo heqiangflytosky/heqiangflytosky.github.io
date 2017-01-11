@@ -83,6 +83,16 @@ $ git push origin hexo
 修改_config.yml文件：
 skip_render: README.md
 在source目录下创建README.md文件。
+其他几种情况下的写法：
+ - 单个文件夹下全部文件：skip_render: demo/*
+ - 单个文件夹下指定类型文件：skip_render: demo/*.html
+ - 单个文件夹下全部文件以及子目录:skip_render: demo/**
+ - 多个文件夹以及各种复杂情况：
+ ```
+ skip_render:
+    - 'demo/*.html'
+    - 'demo/**'
+ ```
 ### 修改网站相关信息
 修改根目录下面的_config.yml文件
 ```
@@ -103,6 +113,24 @@ $ npm install hexo-generator-feed --save
 ```
 $ npm install hexo-generator-baidu-sitemap --save
 ```
+我们在百度里面搜索site:heqiangfly.com，发现没有我们的博客并没有被百度收录，也就是说你的博客别人可能会看不到，下面来解决这个问题。
+进入[链接提交](http://zhanzhang.baidu.com/linksubmit/url)，然后[验证网站所有权](http://zhanzhang.baidu.com/site/siteadd)，选择文件验证，下面baidu_verify_IIJFGFbbEX.html文件到source/目录下面。
+修改_config.yml
+```
+skip_render: 
+  - README.md
+  - baidu_verify_IIJFGFbbEX.html
+```
+按照说明完成验证。
+在百度站长平台里面的站点管理里面看到是否验证成功。
+上面进行步骤成功之后，进入站点信息->网页抓取->链接提交->详情，按照说明进行设置。
+在百度里面搜索site:heqiangfly.com，有记录说明是被收录了。
+### 添加Google收录
+```
+$ npm install hexo-generator-sitemap --save
+```
+谷歌操作比较简单，就是向[Google站长工具](https://www.google.com/webmasters/tools/home?hl=zh-CN)提交sitemap。
+类似百度，通过HTML文件方式验证通过后，在站点里选择 抓取->站点地图里 添加/测试站点地图。
 ### 添加CNZZ统计
 首先要在[CNZZ网站](http://i.umeng.com/signup)注册一个帐号，复制一种你喜欢的统计格式的代码，在themes/landscape/layout/_partial/新建文件cnzz.ejs，加入代码：
 ```
