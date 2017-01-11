@@ -1,5 +1,8 @@
 ---
 title: Hexo+GitHub搭建个人博客
+comments: true
+keywords: Hexo, Blog, GitHub
+description: 使用Hexo在GitHub上搭建个人博客
 ---
 ## 本地环境搭建
 ### 安装git
@@ -86,12 +89,34 @@ skip_render: README.md
 title: 寒江蓑笠的个人博客 #网站title
 subtitle: 天道酬勤  #副标题，网站名下面
 description: 技术博客     //网站描述，便于搜索引擎用关键词检索
-author: JohnnyHe
+author: QH
 language: zh-CN
 timezone: Asia/Shanghai
 ```
+### 添加RSS
+安装RSS插件
+```
+$ npm install hexo-generator-feed --save
+```
 ### 主题
 博客的整体配置在D:\hexo\_config.yml文件中进行。默认使用的主题是landscape，主题的配置在D:\hexo\themes\landscape\_config.yml。
+
+## 发表博客
+### 文章信息
+```
+title: Hexo+GitHub搭建个人博客
+layout: post
+date: 2017-01-010 15:00:00
+comments: true
+categories: Blog
+tags: 
+keywords: Hexo, Blog, GitHub
+description: 使用Hexo在GitHub上搭建个人博客
+```
+### 设置摘要
+```
+以上是文章摘要 <!--more--> 以下是余下全文
+```
 
 ## Hexo常用命令
 - hexo generate = hexo g          #生成
@@ -99,6 +124,8 @@ timezone: Asia/Shanghai
 - hexo deploy = hexo d            #部署
 - hexo new "博客"= hexo n "博客"   #新建文章
 - hexo clean                      #清除缓存,清除缓存文件 db.json 和已生成的静态文件 public。 网页正常情况下可以忽略此条命令
+- hexo new "postName"             #新建文章
+- hexo new page "pageName"        #新建页面
 
 
 
