@@ -3,6 +3,8 @@ title: Hexo+GitHub搭建个人博客
 comments: true
 keywords: Hexo, Blog, GitHub
 description: 使用Hexo在GitHub上搭建个人博客
+date: 2017-01-010 13:00:00
+keywords: Hexo, Blog, GitHub
 ---
 ## 本地环境搭建
 ### 安装git
@@ -96,7 +98,7 @@ skip_render: README.md
 ### 修改网站相关信息
 修改根目录下面的_config.yml文件
 ```
-title: 寒江蓑笠的个人博客 #网站title
+title: 孤舟蓑笠翁，独钓寒江雪 #网站title
 subtitle: 天道酬勤  #副标题，网站名下面
 description: 技术博客     //网站描述，便于搜索引擎用关键词检索
 author: QH
@@ -124,14 +126,16 @@ skip_render:
 按照说明完成验证。
 在百度站长平台里面的站点管理里面看到是否验证成功。
 上面进行步骤成功之后，进入站点信息->网页抓取->链接提交->详情，按照说明进行设置。
-在百度里面搜索site:heqiangfly.com，有记录说明是被收录了。
+完成后等一段时间，在百度里面搜索site:heqiangfly.com，有记录说明是被收录了。
 ### 添加Google收录
 ```
 $ npm install hexo-generator-sitemap --save
 ```
 谷歌操作比较简单，就是向[Google站长工具](https://www.google.com/webmasters/tools/home?hl=zh-CN)提交sitemap。
 类似百度，通过HTML文件方式验证通过后，在站点里选择 抓取->站点地图里 添加/测试站点地图。
-### 添加CNZZ统计
+完成后等一段时间（大概一天时间）在Google里面搜索site:heqiangfly.com，就可以看到搜索结果了。
+### 站点访问量统计
+#### 添加CNZZ统计
 首先要在[CNZZ网站](http://i.umeng.com/signup)注册一个帐号，复制一种你喜欢的统计格式的代码，在themes/landscape/layout/_partial/新建文件cnzz.ejs，加入代码：
 ```
 <% if (theme.cnzz){ %>
@@ -150,15 +154,26 @@ $ npm install hexo-generator-sitemap --save
 cnzz: true
 ```
 就会在页面左下角出现站长统计了。
+#### 其他方法
+参考[不蒜子](http://busuanzi.ibruce.info/)的方法。
+### 文章访问量统计
+使用LeanCloud https://notes.wanghao.work/2015-10-21-%E4%B8%BANexT%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB%E9%87%8F%E7%BB%9F%E8%AE%A1%E5%8A%9F%E8%83%BD.html#%E9%85%8D%E7%BD%AELeanCloud
+### 修改日期显示
+打开根目录下的_config.yml文件，修改：
+```
+date_format: YYYY-MM-DD
+```
+即可。
 ### 主题
-博客的整体配置在D:\hexo\_config.yml文件中进行。默认使用的主题是landscape，主题的配置在D:\hexo\themes\landscape\_config.yml。
+[官方推荐的一些主题](https://hexo.io/themes/) 。
+在 Hexo 中有两份主要的配置文件，其名称都是 _config.yml。博客的整体配置在hexo\_config.yml文件中进行。默认使用的主题是landscape，主题的配置在hexo\themes\landscape\_config.yml。
 
 ## 发表博客
 ### 文章信息
 ```
 title: Hexo+GitHub搭建个人博客
 layout: post
-date: 2017-01-010 15:00:00
+date: 2017-01-010 13:00:00
 comments: true
 categories: Blog
 tags: 
@@ -178,6 +193,8 @@ description: 使用Hexo在GitHub上搭建个人博客
 - hexo clean                      #清除缓存,清除缓存文件 db.json 和已生成的静态文件 public。 网页正常情况下可以忽略此条命令
 - hexo new "postName"             #新建文章
 - hexo new page "pageName"        #新建页面
+
+好了，我的GitHub个人博客[孤舟蓑笠翁，独钓寒江雪](www.heqiangfly.com)就是这样炼成的，欢迎大家访问，博客持续更新中。
 
 
 
