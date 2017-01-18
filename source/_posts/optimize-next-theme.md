@@ -26,3 +26,5 @@ comments: true
   }
 }
 ```
+### 阅读次数统计(使用LeanCloud)
+参考[文档](http://theme-next.iissnan.com/third-party-services.html)
