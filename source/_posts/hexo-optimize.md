@@ -157,6 +157,13 @@ tags: Hexo
 ```
 tags: [标签1,标签2,标签3]
 ```
+下面的写法也是可以的：
+```
+tags: 
+ - Hexo
+ - Blog
+ - GitHub
+```
 在主题配置文件中添加
 menu:
   tags: /tags
