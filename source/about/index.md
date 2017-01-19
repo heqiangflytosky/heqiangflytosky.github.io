@@ -1,6 +1,7 @@
 ---
 title: 关于
 date: 2017-01-17 17:12:39
+comments: false
 ---
 ## Johnny He
 Android开发工程师
