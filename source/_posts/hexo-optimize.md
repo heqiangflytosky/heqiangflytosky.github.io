@@ -5,13 +5,16 @@ tags: Hexo
 categories: Hexo
 comments: true
 ---
-## Hexo优化
 ### 创建hexo分支
 为了实现能在更换环境（比如更换电脑）的情况下我们仍然能发布博客，我们创建一个hexo分支用来存放hexo的文件。
 ``` bash
 $ git checkout --orphan hexo
 $ git rm -rf .
+```
+将hexo代码全部copy过来
+```
 $ git add . -A
+$ git commit -m "hexo init"
 $ git push origin hexo
 ```
 这样就用hexo分支来存放网站的原始文件，master分支用来存放生成的静态网页。
@@ -58,6 +61,7 @@ skip_render:
   - README.md
   - baidu_verify_IIJFGFbbEX.html
 ```
+注意-后面要加个空格。
 按照说明完成验证。
 在百度站长平台里面的站点管理里面看到是否验证成功。
 上面进行步骤成功之后，进入站点信息->网页抓取->链接提交->详情，按照说明进行设置。
@@ -92,7 +96,7 @@ cnzz: true
 #### 其他方法
 参考[不蒜子](http://busuanzi.ibruce.info/)的方法。
 ### 文章访问量统计
-使用LeanCloud https://notes.wanghao.work/2015-10-21-%E4%B8%BANexT%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB%E9%87%8F%E7%BB%9F%E8%AE%A1%E5%8A%9F%E8%83%BD.html#%E9%85%8D%E7%BD%AELeanCloud
+使用LeanCloud，参考[文档](https://notes.wanghao.work/2015-10-21-%E4%B8%BANexT%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB%E9%87%8F%E7%BB%9F%E8%AE%A1%E5%8A%9F%E8%83%BD.html#%E9%85%8D%E7%BD%AELeanCloud)
 ### 修改日期显示
 打开根目录下的_config.yml文件，修改：
 ```
@@ -186,6 +190,6 @@ theme: next
 hexo g
 hexo s
 ```
-浏览器中打开http://localhost:4000/。
+浏览器中打开 http://localhost:4000/ 。
 Next主题的具体其他的配置请参考[文档](http://theme-next.iissnan.com/getting-started.html)
 然后再把自己自定义的一些东西，比如CNZZ统计迁移过来即可。

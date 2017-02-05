@@ -14,9 +14,9 @@ date: 2017-01-010 13:00:00
 
 ## 配置Github
 ### 建立Repository
-首先在github上面建一个仓库username.github.io
+首先在github上面建一个仓库username.github.io，username是你github的用户名。此时访问 http://heqiangflytosky.github.io/ ，就会访问到你创建的git的内容。
 ### 域名配置
-首先要购买一个域名，然后进入域名解析页面，添加一个CNAME记录，指向username.github.io即可。配置好一般等待TTL缓存的时间过后，博客建好后，访问你的域名heqiangfly.com，你会发现已经调整到你的博客页面了。
+首先要购买一个域名，然后进入域名解析页面，添加一个CNAME记录，指向username.github.io即可。配置好一般等待TTL缓存的时间过后，博客建好后，访问你的域名heqiangfly.com，你会发现已经跳转到你的博客页面了。
 
 ## 安装Hexo
 ### 安装Hexo
@@ -35,7 +35,7 @@ $ hexo g
 ``` bash
 $ hexo s
 ```
-浏览器输入http://localhost:4000/，查看搭建效果。
+浏览器输入 http://localhost:4000/ ，查看搭建效果。
 ### 配置Hexo
 编辑更目录下面的_config.yml文件
 ```
@@ -47,6 +47,15 @@ deploy:
   branch: master
   name: heqiang
   email: heqiangfly@163.com
+```
+这里的name和email在你每次部署提交到master分支的时候，会生成在提交信息里面：
+```
+commit c201b7e15aba41f9c874c2ee79223becba477fac
+Author: heqiang <heqiangfly@163.com>
+Date:   Tue Jan 10 13:05:22 2017 +0800
+
+    Site updated: 2017-01-10 13:05:22
+
 ```
 注意：每一项的填写，其:后面都要保留一个空格，下同。
 ### 发布到github
@@ -76,13 +85,19 @@ $ hexo d
 ```
 title: Hexo+GitHub搭建个人博客
 layout: post
-date: 2017-01-010 13:00:00
+date: 2017-01-10 13:00:00
 comments: true
 categories: Blog
 tags: 
 keywords: Hexo, Blog, GitHub
 description: 使用Hexo在GitHub上搭建个人博客
 ```
+title：文章的标题
+date：文章的发表日期
+comments：是否允许评论
+categories：此文章的分类
+tag：文章的标签
+keywords：文章内容的关键字
 ### 设置摘要
 ```
 以上是文章摘要 <!--more--> 以下是余下全文
