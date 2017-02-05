@@ -180,6 +180,7 @@ menu:
 cd hexo\themes
 git clone https://github.com/iissnan/hexo-theme-next next
 ```
+注意：next为一个git仓库，可以采用submodule方式来管理，也可以把next下面的.git删除，然后再提交。
 #### 启用主题
 打开next根目录下面的配置文件_config.yml，修改
 ```
