@@ -3,7 +3,7 @@ title: 开始了解React Native
 categories: React Native
 comments: true
 tags: [React Native]
-date: 2017-01-18 10:00:00
+date: 2017-01-10 10:00:00
 ---
 ## React是什么？
 React起源于Facebook的内部项目，因为 FB 对市场上所有 JavaScript MVC 框架，都不满意，就决定自己写一套，用来架设 Instagram 的网站。做出来以后，发现这套东西很好用，就在2013年5月开源了。

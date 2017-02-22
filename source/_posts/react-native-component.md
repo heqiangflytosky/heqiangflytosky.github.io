@@ -3,7 +3,7 @@ title: React Native-组件Component
 categories: React Native
 comments: true
 tags: [React Native]
-date: 2017-01-19 10:00:00
+date: 2017-01-12 10:00:00
 ---
 ## 创建一个Component
 一个组件类可以像前面Hello World工程中那样通过 `class HelloWorldAppp extends Component` 来创建，或者通过`React.createClass`来创建，并且提供一个render方法以及其他可选的生命周期函数、组件相关的事件或方法定义。

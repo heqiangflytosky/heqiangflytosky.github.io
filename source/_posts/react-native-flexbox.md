@@ -3,7 +3,7 @@ title: React Native-flexbox
 categories: React Native
 comments: true
 tags: [React Native]
-date: 2017-01-19 15:00:00
+date: 2017-01-13 12:00:00
 ---
 ## 介绍flexbox布局
 flexbox是React Native应用开发中必不可少的内容，也是最常用的内容。flexbox是由W3C在2009年提出的一种新的布局方案，该布局可以简单快速地完成各种伸缩性的设计。

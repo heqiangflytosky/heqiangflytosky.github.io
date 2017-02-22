@@ -1,6 +1,6 @@
 ---
 title: Hexo博客配置优化
-date: 2017-01-16 17:32:57
+date: 2016-01-11 10:00:00
 tags: Hexo
 categories: Hexo
 comments: true

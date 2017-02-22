@@ -3,7 +3,7 @@ title: React Native-Image控件
 categories: React Native
 comments: true
 tags: [React Native]
-date: 2017-01-19 12:00:00
+date: 2017-01-13 10:00:00
 ---
 ## 基本用法
 ### 加载本地图片

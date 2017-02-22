@@ -5,7 +5,7 @@ comments: true
 keywords: Hexo, Blog, GitHub
 tags: [Hexo, Blog, GitHub]
 description: 使用Hexo在GitHub上搭建个人博客
-date: 2017-01-010 13:00:00
+date: 2016-01-10 10:00:00
 ---
 ## 本地环境搭建
 ### 安装git
@@ -86,7 +86,7 @@ $ hexo d
 ```
 title: Hexo+GitHub搭建个人博客
 layout: post
-date: 2017-01-10 13:00:00
+date: 2016-01-10 10:00:00
 comments: true
 categories: Blog
 tags: 

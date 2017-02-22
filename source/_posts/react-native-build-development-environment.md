@@ -3,7 +3,7 @@ title: 搭建 React Native 开发环境
 categories: React Native
 comments: true
 tags: [React Native]
-date: 2017-01-18 12:00:00
+date: 2017-01-10 12:00:00
 ---
 本文是对Ubuntu环境下开发环境的搭建
 <!-- more -->
