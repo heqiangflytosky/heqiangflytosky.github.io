@@ -1,6 +1,6 @@
 ---
-title: 开源框架- Lottie 简介
-categories: Android开源框架
+title: 开源项目- Lottie 简介
+categories: Android开源项目
 comments: true
 tags: [Android, Lottie]
 date: 2017-02-07 10:00:00
@@ -10,6 +10,7 @@ Airbnb在GitHub上面开源了一个项目lottie-android，最近火的不要不
 ## Lottie简介
 Lottie是一个为Android和IOS设备提供的一个开源框架，它能够解析通过[Adobe After Effects](http://www.adobe.com/products/aftereffects.html) 软件做出来的动画，动画文件通过[Bodymovin](https://github.com/bodymovin/bodymovin)导出json文件，就可以通过Lottie中的LottieAnimationView来使用了。
 [Bodymovin](https://github.com/bodymovin/bodymovin)是一个After Effects的插件，它由Hernan Torrisi开发。
+<!-- more -->
 我们先看看官方给出的实现的动画效果：
 
 <img src="https://raw.githubusercontent.com/airbnb/lottie-android/master/gifs/Example1.gif"/>

@@ -11,6 +11,7 @@ date: 2017-01-19 12:00:00
 ```
 <Image source={require('./img/baidu.png')}/>
 ```
+
 ### 加载App内资源图片
 
 ```
@@ -22,6 +23,8 @@ date: 2017-01-19 12:00:00
 <Image source={{uri:'http://172.17.137.68/heqiang/2.jpg'}} style={{width: 200, height: 200}}/>
 ```
 资源图片和网络图片必须声明图片寬高，否则不显示。
+<!-- more -->
+
 ### 适配不同平台
 有时我们希望在不同平台之间用不同的图片
 比如baidu.android.png，baidu.ios.png，代码中只需要写baidu.png，便可以适配android和ios平台

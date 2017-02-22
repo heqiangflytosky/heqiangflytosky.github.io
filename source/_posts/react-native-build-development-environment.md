@@ -6,6 +6,7 @@ tags: [React Native]
 date: 2017-01-18 12:00:00
 ---
 本文是对Ubuntu环境下开发环境的搭建
+<!-- more -->
 ## Android Studio
 下载Android Studio2.2: [下载地址](http://www.androiddevtools.cn/)
 下载android-sdk；

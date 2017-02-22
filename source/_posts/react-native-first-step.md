@@ -3,8 +3,10 @@ title: React Native 入门
 categories: React Native
 comments: true
 tags: [React Native]
+description: 本文主要对Helle World的代码进行分析分析
 date: 2017-01-18 15:00:00
 ---
+
 ## Helle World代码分析
 
 ```

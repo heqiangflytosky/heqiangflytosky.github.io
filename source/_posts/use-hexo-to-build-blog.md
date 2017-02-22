@@ -11,6 +11,7 @@ date: 2017-01-010 13:00:00
 ### 安装git
 ### 安装node.js
 去[官网](https://nodejs.org/en/download/)下载node-v5.0.0-linux-x64解压即可
+<!-- more -->
 
 ## 配置Github
 ### 建立Repository
@@ -98,11 +99,13 @@ comments：是否允许评论
 categories：此文章的分类
 tag：文章的标签
 keywords：文章内容的关键字
+description：设置摘要
 ### 设置摘要
+使用`<!--more-->`
 ```
 以上是文章摘要 <!--more--> 以下是余下全文
 ```
-
+这样在主页就只显示文章的摘要内容。
 ## Hexo常用命令
 - hexo generate = hexo g          #生成
 - hexo server = hexo s            #启动服务预览

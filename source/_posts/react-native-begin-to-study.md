@@ -10,7 +10,7 @@ React起源于Facebook的内部项目，因为 FB 对市场上所有 JavaScript 
 由于 React 的设计思想极其独特，属于革命性创新，性能出众，代码逻辑却非常简单。所以，越来越多的人开始关注和使用，认为它可能是将来 Web 开发的主流工具。
 和Backbone、Angular 等MV*框架不一样，它只处理View逻辑 。所以如果你喜欢它，你可以很容易的将它接入到现有工程中，然后用React重写HTML部分即可，不用修改逻辑。
 近几年web领域的技术革新非常迅速，React 也是一项新技术……话说React出来也已经2年了，其实并不算什么新技术了，只是在国内还没有普及开。国内在热更新方面更热衷于纯Native的插件化技术。可以说，Android的未来必将是React-Native和插件化的天下……
-
+<!-- more -->
 ## React Native
 React Native是由React衍生出来的项目，基于React来写的支持编写原生App的框架，目标是希望用写Web App的方式去写Native App。React Native看起来很像React，只不过其基础组件是原生组件而非web组件。
 

@@ -18,6 +18,7 @@ $ git commit -m "hexo init"
 $ git push origin hexo
 ```
 这样就用hexo分支来存放网站的原始文件，master分支用来存放生成的静态网页。
+<!-- more -->
 ### 添加README.md到github
 众所周知hexo会把文件夹内的所有md文件解析成html，而github的readme只支持MD格式，但是我们可以使用下面方式来规避。
 修改_config.yml文件：
