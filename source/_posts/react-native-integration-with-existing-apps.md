@@ -241,7 +241,7 @@ public class Application extends android.app.Application implements ReactApplica
 根目录运行下面命令：
 ```
 adb reverse tcp:8081 tcp:8081
-nmp start
+npm start
 ```
 启动server。
 然后点击Android Studio的运行按钮：
