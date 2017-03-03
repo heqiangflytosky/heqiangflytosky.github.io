@@ -64,8 +64,10 @@ AppRegistry.registerComponent('AwesomeProject', () => HelloWorldAppp);
 首先你需要了解ES2015 （也叫作ES6）——这是一套对JavaScript的语法改进的官方标准。但是这套标准目前还没有在所有的浏览器上完整实现，所以目前而言web开发中还很少使用。React Native内置了对ES2015标准的支持，你可以放心使用而无需担心兼容性问题。上面的示例代码中的`import`、`from`、`class`、`extends`、以及`() =>`箭头函数等新语法都是ES2015中的特性。如果你不熟悉ES2015的话，可以看看阮一峰老师的书，[ES 6 标准入门](http://es6.ruanyifeng.com/)。
 示例中的这一行`<Text>*****</Text>`恐怕很多人看起来也觉得陌生。这叫做JSX——是一种在JavaScript中嵌入XML结构的语法。很多传统的应用框架会设计自有的模板语法，让你在结构标记中嵌入代码。React反其道而行之，设计的JSX语法却是让你在代码中嵌入结构标记。初看起来，这种写法很像web上的HTML，只不过使用的并不是web上常见的标签如`<div>`或是`<span>`等，这里我们使用的是React Native的组件。上面的示例代码中，使用的是内置的`<Text>`组件，它专门用来显示文本。
 上面的代码定义了一个名为`HelloWorldAppp`的新的组件（Component），并且使用了名为`AppRegistry`的内置模块进行了“注册”操作。你在编写React Native应用时，肯定会写出很多新的组件。而一个App的最终界面，其实也就是各式各样的组件的组合。组件本身结构可以非常简单——唯一必须的就是在render方法中返回一些用于渲染结构的JSX语句。`HelloWorldAppp`组件的名称你可以随意定，但`AppRegistry.registerComponent('AwesomeProject', () => HelloWorldAppp);`第一个参数必须和工程名称一致。
-注意，组件类的第一个字母必须大写，否则会报错。另外，组件类只能包含一个顶层标签，否则也会报错。
 `render()`方法为必须有的方法，实现组件渲染功能，返回JSX或其他组件来构成DOM，和Android的XML布局、WPF的XAML布局类似，只能返回一个顶级元素。
+注意：
+ - 组件类的第一个字母必须大写，否则会报错。
+ - 组件类只能包含一个顶层标签，否则也会报错。
 
 ## JSX
 React的核心机制之一就是可以在内存中创建虚拟的DOM元素。React利用虚拟DOM来减少对实际DOM的操作从而提升性能。
@@ -105,5 +107,6 @@ JSX让事件直接绑定在元素上。
 可以看到这里需要调用bind方法，这个方法第一个参数主要用来设置作用域，从第二个参数开始便是我们想要传递的参数了。
 
 ## 调试
-代码中添加打印可以使用`console.log("")`方法，在logcat中过滤ReactNativeJS TAG。
+ - 代码中添加打印可以使用`console.log("")`方法，在logcat中过滤ReactNativeJS TAG。
+ - 在Chrome浏览器中进行调试。
 
