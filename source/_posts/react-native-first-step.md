@@ -10,8 +10,6 @@ date: 2017-01-11 10:00:00
 ## Helle World代码分析
 
 ```
-Helle World代码分析
-
 import React, { Component } from 'react';
 import {
   AppRegistry,

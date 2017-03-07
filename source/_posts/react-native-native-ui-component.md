@@ -9,7 +9,7 @@ date: 2017-01-15 10:00:00
 在React Native开发过程中，有时我们想要使用原生的一个UI组件或者是JS比较难以实现的动画效果时，我们可以在React Naitve应用程序中封装和植入已有的原生组件。
 比如开源项目[Lottie](https://github.com/airbnb/lottie-android)在Android上能够非常简单的实现一些复杂的动画效果，如果我们想在JS中也实现这样的效果呢？很简单，我们可以自己构建一个原生UI组件。
 <!-- more -->
-接下来就以此为例来进行介绍。Lottie官方已经提供了[React Native](https://github.com/airbnb/lottie-react-native)了，但这里我们仅仅是做为例子来介绍。
+接下来就以此为例来进行介绍。Lottie官方已经提供了[React Native版本的Lottie](https://github.com/airbnb/lottie-react-native)了，但这里我们作为例子再来介绍一下。
 [官方中文文档](http://reactnative.cn/docs/0.42/native-component-android.html#content)
 先看一下效果图：
 <img src="/images/react-native-native-ui-compent/lottie.gif" width="360" height="620"/>

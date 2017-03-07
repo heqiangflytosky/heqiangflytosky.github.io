@@ -24,6 +24,7 @@ sudo ln -s /home/heqiang/install/tools/node-v5.0.0-linux-x64/bin/react-native /u
 sudo ln -s /home/heqiang/install/tools/node-v5.0.0-linux-x64/bin/yarn /usr/bin/yarn
 sudo ln -s /home/heqiang/install/tools/node-v5.0.0-linux-x64/bin/yarnpkg /usr/bin/yarnpkg
 ```
+ - `react-native-cli`是React Native的一个命令行工具，用于执行创建、初始化、更新项目、运行打包服务（packager）等任务。
 
 ## 开始创建第一个工程
 ```
@@ -116,6 +117,11 @@ React packager ready.
 点击一下RELOAD，有东西显示了，可以对React Native Say Hello了！
 ![react demo](/images/react-native-build-development-environment/image2.png)
 这个时候可以打开JS，index.android.js，随便写点什么，然后摇一摇，点击RELOAD就可以显示出来了。
+**总结**：运行一个工程需要的步骤：
+ 1. `react-native start`启动React packager
+ 2. `react-native run-android`
+ 3. `adb reverse tcp:8081 tcp:8081`（Android5.0以上）
+ 4. 打开悬浮窗权限
 
 ## 开发工具
 ### Sublime Text 3
