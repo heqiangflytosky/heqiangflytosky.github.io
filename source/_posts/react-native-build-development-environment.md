@@ -8,7 +8,7 @@ date: 2017-01-10 12:00:00
 本文是对Ubuntu环境下开发环境的搭建
 <!-- more -->
 ## Android Studio
-下载Android Studio2.2: [下载地址](http://www.androiddevtools.cn/)
+下载Android Studio2.2，React Native目前需要Android Studio2.0或更高版本: [下载地址](http://www.androiddevtools.cn/)
 下载android-sdk；
 这部分相信Android开发者都懂，不做详细介绍。
 
@@ -83,7 +83,7 @@ sdk.dir=/home/heqiang/install/android-studio/android-sdk-linux
 
 由于我的环境是Android 5.0以上，所以选择第一种方式。
 还是不行，在电脑pc上输入一下网址检查一下：
-http://172.17.137.68:8081/index.Android.bundle?platform=android&dev=true&hot=false&minify=false
+http://172.17.137.68:8081/index.android.bundle?platform=android&dev=true&hot=false&minify=false
 果然是打不开。
 哦，应该是server没有启动起来，启动server了，电脑上启动 react-native start。
 ```

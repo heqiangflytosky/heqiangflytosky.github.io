@@ -25,8 +25,8 @@ flexbox布局由伸缩容器和伸缩项目组成。采用Flex布局的元素称
 该属性用来制定元素是否为伸缩容器，其语法为：
 display:flex | inline-flex
 
- - flex：这个值用于产生块级伸缩容器。
- - inline-flex：这个值用于产生行内级伸缩容器。
+ - flex：这个值用于产生块级伸缩容器，此时时父元素是`block`元素。
+ - inline-flex：这个值用于产生行内级伸缩容器，此时时父元素是`inline`元素。
 
 #### flex-direction
 该属性用于指定主轴方向，其语法为：

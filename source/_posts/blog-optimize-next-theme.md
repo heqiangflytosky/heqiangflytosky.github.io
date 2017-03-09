@@ -59,3 +59,11 @@ date: 2017-01-010 13:00:00
 ```
 ### 阅读次数统计(使用LeanCloud)
 参考[文档](http://theme-next.iissnan.com/third-party-services.html)
+### 加入网站缩略图标
+加入后就可以在浏览器的标签栏或者是收藏夹里面现实网站的缩略图标了。
+在`themes/next/`的`_config.yml`中配置：
+```
+# Put your favicon.ico into `hexo-site/source/` directory.
+favicon: /images/favicon.ico
+```
+然后把图表放到根目录的`source/images/`下面。

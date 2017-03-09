@@ -102,5 +102,5 @@ LottieAnimationView#setAnimation(String, CacheStrategy)
 ```
 来实现它，`CacheStrategy`可以是`Strong`，`Weak`或者是`None`，这样`LottieAnimationView`就可以持有一个已经加载和解析动画的强引用或者弱引用。
 
-先简单介绍到这里，稍后会带来Lottie的源码分析……
+先简单介绍到这里，如需要了解更多请看[Lottie的源码分析](http://www.heqiangfly.com/2017/02/07/open-source-lottie-android-source-code-analysis/)。
 

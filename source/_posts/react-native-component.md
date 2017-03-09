@@ -221,7 +221,13 @@ var HelloWorldAppp = React.createClass({
 ## 组件之间通信
 通过上面的讲解我们可以知道：
 
- - 子组件调用父组件：可以通过`this.props`方法。
- - 父组件调用子组件：可以通过`ref`来实现。
+ - 父组件调用子组件：可以通过`this.props`方法。
+ - 子组件调用父组件：通过回调函数；
+ - 兄弟组件：通过其父组件；通过`ref`来实现；
+ - 没有关联的组件：通过发送事件：Event Emitter/Target/Dispatcher或者可以通过`ref`来实现。
+ - Redux
+ - Flux
+
+这部分后面再介绍。
 
 

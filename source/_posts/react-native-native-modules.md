@@ -18,6 +18,7 @@ date: 2017-01-14 12:00:00
 
 public class MyNativeModule extends ReactContextBaseJavaModule {
     private final static String MODULE_NAME = "MyNativeModule";
+    private static final  String TestEvent = "TestEvent";
     private ReactApplicationContext mContext;
     public MyNativeModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -36,6 +37,7 @@ public class MyNativeModule extends ReactContextBaseJavaModule {
         constants.put("SHORT", Toast.LENGTH_SHORT);
         constants.put("LONG", Toast.LENGTH_LONG);
         constants.put("NATIVE_MODULE_NAME", MODULE_NAME);
+        constants.put(TestEvent, TestEvent);
         return constants;
     }
 
@@ -239,6 +241,9 @@ import { DeviceEventEmitter } from 'react-native';
     });
   }
 ```
+这里可以用`then`方法分别指定`Resolved`状态和`Reject`状态的回调函数。第一个回调函数是`Promise`对象的状态变为`Resolved`时调用，第二个回调函数是`Promise`对象的状态变为`Reject`时调用。其中，第二个函数是可选的，不一定要提供。
+`catch`方法用于指定发生错误时的回调函数。
+结果：`'result1 is ', 'true'`
 
 ### 从startActivityForResult中获取结果
 参考[官方文档](http://reactnative.cn/docs/0.41/native-modules-android.html#content)

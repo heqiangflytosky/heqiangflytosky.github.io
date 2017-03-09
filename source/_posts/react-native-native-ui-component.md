@@ -54,6 +54,7 @@ public class LottieViewManager extends SimpleViewManager<LottieAnimationView> {
         view.loop(loop);
     }
 ```
+这里方法名可以随意定，但是`@ReactProp(name = "loop")`一定要和JS里面调用的属性值对应。
 
 ### 导出一些命令
 ```
