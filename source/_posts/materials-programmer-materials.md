@@ -4,8 +4,10 @@ categories: 学习资料
 comments: true
 tags: [学习资料]
 description:
-date: 2016-12-1 12:00:00
+date: 2016-12-1 10:00:00
 ---
+
+[TOC]
 
 ## 前言
 记录一些作为一名程序员在学习道路上经常用到的一些资料，以备不时之需。
@@ -13,8 +15,11 @@ date: 2016-12-1 12:00:00
 <!-- more -->
 
 ## 资料篇
+
 ### 技术网站
+
 #### 开发社区
+
  - [CSDN](http://www.csdn.net/)：号称全球最大的中文IT社区，很多业界大牛在上面开通有博客
  - [ChinaUnix](http://www.chinaunix.net/)：号称全球最大的Linux/Unix应用与开发者社区
  - [51CTO](http://www.51cto.com/)：中国领先的IT技术网站
@@ -35,6 +40,7 @@ date: 2016-12-1 12:00:00
  - [Android 常用自定义效果和控件](http://a.code4app.com/)：
 
 #### 网站开发
+
  - [Discuz](http://www.discuz.net/)：Discuz社区
  - [Ecshop](http://www.ecshop.com/)：开源网店系统
  - [Shopnc](http://www.shopnc.net/)：商城系统
@@ -43,22 +49,28 @@ date: 2016-12-1 12:00:00
  - [webpy](http://webpy.org/)：Python Web应用框架
 
 #### IT业界资讯
+
  - [虎嗅](http://www.huxiu.com/)：聚合优质的创新信息与人群,捕获精选|深度|犀利的商业科技资讯。
  - [猎云](http://www.lieyunwang.com/)：创业项目推荐创业创新咨询
  - [cnBeta](http://www.cnbeta.com/)：中文业界资讯网站
  - [FreeBuf](http://www.freebuf.com/)：关注黑客与极客
 
 ### 技术博客
+
 #### CSDN博客
+
  - [老罗的Android之旅](http://blog.csdn.net/luoshengyang)：CSDN排名前100，博客专栏“老罗的Android之旅”有对Android从上层应用到底层驱动的介绍，著有《Android系统源代码情景分析》一书。
  - [任玉刚](http://blog.csdn.net/singwhatiwanna)：有“Android源码解析”和“Android开发小栈”两个专栏，著有《Android开发艺术探索》一书。
  - [eclipse_xu徐宜生](http://blog.csdn.net/eclipsexys)：有“Android异步任务处理从零开始”，“android拼图游戏开发记录”和“Android UI开发详解”博客专栏，著有《Android群英传》一书。
 
 #### 个人主页
+
  - [阮一峰的网络日志](http://www.ruanyifeng.com/home.html)：著有《ECMAScript 6入门》一书，并在该网站开源。
 
 ### 微信公众号
+
 #### 技术类
+
  - 移动开发前线
  - WeMobileDev
  - Android程序员
@@ -104,6 +116,7 @@ date: 2016-12-1 12:00:00
  - 最代码：高质量的代码服务
 
 #### 其他
+
  - 斗牛人
  - 伯乐在线：关注职业资讯;学习各类职业感悟、心得和经验分享,扩大职业视野;体会求职、工作和创业的历程 - 就在JobBole.com 伯乐在线
  - 创业新锋
@@ -114,10 +127,13 @@ date: 2016-12-1 12:00:00
  - 移动互联网咨询
 
 ### 开源项目
+
 #### 关于开源项目的网站
+
  - [codeKK](http://p.codekk.com/)：Android开源项目集合、源码解析
 
 #### 知名互联网企业开源项目
+
  - [阿里巴巴GitHub](https://github.com/alibaba)
  - [腾讯开源项目](http://tencentopen.github.io/)，[腾讯GitHub](https://github.com/Tencent)，[腾讯GitHub](https://github.com/TencentOpen)
  - [豆瓣GitHub](https://github.com/douban)
@@ -125,6 +141,7 @@ date: 2016-12-1 12:00:00
  - [网易GitHub](https://github.com/netease)
 
 #### Android
+
  - [RxAndroid](https://github.com/ReactiveX/RxAndroid)：RxJava的Android扩展。
  - [Retrofit](https://github.com/square/retrofit)：Square公司开发的一款针对Android网络请求的框架，Retrofit2底层基于OkHttp实现的。
  - [OkHttp](https://github.com/square/okhttp)：一个处理网络请求的框架。
@@ -135,10 +152,12 @@ date: 2016-12-1 12:00:00
  - [Atlas](https://github.com/alibaba/atlas)：阿里开源项目，运行于Android系统上的一个容器化框架，我们也叫动态组件化(Dynamic Bundle)框架。它主要提供了解耦化、组件化、动态性的支持。覆盖了工程师的工程编码期、Apk运行期以及后续运维期的各种问题。
 
 #### Java
+
  - [JSOUP](https://github.com/jhy/jsoup)：基于Java的HTML解析器。
  - [RxJava](https://github.com/ReactiveX/RxJava)：一个基于事件订阅的异步执行的一个类库。
 
 #### 其他
+
  - [conceal](https://github.com/facebook/conceal)：facebook开源的用来对数据进行快速加密和认证的API。
  - [tensorflow](https://github.com/tensorflow/tensorflow)：google开发的开源深度学习框架。
  - [AE-Element](https://github.com/OYsun/AE-Element)使用bodymovin渲染一些有趣的After Effects矢量元素，可以直接使用[Lottie](https://github.com/airbnb/lottie-android)应用在客户端开发上面。
@@ -146,28 +165,36 @@ date: 2016-12-1 12:00:00
  - [React Native](https://github.com/facebook/react-native)：Facebook开源项目，跨平台开发框架
 
 #### 资料汇总
+
  - [be-a-professional-programmer](https://github.com/stanzhai/be-a-professional-programmer)：汇集了一些程序员的资料，与本篇功能类似
  - [awesome-programming-books](https://github.com/jobbole/awesome-programming-books)：经典编程书籍大全，与本篇功能类似
 
+
 ## 必读书籍
+
 ### Android
+
  - 《Android开发艺术探索》
  - 《App研发录》
 
 ### 程序原理
+
  - 《程序员的自我修养—链接、装载与库》
  - 《链接器和加载器》
 
 ### 虚拟机
+
  - 《深入java虚拟机》
  - 《深入理解Java虚拟机++JVM高级特性与最佳实践》
 
 ### Java
+
  - 《Effective Java》
  - 《Java多线程编程核心技术》
  - 《Java NIO》
 
 ### Linux
+
  - 《Linux内核修炼之道》
  - 《深入理解LINUX内核》
  - 《Linux内核设计与实现》
@@ -177,10 +204,12 @@ date: 2016-12-1 12:00:00
  - 《Linux 多线程服务端编程:使用 muduo C++ 网络库》
 
 ### Web
+
  - 《构建高性能web站点》
  - 《高性能网站构建实战》
 
 ### 个人发展
+
  - 《软技能，代码之外的生存指南》
  - 《总裁日记》
  - 《浪潮之巅》
@@ -196,7 +225,9 @@ date: 2016-12-1 12:00:00
  - 《素书》
 
 ## 工具篇
+
 ### 开发工具
+
  - [Android Developers](https://developer.android.com/index.html)：Android官方开发者网站，有各种开发文档可以阅读，英语不太好的可以选择“简体中文”哦！
  - [AndroidDevTools](http://www.androiddevtools.cn/)：收集和整理了Android SDK、开发工具、开发教程的下载地址
  - [下载qt源码](ftp://ftp.qt-project.org/qt/source/)：
@@ -205,13 +236,16 @@ date: 2016-12-1 12:00:00
 ### 素材站点
 
 ### 常用工具
+
  - GifCam：一个好用的视频转gif工具
  - [jadx](https://github.com/skylot/jadx)：GitHub上面一个好用的反编译工具。
  - [SunSpider](https://webkit.org/perf/sunspider/sunspider.html)：JavaScript Benchmark
  - [JetStream](http://browserbench.org/JetStream/)：JavaScript Benchmark
 
 ### 其他
+
 #### 视频地址解析
+
  - [飞驴视频下载](http://www.flvxz.com/)：
  - [硕鼠](http://www.flvcd.com/)：
 
