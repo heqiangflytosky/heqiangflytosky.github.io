@@ -6,12 +6,12 @@ keywords: SourceCode, Android Studio
 tags: [Android Studio]
 date: 2016-12-3 10:00:00
 ---
-Android 的源码代码亮是非常大的，也有多种代码编辑器来供我们选择来去阅读Android源码，本文将介绍如何将 Android 源码导入到 Android Studio 中来的技巧。
+Android 的源码代码量是非常大的，也有多种代码编辑器来供我们选择来去阅读Android源码，虽然在 Eclipse 和 SourceInsight 上阅读 Android 源码也能带来很好的体验，但习惯于用 Android Studio 来作为应用开发工具的大家肯定也希望用它来阅读源代码。本文将介绍如何将 Android 源码导入到 Android Studio 中来的技巧。
 <!-- more -->
 
 ## 导入源码
 ### 修改Android Studio的配置文件
-由于导入源码时需要消耗大量内存，所以建议修改一`studio64.vmoptions`文件：
+由于导入源码时需要消耗大量内存，所以建议修改`studio64.vmoptions`文件：
 ```
 -Xms1024m
 -Xmx1024m
@@ -75,25 +75,25 @@ development/tools/idegen/idegen.sh
 ## 一些配置
 ### 设置SDK和JDK
 
-![配置](/images/development-tool-import-source-to-android-studio/project.png)
+![配置图](/images/development-tool-import-source-to-android-studio/project.png)
 
 ### 解决源码中跳转错误问题
 设置`Modules`的依赖：
 先将所有依赖删掉，只留下图中的两个(注意:这里删除全部只是为了方便。如果确实用到了.jar，再将它们的路径添加进来就可以了）。
-![配置](/images/development-tool-import-source-to-android-studio/modules-add.png)
+![配置图](/images/development-tool-import-source-to-android-studio/modules-add.png)
 
-点击上图中的'+'并选择上图中的'Jars or directories'选项，依次将`frameworks`和`external`文件夹添加进来。如图：
+点击上图中的'+'并选择上图中的`Jars or directories`选项，依次将`frameworks`和`external`文件夹添加进来。如图：
 
-![配置](/images/development-tool-import-source-to-android-studio/modules-added.png)
+![配置图](/images/development-tool-import-source-to-android-studio/modules-added.png)
 
 推荐把frameworks和external这两个移到最上面，这样在代码跳转时会优先从这两个文件夹下查找，而不是在Android.jar中查找。
 
 ### Debug源码
-我们可以通过给刚导入的工程在'Modules'中添加'Android Framework'来让AS将它作为一个Android工程，从而方便我们调试代码。
+我们可以通过给刚导入的工程在`Modules`中添加`Android Framework`来让AS将它作为一个Android工程，从而方便我们调试代码。
 
-![配置](/images/development-tool-import-source-to-android-studio/debug-add.png)
+![配置图](/images/development-tool-import-source-to-android-studio/debug-add.png)
 
 可以按照上图中来添加Android Framework支持。
 然后我们就可以发现，调试按钮已经可以点击了。
 
-![配置](/images/development-tool-import-source-to-android-studio/debug-added.png)
+![配置图](/images/development-tool-import-source-to-android-studio/debug-added.png)
