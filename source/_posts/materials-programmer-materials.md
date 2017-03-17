@@ -3,7 +3,7 @@ title: 程序员学习资料汇总
 categories: 学习资料
 comments: true
 tags: [学习资料]
-description:记录一些作为一名程序员在学习道路上经常用到的一些资料，以备不时之需
+description: 记录一些作为一名程序员在学习道路上经常用到的一些资料，以备不时之需
 date: 2016-12-1 10:00:00
 ---
 
