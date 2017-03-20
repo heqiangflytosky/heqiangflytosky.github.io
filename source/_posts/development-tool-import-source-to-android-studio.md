@@ -97,3 +97,5 @@ development/tools/idegen/idegen.sh
 然后我们就可以发现，调试按钮已经可以点击了。
 
 ![配置图](/images/development-tool-import-source-to-android-studio/debug-added.png)
+
+有时候遇到过点击调试按钮没有调试进程可以选择，打开`Project Structure`->`Project`，重新选择一下`Projct SDK`就可以了。

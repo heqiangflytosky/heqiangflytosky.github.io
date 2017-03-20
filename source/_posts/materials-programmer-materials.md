@@ -36,6 +36,7 @@ date: 2016-12-1 10:00:00
  - [百度开发者中心](http://developer.baidu.com)：
  - [PHPChina开发者社区](http://www.phpchina.com/)：
  - [Android 常用自定义效果和控件](http://a.code4app.com/)：
+ - [美团点评技术团队](http://tech.meituan.com/)
 
 #### 网站开发
 
@@ -60,6 +61,7 @@ date: 2016-12-1 10:00:00
  - [老罗的Android之旅](http://blog.csdn.net/luoshengyang)：CSDN排名前100，博客专栏“老罗的Android之旅”有对Android从上层应用到底层驱动的介绍，著有《Android系统源代码情景分析》一书。
  - [任玉刚](http://blog.csdn.net/singwhatiwanna)：有“Android源码解析”和“Android开发小栈”两个专栏，著有《Android开发艺术探索》一书。
  - [eclipse_xu徐宜生](http://blog.csdn.net/eclipsexys)：有“Android异步任务处理从零开始”，“android拼图游戏开发记录”和“Android UI开发详解”博客专栏，著有《Android群英传》一书。
+ - [郭霖的专栏](http://blog.csdn.net/guolin_blog)：CSDN排名前100
 
 #### 个人主页
 
@@ -139,6 +141,7 @@ date: 2016-12-1 10:00:00
  - [豆瓣GitHub](https://github.com/douban)
  - [大众点评GitHub](https://github.com/dianping)
  - [网易GitHub](https://github.com/netease)
+ - [美团·大众点评GitHub官方账号](https://github.com/Meituan-Dianping)
 
 #### Android
 
@@ -150,6 +153,11 @@ date: 2016-12-1 10:00:00
  - [Lottie](https://github.com/airbnb/lottie-android)：为Android和IOS设备提供的一个开源框架，它能够解析通过Adobe After Effects 软件做出来的动画，供App使用。
  - [GADownloading](https://github.com/Ajian-studio/GADownloading)：一个比较酷的下载动画
  - [Atlas](https://github.com/alibaba/atlas)：阿里开源项目，运行于Android系统上的一个容器化框架，我们也叫动态组件化(Dynamic Bundle)框架。它主要提供了解耦化、组件化、动态性的支持。覆盖了工程师的工程编码期、Apk运行期以及后续运维期的各种问题。
+ - [AndFix](https://github.com/alibaba/AndFix)：阿里开源热更新框架
+ - [dexposed](https://github.com/alibaba/dexposed)：阿里开源热更新框架
+ - [tinker](https://github.com/Tencent/tinker)：腾讯开源热更新框架
+ - [Nuwa](https://github.com/jasonross/Nuwa)：大众点评开源热更新框架
+ - [Robust](https://github.com/Meituan-Dianping/Robust)：美团点评开源热更新框架
 
 #### Java
 
@@ -163,6 +171,7 @@ date: 2016-12-1 10:00:00
  - [AE-Element](https://github.com/OYsun/AE-Element)使用bodymovin渲染一些有趣的After Effects矢量元素，可以直接使用[Lottie](https://github.com/airbnb/lottie-android)应用在客户端开发上面。
  - [Weex](https://github.com/apache/incubator-weex)：阿里开源项目，跨平台开发框架
  - [React Native](https://github.com/facebook/react-native)：Facebook开源项目，跨平台开发框架
+ - [Hexo](https://github.com/hexojs/hexo)：一个简单地、轻量地、基于Node.js的一个静态博客框架
 
 #### 资料汇总
 
