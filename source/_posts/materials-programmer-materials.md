@@ -58,6 +58,7 @@ date: 2016-12-1 10:00:00
 
 #### CSDN博客
 
+ - [CSDN 官方博客](http://blog.csdn.net/blogdevteam/)
  - [老罗的Android之旅](http://blog.csdn.net/luoshengyang)：CSDN排名前100，博客专栏“老罗的Android之旅”有对Android从上层应用到底层驱动的介绍，著有《Android系统源代码情景分析》一书。
  - [任玉刚](http://blog.csdn.net/singwhatiwanna)：有“Android源码解析”和“Android开发小栈”两个专栏，著有《Android开发艺术探索》一书。
  - [eclipse_xu徐宜生](http://blog.csdn.net/eclipsexys)：有“Android异步任务处理从零开始”，“android拼图游戏开发记录”和“Android UI开发详解”博客专栏，著有《Android群英传》一书。
@@ -142,6 +143,7 @@ date: 2016-12-1 10:00:00
  - [大众点评GitHub](https://github.com/dianping)
  - [网易GitHub](https://github.com/netease)
  - [美团·大众点评GitHub官方账号](https://github.com/Meituan-Dianping)
+ - [Google](https://github.com/google/)
 
 #### Android
 
@@ -158,6 +160,8 @@ date: 2016-12-1 10:00:00
  - [tinker](https://github.com/Tencent/tinker)：腾讯开源热更新框架
  - [Nuwa](https://github.com/jasonross/Nuwa)：大众点评开源热更新框架
  - [Robust](https://github.com/Meituan-Dianping/Robust)：美团点评开源热更新框架
+ - [Hermes](https://github.com/Xiaofei-it/Hermes)：简单易用的安卓进程间通信IPC框架，抽空看看源码
+ - [FlexboxLayout](https://github.com/google/flexbox-layout)：Google开源项目，CSS Flexible Box 在Android上的应用
 
 #### Java
 
@@ -250,6 +254,10 @@ date: 2016-12-1 10:00:00
  - [jadx](https://github.com/skylot/jadx)：GitHub上面一个好用的反编译工具。
  - [SunSpider](https://webkit.org/perf/sunspider/sunspider.html)：JavaScript Benchmark
  - [JetStream](http://browserbench.org/JetStream/)：JavaScript Benchmark
+
+### 在线绘制流程图
+
+ - [ProcessOn](https://www.processon.com)：免费在线作图
 
 ### 其他
 
