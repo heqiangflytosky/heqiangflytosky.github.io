@@ -139,6 +139,8 @@ date: 2016-12-1 10:00:00
 #### 关于开源项目的网站
 
  - [codeKK](http://p.codekk.com/)：Android开源项目集合、源码解析
+ - [gitHub优秀开源项目](http://blog.csdn.net/fbird45/article/details/43053235)：
+ - [android-open-project](https://github.com/Trinea/android-open-project)：Android 开源项目分类汇总
 
 #### 知名互联网企业开源项目
 
@@ -167,6 +169,15 @@ date: 2016-12-1 10:00:00
  - [Robust](https://github.com/Meituan-Dianping/Robust)：美团点评开源热更新框架
  - [Hermes](https://github.com/Xiaofei-it/Hermes)：简单易用的安卓进程间通信IPC框架，抽空看看源码
  - [FlexboxLayout](https://github.com/google/flexbox-layout)：Google开源项目，CSS Flexible Box 在Android上的应用
+ - [DeckView](https://github.com/vikramkakkar/DeckView)：Android 5.0层叠式卡片布局（类似原生多任务栏的效果）
+ - [Android-Universal-Image-Loader](https://github.com/nostra13/Android-Universal-Image-Loader)：图片异步加载库
+ - [CircleImageView](https://github.com/hdodenhof/CircleImageView)：圆形图片
+ - [animated-vector-drawable](https://github.com/chiuki/animated-vector-drawable)：Android矢量图及动画
+ - [fresco](https://github.com/facebook/fresco)：图片加载库 Fresco
+ - [Volley](https://android.googlesource.com/platform/frameworks/volley)：网络框架Volley，已经集成到Android源码中，frameworks/volley
+ - [LeakCanary](https://github.com/square/leakcanary)：内存泄漏检测
+ - [Dagger 2](https://github.com/google/dagger)：
+ - [awesome-android-ui](https://github.com/wasabeef/awesome-android-ui)：
 
 #### Java
 
@@ -182,6 +193,8 @@ date: 2016-12-1 10:00:00
  - [React Native](https://github.com/facebook/react-native)：Facebook开源项目，跨平台开发框架
  - [Hexo](https://github.com/hexojs/hexo)：一个简单地、轻量地、基于Node.js的一个静态博客框架
  - [hexo-theme-next](https://github.com/iissnan/hexo-theme-next)：为hexo设计的next主题风格
+ - [Realm](https://realm.io/)：
+ - [android-architecture](https://github.com/googlesamples/android-architecture)：
 
 #### 资料汇总
 
