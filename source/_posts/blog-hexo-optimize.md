@@ -5,6 +5,7 @@ tags: Hexo
 categories: Hexo
 comments: true
 ---
+[Hexo 文档](https://hexo.io/docs/)
 ### 创建hexo分支
 为了实现能在更换环境（比如更换电脑）的情况下我们仍然能发布博客，我们创建一个hexo分支用来存放hexo的文件。
 ``` bash

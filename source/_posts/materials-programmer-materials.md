@@ -35,8 +35,12 @@ date: 2016-12-1 10:00:00
  - [MOZILLA 开发者网络](https://developer.mozilla.org/zh-CN/)：MOZILLA开发者社区
  - [百度开发者中心](http://developer.baidu.com)：
  - [PHPChina开发者社区](http://www.phpchina.com/)：
- - [Android 常用自定义效果和控件](http://a.code4app.com/)：
  - [美团点评技术团队](http://tech.meituan.com/)
+
+#### Android开发
+
+ - [Android Developers](https://developer.android.com/index.html)：Android官方开发者网站，有各种开发文档可以阅读，以及下载开发工具，英语不太好的可以选择“简体中文”哦！
+ - [Android 常用自定义效果和控件](http://a.code4app.com/)：
 
 #### 网站开发
 
@@ -117,6 +121,7 @@ date: 2016-12-1 10:00:00
  - 最代码：高质量的代码服务
  - 携程技术中心：携程技术中心官方帐号，分享来自携程技术人的一手干货，及各类线上线下技术活动
  - 美团点评技术团队
+ - 谷歌开发者：Google中国官方帐号
 
 #### 其他
 
@@ -176,6 +181,7 @@ date: 2016-12-1 10:00:00
  - [Weex](https://github.com/apache/incubator-weex)：阿里开源项目，跨平台开发框架
  - [React Native](https://github.com/facebook/react-native)：Facebook开源项目，跨平台开发框架
  - [Hexo](https://github.com/hexojs/hexo)：一个简单地、轻量地、基于Node.js的一个静态博客框架
+ - [hexo-theme-next](https://github.com/iissnan/hexo-theme-next)：为hexo设计的next主题风格
 
 #### 资料汇总
 
@@ -241,7 +247,7 @@ date: 2016-12-1 10:00:00
 
 ### 开发工具
 
- - [Android Developers](https://developer.android.com/index.html)：Android官方开发者网站，有各种开发文档可以阅读，英语不太好的可以选择“简体中文”哦！
+ - [Android Developers](https://developer.android.com/index.html)：Android官方开发者网站，有各种开发文档可以阅读，以及下载开发工具，英语不太好的可以选择“简体中文”哦！
  - [AndroidDevTools](http://www.androiddevtools.cn/)：收集和整理了Android SDK、开发工具、开发教程的下载地址
  - [下载qt源码](ftp://ftp.qt-project.org/qt/source/)：
  - [下载jar包](http://www.findjar.com)：
