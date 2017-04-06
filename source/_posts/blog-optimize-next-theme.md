@@ -27,6 +27,13 @@ comments: true
   }
 }
 ```
+但是，我们一般不主张这样修改源码的，在`next/source/css/_custom`目录下面专门提供了`custom.styl`供我们自定义样式的，因此也可以在`custom.styl`里面添加：
+```
+// Custom styles.
+.site-meta {
+  background: $blue; //修改为自己喜欢的颜色
+}
+```
 ### 主页显示文章摘要
 默认情况下在主页是把文章内容全部显示出来的，如果在根目录的`_config.yml`中配置分页:
 ```
