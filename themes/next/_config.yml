@@ -268,7 +268,7 @@ mathjax:
 #baidu_analytics:
 
 # Duoshuo ShortName
-duoshuo_shortname: heqiangfly
+#duoshuo_shortname: heqiangfly
 
 # Disqus
 #disqus_shortname:
@@ -277,7 +277,7 @@ duoshuo_shortname: heqiangfly
 #hypercomments_id:
 
 # Gentie productKey
-#gentie_productKey:
+gentie_productKey: d2475abece3649debc94c21b166fc009
 
 # Support for youyan comments system.
 # You can get your uid from http://www.uyan.cc
@@ -296,7 +296,7 @@ duoshuo_shortname: heqiangfly
 #add_this_id:
 
 # Share
-duoshuo_share: true
+#duoshuo_share: true
 
 # Google Webmaster tools verification setting
 # See: https://www.google.com/webmasters/
