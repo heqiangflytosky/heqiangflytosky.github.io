@@ -67,6 +67,7 @@ date: 2016-12-1 10:00:00
  - [任玉刚](http://blog.csdn.net/singwhatiwanna)：有“Android源码解析”和“Android开发小栈”两个专栏，著有《Android开发艺术探索》一书。
  - [eclipse_xu徐宜生](http://blog.csdn.net/eclipsexys)：有“Android异步任务处理从零开始”，“android拼图游戏开发记录”和“Android UI开发详解”博客专栏，著有《Android群英传》一书。
  - [郭霖的专栏](http://blog.csdn.net/guolin_blog)：CSDN排名前100
+ - [北漂周](http://blog.csdn.net/yzzst)：《Android安全技术揭秘与防范》一书的作者的CSDN博客
 
 #### 个人主页
 
@@ -209,6 +210,8 @@ date: 2016-12-1 10:00:00
 
  - 《Android开发艺术探索》
  - 《App研发录》
+ - 《Android安全技术揭秘与防范》
+ - 《Android开发精要》
 
 ### 程序原理
 
