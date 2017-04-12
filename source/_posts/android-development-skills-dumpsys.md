@@ -117,7 +117,7 @@ DUMP OF SERVICE window:
 从上面可以看出可以查看的`Service`非常多，`DUMP OF SERVICE`关键字后面的单词都可以直接通过 `dumpsys + 单词` 查看相关信息，具体每一个如何使用有一种通用的查看帮助的办法。
 查看每一个命令的使用帮助，以下以`activity`为例演示：
 ```
-adb shell dumpsys activity -h
+$ adb shell dumpsys activity -h
 
 Activity manager dump options:
   [-a] [-c] [-h] [cmd] ...
@@ -142,6 +142,69 @@ Activity manager dump options:
   -c: include client state.
 ```
 这样就可以清楚每个命名的使用方法以及对应输出内容的信息查看方法。
+以`window`为例：
+```
+$ adb shell dumpsys window -h
+
+Window manager dump options:
+  [-a] [-h] [cmd] ...
+  cmd may be one of:
+    i[input]: input subsystem state
+    p[policy]: policy state
+    s[essions]: active sessions
+    surfaces: active surfaces (debugging enabled only)
+    d[isplays]: active display contents
+    t[okens]: token list
+    w[indows]: window list
+  cmd may also be a NAME to dump windows.  NAME may
+    be a partial substring in a window name, a
+    Window hex object identifier, or
+    "all" for all windows, or
+    "visible" for the visible windows.
+  -a: include all available server state.
+  -d list                     list the all of debug zones
+  -d enable  <zone zone ...>  enable the debug zone
+  -d disable <zone zone ...>  disable the debug zone
+  zone usage : 
+    0  : DEBUG
+    1  : DEBUG_FOCUS
+    2  : DEBUG_ANIM
+    3  : DEBUG_LAYOUT
+    4  : DEBUG_RESIZE
+    5  : DEBUG_LAYERS
+    6  : DEBUG_INPUT
+    7  : DEBUG_INPUT_METHOD
+    8  : DEBUG_VISIBILITY
+    9  : DEBUG_WINDOW_MOVEMENT
+    10 : DEBUG_ORIENTATION
+    11 : DEBUG_CONFIGURATION
+    12 : DEBUG_APP_TRANSITIONS
+    13 : DEBUG_STARTING_WINDOW
+    14 : DEBUG_REORDER
+    15 : DEBUG_WALLPAPER
+    16 : DEBUG_WALLPAPER_LIGHT
+    17 : SHOW_TRANSCATIONS
+    18 : HIDE_STACK_CRAWLS
+    19 : PROFILE_ORIENTATION
+    20 : DEBUG_TASK_MOVEMENT
+    21 : DEBUG_ADD_REMOVE
+    22 : DEBUG_TOKEN_MOVEMENT
+    23 : DEBUG_APP_ORIENTATION
+    24 : DEBUG_DRAG
+    25 : DEBUG_SCREEN_ON
+    26 : DEBUG_SCREENSHOT
+    27 : DEBUG_BOOT
+    28 : SHOW_SURFACE_ALLOC
+    29 : SHOW_LIGHT_TRANSACTIONS
+    30 : DEBUG_LAYOUT_REPEATS
+    31 : DEBUG_SURFACE_TRACE
+    32 : DEBUG_WINDOW_TRACE
+    33 : DEBUG_WINDOW
+    34 : DEBUG_STACK
+    35 : DEBUG_DIM_LAYER
+    36 : DEBUG_KEYGUARD
+```
+比如`adb shell dumpsys window -d enable 10`就是打开`DEBUG_ORIENTATION`，这样就把代码中的关于屏幕方向旋转相关的Log打印出来。
 
 ## 一些常用命令解释
  - adb shell dumpsys activity： 显示activity的相关信息，包括任务栈等

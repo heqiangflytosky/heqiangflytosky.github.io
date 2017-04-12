@@ -58,6 +58,13 @@ date: 2016-12-1 10:00:00
  - [cnBeta](http://www.cnbeta.com/)：中文业界资讯网站
  - [FreeBuf](http://www.freebuf.com/)：关注黑客与极客
 
+#### 源码网站
+
+ - [codota](https://www.codota.com/)：如果你不知道一个Android的类怎么用，可以在Codota上面快速的找到很多不错的示例代码。
+ - [android.googlesource](https://android.googlesource.com/)：Android所有的源代码都在这里，只需找到对应想要的模块，用Git克隆下来即可。比如，我想要的framework代码。
+ - [androidxref](http://androidxref.com/)：
+ - [GrepCode](http://grepcode.com/)：除了AndroidXRef可以查看某个类的源代码外，GrepCode同样也能做到。而且GrepCode不限于Android的源码
+
 ### 技术博客
 
 #### CSDN博客
@@ -72,6 +79,10 @@ date: 2016-12-1 10:00:00
 #### 个人主页
 
  - [阮一峰的网络日志](http://www.ruanyifeng.com/home.html)：著有《ECMAScript 6入门》一书，并在该网站开源。
+ - [胡凯](http://hukai.me/)：腾讯开发者，翻译了一系列的Google Android性能优化典范的文章。
+ - [Gityuan](http://gityuan.com/)：作者是小米的MIUI系统工程师Gityuan(如果你想了解Android系统中常见模块的实现细节的话，非常推荐阅读这位开发者的博客，他的博客中文章的质量都非常高)，里面的“Friends”专栏有很多开发学习资料。
+ - [Hujiawei Bujidao](https://hujiaweibujidao.github.io/)：很多Android系统性能相关的文章
+ - [进击的程序员](http://0xcc0xcd.com/p/index.php)：老罗，罗升阳的个人博客站点
 
 ### 微信公众号
 
@@ -140,9 +151,12 @@ date: 2016-12-1 10:00:00
 
 #### 关于开源项目的网站
 
- - [codeKK](http://p.codekk.com/)：Android开源项目集合、源码解析
+ - [p.codeKK](http://p.codekk.com/)：Android开源项目集合
+ - [a.codeKK](http://a.codekk.com/)：Android源码解析
  - [gitHub优秀开源项目](http://blog.csdn.net/fbird45/article/details/43053235)：
  - [android-open-project](https://github.com/Trinea/android-open-project)：Android 开源项目分类汇总
+ - [googlesamples](https://github.com/googlesamples)：Android系统每次推出一些新特性，Google都会写一些Demo放在Github上，对于想要了解新特性怎么玩的同学，肯定不能错过它。
+ - [android-arsenal](https://android-arsenal.com/)：你是否还在为找不到合适的开源库而苦恼，Android Arsenal这个网站已经帮你做了一定的分类，可以帮你提高不少效率。
 
 #### 知名互联网企业开源项目
 
@@ -202,6 +216,10 @@ date: 2016-12-1 10:00:00
 
  - [be-a-professional-programmer](https://github.com/stanzhai/be-a-professional-programmer)：汇集了一些程序员的资料，与本篇功能类似
  - [awesome-programming-books](https://github.com/jobbole/awesome-programming-books)：经典编程书籍大全，与本篇功能类似
+
+#### 学习资料
+
+ - [AndroidSdkSourceAnalysis](https://github.com/LittleFriendsGroup/AndroidSdkSourceAnalysis)：CJJ，网易的开发者，由他带领发起的Android SDK源码解析GitHub项目
 
 
 ## 必读书籍
@@ -264,17 +282,40 @@ date: 2016-12-1 10:00:00
 
 ### 开发工具
 
+#### 工具网站
+
  - [Android Developers](https://developer.android.com/index.html)：Android官方开发者网站，有各种开发文档可以阅读，以及下载开发工具，英语不太好的可以选择“简体中文”哦！
  - [AndroidDevTools](http://www.androiddevtools.cn/)：收集和整理了Android SDK、开发工具、开发教程的下载地址
  - [下载qt源码](ftp://ftp.qt-project.org/qt/source/)：
  - [下载jar包](http://www.findjar.com)：
+
+#### 调试利器
+
+ - [Stetho](http://facebook.github.io/stetho/)：Stetho，来自Facebook，它能做什么？无需root，借助Chrome可以查看SharePreferences和数据库中的数据，此外还有网络抓包以及查看View树等。
+
+#### AS插件
+ - [android-parcelable-intellij-plugin](https://github.com/mcharmas/android-parcelable-intellij-plugin)：帮助继承Parcelable的类自动生成相应代码，在没遇见它之前，手动写过大量的Parcelable实现代码，真的好痛苦。
+ - [GsonFormat](https://github.com/zzz40500/GsonFormat)：根据JSON数据快速生成Java实体类，又一波解放生产力。
+
+#### 逆向分析
+
+ - [Jdax](https://github.com/skylot/jadx/)：轻轻一下，立马让apk宽衣解带
+ - [Classyshark](https://github.com/google/android-classyshark)：轻松查看apk内部每个包的方法数，用了哪些开源库。
+ - [smali代码调试插件](https://github.com/JesusFreke/smali/wiki/smalidea)：你以为没有拿到安卓Java源码就不能调试了吗？图样图森破了吧。
+ - [IDA Pro](https://www.hex-rays.com/products/ida/)：逆向大利器，不管你是smali还是so文件，照样动态调试你。
+
+#### Crash搜集
+
+ - [Bugly](https://bugly.qq.com)：腾讯出品的SDK，对Crash搜集的体验非常赞，能搜集到JNI层的奔溃以及监控线上的ANR问题。
+ - [Crashlytics](https://try.crashlytics.com/)：国外的一个SDK
+ - [ARCA](https://github.com/ACRA/acra)：一个开源的崩溃日志搜集器，轻松让你实现客户端的崩溃日志上传到后台，如果你不喜欢接入别人家的SDK，可以使用它。有一个不足之处，就是它搜集不到JNI层的奔溃。
 
 ### 素材站点
 
 ### 常用工具
 
  - GifCam：一个好用的视频转gif工具
- - [jadx](https://github.com/skylot/jadx)：GitHub上面一个好用的反编译工具。
+ - [JitPack](https://jitpack.io/)：GitHub上面的开源库可以发布到这里，创建属于自己的开源库，供其他开发者使用
  - [SunSpider](https://webkit.org/perf/sunspider/sunspider.html)：JavaScript Benchmark
  - [JetStream](http://browserbench.org/JetStream/)：JavaScript Benchmark
 
