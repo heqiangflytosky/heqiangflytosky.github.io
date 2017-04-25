@@ -75,6 +75,7 @@ date: 2016-12-1 10:00:00
  - [eclipse_xu徐宜生](http://blog.csdn.net/eclipsexys)：有“Android异步任务处理从零开始”，“android拼图游戏开发记录”和“Android UI开发详解”博客专栏，著有《Android群英传》一书。
  - [郭霖的专栏](http://blog.csdn.net/guolin_blog)：CSDN排名前100
  - [北漂周](http://blog.csdn.net/yzzst)：《Android安全技术揭秘与防范》一书的作者的CSDN博客
+ - [Innost的专栏](http://blog.csdn.net/Innost)：作者邓凡平，《深入理解Android》一书的作者。
 
 #### 个人主页
 

@@ -3,7 +3,7 @@ title: Git 常用命令
 categories: 开发工具
 comments: true
 keywords: Git
-tags: [Git]
+tags: [Git, 开发工具]
 description: 列举一些常用的Git命令
 date: 2015-3-7 10:00:00
 ---

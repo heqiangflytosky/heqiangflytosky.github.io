@@ -3,7 +3,7 @@ title: Android Studio 导入 Android 源码
 categories: 开发工具
 comments: true
 keywords: SourceCode, Android Studio
-tags: [Android Studio]
+tags: [Android Studio, 开发工具]
 date: 2016-12-3 10:00:00
 ---
 Android 的源码代码量是非常大的，也有多种代码编辑器来供我们选择来去阅读Android源码，虽然在 Eclipse 和 SourceInsight 上阅读 Android 源码也能带来很好的体验，但习惯于用 Android Studio 来作为应用开发工具的大家肯定也希望用它来阅读源代码。本文将介绍如何将 Android 源码导入到 Android Studio 中来的技巧。
