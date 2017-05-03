@@ -1,9 +1,9 @@
 ---
 title: Android 性能优化之旋转屏幕优化
-categories: 性能优化
+categories: Android性能优化
 comments: true
-tags: [Android, 性能优化]
-description: 简单开发过程中遇到旋转屏幕卡顿问题的解决过程
+tags: [Android, Android性能优化]
+description: 介绍开发过程中遇到的旋转屏幕卡顿问题的解决过程
 date: 2017-4-26 10:00:00
 ---
 
