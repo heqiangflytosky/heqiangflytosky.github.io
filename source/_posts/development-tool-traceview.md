@@ -19,7 +19,7 @@ TraceView 是 Android SDK 中内置的一个工具，它可以加载 trace 文�
 ### 插入代码生成trace文件
 
 ```
-Debug.startMethodTracing("test")
+Debug.startMethodTracing("test.trace")
 ……
 Debug.stopMethodTracing();
 ```
@@ -29,7 +29,7 @@ Debug.stopMethodTracing();
 ### 使用Android Monitor
 
 使用Android Studio 内置的 Android Monitor 也可以很方便的生成 trace 文件到电脑。
-在 CPU 监控的那栏会有一个类似秒表的按钮，未启动应用时是灰色，不可点击，应用启动后变成可以点击状态，点击之后开始追踪，再次点击结束追踪，并生成 tarce 文件。
+在 CPU 监控的那栏会有一个类似秒表的按钮，未启动应用时是灰色，不可点击，应用启动后变成可以点击状态，点击之后开始追踪，再次点击结束追踪，并生成后缀为.trace的 tarce 文件。
 
 ![图片](/images/development-tool-traceview/android_monitor_start.png)
 

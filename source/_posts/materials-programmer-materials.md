@@ -36,6 +36,7 @@ date: 2016-12-1 10:00:00
  - [百度开发者中心](http://developer.baidu.com)：
  - [PHPChina开发者社区](http://www.phpchina.com/)：
  - [美团点评技术团队](http://tech.meituan.com/)
+ - [魅族内核团队](http://kernel.meizu.com/)：魅族内核团队发表的一些博客
 
 #### Android开发
 

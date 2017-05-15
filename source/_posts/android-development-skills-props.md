@@ -1,5 +1,5 @@
 ---
-title: Android实用技巧：getprop，setprop，watchprops命令的使用 
+title: Android实用技巧之adb命令：getprop，setprop，watchprops命令的使用 
 categories: Android实用技巧
 comments: true
 tags: [Android, getprop, setprop, watchprops]
