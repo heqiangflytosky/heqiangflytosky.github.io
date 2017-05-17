@@ -13,7 +13,7 @@ Lottie使用json文件来作为动画数据源，然后把解析这些数据源�
 下面我们就从`LottieAnimationView`作为切入点来一步一步分析。
 ### LottieAnimationView
 `LottieAnimationView`继承自`AppCompatImageView`，封装了一些动画的操作：
-```
+```java
 public void playAnimation()
 public void cancelAnimation()
 public void pauseAnimation()
@@ -24,21 +24,21 @@ public boolean isAnimating()
 ```
 等等；
 `LottieAnimationView`有两个很重要的成员变量：
-```
+```java
 @Nullable private LottieComposition.Cancellable compositionLoader;
 private final LottieDrawable lottieDrawable = new LottieDrawable();
 ```
 `LottieComposition`和`LottieDrawable`将会在下面专门进行分析，他们分别进行了两个重要的工作：json文件的解析和动画的绘制。
 `compositionLoader`进行了动画解析工作，得到`LottieComposition`。
 我们看到的动画便是在`LottieDrawable`上面绘制出来的，`lottieDrawable`在`setComposition`方法中被添加到`LottieAnimationView`上面最终显示出来。
-```
+```java
 setImageDrawable(lottieDrawable);
 ```
 
 ### 解析JSON文件
 #### JSON文件
 其实在 Bodymovin 插件这里也是比较神奇的，它是怎么生成json文件的呢？这个后面有时间再研究。解析出来的json文件是这样子的：
-```
+```json
 {
   "assets": [
     
@@ -103,7 +103,7 @@ setImageDrawable(lottieDrawable);
 #### LottieComposition
 Lottie使用`LottieComposition`来作为存储json文件的对象，即把json文件映射到`LottieComposition`，`LottieComposition`中提供了解析json文件的几个静态方法：
 
-```
+```java
 public static Cancellable fromAssetFileName(Context context, String fileName, OnCompositionLoadedListener loadedListener);
 public static Cancellable fromInputStream(Context context, InputStream stream, OnCompositionLoadedListener loadedListener);
 public static LottieComposition fromFileSync(Context context, String fileName);
@@ -115,7 +115,7 @@ public static LottieComposition fromJsonSync(Resources res, JSONObject json);
 其实上面这些函数最终的解析工作是在`public static LottieComposition fromJsonSync(Resources res, JSONObject json)`里面进行的。进行了动画几个属性的解析以及`Layer`解析。
 下面看一下`LottieComposition`里面的几个变量：
 
-```
+```java
     private final LongSparseArray<Layer> layerMap = new LongSparseArray<>();
     private final List<Layer> layers = new ArrayList<>();
 ```
@@ -123,7 +123,7 @@ public static LottieComposition fromJsonSync(Resources res, JSONObject json);
 `layers`存储json文件中的`layers`数组里面的数据，`Layer`就是对应了做图中图层的概念，一个完整的动画就是由这些图层叠加起来的，具体到下面再介绍。
 `layerMap`存储了`Layer`和其`id`的映射关系。
 下面几个是动画里面常用的几个属性：
-```
+```java
     private Rect bounds;
     private long startFrame;
     private long endFrame;
@@ -137,11 +137,11 @@ public static LottieComposition fromJsonSync(Resources res, JSONObject json);
 #### Layer
 `Layer`就是对应了做图中图层的概念，一个完整的动画就是由这些图层叠加起来的。
 `Layer`里面有个静态方法：
-```
+```java
 static Layer fromJson(JSONObject json, LottieComposition composition)；
 ```
 它解析json文件的数据并转化为`Layer`对象，
-```
+```java
   private final List<Object> shapes = new ArrayList<>();
 
   private String layerName;
@@ -184,7 +184,7 @@ static Layer fromJson(JSONObject json, LottieComposition composition)；
 会根据`LottieComposition`里面的每一个`Layer`生成一个对应的`LayerView`。
 #### LayerView
 `LayerView`也是`AnimatableLayer`的子类，它在`setupForModel()`里面会根据`Layer`里面的数据生成不同的`AnimatableLayer`的子类，添加到变量`layers`中去。
-```
+```java
       else if (item instanceof ShapePath) {
         ShapePath shapePath = (ShapePath) item;
         ShapeLayerView shapeLayer =
@@ -207,7 +207,7 @@ static Layer fromJson(JSONObject json, LottieComposition composition)；
 ```
 #### AnimatableLayer
 AnimatableLayer的子类，分别对应着json文件中的不同数据：
-```
+```java
 Drawable (android.graphics.drawable)
     AnimatableLayer (com.airbnb.lottie)
         ShapeLayerView (com.airbnb.lottie)
@@ -225,7 +225,7 @@ Drawable (android.graphics.drawable)
 
 `LottieDrawable`的`animator`来触发整个动画的绘制，最终会调用`LottieAnimationView`的`public void invalidateDrawable(Drawable dr)`方法进行视图的更新和重绘。
 绘制工作基本是由`LottieDrawable`来完成的，具体实在其父类`AnimatableLayer`的`public void draw(@NonNull Canvas canvas)`方法中进行：
-```
+```java
   @Override
   public void draw(@NonNull Canvas canvas) {
     int saveCount = canvas.save();

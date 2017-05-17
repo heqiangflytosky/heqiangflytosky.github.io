@@ -35,7 +35,8 @@ frameworks/base/core/java/android/os/Process.java
 ### 几个常用方法介绍
 
 #### 判断是否支持多用户模式：
-```
+
+```java
     public static boolean supportsMultipleUsers() {
         return getMaxSupportedUsers() > 1
                 && SystemProperties.getBoolean("fw.show_multiuserui",
@@ -54,20 +55,23 @@ frameworks/base/core/java/android/os/Process.java
                 Resources.getSystem().getInteger(R.integer.config_multiuserMaximumUsers));
     }
 ```
+
 首先会读取系统配置`fw.show_multiuserui`和`fw.max_users`，如果系统没有这个配置项则从配置文件中读取默认值，配置文件在`frameworks/base/core/res/res/values/config.xml`中：
-```
+
+```xml
     <!--  Maximum number of supported users -->
     <integer name="config_multiuserMaximumUsers">1</integer>
     <!-- Whether UI for multi user should be shown -->
     <bool name="config_enableMultiUserUI">false</bool>
 ```
+
 也可以看到，手机上默认是不支持多用户模式的。
 
 #### 查询是否是访客模式
 
 查询当前进程的用户是否是访客。
 
-```
+```java
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         return userManager.isGuestUser();
 ```
@@ -76,21 +80,22 @@ frameworks/base/core/java/android/os/Process.java
 
 查询当前进程的用户是否拥有某个权限，
 
-```
+```java
         UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         boolean canSendSms = userManager.hasUserRestriction(UserManager.DISALLOW_SMS);
 ```
 
 还有个方法是查询指定用户的权限：
 
-```
+```java
 public boolean hasUserRestriction(String restrictionKey, UserHandle userHandle)
 ```
 
 ### 如何创建Guest用户
 
 比如要创建一个访客用户，就可以调用`UserManager.createGuest(Context context, String name)`方法来完成：
-```
+
+```java
     public UserInfo createGuest(Context context, String name) {
         UserInfo guest = createUser(name, UserInfo.FLAG_GUEST);
         if (guest != null) {
@@ -111,10 +116,11 @@ public boolean hasUserRestriction(String restrictionKey, UserHandle userHandle)
         return guest;
     }
 ```
+
 从代码我们可以看到`createGuest`最终也会调用到`UserManagerService.createUser`方法，然后通过`setUserRestrictions`方法进一步对Guest用户的权限进行限制。因此，Guset用户和普通用户的区别也就在于权限的不同。
 可以通过下面的方式创建一个访客用户：
 
-```
+```java
     private void initGuestUser() {
         boolean needCreate = true;
         List<UserInfo> users = mUserManager.getUsers(true);
@@ -165,7 +171,7 @@ public boolean hasUserRestriction(String restrictionKey, UserHandle userHandle)
 
 一般通过 `ActivityManagerNative.getDefault().switchUser(int userId)`进行调用，这个在后面会有详细介绍。
 
-```
+```java
     private void enterGuestMode() {
         if (lossMode())
             return;
@@ -245,7 +251,7 @@ UMS 是用来管理用户的系统服务，是创建、删除以及查询用户�
 
 UMS 的创建是在`PackageManagerService`的构造函数中进行的。
 
-```
+```java
             sUserManager = new UserManagerService(context, this,
                     mInstallLock, mPackages);
 ```
@@ -253,7 +259,7 @@ UMS 的创建是在`PackageManagerService`的构造函数中进行的。
 接下来再看一下 UMS 的构造函数：
 UMS 构造函数有两个参数：分别是`/data`目录和`/data/user/`目录。
 
-```
+```java
     private UserManagerService(Context context, PackageManagerService pm,
             Object installLock, Object packagesLock,
             File dataDir, File baseUserPath) {
@@ -290,7 +296,7 @@ UMS 构造函数有两个参数：分别是`/data`目录和`/data/user/`目录�
 
 然后再看一下`systemReady()`函数，这里面也有一些初始化的工作，它的调用是在`PackageManagerService.systemReady()`中进行的。
 
-```
+```java
     void systemReady() {
         synchronized (mInstallLock) {
             synchronized (mPackagesLock) {
@@ -354,7 +360,7 @@ wallpaper_info.xml
 
 userlist.xml示例：
 
-```
+```xml
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
 <users nextSerialNumber="11" version="5">
     <guestRestrictions>
@@ -371,7 +377,7 @@ userlist.xml示例：
 得到 Id 信息后还要读取保存了用户注册信息的 xml 文件，这个文件也位于`/data/system/users`目录下，文件名用用户 Id 数字表示。
 0.xml 示例：
 
-```
+```xml
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
 <user id="0" serialNumber="0" flags="19" created="0" lastLoggedIn="1493886997408">
     <name>机主</name>
@@ -381,7 +387,7 @@ userlist.xml示例：
 
 10.xml：
 
-```
+```xml
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
 <user id="10" serialNumber="10" flags="4" created="1493886837832" lastLoggedIn="0">
     <name>Guest</name>
@@ -398,7 +404,7 @@ userlist.xml示例：
 
 UMS 中创建用户是在`createUser()`方法中实现的：
 
-```
+```java
     @Override
     public UserInfo createUser(String name, int flags) {
         checkManageUsersPermission("Only the system can create users");
@@ -408,7 +414,7 @@ UMS 中创建用户是在`createUser()`方法中实现的：
 
 首先检查调用者的权限，只有 UID 是 system 或者具有`android.Manifest.permission.MANAGE_USERS`的应用才有权限，否则抛出异常。然后就调用`createUserInternal`来执行真正的创建工作。
 
-```
+```java
     private UserInfo createUserInternal(String name, int flags, int parentId) {
         // 检查一下该用户是否被限制创建用户
         if (getUserRestrictions(UserHandle.getCallingUserId()).getBoolean(
@@ -522,7 +528,7 @@ UMS 中创建用户是在`createUser()`方法中实现的：
 
 `UserManagerService`中删除用户是在`removeUser()`方法中实现的：
 
-```
+```java
     public boolean removeUser(int userHandle) {
         // 检查该进程是否具有删除用户的权限
         checkManageUsersPermission("Only the system can remove users");
@@ -591,7 +597,7 @@ UMS 中创建用户是在`createUser()`方法中实现的：
 
 `ActivityManagerNative.getDefault().stopUser`执行完后 UMS 会继续执行删除工作。
 
-```
+```java
     void finishRemoveUser(final int userHandle) {
         // Let other services shutdown any activity and clean up their state before completely
         // wiping the user's system directory and removing from the user list
@@ -625,7 +631,7 @@ UMS 中创建用户是在`createUser()`方法中实现的：
 
 根据代码可以看到`finishRemoveUser`方法只是发送了一个有序广播ACTION_USER_REMOVED，同时注册了一个广播接收器，这个广播接收器是最后一个接收到该广播的接收器，这样做的目的是让关心该广播的其他接收器处理完之后， UMS 才会进行删除用户的收尾工作，即调用`removeUserStateLocked`来删除用户的相关文件。
 
-```
+```java
     private void removeUserStateLocked(final int userHandle) {
         // 调用mPm.cleanUpUserLILPw来删除用户目录/data/user/<用户id>/下面的应用数据，后面会详细介绍
         mPm.cleanUpUserLILPw(this, userHandle);
@@ -648,7 +654,7 @@ UMS 中创建用户是在`createUser()`方法中实现的：
 
 ## UserInfo
 
-```
+```java
 public class UserInfo implements Parcelable {
 
     // 用户类型
@@ -711,7 +717,7 @@ public class UserInfo implements Parcelable {
 
 他们之间有一下的换算关系：
 
-```
+```java
 uid = userId * 100000  + appId
 ```
 
@@ -817,7 +823,8 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
  - LAST_ISOLATED_UID = 99999
 
 还有像`u0_a24`这种uid代表的uid为10024，代表user 0 的一个应用程序uid，这个转换方法在`UserHandle.formatUid()`：
-```
+
+```java
     public static void formatUid(StringBuilder sb, int uid) {
         if (uid < Process.FIRST_APPLICATION_UID) {
             sb.append(uid);
@@ -846,7 +853,7 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
 
 ### 创建用户数据createNewUserLILPw()
 
-```
+```java
     void createNewUserLILPw(int userHandle) {
         if (mInstaller != null) {
             //通过mInstaller调用守护进程installd执行mkuserconfig，创建用户配置文件。
@@ -862,7 +869,7 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
 
 下面来看一下`Settings.createNewUserLILP()`方法的代码：
 
-```
+```java
     void createNewUserLILPw(PackageManagerService service, Installer installer, int userHandle) {
         // 为每一个应用创建数据目录
         for (PackageSetting ps : mPackages.values()) {
@@ -886,7 +893,7 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
 
 ### 删除用户数据cleanUpUserLILPw()
 
-```
+```java
     void cleanUpUserLILPw(UserManagerService userManager, int userHandle) {
         mDirtyUsers.remove(userHandle);
         mSettings.removeUserLPw(userHandle);
@@ -909,7 +916,7 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
 
 删除用户的工作比较简单，删除用户的数据。同时调用`mSettings.removeUserLPw(userHandle)`来删除和 PMS 中和用户相关的信息。
 
-```
+```java
     void removeUserLPw(int userId) {
         // 删除每个应用中的该用户的信息
         Set<Entry<String, PackageSetting>> entries = mPackages.entrySet();
@@ -936,7 +943,7 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
 
 在分析这一部分之前，我们先需要了解一下用户的几个运行状态：
 
-```
+```java
 public final class UserState {
     // 用户正在启动
     public final static int STATE_BOOTING = 0;
@@ -965,7 +972,7 @@ UMS 有下列变量来存储用户的相关信息：
 用户切换是通过调用`ActivityManager`的`public boolean switchUser(int userId)`方法进行。一般通过 `ActivityManagerNative.getDefault().switchUser(int userId)`进行调用。
 最终会调用`ActivityManagerService.switchUser`方法：
 
-```
+```java
     @Override
     public boolean switchUser(final int userId) {
         enforceShellRestriction(UserManager.DISALLOW_DEBUGGING_FEATURES, userId);
@@ -994,7 +1001,7 @@ UMS 有下列变量来存储用户的相关信息：
 
 `Handler`收到`START_USER_SWITCH_MSG`消息后，会调用`showUserSwitchDialog()`来弹出一个确认的对话框。
 
-```
+```java
     private void showUserSwitchDialog(int userId, String userName) {
         // The dialog will show and then initiate the user switch by calling startUserInForeground
         Dialog d = new UserSwitchingDialog(this, mContext, userId, userName,
@@ -1006,7 +1013,7 @@ UMS 有下列变量来存储用户的相关信息：
 
 点击确定后最终会调用到`startUser()`来执行切换用户的动作。
 
-```
+```java
     private boolean startUser(final int userId, final boolean foreground) {
         //切换用话需要INTERACT_ACROSS_USERS_FULL权限
         if (checkCallingPermission(INTERACT_ACROSS_USERS_FULL)
@@ -1182,7 +1189,7 @@ UMS 有下列变量来存储用户的相关信息：
 
 下面来分析一下`moveUserToForeground()`函数
 
-```
+```java
     void moveUserToForeground(UserState uss, int oldUserId, int newUserId) {
         //从mStackSupervisor获取newUserId用户在切换之前的stack状态，以便将原来在前台的应用推到前台
         boolean homeInFront = mStackSupervisor.switchUserLocked(newUserId, uss);
@@ -1207,7 +1214,7 @@ UMS 有下列变量来存储用户的相关信息：
 下面介绍一下`startUser()`中发出的几条消息的处理。
 SYSTEM_USER_CURRENT_MSG：
 
-```
+```java
             case SYSTEM_USER_CURRENT_MSG: {
                 mBatteryStatsService.noteEvent(
                         BatteryStats.HistoryItem.EVENT_USER_FOREGROUND_FINISH,
@@ -1224,7 +1231,7 @@ SYSTEM_USER_CURRENT_MSG：
 
 REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和REPORT_USER_SWITCH_COMPLETE_MSG
 
-```
+```java
             case REPORT_USER_SWITCH_MSG: {
                 dispatchUserSwitch((UserState) msg.obj, msg.arg1, msg.arg2);
                 break;
@@ -1244,7 +1251,7 @@ REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和RE
 
 `REPORT_USER_SWITCH_MSG`消息的处理方法是`dispatchUserSwitch()`：
 
-```
+```java
     void dispatchUserSwitch(final UserState uss, final int oldUserId,
             final int newUserId) {
         // 获取需要通知的观察者数量
@@ -1300,7 +1307,7 @@ REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和RE
 `sendContinueUserSwitchLocked()`方法会先清除前面延迟发送的`USER_SWITCH_TIMEOUT_MSG`消息，然后再发送一条`CONTINUE_USER_SWITCH_MSG`消息。
 `CONTINUE_USER_SWITCH_MSG`消息的执行函数是`completeSwitchAndInitialize()`方法，
 
-```
+```java
     void timeoutUserSwitch(UserState uss, int oldUserId, int newUserId) {
         synchronized (this) {
             sendContinueUserSwitchLocked(uss, oldUserId, newUserId);
@@ -1343,7 +1350,7 @@ REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和RE
 
 `REPORT_USER_SWITCH_COMPLETE_MSG`消息的处理函数是`dispatchUserSwitchComplete`，此方法的主要工作就是调用观察者的`onUserSwitchComplete()`方法，进行用户切换的收尾工作。
 
-```
+```java
     void dispatchUserSwitchComplete(int userId) {
         final int observerCount = mUserSwitchObservers.beginBroadcast();
         for (int i = 0; i < observerCount; i++) {
@@ -1358,7 +1365,7 @@ REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和RE
 
 再介绍一下`USER_SWITCH_TIMEOUT_MSG`消息，发送`REPORT_USER_SWITCH_MSG`消息的同时发送`USER_SWITCH_TIMEOUT_MSG`消息是为了防止用户切换时间过长，毕竟只有所有的观察者都处理完了才能继续进行切换用户的操作。发送完`USER_SWITCH_TIMEOUT_MSG`消息以后，如果后面没有进行清除该消息，那么时间一到就表示处理超时，就会调用`timeoutUserSwitch()`方法进行超时处理，`timeoutUserSwitch()`执行`sendContinueUserSwitchLocked()`来结束切换工作，不再等待各个观察者处理任务的结束。
 
-```
+```java
     void timeoutUserSwitch(UserState uss, int oldUserId, int newUserId) {
         synchronized (this) {
             sendContinueUserSwitchLocked(uss, oldUserId, newUserId);
@@ -1372,7 +1379,7 @@ REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和RE
 
 在`Activity`进入Idle状态后会调用AMS的`activityIdle()`方法，此方法会调用`mStackSupervisor.activityIdleInternalLocked(token, false, config);`，在`activityIdleInternalLocked()`方法内有下面的处理：
 
-```
+```java
         if (!booting) {
             // Complete user switch
             if (startingUsers != null) {
@@ -1394,7 +1401,7 @@ REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和RE
 当前有正在切换的用户的话就会调用AMS的`finishUserSwitch()`和`finishUserBoot()`方法，来更新用户状态，发送广播以及处理需要停止的用户工作。
 下面来看一下 AMS 的`finishUserSwitch()`和`finishUserBoot()`方法：
 
-```
+```java
     void finishUserSwitch(UserState uss) {
         synchronized (this) {
             finishUserBoot(uss);
@@ -1456,7 +1463,7 @@ REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和RE
 
 UMS的`removeUser()`会调用AMS的`stopUser()`来处理停止用户的一些工作，在AMS内部也会调用`stopUser()`。该方法在进行了权限检查之后，主要的工作都是由`stopUserLocked()`来完成的。
 
-```
+```java
     private int stopUserLocked(final int userId, final IStopUserCallback callback) {
         // 当前用户是不能被停止的，如果是当前用户则直接返回
         if (mCurrentUserId == userId && mTargetUserId == UserHandle.USER_NULL) {
@@ -1546,7 +1553,7 @@ UMS的`removeUser()`会调用AMS的`stopUser()`来处理停止用户的一些工
 
 `stopUserLocked()`方法首先检查当前的用户是否需要执行停止的工作，如果不需要直接调用参数的回调函数结束停止工作，如果需要，则先后发送`Intent.ACTION_USER_STOPPING`和`Intent.ACTION_SHUTDOWN`广播，方法中也注册了两个广播的接收器，在`Intent.ACTION_SHUTDOWN`广播接收器中执行`finishUserStop(uss)`方法。
 
-```
+```java
     void finishUserStop(UserState uss) {
         final int userId = uss.mHandle.getIdentifier();
         boolean stopped;
@@ -1593,7 +1600,7 @@ UMS的`removeUser()`会调用AMS的`stopUser()`来处理停止用户的一些工
 
 `finishUserStop()`方法从`mStartedUsers`和`mUserLru`列表中删除该用户，更新`mStartedUserArray`列表，清理和该用户有关的进程，发送`Intent.ACTION_USER_STOPPED`广播来通知该用户已经停止，接下来清除用户相关的Recent Task列表以及从`mStackSupervisor`中删除用户的信息。
 
-```
+```java
     private void forceStopUserLocked(int userId, String reason) {
         // 杀掉该用户相关的所有进程，具体流程会在ActivityManager相关文章中介绍
         forceStopPackageLocked(null, -1, false, false, true, false, false, userId, reason);

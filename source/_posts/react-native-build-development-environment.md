@@ -16,7 +16,7 @@ date: 2017-01-10 12:00:00
 下载node-v5.0.0-linux-x64解压即可； 
 [下载地址](https://nodejs.org/en/download/)
 创建软链接
-```
+```bash
 sudo ln -s /XXXXXX/tools/node-v5.0.0-linux-x64/bin/node /usr/bin/node
 sudo ln -s /XXXXXX/tools/node-v5.0.0-linux-x64/bin/npm /usr/bin/npm
 sudo npm install -g yarn react-native-cli
@@ -27,12 +27,12 @@ sudo ln -s /home/heqiang/install/tools/node-v5.0.0-linux-x64/bin/yarnpkg /usr/bi
  - `react-native-cli`是React Native的一个命令行工具，用于执行创建、初始化、更新项目、运行打包服务（packager）等任务。
 
 ## 开始创建第一个工程
-```
+```bash
 react-native init AwesomeProject
 cd AwesomeProject/
 ```
 连接好手机
-```
+```bash
 react-native run-android
 ```
 发现下面的错误：
@@ -54,7 +54,7 @@ java.lang.RuntimeException: SDK location not found. Define location with sdk.dir
 ```
 按他说的去配置local.properties的adk.dir
 添加
-```
+```bash
 sdk.dir=/home/heqiang/install/android-studio/android-sdk-linux
 ```
 再次启动，OK了。
@@ -151,7 +151,7 @@ React Native开发推荐的一些插件：
 > **功能：** jsx 文件中快速通过 emmet 编写自定义组件。
 > **安装：** PC上ctrl+shift+p（MacCmd+shift+p）打开面板输入emmet安装
 > **配置：** 打开 preferences -> Key bindings - Users，先用[]扩展为数组，然后把下面代码复制到[]内部。
-```
+```json
 {
       "keys": [
         "super+e"

@@ -15,7 +15,7 @@ date: 2015-2-2 10:00:00
 实例中用到了两个APK，MessengerClient和MessengerServer。
 
 ### Server端
-```
+```java
 public class MessengerService extends Service {
 
     private static final int MSG_ADD = 0;
@@ -53,7 +53,7 @@ public class MessengerService extends Service {
 }
 ```
 AndroidManifest.xml
-```
+```xml
         <service
             android:name=".MessengerService"
             android:enabled="true"
@@ -67,7 +67,7 @@ AndroidManifest.xml
 可以看到Server端代码很简单，就是一个 `Service`，只需要去声明一个 `Messenger` 对象，然后 `onBind` 方法返回 `mMessenger.getBinder()`。
 
 ### Client端
-```
+```java
 public class MainActivity extends AppCompatActivity {
     private static final int MSG_ADD = 0;
     private Messenger mService = null;
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
 ## 源码分析
 看一下`Messenger`的源码，首先看一下它的构造函数：
-```
+```java
     public Messenger(Handler target) {
         mTarget = target.getIMessenger();
     }
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     }
 ```
 我们先来分析第一个，看看这个`getIMessenger()`是怎么实现的，在Handler.java类中，它是这么实现的：
-```
+```java
     final IMessenger getIMessenger() {
         synchronized (mQueue) {
             if (mMessenger != null) {
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
     }
 ```
 那么这个`MessengerImpl()`类又是什么呢？
-```
+```java
     private final class MessengerImpl extends IMessenger.Stub {
         public void send(Message msg) {
             msg.sendingUid = Binder.getCallingUid();
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 ```
 咦！`IMessenger.Stub`，似曾相识的感觉！是的，我们平时写aidl文件，就会生成一个`IXXX.Stub`的类，那么是不是也有个`IMessenger.aidl`的文件呢？哈，还真有，
 frameworks/base/core/java/android/os/IMessenger.aidl：
-```
+```java
 package android.os;
 
 import android.os.Message;
@@ -185,7 +185,7 @@ oneway interface IMessenger {
 ```
 到这里大家应该明白了，`Messenger`和我们用aidl文件的方式实现进程间通信其实是异曲同工的，它也是依赖aidl文件生成的类，继承了IMessenger.Stub类，实现了send方法，send方法中参数会通过客户端传递过来，最终发送给handler进行处理。
 其实在它的另一个构造函数中已经体现出来了：
-```
+```java
     public Messenger(IBinder target) {
         mTarget = IMessenger.Stub.asInterface(target);
     }

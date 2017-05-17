@@ -9,7 +9,7 @@ date: 2017-01-11 10:00:00
 
 ## Helle World代码分析
 
-```
+```javascript
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -74,14 +74,14 @@ JSX就是Javascript和HTML结合的一种格式。可以看作JavaScript的拓�
 看个直接的对比，如下面两段代码是等价的：
 JS：
 
-```
+```javascript
 var child1 = React.createElement('li', null, 'First Text Content');
 var child2 = React.createElement('li', null, 'Second Text Content');
 var root = React.createElement('ul', { className: 'my-list' }, child1, child2);
 ```
 JSX：
 
-```
+```javascript
 var root =(
   <ul className="my-list">
     <li>First Text Content</li>
@@ -91,14 +91,14 @@ var root =(
 ```
 后者将XML语法直接加入JS中,通过代码而非模板来高效的定义界面。之后JSX通过翻译器转换为纯JS再由浏览器执行。在实际开发中，JSX在产品打包阶段都已经编译成纯JavaScript，JSX的语法不会带来任何性能影响。另外，由于JSX只是一种语法，因此JavaScript的关键字class, for等也不能出现在XML中，而要如例子中所示，使用className, htmlFor代替，这和原生DOM在JavaScript中的创建也是一致的。JSX只是创建虚拟DOM的一种语法格式而已,除了用JSX,我们也可以用JS代码来创建虚拟DOM。
 ### 样式使用
-```
+```javascript
 <View style={{width: 50, height: 50, flex: 1,backgroundColor: 'powderblue'}} />
 ```
 上面第一个大括号是JSX语法，第二个大括号是JavaScript语法。
 ### JSX中绑定事件
 JSX让事件直接绑定在元素上。
 
-```
+```javascript
 <button onClick={this.checkAndSubmit.bind(this)}>Submit</button>
 ```
 和原生HTML定义事件的唯一区别就是JSX采用驼峰写法来描述事件名称，大括号中仍然是标准的JavaScript表达式，返回一个事件处理函数。

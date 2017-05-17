@@ -53,23 +53,23 @@ animationView.loop(true);
 此方法将加载文件并在后台解析动画，并在完成后异步开始呈现动画。
 Lottie只支持Jellybean (API 16)或以上版本。
 通过源码我们可以发现`LottieAnimationView`是继承自`AppCompatImageView`，我们可以像使用其他`View`一样来使用它。
-```
+```java
 LottieAnimationView animationView = (LottieAnimationView) findViewById(R.id.animation_view);
 ```
 甚至可以从网络上下载json数据：
-```
+```java
  LottieComposition composition = LottieComposition.fromJson(getResources(), jsonObject, (composition) -> {
      animationView.setComposition(composition);
      animationView.playAnimation();
  });
 ```
 或者使用
-```
+```java
 setAnimation(JSONObject);
 ```
 
 我们还可以控制动画或者添加监听器：
-```
+```java
 animationView.addAnimatorUpdateListener((animation) -> {
     // Do something.
 });
@@ -92,14 +92,14 @@ animator.start();
 animationView.cancelAnimation();
 ```
 `LottieAnimationView`是使用`LottieDrawable`来渲染动画的，如果有必要，还可以直接使用`LottieDrawable`：
-```
+```java
 LottieDrawable drawable = new LottieDrawable();
 LottieComposition.fromAssetFileName(getContext(), "hello-world.json", (composition) -> {
     drawable.setComposition(composition);
 });
 ```
 如果动画会被频繁的复用，`LottieAnimationView`有一套缓存策略，可以使用
-```
+```java
 LottieAnimationView#setAnimation(String, CacheStrategy)
 ```
 来实现它，`CacheStrategy`可以是`Strong`，`Weak`或者是`None`，这样`LottieAnimationView`就可以持有一个已经加载和解析动画的强引用或者弱引用。

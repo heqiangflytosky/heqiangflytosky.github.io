@@ -31,7 +31,7 @@ date: 2017-01-13 10:00:00
 baidu@2x.png，baidu@3x.png还可以适配不同分辨率的机型。如果没有图片恰好满足屏幕分辨率，则会自动选中最接近的一个图片。这点是和Android中是类似的。
 ### 代码
 
-```
+```javascript
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
  - onLoadStart：开始加载时调用
  - onLoadEnd加载结束时调用
  - onLoad：成功读取图片时调用
-```
+```javascript
         <Image source={{uri:'http://172.17.137.68/heqiang/23.jpg'}} style={{width: 200, height: 200}} 
           onLoad={function(){console.log("onLoad");}}
           onLayout={function(){console.log("onLayout");}}
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   - center：居中不缩放
  
  resizeMode也可以定义在style中，但在属性上定义的优先级比style中高。比如下面设置中最终生效的是Image.resizeMode.center。
-```
+```javascript
         <Image source={{uri:'http://172.17.137.68/heqiang/test.png'}} 
           style={{width: 200, height: 200, backgroundColor: 'grey',resizeMode: Image.resizeMode.contain}} 
           resizeMode={Image.resizeMode.center}

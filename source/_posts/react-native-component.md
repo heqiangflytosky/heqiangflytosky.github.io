@@ -9,7 +9,7 @@ date: 2017-01-12 10:00:00
 一个组件类可以像前面Hello World工程中那样通过 `class HelloWorldAppp extends Component` 来创建，或者通过`React.createClass`来创建，并且提供一个render方法以及其他可选的生命周期函数、组件相关的事件或方法定义。
 <!-- more -->
 因此，HelloWorldAppp和下面的实现方法是等价的:
-```
+```java
 var HelloWorldAppp = React.createClass({
   render() {
     return (
@@ -27,7 +27,7 @@ Warning: getDefaultProps was defined on HelloWorldAppp, a plain JavaScript class
 ## React组件生命周期
 先来看一段代码：
 
-```
+```javascript
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
  - getDefaultProps： 用来设置组件属性的默认值。通常会将固定的内容放在这个过程中进行初始化和赋值，一个控件可以利用`this.props`获取在这里初始化它的属性，由于组件初始化后，再次使用该组件不会调用`getDefaultProps`函数，所以组件自己不可以自己修改props（即：props可认为是只读的），只可由其他组件调用它时在外部修改。
 `getDefaultProps`并不是在组件实例化时被调用，而是在`createClass`时被调用，返回值会被缓存。也就是说，不能在`getDefaultProps`中使用任何特定的实例数据。
  - getInitialState： 这里是对控件的一些状态进行初始化，由于该函数不同于`getDefaultProps`，在以后的过程中，会再次调用，所以可以将控制控件的状态的一些变量放在这里初始化，如控件上显示的文字，可以通过`this.state`来获取值，通过`this.setState`来修改state值，修改方式如下：
-```
+```javascript
     this.setState({
       content:"第"+clickTime+"次点击"
     });
@@ -153,7 +153,7 @@ componentDidUpdate
 
 ## Props（属性）和 State（状态）
 Props 就是组件的属性，由外部通过 JSX 属性传入设置，一旦初始设置完成，就可以认为 `this.props` 是不可更改的，所以不要轻易更改设置 `this.props` 里面的值（虽然对于一个 JS 对象你可以做任何事）。
-```
+```javascript
 class MyText extends Component{
   render() {
     return(
@@ -172,7 +172,7 @@ class HelloWorldAppp extends Component{
 ```
 
 State 是组件的当前状态，可以把组件简单看成一个“状态机”，根据状态 state 呈现不同的 UI 展示。一旦状态（数据）更改，组件就会自动调用 render 重新渲染 UI，这个更改的动作会通过 `this.setState` 方法来触发。
-```
+```javascript
 class HelloWorldAppp extends Component{
   constructor(props) {
     super(props);
@@ -191,7 +191,7 @@ class HelloWorldAppp extends Component{
 ## refs
 ref是React中的一种属性，当render函数返回某个组件的实例时，可以给render中的某个虚拟DOM节点添加一个ref属性。要获取一个React组件的引用，可以使用ref来获取你拥有的子组件的引用。
 
-```
+```javascript
 var HelloWorldAppp = React.createClass({
     render() {
       console.log("render");

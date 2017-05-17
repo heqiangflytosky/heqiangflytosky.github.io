@@ -15,7 +15,7 @@ date: 2015-1-8 10:00:00
 ### 代码
 
 MainActivity.java
-```
+```java
 public class MainActivity extends ActivityGroup {
 
     private ViewGroup mLeft;
@@ -54,7 +54,7 @@ public class MainActivity extends ActivityGroup {
 }
 ```
 activity_main.xml
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:id="@+id/container_main"
@@ -89,7 +89,7 @@ activity_main.xml
 </LinearLayout>
 ```
 LeftActivity.java
-```
+```java
 public class LeftActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,25 +113,25 @@ public class LeftActivity extends Activity{
 ## 源码分析
 从源码中我们可以看到`ActivityGroup`类的父类是`Activity`，也就是说二者具有相同的方法和生命周期。在`ActivityGroup`有成员变量`protected LocalActivityManager mLocalActivityManager`，那么`ActivityGroup`对`Activity`的管理就要以来这个变量来管理了。
 在`ActivityGroup`的`onCreate``onResume``onPause`等生命周期函数里面分别调用
-```
+```java
         Bundle states = savedInstanceState != null
                 ? (Bundle) savedInstanceState.getBundle(STATES_KEY) : null;
         mLocalActivityManager.dispatchCreate(states);
 ```
-```
+```java
 mLocalActivityManager.dispatchResume();
 ```
-```
+```java
 mLocalActivityManager.dispatchPause(isFinishing());
 ```
 来保证子`Activity`的生命周期与`ActivityGroup`一致。
 `LocalActivityManager`通过`startActivity(String id,Intent intent)`这个方法获取当前`Window`对象，再然后调用`getDecorView()`方法获取当前`Activity`对应的`View`，这个就把多个`Activity`添加到一个`RootView`里面了。
 具体是怎么获得我们需要`Activity`的`DecorView`的呢？我们就要看一下`LocalActivityManager`的`startActivity`这个方法了。
 首先要获取主线程的`mActivityThread`：
-```
+```java
 mActivityThread = ActivityThread.currentActivityThread();
 ```
-```
+```java
             r.activity = mActivityThread.startActivityNow(
                     mParent, r.id, r.intent, r.activityInfo, r, r.instanceState, instance);
             if (r.activity == null) {

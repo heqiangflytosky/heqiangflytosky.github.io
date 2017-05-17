@@ -15,14 +15,14 @@ React Native是非常强大的，但有的时候我们可能并不需要从0开�
 ## 集成 React Native
 ### 添加JS到App中
 进入工程根目录执行以下命令：
-```
+```bash
 npm init
 npm install --save react react-native
 curl -o .flowconfig https://raw.githubusercontent.com/facebook/react-native/master/.flowconfig
 
 ```
 `npm init`命令是根据提示生成 package.json 文件的。
-```
+```json
 This utility will walk you through creating a package.json file.
 It only covers the most common items, and tries to guess sensible defaults.
 
@@ -63,11 +63,11 @@ Is this ok? (yes)
 `curl`用来下载.flowconfig文件
 
 在`package.json`文件中添加下面语句：
-```
+```json
 "start": "node node_modules/react-native/local-cli/cli.js start"
 ```
 现在的`package.json`是这样的：
-```
+```json
 {
   "name": "reactnativedemo",
   "version": "1.0.0",
@@ -87,7 +87,7 @@ Is this ok? (yes)
 ```
 
 创建`index.android.js`文件：
-```
+```javascript
 'use strict';
 import React from 'react';
 import {
@@ -151,14 +151,14 @@ configurations.all {
 }
 ```
 在`AndroidManifest.xml`中加入网络权限：
-```
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 ### 添加Native Code
 下面将修改原生代码，实现嵌入React Native功能。
 #### 方法一
 官方文档的做法，首先就是Activity实现DefaultHardwareBackBtnHandler接口：
-```
+```java
 public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler {
 
     private ReactRootView mReactRootView;
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 ```
 #### 方法二
 新版本中可以用下面的方法，更简单：
-```
+```java
 public class MainActivity extends ReactActivity{
 
     /**
@@ -206,7 +206,7 @@ public class MainActivity extends ReactActivity{
 java.lang.RuntimeException: Unable to start activity ComponentInfo{com.android.hq.reactnativedemo/com.android.hq.reactnativedemo.MainActivity}: java.lang.ClassCastException: android.app.Application cannot be cast to com.facebook.react.ReactApplication
 ```
 Application的代码：
-```
+```java
 public class Application extends android.app.Application implements ReactApplication  {
 
     private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -239,7 +239,7 @@ public class Application extends android.app.Application implements ReactApplica
 
 ### 运行
 根目录运行下面命令：
-```
+```bash
 adb reverse tcp:8081 tcp:8081
 npm start
 ```
@@ -266,7 +266,7 @@ npm start
 下面就来生成Realease版本。
 #### 方法一
 在`app/src/main/`中新建`assets`，根目录下执行下面命令：
-```
+```bash
 react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output app/src/main/assets/index.android.bundle --assets-dest app/src/main/res/
 ```
 会在`assets`目录中生成`index.android.bundle`和`index.android.bundle.meta`文件。`index.android.bundle`文件是所有的React Native js文件打包生成的一个js文件，`index.android.bundle.meta`中存储的是bundle的sha1值，每次打包都会生成一个meta唯一标识bundle
@@ -274,7 +274,7 @@ react-native bundle --platform android --dev false --entry-file index.android.js
 #### 方法二
 其实也可以通过复制React Native Server里面bundle文件的方法来实现。
 在根目录执行以下命令：
-```
+```bash
 curl "http://localhost:8081/index.android.bundle?platform=android" -o "app/src/main/assets/index.android.bundle"
 ```
 也是可以的。
