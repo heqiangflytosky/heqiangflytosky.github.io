@@ -25,6 +25,8 @@ frameworks/base/core/java/com/android/server/am/ActivityManagerService.java
 frameworks/base/core/java/android/os/Process.java
 ```
 
+ - PackageManagerService：在多用户环境中，所有安装的应用还是位于 /data/app/ 目录中，应用的数据还是保存在 /data/data 下面，这些数据只对 Id 为 0 的用户即管理员用户有效，但是这些应用的数据在 /data/user/<用户id>/ 目录下面都会有单独的一份。
+
 ## UserManager
 
 `UserManager`可以称为 UMS 的代理对象，它通过`IUserManager mService`来与 UMS 进行进程间的通信。
@@ -400,258 +402,6 @@ userlist.xml示例：
 如果有未创建完成的用户，即`partial=true`的用户，则把它们从用户列表中移除出去。
 因此，UMS 的初始化工作主要就是分析`userlist.xml`文件、创建用户列表`mUsers`以及设置用户权限。
 
-### 创建用户createUser()
-
-UMS 中创建用户是在`createUser()`方法中实现的：
-
-```java
-    @Override
-    public UserInfo createUser(String name, int flags) {
-        checkManageUsersPermission("Only the system can create users");
-        return createUserInternal(name, flags, UserHandle.USER_NULL);
-    }
-```
-
-首先检查调用者的权限，只有 UID 是 system 或者具有`android.Manifest.permission.MANAGE_USERS`的应用才有权限，否则抛出异常。然后就调用`createUserInternal`来执行真正的创建工作。
-
-```java
-    private UserInfo createUserInternal(String name, int flags, int parentId) {
-        // 检查一下该用户是否被限制创建用户
-        if (getUserRestrictions(UserHandle.getCallingUserId()).getBoolean(
-                UserManager.DISALLOW_ADD_USER, false)) {
-            return null;
-        }
-        // 检查是否是低内存设备
-        if (ActivityManager.isLowRamDeviceStatic()) {
-            return null;
-        }
-        final boolean isGuest = (flags & UserInfo.FLAG_GUEST) != 0;
-        final boolean isManagedProfile = (flags & UserInfo.FLAG_MANAGED_PROFILE) != 0;
-        final long ident = Binder.clearCallingIdentity();
-        UserInfo userInfo = null;
-        final int userId;
-        try {
-            synchronized (mInstallLock) {
-                synchronized (mPackagesLock) {
-                    UserInfo parent = null;
-                    if (parentId != UserHandle.USER_NULL) {
-                        parent = getUserInfoLocked(parentId);
-                        if (parent == null) return null;
-                    }
-                    if (isManagedProfile && !canAddMoreManagedProfiles()) {
-                        return null;
-                    }
-                    // 如果添加的不是Guest用户，也不是用户的profile，而且已经到达用户的上限，则不允许再添加
-                    if (!isGuest && !isManagedProfile && isUserLimitReachedLocked()) {
-                        return null;
-                    }
-                    // 如果添加的是Guest用户，但是系统中已经存在一个，则不允许再添加
-                    if (isGuest && findCurrentGuestUserLocked() != null) {
-                        return null;
-                    }
-                    // 得到新用户的Id
-                    userId = getNextAvailableIdLocked();
-                    // 为该新用户创建UserInfo
-                    userInfo = new UserInfo(userId, name, null, flags);
-                    // 设置序列号
-                    userInfo.serialNumber = mNextSerialNumber++;
-                    // 设置创建时间
-                    long now = System.currentTimeMillis();
-                    userInfo.creationTime = (now > EPOCH_PLUS_30_YEARS) ? now : 0;
-                    // 设置partial，表示正在创建
-                    userInfo.partial = true;
-                    Environment.getUserSystemDirectory(userInfo.id).mkdirs();
-                    // 放入mUsers列表
-                    mUsers.put(userId, userInfo);
-                    // 把用户信息写入userlist.xml
-                    writeUserListLocked();
-                    if (parent != null) {
-                        if (parent.profileGroupId == UserInfo.NO_PROFILE_GROUP_ID) {
-                            parent.profileGroupId = parent.id;
-                            scheduleWriteUserLocked(parent);
-                        }
-                        userInfo.profileGroupId = parent.profileGroupId;
-                    }
-                    // 创建用户目录
-                    final StorageManager storage = mContext.getSystemService(StorageManager.class);
-                    for (VolumeInfo vol : storage.getWritablePrivateVolumes()) {
-                        final String volumeUuid = vol.getFsUuid();
-                        try {
-                            final File userDir = Environment.getDataUserDirectory(volumeUuid,
-                                    userId);
-                            // 创建userDir，如果volumeUuid为空，创建/data/user/<userId>/，不为空，创建/mnt/expand/<volumeUuid>/user/<userId>/
-                            prepareUserDirectory(userDir);
-                            enforceSerialNumber(userDir, userInfo.serialNumber);
-                        } catch (IOException e) {
-                            Log.wtf(LOG_TAG, "Failed to create user directory on " + volumeUuid, e);
-                        }
-                    }
-                    // 调用PackageManagerService的createNewUserLILPw方法，此方法很重要，后面会单独分析
-                    // 这个函数会在新建用户的userDir目录下面为所有应用创建数据
-                    // 此方法将新用户可以使用的App在/data/user/<用户Id>文件夹下创建数据目录，目录名称为包名
-                    mPm.createNewUserLILPw(userId);
-                    // 创建成功，将partial改为false
-                    userInfo.partial = false;
-                    // 会调用writeUserLocked()创建xxx.xml，类似0.xml，xxx是用户Id
-                    scheduleWriteUserLocked(userInfo);
-                    // 更新mUserIds数组
-                    updateUserIdsLocked();
-                    Bundle restrictions = new Bundle();
-                    // 添加为该用户设置的限制条件
-                    mUserRestrictions.append(userId, restrictions);
-                }
-            }
-            // 发送用户创建完成的广播，广播附带用户的id
-            if (userInfo != null) {
-                Intent addedIntent = new Intent(Intent.ACTION_USER_ADDED);
-                addedIntent.putExtra(Intent.EXTRA_USER_HANDLE, userInfo.id);
-                mContext.sendBroadcastAsUser(addedIntent, UserHandle.ALL,
-                        android.Manifest.permission.MANAGE_USERS);
-            }
-        } finally {
-            Binder.restoreCallingIdentity(ident);
-        }
-        return userInfo;
-    }
-```
-
-由上面的代码可知，`createUser`主要做了一下工作：
-1. 检查调用进程所属用户是否被限制添加用户、当前设备是否是低内存设备、当前用户数是否已达上限，如是则停止创建新用户
-2. 为新用户设置用户信息，比如Id，序列号创建时间等
-3. 将用户信息写入userlist.xml，注意，此时的userInfo.partial = true，表示正在创建
-4. 创建用户目录/data/user/<userId>/或者/mnt/expand/<volumeUuid>/user/<userId>/
-5. 调用PackageManagerService的createNewUserLILPw方法，这个函数会在新建用户的目录下面为所有应用创建数据目录
-6. 创建用户完成，将userInfo.partial设置为false，创建用户的信息文件，比如0.xml
-7. 发送用户创建完成的广播
-
-### 删除用户removeUser()
-
-`UserManagerService`中删除用户是在`removeUser()`方法中实现的：
-
-```java
-    public boolean removeUser(int userHandle) {
-        // 检查该进程是否具有删除用户的权限
-        checkManageUsersPermission("Only the system can remove users");
-        // 检查一下该用户是否被限制删除用户
-        if (getUserRestrictions(UserHandle.getCallingUserId()).getBoolean(
-                UserManager.DISALLOW_REMOVE_USER, false)) {
-            return false;
-        }
-
-        long ident = Binder.clearCallingIdentity();
-        try {
-            final UserInfo user;
-            synchronized (mPackagesLock) {
-                user = mUsers.get(userHandle);
-                // 检查被删除的用户是不是管理员用户userHandle=0，检查用户列表中是否有该用户，以及该用户是否是正在被删除的用户
-                if (userHandle == 0 || user == null || mRemovingUserIds.get(userHandle)) {
-                    return false;
-                }
-
-                // 将该用户放入mRemovingUserIds列表中，防止重复删除
-                // mRemovingUserIds中的数据会一直保存直到系统重启，防止Id被重复使用
-                mRemovingUserIds.put(userHandle, true);
-
-                try {
-                    mAppOpsService.removeUser(userHandle);
-                } catch (RemoteException e) {
-                    Log.w(LOG_TAG, "Unable to notify AppOpsService of removing user", e);
-                }
-                // 将partial设置为true，这样如果后面的过程意外终止导致此次删除失败，系统重启后还是会继续删除工作的
-                user.partial = true;
-                // 设置FLAG_DISABLED，禁止该用户
-                user.flags |= UserInfo.FLAG_DISABLED;
-                // 将上面更新的用户文件信息写入到xml文件中去
-                writeUserLocked(user);
-            }
-
-            // 如果该user是一个user的一份profile，则发出一个ACTION_MANAGED_PROFILE_REMOVED广播
-            if (user.profileGroupId != UserInfo.NO_PROFILE_GROUP_ID
-                    && user.isManagedProfile()) {
-                sendProfileRemovedBroadcast(user.profileGroupId, user.id);
-            }
-
-            // 调用AMS停止当前的用户，这部分后面会详细介绍
-            int res;
-            try {
-                res = ActivityManagerNative.getDefault().stopUser(userHandle,
-                        // 设置回调函数，调用finishRemoveUser继续后面的删除工作
-                        new IStopUserCallback.Stub() {
-                            @Override
-                            public void userStopped(int userId) {
-                                finishRemoveUser(userId);
-                            }
-                            @Override
-                            public void userStopAborted(int userId) {
-                            }
-                        });
-            } catch (RemoteException e) {
-                return false;
-            }
-            return res == ActivityManager.USER_OP_SUCCESS;
-        } finally {
-            Binder.restoreCallingIdentity(ident);
-        }
-    }
-```
-
-`ActivityManagerNative.getDefault().stopUser`执行完后 UMS 会继续执行删除工作。
-
-```java
-    void finishRemoveUser(final int userHandle) {
-        // Let other services shutdown any activity and clean up their state before completely
-        // wiping the user's system directory and removing from the user list
-        long ident = Binder.clearCallingIdentity();
-        try {
-            Intent addedIntent = new Intent(Intent.ACTION_USER_REMOVED);
-            addedIntent.putExtra(Intent.EXTRA_USER_HANDLE, userHandle);
-            mContext.sendOrderedBroadcastAsUser(addedIntent, UserHandle.ALL,
-                    android.Manifest.permission.MANAGE_USERS,
-
-                    new BroadcastReceiver() {
-                        @Override
-                        public void onReceive(Context context, Intent intent) {
-                            new Thread() {
-                                public void run() {
-                                    synchronized (mInstallLock) {
-                                        synchronized (mPackagesLock) {
-                                            removeUserStateLocked(userHandle);
-                                        }
-                                    }
-                                }
-                            }.start();
-                        }
-                    },
-                    null, Activity.RESULT_OK, null, null);
-        } finally {
-            Binder.restoreCallingIdentity(ident);
-        }
-    }
-```
-
-根据代码可以看到`finishRemoveUser`方法只是发送了一个有序广播ACTION_USER_REMOVED，同时注册了一个广播接收器，这个广播接收器是最后一个接收到该广播的接收器，这样做的目的是让关心该广播的其他接收器处理完之后， UMS 才会进行删除用户的收尾工作，即调用`removeUserStateLocked`来删除用户的相关文件。
-
-```java
-    private void removeUserStateLocked(final int userHandle) {
-        // 调用mPm.cleanUpUserLILPw来删除用户目录/data/user/<用户id>/下面的应用数据，后面会详细介绍
-        mPm.cleanUpUserLILPw(this, userHandle);
-
-        // 从mUsers列表中移除该用户信息
-        mUsers.remove(userHandle);
-        AtomicFile userFile = new AtomicFile(new File(mUsersDir, userHandle + XML_SUFFIX));
-        // 删除用户信息文件 <用户id>.xml
-        userFile.delete();
-        // 更新userlist.xml文件，将删除调用的用户从中移除
-        writeUserListLocked();
-        // 更新mUserIds列表
-        updateUserIdsLocked();
-        // 删除用户目录以及该用户的所有文件
-        removeDirectoryRecursive(Environment.getUserSystemDirectory(userHandle));
-    }
-```
-
-至此，删除用户的工作已经全部完成。
-
 ## UserInfo
 
 ```java
@@ -846,12 +596,160 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
     }
 ```
 
-## PackageManagerService和多用户
+## UserState
 
-在多用户环境中，所有安装的应用还是位于 /data/app/ 目录中，应用的数据还是保存在 /data/data 下面，这些数据只对 Id 为 0 的用户即管理员用户有效，但是这些应用的数据在 /data/user/<用户id>/ 目录下面都会有单独的一份。
-下面来介绍一下 PMS 中和`UserManager`打交道的一些方法。
+先了解一下用户的几个运行状态：
 
-### 创建用户数据createNewUserLILPw()
+```java
+public final class UserState {
+    // 用户正在启动
+    public final static int STATE_BOOTING = 0;
+    // 用户正在运行
+    public final static int STATE_RUNNING = 1;
+    // 用户正在关闭
+    public final static int STATE_STOPPING = 2;
+    // 用户已经被关闭
+    public final static int STATE_SHUTDOWN = 3;
+}
+```
+
+UMS 有下列变量来存储用户的相关信息：
+
+ - `mCurrentUserId`表示当前正在允许的用户的Id；
+ - `mTargetUserId`记录当前正在切换到该用户；
+ - `mStartedUsers`保存了当前已经运行过的用户的列表，这个列表中的用户会有上面的四种状态
+ - `mUserLru`用最近最少使用算法保存的用户列表，最近的前台用户保存在列表的最后位置
+ - `mStartedUserArray`表示mStartedUsers中当前正在运行的用户列表的index，即mStartedUsers中除去正在关闭和已经被关闭状态外的用户
+
+## 创建用户
+
+### UserManagerService
+
+UMS 中创建用户是在`createUser()`方法中实现的：
+
+```java
+    @Override
+    public UserInfo createUser(String name, int flags) {
+        checkManageUsersPermission("Only the system can create users");
+        return createUserInternal(name, flags, UserHandle.USER_NULL);
+    }
+```
+
+首先检查调用者的权限，只有 UID 是 system 或者具有`android.Manifest.permission.MANAGE_USERS`的应用才有权限，否则抛出异常。然后就调用`createUserInternal`来执行真正的创建工作。
+
+```java
+    private UserInfo createUserInternal(String name, int flags, int parentId) {
+        // 检查一下该用户是否被限制创建用户
+        if (getUserRestrictions(UserHandle.getCallingUserId()).getBoolean(
+                UserManager.DISALLOW_ADD_USER, false)) {
+            return null;
+        }
+        // 检查是否是低内存设备
+        if (ActivityManager.isLowRamDeviceStatic()) {
+            return null;
+        }
+        final boolean isGuest = (flags & UserInfo.FLAG_GUEST) != 0;
+        final boolean isManagedProfile = (flags & UserInfo.FLAG_MANAGED_PROFILE) != 0;
+        final long ident = Binder.clearCallingIdentity();
+        UserInfo userInfo = null;
+        final int userId;
+        try {
+            synchronized (mInstallLock) {
+                synchronized (mPackagesLock) {
+                    UserInfo parent = null;
+                    if (parentId != UserHandle.USER_NULL) {
+                        parent = getUserInfoLocked(parentId);
+                        if (parent == null) return null;
+                    }
+                    if (isManagedProfile && !canAddMoreManagedProfiles()) {
+                        return null;
+                    }
+                    // 如果添加的不是Guest用户，也不是用户的profile，而且已经到达用户的上限，则不允许再添加
+                    if (!isGuest && !isManagedProfile && isUserLimitReachedLocked()) {
+                        return null;
+                    }
+                    // 如果添加的是Guest用户，但是系统中已经存在一个，则不允许再添加
+                    if (isGuest && findCurrentGuestUserLocked() != null) {
+                        return null;
+                    }
+                    // 得到新用户的Id
+                    userId = getNextAvailableIdLocked();
+                    // 为该新用户创建UserInfo
+                    userInfo = new UserInfo(userId, name, null, flags);
+                    // 设置序列号
+                    userInfo.serialNumber = mNextSerialNumber++;
+                    // 设置创建时间
+                    long now = System.currentTimeMillis();
+                    userInfo.creationTime = (now > EPOCH_PLUS_30_YEARS) ? now : 0;
+                    // 设置partial，表示正在创建
+                    userInfo.partial = true;
+                    Environment.getUserSystemDirectory(userInfo.id).mkdirs();
+                    // 放入mUsers列表
+                    mUsers.put(userId, userInfo);
+                    // 把用户信息写入userlist.xml
+                    writeUserListLocked();
+                    if (parent != null) {
+                        if (parent.profileGroupId == UserInfo.NO_PROFILE_GROUP_ID) {
+                            parent.profileGroupId = parent.id;
+                            scheduleWriteUserLocked(parent);
+                        }
+                        userInfo.profileGroupId = parent.profileGroupId;
+                    }
+                    // 创建用户目录
+                    final StorageManager storage = mContext.getSystemService(StorageManager.class);
+                    for (VolumeInfo vol : storage.getWritablePrivateVolumes()) {
+                        final String volumeUuid = vol.getFsUuid();
+                        try {
+                            final File userDir = Environment.getDataUserDirectory(volumeUuid,
+                                    userId);
+                            // 创建userDir，如果volumeUuid为空，创建/data/user/<userId>/，不为空，创建/mnt/expand/<volumeUuid>/user/<userId>/
+                            prepareUserDirectory(userDir);
+                            enforceSerialNumber(userDir, userInfo.serialNumber);
+                        } catch (IOException e) {
+                            Log.wtf(LOG_TAG, "Failed to create user directory on " + volumeUuid, e);
+                        }
+                    }
+                    // 调用PackageManagerService的createNewUserLILPw方法，此方法很重要，后面会单独分析
+                    // 这个函数会在新建用户的userDir目录下面为所有应用创建数据
+                    // 此方法将新用户可以使用的App在/data/user/<用户Id>文件夹下创建数据目录，目录名称为包名
+                    mPm.createNewUserLILPw(userId);
+                    // 创建成功，将partial改为false
+                    userInfo.partial = false;
+                    // 会调用writeUserLocked()创建xxx.xml，类似0.xml，xxx是用户Id
+                    scheduleWriteUserLocked(userInfo);
+                    // 更新mUserIds数组
+                    updateUserIdsLocked();
+                    Bundle restrictions = new Bundle();
+                    // 添加为该用户设置的限制条件
+                    mUserRestrictions.append(userId, restrictions);
+                }
+            }
+            // 发送用户创建完成的广播，广播附带用户的id
+            if (userInfo != null) {
+                Intent addedIntent = new Intent(Intent.ACTION_USER_ADDED);
+                addedIntent.putExtra(Intent.EXTRA_USER_HANDLE, userInfo.id);
+                mContext.sendBroadcastAsUser(addedIntent, UserHandle.ALL,
+                        android.Manifest.permission.MANAGE_USERS);
+            }
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
+        return userInfo;
+    }
+```
+
+由上面的代码可知，`createUser`主要做了一下工作：
+1. 检查调用进程所属用户是否被限制添加用户、当前设备是否是低内存设备、当前用户数是否已达上限，如是则停止创建新用户
+2. 为新用户设置用户信息，比如Id，序列号创建时间等
+3. 将用户信息写入userlist.xml，注意，此时的userInfo.partial = true，表示正在创建
+4. 创建用户目录/data/user/<userId>/或者/mnt/expand/<volumeUuid>/user/<userId>/
+5. 调用PackageManagerService的createNewUserLILPw方法，这个函数会在新建用户的目录下面为所有应用创建数据目录
+6. 创建用户完成，将userInfo.partial设置为false，创建用户的信息文件，比如0.xml
+7. 发送用户创建完成的广播
+
+### PackageManagerService
+
+#### 创建用户数据createNewUserLILPw()
 
 ```java
     void createNewUserLILPw(int userHandle) {
@@ -891,80 +789,9 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
     }
 ```
 
-### 删除用户数据cleanUpUserLILPw()
+## 切换用户
 
-```java
-    void cleanUpUserLILPw(UserManagerService userManager, int userHandle) {
-        mDirtyUsers.remove(userHandle);
-        mSettings.removeUserLPw(userHandle);
-        mPendingBroadcasts.remove(userHandle);
-        if (mInstaller != null) {
-            // Technically, we shouldn't be doing this with the package lock
-            // held.  However, this is very rare, and there is already so much
-            // other disk I/O going on, that we'll let it slide for now.
-            final StorageManager storage = mContext.getSystemService(StorageManager.class);
-            for (VolumeInfo vol : storage.getWritablePrivateVolumes()) {
-                final String volumeUuid = vol.getFsUuid();
-                mInstaller.removeUserDataDirs(volumeUuid, userHandle);
-            }
-        }
-        mUserNeedsBadging.delete(userHandle);
-        removeUnusedPackagesLILPw(userManager, userHandle);
-    }
-
-```
-
-删除用户的工作比较简单，删除用户的数据。同时调用`mSettings.removeUserLPw(userHandle)`来删除和 PMS 中和用户相关的信息。
-
-```java
-    void removeUserLPw(int userId) {
-        // 删除每个应用中的该用户的信息
-        Set<Entry<String, PackageSetting>> entries = mPackages.entrySet();
-        for (Entry<String, PackageSetting> entry : entries) {
-            entry.getValue().removeUser(userId);
-        }
-        mPreferredActivities.remove(userId);
-        File file = getUserPackagesStateFile(userId);
-        file.delete();
-        file = getUserPackagesStateBackupFile(userId);
-        file.delete();
-        removeCrossProfileIntentFiltersLPw(userId);
-
-        mRuntimePermissionsPersistence.onUserRemoved(userId);
-        // 更新/data/system/packages.list文件
-        writePackageListLPr();
-    }
-
-```
-
-## ActivityManagerService和多用户
-
-### 用户的运行状态
-
-在分析这一部分之前，我们先需要了解一下用户的几个运行状态：
-
-```java
-public final class UserState {
-    // 用户正在启动
-    public final static int STATE_BOOTING = 0;
-    // 用户正在运行
-    public final static int STATE_RUNNING = 1;
-    // 用户正在关闭
-    public final static int STATE_STOPPING = 2;
-    // 用户已经被关闭
-    public final static int STATE_SHUTDOWN = 3;
-}
-```
-
-UMS 有下列变量来存储用户的相关信息：
-
- - `mCurrentUserId`表示当前正在允许的用户的Id；
- - `mTargetUserId`记录当前正在切换到该用户；
- - `mStartedUsers`保存了当前已经运行过的用户的列表，这个列表中的用户会有上面的四种状态
- - `mUserLru`用最近最少使用算法保存的用户列表，最近的前台用户保存在列表的最后位置
- - `mStartedUserArray`表示mStartedUsers中当前正在运行的用户列表的index，即mStartedUsers中除去正在关闭和已经被关闭状态外的用户
-
-### 切换当前用户switchUser()
+### ActivityManagerService
 
 #### startUser()
 
@@ -1459,7 +1286,137 @@ REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和RE
 通过`finishUserSwitch`->`finishUserBoot`来将用户的状态置为`UserState.STATE_RUNNING`，并发出广播`Intent.ACTION_BOOT_COMPLETED`广播。
 至此，用户切换工作全部结束。
 
-### 停止用户运行stopUser()
+## 删除用户
+
+### UserManagerService
+
+`UserManagerService`中删除用户是在`removeUser()`方法中实现的：
+
+```java
+    public boolean removeUser(int userHandle) {
+        // 检查该进程是否具有删除用户的权限
+        checkManageUsersPermission("Only the system can remove users");
+        // 检查一下该用户是否被限制删除用户
+        if (getUserRestrictions(UserHandle.getCallingUserId()).getBoolean(
+                UserManager.DISALLOW_REMOVE_USER, false)) {
+            return false;
+        }
+
+        long ident = Binder.clearCallingIdentity();
+        try {
+            final UserInfo user;
+            synchronized (mPackagesLock) {
+                user = mUsers.get(userHandle);
+                // 检查被删除的用户是不是管理员用户userHandle=0，检查用户列表中是否有该用户，以及该用户是否是正在被删除的用户
+                if (userHandle == 0 || user == null || mRemovingUserIds.get(userHandle)) {
+                    return false;
+                }
+
+                // 将该用户放入mRemovingUserIds列表中，防止重复删除
+                // mRemovingUserIds中的数据会一直保存直到系统重启，防止Id被重复使用
+                mRemovingUserIds.put(userHandle, true);
+
+                try {
+                    mAppOpsService.removeUser(userHandle);
+                } catch (RemoteException e) {
+                    Log.w(LOG_TAG, "Unable to notify AppOpsService of removing user", e);
+                }
+                // 将partial设置为true，这样如果后面的过程意外终止导致此次删除失败，系统重启后还是会继续删除工作的
+                user.partial = true;
+                // 设置FLAG_DISABLED，禁止该用户
+                user.flags |= UserInfo.FLAG_DISABLED;
+                // 将上面更新的用户文件信息写入到xml文件中去
+                writeUserLocked(user);
+            }
+
+            // 如果该user是一个user的一份profile，则发出一个ACTION_MANAGED_PROFILE_REMOVED广播
+            if (user.profileGroupId != UserInfo.NO_PROFILE_GROUP_ID
+                    && user.isManagedProfile()) {
+                sendProfileRemovedBroadcast(user.profileGroupId, user.id);
+            }
+
+            // 调用AMS停止当前的用户，这部分后面会详细介绍
+            int res;
+            try {
+                res = ActivityManagerNative.getDefault().stopUser(userHandle,
+                        // 设置回调函数，调用finishRemoveUser继续后面的删除工作
+                        new IStopUserCallback.Stub() {
+                            @Override
+                            public void userStopped(int userId) {
+                                finishRemoveUser(userId);
+                            }
+                            @Override
+                            public void userStopAborted(int userId) {
+                            }
+                        });
+            } catch (RemoteException e) {
+                return false;
+            }
+            return res == ActivityManager.USER_OP_SUCCESS;
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
+    }
+```
+
+`ActivityManagerNative.getDefault().stopUser`执行完后 UMS 会继续执行删除工作。
+
+```java
+    void finishRemoveUser(final int userHandle) {
+        // Let other services shutdown any activity and clean up their state before completely
+        // wiping the user's system directory and removing from the user list
+        long ident = Binder.clearCallingIdentity();
+        try {
+            Intent addedIntent = new Intent(Intent.ACTION_USER_REMOVED);
+            addedIntent.putExtra(Intent.EXTRA_USER_HANDLE, userHandle);
+            mContext.sendOrderedBroadcastAsUser(addedIntent, UserHandle.ALL,
+                    android.Manifest.permission.MANAGE_USERS,
+
+                    new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            new Thread() {
+                                public void run() {
+                                    synchronized (mInstallLock) {
+                                        synchronized (mPackagesLock) {
+                                            removeUserStateLocked(userHandle);
+                                        }
+                                    }
+                                }
+                            }.start();
+                        }
+                    },
+                    null, Activity.RESULT_OK, null, null);
+        } finally {
+            Binder.restoreCallingIdentity(ident);
+        }
+    }
+```
+
+根据代码可以看到`finishRemoveUser`方法只是发送了一个有序广播ACTION_USER_REMOVED，同时注册了一个广播接收器，这个广播接收器是最后一个接收到该广播的接收器，这样做的目的是让关心该广播的其他接收器处理完之后， UMS 才会进行删除用户的收尾工作，即调用`removeUserStateLocked`来删除用户的相关文件。
+
+```java
+    private void removeUserStateLocked(final int userHandle) {
+        // 调用mPm.cleanUpUserLILPw来删除用户目录/data/user/<用户id>/下面的应用数据，后面会详细介绍
+        mPm.cleanUpUserLILPw(this, userHandle);
+
+        // 从mUsers列表中移除该用户信息
+        mUsers.remove(userHandle);
+        AtomicFile userFile = new AtomicFile(new File(mUsersDir, userHandle + XML_SUFFIX));
+        // 删除用户信息文件 <用户id>.xml
+        userFile.delete();
+        // 更新userlist.xml文件，将删除调用的用户从中移除
+        writeUserListLocked();
+        // 更新mUserIds列表
+        updateUserIdsLocked();
+        // 删除用户目录以及该用户的所有文件
+        removeDirectoryRecursive(Environment.getUserSystemDirectory(userHandle));
+    }
+```
+
+至此，删除用户的工作已经全部完成。
+
+### ActivityManagerService
 
 UMS的`removeUser()`会调用AMS的`stopUser()`来处理停止用户的一些工作，在AMS内部也会调用`stopUser()`。该方法在进行了权限检查之后，主要的工作都是由`stopUserLocked()`来完成的。
 
@@ -1617,4 +1574,52 @@ UMS的`removeUser()`会调用AMS的`stopUser()`来处理停止用户的一些工
 ```
 
 至此，删除用户的相关工作全部完成。
+
+### PackageManagerService
+
+删除用户数据cleanUpUserLILPw()
+
+```java
+    void cleanUpUserLILPw(UserManagerService userManager, int userHandle) {
+        mDirtyUsers.remove(userHandle);
+        mSettings.removeUserLPw(userHandle);
+        mPendingBroadcasts.remove(userHandle);
+        if (mInstaller != null) {
+            // Technically, we shouldn't be doing this with the package lock
+            // held.  However, this is very rare, and there is already so much
+            // other disk I/O going on, that we'll let it slide for now.
+            final StorageManager storage = mContext.getSystemService(StorageManager.class);
+            for (VolumeInfo vol : storage.getWritablePrivateVolumes()) {
+                final String volumeUuid = vol.getFsUuid();
+                mInstaller.removeUserDataDirs(volumeUuid, userHandle);
+            }
+        }
+        mUserNeedsBadging.delete(userHandle);
+        removeUnusedPackagesLILPw(userManager, userHandle);
+    }
+
+```
+
+删除用户的工作比较简单，删除用户的数据。同时调用`mSettings.removeUserLPw(userHandle)`来删除和 PMS 中和用户相关的信息。
+
+```java
+    void removeUserLPw(int userId) {
+        // 删除每个应用中的该用户的信息
+        Set<Entry<String, PackageSetting>> entries = mPackages.entrySet();
+        for (Entry<String, PackageSetting> entry : entries) {
+            entry.getValue().removeUser(userId);
+        }
+        mPreferredActivities.remove(userId);
+        File file = getUserPackagesStateFile(userId);
+        file.delete();
+        file = getUserPackagesStateBackupFile(userId);
+        file.delete();
+        removeCrossProfileIntentFiltersLPw(userId);
+
+        mRuntimePermissionsPersistence.onUserRemoved(userId);
+        // 更新/data/system/packages.list文件
+        writePackageListLPr();
+    }
+
+```
 
