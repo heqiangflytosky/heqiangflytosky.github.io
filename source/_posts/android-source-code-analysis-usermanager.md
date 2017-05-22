@@ -1573,7 +1573,7 @@ UMS的`removeUser()`会调用AMS的`stopUser()`来处理停止用户的一些工
 
 ```
 
-至此，删除用户的相关工作全部完成。
+至此，AMS相关的删除用户的相关工作全部完成。
 
 ### PackageManagerService
 
