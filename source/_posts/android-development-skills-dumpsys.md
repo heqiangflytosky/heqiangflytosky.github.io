@@ -211,12 +211,14 @@ Window manager dump options:
  - adb shell dumpsys meminfo：查看各个进程内存使用情况。（`meminfo $package_name or $pid` 使用程序的包名或者进程id显示内存信息比如浏览器：`adb shell dumpsys meminfo com.android.browser`）
  - adb shell dumpsys SurfaceFlinger： 查看UI绘制的各个层级信息
  - adb shell dumpsys window： 显示键盘，窗口和它们的关系
+ - adb shell dumpsys package <包名>： 查看该包的具体信息
  - adb shell dumpsys statusbar： 显示状态栏相关信息
  - adb shell dumpsys usagestats： 每个应用的启动次数和时间
  - adb shell dumpsys battery： 电池信息
  - adb shell dumpsys diskstats： 磁盘相关信息
  - adb shell dumpsys alarm： 显示Alarm信息
  - adb shell dumpsys wifi： 显示wifi信息
+ - adb shell dumpsys user：查看当前的用户情况
 
 ## 参考资料
 http://www.open-open.com/lib/view/open1405061994872.html

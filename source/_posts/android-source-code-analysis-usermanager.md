@@ -228,9 +228,9 @@ public boolean hasUserRestriction(String restrictionKey, UserHandle userHandle)
  - DISALLOW_SAFE_BOOT
  - DISALLOW_RECORD_AUDIO
 
-### 相关adb命令
+## 相关adb命令
 
-#### 获取用户信息
+### 获取用户信息
 
 用`adb shell dumpsys user`可以查看当前的用户情况：
 
@@ -243,6 +243,20 @@ Users:
     Created: +2d3h37m2s326ms ago
     Last logged in: +1h27m49s171ms ago
 ```
+
+上面的打印是在`UserManagerService.dump()`中打印的。
+UserInfo{0:机主:13} 所代表的含义可以参考代码`UserInfo.toString()`：
+
+```java
+    @Override
+    public String toString() {
+        return "UserInfo{" + id + ":" + name + ":" + Integer.toHexString(flags) + "}";
+    }
+```
+
+ - 0:id
+ - 机主:name
+ - 13:flags
 
 ## UserManagerService
 
@@ -595,6 +609,9 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
         }
     }
 ```
+
+如果我们切换到访客模式，还会发现一个UID为`u10_a24`的`com.android.systemui`进程，因为该应用的appid为10024，不同的是它们是在不同的用户下面创建的进程。
+但是在访客模式下面，root，system，shell等这些系统进程是和主用户是共用的，不会再创建新的进程。
 
 ## UserState
 
