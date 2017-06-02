@@ -3,7 +3,7 @@ title: React Native 入门
 categories: React Native
 comments: true
 tags: [React Native]
-description: 本文主要对Helle World的代码进行分析分析
+description: 本文主要对Helle World示例的代码进行分析，介绍一下 React Native 一些入门知识
 date: 2017-01-11 10:00:00
 ---
 

@@ -3,7 +3,7 @@ title: Android项目中集成React Native
 categories: React Native
 comments: true
 tags: [React Native]
-description:
+description: 介绍如何在一个已有的Android工程中集成React Native
 date: 2017-01-14 10:00:00
 ---
 React Native是非常强大的，但有的时候我们可能并不需要从0开始去开发一个React Native应用，而是需要把它集成到我们现有的Android工程中去，去添加单个的React Native View。本章将主要介绍在原生Android中集成React Native。

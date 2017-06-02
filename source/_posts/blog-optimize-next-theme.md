@@ -4,6 +4,7 @@ date: 2016-01-12 10:00:00
 tags: [Hexo, Next Theme]
 categories: Hexo
 comments: true
+description: 介绍一些Next主题的优化和配置技巧
 ---
 按照上篇博客中更换Theme的方法，我们已经将主题改为Next，但是还是有地方我们可以优化和配置的。
 一些常见的配置方法参考[文档](http://theme-next.iissnan.com/getting-started.html)即可。

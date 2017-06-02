@@ -3,6 +3,7 @@ title: React Native-Image控件
 categories: React Native
 comments: true
 tags: [React Native]
+description: 介绍React Native中Image控件的基本使用
 date: 2017-01-13 10:00:00
 ---
 ## 基本用法

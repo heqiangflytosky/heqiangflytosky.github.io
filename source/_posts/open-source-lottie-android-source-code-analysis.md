@@ -3,6 +3,7 @@ title: 开源项目- Lottie 源码分析
 categories: Android开源项目
 comments: true
 tags: [Android, Lottie]
+description: 分析 Lottie 的源码及其实现原理
 date: 2017-02-07 12:00:00
 ---
 Lottie的基本用法其实还是非常简单的，不熟悉的同学请阅读我的博客[开源项目-Lottie简介](http://www.heqiangfly.com/2017/02/07/open-source-lottie-android-introduction/)。接下来我们就从源码角度分析一下这么强大的功能是怎么实现的。

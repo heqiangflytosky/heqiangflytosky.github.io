@@ -3,6 +3,7 @@ title: React Native-flexbox
 categories: React Native
 comments: true
 tags: [React Native]
+description: 介绍flexbox布局的基本知识以及在React Native中的应用
 date: 2017-01-13 12:00:00
 ---
 ## 介绍flexbox布局

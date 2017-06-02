@@ -3,7 +3,7 @@ title: React Native创建原生模块
 categories: React Native
 comments: true
 tags: [React Native]
-description:
+description: 介绍在React Native中创建Android原生模块的方法，实现调用Android原生模块的功能
 date: 2017-01-14 12:00:00
 ---
 在React Native开发过程中，有时候我们可能需要访问平台的API，但React Native还没有相应的实现，或者是React Native还不支持一些原生的属性，我们需要调用原生代码来实现，或者是我们需要复用一些原来的Java代码，这个时候我们就需要创建一个原生模块来自己实现对我们需要功能的封装。

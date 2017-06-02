@@ -3,6 +3,7 @@ title: React Native-组件Component
 categories: React Native
 comments: true
 tags: [React Native]
+description: 介绍Component的创建、组件的生命周期、组件的Props和 State以及组建之间的通信
 date: 2017-01-12 10:00:00
 ---
 ## 创建一个Component

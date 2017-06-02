@@ -3,6 +3,7 @@ title: 开始了解React Native
 categories: React Native
 comments: true
 tags: [React Native]
+description: 初步介绍一下 React Native 及其在移动开发中的优势
 date: 2017-01-10 10:00:00
 ---
 ## React是什么？

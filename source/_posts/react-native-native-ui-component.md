@@ -3,7 +3,7 @@ title: React Native封装原生UI组件
 categories: React Native
 comments: true
 tags: [React Native]
-description:
+description: 介绍如何在React Native中封装和调用Android原生UI组件
 date: 2017-01-15 10:00:00
 ---
 在React Native开发过程中，有时我们想要使用原生的一个UI组件或者是JS比较难以实现的动画效果时，我们可以在React Naitve应用程序中封装和植入已有的原生组件。

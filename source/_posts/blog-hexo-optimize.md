@@ -4,6 +4,7 @@ date: 2016-01-11 10:00:00
 tags: Hexo
 categories: Hexo
 comments: true
+description: 介绍一些Hexo的配置技巧
 ---
 [Hexo 文档](https://hexo.io/docs/)
 ### 创建hexo分支
