@@ -103,3 +103,35 @@ date: 2017-01-010 13:00:00
 favicon: /images/favicon.ico
 ```
 然后把图表放到根目录的`source/images/`下面。
+### 添加友情链接页面
+和前面的添加关于页面、分类页面类似，不同的是Next主题默认是没有这个页面的，需要我们自己添加一些东西，比如文字翻译，添加对应图标等。
+首先通过下面的命令添加一个页面：
+```
+hexo new page links
+```
+会生成source/links/index.md文件。
+在Next主题配置文件中添加：
+```yml
+menu:
+  home: /
+  ......
+  about: /about
+  links: /links
+```
+添加图标：
+```yml
+menu_icons:
+  enable: true
+  ......
+  links: users
+```
+这里如果找到合适的图标呢？可以到[fontawesome.io](http://fontawesome.io/)这个网站来找 ，Next里面用的就是这里面的图标。
+下一步就是要添加翻译了，要不在菜单栏现实的是 menu.links。
+在next/languages/ 下面编辑对应的语言，添加翻译。
+比如在zh-CN.yml中添加：
+```yml
+menu:
+  ...
+  links: 友情链接
+```
+然后可以随意编辑source/links/index.md文件就可以了。

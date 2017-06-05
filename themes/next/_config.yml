@@ -41,6 +41,7 @@ menu:
   archives: /archives
   tags: /tags
   about: /about
+  links: /links
   #sitemap: /sitemap.xml
   #commonweal: /404.html
 
@@ -61,6 +62,7 @@ menu_icons:
   archives: archive
   sitemap: sitemap
   commonweal: heartbeat
+  links: users
 
 
 
