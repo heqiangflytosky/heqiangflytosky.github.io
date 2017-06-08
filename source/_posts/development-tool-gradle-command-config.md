@@ -168,6 +168,8 @@ android {
              jniLibs.srcDirs = jniLibs.srcDirs << 'src/jniLibs'
              //定义多个资源文件夹,这种情况下，两个资源文件夹具有相同优先级，即如果一个资源在两个文件夹都声明了，合并会报错。
              res.srcDirs = ['src/main/res', 'src/main/res2']
+             //指定多个源文件目录
+             java.srcDirs = ['src/main/java', 'src/main/aidl']
         }
     }
 
