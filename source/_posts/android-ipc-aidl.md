@@ -53,6 +53,7 @@ import com.android.hq.aidldemo.Student;
 
 interface StudentManager {
     List<Student>  getStudents();
+    //传参时除了Java基本类型以及String，CharSequence之外的类型，都需要在前面指定定向tag，具体加什么根据自己需要
     void addStudent(inout Student student);
 }
 
@@ -166,7 +167,7 @@ app/build/generated/source/aidl/debug/com/android/hq/aidldemo/StudentManager.jav
 
 ```
 
-StudentManager.aidl 这里`void addStudent(inout Student student);`的参数类型必须为`inout`类型，否则编译会报下面的错误。一旦申明为这个类型，`Student`类就必须实现`readFromParcel()`方法。具体`inout`类型介绍可以参考我的下一篇博客。
+StudentManager.aidl 这里`void addStudent(inout Student student);`的参数类型必须指定定向tag，否则编译会报下面的错误，这里我们指定的是`inout`类型。一旦申明为`inout`这个类型，`Student`类就必须实现`readFromParcel()`方法。具体`inout`类型介绍可以参考我的下一篇博客。
 
 ```
 17:18:23.963 [ERROR] [org.gradle.api.Task] aidl E  8954  8954 type_namespace.cpp:130] In file /home/heqiang/AndroidStudioProjects/AIDLDemo/app/src/main/aidl/com/android/hq/aidldemo/StudentManager.aidl line 8 parameter student (argument 1):
@@ -431,12 +432,4 @@ public class AIDLService extends Service {
 ```
 看到客户端等服务端调用完毕才会往下走，因此我们可以得到这样的结论：
 **进程间通信是同步的**。
-
-## 参考文档
-http://www.open-open.com/lib/view/open1469493649028.html
-http://www.open-open.com/lib/view/open1469494852171.html
-http://www.open-open.com/lib/view/open1469494342021.html
-
-
-
 
