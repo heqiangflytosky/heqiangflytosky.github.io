@@ -387,7 +387,7 @@ public class AIDLService extends Service {
 
 ## 问题
 
-### 进程间通信是异步的还是同步的？
+### Android进程间通信是异步的还是同步的？
 
 我们可以在程序中验证这个问题。
 我们在`AIDLService`类的`mStudentManager`实现的方法`addStudent()`中添加一个延时：
@@ -431,5 +431,5 @@ public class AIDLService extends Service {
 06-08 19:42:30.506 20807 20807 D Client  : addStudent end
 ```
 看到客户端等服务端调用完毕才会往下走，因此我们可以得到这样的结论：
-**进程间通信是同步的**。
+**Android进程间通信是同步的**。
 

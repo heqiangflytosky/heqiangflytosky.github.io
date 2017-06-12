@@ -6,9 +6,15 @@ tags: [Android, dumpsys]
 description: 介绍dumpsys的使用
 date: 2014-10-15 10:00:00
 ---
-Android提供的`dumpsys`工具可以用于查看手机中的应用程序和系统服务信息与状态，手机连接电脑后可以直接命令行执行`adb shell dumpsy`查看所有支持的`Service`。但是这样输出的太多，可以通过`dumpsys | grep "DUMP OF SERVICE"` 仅显示主要的`Service`的信息。
+
+## dumpsys概述
+
+Android提供的`dumpsys`工具可以用于查看手机中的应用程序和系统服务信息与状态，能够熟练使用`dumpsys`工具以及对它的输出内容进行理解是Android开发人员的必备技能，使用它我们不仅能够对方便的获取一些当前的平台的一些信息，而且能够对Android性能优化、Bug分析与调试带来很大的帮助。
+手机连接电脑后可以直接命令行执行`adb shell dumpsy`查看所有支持的`Service`，但是这样输出的太多，可以通过`dumpsys | grep "DUMP OF SERVICE"` 仅显示主要的`Service`的信息。
 关于这个命令的使用方法在这里做一下记录，以备使用。
+
 ## dumpsys支持的所有命令
+
 输入：
 ```
 adb shell dumpsys | grep DUMP
@@ -114,6 +120,7 @@ DUMP OF SERVICE window:
 ```
 
 ## 具体命令如何查看帮助
+
 从上面可以看出可以查看的`Service`非常多，`DUMP OF SERVICE`关键字后面的单词都可以直接通过 `dumpsys + 单词` 查看相关信息，具体每一个如何使用有一种通用的查看帮助的办法。
 查看每一个命令的使用帮助，以下以`activity`为例演示：
 ```
@@ -207,6 +214,7 @@ Window manager dump options:
 比如`adb shell dumpsys window -d enable 10`就是打开`DEBUG_ORIENTATION`，这样就把代码中的关于屏幕方向旋转相关的Log打印出来。
 
 ## 一些常用命令解释
+
  - adb shell dumpsys activity： 显示activity的相关信息，包括任务栈等
  - adb shell dumpsys meminfo：查看各个进程内存使用情况。（`meminfo $package_name or $pid` 使用程序的包名或者进程id显示内存信息比如浏览器：`adb shell dumpsys meminfo com.android.browser`）
  - adb shell dumpsys SurfaceFlinger： 查看UI绘制的各个层级信息
@@ -221,5 +229,6 @@ Window manager dump options:
  - adb shell dumpsys user：查看当前的用户情况
 
 ## 参考资料
+
 http://www.open-open.com/lib/view/open1405061994872.html
 https://source.android.com/devices/tech/input/dumpsys.html
