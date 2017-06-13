@@ -59,6 +59,7 @@ int main(int argc, char* const argv[])
         ......
         // 打印出当前的服务列表
         for (size_t i=0; i<N; i++) {
+            // 根据服务名称获取服务对象
             sp<IBinder> service = sm->checkService(services[i]);
             if (service != NULL) {
                 aout << "  " << services[i] << endl;
@@ -71,6 +72,7 @@ int main(int argc, char* const argv[])
     }
     // 调用各个service的dump方法来完成服务信息的输出
     for (size_t i=0; i<N; i++) {
+        // 根据服务名称获取服务对象
         sp<IBinder> service = sm->checkService(services[i]);
         if (service != NULL) {
             if (N > 1) {

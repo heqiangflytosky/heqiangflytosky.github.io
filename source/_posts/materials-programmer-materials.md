@@ -317,6 +317,20 @@ date: 2016-12-1 10:00:00
 
 ### 素材站点
 
+ - IconFont 阿里巴巴矢量图标库： http://www.iconfont.cn/
+ - IconMoon： https://icomoon.io/app/#/select
+ - Iconion： http://iconion.com/
+ - Android-Iconics： https://github.com/mikepenz/Android-Iconics
+ - http://findicons.com/
+ - https://www.iconfinder.com/
+ - http://www.flaticon.com/
+ - http://www.iconarchive.com/
+ - https://github.com/google/material-design-icons
+ - http://www.bestpsdfreebies.com/category-freebie/icons/
+ - http://www.premiumpixels.com/page/1/?s=icon
+
+博客 [Android IconFont全攻略](http://mp.weixin.qq.com/s?__biz=MzAxMTI4MTkwNQ==&mid=2650821086&idx=1&sn=080bc2cfaa04947b974bf6273bbd7259&chksm=80b78540b7c00c56fd15fb8027b4d2730523c32c2099970cc49f9ddc03d235c907dc59e1695c&scene=4#wechat_redirect)
+
 ### 常用工具
 
  - GifCam：一个好用的视频转gif工具
