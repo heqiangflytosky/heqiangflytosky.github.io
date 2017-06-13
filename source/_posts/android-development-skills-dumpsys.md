@@ -16,112 +16,58 @@ Android提供的`dumpsys`工具可以用于查看手机中的应用程序和系�
 ## dumpsys支持的所有命令
 
 输入：
+
 ```
-adb shell dumpsys | grep DUMP
+adb shell dumpsys -l
 ```
-或
+
+可以查看当前支持的所有系统服务列表：
+
 ```
-adb shell dumpsys | grep "DUMP OF SERVICE" 
+  DockObserver
+  GuiExtService
+  SurfaceFlinger
+  access_control
+  accessibility
+  account
+  activity
+  ......
+  meminfo
+  mount
+  move_window
+  netpolicy
+  netstats
+  network_management
+  network_score
+  networkmanagement_service_flyme
+  notification
+  package
+  permission
+  persistent_data_block
+  power
+  pppoe
+  ......
+  trust
+  uimode
+  updatelock
+  usagestats
+  usb
+  user
+  vibrator
+  voiceinteraction
+  wallpaper
+  webviewupdate
+  wifi
+  wifip2p
+  wifiscanner
+  window
 ```
-就列出了当前手机支持的所有`dumpsys`参数：
-```
-DUMP OF SERVICE Exynos.HWCService:
-DUMP OF SERVICE SurfaceFlinger:
-DUMP OF SERVICE access_control:
-DUMP OF SERVICE accessibility:
-DUMP OF SERVICE account:
-DUMP OF SERVICE activity:
-DUMP OF SERVICE alarm:
-DUMP OF SERVICE android.security.keystore:
-DUMP OF SERVICE appops:
-DUMP OF SERVICE appwidget:
-DUMP OF SERVICE audio:
-DUMP OF SERVICE backup:
-DUMP OF SERVICE battery:
-DUMP OF SERVICE batterypropreg:
-DUMP OF SERVICE batterystats:
-DUMP OF SERVICE bluetooth_manager:
-DUMP OF SERVICE blurglassinfo:
-DUMP OF SERVICE clipboard:
-DUMP OF SERVICE com.meizu.nfc.NxpExt:
-DUMP OF SERVICE commontime_management:
-DUMP OF SERVICE connectivity:
-DUMP OF SERVICE consumer_ir:
-DUMP OF SERVICE content:
-DUMP OF SERVICE country_detector:
-DUMP OF SERVICE cpuinfo:
-DUMP OF SERVICE dbinfo:
-DUMP OF SERVICE deivce_states:
-DUMP OF SERVICE device_policy:
-DUMP OF SERVICE devicestoragemonitor:
-DUMP OF SERVICE diskstats:
-DUMP OF SERVICE display:
-DUMP OF SERVICE dreams:
-DUMP OF SERVICE drm.drmManager:
-DUMP OF SERVICE dropbox:
-DUMP OF SERVICE entropy:
-DUMP OF SERVICE gesture_manager:
-DUMP OF SERVICE gfxinfo:
-DUMP OF SERVICE hardware:
-DUMP OF SERVICE input:
-DUMP OF SERVICE input_method:
-DUMP OF SERVICE iphonesubinfo:
-DUMP OF SERVICE isms:
-DUMP OF SERVICE location:
-DUMP OF SERVICE lock_settings:
-DUMP OF SERVICE media.audio_flinger:
-DUMP OF SERVICE media.audio_policy:
-DUMP OF SERVICE media.camera:
-DUMP OF SERVICE media.player:
-DUMP OF SERVICE media_router:
-DUMP OF SERVICE meizu.camera:
-DUMP OF SERVICE meminfo:
-DUMP OF SERVICE mount:
-DUMP OF SERVICE netpolicy:
-DUMP OF SERVICE netstats:
-DUMP OF SERVICE network_management:
-DUMP OF SERVICE nfc:
-DUMP OF SERVICE notification:
-DUMP OF SERVICE package:
-DUMP OF SERVICE permission:
-DUMP OF SERVICE phone:
-DUMP OF SERVICE phone_ext:
-DUMP OF SERVICE power:
-DUMP OF SERVICE pppoe:
-DUMP OF SERVICE print:
-DUMP OF SERVICE procstats:
-DUMP OF SERVICE samba_client:
-DUMP OF SERVICE samba_server:
-DUMP OF SERVICE samplingprofiler:
-DUMP OF SERVICE scheduling_policy:
-DUMP OF SERVICE search:
-DUMP OF SERVICE secloader:
-DUMP OF SERVICE secloader2:
-DUMP OF SERVICE secsystemserver:
-DUMP OF SERVICE sensorservice:
-DUMP OF SERVICE serial:
-DUMP OF SERVICE servicediscovery:
-DUMP OF SERVICE simphonebook:
-DUMP OF SERVICE sip:
-DUMP OF SERVICE statusbar:
-DUMP OF SERVICE telephony.registry:
-DUMP OF SERVICE textservices:
-DUMP OF SERVICE uimode:
-DUMP OF SERVICE updatelock:
-DUMP OF SERVICE usagestats:
-DUMP OF SERVICE usb:
-DUMP OF SERVICE user:
-DUMP OF SERVICE vibrator:
-DUMP OF SERVICE voicesense:
-DUMP OF SERVICE wallpaper:
-DUMP OF SERVICE wifi:
-DUMP OF SERVICE wifip2p:
-DUMP OF SERVICE window:
-```
+
+输入 `adb shell dumpsys` 命令可以输出所有的系统服务信息。可以通过`adb shell dumpsys | grep DUMP`过滤输出当前服务列表。
 
 ## 具体命令如何查看帮助
 
-从上面可以看出可以查看的`Service`非常多，`DUMP OF SERVICE`关键字后面的单词都可以直接通过 `dumpsys + 单词` 查看相关信息，具体每一个如何使用有一种通用的查看帮助的办法。
+从上面可以看出可以查看的`Service`非常多，`adb shell dumpsys -l`所列举的服务都可以直接通过 `dumpsys + <service>` 查看相关信息，具体每一个如何使用有一种通用的查看帮助的办法。
 查看每一个命令的使用帮助，以下以`activity`为例演示：
 ```
 $ adb shell dumpsys activity -h
