@@ -169,7 +169,7 @@ MAT 提供了很多功能，但是最常用的只有 Histogram 和 Domintor Tree
 当然这里面还会包括一些java语言特性的数据存储单元。针对数组类型的对象，它的大小是数组元素对象的大小总和。
  - Retained Size：当前对象大小+当前对象可直接或间接引用到的对象的大小总和。(间接引用的含义：A->B->C, C就是间接引用)
 
-一个对象到GC Roots的引用链被称为Path to GC Roots， 通过分析Path to GC Roots可以找出JAVA的内存泄露问题。
+一个对象到GC Roots的引用链被称为Path to GC Roots，通过分析Path to GC Roots可以找出JAVA的内存泄露问题。
 
 ### 内存泄漏分析
 
@@ -196,10 +196,5 @@ MAT 提供了很多功能，但是最常用的只有 Histogram 和 Domintor Tree
 ![效果图](/images/development-tool-mat-to-analyse-leak/mat_bitmap_leak_result.png)
 
 可以看到同样是 `mInnerClassInstance` 引用了 `MainActivity` 导致了`BitmapDrawable`对象无法释放。
-
-
-
-
-
 
 

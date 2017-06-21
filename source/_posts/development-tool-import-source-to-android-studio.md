@@ -91,10 +91,10 @@ development/tools/idegen/idegen.sh
 
 ### Debug源码
 我们可以通过给刚导入的工程在`Modules`中添加`Android Framework`来让AS将它作为一个Android工程，从而方便我们调试代码。
+可以按照下图中来添加Android Framework支持，点击 + 号，然后选择 Android。
 
 ![配置图](/images/development-tool-import-source-to-android-studio/debug-add.png)
 
-可以按照上图中来添加Android Framework支持。
 然后我们就可以发现，调试按钮已经可以点击了。
 
 ![配置图](/images/development-tool-import-source-to-android-studio/debug-added.png)
