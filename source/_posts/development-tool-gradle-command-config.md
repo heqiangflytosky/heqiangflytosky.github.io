@@ -416,7 +416,7 @@ apply from:"config.gradle"
 android节点读取ext中android对应项，dependencies读取dependencies对应项，如果配置有变化就可以只在config.gradle中修改，是不是很方便进行配置的管理呢？
 
 ## 检查依赖报告
-运行命令`./gradlew -q dependencies app:dependencies`，会把依赖树会打印出来，依赖树显示了你 build 脚本声明的顶级依赖和它们的传递依赖：
+运行命令`./gradlew <projectname>:dependencies --configuration compile` （projectname为settings.gradle里面配置的各个project，如果没有配置，直接运行`./gradlew dependencies --configuration compile`），会把依赖树会打印出来，依赖树显示了你 build 脚本声明的顶级依赖和它们的传递依赖：
 ![依赖树](/images/development-tool-gradle-command-config/gradle-dependencies.png)
 仔细观察你会发现有些传递依赖标注了*号，表示这个依赖被忽略了，这是因为其他顶级依赖中也依赖了这个传递的依赖，Gradle会自动分析下载最合适的依赖。
 

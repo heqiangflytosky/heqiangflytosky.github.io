@@ -1,7 +1,7 @@
 ---
 title: 友情链接
 date: 2017-06-02 17:19:07
-comments: false
+comments: true
 ---
 ***
 欢迎访问：
