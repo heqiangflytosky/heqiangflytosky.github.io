@@ -304,6 +304,57 @@ include ':CommonSDK'
 project(':CommonSDK').projectDir = new File(settingsDir, '../../CommonSDK/')
 ```
 `include`调用后，生成了一个名为:`CommonSDK`的`Project`对象，`project(':CommonSDK')`取出这个对象，设置`Project`的 `projectDir`属性。`projectDir`哪里来的？请看`Project`类的文档。
+
+## gradle.properties
+
+可以在 gradle.properties 文件中配置一些变量，这些变量在这个工程下的所有module的build.gradle文件里都可以使用。这样就可以把一些共用的变量放到这里，这样后面修改的时候就可以只修改这个变量，不用各个模块都要修改了。
+比如我们在 gradle.properties SDK 版本以及应用的版本号：
+
+```
+MIN_SDK_VERSION=21
+TARGET_SDK_VERSION=22
+VERSION_CODE=200100
+VERSION_NAME=2.1.0
+```
+
+那么在 build.gradle 中可以通过`project`进行引用：
+
+```
+    defaultConfig {
+        applicationId "com.example.heqiang.testsomething"
+        minSdkVersion project.MIN_SDK_VERSION as int
+        targetSdkVersion project.TARGET_SDK_VERSION as int
+        versionCode project.VERSION_CODE as int
+        versionName project.VERSION_NAME
+        /*
+        * as int 关键字是用来进行类型转换的，因为从配置里面读取出来的默认是字符串
+        *还可以使用 versionCode Integer.parseInt(project.VERSION_CODE)
+        * */
+    }
+```
+
+## 调试
+
+我们在进行一些配置的时候可能需要知道一些变量的值，这时候可以在 build.gradle 中添加打印进行调试，比如：
+
+```
+    defaultConfig {
+        applicationId "com.example.hq.testsomething"
+        minSdkVersion project.MIN_SDK_VERSION as int
+        targetSdkVersion project.TARGET_SDK_VERSION as int
+        versionCode project.VERSION_CODE as int
+        versionName project.VERSION_NAME
+
+        println('** build versionName=' + versionName)
+    }
+```
+
+在 Gradle Console 中就可以看到打印：
+
+```
+** build versionName=2.1.0
+```
+
 # 依赖库管理
 ## 本地依赖
 
