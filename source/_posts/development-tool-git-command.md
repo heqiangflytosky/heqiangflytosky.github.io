@@ -99,3 +99,12 @@ http://blog.chinaunix.net/uid-27714502-id-3479018.html
 改好之后，用 `git add` 把文件添加到缓冲区，同时也要把其他没有冲突合并成功了的文件也加进来，因为在作 `apply` 操作的时候他们也发生了变化。
 `git am --resolved`
 然后合并提交即可。
+
+## git remote
+ - git remote: 不带参数，列出已经存在的远程分支
+ - git remote -v | --verbose: 列出详细信息，在每一个名字后面列出其远程url
+ - git remote add: 添加远程仓库
+
+## git merge
+
+

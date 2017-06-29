@@ -12,6 +12,7 @@ date: 2014-10-15 10:00:00
 Android提供的`dumpsys`工具可以用于查看手机中的应用程序和系统服务信息与状态，能够熟练使用`dumpsys`工具以及对它的输出内容进行理解是Android开发人员的必备技能，使用它我们不仅能够对方便的获取一些当前的平台的一些信息，而且能够对Android性能优化、Bug分析与调试带来很大的帮助。
 手机连接电脑后可以直接命令行执行`adb shell dumpsy`查看所有支持的`Service`，但是这样输出的太多，可以通过`dumpsys | grep "DUMP OF SERVICE"` 仅显示主要的`Service`的信息。
 关于这个命令的使用方法在这里做一下记录，以备使用。
+关于`adb shell dumpsy` 命令的源码分析请参考我的博客[Android 深入理解 dumpsys ](http://www.heqiangfly.com/2017/06/13/android-source-code-analysis-dumpsys/)。
 
 ## dumpsys支持的所有命令
 
