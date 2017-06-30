@@ -7,6 +7,7 @@ comments: true
 description: 介绍一些Next主题的优化和配置技巧
 ---
 按照上篇博客中更换Theme的方法，我们已经将主题改为Next，但是还是有地方我们可以优化和配置的。
+[Next主题Github地址](https://github.com/iissnan/hexo-theme-next)
 一些常见的配置方法参考[文档](http://theme-next.iissnan.com/getting-started.html)即可。
 <!-- more -->
 ### 语言设置
@@ -53,11 +54,47 @@ $content-desktop = 700px
 // 当视窗超过 1600px 后的宽度
 $content-desktop-large = 900px
 ```
-当你使用Pisces风格时可以用下面的方法：
+当你使用Pisces风格时可以用下面的方法，在 Pisces 的布局定义文件 source/css/_schemes/Picses/_layout.styl 的代码后面追加下面的代码：
 ```css
-header{ width: 90%; }
-.container .main-inner { width: 90%; }
+.header{ width: 80%; } 
+.container .main-inner { width: 80%; } 
 .content-wrap { width: calc(100% - 260px); }
+```
+但是这样的修改在PC端是没有问题的，在手机或者平板移动端自适应会有问题，需要在源码中直接修改。
+```css
+.header {
+  position: relative;
+  margin: 0 auto;
+
+  //width: $main-desktop;
+  width: 80%; 
+
+  +tablet() {
+    width: auto;
+  }
+  ...
+}
+...
+.container .main-inner {
+  //width: $main-desktop;
+  width: 80%;
+
+  +tablet() {
+    width: auto;
+  }
+  ...
+  }
+...
+.content-wrap {
+  ...
+  padding: $content-desktop-padding;
+
+  //width: $content-desktop;
+  width: calc(100% - 260px);
+
+  background: white;
+...
+}
 ```
 参考文档：
 http://theme-next.iissnan.com/faqs.html
