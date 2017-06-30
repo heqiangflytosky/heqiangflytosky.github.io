@@ -7,6 +7,7 @@ comments: true
 欢迎访问：
 
  - [Johnny Shieh](http://johnnyshieh.me)
+ - [泽毛的博客](http://lizejun.cn/)
  - ......
 
 期待您的加入，互换友链，请您联系我（QQ：398712943）
