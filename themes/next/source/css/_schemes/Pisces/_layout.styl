@@ -1,7 +1,11 @@
 .header {
   position: relative;
   margin: 0 auto;
-  width: $main-desktop;
+
+  //modified by heqiang @{
+  //width: $main-desktop;
+  width: 80%; 
+  //}@
 
   +tablet() {
     width: auto;
@@ -47,7 +51,10 @@
 }
 
 .container .main-inner {
-  width: $main-desktop;
+  //modified by heqiang @{
+  //width: $main-desktop;
+  width: 80%;
+  //@}
 
   +tablet() {
     width: auto;
@@ -61,7 +68,12 @@
   float: right;
   box-sizing: border-box;
   padding: $content-desktop-padding;
-  width: $content-desktop;
+
+  //modified by heqiang @{
+  //width: $content-desktop;
+  width: calc(100% - 260px);
+  //}@
+
   background: white;
   min-height: 700px;
   box-shadow: $box-shadow-inner;
