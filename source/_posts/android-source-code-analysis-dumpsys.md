@@ -3,7 +3,7 @@ title: Android 深入理解 dumpsys
 categories: Android源码分析
 comments: true
 tags: [Android源码分析, dumpsys]
-description: 基于Android6.0来分析 dumpsys 源码以及其工作原理
+description: 在Android开发过程中 dumpsys 命令是一个我们会经常使用的非常实用的命令，我们非常有必要来探究一下它是如何来带给我们一个如此便捷的查看Android各个服务信息的方式的。本文基于 Android6.0 来分析 dumpsys 源码以及其工作原理。
 date: 2017-6-13 10:00:00
 ---
 

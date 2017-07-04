@@ -3,7 +3,7 @@ title: Android：关于Drawable的缓存机制应该了解的知识
 categories: Android
 comments: true
 tags: [Android]
-description: 通过实例和分析Drawable的缓存机制源码来了解Drawable.mutate()的用法
+description: 在Android中，出于对内存优化的考虑，对于图片的存储使用了缓存机制，资源id相同的图片使用了同一个位图信息，如果对这些机制不了解的话开发过程中就会造成一些困扰。本文通过实例和分析Drawable的缓存机制源码的方式来介绍一下Drawable的缓存机制，并且了解一下Drawable.mutate()的用法。
 date: 2017-6-15 10:00:00
 ---
 

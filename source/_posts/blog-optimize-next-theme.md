@@ -54,7 +54,12 @@ $content-desktop = 700px
 // 当视窗超过 1600px 后的宽度
 $content-desktop-large = 900px
 ```
-当你使用Pisces风格时可以用下面的方法，在 Pisces 的布局定义文件 source/css/_schemes/Picses/_layout.styl 的代码后面追加下面的代码：
+当你使用Pisces风格时可以用下面的方法，在 source/css/_variables/custom.styl 中添加：
+```
+$main-desktop                   = 1200px
+$content-desktop                = 900px
+```
+也可以在 Pisces 的布局定义文件 source/css/_schemes/Picses/_layout.styl 的代码后面追加下面的代码：
 ```css
 .header{ width: 80%; } 
 .container .main-inner { width: 80%; } 
@@ -96,6 +101,7 @@ $content-desktop-large = 900px
 ...
 }
 ```
+以上几种方式都是亲测有效的。这里推荐在 custom.styl 中修改变量的方法，定制化的东西尽量不要写在源码中。
 参考文档：
 http://theme-next.iissnan.com/faqs.html
 https://github.com/iissnan/hexo-theme-next/issues/759#issuecomment-202242848
