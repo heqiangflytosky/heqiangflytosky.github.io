@@ -171,6 +171,8 @@ date: 2016-12-1 10:00:00
  - [网易GitHub](https://github.com/netease)
  - [美团·大众点评GitHub官方账号](https://github.com/Meituan-Dianping)
  - [Google](https://github.com/google/)
+ - [滴滴开源平台GitHub](https://github.com/didi/)
+ - [360开源平台GitHub](https://github.com/Qihoo360)
 
 #### Android
 
@@ -198,6 +200,8 @@ date: 2016-12-1 10:00:00
  - [LeakCanary](https://github.com/square/leakcanary)：内存泄漏检测
  - [Dagger 2](https://github.com/google/dagger)：
  - [awesome-android-ui](https://github.com/wasabeef/awesome-android-ui)：
+ - [VirtualAPK](https://github.com/didi/VirtualAPK)：滴滴插件化框架
+ - [RePlugin](https://github.com/Qihoo360/RePlugin)：360插件化框架
 
 #### Java
 

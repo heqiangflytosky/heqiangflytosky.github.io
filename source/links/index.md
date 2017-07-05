@@ -8,6 +8,7 @@ comments: true
 
  - [Johnny Shieh](http://johnnyshieh.me)
  - [泽毛的博客](http://lizejun.cn/)
+ - [刘卓旻的博客](http://trumi.cn/)
  - ......
 
 期待您的加入，互换友链，请您联系我（QQ：398712943）

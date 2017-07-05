@@ -37,6 +37,7 @@ public class LottieViewManager extends SimpleViewManager<LottieAnimationView> {
 除了`name`，`@ReactProp`注解还接受这些可选的参数：`defaultBoolean`, `defaultInt`, `defaultFloat`。这些参数必须是对应的基础类型的值（也就是`boolean`, `int`, `float`），这些值会被传递给`setter`方法，以免JavaScript端某些情况下在组件中移除了对应的属性。注意这个"默认"值只对基本类型生效，对于其他的类型而言，当对应的属性删除时，`null`会作为默认值提供给方法。
 使用`@ReactPropGroup`来注解的设置方法和`@ReactProp`不同。请参见`@ReactPropGroup`注解类源代码中的文档来获取更多详情。
 **注意**： 在ReactJS里，修改一个属性会引发一次对设置方法的调用。有一种修改情况是，移除掉之前设置的属性。在这种情况下设置方法也一样会被调用，并且“默认”值会被作为参数提供（对于基础类型来说可以通过`defaultBoolean`、`defaultFloat`等`@ReactProp`的属性提供，而对于复杂类型来说参数则会设置为`null`）
+在`LottieViewManager`中创建以下方法：
 
 ```java
     @ReactProp(name = "sourceName")
@@ -57,6 +58,7 @@ public class LottieViewManager extends SimpleViewManager<LottieAnimationView> {
 这里方法名可以随意定，但是`@ReactProp(name = "loop")`一定要和JS里面调用的属性值对应。
 
 ### 导出一些命令
+在`LottieViewManager`中添加以下方法：
 ```java
     private static final int COMMAND_PLAY = 1;
     private static final int COMMAND_RESET = 2;
@@ -97,6 +99,7 @@ public class LottieViewManager extends SimpleViewManager<LottieAnimationView> {
         }
     }
 ```
+在js文件可以通过`this.runCommand('play')`来调用。
 
 ### 注册ViewManager
 实现`ReactPackage`的子类`LottiePackage`，这和[原生模块的注册方法](http://www.heqiangfly.com/2017/01/14/react-native-native-modules/)类似，唯一的区别是我们把它放到`createViewManagers`方法里：
@@ -238,4 +241,5 @@ import LottieView from './Lottie'
     )
   }
 ```
+LogoSmall.json 文件可以从LottieAndroid的源码中获取，[点击这里](https://github.com/airbnb/lottie-android/blob/master/LottieSample/src/main/assets/Logo/LogoSmall.json)，放在 src/main/assets 即可。
 
