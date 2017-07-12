@@ -11,7 +11,7 @@ date: 2016-5-6 10:00:00
 
 `PackageManagerService` 作为Android系统中最常用的服务之一，是我们经常要与之打交道的。应用的安装、卸载、优化以及系统已安装应用信息的扫描和查询等应用管理工作都是 PMS 来完成的。
 与其它系统服务的实现类似，应用管理也采用了经由 `Binder` 调用的远程服务机制。`PackageManager`为暴露给用户的接口，`PackageManagerService`为接口的底层实现。
-PMS（下文会以此来代替`PackageManagerService`）在启动时会扫描所有的 APK 文件和 Jar 包，然后把他们的信息读取出来，保存在内存中，这样系统运行时就能迅速找到各种应用和组建的信息。扫描中如果遇到没有优化过的文件还要进行优化工作（dex格式转换成oat格式（Android5.0以前是odex））。
+PMS（下文会以此来代替`PackageManagerService`）在启动时会扫描所有的 APK 文件和 Jar 包，然后把他们的信息读取出来，保存在内存中，这样系统运行时就能迅速找到各种应用和组建的信息。扫描中如果遇到没有优化过的文件还要进行优化工作（dex格式转换成oat格式（Android5.0以前是odex）），优化后的文件放在 /data/dalvik-cache/ 下面，可以看一下[这篇文章](http://blog.csdn.net/cnzx219/article/details/48714121)。
 PMS要扫描的应用分为系统应用和普通应用通常都在下面的三个目录中：/system/app，/system/priv-app，/data/app。
 
  - 系统应用：安装在/system/app，/system/priv-app，/vendor/app或者/oem/app中。/system/app存放的是一些系统级的应用，比如电话和联系人等，/system/priv-app存放的是系统底层的应用，比如SystemUI，Setting和Laucher等。通常情况下这些应用是不能卸载的，可以升级的，升级的安装包放在/data/app下面
@@ -116,6 +116,9 @@ PMS的创建是在`SystemServer`中的`SystemServer().run()`->`startBootstrapSer
         //通知系统进入就绪状态
         mPackageManagerService.systemReady();
 ```
+
+### DefaultContainerService
+`DefaultContainerService`服务，这个服务执行一些针对的文件复制和删除等相关工作
 
 ## 相关adb命令
 
@@ -272,7 +275,7 @@ PMS中很多的方法都带有LI、LP、Lpr、LPw这样的后缀，它们代表�
 下面就分析一些PMS的构造函数，主要做了以下的工作：
  - 变量的初始化工作，包括mSettings，mInstaller，mPackageDexOptimizer等等
  - 读取配制文件
- - 扫描系统Package，包含Dex优化
+ - 扫描系统Package，包含Dex优化，
  - 保存扫描信息
  - 扫描非系统应用
  - 更新数据
@@ -441,6 +444,7 @@ PMS中很多的方法都带有LI、LP、Lpr、LPw这样的后缀，它们代表�
                             int dexoptNeeded = DexFile.getDexOptNeeded(lib, null, dexCodeInstructionSet, false);
                             if (dexoptNeeded != DexFile.NO_DEXOPT_NEEDED) {
                                 alreadyDexOpted.add(lib);
+                                //调用install 的dexopt命令，优化后的文件放在 /data/dalvik-cache/ 下面
                                 mInstaller.dexopt(lib, Process.SYSTEM_UID, true, dexCodeInstructionSet, dexoptNeeded);
                             }
                         } catch (FileNotFoundException e) {} catch (IOException e) {}
@@ -473,6 +477,7 @@ PMS中很多的方法都带有LI、LP、Lpr、LPw这样的后缀，它们代表�
                         try {
                             int dexoptNeeded = DexFile.getDexOptNeeded(path, null, dexCodeInstructionSet, false);
                             if (dexoptNeeded != DexFile.NO_DEXOPT_NEEDED) {
+                                //调用install 的dexopt命令，优化后的文件放在 /data/dalvik-cache/ 下面
                                 mInstaller.dexopt(path, Process.SYSTEM_UID, true, dexCodeInstructionSet, dexoptNeeded);
                             }
                         } catch (FileNotFoundException e) {...} catch (IOException e) {...}

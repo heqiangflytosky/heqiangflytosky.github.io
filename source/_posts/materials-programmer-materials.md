@@ -202,6 +202,7 @@ date: 2016-12-1 10:00:00
  - [awesome-android-ui](https://github.com/wasabeef/awesome-android-ui)：
  - [VirtualAPK](https://github.com/didi/VirtualAPK)：滴滴插件化框架
  - [RePlugin](https://github.com/Qihoo360/RePlugin)：360插件化框架
+ - [Small](https://github.com/wequick/Small)：插件化框架Small
 
 #### Java
 

@@ -676,7 +676,7 @@ Android的应用安装有下面几个阶段的工作：
                 return;
             }
 
-            // 进行DexOpt操作
+            // 进行DexOpt操作，会调用install 的dexopt命令，优化后的文件放在 /data/dalvik-cache/ 下面
             int result = mPackageDexOptimizer
                     .performDexOpt(pkg, null /* instruction sets */, false /* forceDex */,
                             false /* defer */, false /* inclDependencies */,
