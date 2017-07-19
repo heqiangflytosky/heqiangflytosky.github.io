@@ -52,6 +52,11 @@ date: 2015-3-7 10:00:00
 ### 删除远程仓库上最近的提交：
 先`git reset --hard HEAD~2`，然后`git push -f`
 
+## git rm
+
+ - `git rm test`:删除test文件的跟踪，并且删除本地文件
+ - `git rm --cached test`:删除test文件的跟踪，但是保留在本地
+
 ## git commit
 
  - `git commit --amend` ：对最后一次的 commit进行修改
