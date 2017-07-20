@@ -3,6 +3,7 @@ title: Android热修复之AndFix源码分析
 categories: Android开源项目
 comments: true
 tags: [Android, 热修复, AndFix]
+description: 通过分析热修复框架AndFix的源码来了解其基本原理
 date: 2016-12-16 10:00:00
 ---
 ## AndFix基本原理

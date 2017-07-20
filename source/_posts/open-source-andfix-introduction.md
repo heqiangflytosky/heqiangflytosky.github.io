@@ -3,6 +3,7 @@ title: Android热修复之AndFix使用简介
 categories: Android开源项目
 comments: true
 tags: [Android, 热修复, AndFix]
+description: 通过一个Demo来介绍来简单介绍热修复框架AndFix的基本用法
 date: 2016-12-15 10:00:00
 ---
 ## AndFix简介
