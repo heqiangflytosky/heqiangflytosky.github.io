@@ -489,6 +489,8 @@ uid = userId * 100000  + appId
 
 下面介绍几个`UserHandle`的API：
 
+ - isApp(int uid)：是否是应用进程
+ - isIsolated(int uid)：是否是沙箱进程
  - isSameUser(int uid1, int uid2)：比较两个uid的userId是否相同，即它们是否属于同一个用户
  - isSameApp(int uid1, int uid2)：比较两个uid的appId是否相同
  - getUserId(int uid)：根据uid获取userId
@@ -583,7 +585,7 @@ root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1
  - LAST_APPLICATION_UID = 19999
  - FIRST_SHARED_APPLICATION_GID = 50000
  - LAST_SHARED_APPLICATION_GID = 59999
- - FIRST_ISOLATED_UID = 99000
+ - FIRST_ISOLATED_UID = 99000  //沙箱进程起始值
  - LAST_ISOLATED_UID = 99999
 
 还有像`u0_a24`这种uid代表的uid为10024，代表user 0 的一个应用程序uid，这个转换方法在`UserHandle.formatUid()`：

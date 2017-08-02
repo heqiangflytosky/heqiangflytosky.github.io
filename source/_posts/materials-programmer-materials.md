@@ -208,6 +208,7 @@ date: 2016-12-1 10:00:00
 
  - [JSOUP](https://github.com/jhy/jsoup)：基于Java的HTML解析器。
  - [RxJava](https://github.com/ReactiveX/RxJava)：一个基于事件订阅的异步执行的一个类库。
+ - [J2V8](https://github.com/eclipsesource/J2V8)：Java封装的V8引擎，支持Android
 
 #### 其他
 
@@ -357,9 +358,11 @@ date: 2016-12-1 10:00:00
  - [SunSpider](https://webkit.org/perf/sunspider/sunspider.html)：JavaScript Benchmark
  - [JetStream](http://browserbench.org/JetStream/)：JavaScript Benchmark
 
-### 在线绘制流程图
+### 在线绘图
 
- - [ProcessOn](https://www.processon.com)：免费在线作图
+ - [ProcessOn](https://www.processon.com)：免费在线作图，可以生成本地PNG
+ - [PlantUML](http://plantuml.com/)：在线作图，可以生成在线PNG，可以版本控制
+ - [Gravizo](http://www.gravizo.com/)：在线绘图的渲染引擎
 
 ### 其他
 

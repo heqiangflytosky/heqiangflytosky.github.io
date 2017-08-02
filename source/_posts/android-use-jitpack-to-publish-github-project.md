@@ -79,12 +79,6 @@ push到Github上以后，要添加一个Release版本，如图点击项目中的
 
 ![效果图](/images/android-use-jitpack-to-publish-github-project/jitpack-get-it.png)
 
-
-
-
-
-
-
 ## 遇到的问题
 ### Error:Unable to load class 'org.gradle.internal.logging.LoggingManagerInternal
 
