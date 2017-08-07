@@ -315,6 +315,7 @@ MIN_SDK_VERSION=21
 TARGET_SDK_VERSION=22
 VERSION_CODE=200100
 VERSION_NAME=2.1.0
+debug=true
 ```
 
 那么在 build.gradle 中可以通过`project`进行引用：
@@ -326,6 +327,9 @@ VERSION_NAME=2.1.0
         targetSdkVersion project.TARGET_SDK_VERSION as int
         versionCode project.VERSION_CODE as int
         versionName project.VERSION_NAME
+        // 还可以这样获取
+        if('true' == project.properties['debug']){
+        }
         /*
         * as int 关键字是用来进行类型转换的，因为从配置里面读取出来的默认是字符串
         *还可以使用 versionCode Integer.parseInt(project.VERSION_CODE)
