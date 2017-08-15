@@ -431,5 +431,36 @@ public class AIDLService extends Service {
 06-08 19:42:30.506 20807 20807 D Client  : addStudent end
 ```
 看到客户端等服务端调用完毕才会往下走，因此我们可以得到这样的结论：
-**Android进程间通信是同步的**。
+**Android进程间通信默认是同步的**，这里为什么说默认呢？难道还有其他情况，是的，也可以是异步的，为什么呢？
+看 StudentManager.java 中的 `addStudent` 方法：
 
+```java
+@Override public void addStudent(com.android.hq.aidldemo.Student student) throws android.os.RemoteException
+{
+...
+mRemote.transact(Stub.TRANSACTION_addStudent, _data, _reply, 0);
+...
+}
+```
+
+再来看一下 `IBinder` 中对这个方法的介绍：
+
+```java
+    /**
+     * Perform a generic operation with the object.
+     * 
+     * @param code The action to perform.  This should
+     * be a number between {@link #FIRST_CALL_TRANSACTION} and
+     * {@link #LAST_CALL_TRANSACTION}.
+     * @param data Marshalled data to send to the target.  Must not be null.
+     * If you are not sending any data, you must create an empty Parcel
+     * that is given here.
+     * @param reply Marshalled data to be received from the target.  May be
+     * null if you are not interested in the return value.
+     * @param flags Additional operation flags.  Either 0 for a normal
+     * RPC, or {@link #FLAG_ONEWAY} for a one-way RPC.
+     */
+    public boolean transact(int code, Parcel data, Parcel reply, int flags)
+        throws RemoteException;
+```
+`flags` 为0时是普通的RPC调用，为 `FLAG_ONEWAY` 时是 one-way RPC，是单向调用，执行后立即返回，无需等待Server端 `transact()` 返回。这个时候就是异步执行了。

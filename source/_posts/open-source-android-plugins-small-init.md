@@ -686,7 +686,7 @@ public class LaunchActivity extends Activity {
             sLoadedIntentFilters.putAll(filters);
         }
 
-        // Set entrance activity	
+        // 设置该插件的manifest中定义的入口Activity	
         bundle.setEntrance(parser.getDefaultActivityName());
     }
 ```
