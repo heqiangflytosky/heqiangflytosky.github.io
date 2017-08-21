@@ -17,6 +17,7 @@ gradle明明一般是`./gradlew +参数`， `gradlew`代表 `gradle wrapper`，�
  - `./gradlew -v` 版本号
  - `./gradlew clean` 清除app目录下的build文件夹
  - `./gradlew build` 检查依赖并编译打包
+ - `./gradlew tasks` 列出所有task
 
 这里注意的是 `./gradlew build` 命令把debug、release环境的包都打出来，如果正式发布只需要打Release的包，该怎么办呢，下面介绍一个很有用的命令 `assemble`， 如：
  
@@ -113,15 +114,16 @@ buildscript {
 ### apply
 
 ```
-//声明是Android程序
+//声明引用 com.android.application 插件，那么这个模块就是一个Android应用程序
 apply plugin: 'com.android.application'
 ```
 
- - `apply plugin`:声明构建的项目类型。如果是库的话就加
+ - `apply plugin`:声明引用插件的类型。如果是库的话就加
 
 ```
 apply plugin: 'com.android.library'
 ```
+ - `apply from`：表示引用其他的配置文件，比如 `apply from:"config.gradle"`
 
 ### android
 

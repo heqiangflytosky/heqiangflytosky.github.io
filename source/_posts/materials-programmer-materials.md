@@ -365,6 +365,21 @@ date: 2016-12-1 10:00:00
  - [PlantUML](http://plantuml.com/)：在线作图，可以生成在线PNG，可以版本控制
  - [Gravizo](http://www.gravizo.com/)：在线绘图的渲染引擎
 
+### API
+
+一些后台数据的API，可用来应用开发练手
+
+ - [API 搜索](http://apis.io/)
+ - [知乎上面的回答集合](https://www.zhihu.com/question/39479153)
+ - [百度 API Store](http://apistore.baidu.com/)：为开发者提供最全面的 API 服务
+ - [聚合数据](https://www.juhe.cn/)：一家数据银行
+ - [HaoService](http://www.haoservice.com/)：专业数据平台
+ - [干货集中营](http://gank.io/)：每日分享妹子图和技术干货，还有供大家中午休息的休闲视频
+ - [知乎日报API](https://github.com/izzyleung/ZhihuDailyPurify/wiki/%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5-API-%E5%88%86%E6%9E%90)：知乎日报 API 分析
+ - [Github](https://developer.github.com/v3/)
+ - [微博API](http://open.weibo.com/wiki/API)
+ - [Dribbble](http://developer.dribbble.com/)
+
 ### 其他
 
 #### 视频地址解析

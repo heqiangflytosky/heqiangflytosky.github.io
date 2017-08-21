@@ -71,7 +71,7 @@ small {
 ```
 
 `buildToAssets` 决定是否将插件作为 apk 文件打包到宿主 apk 的 assets 目录下。默认为 false，即作为 so 文件打包到宿主 apk 的 lib 目录下。
-配套的，还需要在宿主的 Application 里指定是否从 assets 读取插件：
+配套的，还需要在宿主的 `Application` 里指定读取插件的位置：
 
 ```java
 @Override
@@ -82,7 +82,25 @@ public void onCreate() {
 }
 ```
 
-`BuildConfig.LOAD_FROM_ASSETS` 将会被 Small 自动赋值为你配置的 `buildToAssets`。
+```java
+                if (Small.isLoadFromAssets()) {
+                    mBuiltinAssetName = pkg + ".apk";
+                    mBuiltinFile = new File(FileUtils.getInternalBundlePath(), mBuiltinAssetName);
+                    mPatchFile = new File(FileUtils.getDownloadBundlePath(), mBuiltinAssetName);
+                    // Extract from assets to files
+                    try {
+                        extractBundle(mBuiltinAssetName, mBuiltinFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    String soName = "lib" + pkg.replaceAll("\\.", "_") + ".so";
+                    mBuiltinFile = new File(sUserBundlesPath, soName);
+                    mPatchFile = new File(FileUtils.getDownloadBundlePath(), soName);
+                }
+```
+
+可以看到，`BuildConfig.LOAD_FROM_ASSETS` 为 true 时，从 /data/data/<packageName>/small_base 下面读取 apk 格式插件，为 false 时从 `nativeLibraryDir` 中读取 so 格式插件。
 
 那么现在我们就导入 DevSample 工程。
 
@@ -96,11 +114,11 @@ public void onCreate() {
 DevSample 示例工程中有下面的模块：
 
  - app 宿主工程
- - app.* 包含Activity/Fragment的组件
- - lib.* 公共库组件
- - web.* 本地网页组件
+ - app.* 应用插件，包含Activity/Fragment的插件
+ - lib.* 公共库插件
+ - web.* 本地网页插件
  - app+* [宿主分身模块](http://code.wequick.net/Small/cn/stub-module)
- - sign 签名文件
+ - gradle-small Small中的一个gradle自定义插件，用于打包组件
 
 出于业务需求考虑，Small定义了两类插件：公共库插件与应用插件。
 *应用插件*相对简单，就是用来把大应用拆分成一个个小的业务单元。而*公共库插件*则是为这些业务单元提供公共的代码与资源，比如可以将在多个应用插件间可以复用的一些主题、界面边距资源提取出来作为一个公共库插件。
