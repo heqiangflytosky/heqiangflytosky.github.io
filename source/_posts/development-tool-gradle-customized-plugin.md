@@ -1,11 +1,11 @@
 
 ---
-title: Android 创建自定义 Gradle 插件
+title: Gradle 使用指南 -- 创建Plugin
 categories: 开发工具
 comments: true
 tags: [Android, Gradle, Android Studio]
 description: 介绍如何在 Android Studio 中自定义 Gradle 插件
-date: 2017-8-21 10:00:00
+date: 2016-3-15 10:00:00
 ---
 
 ## 概述
