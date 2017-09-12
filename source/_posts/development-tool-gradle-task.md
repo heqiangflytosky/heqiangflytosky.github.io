@@ -11,6 +11,7 @@ date: 2016-3-13 10:00:00
 
 [Gradle 官方文档](https://docs.gradle.org/current/userguide/userguide.html)
 [Gradle User Guide 中文版](http://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/)
+[Task的API文档](https://docs.gradle.org/current/dsl/org.gradle.api.Task.html)
 
 Gradle 中的每一个 Project 都是由一个或者多个 Task 来构成的，它是 gradle 构建脚本的最小运行单元，一个 Task 代表一些更加细化的构建，可能是编译一些 classes、创建一个 Jar、生成 javadoc、或者生成某个目录的压缩文件。
 
@@ -35,6 +36,11 @@ task hello {
 task hello1 << {
     println 'task hello1'
 }
+
+task hello2 (type: Copy){
+    from 'src/main/AndroidManifest.xml'
+    into 'build/test'
+}
 ```
 
 我们执行 `./gradlew -q hello`，会有下面的输出：
@@ -54,6 +60,7 @@ task hello doLast
 Gradle 会在进入执行之前，配置所有 Task，而 `println 'config task hello'` 这段代码就是在配置时进行执行。所以哪怕没有显式调用 `gradlew hello`，只是调用列出所有 task 的命令，hello task 仍然需要进入到配置状态，也就仍然执行了一遍。
 hello1 task的声明方式 << 只是简写的 `doLast`，或者说当这个任务不需要任何在配置状态下运行的内容时，这两种声明方式是一样的。
 实际上大部分时候 task 都应该是在执行状态下才真正执行的，配置状态大部分时候用于声明执行时需要用到的变量等为执行服务的前置动作。
+hello2: Task创建的时候可以通过 `type: SomeType` 指定Type，Type其实就是告诉Gradle，这个新建的Task对象会从哪个基类Task派生。比如，Gradle本身提供了一些通用的Task，最常见的有CopyC、Delete、Sync、Tar等任务。Copy是Gradle中的一个类。当我们：task myTask(type:Copy)的时候，创建的Task就是一个Copy Task。下面会详细介绍。
 
 ### 动态任务
 
@@ -108,6 +115,15 @@ task B << {
     println 'Hello from B'
 }
 B.dependsOn A
+```
+或者
+```java
+task A << {
+    println 'Hello from A'
+}
+task B (dependsOn: A) << {
+    println 'Hello from B'
+}
 ```
 
 执行 `./gradlew -q B` 的同时会先去执行任务 A：
@@ -204,7 +220,25 @@ Hello from A
 Hello from B
 ```
 
+## Task Type
+
+### Copy
+
+[Copy的API文档](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.Copy.html)
+
+```
+task hello2 (type: Copy){
+    from 'src/main/AndroidManifest.xml'
+    into 'build/test'
+    rename {String fileName ->
+        fileName = "AndroidManifestCopy.xml"
+    }
+}
+```
+其他 Type 具体详见文档，此处不详细解释。
+
 ## 参考文档
 
 http://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/
 https://docs.gradle.org/current/userguide/userguide.html
+http://www.jianshu.com/p/cd1a78dc8346

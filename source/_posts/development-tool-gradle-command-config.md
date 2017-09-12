@@ -63,7 +63,7 @@ if (project.hasProperty('custom')){
  3. `assemble<Product Flavor Name>`： 允许构建指定flavor的所有APK，例如`assembleFlavor1`将会构建Flavor1Debug和Flavor1Release两个Variant版本。
  
 # Gradle配置
-Gradle构建脚本 build.gradle:
+Gradle构建脚本 build.gradle
 Gradle属性文件 gradle.properties
 Gradle设置文件 settings.gradle
 ## build.gradle
@@ -231,7 +231,7 @@ android {
 `android{}`设置编译android项目的参数，构建android项目的所有配置都写在这里。
 除了上面写的，在`android{}`块中可以包含以下直接配置项：
 
- - `productFlavors{ }` 产品风格配置，ProductFlavor类型
+ - `productFlavors{ }` 产品风格配置，ProductFlavor类型，后面的多渠道打包章节会详细介绍
  - `testOptions{ }` 测试配置，TestOptions类型
  - `dexOptions{ }` dex配置，DexOptions类型
  - `packagingOptions{ }` PackagingOptions类型
@@ -587,6 +587,27 @@ manifestPlaceholders = [ CHANNEL_NAME:"Unspecified"]
 这里的`Unspecified`换成你实际上的默认的渠道名。 
 使用`manifestPlaceholders`的这种配置，同样适用于`manifest`的其他配置。比如你需要在不同渠道发布的apk里面，指定不同的启动`Activity`。比如在豌豆荚里面发布的，启动的`Activity`显示的是豌豆荚首发的界面，应用宝里面启动的是应用宝首发的界面（哈哈，有点坏），你就可以对你的`activity`的值使用 `{activity_name}`的方式，然后在`productFlavors`里面配置这个`{activity_name}`的值。
 
+另外这里记录一个 productFlavors 和 applicationId 关系的小知识。
+[参考文档](https://developer.android.com/studio/build/application-id.html)
+每个 Android 应用均有一个唯一的应用 ID，我们可以在通过 productFlavors 构建的应用变体中配置不同的应用 ID。
+
+```
+android {
+    defaultConfig {
+        applicationId "com.example.myapp"
+    }
+    productFlavors {
+        free {
+            applicationIdSuffix ".free"
+        }
+        pro {
+            applicationIdSuffix ".pro"
+        }
+    }
+}
+
+```
+这样，“免费”的 applicationId 就变为“com.example.myapp.free”。
 
 
 

@@ -9,7 +9,7 @@ date: 2017-5-12 10:00:00
 ---
 ## 动态注册组件原理
 
-前面我们说过，替换 `Instrumentation` 对象和 `ActivityThreadHandlerCallback` 是插件化工作中的重头戏。
+前面我们说过，替换 `Instrumentation` 对象和 `ActivityThreadHandlerCallback` 是插件化工作中的重头戏。这里用到了我们常说的“Hook”技术。
 `Instrumentation`类看一下[官方文档对这个类的解释](https://developer.android.com/reference/android/app/Instrumentation.html?hl=zh-cn)，该类跟踪 `Application` 及 `Activity` 的整个生命周期，它的一些方法在 `Application` 及 `Activity` 所有生命周期函数的调用中，都会先调用这些方法，因此，得到了这个对象，我们就可以进入并跟踪 `Application` 和 `Activity` 的生命周期流程。
 Small 想要做到动态注册 `Activity`，首先在宿主 Manifest 中注册一个命名特殊的占坑 `Activity` 来欺骗 `startActivityForResult` 以获得生命周期，再欺骗 `performLaunchActivity` 来获得插件 `Activity` 实例，又为了处理之间的信息传递，因此有了后面的 `ActivityThreadHandlerCallback`。
 
