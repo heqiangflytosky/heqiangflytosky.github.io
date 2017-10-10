@@ -490,7 +490,7 @@ uid = userId * 100000  + appId
 下面介绍几个`UserHandle`的API：
 
  - isApp(int uid)：是否是应用进程
- - isIsolated(int uid)：是否是沙箱进程
+ - isIsolated(int uid)：是否是完全隔绝的沙箱进程，完全隔绝的沙箱进程每次启动都是独立的，不能复用已有的进程信息。这个进程与系统其他进程分开且没有自己的权限。
  - isSameUser(int uid1, int uid2)：比较两个uid的userId是否相同，即它们是否属于同一个用户
  - isSameApp(int uid1, int uid2)：比较两个uid的appId是否相同
  - getUserId(int uid)：根据uid获取userId

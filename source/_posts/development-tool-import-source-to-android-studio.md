@@ -99,4 +99,8 @@ development/tools/idegen/idegen.sh
 
 ![配置图](/images/development-tool-import-source-to-android-studio/debug-added.png)
 
+## 一些问题
+
+### Choose Process -> Nothing to show
+
 有时候遇到过点击调试按钮没有调试进程可以选择，打开`Project Structure`->`Project`，重新选择一下`Projct SDK`就可以了。

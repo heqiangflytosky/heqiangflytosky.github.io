@@ -52,11 +52,14 @@ public class Apple implements Fruit {
         InvocationHandler invocationHandler = new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                Log.e("Test","Let Apple introduce himself.");
-                // 返回方法的执行结果
-                Object result = method.invoke(apple, args);
-                Log.e("Test","Thank you!");
-                return result;
+                if("getName".equals(method.getName())){
+                    Log.e("Test","Let Apple introduce himself.");
+                    // 返回方法的执行结果
+                    Object result = method.invoke(apple, args);
+                    Log.e("Test","Thank you!");
+                    return result;
+                }
+                return null;
             }
         };
 

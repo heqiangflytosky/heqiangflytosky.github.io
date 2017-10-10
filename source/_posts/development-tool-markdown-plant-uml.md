@@ -61,7 +61,9 @@ class AssetBundleLauncher {
 打开[在线作图网址](http://www.plantuml.com/plantuml/uml/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000)，把图片的 url 复制到下面的 url 框里面，点击 Submit ，在上面代码框里面会出现该图片对应的代码，然后修改即可。修改完成后再次生成图片即可。
 是不是相当的方便呢？
 
-## 基本语法教程
+## 基本通用语法教程
+
+这里只介绍一些通用的语法命令，其他具体的语法请参考[官方文档](http://translate.plantuml.com/zh/PlantUML_Language_Reference_Guide_ZH.pdf)
 
  1. 添加标题
 
@@ -74,6 +76,10 @@ Father <|-- Son
 ```
 
 ![PlantUML](http://www.plantuml.com/plantuml/png/2yaioKbLK7g-U_cpplrFMpS_txpxwUnzIbnSReab6Qb52ZOrkheAmVbv0000)
+
+ 2. 注释
+
+所有以单引号开头的行 ' 都是注释。你也可以使用多行注释,多行注释以 /' 开头 '/ 结尾。
 
 ### 类图
 
@@ -191,6 +197,10 @@ class net.unused.Person {
 ```
 
 ![UML类图](http://www.plantuml.com/plantuml/png/TKvB2i8m4Dtd50_SAD9SG5VgLl0ACHabq2J5IGgYlRjjf87M-bR3lA-k5JCEYkauN49uvOWRfGcUeZJ9kITMfmoy17h8eiR-NLMuq8E3pzIPA5f_HvY-5soZL7Jpobi8kQZKosyIigsa_banCIxCwUjcna6UV68oSipGcVqXygmjcdIjhKORh44aZklDJdGV)
+
+### 时序图
+
+语法参考[官方网站](http://plantuml.com/sequence-diagram)
 
 ## PlantUML + Gravizo
 

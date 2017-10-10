@@ -41,6 +41,7 @@ date: 2016-12-1 10:00:00
 #### Android开发
 
  - [Android Developers](https://developer.android.com/index.html)：Android官方开发者网站，有各种开发文档可以阅读，以及下载开发工具，英语不太好的可以选择“简体中文”哦！
+ - [Android Open Source Project](https://source.android.com/)
  - [Android 常用自定义效果和控件](http://a.code4app.com/)：
 
 #### 网站开发
@@ -140,6 +141,8 @@ date: 2016-12-1 10:00:00
  - 郭霖：CSDN上[郭霖的专栏](http://blog.csdn.net/guolin_blog)的公众号
  - 极客公园：提供科技领域的前沿报道
  - AI科技大本营：程序员转型第一站
+ - 老马说编程
+ - GitChat：一种全新的IT知识交流方式
 
 #### 其他
 
@@ -174,6 +177,7 @@ date: 2016-12-1 10:00:00
  - [Google](https://github.com/google/)
  - [滴滴开源平台GitHub](https://github.com/didi/)
  - [360开源平台GitHub](https://github.com/Qihoo360)
+ - [百度](https://github.com/baidu)
 
 #### Android
 
@@ -216,10 +220,14 @@ date: 2016-12-1 10:00:00
  - [Javassist](http://jboss-javassist.github.io/javassist/)：Javassist是一个开源的分析、编辑和创建Java字节码的类库。
  - [BCEL](http://commons.apache.org/proper/commons-bcel/index.html)：类似Javassist，可以转换现有的类表示或者构建新的类。
 
+#### 人工智能
+
+ - [tensorflow](https://github.com/tensorflow/tensorflow)：google开发的开源深度学习框架。
+ - [百度开源移动端深度学习框架](https://github.com/baidu/mobile-deep-learning)
+
 #### 其他
 
  - [conceal](https://github.com/facebook/conceal)：facebook开源的用来对数据进行快速加密和认证的API。
- - [tensorflow](https://github.com/tensorflow/tensorflow)：google开发的开源深度学习框架。
  - [AE-Element](https://github.com/OYsun/AE-Element)使用bodymovin渲染一些有趣的After Effects矢量元素，可以直接使用[Lottie](https://github.com/airbnb/lottie-android)应用在客户端开发上面。
  - [Weex](https://github.com/apache/incubator-weex)：阿里开源项目，跨平台开发框架
  - [React Native](https://github.com/facebook/react-native)：Facebook开源项目，跨平台开发框架
@@ -310,6 +318,14 @@ date: 2016-12-1 10:00:00
  - 《精益创业》
  - 《认知盈余》
  - 《定位》
+ - 《PRINCE2成功的项目管理》
+ - 《超越对手-软件项目经理的18种使用技能》
+ - 《快速软件开发》
+ - 《人件》
+ - 《人月神话》
+ - 《写给大家看的项目管理》
+ - 《有效沟通-管理者的沟通艺术》
+ - 《最后期限》
 
 ## 工具篇
 
@@ -365,12 +381,14 @@ date: 2016-12-1 10:00:00
  - [JitPack](https://jitpack.io/)：GitHub上面的开源库可以发布到这里，创建属于自己的开源库，供其他开发者使用
  - [SunSpider](https://webkit.org/perf/sunspider/sunspider.html)：JavaScript Benchmark
  - [JetStream](http://browserbench.org/JetStream/)：JavaScript Benchmark
+ - [StarUML](http://staruml.io/)：开源免费的UML工具
 
 ### 在线绘图
 
  - [ProcessOn](https://www.processon.com)：免费在线作图，可以生成本地PNG
  - [PlantUML](http://plantuml.com/)：在线作图，可以生成在线PNG，可以版本控制
  - [Gravizo](http://www.gravizo.com/)：在线绘图的渲染引擎
+ - [百度脑图](http://naotu.baidu.com/)：在线绘制思维导图，免安装，云存储，易分享
 
 ### API
 
