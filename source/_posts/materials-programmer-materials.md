@@ -67,6 +67,11 @@ date: 2016-12-1 10:00:00
  - [androidxref](http://androidxref.com/)：
  - [GrepCode](http://grepcode.com/)：除了AndroidXRef可以查看某个类的源代码外，GrepCode同样也能做到。而且GrepCode不限于Android的源码
 
+#### 学习网站
+
+ - [W3School](http://www.w3school.com.cn/)
+ - [菜鸟教程](http://www.runoob.com/)：涵盖前端、服务器、Android等教程
+
 ### 技术博客
 
 #### CSDN博客
@@ -175,6 +180,7 @@ date: 2016-12-1 10:00:00
  - [网易GitHub](https://github.com/netease)
  - [美团·大众点评GitHub官方账号](https://github.com/Meituan-Dianping)
  - [Google](https://github.com/google/)
+ - [googlesamples](https://github.com/googlesamples)：Google官方提供的有用的Android范例程序
  - [滴滴开源平台GitHub](https://github.com/didi/)
  - [360开源平台GitHub](https://github.com/Qihoo360)
  - [百度](https://github.com/baidu)
