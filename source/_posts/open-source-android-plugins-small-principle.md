@@ -8,15 +8,15 @@ description: 结合 Activity 的启动流程来分析如何启动插件 Activity
 date: 2017-5-12 10:00:00
 ---
 ## 动态注册组件原理
-
-前面我们说过，替换 `Instrumentation` 对象和 `ActivityThreadHandlerCallback` 是插件化工作中的重头戏。这里用到了我们常说的“Hook”技术。
-`Instrumentation`类看一下[官方文档对这个类的解释](https://developer.android.com/reference/android/app/Instrumentation.html?hl=zh-cn)，该类跟踪 `Application` 及 `Activity` 的整个生命周期，它的一些方法在 `Application` 及 `Activity` 所有生命周期函数的调用中，都会先调用这些方法，因此，得到了这个对象，我们就可以进入并跟踪 `Application` 和 `Activity` 的生命周期流程。
-Small 想要做到动态注册 `Activity`，首先在宿主 Manifest 中注册一个命名特殊的占坑 `Activity` 来欺骗 `startActivityForResult` 以获得生命周期，再欺骗 `performLaunchActivity` 来获得插件 `Activity` 实例，又为了处理之间的信息传递，因此有了后面的 `ActivityThreadHandlerCallback`。
-
-接下来我们就在 `ApkBundleLauncher.InstrumentationWrapper` 来看一下这些是如何实现的。
-先来看一下 `execStartActivity` 方法：
-`execStartActivity`方法有两个实现，一个是API Level 20以前的，一个是API Level 20以后的，仅仅是参数不同而已。
-通过`Activity.startActivityForResult`源码可以看到，当我们调用 `startActivityForResult` 方法时，会调用 `mInstrumentation.execStartActivity` 来启动 `Activity`，此时便开启了 `Activity` 的整个生命周期流程。
+动态的注册组件就是我们常说的Hook技术。
+想要了解插件化的Hook技术我们需要先了解一下 `Activity` 的启动流程，`Activity` 的启动流程要涉及到App进程以及system_server进程，system_server进程的AMS负责 `Activity` 的真实性校验以及生命周期管理，App进程负责创建 `Activity` 对象以及回调生命周期的方法。
+由于`Activity` 的检验过程是在AMS进程完成的，我们对system_server进程里面的操作无能为力，只有在我们APP进程里面执行的过程才是有可能被Hook掉的，因此，所有的Hook我们只能在App进程完成，那么在AMS进程里面进行校验的 `Activity` 也必须是真实存在的。
+因此，Hook的基本思路就是当调用AMS时，就用我们真实注册的存在的 `Activity` 信息（对应上一篇文章的AndroidManifest.xml中的A、A1、A2….A33等 `Activity`），AMS回调到App进程时替换为插件中需要启动的 `Activity` 信息，从而达到欺骗系统的目的。
+可以先看一下我的博客[startActivity 流程](http://www.heqiangfly.com/2016/04/10/android-source-code-analysis-activity-start-process/)，通过看启动流程图我们可以清晰的看到，涉及到 `Acitivity` 的AMS进程和App进程的边界操作有两个：startActivity和对LAUNCH_ACTIVITY消息的处理，这也就是我们需要Hook的两个重要点。
+下面通过实际代码来进程介绍。
+前面我们说过，替换 `Instrumentation` 对象和 `ActivityThreadHandlerCallback` 是插件化工作中的重头戏。这里用到了我们说的“Hook”技术。
+`Instrumentation`类看一下[官方文档对这个类的解释](https://developer.android.com/reference/android/app/Instrumentation.html?hl=zh-cn)，该类跟踪 `Application` 及 `Activity` 的整个生命周期，它的一些方法在 `Application` 及 `Activity` 所有生命周期函数的调用中，都会先调用这些方法。
+熟悉 `Activity` 启动流程的同学都知道，启动 `Activity` 是由 `Activity` 的 `startActivityForResult()` 方法启动，通过 `Instrumentation` 的 `execStartActivity` 方法激活生命周期。
 
 ```java
     public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
@@ -34,6 +34,52 @@ Small 想要做到动态注册 `Activity`，首先在宿主 Manifest 中注册�
         ……
 ```
 
+`Activity` 的实例化在 `ActivityThread` 的 `performLaunchActivity()` 方法中通过 `Instrumentation` 的 `newActivity()` 方法实例化。
+
+```java
+private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) {
+    ...
+
+    Activity activity = null;
+    try {
+        java.lang.ClassLoader cl = r.packageInfo.getClassLoader();
+        activity = mInstrumentation.newActivity( // Override entry 2
+                cl, component.getClassName(), r.intent);
+        StrictMode.incrementExpectedActivityCount(activity.getClass());
+        r.intent.setExtrasClassLoader(cl);
+        r.intent.prepareToEnterProcess();
+        if (r.state != null) {
+            r.state.setClassLoader(cl);
+        }
+    } catch (Exception e) {
+        ...
+    }
+    ...
+}
+```
+
+'onCreate()' 生命周期函数的调用也是在 `ActivityThread.performLaunchActivity()` 中调用 `Instrumentation` 的 `callActivityOnCreate()` 方法来实现的。
+
+```java
+private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) {
+    ...
+    activity.mCalled = false;
+    // 调用Activity.onCreate方法
+    if (r.isPersistable()) {
+        mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);
+    } else {
+        mInstrumentation.callActivityOnCreate(activity, r.state);
+    }
+    ...
+}
+```
+
+因此，得到了这个对象，我们就可以进入并跟踪 `Application` 和 `Activity` 的生命周期流程。
+Small 想要做到动态注册 `Activity`，首先在宿主 Manifest 中注册一个命名特殊的占坑 `Activity` 来欺骗 `startActivityForResult` 以获得生命周期，再欺骗 `performLaunchActivity` 来获得插件 `Activity` 实例，又为了处理之间的信息传递，因此有了后面的 `ActivityThreadHandlerCallback`。
+
+接下来我们就在 `ApkBundleLauncher.InstrumentationWrapper` 来看一下这些是如何实现的。
+先来看一下 `execStartActivity` 方法：
+`execStartActivity`方法有两个实现，一个是API Level 20以前的，一个是API Level 20以后的，仅仅是参数不同而已。
 由于前面我们用 `ApkBundleLauncher.InstrumentationWrapper` 替换了 `mInstrumentation`，因此会调用到 `ApkBundleLauncher.InstrumentationWrapper` 中的 `execStartActivity()` 方法。该方法做的工作后面再详细介绍。主要是把需要启动的真实 `Activity` 替换为占坑 `Activity`。
 熟悉 `Activity` 流程的同学都知道，真正启动 `Activity` 时，`ActivityManagerService` 调用 `ApplicationThread.scheduleLaunchActivity` 接口，通知相应的进程执行启动 `Activity` 的操作，`ApplicationThread` 把这个启动 `Activity` 的操作转发给 `ActivityThread`，`ActivityThread` 通过 `ClassLoader` 导入相应的 `Activity` 类，然后把它启动。
 具体的在 `ActivityThread.ApplicationThread.scheduleLaunchActivity` 方法中会调用 `sendMessage(H.LAUNCH_ACTIVITY, r)`，该消息由 `ActivityThread` 中的消息处理对象 `mH` 来处理，由于我们把 `mH` 的 `mCallback` 替换为了`ActivityThreadHandlerCallback`，因此也会对 `LAUNCH_ACTIVITY` 消息进行拦截处理，处理完后再由`mH` 来处理正常的流程。
@@ -435,4 +481,9 @@ Small 想要做到动态注册 `Activity`，首先在宿主 Manifest 中注册�
 ```
 
 另外还有对 `OnStop`，`OnDestroy`等其他生命周期方法的拦截，这里就不一一介绍了。
+
+<!--     
+http://blog.csdn.net/u013210620/article/details/54692417?utm_source=itdadao&utm_medium=referral
+http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
+-->
 

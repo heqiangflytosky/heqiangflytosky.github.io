@@ -28,8 +28,7 @@ frameworks/base/services/core/java/com/android/server/am/ActivityStack.java
  - TaskRecord：Activity的管理者
  - ActivityStack：Stack的管理者
  - ActivityStackSupervisor：ActivityStack的管理者，早期的Android版本是没有这个类的，直到Android 6.0才出现。
-
-
+ - ActivityManagerNative：AMS 这个远程对象在App进程的Binder代理对象；App进程每次需要与AMS打交道的时候，需要借助这个代理对象通过驱动进而完成IPC调用。
 
 ## 启动流程图
 
@@ -98,6 +97,8 @@ frameworks/base/services/core/java/com/android/server/am/ActivityStack.java
 http://www.plantuml.com/plantuml/png/jLVTYjj65BxNKqnDBsn8qhIzMGmRyCffruuDnZRgPHbBi_OGQKQCHjdrdKCefOKa5oqfj9IIGjbUDIsqjFI7lapjZT-YvqYMFBBbzR9i3AlrdByvSxvlT8wZXro4LD601598Tw9am8XMCREYN1FfgS_WgRYhuy2t9jnZv4HAFP9dbWKschiyf4AJIZyMcWUiuMh-YEjfXT28z1j5c-FfI77FuUoq5OH-OdBij3RYG7Iq8E-GxElRnsaqfsZPZeOJnQW7bjdNbMLxMBHq3XAnSr0Kz-YOTQc0fqhqlMvHNpWBB3OJZJLJBN4Yq-mspk4qfHi7JEXqQrWLzI2mPH1AaPaqxGq3vahLeLFO9jLtBElmaBnxXzXIH13Q8wCfQG_8uQ5bzHlazZseTvr8yO1Dc_9KM1JJfveX3AaUYbqdOtb4tOThBI80Vuc_iws6glSTLBQ7THBAIACwL2oArZPGRu_jM86_iSBDJ6N3ijf3Y9w67vM6JWm0l3fXPyo5eXz9wJCg1gxYeQvMqAk7NeXdjLQfhRq1SUU0tCxYkwl2cIc0YKLzJTxAbGG-gwIm81CgF9zr8Jw6xmu-_FYeOJ_ezUyF1hN4jdZqSebP3aJnlIAA1XCJE1CNICgGtnapRSSA2EUnisgDt2Dt4pFyf03rkca5St6-AH0xa_MwcUbObXfkM685fC0yeCGsr6BCjjtWKCLKCgwa3WwF-CXd2JpIz_3_BN92_OZLjcEj2fQ3aCTAuTxlKA2A8xcNySJTIYQ4HylBSgcKP0Fio6H5pfH8ZKJsIf46cTYNCYHGbnnTm5QmqtoP6vQXqcU1VBGYxMMuR6FJPF1UbrCCKkvjP6uK5zszwxXkml91BC1SYch526TWi0k7tLZihloLDKR5cF1sNuQKsDuLhiAMJqjqAHTflohrtmY0hGDBhgaxiIVSznGJ9KJ51fD9SO6kJNk_8xITJDQqCwT8GoTg21vGH2Wt418S51zFT9qilZfVllnj-Uttyp-Up7-PBMUp-QT_pZ__yUBBl_PlakuYHRx5VU5TCJML41vUdXeQPzeU1_I4-TDB_Gs8tvGqGQ1OAaXK9GHu_Upt-VCNQRsMdpoz-EUd__vzkNZyQfChs9wPHhBWN572ZjRQevNsDGmVRZgOZ6wL4uhgQn9gd-CRHosDYkUcNZ9CLWDZLhf5xjQkS2sRdSjPda27HeiNFviyNtpsnVplsKwUTqfpxrYNlsgCYyTq70vXlXbHrH3UHrnuyXGdhh6IyPuxSYEytTE_RxPVbx-Ir_N7Zh6SVNtntGyuvow--NKDnlDNhyyVBsRdr-xzDz7kzy2wezyROcCmsvOo64foDSoCxnTdnkpN2GwCHVH0Wo_NesmkBkjJ-7EcPEiTujMXafQOF8m9_dy0
 
 -->
+
+## 进程间的通信
 
 ## 启动流程
 
@@ -357,6 +358,7 @@ Instrumentation.execStartActivity
         }
 
         if (err == ActivityManager.START_SUCCESS && aInfo == null) {
+            // 如果待启动的Activity没有在Manifestfest中显示声明，就会有这个error
             err = ActivityManager.START_CLASS_NOT_FOUND;
         }
 
@@ -2474,12 +2476,6 @@ Instrumentation.execStartActivity
             r.startLaunchTickingLocked();
         }
 
-        // Have the window manager re-evaluate the orientation of
-        // the screen based on the new activity order.  Note that
-        // as a result of this, it can call back into the activity
-        // manager with a new orientation.  We don't care about that,
-        // because the activity is not currently running so we are
-        // just restarting it anyway.
         if (checkConfig) {
             Configuration config = mWindowManager.updateOrientationFromAppTokens(
                     mService.mConfiguration,
@@ -2491,8 +2487,6 @@ Instrumentation.execStartActivity
         app.waitingToKill = null;
         r.launchCount++;
         r.lastLaunchTime = SystemClock.uptimeMillis();
-
-        if (DEBUG_ALL) Slog.v(TAG, "Launching: " + r);
 
         int idx = app.activities.indexOf(r);
         if (idx < 0) {
@@ -2518,16 +2512,13 @@ Instrumentation.execStartActivity
                 results = r.results;
                 newIntents = r.newIntents;
             }
-            if (DEBUG_SWITCH) Slog.v(TAG_SWITCH,
-                    "Launching: " + r + " icicle=" + r.icicle + " with results=" + results
-                    + " newIntents=" + newIntents + " andResume=" + andResume);
             if (andResume) {
                 EventLog.writeEvent(EventLogTags.AM_RESTART_ACTIVITY,
                         r.userId, System.identityHashCode(r),
                         task.taskId, r.shortComponentName);
             }
             if (r.isHomeActivity() && r.isNotResolverActivity()) {
-                // Home process is the root process of the task.
+                // Home process 是task中的第一个进程
                 mService.mHomeProcess = task.mActivities.get(0).app;
             }
             mService.ensurePackageDexOpt(r.intent.getComponent().getPackageName());
@@ -2575,16 +2566,10 @@ Instrumentation.execStartActivity
                     newIntents, !andResume, mService.isNextTransitionForward(), profilerInfo);
 
             if ((app.info.privateFlags&ApplicationInfo.PRIVATE_FLAG_CANT_SAVE_STATE) != 0) {
-                // This may be a heavy-weight process!  Note that the package
-                // manager will ensure that only activity can run in the main
-                // process of the .apk, which is the only thing that will be
-                // considered heavy-weight.
                 if (app.processName.equals(app.info.packageName)) {
                     if (mService.mHeavyWeightProcess != null
                             && mService.mHeavyWeightProcess != app) {
-                        Slog.w(TAG, "Starting new heavy weight process " + app
-                                + " when already running "
-                                + mService.mHeavyWeightProcess);
+                        ...
                     }
                     mService.mHeavyWeightProcess = app;
                     Message msg = mService.mHandler.obtainMessage(
@@ -2596,54 +2581,30 @@ Instrumentation.execStartActivity
 
         } catch (RemoteException e) {
             if (r.launchFailed) {
-                // This is the second time we failed -- finish activity
-                // and give up.
-                Slog.e(TAG, "Second failure launching "
-                      + r.intent.getComponent().flattenToShortString()
-                      + ", giving up", e);
                 mService.appDiedLocked(app);
                 stack.requestFinishActivityLocked(r.appToken, Activity.RESULT_CANCELED, null,
                         "2nd-crash", false);
                 return false;
             }
 
-            // This is the first time we failed -- restart process and
-            // retry.
             app.activities.remove(r);
             throw e;
         }
 
         r.launchFailed = false;
-        if (stack.updateLRUListLocked(r)) {
-            Slog.w(TAG, "Activity " + r
-                  + " being launched, but already in LRU list");
-        }
+        ...
 
         if (andResume) {
-            // As part of the process of launching, ActivityThread also performs
-            // a resume.
             stack.minimalResumeActivityLocked(r);
         } else {
-            // This activity is not starting in the resumed state... which
-            // should look like we asked it to pause+stop (but remain visible),
-            // and it has done so and reported back the current icicle and
-            // other state.
-            if (DEBUG_STATES) Slog.v(TAG_STATES,
-                    "Moving to STOPPED: " + r + " (starting in stopped state)");
             r.state = STOPPED;
             r.stopped = true;
         }
 
-        // Launch the new version setup screen if needed.  We do this -after-
-        // launching the initial activity (that is, home), so that it can have
-        // a chance to initialize itself while in the background, making the
-        // switch back to it faster and look better.
         if (isFrontStack(stack)) {
             mService.startSetupActivityLocked();
         }
 
-        // Update any services we are bound to that might care about whether
-        // their client may have activities.
         mService.mServices.updateServiceConnectionActivitiesLocked(r.app);
 
         return true;
@@ -2734,12 +2695,13 @@ Instrumentation.execStartActivity
 
 ```java
     private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) {
+        // 收集要启动的Activity的package信息
         ActivityInfo aInfo = r.activityInfo;
         if (r.packageInfo == null) {
             r.packageInfo = getPackageInfo(aInfo.applicationInfo, r.compatInfo,
                     Context.CONTEXT_INCLUDE_CODE);
         }
-
+        // 收集要启动的Activity的component信息
         ComponentName component = r.intent.getComponent();
         if (component == null) {
             component = r.intent.resolveActivity(
@@ -2752,7 +2714,7 @@ Instrumentation.execStartActivity
                     r.activityInfo.targetActivity);
         }
 
-        // 新建一个Activity对象
+        // 新建一个Activity对象，通过ClassLoader将要启动的Activity类加载进来
         Activity activity = null;
         try {
             java.lang.ClassLoader cl = r.packageInfo.getClassLoader();
@@ -2869,6 +2831,8 @@ Instrumentation.execStartActivity
 ### findTaskLocked()
 
 ### findActivityLocked()
+
+### resolveActivity()
 
 ## 参考文档
 
