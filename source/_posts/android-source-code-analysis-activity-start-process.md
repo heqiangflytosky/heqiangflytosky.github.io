@@ -32,7 +32,7 @@ frameworks/base/services/core/java/com/android/server/am/ActivityStack.java
 
 ## 启动流程图
 
-![效果图](http://www.plantuml.com/plantuml/png/pLOzRzim4DtrArYdQr74em47S08KCM07HUIqA8eYOAXBJ4IX199sawrVKpkaKuTsBf0jNJfrw9zfFdv6ALjsBFfeIxA2TZ6iu_6zk-CZx_ey078OHVeWElKyyqDgwqgJLXoJfp9Ye5IDh7NuKLzlXWFmOYerPpocmlWmpOTSdsMCRQ6q79o0q5JpIA0RkbJG8v06__ICK8NQzzSz406vYwhLzQSHBKBTCRn3MEJXWnnoXhluch9ZVn0dBYgIRf_iIXo7d8qIxlKbq62KWfL0tNpbAMjjmZE68ez9rl1mkpPRjB6nV9thTs4-sfYwD9GsWDCJfiaVgk7kp2T_Y7FJaqZkWXg4UibkIp4DE0Ncu-oskAplsLYoMbgMZgKyt8p0ZyNMCCSkgL06rWcToXAr8i2fHdF6FL4qRiuBtr9x2cG59DOboh9qwTbpof52sLVFOLz49455uH3SzR8v0hYFC3BvTY9s385txpnxWlKXeQgQi40wMSmb9sNkRI-AKmSEglAuROwLOfz7Qmi1ig9oZ4hiny3u8MT5bUFHK9C7pBG13JlmEkql7Y6bRX0DVUIy2LaQnWA-bsj9btkruMYK3MMa6mn2wD21KV7q-X8Y8aCeapPfFgxEB__y-dvr_kxspVlhBpzkVt-xkVYKs3zVNdsycDbry_N3zS-tuyMakIKecGpmTat8x7EGnyTH2GWLa7BdWRtFAO3x9Am7cf32VK1Cmzm55icW01TIZzNZAPbtdbYM-nZ9U7awWykb-C8geCMwMJaNgq2hUAHpaDjXCeFDUDXZ7x8PjNdDPdeDYRc7ay6RD9kPKNTylHidb8lvjpQThgsHV7utrQQA_HBxixDuYZFp-2oPLUluh5h_5xDg_jXBpwjp5AuUQH4jOi9RqW4N0PuAtXXmCwAKFXL129jE-Anm45aZAtX89IRrtFMjP5Z7HutoN2N7ZCgEjjFQszdQtczjzThFshqNvL-JiKQSOHP4CmKwZEH9JhXyYgjEfTKqhV-ZQzKNLCAzz1S0)
+![效果图](http://www.plantuml.com/plantuml/svg/pLTDJnin4Btlht13hrL5Zf62590g8WLKiQ5LLLN8U0TYiTWhsqdXrgzJUu1J3-sv4ZTwwQc7_fa6-1draat8ElP-PMbxYPBn-BsPyRDdCg01e0FErJu_yJpzWHghKg5E5A6dWXEGie5MUlHmeDR38NWH5eeI6c6cVOYY8wfEKyOkaqeCZu4fh2XdrWrRcE5341h_v1HXQRNlhNh00dGNLMVBdqMKXRgjUKUGvU63655YT_4L9aV-C8fT91Tkd_HA58MKt2RS7mZ0mMqAHW9D_QjCMGjLgPaTHsgrCKMOhA77A6rukDcOvqaGPaayMfijjQJIkBFpn_4NhE1E4TCloBdf2HSx88UXojbjwAa59q1yExifFUFtV2nffUMbO-ZIRhR0JwJOqeSXC9CQrWcTYDPgjG0d2YuOzrJlTdDH-8xSbI1g836kM9fb2vy-nzHIAFDYEknPH08a3qVWhfV94S1zX97AjyV94GJUlVFiCZA0cAfkmXBff35pJahVspwF4WSAilQuJOwbObz4wp86egPot9ROZu3G0qhAAiV3eK8FY7xB5Mp3wwJxU0XLka4uz2tdZL1k61byBrVY7lXgpT56Mr9BDnY6qCD3hUBPzKM8SKqeuYQgVupFBd___3O-UtVpvltLv-ytlxvUNtoAxUUNuuyNSxkkltou-l5siXWtjnWbbO6zcICq_nmKyN5K0a89gDfvsDxd1C1z4iO3ZL3fFi1cOUu0uI8emMMfn_BnLCoxI2pvFbeoNf7Eu78flx0CQBbkLit5AD0o7iaSv7QOpc1p7kROPzbijNdjTd8DaRw7qx4SjTkfKNTolLl7cBB5jpOPaOsvUd4tLhgAWmhxqxD-WZFt-EJCgatxhDhy5xDgyTWhpwiB5AuUQH1bCTbRqZvbWJqLUsEmcwq49R0NOItQ6s0MXB3k14rBqN9HB2iBWUItnWf_30eVPot_3UoJJNMkYbDDdKegJL58KBtExlR6vbvdezzzrks_gFugJfJf3Auacgxy0HV71U6AwVmltOrwElF_qPgR6MLoB_q1)
 
 <!-- 
 ------------------------------------------------------------------------------ FirstActivity 进程
@@ -81,7 +81,8 @@ frameworks/base/services/core/java/com/android/server/am/ActivityStack.java
                ├── ApplicationThreadNative.ApplicationThreadProxy.bindApplication()
 ------------------------------------------------------------------------------ AMS 进程
 ------------------------------------------------------------------------------ SecondActivity 进程
-                    ├── ActivityThread.handleBindApplication()
+                    ├── ApplicationThread.bindApplication()
+                         ├── ActivityThread.handleBindApplication()
 ------------------------------------------------------------------------------ SecondActivity 进程
 ------------------------------------------------------------------------------ AMS 进程
                ├── ActivityStackSupervisor.attachApplicationLocked()
@@ -89,12 +90,166 @@ frameworks/base/services/core/java/com/android/server/am/ActivityStack.java
                          ├── ApplicationThreadNative.ApplicationThreadProxy.scheduleLaunchActivity()
 ------------------------------------------------------------------------------ AMS 进程
 ------------------------------------------------------------------------------ SecondActivity 进程
-├── ActivityThread.H.handleMessage():LAUNCH_ACTIVITY
-     ├── ActivityThread.handleLaunchActivity()
-          ├── ActivityThread.performLaunchActivity()
+├── ApplicationThread.scheduleLaunchActivity()
+   ├── ActivityThread.H.handleMessage():LAUNCH_ACTIVITY
+        ├── ActivityThread.handleLaunchActivity()
+             ├── ActivityThread.performLaunchActivity()
 ------------------------------------------------------------------------------ SecondActivity 进程
 
 http://www.plantuml.com/plantuml/png/jLVTYjj65BxNKqnDBsn8qhIzMGmRyCffruuDnZRgPHbBi_OGQKQCHjdrdKCefOKa5oqfj9IIGjbUDIsqjFI7lapjZT-YvqYMFBBbzR9i3AlrdByvSxvlT8wZXro4LD601598Tw9am8XMCREYN1FfgS_WgRYhuy2t9jnZv4HAFP9dbWKschiyf4AJIZyMcWUiuMh-YEjfXT28z1j5c-FfI77FuUoq5OH-OdBij3RYG7Iq8E-GxElRnsaqfsZPZeOJnQW7bjdNbMLxMBHq3XAnSr0Kz-YOTQc0fqhqlMvHNpWBB3OJZJLJBN4Yq-mspk4qfHi7JEXqQrWLzI2mPH1AaPaqxGq3vahLeLFO9jLtBElmaBnxXzXIH13Q8wCfQG_8uQ5bzHlazZseTvr8yO1Dc_9KM1JJfveX3AaUYbqdOtb4tOThBI80Vuc_iws6glSTLBQ7THBAIACwL2oArZPGRu_jM86_iSBDJ6N3ijf3Y9w67vM6JWm0l3fXPyo5eXz9wJCg1gxYeQvMqAk7NeXdjLQfhRq1SUU0tCxYkwl2cIc0YKLzJTxAbGG-gwIm81CgF9zr8Jw6xmu-_FYeOJ_ezUyF1hN4jdZqSebP3aJnlIAA1XCJE1CNICgGtnapRSSA2EUnisgDt2Dt4pFyf03rkca5St6-AH0xa_MwcUbObXfkM685fC0yeCGsr6BCjjtWKCLKCgwa3WwF-CXd2JpIz_3_BN92_OZLjcEj2fQ3aCTAuTxlKA2A8xcNySJTIYQ4HylBSgcKP0Fio6H5pfH8ZKJsIf46cTYNCYHGbnnTm5QmqtoP6vQXqcU1VBGYxMMuR6FJPF1UbrCCKkvjP6uK5zszwxXkml91BC1SYch526TWi0k7tLZihloLDKR5cF1sNuQKsDuLhiAMJqjqAHTflohrtmY0hGDBhgaxiIVSznGJ9KJ51fD9SO6kJNk_8xITJDQqCwT8GoTg21vGH2Wt418S51zFT9qilZfVllnj-Uttyp-Up7-PBMUp-QT_pZ__yUBBl_PlakuYHRx5VU5TCJML41vUdXeQPzeU1_I4-TDB_Gs8tvGqGQ1OAaXK9GHu_Upt-VCNQRsMdpoz-EUd__vzkNZyQfChs9wPHhBWN572ZjRQevNsDGmVRZgOZ6wL4uhgQn9gd-CRHosDYkUcNZ9CLWDZLhf5xjQkS2sRdSjPda27HeiNFviyNtpsnVplsKwUTqfpxrYNlsgCYyTq70vXlXbHrH3UHrnuyXGdhh6IyPuxSYEytTE_RxPVbx-Ir_N7Zh6SVNtntGyuvow--NKDnlDNhyyVBsRdr-xzDz7kzy2wezyROcCmsvOo64foDSoCxnTdnkpN2GwCHVH0Wo_NesmkBkjJ-7EcPEiTujMXafQOF8m9_dy0
+
+@startuml
+hide footbox
+
+box "1st App Process" #LightBlue
+participant Activity
+participant Instrumentation
+participant ActivityManagerProxy as ActivityManagerProxy_1
+end box
+
+box "AMS Process"
+participant ActivityManagerNative
+participant ActivityManagerService
+participant ActivityStackSupervisor
+participant ActivityStack
+participant ApplicationThreadProxy
+end box
+
+box "2nd App Process" #LightBlue
+participant ActivityManagerProxy as ActivityManagerProxy_2
+participant ApplicationThread
+participant "ActivityThread / ActivityThread$H" as ActivityThread
+end box
+
+-> Activity:startActivity
+activate Activity
+Activity -> Activity:startActivityForResult
+activate Activity
+Activity -> Instrumentation:execStartActivity
+activate Instrumentation
+Instrumentation -> ActivityManagerProxy_1:startActivity
+activate ActivityManagerProxy_1
+ActivityManagerProxy_1 -> ActivityManagerNative:onTransact
+activate ActivityManagerNative
+ActivityManagerNative -> ActivityManagerService:startActivity
+activate ActivityManagerService
+ActivityManagerService -> ActivityManagerService:startActivityAsUser
+activate ActivityManagerService
+ActivityManagerService -> ActivityStackSupervisor:startActivityMayWait
+activate ActivityStackSupervisor
+ActivityStackSupervisor -> ActivityStackSupervisor:resolveActivity
+activate ActivityStackSupervisor
+deactivate ActivityStackSupervisor
+ActivityStackSupervisor -> ActivityStackSupervisor:startActivityLocked
+activate ActivityStackSupervisor
+ActivityStackSupervisor -> ActivityStackSupervisor:startActivityUncheckedLocked
+activate ActivityStackSupervisor
+ActivityStackSupervisor -> ActivityStack:startActivityLocked
+activate ActivityStack
+ActivityStack -> ActivityStackSupervisor:resumeTopActivitiesLocked
+activate ActivityStackSupervisor
+ActivityStackSupervisor -> ActivityStack:resumeTopActivityLocked
+activate ActivityStack
+ActivityStack -> ActivityStack:resumeTopActivityInnerLocked
+activate ActivityStack
+ActivityStack -> ActivityStackSupervisor:startSpecificActivityLocked
+activate ActivityStackSupervisor
+
+alt !createNewProcess
+  ActivityStackSupervisor -> ActivityStackSupervisor:realStartActivityLocked
+  activate ActivityStackSupervisor
+  ActivityStackSupervisor -[#Blue]> ApplicationThreadProxy:scheduleLaunchActivity
+  note right
+  可以参考新进程
+  启动Activity
+  的流程
+  end note
+  activate ApplicationThreadProxy
+  deactivate ApplicationThreadProxy
+  deactivate ActivityStackSupervisor
+else createNewProcess
+  ActivityStackSupervisor -> ActivityManagerService:startProcessLocked
+  activate ActivityManagerService
+  ActivityManagerService -> ActivityManagerService:newProcessRecordLocked
+  activate ActivityManagerService
+  deactivate ActivityManagerService
+  ActivityManagerService -> ActivityManagerService:startProcessLocked
+  activate ActivityManagerService
+  deactivate ActivityManagerService
+  deactivate ActivityManagerService
+end
+
+deactivate ActivityStackSupervisor
+deactivate ActivityStack
+deactivate ActivityStack
+deactivate ActivityStackSupervisor
+deactivate ActivityStack
+deactivate ActivityStackSupervisor
+deactivate ActivityStackSupervisor
+deactivate ActivityStackSupervisor
+deactivate ActivityManagerService
+deactivate ActivityManagerService
+deactivate ActivityManagerNative
+deactivate ActivityManagerProxy_1
+deactivate Instrumentation
+deactivate Activity
+deactivate Activity
+
+== create New Process ==
+
+-> ActivityThread:main
+activate ActivityThread
+ActivityThread -> ActivityThread:attach
+activate ActivityThread
+ActivityThread -> ActivityManagerProxy_2:attachApplication
+activate ActivityManagerProxy_2
+ActivityManagerProxy_2 -> ActivityManagerNative:onTransact
+activate ActivityManagerNative
+ActivityManagerNative -> ActivityManagerService:attachApplication
+activate ActivityManagerService
+ActivityManagerService -> ActivityManagerService:attachApplicationLocked
+activate ActivityManagerService
+
+ActivityManagerService -> ApplicationThreadProxy:bindApplication
+activate ApplicationThreadProxy
+ApplicationThreadProxy -> ApplicationThread:bindApplication
+activate ApplicationThread
+ApplicationThread -> ActivityThread:handleBindApplication
+activate ActivityThread
+deactivate ActivityThread
+deactivate ApplicationThread
+deactivate ApplicationThreadProxy
+
+ActivityManagerService -> ActivityStackSupervisor:attachApplicationLocked
+activate ActivityStackSupervisor
+ActivityStackSupervisor -> ActivityStackSupervisor:realStartActivityLocked
+activate ActivityStackSupervisor
+ActivityStackSupervisor -[#Blue]> ApplicationThreadProxy:scheduleLaunchActivity
+activate ApplicationThreadProxy
+ApplicationThreadProxy -> ApplicationThread:scheduleLaunchActivity
+activate ApplicationThread
+ApplicationThread -> ActivityThread:LAUNCH_ACTIVITY
+activate ActivityThread
+ActivityThread -> ActivityThread:handleLaunchActivity
+activate ActivityThread
+ActivityThread -> ActivityThread:performLaunchActivity
+activate ActivityThread
+deactivate ActivityThread
+deactivate ActivityThread
+deactivate ActivityThread
+deactivate ApplicationThread
+deactivate ApplicationThreadProxy
+deactivate ActivityStackSupervisor
+deactivate ActivityStackSupervisor
+
+deactivate ActivityManagerService
+deactivate ActivityManagerService
+deactivate ActivityManagerNative
+deactivate ActivityManagerProxy_2
+deactivate ActivityThread
+
+deactivate ActivityThread
+@enduml
 
 -->
 
