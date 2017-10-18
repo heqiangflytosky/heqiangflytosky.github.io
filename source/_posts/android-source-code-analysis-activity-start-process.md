@@ -28,7 +28,6 @@ frameworks/base/services/core/java/com/android/server/am/ActivityStack.java
  - TaskRecord：Activity的管理者
  - ActivityStack：Stack的管理者
  - ActivityStackSupervisor：ActivityStack的管理者，早期的Android版本是没有这个类的，直到Android 6.0才出现。
- - ActivityManagerNative：AMS 这个远程对象在App进程的Binder代理对象；App进程每次需要与AMS打交道的时候，需要借助这个代理对象通过驱动进而完成IPC调用。
 
 ## 启动流程图
 

@@ -24,7 +24,7 @@ frameworks/base/core/java/android/app/ActivityThread$ApplicationThread.java
 
 ## 相关类关系图
 
-![效果图](http://www.plantuml.com/plantuml/svg/ZPBFJi904CRlynGJZYPWl6hJ13mO3X0Ik9EbZBgnR9lT3P4eneidEHZ3IKmCDww6Yv54NiQc-1OMsigVjeRRPFStCzzyCmskRS9SiL97xtc0nLeDV-vVlkTZV_JXFKpzzvat-ig1kkB2PP9rqBAPKdW3Y2L7jacUEhOZ3KFrbAPEKv7iaZHDh1CxaqHYbsEkstIbOv5I0LLX5oGqWpu224SJCeNL8p1Qfc4j-UEu39guc3yjnWFlTU9FP_xiRJ4V-PD7D0vN89eRIL7LpHplS-WF9uaS4crSzWNWGfCyPnPXkHo74CvQuYBGlqaKBSsxNFSgJ0IjjhzSr-OMqzmHZKj9h0sifRHabewSIm3L8EuIueuta87Nf7FTmuJXMNXctUqHwa4P7kZFhBkDHvhtf6F9_-d8KBiwjBkKiJh1KnYUG1_AuOxGk2qKudtzFUNpwVAtYVIr0ApF8QoUM7uII9m0x2Q5P9fD-w6Hk6IhY4uzcltnUFQChQSu6jqFP5rtkiVh3f6SWpJg5m00)
+![效果图](http://www.plantuml.com/plantuml/svg/jLHDRzD04BtlhnZrn8TIn9LQbb8EA1Af8j9xDRQtpGfxrzhTM4HGn8KJFI3K4wc4UiiLzOA8rFmPB8T_mHhRn8ut7nTkA-VDUs_UpEIKwP32GRS_XFJB5NG70_ZzuUklnMqs_P5-lCk-pzFf_G5HhncFKM84VeXAmLi2S2naGELp4GhfE6gYD8tE59K9bQuBGuel9ALy7OTnV1PBuLEb3AgF5vHh99T021UQ0YeuUKeSptNy7F-ieW4NbelFozkhz6QMtSsp-RVbOfhDFe7pv2yGt5fHoLglINzUPzUpLWtb0UIwX32kgJn7dqAlLpr9qUinuyP_7T7rDKkOdlIH6wdcJt4SCXyr4_nq92a613sb9VgwJAu5E37lX0AiPvD7_1ZYiMVWu0aHKkHWYYHoPUWUF3mYbsG3vq2ADnDeJoNdx40iMO8cx7F6COHUqHz4hsXaeZYgonQ8HB00F8EgwUJoTg3oHpGOX_GbZha_ggBQQdT7y__9HNE8GvCHCnEqXxOcOGOEIgFKTMAx4TGQZO6cvmqUobNOOM77BZGfgqrenxlQWsqRiAlJ_NlSDkhtbfs8pAVYcNDL7frtXuVLHVxxrEdOasmYx8T7oEhW2_RMURS1hICdwqK5qZQC_Q2bkRPKYRPU_FxmglSD2sX9jBmFikd_ovxnIg6qyyY6-WC0)
 
 <!--   
 @startuml
@@ -43,12 +43,30 @@ interface IInterface
 class Binder
 interface IActivityManager
 interface IApplicationThread
-abstract class ApplicationThreadNative  <<app_process>>
-class ApplicationThreadProxy <<system_server>>
-class ApplicationThread  <<app_process>>
-class ActivityManagerService <<system_server>>
-class ActivityManagerNative <<system_server>>
-class ActivityManagerProxy <<app_process>>
+abstract class ApplicationThreadNative  <<app_process>> {
+  + public boolean onTransact();
+}
+class ApplicationThreadProxy <<system_server>> {
+  - private final IBinder mRemote;
+  + public final void bindApplication();
+  + public final void scheduleLaunchActivity();
+}
+class ApplicationThread  <<app_process>> {
+  + public final void bindApplication();
+  + public final void scheduleLaunchActivity();
+}
+class ActivityManagerService <<system_server>> {
+  + public final int startActivity();
+  + public final void attachApplication();
+}
+class ActivityManagerNative <<system_server>> {
+  + public boolean onTransact();
+}
+class ActivityManagerProxy <<app_process>> {
+  - private IBinder mRemote;
+  + public int startActivity();
+  + public void attachApplication();
+}
 class ActivityThread  <<app_process>> {
   ~ ApplicationThread mAppThread;
 }
