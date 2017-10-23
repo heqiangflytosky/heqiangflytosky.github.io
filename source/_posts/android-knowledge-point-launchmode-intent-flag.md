@@ -12,8 +12,9 @@ date: 2015-12-8 10:00:00
 
 ### standard
 
-如果不显式的指定 launchMode，Activity都会按照此种模式启动。这种模式下的 Activity 可以有多个实例，不同任务中可以有不同的 Activity 实例，同一个任务中也可以有多个 Activity 实例。
+如果不显式的指定 launchMode，Activity都会按照此种模式启动。这种模式下的 Activity 可以有多个实例，不同任务中可以有不同的 Activity 实例，同一个任务中也可以有多个 Activity 实例。这种模式下启动Activity总是会重新创建Activity，对应调用 `onCreate()` 方法。
 Android L(Android 5.0)前后对这种启动模式的处理方式是不同的：
+
  - Android L之前：每次以该模式启动的 Activity 都会被压入当前任务的顶部，启动 N 次，在当前任务就会出现 N 个 Activity 的实例，每次Back键就会销毁一个，直到按了 N 次Back键。
  - Android L之后：如果要以该模式启动 Activity 都是来自同一应用，那么还是会像之前一样，压入当前任务的顶部; 如果是来自不同应用，那么将会创建一个新的任务，然后将 Activity 的实例压入新的任务中。Android L做的优化主要是针对多任务的显示。
 
@@ -23,12 +24,14 @@ Android L(Android 5.0)前后对这种启动模式的处理方式是不同的：
 
 ### singleTask
 
-具体启动 singleTask 会不会新建一个 Task，则和 TaskAffinity 有关。在我们不设置 `android:taskAffinity` 的情况下，同一个应用的 Activity 默认具有相同的 TaskAffinity，除非你自己设置了 Activity 的 `android:taskAffinity`。
+系统在该类型的 Task 不存在时创建一个新的 Task，并将该 Activity 放入 Task 底部。具体启动 singleTask 会不会新建一个 Task，则和 TaskAffinity 有关。在我们不设置 `android:taskAffinity` 的情况下，同一个应用的 Activity 默认具有相同的 TaskAffinity，除非你自己设置了 Activity 的 `android:taskAffinity`。
 以 A 启动 B（singleTask）为例，下面我们分集中情况来介绍：
+
  - A 和 B 的 TaskAffinity 相同，该 Task 里面没有 B：那么就直接在 A 的 Task 里面启动 B。
  - A 和 B 的 TaskAffinity 相同，该 Task 里面存在 B：清除该 Activity 上面的所有对象，把该 Activity 推到前台。
  - A 和 B 的 TaskAffinity 不同，且 B 不存在：则创建一个新的 Task，并将该 Activity 放入 Task 底部。
  - A 和 B 的 TaskAffinity 不同，且 B 存在：在该 Task 中启动该 Activity，并把该 Task 拉回前台，如果该 Activity 上面有其他的对象，则清除该 Activity 上面的所有对象，把该 Activity 推到前台。
+
 也就是说，启动模式为 singleTask 的 Activity 在系统中只会存在一个实例。
 如果在栈中已经有该Activity的实例，就重用该实例(会调用实例的 `onNewIntent()`)。重用时，会让该实例回到栈顶，因此在它上面的实例将会被移除栈。
 但是要注意，系统可能会随时杀掉后台运行的 Activity，如果这一切发生，那么系统就会调用 `onCreate()` 方法，而不调用 `onNewIntent()` 方法。，因此，如果有需要在 `Activity` 启动时处理的方法最好在 `onCreate() `和 `onNewIntent()` 方法中都要调用一下。
@@ -90,7 +93,7 @@ A 启动 B：
 ### FLAG_ACTIVITY_NEW_TASK
 
 当使用这个 Flag 时，
-Task 中已经有A和B，现在B以 `FLAG_ACTIVITY_NEW_TASK` 的方式来启动A，先来看一下 `android:taskAffinity` 相同的情况下：
+Task 中已经有A（standard）和B，现在B以 `FLAG_ACTIVITY_NEW_TASK` 的方式来启动A（standard），先来看一下 `android:taskAffinity` 相同的情况下：
 启动前：
 ```
   Stack #2:
@@ -146,7 +149,7 @@ Task 中已经有A和B，现在B以 `FLAG_ACTIVITY_NEW_TASK` 的方式来启动A
 ```
 
 我们发现会在B上面直接创建A。
-再来测试另外一种情况，Task中已经存在A，在另外的一个Task中的B以 `FLAG_ACTIVITY_NEW_TASK` 启动A：
+再来测试另外一种情况，Task中已经存在A（standard），在另外的一个Task中的B以 `FLAG_ACTIVITY_NEW_TASK` 启动A（standard）：
 启动前：
 
 ```
@@ -179,7 +182,15 @@ Task 中已经有A和B，现在B以 `FLAG_ACTIVITY_NEW_TASK` 的方式来启动A
 
 ```
 可以看到在A上面又新创建了个A。
-因此可以得到下面的结论：FLAG_ACTIVITY_NEW_TASK 只会去关心该 `Activity` 的 Task 的个数，如果不存在就新建，存在就直接推到前台。而不去关心 `Activity` 的数量，也就是说该 Task 中可以有多个 Activity 存在，这个要和 `singleTask` 做区别。
+当然这里只是以A是 standard 的启动模式来做介绍，具体其他的启动模式情况肯定是不一样的。
+因此可以得到下面的结论：FLAG_ACTIVITY_NEW_TASK 只会去关心该 `Activity` 的 Task 的个数，如果不存在就新建，存在就直接推到前台。而不去关心 `Activity` 的个数（和启动模式有关），也就是说该 Task 中可以有多个 Activity 存在，这个要和 `singleTask` 做区别。
+
+### FLAG_ACTIVITY_CLEAR_TOP
+
+启动模式不同，具体操作也不一样。但是都会清除该 Activity 上面的所有对象。
+standard 模式：系统收到新的 Intent 时，如果 Task 中存在该 Activity 则弹出 Activity 和 Activity 上面的所有对象，并重新初始化一个新的 Activity 对象放入栈顶，以处理 Intent 请求。因为 standard 总是初始化新的 Activity 来处理 Intent请求。
+其他模式：则会将 Activity 上面的对象弹出，使该 Activity 在栈顶部，以处理 Intent请求。
+
 
 <!--   
 http://duanqz.github.io/2016-01-21-Activity-LaunchMode
