@@ -31,11 +31,18 @@ React Native是由React衍生出来的项目（[GitHub地址](https://github.com
  - Weex：基于vue.js开发，使用V8作为JS引擎。
 
 ## 一些学习资料
-React 中文网：http://react-china.org/
-React Native中文网：http://reactnative.cn
 React Native的相关文档https://facebook.github.io/react/   https://facebook.github.io/react-native/
-ECMAScript 6入门：http://es6.ruanyifeng.com/
-React/React Native 的ES5 ES6写法对照表：http://bbs.reactnative.cn/topic/15/react-react-native-%E7%9A%84es5-es6%E5%86%99%E6%B3%95%E5%AF%B9%E7%85%A7%E8%A1%A8
+[React 中文网](http://react-china.org/)
+[React Native中文网](http://reactnative.cn)
+[ECMAScript 6入门](http://es6.ruanyifeng.com/)
+[React/React Native 的ES5 ES6写法对照表](http://bbs.reactnative.cn/topic/15/react-react-native-%E7%9A%84es5-es6%E5%86%99%E6%B3%95%E5%AF%B9%E7%85%A7%E8%A1%A8)
+[分析reactnative优劣](http://bbs.reactnative.cn/topic/320/2016%E5%B9%B41%E6%9C%889%E6%97%A5-react-native%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB%E4%BC%9A-%E5%8C%97%E4%BA%AC-%E5%88%86%E4%BA%AB%E8%AE%B0%E5%BD%95)
+[ReactNativeAndroid源码分析-Js如何调用Native的代码](https://zhuanlan.zhihu.com/p/20464825?refer=program-life)
+[ReactNative For Android 项目实战总结 QQ空间](https://zhuanlan.zhihu.com/p/20587485?refer=magilu)
+[React Native For Android 架构初探 QQ空间](https://zhuanlan.zhihu.com/p/20259704)
+[React native for Android 初步实践(淘宝)](https://yq.aliyun.com/articles/2757?spm=5176.100240.searchblog.21.VfnaXO)
+[ReactNative开发指导](https://github.com/cnsnake11/blog/tree/master/ReactNative%E5%BC%80%E5%8F%91%E6%8C%87%E5%AF%BC)
+
 
 随后继续补充
 

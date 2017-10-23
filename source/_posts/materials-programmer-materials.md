@@ -397,6 +397,29 @@ date: 2016-12-1 10:00:00
  - [Gravizo](http://www.gravizo.com/)：在线绘图的渲染引擎
  - [百度脑图](http://naotu.baidu.com/)：在线绘制思维导图，免安装，云存储，易分享
 
+### Markdown 相关工具
+
+#### 在线编辑工具
+
+ - leanote 蚂蚁笔记：[地址](https://leanote.com/)：在线功能强大，客户端功能更强大
+ - Dillinger：[地址](https://dillinger.io/)
+ - StackEdit：[地址](https://stackedit.io/)
+
+功能：
+
+ - 即时渲染
+ - 管理多个 MarkDown 文档，可在线或离线编辑
+ - 通过模板导出 MarkDown 、 HTML 或者 pdf 格式文件
+ - 转换HTML到 MarkDown
+ - 云同步，一键发布
+
+#### Markdown 转 pdf
+
+ - 用 leanote，客户端功能很强大
+ - 用 Chrome 打开 md 文件，然后打印用 pdf 格式输出。
+ - 用 StackEdit 保存为 pdf 格式，不过这种格式要收费才能使用，可以保存为html，然后用浏览器打开打印成 pdf。格式转化可能会有问题
+ - 用 Dillinger 保存为 pdf 格式，但是中文转化有问题
+
 ### API
 
 一些后台数据的API，可用来应用开发练手
