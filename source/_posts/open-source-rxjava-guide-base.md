@@ -28,6 +28,7 @@ RxAndroid 是一个 RxJava 扩展库，更好的兼容了 Android 特性，比�
 
 RxJava 官方的解释是一个在 Java VM 上使用可观测的序列来组成异步的、基于事件的程序的库。简要概括一下，它就是一个实现异步操作的库。它的本质体现在异步两个字上面。
 RxJava 的异步的实现，是通过一种扩展的观察者模式来实现的，观察者模式相信我们都不陌生。
+RxJava 提供众多的操作符以及它的链式操作可以替代深度回调逻辑，可以使代码简短优雅。
 想要使用RxJava，我们先来了解一下几个基本概念。
 
  - Observable (可观察者，即被观察者)：发射数据流
@@ -36,9 +37,18 @@ RxJava 的异步的实现，是通过一种扩展的观察者模式来实现的�
  - subscribe (订阅)：建立 Observable 和 Observer 的联系
  - subscribeOn：为 Observable 对数据的处理指定一个调度器
  - observeOn：为下游对数据的操作指定一个调度器
+ - Disposable：用于解除订阅以及查询订阅关系是否解除
  - Operators操作符：可以理解为对数据流的操作，包括创建、过滤、变换、组合、聚合等。
+ - Flowable：(被观察者)：发射数据流，支持背压
+ - Publisher：Flowable 的父类
+ - Subscriber：(观察者)，支持背压
+ - Subscription：可以通过request发起请求数据，通过cancel取消订阅关系。
+ - Single/SingleObserver：一种观察者模式组合
+ - Completable/CompletableObserver：一种观察者模式组合
+ - Maybe/MaybeObserver：一种观察者模式组合
 
 
+订阅关系：Observable/Observer是一对，Flowable/Subscriber是一对。
 
 ## 基本用法
 
