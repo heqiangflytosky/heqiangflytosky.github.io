@@ -69,6 +69,7 @@ RxJava 提供众多的操作符以及它的链式操作可以替代深度回调�
 ```
 
 `ObservableEmitter` 相当于一个事件发射器，每执行一次 `onNext()`，观察者就会收到一次数据，数据发送完毕后调用 `onComplete()` 方法。
+在事件处理过程中出异常时，触发`onError()` ，同时队列自动终止，不允许再有事件发出。在一个正确运行的事件序列中， `onCompleted()` 和 `onError()` 有且只有一个，并且是事件序列中的最后一个。需要注意的是，`onCompleted()` 和 `onError()` 二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个。
 
 ### 创建Observer
 
@@ -263,11 +264,22 @@ I/RxJava: onComplete
                 });
 ```
 
+## 创建Observer
+
+RxJava 支持多种不同方式的 `Observer` 回调。
+
+ - subscribe()：忽略 `onNext` 以及 `onComplete` 等事件。
+ - subscribe(Observer<? super T> observer)：以 `Observer` 为参数。
+ - subscribe(Consumer<? super T> onNext)：只接受 `onNext`
+ - subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError)：接受 `onNext` 和 `onError`
+ - subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Action onComplete)：接受 `onNext` `onError` 和 `onComplete`
+ - subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Action onComplete, Consumer<? super Disposable> onSubscribe)：接受 `onNext` `onError` 和 `onComplete`，接受参数为 `Disposable` 的一个回调，用于解除订阅，这中实现就和 `Observer` 类似了，四个回调。
+
 ## 线程调度
 
 ### Scheduler（调度器）
 
-在上面的例子中，并没有涉及到线程切换的操作，但是我们在使用过程中会经常遇到这种情况，比如，我们会将网络请求等耗时操作放到后台线程中，将UI操作放到主线程中执行。
+在上面的例子中，并没有涉及到线程切换的操作。如果只是这样在一个线程中同步使用还没有将RxJava的优势体现出来。我们在使用过程中会经常遇到这种情况，比如，我们会将网络请求等耗时操作放到后台线程中，将UI操作放到主线程中执行。
 RxJava 提供了线程调度的功能，我们可以借助于 `Scheduler` 来完成。另外 RxAndroid 提供了 `AndroidSchedulers` 调度器来供开发者使用。
 `Scheduler` 和 `AndroidSchedulers` 提供了6种线程调度器：
 
@@ -285,8 +297,8 @@ RxJava 提供了线程调度的功能，我们可以借助于 `Scheduler` 来完
 
 实现线程的调度可以通过 `subscribeOn()` 和 `observerOn()` 实现。
 
- - subscribeOn()：指定对数据的处理在哪个调度器上执行，直到遇到observeOn改变线程调度器。
- - observerOn()：指定下游对数据的操作运行在哪个调度器上。
+ - subscribeOn()：指定被观察者在哪个调度器上执行，跟调用的位置没有关系。直到遇到observeOn改变线程调度器。
+ - observerOn()：指定下游观察者对数据的操作运行在哪个调度器上。在调用位置切换线程。
 
 使用时需要注意：
 
@@ -353,3 +365,79 @@ Observable.create                           //被观察者在io线程执行，�
 ```
 
 > 如果我们不指定线程调度器，被观察者和观察者会在什么线程执行呢？我们通过在前面的例子中添加一些打印信息会发现，它们会默认在当前线程中执行。
+
+### doOnSubscribe()
+
+这里再提一个方法 `doOnSubscribe()`，它是在 `subscribe()` 调用后而且在事件发送前执行。前面我们说过，有多个 `subscribeOn()` 来对别观察者指定线程，只会有第一个起作用，但是多个 `subscribeOn()` 却可以影响 `doOnSubscribe()` 的执行线程。
+先来测试一下我们的结论：
+
+```java
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
+                Log.i(TAG,"subscribe current thread : "+Thread.currentThread().getName());
+                e.onNext(1);
+                e.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.i(TAG,"accept current thread : "+Thread.currentThread().getName());
+                        Log.i(TAG,"accept : " + integer);
+                    }
+                });
+```
+
+这里通过 `subscribeOn` 两次指定被观察者执行线程，一个是IO线程，一个指定主线程。
+结果：
+
+```
+I/RxJava: subscribe current thread : RxCachedThreadScheduler-1
+I/RxJava: accept current thread : RxCachedThreadScheduler-1
+I/RxJava: accept : 1
+```
+
+执行在 IO 线程，是第一次指定生效。
+上面例子稍加改动，再来看一下：
+
+```java
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
+                Log.i(TAG,"subscribe current thread : "+Thread.currentThread().getName());
+                e.onNext(1);
+                e.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.i(TAG,"doOnSubscribe current thread : "+Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.i(TAG,"accept current thread : "+Thread.currentThread().getName());
+                        Log.i(TAG,"accept : " + integer);
+                    }
+                });
+```
+
+结果：
+
+```
+I/RxJava: doOnSubscribe current thread : main
+I/RxJava: subscribe current thread : RxCachedThreadScheduler-1
+I/RxJava: accept current thread : RxCachedThreadScheduler-1
+I/RxJava: accept : 1
+```
+
+可以看到，`subscribeOn` 是可以重新指定 `doOnSubscribe` 的执行线程的。
+
+## 推荐阅读
+
+http://gank.io/post/560e15be2dca930e00da1083

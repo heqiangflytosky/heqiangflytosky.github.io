@@ -255,6 +255,64 @@ I/RxJava: accept : 5five
                 });
 ```
 
+## sample
+
+`sample(long period, TimeUnit unit)` 相当于采样操作，它会定时地扫描被观察者发送的数据，并接收被观察者最近发射的数据。
+
+```java
+        Observable.interval(2, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .sample(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        Log.i(TAG,"accept : " + aLong);
+                    }
+                });
+```
+
+```
+I/RxJava: accept : 0
+I/RxJava: accept : 1
+I/RxJava: accept : 3
+I/RxJava: accept : 4
+I/RxJava: accept : 6
+I/RxJava: accept : 7
+I/RxJava: accept : 9
+I/RxJava: accept : 10
+I/RxJava: accept : 12
+```
+
+## skip 和 skipLast
+
+### skip
+
+`skip(long count)` 用于过滤被观察者发送的前 n 项数据。
+
+```java
+        Observable.interval(1, TimeUnit.SECONDS)
+                .skip(6)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        Log.i(TAG,"accept : " + aLong);
+                    }
+                });
+```
+
+```
+I/RxJava: accept : 6
+I/RxJava: accept : 7
+I/RxJava: accept : 8
+I/RxJava: accept : 9
+I/RxJava: accept : 10
+```
+
+### skipLast
+
+`skipLast(int count)` 用于过滤最后 n 项数据。
+
 ## repeat、repeatUntil 和 repeatWhen
 
 这组操作符提供在调用 `onCompleted()` 事件后提供重复调用 `Observable` 事件的操作。

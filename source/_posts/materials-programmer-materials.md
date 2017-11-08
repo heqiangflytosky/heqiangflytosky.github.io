@@ -92,6 +92,7 @@ date: 2016-12-1 10:00:00
  - [Hujiawei Bujidao](https://hujiaweibujidao.github.io/)：很多Android系统性能相关的文章
  - [进击的程序员](http://0xcc0xcd.com/p/index.php)：老罗，罗升阳的个人博客站点
  - [Weishu's Notes](http://weishu.me/)：有一些不错的文章
+ - [HenCoder](http://hencoder.com/)：大神扔物线的给<font color=#DC143C>高阶Android工程师</font>的进阶手册
 
 ### 微信公众号
 
@@ -148,6 +149,8 @@ date: 2016-12-1 10:00:00
  - AI科技大本营：程序员转型第一站
  - 老马说编程
  - GitChat：一种全新的IT知识交流方式
+ - HenCoder：大神扔物线的给高阶Android工程师的进阶手册
+ - 视觉求索：计算机视觉领域资深华人教授与研究员共同发起的、非盈利性的、独立于产业界的移动新媒体平台
 
 #### 其他
 
