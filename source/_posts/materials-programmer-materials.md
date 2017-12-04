@@ -232,7 +232,11 @@ date: 2016-12-1 10:00:00
 #### 人工智能
 
  - [tensorflow](https://github.com/tensorflow/tensorflow)：google开发的开源深度学习框架。
- - [百度开源移动端深度学习框架](https://github.com/baidu/mobile-deep-learning)
+ - [mobile-deep-learning](https://github.com/baidu/mobile-deep-learning)：百度开源移动端深度学习框架 
+
+#### VR/AR
+
+ - [ArCore](https://github.com/google-ar)：Google 发布的基于 Android 平台的 AR SDK。
 
 #### 其他
 
@@ -437,6 +441,10 @@ date: 2016-12-1 10:00:00
  - [Github](https://developer.github.com/v3/)
  - [微博API](http://open.weibo.com/wiki/API)
  - [Dribbble](http://developer.dribbble.com/)
+
+### 专利检索
+
+ - [专利检索及分析](http://www.pss-system.gov.cn)
 
 ### 其他
 

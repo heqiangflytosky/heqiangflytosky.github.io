@@ -232,7 +232,7 @@ HTTP 方式是对上面 6 中的扩展，用法：
 ```
 
 如果参数指定的 url 是一个以 `http` 开头的 url，那么就完全使用这个url，和前面指定的 BaseUrl 完全没有联系，如果 url 指定的只有类似 `/id/name` 的path，而没有指定 scheme 和 host，那么它就会用 BaseUrl 的 scheme 和 host。
-** <font color=#ff0000>这里注意</font> **：只是用 BaseUrl 的 scheme 和 host，如果 BaseUrl 是 http://www.test.com/v/，那么还是会把 path 中的 v  去掉，组成 http://www.test.com/id/name。
+** <font color=#ff0000>这里注意</font> **：只是用 BaseUrl 的 scheme 和 host，如果 BaseUrl 是 http://www.test.com/v/ ，那么还是会把 path 中的 v  去掉，组成 http://www.test.com/id/name 。
 
 <!--  
 http://www.jianshu.com/p/308f3c54abdd

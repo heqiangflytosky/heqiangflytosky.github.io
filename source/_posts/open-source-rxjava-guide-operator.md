@@ -45,7 +45,7 @@ date: 2017-10-12 10:00:00
 
 `flatMap(Function<? super T, ? extends ObservableSource<? extends R>> mapper)` 中同样需要一个 `Function` 对象作为参数，但是 `Function` 的目标数据类型变成了 `Observable`。
 `flatMap` 一般用于输出一个 `Observable`，而其随后的 `subscribe` 中的参数也跟 `Observable` 中的参数一样。
-下面再提供一个使用场景，比如我们想先进行一次网络请求得到图片的url，然后根据url再进行网络请求得到图片，最后设置给 `ImageView` ，这种情况下由url到 `Bitmap` 的转换用 `map` 是无法实现的，可以使用 `flatmap`。
+下面再提供一个使用场景，这个场景属于嵌套的网络请求，比如我们想先进行一次网络请求得到图片的url，然后根据url再进行网络请求得到图片，最后设置给 `ImageView` ，这种情况下由url到 `Bitmap` 的转换用 `map` 是无法实现的，可以使用 `flatmap`。
 
 ```java
         Observable.create(new ObservableOnSubscribe<String>() {

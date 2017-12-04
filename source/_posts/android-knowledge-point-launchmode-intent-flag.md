@@ -193,28 +193,5 @@ standard 模式：系统收到新的 Intent 时，如果 Task 中存在该 Activ
 
 
 <!--   
-http://duanqz.github.io/2016-01-21-Activity-LaunchMode
-http://www.jianshu.com/p/7f1c9fac2af2
-http://www.jianshu.com/p/c1386015856a
-https://www.2cto.com/kf/201508/436663.html
-http://blog.csdn.net/vipzjyno1/article/details/25463457
-http://www.jianshu.com/p/537aa221eec4
-http://blog.csdn.net/lincyang/article/details/6802017
 
-http://blog.csdn.net/qq_21763489/article/details/52875739
-FLAG_ACTIVITY_PREVIOUS_IS_TOP
-
-taskAffinity 和 FLAG_ACTIVITY_NEW_TASK
-https://www.baidu.com/s?word=FLAG_ACTIVITY_NEW_TASK&tn=sitehao123&ie=utf-8
-http://www.cnblogs.com/xiaoQLu/archive/2012/07/17/2595294.html
-http://blog.csdn.net/zhangjg_blog/article/details/10923643
-
-
-Intent.FLAG_ACTIVITY_TASK_ON_HOME
-https://www.baidu.com/s?word=FLAG_ACTIVITY_TASK_ON_HOME&tn=50000021_hao_pg&ie=utf-8&sc=UWd1pgw-pA7EnHc1FMfqnHRsPWRvnWndn1DLriuW5y99U1Dznzu9m1YYPWnknHbLrHn&ssl_sample=s_4%2Cs_30&srcqid=1348961502141319706
-http://blog.csdn.net/new_abc/article/details/13737331
-
-http://blog.csdn.net/ljz2009y/article/details/26621815
-blog.csdn.net/lincyang/article/details/6826021
-http://blog.csdn.net/goodlixueyong/article/details/49620667
 -->
