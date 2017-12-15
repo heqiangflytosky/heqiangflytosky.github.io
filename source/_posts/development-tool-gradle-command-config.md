@@ -10,6 +10,7 @@ date: 2016-3-11 10:00:00
 
 Gradle是一种构建工具，它抛弃了基于XML的构建脚本，取而代之的是采用一种基于Groovy的内部领域特定语言，建议可以先熟悉一下Groovy脚本。
 [在线文档](https://docs.gradle.org/current/dsl/)
+[Android 配置构建](https://developer.android.com/studio/build/index.html)
 # Gradle命令
 ## 常用命令
 gradle明明一般是`./gradlew +参数`， `gradlew`代表 `gradle wrapper`，意思是gradle的一层包装，大家可以理解为在这个项目本地就封装了gradle，即gradle wrapper， 在`gradle/wrapper/gralde-wrapper.properties`文件中声明了它指向的目录和版本。只要下载成功即可用`grdlew wrapper`的命令代替全局的`gradle`命令。
@@ -244,6 +245,17 @@ android {
  - `minifyEnabled`也是最新的语法，很早之前是`runProguard`,这个也需要更新下。
  - `proguardFiles`这部分有两段，前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，免去了我们很多事，这个文件的目录在 sdk目录`/tools/proguard/proguard-android.txt` , 后一部分是我们项目里的自定义的混淆文件，目录就在 `app/proguard-rules.txt` , 如果你用Studio 1.0创建的新项目默认生成的文件名是 `proguard-rules.pro` , 这个名字没关系，在这个文件里你可以声明一些第三方依赖的一些混淆规则。最终混淆的结果是这两部分文件共同作用的。
  - `aaptOptions`更多介绍 http://blog.csdn.net/heqiangflytosky/article/details/51009123
+
+#### 变量的引用
+
+比如在gradle的某个地方想使用版本号，可以使用下面的方法：
+
+```
+def getVersionCode() {
+    int code = android.defaultConfig.versionCode
+    return code
+}
+```
 
 ### repositories
 
