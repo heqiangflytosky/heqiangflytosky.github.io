@@ -85,7 +85,7 @@ public class TestRetrofit {
                 .baseUrl("http://*.*.*.*/")
                 .addConverterFactory(GsonConverterFactory.create())
                 //加入对RxJava2的支持
-                //.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         mMyService = retrofit.create(MyService.class);
     }
@@ -122,7 +122,7 @@ public class TestRetrofit {
 
 ## 结合RxJava
 
-在上面的代码中去掉 `addCallAdapterFactory(RxJavaCallAdapterFactory.create())` 的注释，再加上定义的 `Observable<TestRetrofit.TestBean> getDataRx()` 方法，就添加了对 RxJava2 的支持。
+在上面的代码中去掉 `addCallAdapterFactory(RxJava2CallAdapterFactory.create())` 的注释，再加上定义的 `Observable<TestRetrofit.TestBean> getDataRx()` 方法，就添加了对 RxJava2 的支持。
 
 ```java
     public void getDataRx(){
@@ -153,7 +153,7 @@ public class TestRetrofit {
 
 ## CallAdapter
 
-`CallAdapter` 其实就是对 `Call` 的转换，上面的对 RxJava 支持时用到的 `RxJavaCallAdapterFactory` 其实就是 `CallAdapter.Factory` 的子类，当然我们也可以自定义实现一个 `CallAdapter`。
+`CallAdapter` 其实就是对 `Call` 的转换，上面的对 RxJava 支持时用到的 `RxJava2CallAdapterFactory` 其实就是 `CallAdapter.Factory` 的子类，当然我们也可以自定义实现一个 `CallAdapter`。
 
 ## Converter
 在默认情况下 Retrofit 只支持将 HTTP 的响应体转换换为 `ResponseBody`，那么接口的返回值都是 `Call<ResponseBody>`，如果我们需要把 `ResponseBody` 转换成我们需要的类型就需要 `Converter`。

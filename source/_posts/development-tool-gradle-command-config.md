@@ -351,6 +351,20 @@ debug=true
     }
 ```
 
+```
+systemProp.versionName=1.0.0
+systemProp.versionCode=100
+```
+
+可以通过 `System.properties`进行引用：
+
+```
+def code = System.properties['versionCode']
+def name = System.properties['versionName']
+```
+
+
+
 ## 调试
 
 我们在进行一些配置的时候可能需要知道一些变量的值，这时候可以在 build.gradle 中添加打印进行调试，比如：
