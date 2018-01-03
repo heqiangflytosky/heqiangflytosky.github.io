@@ -35,8 +35,6 @@ date: 2016-12-1 10:00:00
  - [MOZILLA 开发者网络](https://developer.mozilla.org/zh-CN/)：MOZILLA开发者社区
  - [百度开发者中心](http://developer.baidu.com)：
  - [PHPChina开发者社区](http://www.phpchina.com/)：
- - [美团点评技术团队](http://tech.meituan.com/)
- - [魅族内核团队](http://kernel.meizu.com/)：魅族内核团队发表的一些博客
 
 #### Android开发
 
@@ -71,8 +69,22 @@ date: 2016-12-1 10:00:00
 
  - [W3School](http://www.w3school.com.cn/)
  - [菜鸟教程](http://www.runoob.com/)：涵盖前端、服务器、Android等教程
+ - [Leetcode](https://leetcode.com/)：编程做题
 
 ### 技术博客
+
+#### 技术团队博客
+
+ - [美团点评技术团队](http://tech.meituan.com/)：一个非常接地气的技术博客，涉及内容广泛，例如：支付通道开发、插件化实践、前端项目等等。事无巨细的总结好他们的思路给你。
+ - [魅族内核团队](http://kernel.meizu.com/)：魅族内核团队发表的一些博客
+ - [今日头条技术博客](https://techblog.toutiao.com/)：众所周知今日头条有着一项强大的技术武器——推荐引擎。这个博客里面关于机器学习的内容非常丰富。文章也清晰有条理，他会交代实践背景、要求、失败案例、难点、最后给出一个甚至几个优选方案。
+ - [Tencent ISUX](https://isux.tencent.com/articles/)：ISUX是腾讯核心设计团队,负责腾讯社交网络相关产品的用户体验设计与研究。主要涉及互联网产品的设计、重构、前端、用研等。
+ - [TGidea](http://tgideas.qq.com/#4)：腾讯游戏的专业设计团队，工作范围涉及腾讯游戏旗下各类网游产品的包装、创意、网站等设计工作。
+ - [Alloy Team](http://www.alloyteam.com/)：这个团队就厉害了，是腾讯的核心团队。他们致力于Web前端技术的研究，热衷HTML5、移动Web技术，用最酷的新技术开发各种有趣的开源项目。
+ - [UED](http://www.aliued.cn/)：阿里巴巴集团最为资深的用户体验设计部门之一，涉及领域有用户研究、交互设计、视觉设计、前端开发等。
+ - [Google研究所](https://research.google.com/)：
+ - [Linkdln](https://engineering.linkedin.com/)：全球最大的职业社交网站，他们的技术团队从各个方面详细地介绍了LinkedIn技术人员如何使用高度结构化的数据来完成LinkedIn的搜索功能、社交图谱以及机器学习系统。
+ - [Square](https://medium.com/square-corner-blog)：Square的技术博客包含的更多的是数据科学、数据分析、机器学习相关内容
 
 #### CSDN博客
 
@@ -187,6 +199,8 @@ date: 2016-12-1 10:00:00
  - [滴滴开源平台GitHub](https://github.com/didi/)
  - [360开源平台GitHub](https://github.com/Qihoo360)
  - [百度](https://github.com/baidu)
+ - [Alloy Team](http://AlloyTeam.github.com)：腾讯的核心团队。他们致力于Web前端技术的研究，热衷HTML5、移动Web技术，用最酷的新技术开发各种有趣的开源项目。
+ - [Square](http://square.github.io/)：
 
 #### Android
 

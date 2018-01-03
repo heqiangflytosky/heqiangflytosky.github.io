@@ -330,9 +330,10 @@ TARGET_SDK_VERSION=22
 VERSION_CODE=200100
 VERSION_NAME=2.1.0
 debug=true
+RX_ANDROID_VERSION=1.2.0
 ```
 
-那么在 build.gradle 中可以通过`project`进行引用：
+那么在 build.gradle 中可以通过`project`进行获取或者 `"${RX_ANDROID_VERSION}"` 引用：
 
 ```
     defaultConfig {
@@ -349,7 +350,14 @@ debug=true
         *还可以使用 versionCode Integer.parseInt(project.VERSION_CODE)
         * */
     }
+// 还可以这样用
+dependencies {
+    compile "io.reactivex:rxandroid:${RX_ANDROID_VERSION}"
+    compile "io.reactivex:rxjava:${RX_JAVA_VERSION}"
+}
 ```
+
+或者在 `gradle.properties` 中添加：
 
 ```
 systemProp.versionName=1.0.0
