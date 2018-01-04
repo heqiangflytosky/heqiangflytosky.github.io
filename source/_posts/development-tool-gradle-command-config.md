@@ -1,6 +1,6 @@
 ---
 title: Gradle命令和配置
-categories: 开发工具
+categories: Gradle
 comments: true
 keywords: Gradle
 tags: [Gradle, 开发工具]

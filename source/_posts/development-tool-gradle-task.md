@@ -1,6 +1,6 @@
 ---
 title: Gradle 使用指南 -- Gradle Task
-categories: 开发工具
+categories: Gradle
 comments: true
 tags: [Android, Gradle]
 description: 介绍 Gradle 中 Task 的使用

@@ -4,7 +4,7 @@ categories: 学习资料
 comments: true
 tags: [学习资料]
 description: 记录一些作为一名程序员在学习道路上经常用到的一些资料，以备不时之需
-date: 2016-12-1 10:00:00
+date: 2016-6-1 10:00:00
 ---
 
 ## 前言
@@ -68,6 +68,7 @@ date: 2016-12-1 10:00:00
 #### 学习网站
 
  - [W3School](http://www.w3school.com.cn/)
+ - [W3Cschool](https://www.w3cschool.cn/)：注意和W3School一字之差。W3Cschool是一个专业的编程入门学习及技术文档查询网站,提供包括HTML,CSS,Javascript,jQuery,C,PHP,Java,Python,Sql,Mysql等编程语言和开源技术的在线教程及使用手册。设计前端、服务器、大数据、移动端等技术。
  - [菜鸟教程](http://www.runoob.com/)：涵盖前端、服务器、Android等教程
  - [Leetcode](https://leetcode.com/)：编程做题
 
