@@ -1,8 +1,8 @@
 ---
 title: Markdown 绘制 UML 图 -- PlantUML + Gravizo
-categories: 常用工具
+categories: 开发工具
 comments: true
-tags: [常用工具, Markdown, PlantUML, Gravizo]
+tags: [开发工具, Markdown, PlantUML, Gravizo]
 description: 介绍使用 PlantUML 绘制 UML 图，以及渲染引擎组合 PlantUML + Gravizo 的使用
 date: 2017-7-8 10:00:00
 ---

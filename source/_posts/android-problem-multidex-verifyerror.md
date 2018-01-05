@@ -4,7 +4,7 @@ categories: Android
 comments: true
 tags: [Android, Multidex]
 description: 介绍一个在开发过程中遇到的Multidex引发的VerifyError和Class Not Found问题
-date: 2016-2-12 10:00:00
+date: 2016-2-16 10:00:00
 ---
 
 一个困扰两天的问题终于解决了，下面记录一下该问题解决的历程，希望能对那些遇到类似问题的猿们有些帮助。

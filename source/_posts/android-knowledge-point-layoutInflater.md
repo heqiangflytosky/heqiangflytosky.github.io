@@ -4,7 +4,7 @@ categories: Android
 comments: true
 tags: [Android, LayoutInflater]
 description: 通过解决在使用ViewGroup.addView()添加LayoutInflater生成的布局文件时遇到的布局文件的layout参数被忽略的问题来介绍如何正确使用LayoutInflater
-date: 2016-2-15 10:00:00
+date: 2016-2-18 10:00:00
 ---
 
 我们通常使用`addView`这个方法时，会先通过`LayoutInflater`的`inflate`生成一个`View`视图，然后添加到当前`ViewGroup`中，如果使用不恰当，就会出现这样的问题：

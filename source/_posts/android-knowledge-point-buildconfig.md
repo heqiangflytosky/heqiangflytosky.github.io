@@ -4,7 +4,7 @@ categories: Android
 comments: true
 tags: [Android, BuildConfig]
 description: 介绍如何在 Android 开发中 BuildConfig 类的用法
-date: 2016-3-18 10:00:00
+date: 2016-2-2 10:00:00
 ---
 
 ## 概述

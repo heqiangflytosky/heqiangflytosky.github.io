@@ -4,7 +4,7 @@ categories: Android
 comments: true
 tags: [Android, buildType]
 description: 介绍如何解决 Android 多模块开发过程中遇到的 Lib Module 和 App Module 的 buildType 不一样的问题
-date: 2016-3-19 10:00:00
+date: 2016-2-5 10:00:00
 ---
 
 ## 概述
