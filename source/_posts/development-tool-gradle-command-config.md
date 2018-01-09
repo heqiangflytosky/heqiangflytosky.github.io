@@ -1,16 +1,18 @@
 ---
-title: Gradle命令和配置
+title: Gradle 使用指南 -- 基础配置
 categories: Gradle
 comments: true
 keywords: Gradle
 tags: [Gradle, 开发工具]
 description: 介绍在Android开发过程中Gradle的一些常见命令和配置
-date: 2016-3-11 10:00:00
+date: 2016-3-3 10:00:00
 ---
 
-Gradle是一种构建工具，它抛弃了基于XML的构建脚本，取而代之的是采用一种基于Groovy的内部领域特定语言，建议可以先熟悉一下Groovy脚本。
-[在线文档](https://docs.gradle.org/current/dsl/)
+Gradle是一种构建工具，它抛弃了基于XML的构建脚本，取而代之的是采用一种基于Groovy的内部领域特定语言（DSL），建议可以先熟悉一下Groovy脚本。
+[Gradle API 文档](https://docs.gradle.org/current/dsl/)
 [Android 配置构建](https://developer.android.com/studio/build/index.html)
+[Android 插件 DSL 扩展](http://google.github.io/android-gradle-dsl/current/)
+本文只是简单的介绍一下 Gradle 的一些基本配置，如果想进行一些高级的操作或者是想深入的了解这些配置，请参考我的后面几篇博客。
 # Gradle命令
 ## 常用命令
 gradle明明一般是`./gradlew +参数`， `gradlew`代表 `gradle wrapper`，意思是gradle的一层包装，大家可以理解为在这个项目本地就封装了gradle，即gradle wrapper， 在`gradle/wrapper/gralde-wrapper.properties`文件中声明了它指向的目录和版本。只要下载成功即可用`grdlew wrapper`的命令代替全局的`gradle`命令。
@@ -127,6 +129,8 @@ apply plugin: 'com.android.library'
  - `apply from`：表示引用其他的配置文件，比如 `apply from:"config.gradle"`
 
 ### android
+
+这个是 Android 插件引入的 Script blocks，想深入了解的话看我后面的博客。
 
 ```
 android {
