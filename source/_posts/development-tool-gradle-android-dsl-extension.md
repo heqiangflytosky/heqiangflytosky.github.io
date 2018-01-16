@@ -65,6 +65,7 @@ android {
 ### AppExtension
 
 下面仅列觉一下 `AppExtension` 的部分扩展：
+
 | 方法（Script blocks） | 描述 |
 | ------------- | ------------- |
 | buildToolsVersion | Specifies the version of the SDK Build Tools to use when building your project.  |

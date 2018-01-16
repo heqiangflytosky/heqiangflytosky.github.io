@@ -4,7 +4,7 @@ categories: Gradle
 comments: true
 tags: [Groovy]
 description: 介绍 Groovy 语言的一些基本语法规则
-date: 2016-3-16 10:00:00
+date: 2016-3-20 10:00:00
 ---
 
 ## 概述

@@ -85,9 +85,11 @@ apply plugin: com.android.hq.testplugin.TestPlugin
 
 即可。
 
-### 测试
 
-输入 `./gradlew tasks`，我们可以看到 testPlugin 已经在task列表中。
+### 测试
+1. 在 Gradle 的 task 视窗里面: app/other 下多了一个 testPlugin 的 task。
+
+2. 输入 `./gradlew tasks`，我们可以看到 testPlugin 已经在task列表中。
 
 ```
 :tasks

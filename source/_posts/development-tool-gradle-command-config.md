@@ -13,6 +13,8 @@ Gradle是一种构建工具，它抛弃了基于XML的构建脚本，取而代�
 [Android 配置构建](https://developer.android.com/studio/build/index.html)
 [Android 插件 DSL 扩展](http://google.github.io/android-gradle-dsl/current/)
 本文只是简单的介绍一下 Gradle 的一些基本配置，如果想进行一些高级的操作或者是想深入的了解这些配置，请参考我的后面几篇博客。
+[Gradle 使用指南 -- Android DSL 扩展](http://www.heqiangfly.com/2016/03/08/development-tool-gradle-android-dsl-extension/)
+
 # Gradle命令
 ## 常用命令
 gradle明明一般是`./gradlew +参数`， `gradlew`代表 `gradle wrapper`，意思是gradle的一层包装，大家可以理解为在这个项目本地就封装了gradle，即gradle wrapper， 在`gradle/wrapper/gralde-wrapper.properties`文件中声明了它指向的目录和版本。只要下载成功即可用`grdlew wrapper`的命令代替全局的`gradle`命令。
