@@ -237,6 +237,105 @@ task hello2 (type: Copy){
 ```
 其他 Type 具体详见文档，此处不详细解释。
 
+## 任务的执行条件
+
+### 使用判断条件
+
+可以使用 `onlyIf()` 方法来为一个任务加入判断条件。就和 Java 里的 `if` 语句一样，任务只有在条件判断为真时才会执行。可以通过一个闭包来实现判断条件。
+
+```
+task A << {
+    println 'Hello from A'
+}
+A.onlyIf{!project.hasProperty('skipA')}
+```
+
+执行 "./gradlew A -PskipA"，输出：
+
+```
+:app:A SKIPPED
+```
+
+可以看到 A 任务被跳过。
+
+### 使用 StopExecutionException
+
+如果想要跳过一个任务的逻辑并不能被判断条件通过表达式表达出来，那么可以使用 `StopExecutionException`。如果这个异常是被一个任务要执行的动作抛出的，这个动作之后的执行以及所有紧跟它的动作都会被跳过。构建将会继续执行下一个任务。
+
+```
+task hello {
+    doFirst {
+        println 'task hello doFirst'
+        throw new StopExecutionException()
+    }
+    doLast {
+        println 'task hello doLast'
+    }
+}
+```
+
+如果你直接使用 Gradle 提供的任务，这项功能还是十分有用的。它允许你为内建的任务加入条件来控制执行。
+
+### 激活和注销任务
+
+每一个任务都有一个已经激活的标记(enabled flag)，这个标记一般默认为真。 将它设置为假，那它的任何动作都不会被执行。
+
+```
+task A << {
+    println 'Hello from A'
+}
+A.enabled = false
+```
+
+执行 "./gradlew A"，输出：
+
+```
+:app:A SKIPPED
+```
+
+## 声明任务的输入和输出
+
+我们在执行 Gradle 任务的时候，你可能会注意到 Gradle 会跳过一些任务，这些任务后面会标注 up-to-date。代表这个任务已经运行过了或者说是最新的状态，不再需要产生一次相同的输出。
+Gradle 通过比较两次 build 之间输入和输出有没有变化来确定这个任务是否是最新的，如果从上一个执行之后这个任务的输入和输出没有发生改变这个任务就标记为 up-to-date，跳过这个任务。
+因此，要想跳过 up-to-date 的任务，我们必须为任务指定输入和输出。
+任务的输入属性是 [TaskInputs](https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/TaskInputs.html) 类型. 任务的输出属性是 [TaskOutputs](https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/TaskOutputs.html) 类型.
+下面的例子中把上面的 `Copy` 示例中的输入和输出文件作为 `hello` task 的输入和输出文件：
+
+```
+task hello {
+    inputs.file ("src/main/AndroidManifest.xml")
+    outputs.file ("build/test/AndroidManifestCopy.xml")
+    doFirst {
+        println 'task hello doFirst'
+    }
+}
+```
+
+第一次执行 `./gradlew hello`输出：
+
+```
+:app:hello
+task hello doFirst
+```
+
+可以看到任务正常的执行。
+然后进行第二次执行，输出：
+
+```
+:app:hello UP-TO-DATE
+```
+
+跳过这个任务。可以看到，Gradle 能够检测出任务是否是 up-to-date 状态.
+如果我们修改一下 `src/main/AndroidManifest.xml` 文件，输入上面命令就会再次执行该任务。
+
+
+### UP-TO-DATE 原理
+
+当一个任务是首次执行时，Gradle 会取一个输入的快照 (snapshot)。该快照包含组输入文件和每个文件的内容的散列。然后当 Gradle 执行任务时，如果任务成功完成，Gradle 会获得一个输出的快照。该快照包含输出文件和每个文件的内容的散列。Gradle 会保留这两个快照用来在该任务的下一次执行时进行判断。
+之后，每次在任务执行之前，Gradle 都会为输入和输出取一个新的快照，如果这个快照和之前的快照一样，Gradle 就会假定这个任务已经是最新的 (up-to-date) 并且跳过任务，反之亦然。
+**需要注意的是**，如果一个任务有指定的输出目录，自从该任务上次执行以来被加入到该目录的任务文件都会被忽略，并且不会引起任务过时 (out of date)。这是因为不相关任务也许会共用同一个输出目录。如果这并不是你所想要的情况，可以考虑使用 `TaskOutputs.upToDateWhen()`。
+
+
 ## 参考文档
 
 http://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/

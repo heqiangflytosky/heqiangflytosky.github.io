@@ -87,7 +87,9 @@ android 对象有两个属性：
 这三个都会分别返回一个 `ApplicationVariant`、`LibraryVariant` 、 `TestVariant` 和 `FeatureVariant` 对象的 `DomainObjectCollection`。
 [ApplicationVariant 源码](https://android.googlesource.com/platform/tools/build/+/8dca86a/gradle/src/main/groovy/com/android/build/gradle/internal/ApplicationVariant.groovy)
 `DomainObjectCollection` 继承自 `Collection`，可以查看 [DomainObjectCollection文档说明](https://docs.gradle.org/4.2/javadoc/org/gradle/api/DomainObjectCollection.html)
+
 **注意：** 使用这四个 `collection` 中的其中一个都会触发生成所有对应的task。这意味着使用 `collection` 之后不需要更改配置。
+
 `DomainObjectCollection` 可以直接访问所有对象，或者通过过滤器进行筛选。
 
 ```

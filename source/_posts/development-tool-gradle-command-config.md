@@ -14,6 +14,7 @@ Gradle是一种构建工具，它抛弃了基于XML的构建脚本，取而代�
 [Android 插件 DSL 扩展](http://google.github.io/android-gradle-dsl/current/)
 本文只是简单的介绍一下 Gradle 的一些基本配置，如果想进行一些高级的操作或者是想深入的了解这些配置，请参考我的后面几篇博客。
 [Gradle 使用指南 -- Android DSL 扩展](http://www.heqiangfly.com/2016/03/08/development-tool-gradle-android-dsl-extension/)
+[Gradle 使用指南 -- Plugin DSL 扩展](http://www.heqiangfly.com/2016/03/16/development-tool-gradle-customized-plugin-dsl-extension/)
 
 # Gradle命令
 ## 常用命令
