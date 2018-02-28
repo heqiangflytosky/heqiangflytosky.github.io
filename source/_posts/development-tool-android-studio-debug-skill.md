@@ -14,6 +14,11 @@ date: 2016-2-8 10:00:00
 
 在我们写代码或者是 Debug 过程中，各种调试手段必不可少，Android Studio 提供了强大的调试能力。
 
+### 启动调试
+
+启动调试方法我相信大家都会，一个是以Debug模式启动App，APP启动后，运行至第一处断点处会停下来，断点可以在运行之前设置，也可在运行后设置。一个是使一个已经启动的进程进入调试模式。这两种方式可以通过下面工具栏的的两个按钮启动。
+![效果图](/images/development-tool-android-studio-debug-skill/as-start-debug.png)
+
 ### 基本调试方法
 
 先来看一下 AS 的调试面板：
@@ -37,6 +42,10 @@ date: 2016-2-8 10:00:00
 
  - Restore Layout：重置调试窗口布局。
  - View Breakpoints：可以查看所有断点，管理或者配置断点的行为。
+ - Mute Breakpoints：中途切换所有断点的状态。可以临时取消所有断点，不可用的时候断点是白色的。
+ - Drop Frame：这个还不知道怎么用。
+ - Show Values InLine：这个在 Settings 按钮列表中，可以在调试过程中代码右边显示变量值。
+ - Show Method Return Values：这个在 Settings 按钮列表中，可以把调试过程中在对象变量区将带返回值方法的返回值显示出来。
 
 #### 求值表达式
 
@@ -46,6 +55,8 @@ date: 2016-2-8 10:00:00
 
  1. 通过调试面板的**求值表达式**按钮；
  2. 选中需要调试的表达式，点击右键，选中“Evaluate Expression...”；
+
+注意这里有个 Code Fragment Mode，这个是支持代码片段，可以输入多行表达式，返回最后结果。
 
 #### 变量观察区
 
@@ -109,7 +120,15 @@ date: 2016-2-8 10:00:00
 
 ![效果图](/images/development-tool-android-studio-debug-skill/as-crash-break-point-3.png)
 
+#### 属性断点
+
+我们可以为一个类的属性设置断点，那么这个断点就叫属性断点，当这个属性值被修改的时候，程序暂停在修改处。
+属性断点的使用和添加普通的断点并无不同，只是断点图标稍有不同。
+
+![效果图](/images/development-tool-android-studio-debug-skill/as-value-break-point.png)
+
 <!--  
+https://www.jianshu.com/p/f695b8f8839c
 https://www.jianshu.com/p/f19ee61126ef
 https://www.jianshu.com/p/011eb88f4e0d/
 http://blog.csdn.net/huangxiaominglipeng/article/details/53100811
