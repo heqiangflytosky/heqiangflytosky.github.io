@@ -4,7 +4,7 @@
   <url>
     <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
     
-    <lastmod>2018-03-11T14:22:52.000Z</lastmod>
+    <lastmod>2018-03-11T14:49:10.000Z</lastmod>
     
   </url>
   
@@ -37,14 +37,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
+    <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
+    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -100,14 +100,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/15/development-tool-gradle-customized-plugin/</loc>
+    <loc>http://yoursite.com/2016/03/20/development-tool-gradle-groovy-basic/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/20/development-tool-gradle-groovy-basic/</loc>
+    <loc>http://yoursite.com/2016/03/15/development-tool-gradle-customized-plugin/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -156,13 +156,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -177,14 +170,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</loc>
+    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/01/11/blog-hexo-optimize/</loc>
+    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -192,6 +185,13 @@
   
   <url>
     <loc>http://yoursite.com/2016/01/12/blog-optimize-next-theme/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/01/11/blog-hexo-optimize/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -219,14 +219,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/11/08/android-app-ganktoutiao/</loc>
+    <loc>http://yoursite.com/2015/02/02/android-ipc-messenger/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/02/02/android-ipc-messenger/</loc>
+    <loc>http://yoursite.com/2016/11/08/android-app-ganktoutiao/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -338,14 +338,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
+    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
+    <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -394,13 +394,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/10/14/open-source-rxjava-guide-flowable/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -408,7 +401,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
+    <loc>http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
