@@ -19,6 +19,7 @@ date: 2016-12-1 10:00:00
 #### 开发社区
 
  - [CSDN](http://www.csdn.net/)：号称全球最大的中文IT社区，很多业界大牛在上面开通有博客
+ - [云栖社区](https://yq.aliyun.com/)：云栖社区是面向开发者的开放型技术平台。源自阿里云,服务于云计算技术全生态。
  - [ChinaUnix](http://www.chinaunix.net/)：号称全球最大的Linux/Unix应用与开发者社区
  - [51CTO](http://www.51cto.com/)：中国领先的IT技术网站
  - [博客园](http://www.cnblogs.com/)：老牌开发者社区
