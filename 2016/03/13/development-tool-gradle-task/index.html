@@ -1,0 +1,946 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Gradle," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 Gradle 中 Task 的使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gradle 使用指南 -- Gradle Task">
+<meta property="og:url" content="http://yoursite.com/2016/03/13/development-tool-gradle-task/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 Gradle 中 Task 的使用">
+<meta property="og:updated_time" content="2018-03-11T13:47:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gradle 使用指南 -- Gradle Task">
+<meta name="twitter:description" content="介绍 Gradle 中 Task 的使用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/03/13/development-tool-gradle-task/"/>
+
+
+
+
+
+  <title> Gradle 使用指南 -- Gradle Task | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/13/development-tool-gradle-task/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Gradle 使用指南 -- Gradle Task
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-03-13T10:00:00+08:00">
+                2016-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Gradle/" itemprop="url" rel="index">
+                    <span itemprop="name">Gradle</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/03/13/development-tool-gradle-task/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/03/13/development-tool-gradle-task/" class="leancloud_visitors" data-flag-title="Gradle 使用指南 -- Gradle Task">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 Gradle 中 Task 的使用
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><a href="https://docs.gradle.org/current/userguide/userguide.html" target="_blank" rel="external">Gradle 官方文档</a><br><a href="http://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/" target="_blank" rel="external">Gradle User Guide 中文版</a><br><a href="https://docs.gradle.org/current/dsl/org.gradle.api.Task.html" target="_blank" rel="external">Task的API文档</a></p>
+<p>Gradle 中的每一个 Project 都是由一个或者多个 Task 来构成的，它是 gradle 构建脚本的最小运行单元，一个 Task 代表一些更加细化的构建，可能是编译一些 classes、创建一个 Jar、生成 javadoc、或者生成某个目录的压缩文件。</p>
+<h2 id="Task-相关命令"><a href="#Task-相关命令" class="headerlink" title="Task 相关命令"></a>Task 相关命令</h2><ul>
+<li><code>./gradlew tasks</code>：列出当前工程的所有Task</li>
+<li><code>./gradlew [-q] &lt;task name&gt;</code>：单独执行某个task，-q 代表 quite 模式，它不会生成 Gradle 的日志信息 (log messages)，所以用户只能看到 tasks 的输出。</li>
+</ul>
+<h2 id="创建任务"><a href="#创建任务" class="headerlink" title="创建任务"></a>创建任务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">task hello &#123;</div><div class="line">    doFirst &#123;</div><div class="line">        println &apos;task hello doFirst&apos;</div><div class="line">    &#125;</div><div class="line">    doLast &#123;</div><div class="line">        println &apos;task hello doLast&apos;</div><div class="line">    &#125;</div><div class="line">    println &apos;config task hello&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">task hello1 &lt;&lt; &#123;</div><div class="line">    println &apos;task hello1&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">task hello2 (type: Copy)&#123;</div><div class="line">    from &apos;src/main/AndroidManifest.xml&apos;</div><div class="line">    into &apos;build/test&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们执行 <code>./gradlew -q hello</code>，会有下面的输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">config task hello</div><div class="line">task hello doFirst</div><div class="line">task hello doLast</div></pre></td></tr></table></figure>
+<p>这里会有个奇怪的现象，我们在执行 <code>./gradlew -q hello</code> 时有上面三条输出是容易理解的，但是在执行 <code>./gradlew tasks</code> 或者是执行其他 Task 比如 <code>./gradlew -q hello1</code> 时，<code>config task hello</code> 这个打印也会输出，为什么呢？<br>这是因为 Task 有两种状态，分别是：</p>
+<ul>
+<li>配置状态（Configuration State）</li>
+<li>执行状态（Execution State）</li>
+</ul>
+<p>Gradle 会在进入执行之前，配置所有 Task，而 <code>println &#39;config task hello&#39;</code> 这段代码就是在配置时进行执行。所以哪怕没有显式调用 <code>gradlew hello</code>，只是调用列出所有 task 的命令，hello task 仍然需要进入到配置状态，也就仍然执行了一遍。<br>hello1 task的声明方式 &lt;&lt; 只是简写的 <code>doLast</code>，或者说当这个任务不需要任何在配置状态下运行的内容时，这两种声明方式是一样的。<br>实际上大部分时候 task 都应该是在执行状态下才真正执行的，配置状态大部分时候用于声明执行时需要用到的变量等为执行服务的前置动作。<br>hello2: Task创建的时候可以通过 <code>type: SomeType</code> 指定Type，Type其实就是告诉Gradle，这个新建的Task对象会从哪个基类Task派生。比如，Gradle本身提供了一些通用的Task，最常见的有CopyC、Delete、Sync、Tar等任务。Copy是Gradle中的一个类。当我们：task myTask(type:Copy)的时候，创建的Task就是一个Copy Task。下面会详细介绍。</p>
+<h3 id="动态任务"><a href="#动态任务" class="headerlink" title="动态任务"></a>动态任务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">4.times &#123; counter -&gt;</div><div class="line">    task &quot;task$counter&quot; &lt;&lt; &#123;</div><div class="line">        println &quot;I&apos;m task number $counter&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里动态的创建了 task0，task1，task2，task3。<br>执行 <code>./gradlew -q task1</code>，输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">I&apos;m task number 1</div></pre></td></tr></table></figure>
+<h2 id="调用任务"><a href="#调用任务" class="headerlink" title="调用任务"></a>调用任务</h2><h3 id="短标记法"><a href="#短标记法" class="headerlink" title="短标记法"></a>短标记法</h3><p>可以使用短标记 $ 可以访问一个存在的任务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">task hello &lt;&lt; &#123;</div><div class="line">    println &apos;Hello world!&apos;</div><div class="line">&#125;</div><div class="line">hello.doLast &#123;</div><div class="line">    println &quot;Greetings from the $hello.name task.&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行 <code>gradle -q hello</code> 输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hello world!</div><div class="line">Greetings from the hello task.</div></pre></td></tr></table></figure>
+<h2 id="任务依赖"><a href="#任务依赖" class="headerlink" title="任务依赖"></a>任务依赖</h2><h3 id="创建依赖"><a href="#创建依赖" class="headerlink" title="创建依赖"></a>创建依赖</h3><p>在Gradle中，Task之间是可以存在依赖关系的。这种关系可以通过 <code>dependsOn</code> 来实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">task A &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from A&apos;</div><div class="line">&#125;</div><div class="line">task B &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from B&apos;</div><div class="line">&#125;</div><div class="line">B.dependsOn A</div></pre></td></tr></table></figure>
+<p>或者<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">task A &lt;&lt; &#123;</div><div class="line">    println <span class="string">'Hello from A'</span></div><div class="line">&#125;</div><div class="line"><span class="function">task <span class="title">B</span> <span class="params">(dependsOn: A)</span> &lt;&lt; </span>&#123;</div><div class="line">    println <span class="string">'Hello from B'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>执行 <code>./gradlew -q B</code> 的同时会先去执行任务 A：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hello from A</div><div class="line">Hello from B</div></pre></td></tr></table></figure>
+<p>下面的代码同样能创建有依赖关系的任务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">task A &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from A&apos;</div><div class="line">&#125;</div><div class="line">task B &#123;</div><div class="line">    dependsOn A</div><div class="line">    doLast &#123;</div><div class="line">        println &apos;Hello from B&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="插入依赖"><a href="#插入依赖" class="headerlink" title="插入依赖"></a>插入依赖</h3><p>也可以在已经存在的 task 依赖中插入我们的 task 。<br>比如前面的A和B已经存在了依赖关系，我们想在中间插入任务B1，可以通过下面的代码实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">B1.dependsOn A</div><div class="line">B.dependsOn B1</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Hello from A</div><div class="line">Hello from B1</div><div class="line">Hello from B</div></pre></td></tr></table></figure>
+<h2 id="任务排序"><a href="#任务排序" class="headerlink" title="任务排序"></a>任务排序</h2><h3 id="mustRunAfter-与-shouldRunAfter"><a href="#mustRunAfter-与-shouldRunAfter" class="headerlink" title="mustRunAfter 与 shouldRunAfter"></a>mustRunAfter 与 shouldRunAfter</h3><p>在某些情况下，我们希望能控制任务的的执行顺序，这种控制并不是向上面那样去显示地加入依赖关系。我们可以通过 <code>mustRunAfter</code> 和 <code>shouldRunAfter</code> 来实现。<br>使用 <code>mustRunAfter</code> 意味着 taskB 必须总是在 taskA 之后运行，<code>shouldRunAfter</code> 和 <code>mustRunAfter</code> 很像，只是没有这么严格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">task A &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from A&apos;</div><div class="line">&#125;</div><div class="line">task B &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from B&apos;</div><div class="line">&#125;</div><div class="line">A.mustRunAfter B</div></pre></td></tr></table></figure>
+<p>执行 <code>./gradlew -q A B</code>，结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hello from B</div><div class="line">Hello from A</div></pre></td></tr></table></figure>
+<p>如果换成 <code>shouldRunAfter</code>，结果也是一样的。<br>虽然我们将两个任务进行了排序，但是他们仍然是可以单独执行的，任务排序不影响任务执行。排序规则只有当两个任务同时执行时才会被应用。<br>比如执行 <code>./gradlew -q A</code> 会输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Hello from A</div></pre></td></tr></table></figure>
+<p>另外，<code>shouldRunAfter</code> 不影响任务之间的执行依赖。但如果 <code>mustRunAfter</code> 和任务依赖之间发生了冲突，那么执行时将会报错。</p>
+<h3 id="finalizedBy"><a href="#finalizedBy" class="headerlink" title="finalizedBy"></a>finalizedBy</h3><p>假如出现了这样一种使用场景，执行完任务 A 之后必须要执行一下任务 B，那么上面的方法是无法解决这个问题的，这时 <code>finalizedBy</code> 就派上用场了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">task A &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from A&apos;</div><div class="line">&#125;</div><div class="line">task B &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from B&apos;</div><div class="line">&#125;</div><div class="line">A.finalizedBy B</div></pre></td></tr></table></figure>
+<p>执行 <code>./gradlew -q A</code>，结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hello from A</div><div class="line">Hello from B</div></pre></td></tr></table></figure>
+<h2 id="Task-Type"><a href="#Task-Type" class="headerlink" title="Task Type"></a>Task Type</h2><h3 id="Copy"><a href="#Copy" class="headerlink" title="Copy"></a>Copy</h3><p><a href="https://docs.gradle.org/current/dsl/org.gradle.api.tasks.Copy.html" target="_blank" rel="external">Copy的API文档</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">task hello2 (type: Copy)&#123;</div><div class="line">    from &apos;src/main/AndroidManifest.xml&apos;</div><div class="line">    into &apos;build/test&apos;</div><div class="line">    rename &#123;String fileName -&gt;</div><div class="line">        fileName = &quot;AndroidManifestCopy.xml&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其他 Type 具体详见文档，此处不详细解释。</p>
+<h2 id="任务的执行条件"><a href="#任务的执行条件" class="headerlink" title="任务的执行条件"></a>任务的执行条件</h2><h3 id="使用判断条件"><a href="#使用判断条件" class="headerlink" title="使用判断条件"></a>使用判断条件</h3><p>可以使用 <code>onlyIf()</code> 方法来为一个任务加入判断条件。就和 Java 里的 <code>if</code> 语句一样，任务只有在条件判断为真时才会执行。可以通过一个闭包来实现判断条件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">task A &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from A&apos;</div><div class="line">&#125;</div><div class="line">A.onlyIf&#123;!project.hasProperty(&apos;skipA&apos;)&#125;</div></pre></td></tr></table></figure>
+<p>执行 “./gradlew A -PskipA”，输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">:app:A SKIPPED</div></pre></td></tr></table></figure>
+<p>可以看到 A 任务被跳过。</p>
+<h3 id="使用-StopExecutionException"><a href="#使用-StopExecutionException" class="headerlink" title="使用 StopExecutionException"></a>使用 StopExecutionException</h3><p>如果想要跳过一个任务的逻辑并不能被判断条件通过表达式表达出来，那么可以使用 <code>StopExecutionException</code>。如果这个异常是被一个任务要执行的动作抛出的，这个动作之后的执行以及所有紧跟它的动作都会被跳过。构建将会继续执行下一个任务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">task hello &#123;</div><div class="line">    doFirst &#123;</div><div class="line">        println &apos;task hello doFirst&apos;</div><div class="line">        throw new StopExecutionException()</div><div class="line">    &#125;</div><div class="line">    doLast &#123;</div><div class="line">        println &apos;task hello doLast&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果你直接使用 Gradle 提供的任务，这项功能还是十分有用的。它允许你为内建的任务加入条件来控制执行。</p>
+<h3 id="激活和注销任务"><a href="#激活和注销任务" class="headerlink" title="激活和注销任务"></a>激活和注销任务</h3><p>每一个任务都有一个已经激活的标记(enabled flag)，这个标记一般默认为真。 将它设置为假，那它的任何动作都不会被执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">task A &lt;&lt; &#123;</div><div class="line">    println &apos;Hello from A&apos;</div><div class="line">&#125;</div><div class="line">A.enabled = false</div></pre></td></tr></table></figure>
+<p>执行 “./gradlew A”，输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">:app:A SKIPPED</div></pre></td></tr></table></figure>
+<h2 id="声明任务的输入和输出"><a href="#声明任务的输入和输出" class="headerlink" title="声明任务的输入和输出"></a>声明任务的输入和输出</h2><p>我们在执行 Gradle 任务的时候，你可能会注意到 Gradle 会跳过一些任务，这些任务后面会标注 up-to-date。代表这个任务已经运行过了或者说是最新的状态，不再需要产生一次相同的输出。<br>Gradle 通过比较两次 build 之间输入和输出有没有变化来确定这个任务是否是最新的，如果从上一个执行之后这个任务的输入和输出没有发生改变这个任务就标记为 up-to-date，跳过这个任务。<br>因此，要想跳过 up-to-date 的任务，我们必须为任务指定输入和输出。<br>任务的输入属性是 <a href="https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/TaskInputs.html" target="_blank" rel="external">TaskInputs</a> 类型. 任务的输出属性是 <a href="https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/TaskOutputs.html" target="_blank" rel="external">TaskOutputs</a> 类型.<br>下面的例子中把上面的 <code>Copy</code> 示例中的输入和输出文件作为 <code>hello</code> task 的输入和输出文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">task hello &#123;</div><div class="line">    inputs.file (&quot;src/main/AndroidManifest.xml&quot;)</div><div class="line">    outputs.file (&quot;build/test/AndroidManifestCopy.xml&quot;)</div><div class="line">    doFirst &#123;</div><div class="line">        println &apos;task hello doFirst&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第一次执行 <code>./gradlew hello</code>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">:app:hello</div><div class="line">task hello doFirst</div></pre></td></tr></table></figure>
+<p>可以看到任务正常的执行。<br>然后进行第二次执行，输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">:app:hello UP-TO-DATE</div></pre></td></tr></table></figure>
+<p>跳过这个任务。可以看到，Gradle 能够检测出任务是否是 up-to-date 状态.<br>如果我们修改一下 <code>src/main/AndroidManifest.xml</code> 文件，输入上面命令就会再次执行该任务。</p>
+<h3 id="UP-TO-DATE-原理"><a href="#UP-TO-DATE-原理" class="headerlink" title="UP-TO-DATE 原理"></a>UP-TO-DATE 原理</h3><p>当一个任务是首次执行时，Gradle 会取一个输入的快照 (snapshot)。该快照包含组输入文件和每个文件的内容的散列。然后当 Gradle 执行任务时，如果任务成功完成，Gradle 会获得一个输出的快照。该快照包含输出文件和每个文件的内容的散列。Gradle 会保留这两个快照用来在该任务的下一次执行时进行判断。<br>之后，每次在任务执行之前，Gradle 都会为输入和输出取一个新的快照，如果这个快照和之前的快照一样，Gradle 就会假定这个任务已经是最新的 (up-to-date) 并且跳过任务，反之亦然。<br><strong>需要注意的是</strong>，如果一个任务有指定的输出目录，自从该任务上次执行以来被加入到该目录的任务文件都会被忽略，并且不会引起任务过时 (out of date)。这是因为不相关任务也许会共用同一个输出目录。如果这并不是你所想要的情况，可以考虑使用 <code>TaskOutputs.upToDateWhen()</code>。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="http://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/" target="_blank" rel="external">http://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/</a><br><a href="https://docs.gradle.org/current/userguide/userguide.html" target="_blank" rel="external">https://docs.gradle.org/current/userguide/userguide.html</a><br><a href="http://www.jianshu.com/p/cd1a78dc8346" target="_blank" rel="external">http://www.jianshu.com/p/cd1a78dc8346</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Gradle/" rel="tag"># Gradle</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/08/development-tool-gradle-android-dsl-extension/" rel="next" title="Gradle 使用指南 -- Android DSL 扩展">
+                <i class="fa fa-chevron-left"></i> Gradle 使用指南 -- Android DSL 扩展
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/15/development-tool-gradle-customized-plugin/" rel="prev" title="Gradle 使用指南 -- 创建Plugin">
+                Gradle 使用指南 -- 创建Plugin <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-相关命令"><span class="nav-number">2.</span> <span class="nav-text">Task 相关命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建任务"><span class="nav-number">3.</span> <span class="nav-text">创建任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#动态任务"><span class="nav-number">3.1.</span> <span class="nav-text">动态任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用任务"><span class="nav-number">4.</span> <span class="nav-text">调用任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#短标记法"><span class="nav-number">4.1.</span> <span class="nav-text">短标记法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务依赖"><span class="nav-number">5.</span> <span class="nav-text">任务依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建依赖"><span class="nav-number">5.1.</span> <span class="nav-text">创建依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入依赖"><span class="nav-number">5.2.</span> <span class="nav-text">插入依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务排序"><span class="nav-number">6.</span> <span class="nav-text">任务排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mustRunAfter-与-shouldRunAfter"><span class="nav-number">6.1.</span> <span class="nav-text">mustRunAfter 与 shouldRunAfter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finalizedBy"><span class="nav-number">6.2.</span> <span class="nav-text">finalizedBy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-Type"><span class="nav-number">7.</span> <span class="nav-text">Task Type</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy"><span class="nav-number">7.1.</span> <span class="nav-text">Copy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务的执行条件"><span class="nav-number">8.</span> <span class="nav-text">任务的执行条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用判断条件"><span class="nav-number">8.1.</span> <span class="nav-text">使用判断条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-StopExecutionException"><span class="nav-number">8.2.</span> <span class="nav-text">使用 StopExecutionException</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#激活和注销任务"><span class="nav-number">8.3.</span> <span class="nav-text">激活和注销任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明任务的输入和输出"><span class="nav-number">9.</span> <span class="nav-text">声明任务的输入和输出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UP-TO-DATE-原理"><span class="nav-number">9.1.</span> <span class="nav-text">UP-TO-DATE 原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">10.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,937 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,IPC,AIDL," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍编写AIDL文件的方式实现进程间通信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android IPC 之 AIDL">
+<meta property="og:url" content="http://yoursite.com/2015/02/01/android-ipc-aidl/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍编写AIDL文件的方式实现进程间通信">
+<meta property="og:image" content="http://yoursite.com/images/android-ipc-aidl/add-aidl.png">
+<meta property="og:image" content="http://yoursite.com/images/android-ipc-aidl/add-aidl-structure.png">
+<meta property="og:image" content="http://yoursite.com/images/android-ipc-aidl/add-source-structure.png">
+<meta property="og:image" content="http://yoursite.com/images/android-ipc-aidl/process.png">
+<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android IPC 之 AIDL">
+<meta name="twitter:description" content="介绍编写AIDL文件的方式实现进程间通信">
+<meta name="twitter:image" content="http://yoursite.com/images/android-ipc-aidl/add-aidl.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/02/01/android-ipc-aidl/"/>
+
+
+
+
+
+  <title> Android IPC 之 AIDL | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/02/01/android-ipc-aidl/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android IPC 之 AIDL
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-02-01T10:00:00+08:00">
+                2015-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/02/01/android-ipc-aidl/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/02/01/android-ipc-aidl/" class="leancloud_visitors" data-flag-title="Android IPC 之 AIDL">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍编写AIDL文件的方式实现进程间通信
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>AIDL是Android Interface Definition Language的简称，也就是Android接口定义语言，通过它我们可以定义进程间的通信接口。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>我们现在通过一个实例来介绍 AIDL 的使用方法。实例中服务端维护了一个<code>Student</code>列表，客户端可以通过跨进程调用来向列表添加和查询数据。</p>
+<h3 id="创建AIDL接口"><a href="#创建AIDL接口" class="headerlink" title="创建AIDL接口"></a>创建AIDL接口</h3><p>AIDL文件支持的数据类型：</p>
+<ul>
+<li>基本数据类型（int, long, boolean, float, double）；</li>
+<li>String和CharSequence；</li>
+<li>List或Map类型：List或Map中的所有元素必须是AIDL支持的类型之一，或者是一个其他AIDL生成的接口，或者是定义的<code>parcelable</code>。</li>
+</ul>
+<p>如果我们需要使用非默认支持的数据类型，就要我们自己定义一个<code>parcelable</code>对象。</p>
+<p>AIDL文件的创建方法如图所示：</p>
+<p><img src="/images/android-ipc-aidl/add-aidl.png" alt="效果图"></p>
+<p>创建完AIDL文件，工程的目录会变成下图所示的样子，多了一个aidl包，和java在同一个层级之下。并且aidl文件的包和java文件的包是一样的。</p>
+<p><img src="/images/android-ipc-aidl/add-aidl-structure.png" alt="效果图"></p>
+<p>在这里有两个AIDL文件：</p>
+<ul>
+<li>Student.aidl：用来定义进程间需要传输的数据对象的parcelable类，以供其他AIDL文件使用AIDL中非默认支持的数据类型的。</li>
+<li>StudentManager.aidl：用来定义一些来完成跨进程通信的接口的类。</li>
+</ul>
+<p>下面来看这两个接口的实现：</p>
+<p>Student.aidl<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.android.hq.aidldemo;</div><div class="line"></div><div class="line">parcelable Student;</div></pre></td></tr></table></figure></p>
+<p>StudentManager.aidl<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.android.hq.aidldemo;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.android.hq.aidldemo.Student;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">StudentManager</span> </span>&#123;</div><div class="line">    <span class="function">List&lt;Student&gt;  <span class="title">getStudents</span><span class="params">()</span></span>;</div><div class="line">    <span class="comment">//传参时除了Java基本类型以及String，CharSequence之外的类型，都需要在前面指定定向tag，具体加什么根据自己需要</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addStudent</span><span class="params">(inout Student student)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里，虽然Studet.java和StudentManager.aidl在同一个包下面，但<code>Studet</code>不是系统默认支持的数据类型，使用的时候必须添加<code>import</code>进来。</p>
+<p>Student.java<br><code>Student</code>是用于跨进程传输数据使用的，因此必须进行序列化，选择的序列化方式是实现 <code>Parcelable</code> 接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> grade;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">Student</span><span class="params">(Parcel in)</span> </span>&#123;</div><div class="line">        <span class="comment">// 注意读取的顺序要和写入顺序一致</span></div><div class="line">        name = in.readString();</div><div class="line">        age = in.readInt();</div><div class="line">        grade = in.readInt();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.age = age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getGrade</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> grade;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGrade</span><span class="params">(<span class="keyword">int</span> grade)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.grade = grade;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;Student&gt; CREATOR = <span class="keyword">new</span> Creator&lt;Student&gt;() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> Student <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Student(in);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> Student[] newArray(<span class="keyword">int</span> size) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Student[size];</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel dest, <span class="keyword">int</span> flags)</span> </span>&#123;</div><div class="line">        <span class="comment">// 注意写入的顺序要和读取顺序一致</span></div><div class="line">        dest.writeString(name);</div><div class="line">        dest.writeInt(age);</div><div class="line">        dest.writeInt(grade);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 因为Student在StudentManager.aidl中被申明为inout类型，这里必须实现这个方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">readFromParcel</span><span class="params">(Parcel dest)</span> </span>&#123;</div><div class="line">        <span class="comment">// 注意读取的顺序要和写入顺序一致</span></div><div class="line">        name = dest.readString();</div><div class="line">        age = dest.readInt();</div><div class="line">        grade = dest.readInt();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"name = "</span>+name+<span class="string">", age = "</span>+age+<span class="string">", grade = "</span>+grade;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这里注意一下，我们知道如果是要在不同的应用中进行进程通信，两个应用必须要相同的aidl文件，这里为了方便移植，我们把进程通信需要的文件都放在aidl目录下面，当然也包括了Student.java这个java文件，但是Android Studio默认是只在<code>src/main/java</code>找源文件的，因此需要进行下面的配置，在 build.gradle 文件的<code>android{}</code>里面加上下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">    main &#123;</div><div class="line">        java.srcDirs = [&apos;src/main/java&apos;, &apos;src/main/aidl&apos;]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>添加之后编译，工程变成下图现实，aidl也就显示在源文件下面了：</p>
+<p><img src="/images/android-ipc-aidl/add-source-structure.png" alt="效果图"></p>
+<p>编译过之后，会生成下面的文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app/build/generated/source/aidl/debug/com/android/hq/aidldemo/StudentManager.java</div></pre></td></tr></table></figure>
+<p>StudentManager.aidl 这里<code>void addStudent(inout Student student);</code>的参数类型必须指定定向tag，否则编译会报下面的错误，这里我们指定的是<code>inout</code>类型。一旦申明为<code>inout</code>这个类型，<code>Student</code>类就必须实现<code>readFromParcel()</code>方法。具体<code>inout</code>类型介绍可以参考我的下一篇博客。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">17:18:23.963 [ERROR] [org.gradle.api.Task] aidl E  8954  8954 type_namespace.cpp:130] In file /home/heqiang/AndroidStudioProjects/AIDLDemo/app/src/main/aidl/com/android/hq/aidldemo/StudentManager.aidl line 8 parameter student (argument 1):</div><div class="line">aidl E  8954  8954 type_namespace.cpp:130]     &apos;Student&apos; can be an out type, so you must declare it as in, out or inout.</div><div class="line"></div><div class="line">17:18:23.967 [DEBUG] [org.gradle.api.internal.tasks.execution.ExecuteAtMostOnceTaskExecuter] Finished executing task &apos;:app:compileDebugAidl&apos;</div><div class="line">17:18:23.967 [LIFECYCLE] [class org.gradle.TaskExecutionLogger] :app:compileDebugAidl FAILED</div><div class="line">17:18:23.968 [INFO] [org.gradle.execution.taskgraph.AbstractTaskPlanExecutor] :app:compileDebugAidl (Thread[Daemon worker,5,main]) completed. Took 0.202 secs.</div><div class="line">17:18:23.968 [DEBUG] [org.gradle.execution.taskgraph.AbstractTaskPlanExecutor] Task worker [Thread[Daemon worker,5,main]] finished, busy: 0.578 secs, idle: 0.01 secs</div><div class="line">17:18:23.974 [ERROR] [org.gradle.BuildExceptionReporter] </div><div class="line">17:18:23.975 [ERROR] [org.gradle.BuildExceptionReporter] FAILURE: Build failed with an exception.</div><div class="line">17:18:23.975 [ERROR] [org.gradle.BuildExceptionReporter] </div><div class="line">17:18:23.975 [ERROR] [org.gradle.BuildExceptionReporter] * What went wrong:</div><div class="line">17:18:23.975 [ERROR] [org.gradle.BuildExceptionReporter] Execution failed for task &apos;:app:compileDebugAidl&apos;.</div><div class="line">17:18:23.975 [ERROR] [org.gradle.BuildExceptionReporter] &gt; java.lang.RuntimeException: com.android.ide.common.process.ProcessException: Error while executing &apos;/home/heqiang/install/android-studio/android-sdk-linux/build-tools/25.0.2/aidl&apos; with arguments &#123;-p/home/heqiang/install/android-studio/android-sdk-linux/platforms/android-25/framework.aidl -o/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/generated/source/aidl/debug -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/src/main/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/src/debug/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.2.0/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.2.0/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.2.0/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.2.0/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.2.0/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.2.0/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.2.0/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.2.0/aidl -I/home/heqiang/AndroidStudioProjects/AIDLDemo/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.2.0/aidl -d/tmp/aidl1017216491494308629.d /home/heqiang/AndroidStudioProjects/AIDLDemo/app/src/main/aidl/com/android/hq/aidldemo/StudentManager.aidl&#125;</div><div class="line">17:18:23.975 [ERROR] [org.gradle.BuildExceptionReporter] </div><div class="line">17:18:23.976 [ERROR] [org.gradle.BuildExceptionReporter] * Try:</div><div class="line">17:18:23.976 [ERROR] [org.gradle.BuildExceptionReporter] Run with --stacktrace option to get the stack trace. </div><div class="line">17:18:23.977 [LIFECYCLE] [org.gradle.BuildResultLogger] </div><div class="line">17:18:23.977 [LIFECYCLE] [org.gradle.BuildResultLogger] BUILD FAILED</div><div class="line">17:18:23.977 [LIFECYCLE] [org.gradle.BuildResultLogger]</div></pre></td></tr></table></figure>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>AndroidManifest.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">manifest</span> <span class="attr">package</span>=<span class="string">"com.android.hq.aidldemo"</span></span></div><div class="line">          <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">application</span></span></div><div class="line">        <span class="attr">android:allowBackup</span>=<span class="string">"true"</span></div><div class="line">        <span class="attr">android:icon</span>=<span class="string">"@mipmap/ic_launcher"</span></div><div class="line">        <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></div><div class="line">        <span class="attr">android:supportsRtl</span>=<span class="string">"true"</span></div><div class="line">        <span class="attr">android:theme</span>=<span class="string">"@style/AppTheme"</span>&gt;</div><div class="line">        <span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".MainActivity"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.intent.action.MAIN"</span>/&gt;</span></div><div class="line"></div><div class="line">                <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.LAUNCHER"</span>/&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></div><div class="line">        </div><div class="line">        <span class="tag">&lt;<span class="name">service</span> <span class="attr">android:name</span>=<span class="string">".AIDLService"</span></span></div><div class="line">            <span class="attr">android:process</span>=<span class="string">":remote"</span>&gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;/<span class="name">service</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">application</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>MainActivity.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String TAG = <span class="string">"Client"</span>;</div><div class="line">    <span class="keyword">private</span> StudentManager mStudentManager;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> mConnected = <span class="keyword">false</span>;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line">        <span class="keyword">if</span>(!mConnected)&#123;</div><div class="line">            bindService();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onDestroy();</div><div class="line">        <span class="keyword">if</span>(mConnected)&#123;</div><div class="line">            unbindService(mServiceConnection);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">bindService</span><span class="params">()</span></span>&#123;</div><div class="line">        Intent intent = <span class="keyword">new</span> Intent();</div><div class="line">        intent.setClassName(<span class="string">"com.android.hq.aidldemo"</span>,<span class="string">"com.android.hq.aidldemo.AIDLService"</span>);</div><div class="line">        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addStudent</span><span class="params">(View view)</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(mStudentManager == <span class="keyword">null</span>)&#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        Student student = <span class="keyword">new</span> Student();</div><div class="line">        student.setName(<span class="string">"James"</span>);</div><div class="line">        student.setAge(<span class="number">7</span>);</div><div class="line">        student.setGrade(<span class="number">2</span>);</div><div class="line">        Log.d(TAG, <span class="string">"addStudent : "</span>+student);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            mStudentManager.addStudent(student);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        Log.d(TAG, <span class="string">"addStudent end"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getStudent</span><span class="params">(View view)</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(mStudentManager == <span class="keyword">null</span>)&#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        List&lt;Student&gt; list = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            list = mStudentManager.getStudents();</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        Log.d(TAG, <span class="string">"getStudent. student list is : "</span>+list);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> ServiceConnection mServiceConnection = <span class="keyword">new</span> ServiceConnection() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceConnected</span><span class="params">(ComponentName name, IBinder service)</span> </span>&#123;</div><div class="line">            mStudentManager = StudentManager.Stub.asInterface(service);</div><div class="line">            mConnected = <span class="keyword">true</span>;</div><div class="line">            <span class="keyword">if</span>(mStudentManager != <span class="keyword">null</span>)&#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    List&lt;Student&gt; list = mStudentManager.getStudents();</div><div class="line">                    Log.d(TAG, <span class="string">"onServiceConnected. student list is : "</span>+list);</div><div class="line">                &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceDisconnected</span><span class="params">(ComponentName name)</span> </span>&#123;</div><div class="line">            mConnected = <span class="keyword">false</span>;</div><div class="line">            <span class="keyword">if</span>(mStudentManager != <span class="keyword">null</span>)&#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    List&lt;Student&gt; list = mStudentManager.getStudents();</div><div class="line">                    Log.d(TAG, <span class="string">"onServiceDisconnected. student list is : "</span>+list);</div><div class="line">                &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>AIDLService.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AIDLService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String TAG = <span class="string">"AIDLService"</span>;</div><div class="line">    <span class="keyword">private</span> List&lt;Student&gt; mStudents = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> StudentManager.Stub mStudentManager = <span class="keyword">new</span> StudentManager.Stub()&#123;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> List&lt;Student&gt; <span class="title">getStudents</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">            Log.d(TAG, <span class="string">"call getStudents(), student list is :"</span>+mStudents.toString());</div><div class="line">            <span class="keyword">return</span> mStudents;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addStudent</span><span class="params">(Student student)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">            <span class="keyword">if</span>(!mStudents.contains(student))&#123;</div><div class="line">                mStudents.add(student);</div><div class="line">            &#125;</div><div class="line">            Log.d(TAG, <span class="string">"call addStudent(), student list is :"</span>+mStudents.toString());</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Thread.sleep(<span class="number">2000</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            Log.d(TAG, <span class="string">"sleep end !"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    <span class="meta">@Nullable</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</div><div class="line">        Log.d(TAG, <span class="string">"called onBind"</span>);</div><div class="line">        <span class="keyword">return</span> mStudentManager;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate();</div><div class="line">        Student student = <span class="keyword">new</span> Student();</div><div class="line">        student.setName(<span class="string">"John"</span>);</div><div class="line">        student.setAge(<span class="number">6</span>);</div><div class="line">        student.setGrade(<span class="number">1</span>);</div><div class="line">        mStudents.add(student);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>如图所示，Clent和Server是在两个不同的进程中的：</p>
+<p><img src="/images/android-ipc-aidl/process.png" alt="效果图"></p>
+<p>启动后分别点击添加和获取列表按钮，打印如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">06-08 19:30:10.047 10005 10005 D AIDLService: called onBind</div><div class="line">06-08 19:30:10.072 10005 10017 D AIDLService: call getStudents(), student list is :[name = John, age = 6, grade = 1]</div><div class="line">06-08 19:30:10.073  9991  9991 D Client  : onServiceConnected. student list is : [name = John, age = 6, grade = 1]</div><div class="line"></div><div class="line">06-08 19:32:51.814  9991  9991 D Client  : addStudent : name = James, age = 7, grade = 2</div><div class="line">06-08 19:32:51.815 10005 10016 D AIDLService: call addStudent(), student list is :[name = John, age = 6, grade = 1, name = James, age = 7, grade = 2]</div><div class="line"></div><div class="line">06-08 19:33:09.875 10005 10017 D AIDLService: call getStudents(), student list is :[name = John, age = 6, grade = 1, name = James, age = 7, grade = 2]</div><div class="line">06-08 19:33:09.876  9991  9991 D Client  : getStudent. student list is : [name = John, age = 6, grade = 1, name = James, age = 7, grade = 2]</div></pre></td></tr></table></figure></p>
+<p>成功的进行了进程间通信。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="Android进程间通信是异步的还是同步的？"><a href="#Android进程间通信是异步的还是同步的？" class="headerlink" title="Android进程间通信是异步的还是同步的？"></a>Android进程间通信是异步的还是同步的？</h3><p>我们可以在程序中验证这个问题。<br>我们在<code>AIDLService</code>类的<code>mStudentManager</code>实现的方法<code>addStudent()</code>中添加一个延时：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addStudent</span><span class="params">(Student student)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">    <span class="keyword">if</span>(!mStudents.contains(student))&#123;</div><div class="line">        mStudents.add(student);</div><div class="line">    &#125;</div><div class="line">    Log.d(TAG, <span class="string">"call addStudent(), student list is :"</span>+mStudents.toString());</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        Thread.sleep(<span class="number">2000</span>);</div><div class="line">    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">    Log.d(TAG, <span class="string">"sleep end !"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们在客户端调用<code>addStudent()</code>方法的结尾添加打印，这样可以得到函数调用结束的信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addStudent</span><span class="params">(View view)</span></span>&#123;</div><div class="line">    ......</div><div class="line">    Log.d(TAG, <span class="string">"addStudent : "</span>+student);</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        mStudentManager.addStudent(student);</div><div class="line">    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">    Log.d(TAG, <span class="string">"addStudent end"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看到打印：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">06-08 19:42:28.505 20807 20807 D Client  : addStudent : name = James, age = 7, grade = 2</div><div class="line">06-08 19:42:28.506 20822 20833 D AIDLService: call addStudent(), student list is :[name = John, age = 6, grade = 1, name = James, age = 7, grade = 2]</div><div class="line">06-08 19:42:30.506 20822 20833 D AIDLService: sleep end !</div><div class="line">06-08 19:42:30.506 20807 20807 D Client  : addStudent end</div></pre></td></tr></table></figure></p>
+<p>看到客户端等服务端调用完毕才会往下走，因此我们可以得到这样的结论：<br><strong>Android进程间通信默认是同步的</strong>，这里为什么说默认呢？难道还有其他情况，是的，也可以是异步的，为什么呢？<br>看 StudentManager.java 中的 <code>addStudent</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addStudent</span><span class="params">(com.android.hq.aidldemo.Student student)</span> <span class="keyword">throws</span> android.os.RemoteException</span></div><div class="line">&#123;</div><div class="line">...</div><div class="line">mRemote.transact(Stub.TRANSACTION_addStudent, _data, _reply, <span class="number">0</span>);</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再来看一下 <code>IBinder</code> 中对这个方法的介绍：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Perform a generic operation with the object.</div><div class="line"> * </div><div class="line"> * <span class="doctag">@param</span> code The action to perform.  This should</div><div class="line"> * be a number between &#123;<span class="doctag">@link</span> #FIRST_CALL_TRANSACTION&#125; and</div><div class="line"> * &#123;<span class="doctag">@link</span> #LAST_CALL_TRANSACTION&#125;.</div><div class="line"> * <span class="doctag">@param</span> data Marshalled data to send to the target.  Must not be null.</div><div class="line"> * If you are not sending any data, you must create an empty Parcel</div><div class="line"> * that is given here.</div><div class="line"> * <span class="doctag">@param</span> reply Marshalled data to be received from the target.  May be</div><div class="line"> * null if you are not interested in the return value.</div><div class="line"> * <span class="doctag">@param</span> flags Additional operation flags.  Either 0 for a normal</div><div class="line"> * RPC, or &#123;<span class="doctag">@link</span> #FLAG_ONEWAY&#125; for a one-way RPC.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">transact</span><span class="params">(<span class="keyword">int</span> code, Parcel data, Parcel reply, <span class="keyword">int</span> flags)</span></span></div><div class="line">    <span class="keyword">throws</span> RemoteException;</div></pre></td></tr></table></figure>
+<p><code>flags</code> 为0时是普通的RPC调用，为 <code>FLAG_ONEWAY</code> 时是 one-way RPC，是单向调用，执行后立即返回，无需等待Server端 <code>transact()</code> 返回。这个时候就是异步执行了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/IPC/" rel="tag"># IPC</a>
+          
+            <a href="/tags/AIDL/" rel="tag"># AIDL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/08/android-compnent-activitygroup/" rel="next" title="Android ActivityGroup简介">
+                <i class="fa fa-chevron-left"></i> Android ActivityGroup简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/02/android-ipc-messenger/" rel="prev" title="Android IPC 之 Messenger">
+                Android IPC 之 Messenger <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建AIDL接口"><span class="nav-number">2.1.</span> <span class="nav-text">创建AIDL接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果"><span class="nav-number">3.</span> <span class="nav-text">结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">4.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android进程间通信是异步的还是同步的？"><span class="nav-number">4.1.</span> <span class="nav-text">Android进程间通信是异步的还是同步的？</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,940 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,开发工具,性能优化," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍Android分析内存泄漏工具的使用方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 性能优化之MAT分析内存泄漏">
+<meta property="og:url" content="http://yoursite.com/2016/02/20/development-tool-mat-to-analyse-leak/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍Android分析内存泄漏工具的使用方法">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/android_monitor_init_gc.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/android_monitor_dump_heap.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_open_device_monitor.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_update_heap.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_dump_hprof_file.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_open_error.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_overview.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_activity_leak.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_path_to_gc_root_exclude_phontom_soft_weak.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_domintor_tree_analysis.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_bitmap_leak_result.png">
+<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 性能优化之MAT分析内存泄漏">
+<meta name="twitter:description" content="介绍Android分析内存泄漏工具的使用方法">
+<meta name="twitter:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/android_monitor_init_gc.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/02/20/development-tool-mat-to-analyse-leak/"/>
+
+
+
+
+
+  <title> Android 性能优化之MAT分析内存泄漏 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/02/20/development-tool-mat-to-analyse-leak/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 性能优化之MAT分析内存泄漏
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-02-20T10:00:00+08:00">
+                2016-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开发工具/" itemprop="url" rel="index">
+                    <span itemprop="name">开发工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/02/20/development-tool-mat-to-analyse-leak/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/02/20/development-tool-mat-to-analyse-leak/" class="leancloud_visitors" data-flag-title="Android 性能优化之MAT分析内存泄漏">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍Android分析内存泄漏工具的使用方法
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>MAT 是 Memory Analyzer Tool 的简称，它是一款强大的内存分析工具，使用它能帮助开发者快速分析内存泄漏以及优化内存的使用。<br>内存泄漏也是我们开发过程中经常碰到的问题，掌握了MAT工具，那么你就不会惧怕内存泄漏，使用它可以让内存泄漏无所遁形。</p>
+<h2 id="MAT下载"><a href="#MAT下载" class="headerlink" title="MAT下载"></a>MAT下载</h2><p>进入<a href="https://www.eclipse.org/mat/" target="_blank" rel="external">网址</a>下载MAT工具，如果你使用 Eclipse 开发工具而且已经集成了插件，可以不用下载了。</p>
+<h2 id="场景准备"><a href="#场景准备" class="headerlink" title="场景准备"></a>场景准备</h2><p>我们用下面的代码产生一个内存泄漏的场景：<br>MainActivity.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">    <span class="keyword">if</span>(mInnerClassInstance == <span class="keyword">null</span>)&#123;</div><div class="line">        mInnerClassInstance = <span class="keyword">new</span> InnerClass();</div><div class="line">    &#125;</div><div class="line">    mInnerClassInstance.testFunc();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> InnerClass mInnerClassInstance;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InnerClass</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFunc</span><span class="params">()</span></span>&#123;</div><div class="line">        Log.e(<span class="string">"InnerClass"</span>, <span class="string">"InnerClass.testFunc()"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们知道，在 Java 中，非静态内部类会默认隐性引用外部类对象。而上面的例子中的静态变量<code>mInnerClassInstance</code>在第一个<code>MainActivity</code>实例创建后便会一直存在，那么它就会一直持有<code>MainActivity</code>的一个引用，在<code>MainActivity</code>实例销毁后它是无法被回收的，因此便造成了内存泄漏。</p>
+<h2 id="内存泄漏的初步分析"><a href="#内存泄漏的初步分析" class="headerlink" title="内存泄漏的初步分析"></a>内存泄漏的初步分析</h2><p>首先可以用<code>adb shell dumpsys meminfo &lt;包名&gt;</code>先进行初步的分析。<br>我们按下手机的后退键回到桌面，这时会调用<code>MainActivity</code>的<code>onDestroy()</code>，正常情况下<code>MainActivity</code>实例会被回收。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">$ adb shell dumpsys meminfo com.example.hq.testsomething</div><div class="line"></div><div class="line">Applications Memory Usage (kB):</div><div class="line">Uptime: 23692543 Realtime: 23692543</div><div class="line"></div><div class="line">** MEMINFO in pid 29474 [com.example.hq.testsomething] **</div><div class="line">                   Pss  Private  Private  Swapped     Heap     Heap     Heap</div><div class="line">                 Total    Dirty    Clean    Dirty     Size    Alloc     Free</div><div class="line">                ------   ------   ------   ------   ------   ------   ------</div><div class="line">  Native Heap     5252     4568        0     9400    32768    30309     2458</div><div class="line">  Dalvik Heap     1761     1692        0      320    11829     7872     3957</div><div class="line"> Dalvik Other      467      396        0     2848</div><div class="line">        Stack      200      200        0        0                           </div><div class="line">       Ashmem        2        0        0        0</div><div class="line">    Other dev        4        0        4        0</div><div class="line">     .so mmap     1047      156       12     2184</div><div class="line">    .apk mmap      160        0       72        0</div><div class="line">    .ttf mmap       33        0       16        0</div><div class="line">    .dex mmap      268        4      264        0</div><div class="line">    .oat mmap     1172        0      388        4</div><div class="line">    .art mmap     1434      492      424       80</div><div class="line">   Other mmap      131        8       28        4</div><div class="line">      Unknown      188      188        0       96</div><div class="line">        TOTAL    12119     7704     1208    14936    44597    38181     6415</div><div class="line"> </div><div class="line"> App Summary</div><div class="line">                       Pss(KB)</div><div class="line">                        ------</div><div class="line">           Java Heap:     2608</div><div class="line">         Native Heap:     4568</div><div class="line">                Code:      912</div><div class="line">               Stack:      200</div><div class="line">            Graphics:        0</div><div class="line">       Private Other:      624</div><div class="line">              System:     3207</div><div class="line"> </div><div class="line">               TOTAL:    12119      TOTAL SWAP (KB):    14936</div><div class="line"> </div><div class="line"> Objects</div><div class="line">               Views:       26         ViewRootImpl:        0</div><div class="line">         AppContexts:        2           Activities:        1</div><div class="line">              Assets:        3        AssetManagers:        2</div><div class="line">       Local Binders:       11        Proxy Binders:       15</div><div class="line">       Parcel memory:        3         Parcel count:       12</div><div class="line">    Death Recipients:        1      OpenSSL Sockets:        0</div><div class="line"> </div><div class="line"> Dalvik</div><div class="line">         isLargeHeap:    false</div><div class="line"> </div><div class="line"> SQL</div><div class="line">         MEMORY_USED:        0</div><div class="line">  PAGECACHE_OVERFLOW:        0          MALLOC_SIZE:        0</div></pre></td></tr></table></figure></p>
+<p>我们通过这个结果查看发现<code>Objects</code>这一项里面的<code>Activities</code>为1,证明还是有个<code>Activity</code>的实例存在的，没有被正常回收。下面我们来借助于MAT工具来分析一下。</p>
+<h2 id="使用Android-Monitor分析内存泄漏"><a href="#使用Android-Monitor分析内存泄漏" class="headerlink" title="使用Android Monitor分析内存泄漏"></a>使用Android Monitor分析内存泄漏</h2><p>Android Studio 中的 Android Monitor 里面有个 Memory 控制台，它提供了一个内存监视器，我们可以通过它方便地查看应用程序的性能和内存使用情况，从而也就可以找到需要释放对象，查找内存泄漏等。</p>
+<p>点击图中的按钮可以触发一次GC</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/android_monitor_init_gc.png" alt="效果图"></p>
+<p>点击图中的按钮可以生成hprof文件来进行分析。</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/android_monitor_dump_heap.png" alt="效果图"></p>
+<p>这里我们不再详细介绍。</p>
+<h2 id="生成HPROF文件"><a href="#生成HPROF文件" class="headerlink" title="生成HPROF文件"></a>生成HPROF文件</h2><h3 id="使用Android-Studio"><a href="#使用Android-Studio" class="headerlink" title="使用Android Studio"></a>使用Android Studio</h3><p>首先我们借助Android Studio生成hprof文件，Tools -&gt; Android -&gt; Android Device Monitor 打开 DDMS：</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_open_device_monitor.png" alt="效果图"></p>
+<p>点击一下我们需要调试的进程，此时进程上访的一排工具处于可点击状态，点击一下 Update Heap 按钮可以在Heap视图里面现实当前堆内存的使用情况，点击 Cause GC 按钮可以触发一次GC操作。</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_update_heap.png" alt="效果图"></p>
+<p>按回退键回到桌面，然后点击 Dump HPROF file 按钮，如图：</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_dump_hprof_file.png" alt="效果图"></p>
+<p>会生成 hprof 文件，会弹框提示我们保存下来。<br>然后打开MAT工具，File –&gt; Open Heap Dump…，选择刚刚生成的文件，如果出现下面的错误，用 <code>hprof-conv</code> 命令转换一下就可以了。这是因为MAT是用来分析java程序的hprof文件的，与Android导出的hprof有一定的格式区别，因此我们需要把导出的hprof文件转换一下。<code>hprof-conv</code> 是 Android SDK 提供的工具，它位于 Android SDK 的platform-tools目录下。</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_open_error.png" alt="效果图"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android-sdk-linux/platform-tools/hprof-conv com.example.hq.testsomething.hprof test.hprof</div></pre></td></tr></table></figure>
+<h3 id="使用Eclipse"><a href="#使用Eclipse" class="headerlink" title="使用Eclipse"></a>使用Eclipse</h3><p>如果你的 Eclipse 安装了MAT插件，那么安装上面使用Android Studio生成hprof文件的步骤，点击 Dump HPROF file 按钮后，就直接打开了该hprof文件。</p>
+<h3 id="使用代码"><a href="#使用代码" class="headerlink" title="使用代码"></a>使用代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android.os.Debug.dumpHprofData(hprofName);</div></pre></td></tr></table></figure>
+<p>生成的hprof文件也需要用<code>hprof-conv</code>转换一下才能用MAT工具打开。</p>
+<h2 id="通过MAT工具分析内存泄漏"><a href="#通过MAT工具分析内存泄漏" class="headerlink" title="通过MAT工具分析内存泄漏"></a>通过MAT工具分析内存泄漏</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>打开hprof文件后首先进入主视图，下来看一下这个主视图：</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_overview.png" alt="效果图"></p>
+<p>MAT 提供了很多功能，但是最常用的只有 Histogram 和 Domintor Tree：</p>
+<ul>
+<li>Histogram：通过 Histogram 可以直观地看出内存中不同类型的 buffer 的数量和占用内存的大小。</li>
+<li>Domintor Tree：把内存中的对象按照从大到小的顺序进行排序，并且可以分析对象之间的引用关系</li>
+</ul>
+<p>我们看到在这两个视图中还会发现有 Shallow size 和 Retained Size 两个属性：</p>
+<ul>
+<li>Shallow size：对象自身占用的内存大小，不包括它引用的对象。针对非数组类型的对象，它的大小就是对象与它所有的成员变量大小的总和。<br>当然这里面还会包括一些java语言特性的数据存储单元。针对数组类型的对象，它的大小是数组元素对象的大小总和。</li>
+<li>Retained Size：当前对象大小+当前对象可直接或间接引用到的对象的大小总和。(间接引用的含义：A-&gt;B-&gt;C, C就是间接引用)</li>
+</ul>
+<p>一个对象到GC Roots的引用链被称为Path to GC Roots，通过分析Path to GC Roots可以找出JAVA的内存泄露问题。</p>
+<h3 id="内存泄漏分析"><a href="#内存泄漏分析" class="headerlink" title="内存泄漏分析"></a>内存泄漏分析</h3><p>我们在主视图中选择<code>Actions</code>–&gt;<code>Domintor Tree</code>或者<code>Histogram</code>也可以。<br>因为在前面我们已经初步分析了<code>MainActivity</code>是存在内存泄漏的，这里我们可以使用界面中的搜索功能，在输入框中输入<code>MainActivity</code>进行过滤，查看当前存在的<code>MainActivity</code>对象，我们发现当前有两个<code>MainActivity</code>对象，这是因为我们按back键退出应用再进来，系统都会重新创建一个新的<code>MainActivity</code>，但是第一次创建的老的对象却无法回收，所以就出现了两个<code>MainActivity</code>对象。</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_activity_leak.png" alt="效果图"></p>
+<p>我们在进一步分析一下是什么导致了内存泄漏，单击选中<code>MainActivity</code>，然后单击鼠标右键-&gt;Path To GC Roots-&gt;exclude all phontom/weak/soft etc. references，如图所示。</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_path_to_gc_root_exclude_phontom_soft_weak.png" alt="效果图"></p>
+<p>这里在 Path To GC Roots 之所以选择排除所有的虚引用、弱引用和软引用，是因为它们都有很大的几率被GC回收掉的，它们并不会构成内存泄漏。<br>可以看到是 <code>mInnerClassInstance</code> 引用了 <code>MainActivity</code> 导致了无法释放。</p>
+<h3 id="Domintor-Tree-视图分析"><a href="#Domintor-Tree-视图分析" class="headerlink" title="Domintor Tree 视图分析"></a>Domintor Tree 视图分析</h3><p>一般分析内存泄漏我们需要分析 Domintor Tree 视图，但是在视图中内存泄漏一般不会直接显示出来，这个时候我们一般要需要按照内存的从大到小去排查一遍。</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_domintor_tree_analysis.png" alt="效果图"></p>
+<p>在图中我们就发现第2列中就有个<code>BitmapDrawable</code>对象，同样我们选择<code>BitmapDrawable</code>对象，然后单击鼠标右键-&gt;Path To GC Roots-&gt;exclude all phontom/weak/soft etc. references，如图所示。</p>
+<p><img src="/images/development-tool-mat-to-analyse-leak/mat_bitmap_leak_result.png" alt="效果图"></p>
+<p>可以看到同样是 <code>mInnerClassInstance</code> 引用了 <code>MainActivity</code> 导致了<code>BitmapDrawable</code>对象无法释放。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/开发工具/" rel="tag"># 开发工具</a>
+          
+            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/18/android-knowledge-point-layoutInflater/" rel="next" title="Android：使用LayoutInflater应该注意的问题">
+                <i class="fa fa-chevron-left"></i> Android：使用LayoutInflater应该注意的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/25/development-tool-traceview/" rel="prev" title="Android 性能优化之TraceView的使用">
+                Android 性能优化之TraceView的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MAT下载"><span class="nav-number">1.</span> <span class="nav-text">MAT下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#场景准备"><span class="nav-number">2.</span> <span class="nav-text">场景准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存泄漏的初步分析"><span class="nav-number">3.</span> <span class="nav-text">内存泄漏的初步分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Android-Monitor分析内存泄漏"><span class="nav-number">4.</span> <span class="nav-text">使用Android Monitor分析内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成HPROF文件"><span class="nav-number">5.</span> <span class="nav-text">生成HPROF文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Android-Studio"><span class="nav-number">5.1.</span> <span class="nav-text">使用Android Studio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Eclipse"><span class="nav-number">5.2.</span> <span class="nav-text">使用Eclipse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用代码"><span class="nav-number">5.3.</span> <span class="nav-text">使用代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过MAT工具分析内存泄漏"><span class="nav-number">6.</span> <span class="nav-text">通过MAT工具分析内存泄漏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">6.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存泄漏分析"><span class="nav-number">6.2.</span> <span class="nav-text">内存泄漏分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Domintor-Tree-视图分析"><span class="nav-number">6.3.</span> <span class="nav-text">Domintor Tree 视图分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

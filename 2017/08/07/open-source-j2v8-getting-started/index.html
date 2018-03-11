@@ -1,0 +1,921 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="V8,J2V8," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 J2V8 的基本用法，如何在 Android 中使用 J2V8，如何通过 Java 来调用 JavaScript 的对象和方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="J2V8 -- 开始使用J2V8">
+<meta property="og:url" content="http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 J2V8 的基本用法，如何在 Android 中使用 J2V8，如何通过 Java 来调用 JavaScript 的对象和方法。">
+<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="J2V8 -- 开始使用J2V8">
+<meta name="twitter:description" content="介绍 J2V8 的基本用法，如何在 Android 中使用 J2V8，如何通过 Java 来调用 JavaScript 的对象和方法。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/"/>
+
+
+
+
+
+  <title> J2V8 -- 开始使用J2V8 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                J2V8 -- 开始使用J2V8
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-07T10:00:00+08:00">
+                2017-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/V8/" itemprop="url" rel="index">
+                    <span itemprop="name">V8</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/08/07/open-source-j2v8-getting-started/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/08/07/open-source-j2v8-getting-started/" class="leancloud_visitors" data-flag-title="J2V8 -- 开始使用J2V8">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 J2V8 的基本用法，如何在 Android 中使用 J2V8，如何通过 Java 来调用 JavaScript 的对象和方法。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文译自<a href="https://eclipsesource.com/blogs/tutorials/getting-started-with-j2v8/" target="_blank" rel="external">Getting Started With J2V8</a>，并加入了自己的一些理解。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>J2V8 是对 Google 的目前非常流行的 JavaScript 引擎 V8 的 Java 封装，J2V8 的开发使 Android 高效执行 JavaScript 带来了可能。<a href="https://tabrisjs.com/" target="_blank" rel="external">Tabris.js</a> 就是基于 J2V8 开发的一款移动端 App。J2V8 可以运行在 Windows，Linux 以及 Mac OS 上面。这篇入门教程主要来介绍如何使用J2V8来在Android上面运行JavaScript脚本。<br><a href="https://github.com/eclipsesource/J2V8" target="_blank" rel="external">Github源码地址</a><br>J2V8 非常注重性能和内存的消耗，为了达到这些目的在设计的时候做了很大的努力。<br>如果一段 Javascript 代码的执行结果是一个32位整数，那么它可以直接作为一个原始类型被访问，而不必转化为一个包装类的实例。这对于64位的浮点数（doubles）和布尔类型的数据来说同样是适用的。<br>J2V8 使用了一套“懒加载”技术，也就是说，一个 JavaScript 只有在它被需要使用的时候才会通过 JNI 复制到 Java 中，如果 Javascript 返回了一个大型的数组，这个数组的内容直到数组中的元素的被需要的时候才会被加载到 Java 中。<br>J2V8 仅仅是对 V8 的 Java 封装并暴露出来一系列的接口供 Java 调用，V8 引擎是用 C++ 写的，为了使用 V8，就需要使用JNI来进行调用。C++ 中需要开发者进行内存管理，有申请就需要有对应的释放。V8 的垃圾回收器会帮助我们做一些工作，但是一些 Native 的一些句柄对象如果不再使用的时候仍然需要我们调用 <code>release()</code> 去释放它们。<br>如果有内存泄漏，当程序运行结束时会有一些报告，比如会有一些打印和异常抛出。</p>
+<h2 id="J2V8的使用"><a href="#J2V8的使用" class="headerlink" title="J2V8的使用"></a>J2V8的使用</h2><p>J2V8目前支持的平台</p>
+<ul>
+<li>j2v8</li>
+<li>j2v8_android</li>
+<li>j2v8_android_armv7l</li>
+<li>j2v8_android_x86</li>
+<li>j2v8_linux_x86_64</li>
+<li>j2v8_macosx_x86_64</li>
+<li>j2v8_win32_x86</li>
+<li>j2v8_win32_x86_64</li>
+</ul>
+<p>仅介绍在 Android 环境下的使用。</p>
+<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><p>在build.gradle中添加依赖：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile &apos;com.eclipsesource.j2v8:j2v8:4.5.0@aar&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><p>运行下面一段 Hello World 代码，这段脚本将两个字符串连接起来并且返回了结果字符串的长度：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">var</span> hello = <span class="string">'hello, '</span>;</div><div class="line"> <span class="keyword">var</span> world = <span class="string">'world!'</span>;</div><div class="line">hello.concat(world).length;</div></pre></td></tr></table></figure>
+<p>要使用J2V8，首先你必须创建一个运行时环境，J2V8为此提供了一个静态工厂方法。在创建一个运行时环境时，同时也会加载J2V8的本地库。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">V8 runtime = V8.createV8Runtime();</div><div class="line"><span class="keyword">int</span> result = runtime.executeIntegerScript(<span class="string">""</span></div><div class="line">        + <span class="string">"var hello = 'hello, ';\n"</span></div><div class="line">        + <span class="string">"var world = 'world!';\n"</span></div><div class="line">        + <span class="string">"hello.concat(world).length;\n"</span>);</div><div class="line">Log.e(<span class="string">"Test"</span>,<span class="string">"JS result = "</span>+result);</div><div class="line">runtime.release();</div></pre></td></tr></table></figure>
+<p>会打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JS result = 13</div></pre></td></tr></table></figure>
+<p>为了执行脚本，它提供了多个基于不同返回值的执行方法。在这个例子里，我们使用了 <code>executeIntegerScript()</code> 这个方法，因为脚本执行的结果是一个int类型的整数，并且不需要任何的类型转换和包装。当应用结束时，运行时环境必须被释放。<br>稍微改动一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">V8 runtime = V8.createV8Runtime();</div><div class="line">String result = runtime.executeStringScript(<span class="string">""</span></div><div class="line">        + <span class="string">"var hello = 'hello, ';\n"</span></div><div class="line">        + <span class="string">"var world = 'world!';\n"</span></div><div class="line">        + <span class="string">"hello.concat(world);\n"</span>);</div><div class="line">Log.e(<span class="string">"Test"</span>,<span class="string">"JS result = "</span>+result);</div><div class="line">runtime.release();</div></pre></td></tr></table></figure>
+<p>会打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JS result = hello, world!</div></pre></td></tr></table></figure>
+<p>这里我们使用 <code>executeStringScript()</code> 方法返回的是一个 <code>String</code> 的对象。</p>
+<h2 id="获取Javascript对象"><a href="#获取Javascript对象" class="headerlink" title="获取Javascript对象"></a>获取Javascript对象</h2><p>使用J2V8你可以从Java中获取javascript对象的句柄，下面用一段代码来演示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">testJ2V8</span><span class="params">()</span></span>&#123;</div><div class="line">    V8 runtime = V8.createV8Runtime();</div><div class="line">    runtime.executeVoidScript(<span class="string">""</span></div><div class="line">            + <span class="string">"var person = &#123;&#125;;\n"</span></div><div class="line">            + <span class="string">"var hockeyTeam = &#123;name : 'WolfPack'&#125;;\n"</span></div><div class="line">            + <span class="string">"person.first = 'Ian';\n"</span></div><div class="line">            + <span class="string">"person['last'] = 'Bull';\n"</span></div><div class="line">            + <span class="string">"person.hockeyTeam = hockeyTeam;\n"</span>);</div><div class="line"></div><div class="line">    V8Object person = runtime.getObject(<span class="string">"person"</span>);</div><div class="line">    V8Object hockeyTeam = person.getObject(<span class="string">"hockeyTeam"</span>);</div><div class="line">    Log.e(<span class="string">"Test"</span>,<span class="string">" JS result name = "</span>+hockeyTeam.getString(<span class="string">"name"</span>));</div><div class="line">    person.release();</div><div class="line">    hockeyTeam.release();</div><div class="line"></div><div class="line">    runtime.release();</div></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JS result name = WolfPack</div></pre></td></tr></table></figure>
+<p>因为 <code>V8Object</code> 是底层 Javascript 对象的引用，那么我们也可以对这个对象进行操作，比如现在为Javascript增加新的属性，比如 <code>hockeyTeam.add(&quot;captain&quot;, person);</code> 在进行了这一步操作之后，新添加的属性 <code>captain</code> 可以在Javascript中立刻被访问到。以下代码可以验证这一点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hockeyTeam.add(<span class="string">"captain"</span>, person);</div><div class="line">Log.e(<span class="string">"Test"</span>,<span class="string">" JS result  "</span>+runtime.executeBooleanScript(<span class="string">"person === hockeyTeam.captain"</span>));</div></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JS result  true</div></pre></td></tr></table></figure>
+<h2 id="V8Array"><a href="#V8Array" class="headerlink" title="V8Array"></a>V8Array</h2><p><code>V8Array</code> 继承自 <code>V8Object</code>，因此提供了相同的存取器方法（accessor / mutator methods，相当于setter / getter方法）。除此之外，<code>V8Array</code> 的元素也可以通过索引来进行访问。<code>V8Object</code> 和 <code>V8Array</code> 都遵循了流式编程模型 ，这使得创建新的JavaScript对象变得非常简单。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">V8Object player1 = <span class="keyword">new</span> V8Object(runtime).add(<span class="string">"name"</span>, <span class="string">"John"</span>);</div><div class="line">V8Object player2 = <span class="keyword">new</span> V8Object(runtime).add(<span class="string">"name"</span>, <span class="string">"Chris"</span>);</div><div class="line">V8Array players = <span class="keyword">new</span> V8Array(runtime).push(player1).push(player2);</div><div class="line">hockeyTeam.add(<span class="string">"players"</span>, players);</div><div class="line">player1.release();</div><div class="line">player2.release();</div><div class="line">players.release();</div></pre></td></tr></table></figure>
+<h2 id="调用JavaScript函数"><a href="#调用JavaScript函数" class="headerlink" title="调用JavaScript函数"></a>调用JavaScript函数</h2><p>除了执行JavaScript脚本，也可以使用J2V8来调用JavaScript函数。既可以返回一个结果，也可以没有返回值。请看以下javascript函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> hockeyTeam = &#123;</div><div class="line">     <span class="attr">name</span>      : <span class="string">'WolfPack'</span>,</div><div class="line">     <span class="attr">players</span>   : [],</div><div class="line">     <span class="attr">addPlayer</span> : <span class="function"><span class="keyword">function</span>(<span class="params">player</span>) </span>&#123;</div><div class="line">                   <span class="keyword">this</span>.players.push(player);</div><div class="line">                   <span class="keyword">return</span> <span class="keyword">this</span>.players.size;</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为了在Java中调用上述对象中的函数，我们仅仅只需要一个 <code>hockeyTeam</code> 的句柄。通过这个对象句柄，我们可以向执行脚本一样执行函数。不同与脚本的是，可以传递给函数一个 <code>V8Array</code> 作为它的参数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">V8 runtime = V8.createV8Runtime();</div><div class="line">runtime.executeVoidScript(<span class="string">""</span></div><div class="line">        + <span class="string">"var hockeyTeam = &#123;\n"</span></div><div class="line">        + <span class="string">"name      : 'WolfPack',\n"</span></div><div class="line">        + <span class="string">"players   : [],\n"</span></div><div class="line">        + <span class="string">"addPlayer : function(player) &#123;\n"</span></div><div class="line">        + <span class="string">"              this.players.push(player);\n"</span></div><div class="line">        + <span class="string">"              return this.players.length;\n"</span></div><div class="line">        + <span class="string">"&#125;\n"</span></div><div class="line">        + <span class="string">"&#125;\n"</span>);</div><div class="line"></div><div class="line">V8Object hockeyTeam = runtime.getObject(<span class="string">"hockeyTeam"</span>);</div><div class="line">V8Object player1 = <span class="keyword">new</span> V8Object(runtime).add(<span class="string">"name"</span>, <span class="string">"John"</span>);</div><div class="line">V8Array parameters = <span class="keyword">new</span> V8Array(runtime).push(player1);</div><div class="line"><span class="keyword">int</span> size = hockeyTeam.executeIntegerFunction(<span class="string">"addPlayer"</span>, parameters);</div><div class="line">Log.e(<span class="string">"Test"</span>, <span class="string">"JS result size = "</span>+size);</div><div class="line">parameters.release();</div><div class="line">player1.release();</div><div class="line">hockeyTeam.release();</div><div class="line">runtime.release();</div></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JS result size = 1</div></pre></td></tr></table></figure>
+<p>参数数组的元素被映射为 JavaSscrip t函数的参数。参数数组元素的数量和在函数中声明的参数的数量不必相符，<code>undefined</code> 会被作为默认的值。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/V8/" rel="tag"># V8</a>
+          
+            <a href="/tags/J2V8/" rel="tag"># J2V8</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/05/mobile-internet-webapp-vs-nativeapp/" rel="next" title="WebApp 和 NativeApp 的世纪之战">
+                <i class="fa fa-chevron-left"></i> WebApp 和 NativeApp 的世纪之战
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/10/open-source-j2v8-registerting-java-callback/" rel="prev" title="J2V8 -- 注册 Java 回调函数">
+                J2V8 -- 注册 Java 回调函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#J2V8的使用"><span class="nav-number">2.</span> <span class="nav-text">J2V8的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加依赖"><span class="nav-number">2.1.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hello-World"><span class="nav-number">2.2.</span> <span class="nav-text">Hello World</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取Javascript对象"><span class="nav-number">3.</span> <span class="nav-text">获取Javascript对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V8Array"><span class="nav-number">4.</span> <span class="nav-text">V8Array</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用JavaScript函数"><span class="nav-number">5.</span> <span class="nav-text">调用JavaScript函数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

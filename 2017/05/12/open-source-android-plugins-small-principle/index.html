@@ -1,0 +1,908 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android开源项目,插件化框架,Small," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="结合 Activity 的启动流程来分析如何启动插件 Activity，以此来介绍Small插件化一个核心技术--动态注册组件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程">
+<meta property="og:url" content="http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="结合 Activity 的启动流程来分析如何启动插件 Activity，以此来介绍Small插件化一个核心技术--动态注册组件">
+<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程">
+<meta name="twitter:description" content="结合 Activity 的启动流程来分析如何启动插件 Activity，以此来介绍Small插件化一个核心技术--动态注册组件">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/"/>
+
+
+
+
+
+  <title> Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-12T10:00:00+08:00">
+                2017-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android开源项目/" itemprop="url" rel="index">
+                    <span itemprop="name">Android开源项目</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/05/12/open-source-android-plugins-small-principle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/05/12/open-source-android-plugins-small-principle/" class="leancloud_visitors" data-flag-title="Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  结合 Activity 的启动流程来分析如何启动插件 Activity，以此来介绍Small插件化一个核心技术--动态注册组件
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="动态注册组件原理"><a href="#动态注册组件原理" class="headerlink" title="动态注册组件原理"></a>动态注册组件原理</h2><p>动态的注册组件就是我们常说的Hook技术。<br>想要了解插件化的Hook技术我们需要先了解一下 <code>Activity</code> 的启动流程，<code>Activity</code> 的启动流程要涉及到App进程以及system_server进程，system_server进程的AMS负责 <code>Activity</code> 的真实性校验以及生命周期管理，App进程负责创建 <code>Activity</code> 对象以及回调生命周期的方法。<br>由于<code>Activity</code> 的检验过程是在AMS进程完成的，我们对system_server进程里面的操作无能为力，只有在我们APP进程里面执行的过程才是有可能被Hook掉的，因此，所有的Hook我们只能在App进程完成，那么在AMS进程里面进行校验的 <code>Activity</code> 也必须是真实存在的。<br>因此，Hook的基本思路就是当调用AMS时，就用我们真实注册的存在的 <code>Activity</code> 信息（对应上一篇文章的AndroidManifest.xml中的A、A1、A2….A33等 <code>Activity</code>），AMS回调到App进程时替换为插件中需要启动的 <code>Activity</code> 信息，从而达到欺骗系统的目的。<br>可以先看一下我的博客<a href="http://www.heqiangfly.com/2016/04/10/android-source-code-analysis-activity-start-process/" target="_blank" rel="external">startActivity 流程</a>，通过看启动流程图我们可以清晰的看到，涉及到 <code>Acitivity</code> 的AMS进程和App进程的边界操作有两个：startActivity和对LAUNCH_ACTIVITY消息的处理，这也就是我们需要Hook的两个重要点。<br>下面通过实际代码来进程介绍。<br>前面我们说过，替换 <code>Instrumentation</code> 对象和 <code>ActivityThreadHandlerCallback</code> 是插件化工作中的重头戏。这里用到了我们说的“Hook”技术。<br><code>Instrumentation</code>类看一下<a href="https://developer.android.com/reference/android/app/Instrumentation.html?hl=zh-cn" target="_blank" rel="external">官方文档对这个类的解释</a>，该类跟踪 <code>Application</code> 及 <code>Activity</code> 的整个生命周期，它的一些方法在 <code>Application</code> 及 <code>Activity</code> 所有生命周期函数的调用中，都会先调用这些方法。<br>熟悉 <code>Activity</code> 启动流程的同学都知道，启动 <code>Activity</code> 是由 <code>Activity</code> 的 <code>startActivityForResult()</code> 方法启动，通过 <code>Instrumentation</code> 的 <code>execStartActivity</code> 方法激活生命周期。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityForResult</span><span class="params">(Intent intent, <span class="keyword">int</span> requestCode, @Nullable Bundle options)</span> </span>&#123;</div><div class="line">    ……</div><div class="line">    <span class="keyword">if</span> (mParent == <span class="keyword">null</span>) &#123;</div><div class="line">        Instrumentation.ActivityResult ar =</div><div class="line">            mInstrumentation.execStartActivity(</div><div class="line">                <span class="keyword">this</span>, mMainThread.getApplicationThread(), mToken, <span class="keyword">this</span>,</div><div class="line">                intent, requestCode, options);</div><div class="line">        <span class="keyword">if</span> (ar != <span class="keyword">null</span>) &#123;</div><div class="line">            mMainThread.sendActivityResult(</div><div class="line">                mToken, mEmbeddedID, requestCode, ar.getResultCode(),</div><div class="line">                ar.getResultData());</div><div class="line">        &#125;</div><div class="line">    ……</div></pre></td></tr></table></figure>
+<p><code>Activity</code> 的实例化在 <code>ActivityThread</code> 的 <code>performLaunchActivity()</code> 方法中通过 <code>Instrumentation</code> 的 <code>newActivity()</code> 方法实例化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> Activity <span class="title">performLaunchActivity</span><span class="params">(ActivityClientRecord r, Intent customIntent)</span> </span>&#123;</div><div class="line">    ...</div><div class="line"></div><div class="line">    Activity activity = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        java.lang.ClassLoader cl = r.packageInfo.getClassLoader();</div><div class="line">        activity = mInstrumentation.newActivity( <span class="comment">// Override entry 2</span></div><div class="line">                cl, component.getClassName(), r.intent);</div><div class="line">        StrictMode.incrementExpectedActivityCount(activity.getClass());</div><div class="line">        r.intent.setExtrasClassLoader(cl);</div><div class="line">        r.intent.prepareToEnterProcess();</div><div class="line">        <span class="keyword">if</span> (r.state != <span class="keyword">null</span>) &#123;</div><div class="line">            r.state.setClassLoader(cl);</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>‘onCreate()’ 生命周期函数的调用也是在 <code>ActivityThread.performLaunchActivity()</code> 中调用 <code>Instrumentation</code> 的 <code>callActivityOnCreate()</code> 方法来实现的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> Activity <span class="title">performLaunchActivity</span><span class="params">(ActivityClientRecord r, Intent customIntent)</span> </span>&#123;</div><div class="line">    ...</div><div class="line">    activity.mCalled = <span class="keyword">false</span>;</div><div class="line">    <span class="comment">// 调用Activity.onCreate方法</span></div><div class="line">    <span class="keyword">if</span> (r.isPersistable()) &#123;</div><div class="line">        mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        mInstrumentation.callActivityOnCreate(activity, r.state);</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因此，得到了这个对象，我们就可以进入并跟踪 <code>Application</code> 和 <code>Activity</code> 的生命周期流程。<br>Small 想要做到动态注册 <code>Activity</code>，首先在宿主 Manifest 中注册一个命名特殊的占坑 <code>Activity</code> 来欺骗 <code>startActivityForResult</code> 以获得生命周期，再欺骗 <code>performLaunchActivity</code> 来获得插件 <code>Activity</code> 实例，又为了处理之间的信息传递，因此有了后面的 <code>ActivityThreadHandlerCallback</code>。</p>
+<p>接下来我们就在 <code>ApkBundleLauncher.InstrumentationWrapper</code> 来看一下这些是如何实现的。<br>先来看一下 <code>execStartActivity</code> 方法：<br><code>execStartActivity</code>方法有两个实现，一个是API Level 20以前的，一个是API Level 20以后的，仅仅是参数不同而已。<br>由于前面我们用 <code>ApkBundleLauncher.InstrumentationWrapper</code> 替换了 <code>mInstrumentation</code>，因此会调用到 <code>ApkBundleLauncher.InstrumentationWrapper</code> 中的 <code>execStartActivity()</code> 方法。该方法做的工作后面再详细介绍。主要是把需要启动的真实 <code>Activity</code> 替换为占坑 <code>Activity</code>。<br>熟悉 <code>Activity</code> 流程的同学都知道，真正启动 <code>Activity</code> 时，<code>ActivityManagerService</code> 调用 <code>ApplicationThread.scheduleLaunchActivity</code> 接口，通知相应的进程执行启动 <code>Activity</code> 的操作，<code>ApplicationThread</code> 把这个启动 <code>Activity</code> 的操作转发给 <code>ActivityThread</code>，<code>ActivityThread</code> 通过 <code>ClassLoader</code> 导入相应的 <code>Activity</code> 类，然后把它启动。<br>具体的在 <code>ActivityThread.ApplicationThread.scheduleLaunchActivity</code> 方法中会调用 <code>sendMessage(H.LAUNCH_ACTIVITY, r)</code>，该消息由 <code>ActivityThread</code> 中的消息处理对象 <code>mH</code> 来处理，由于我们把 <code>mH</code> 的 <code>mCallback</code> 替换为了<code>ActivityThreadHandlerCallback</code>，因此也会对 <code>LAUNCH_ACTIVITY</code> 消息进行拦截处理，处理完后再由<code>mH</code> 来处理正常的流程。<br>这里解释一下为什么要调用 <code>ensureInjectMessageHandler</code> 来反射替换 <code>ActivityThread</code> 的 <code>Handler</code> 对象 <code>mH</code> 的 <code>mCallback</code> 呢？<br>先看一下 <code>Handler</code> 源码中的 <code>dispatchMessage()</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Handle system messages here.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (msg.callback != <span class="keyword">null</span>) &#123;</div><div class="line">        handleCallback(msg);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span> (mCallback != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (mCallback.handleMessage(msg)) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        handleMessage(msg);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里会先执行 <code>mCallback</code> 的 <code>handleMessage()</code>，在返回false的情况下再执行自身的 <code>handleMessage()</code>。<br>这样就可以在 <code>ActivityThreadHandlerCallback</code> 中处理一些事情，然后在调用 <code>mH</code> 的方法。</p>
+<h2 id="启动插件Activity流程"><a href="#启动插件Activity流程" class="headerlink" title="启动插件Activity流程"></a>启动插件Activity流程</h2><p>这里以 <code>ApkBundleLauncher</code> 来作为 <code>Bundle</code> 的 <code>BundleLauncher</code> 为例进行说明。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">├── Small.openUri()</div><div class="line">     ├── Bundle.getLaunchableBundle(uri)</div><div class="line">     │    └── Bundle.matchesRule()</div><div class="line">     └── Bundle.launchFrom(context)</div><div class="line">          └──ApkBundleLauncher.launchBundle()</div><div class="line">               ├── ApkBundleLauncher.prelaunchBundle()</div><div class="line">               │    └── Bundle.getActivityName()</div><div class="line">               └── BundleLauncher.launchBundle()</div><div class="line">                    └── Activity.startActivityForResult()</div><div class="line">                         └── InstrumentationWrapper.execStartActivity()</div><div class="line">                              ├── InstrumentationWrapper.wrapIntent()</div><div class="line">                              └── InstrumentationWrapper.dequeueStubActivity</div><div class="line">----------------------------------消息处理----------------------------------</div><div class="line">├── ActivityThreadHandlerCallback.LAUNCH_ACTIVITY</div><div class="line">     └── redirectActivity()</div><div class="line">----------------------------------消息处理----------------------------------</div><div class="line">├── InstrumentationWrapper.callActivityOnCreate()</div></pre></td></tr></table></figure>
+<h3 id="根据URI匹配Bundle"><a href="#根据URI匹配Bundle" class="headerlink" title="根据URI匹配Bundle"></a>根据URI匹配Bundle</h3><p>匹配插件中注册的 <code>Activity</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">static</span> Bundle <span class="title">getLaunchableBundle</span><span class="params">(Uri uri)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (sPreloadBundles != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">for</span> (Bundle bundle : sPreloadBundles) &#123;</div><div class="line">            <span class="keyword">if</span> (bundle.matchesRule(uri)) &#123;</div><div class="line">                <span class="keyword">if</span> (bundle.mApplicableLauncher == <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="keyword">if</span> (!bundle.enabled) <span class="keyword">return</span> <span class="keyword">null</span>; <span class="comment">// Illegal bundle (invalid signature, etc.)</span></div><div class="line">                <span class="keyword">return</span> bundle;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 如果没有找到就用webview来显示这个uri</span></div><div class="line">    <span class="keyword">if</span> (uri.getScheme() != <span class="keyword">null</span>) &#123;</div><div class="line">        Bundle bundle = <span class="keyword">new</span> Bundle();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            bundle.url = <span class="keyword">new</span> URL(uri.toString());</div><div class="line">        &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        bundle.prepareForLaunch();</div><div class="line">        bundle.setQuery(uri.getEncodedQuery()); <span class="comment">// Fix issue #6 from Spring-Xu.</span></div><div class="line">        bundle.mApplicableLauncher = <span class="keyword">new</span> WebBundleLauncher();</div><div class="line">        bundle.mApplicableLauncher.prelaunchBundle(bundle);</div><div class="line">        <span class="keyword">return</span> bundle;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> Boolean <span class="title">matchesRule</span><span class="params">(Uri uri)</span> </span>&#123;</div><div class="line">    <span class="comment">/* e.g.</span></div><div class="line">     *  input</div><div class="line">     *      - uri: http://base/abc.html</div><div class="line">     *      - self.uri: http://base</div><div class="line">     *      - self.rules: abc.html -&gt; AbcController</div><div class="line">     *  output</div><div class="line">     *      - target =&gt; AbcController</div><div class="line">     */</div><div class="line">    <span class="comment">// 将uri和Bundle.uriString进行匹配，如果不匹配直接返回false</span></div><div class="line">    String uriString = uri.toString();</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.uriString == <span class="keyword">null</span> || !uriString.startsWith(<span class="keyword">this</span>.uriString)) <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 截取类似 http://code.wequick.net/small-sample/detail?from=app.home 后面的字段?from=app.home进行解析</span></div><div class="line">    String srcPath = uriString.substring(<span class="keyword">this</span>.uriString.length());</div><div class="line">    <span class="comment">// 获取 ? 后面的字符</span></div><div class="line">    String srcQuery = uri.getEncodedQuery();</div><div class="line">    <span class="keyword">if</span> (srcQuery != <span class="keyword">null</span>) &#123;</div><div class="line">        srcPath = srcPath.substring(<span class="number">0</span>, srcPath.length() - srcQuery.length() - <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ......</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.path = dstPath;</div><div class="line">    <span class="keyword">this</span>.query = dstQuery;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>BundleLauncher.launchBundle()</code> 启动 <code>Activity</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">launchBundle</span><span class="params">(Bundle bundle, Context context)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span>(bundle.isLaunchable()) &#123;</div><div class="line">        <span class="keyword">if</span>(context <span class="keyword">instanceof</span> Activity) &#123;</div><div class="line">            Activity activity = (Activity)context;</div><div class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.shouldFinishPreviousActivity(activity)) &#123;</div><div class="line">                activity.finish();</div><div class="line">            &#125;</div><div class="line">            activity.startActivityForResult(bundle.getIntent(), <span class="number">10000</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            context.startActivity(bundle.getIntent());</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="启动真实的Activity"><a href="#启动真实的Activity" class="headerlink" title="启动真实的Activity"></a>启动真实的Activity</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prelaunchBundle</span><span class="params">(Bundle bundle)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.prelaunchBundle(bundle);</div><div class="line">    Intent intent = <span class="keyword">new</span> Intent();</div><div class="line">    bundle.setIntent(intent);</div><div class="line"></div><div class="line">    <span class="comment">// 获取该插件的入口Activity</span></div><div class="line">    String activityName = bundle.getActivityName();</div><div class="line">    <span class="comment">// 判断一下ActivityLauncher中的sActivityClasses是否包含该Activity，这里面只包含宿主app和Small框架里面的Activity</span></div><div class="line">    <span class="keyword">if</span> (!ActivityLauncher.containsActivity(activityName)) &#123;</div><div class="line">        <span class="comment">// 一般启动插件Activity的情况下面是会走到这里的</span></div><div class="line">        <span class="comment">// sLoadedActivities 包含的是插件里面定义的Activity，在启动初始化时解析的</span></div><div class="line">        <span class="keyword">if</span> (sLoadedActivities == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ActivityNotFoundException(<span class="string">"Unable to find explicit activity class "</span> +</div><div class="line">                    <span class="string">"&#123; "</span> + activityName + <span class="string">" &#125;"</span>);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (!sLoadedActivities.containsKey(activityName)) &#123;</div><div class="line">            <span class="keyword">if</span> (activityName.endsWith(<span class="string">"Activity"</span>)) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> ActivityNotFoundException(<span class="string">"Unable to find explicit activity class "</span> +</div><div class="line">                        <span class="string">"&#123; "</span> + activityName + <span class="string">" &#125;"</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 再次进行一些模糊匹配</span></div><div class="line">            String tempActivityName = activityName + <span class="string">"Activity"</span>;</div><div class="line">            <span class="keyword">if</span> (!sLoadedActivities.containsKey(tempActivityName)) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> ActivityNotFoundException(<span class="string">"Unable to find explicit activity class "</span> +</div><div class="line">                        <span class="string">"&#123; "</span> + activityName + <span class="string">"(Activity) &#125;"</span>);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            activityName = tempActivityName;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 设置ComponentName</span></div><div class="line">    intent.setComponent(<span class="keyword">new</span> ComponentName(Small.getContext(), activityName));</div><div class="line"></div><div class="line">    <span class="comment">// Intent extras - params</span></div><div class="line">    String query = bundle.getQuery();</div><div class="line">    <span class="keyword">if</span> (query != <span class="keyword">null</span>) &#123;</div><div class="line">        intent.putExtra(Small.KEY_QUERY, <span class="string">'?'</span>+query);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="启动流程拦截，启动占坑位Activity"><a href="#启动流程拦截，启动占坑位Activity" class="headerlink" title="启动流程拦截，启动占坑位Activity"></a>启动流程拦截，启动占坑位Activity</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">InstrumentationWrapper</span> <span class="keyword">extends</span> <span class="title">Instrumentation</span></span></div><div class="line">            <span class="keyword">implements</span> <span class="title">InstrumentationInternal</span> &#123;</div><div class="line"></div><div class="line">        ......</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> ActivityResult <span class="title">execStartActivity</span><span class="params">(</span></span></div><div class="line">                Context who, IBinder contextThread, IBinder token, Activity target,</div><div class="line">                Intent intent, <span class="keyword">int</span> requestCode, android.os.Bundle options) &#123;</div><div class="line">            <span class="comment">// 将intent 中真正的Activity替换为占坑位的Activity</span></div><div class="line">            wrapIntent(intent);</div><div class="line">            <span class="comment">// 通过反射替换ActivityThread 的 Message Handler mH变量的 mCallback 为ActivityThreadHandlerCallback</span></div><div class="line">            <span class="comment">// 用于恢复Activity Info 到真实的Activity</span></div><div class="line">            ensureInjectMessageHandler(sActivityThread);</div><div class="line">            <span class="comment">// 反射调用启动Activity</span></div><div class="line">            <span class="keyword">return</span> ReflectAccelerator.execStartActivity(mBase,</div><div class="line">                    who, contextThread, token, target, intent, requestCode, options);</div><div class="line">        &#125;</div><div class="line">        ......</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">wrapIntent</span><span class="params">(Intent intent)</span> </span>&#123;</div><div class="line">            <span class="comment">// 此处为插件中注册的真正的Activity</span></div><div class="line">            ComponentName component = intent.getComponent();</div><div class="line">            String realClazz;</div><div class="line">            <span class="keyword">if</span> (component == <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">// 如果component为空，交给宿主来处理这个intent</span></div><div class="line">                component = intent.resolveActivity(Small.getContext().getPackageManager());</div><div class="line">                <span class="keyword">if</span> (component != <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="comment">// 系统或者宿主处理掉了，直接返回</span></div><div class="line">                    <span class="keyword">return</span>;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="comment">// 如果Action没有处理掉，看一下插件注册的Activity能否处理</span></div><div class="line">                realClazz = resolveActivity(intent);</div><div class="line">                <span class="keyword">if</span> (realClazz == <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="comment">// 如果插件也不能处理，就直接返回，无能为力了……</span></div><div class="line">                    <span class="keyword">return</span>;</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                realClazz = component.getClassName();</div><div class="line">                <span class="keyword">if</span> (realClazz.startsWith(STUB_ACTIVITY_PREFIX)) &#123;</div><div class="line">                    <span class="comment">// 如果这个Activity已经是占坑位的Activity，进行解开回原来的Activity</span></div><div class="line">                    realClazz = unwrapIntent(intent);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (sLoadedActivities == <span class="keyword">null</span>) <span class="keyword">return</span>;</div><div class="line">            <span class="comment">// 从sLoadedActivities中获得真正Activity的信息</span></div><div class="line">            ActivityInfo ai = sLoadedActivities.get(realClazz);</div><div class="line">            <span class="keyword">if</span> (ai == <span class="keyword">null</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">            <span class="comment">// 把真实的Activity放到Category中并用'&gt;'进行标识</span></div><div class="line">            intent.addCategory(REDIRECT_FLAG + realClazz);</div><div class="line">            <span class="comment">// 获取一个占坑位的Activity</span></div><div class="line">            String stubClazz = dequeueStubActivity(ai, realClazz);</div><div class="line">            <span class="comment">// 将真正需要启动的Activity替换为占坑位的Activity</span></div><div class="line">            intent.setComponent(<span class="keyword">new</span> ComponentName(Small.getContext(), stubClazz));</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">private</span> String <span class="title">dequeueStubActivity</span><span class="params">(ActivityInfo ai, String realActivityClazz)</span> </span>&#123;</div><div class="line">            <span class="keyword">if</span> (ai.launchMode == ActivityInfo.LAUNCH_MULTIPLE) &#123;</div><div class="line">                <span class="comment">// 如果是普通的启动模式，用 A和A1 Activity，这两个Activity是可以重复使用的</span></div><div class="line">                <span class="comment">// 看是否有windowIsTranslucent属性</span></div><div class="line">                Resources.Theme theme = Small.getContext().getResources().newTheme();</div><div class="line">                theme.applyStyle(ai.getThemeResource(), <span class="keyword">true</span>);</div><div class="line">                TypedArray sa = theme.obtainStyledAttributes(</div><div class="line">                        <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; android.R.attr.windowIsTranslucent &#125;);</div><div class="line">                <span class="keyword">boolean</span> translucent = sa.getBoolean(<span class="number">0</span>, <span class="keyword">false</span>);</div><div class="line">                sa.recycle();</div><div class="line">                <span class="comment">// 如果有就用A1,没有就用A</span></div><div class="line">                <span class="keyword">return</span> translucent ? STUB_ACTIVITY_TRANSLUCENT : STUB_ACTIVITY_PREFIX;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 根据启动模式匹配合适的占坑位Activity</span></div><div class="line">            <span class="keyword">int</span> availableId = -<span class="number">1</span>;</div><div class="line">            <span class="keyword">int</span> stubId = -<span class="number">1</span>;</div><div class="line">            <span class="keyword">int</span> countForMode = STUB_ACTIVITIES_COUNT;</div><div class="line">            <span class="keyword">int</span> countForAll = countForMode * <span class="number">3</span>; <span class="comment">// 3=[singleTop, singleTask, singleInstance]</span></div><div class="line">            <span class="keyword">if</span> (mStubQueue == <span class="keyword">null</span>) &#123;</div><div class="line">                mStubQueue = <span class="keyword">new</span> String[countForAll];</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">int</span> offset = (ai.launchMode - <span class="number">1</span>) * countForMode;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; countForMode; i++) &#123;</div><div class="line">                String usedActivityClazz = mStubQueue[i + offset];</div><div class="line">                <span class="keyword">if</span> (usedActivityClazz == <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">if</span> (availableId == -<span class="number">1</span>) availableId = i;</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (usedActivityClazz.equals(realActivityClazz)) &#123;</div><div class="line">                    stubId = i;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (stubId != -<span class="number">1</span>) &#123;</div><div class="line">                availableId = stubId;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (availableId != -<span class="number">1</span>) &#123;</div><div class="line">                mStubQueue[availableId + offset] = realActivityClazz;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                Log.e(TAG, <span class="string">"Launch mode "</span> + ai.launchMode + <span class="string">" is full"</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> STUB_ACTIVITY_PREFIX + ai.launchMode + availableId;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">`</div></pre></td></tr></table></figure>
+<h3 id="消息拦截"><a href="#消息拦截" class="headerlink" title="消息拦截"></a>消息拦截</h3><p>由于前面介绍的反射替换 <code>ActivityThread</code> 的 <code>mH</code> 对象的 <code>mCallback</code>，这里拦截了四种消息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityThreadHandlerCallback</span> <span class="keyword">implements</span> <span class="title">Handler</span>.<span class="title">Callback</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LAUNCH_ACTIVITY = <span class="number">100</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CREATE_SERVICE = <span class="number">114</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONFIGURATION_CHANGED = <span class="number">118</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ACTIVITY_CONFIGURATION_CHANGED = <span class="number">125</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Configuration mApplicationConfig;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">        <span class="keyword">switch</span> (msg.what) &#123;</div><div class="line">            <span class="keyword">case</span> LAUNCH_ACTIVITY:</div><div class="line">                redirectActivity(msg);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line"></div><div class="line">            <span class="keyword">case</span> CREATE_SERVICE:</div><div class="line">                ensureServiceClassesLoadable(msg);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line"></div><div class="line">            <span class="keyword">case</span> CONFIGURATION_CHANGED:</div><div class="line">                recordConfigChanges(msg);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line"></div><div class="line">            <span class="keyword">case</span> ACTIVITY_CONFIGURATION_CHANGED:</div><div class="line">                <span class="keyword">return</span> relaunchActivityIfNeeded(msg);</div><div class="line"></div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 这里返回false，不影响 mH 对消息的处理</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="LAUNCH-ACTIVITY"><a href="#LAUNCH-ACTIVITY" class="headerlink" title="LAUNCH_ACTIVITY"></a>LAUNCH_ACTIVITY</h4><p>对 <code>LAUNCH_ACTIVITY</code> 的处理主要是将启动的占坑位的 <code>Activity</code> 重新替换为真实的 <code>Activity</code> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">redirectActivity</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">        Object<span class="comment">/*ActivityClientRecord*/</span> r = msg.obj;</div><div class="line">        <span class="comment">// 通过反射获取intent</span></div><div class="line">        Intent intent = ReflectAccelerator.getIntent(r);</div><div class="line">        <span class="comment">// 解开intent，获取真实的Activity名称</span></div><div class="line">        String targetClass = unwrapIntent(intent);</div><div class="line">        <span class="keyword">boolean</span> hasSetUp = Small.hasSetUp();</div><div class="line">        <span class="keyword">if</span> (targetClass == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="comment">// 在宿主中注册的Activity</span></div><div class="line">            <span class="keyword">if</span> (hasSetUp) <span class="keyword">return</span>; <span class="comment">// nothing to do</span></div><div class="line"></div><div class="line">            <span class="keyword">if</span> (intent.hasCategory(Intent.CATEGORY_LAUNCHER)) &#123;</div><div class="line">                <span class="comment">// 带CATEGORY_LAUNCHER属性的Activity</span></div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// Launching an activity in remote process. Set up Small for it.</span></div><div class="line">            Small.setUpOnDemand();</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (!hasSetUp) &#123;</div><div class="line">            <span class="comment">// Restarting an activity after application recreated,</span></div><div class="line">            <span class="comment">// maybe upgrading or somehow the application was killed in background.</span></div><div class="line">            Small.setUp();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 替换为真正的 activityInfo</span></div><div class="line">        ActivityInfo targetInfo = sLoadedActivities.get(targetClass);</div><div class="line">        ReflectAccelerator.setActivityInfo(r, targetInfo);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="拦截OnCreate方法"><a href="#拦截OnCreate方法" class="headerlink" title="拦截OnCreate方法"></a>拦截OnCreate方法</h3><p>对 <code>Activity</code> 的 <code>OnCreate</code> 调用的拦截由 <code>InstrumentationWrapper.callActivityOnCreate()</code> 来进行处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callActivityOnCreate</span><span class="params">(Activity activity, android.os.Bundle icicle)</span> </span>&#123;</div><div class="line">    <span class="keyword">do</span> &#123;</div><div class="line">        <span class="keyword">if</span> (sLoadedActivities == <span class="keyword">null</span>) <span class="keyword">break</span>;</div><div class="line">        ActivityInfo ai = sLoadedActivities.get(activity.getClass().getName());</div><div class="line">        <span class="keyword">if</span> (ai == <span class="keyword">null</span>) <span class="keyword">break</span>;</div><div class="line">        <span class="comment">//用来设置Activity的一些转屏和键盘状态</span></div><div class="line">        applyActivityInfo(activity, ai);</div><div class="line">        ReflectAccelerator.ensureCacheResources();</div><div class="line">    &#125; <span class="keyword">while</span> (<span class="keyword">false</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 重新设置 mInstrumentation ，防止被改变</span></div><div class="line">    <span class="keyword">if</span> (sBundleInstrumentation != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Field f = Activity.class.getDeclaredField(<span class="string">"mInstrumentation"</span>);</div><div class="line">            f.setAccessible(<span class="keyword">true</span>);</div><div class="line">            Object instrumentation = f.get(activity);</div><div class="line">            <span class="keyword">if</span> (instrumentation != sBundleInstrumentation) &#123;</div><div class="line">                f.set(activity, sBundleInstrumentation);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 再调用 mInstrumentation 的callActivityOnCreate方法</span></div><div class="line">    sHostInstrumentation.callActivityOnCreate(activity, icicle);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>另外还有对 <code>OnStop</code>，<code>OnDestroy</code>等其他生命周期方法的拦截，这里就不一一介绍了。</p>
+<!--     
+http://blog.csdn.net/u013210620/article/details/54692417?utm_source=itdadao&utm_medium=referral
+http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
+-->
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android开源项目/" rel="tag"># Android开源项目</a>
+          
+            <a href="/tags/插件化框架/" rel="tag"># 插件化框架</a>
+          
+            <a href="/tags/Small/" rel="tag"># Small</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/10/open-source-android-plugins-small-init/" rel="next" title="Android 插件化框架Small解析--初始化">
+                <i class="fa fa-chevron-left"></i> Android 插件化框架Small解析--初始化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/13/android-source-code-analysis-dumpsys/" rel="prev" title="Android 深入理解 dumpsys">
+                Android 深入理解 dumpsys <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#动态注册组件原理"><span class="nav-number">1.</span> <span class="nav-text">动态注册组件原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动插件Activity流程"><span class="nav-number">2.</span> <span class="nav-text">启动插件Activity流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#根据URI匹配Bundle"><span class="nav-number">2.1.</span> <span class="nav-text">根据URI匹配Bundle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动真实的Activity"><span class="nav-number">2.2.</span> <span class="nav-text">启动真实的Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动流程拦截，启动占坑位Activity"><span class="nav-number">2.3.</span> <span class="nav-text">启动流程拦截，启动占坑位Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息拦截"><span class="nav-number">2.4.</span> <span class="nav-text">消息拦截</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LAUNCH-ACTIVITY"><span class="nav-number">2.4.1.</span> <span class="nav-text">LAUNCH_ACTIVITY</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拦截OnCreate方法"><span class="nav-number">2.5.</span> <span class="nav-text">拦截OnCreate方法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,1194 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android源码分析,UserManager," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="基于Android6.0来分析Android的用户管理系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android UserManager相关源码分析">
+<meta property="og:url" content="http://yoursite.com/2017/03/06/android-source-code-analysis-usermanager/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="基于Android6.0来分析Android的用户管理系统">
+<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android UserManager相关源码分析">
+<meta name="twitter:description" content="基于Android6.0来分析Android的用户管理系统">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/06/android-source-code-analysis-usermanager/"/>
+
+
+
+
+
+  <title> Android UserManager相关源码分析 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/06/android-source-code-analysis-usermanager/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android UserManager相关源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T10:00:00+08:00">
+                2017-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/03/06/android-source-code-analysis-usermanager/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/06/android-source-code-analysis-usermanager/" class="leancloud_visitors" data-flag-title="Android UserManager相关源码分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  基于Android6.0来分析Android的用户管理系统
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android从4.2开始支持多用户模式，不同的用户运行在独立的用户空间，它们的的锁屏设置，PIN码和壁纸等系统设置是各不相同的，而且不同用户安装的应用和应用数据都是不一样的，但是系统中和硬件相关的设置则是共用的，比如网络设置等。通常第一个在系统中注册的用户将成为系统管理员，可以管理手机上的其他用户。但由于专利的原因，目前手机上并没有开启多用户模式，这种模式只能用在平板上面。<br>手机上经常见到的一个功能就是访客模式，它是多用户模式的一种应用。访客模式下用户的所有数据（通讯录，短信，应用等）会被隐藏，访客只能查看和使用手机的基本功能，另外你还可以设置访客是否有接听电话、发送短信等权限。<br>与其它系统服务的实现类似，用户管理也采用了经由<code>Binder</code>调用的远程服务机制。<code>UserManagerService</code>（以下简称 UMS ）继承自<code>IUserManager.Stub</code>为接口的底层实现，作为Binder的服务端。<code>UserManager</code>为暴露给用户的接口，它的成员变量<code>mService</code>是<code>IUserManager.Stub.Proxy</code>的实例，作为Binder的客户端，<code>UserManager</code>的大部分工作都是通过<code>mService</code>与服务端进行通信调用UMS的对应方法来完成的。<br>本文的代码是基于Android6.0来进行介绍。<br><code>UserManager</code>相关代码位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">frameworks/base/core/java/android/os/UserManager.java</div><div class="line">frameworks/base/services/core/java/com/android/server/pm/UserManagerService.java</div><div class="line">frameworks/base/core/java/android/content/pm/UserInfo.java</div><div class="line">frameworks/base/core/java/android/os/UserHandle.java</div><div class="line">frameworks/base/core/java/com/android/server/pm/PackageManagerService.java</div><div class="line">frameworks/base/core/java/com/android/server/wm/WindowManagerService.java</div><div class="line">frameworks/base/core/java/com/android/server/am/ActivityManagerService.java</div><div class="line">frameworks/base/core/java/android/os/Process.java</div></pre></td></tr></table></figure>
+<ul>
+<li>PackageManagerService：在多用户环境中，所有安装的应用还是位于 /data/app/ 目录中，应用的数据还是保存在 /data/data 下面，这些数据只对 Id 为 0 的用户即管理员用户有效，但是这些应用的数据在 /data/user/&lt;用户id&gt;/ 目录下面都会有单独的一份。</li>
+</ul>
+<h2 id="UserManager"><a href="#UserManager" class="headerlink" title="UserManager"></a>UserManager</h2><p><code>UserManager</code>可以称为 UMS 的代理对象，它通过<code>IUserManager mService</code>来与 UMS 进行进程间的通信。<br><code>UserManager</code>是暴露出来的应用程序接口。对于普通应用程序，提供用户数查询，用户状态判断和用户序列号查询等基本功能。普通应用没有用户操作权限。<br>对于系统应用，<code>UserManager</code>提供了创建/删除/擦除用户、用户信息获取、用户句柄获取等用户操作的接口。<br>这些操作均由远程调用 UMS 服务的对应方法实现。</p>
+<h3 id="几个常用方法介绍"><a href="#几个常用方法介绍" class="headerlink" title="几个常用方法介绍"></a>几个常用方法介绍</h3><h4 id="判断是否支持多用户模式："><a href="#判断是否支持多用户模式：" class="headerlink" title="判断是否支持多用户模式："></a>判断是否支持多用户模式：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">supportsMultipleUsers</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> getMaxSupportedUsers() &gt; <span class="number">1</span></div><div class="line">            &amp;&amp; SystemProperties.getBoolean(<span class="string">"fw.show_multiuserui"</span>,</div><div class="line">            Resources.getSystem().getBoolean(R.bool.config_enableMultiUserUI));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMaxSupportedUsers</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">// Don't allow multiple users on certain builds</span></div><div class="line">    <span class="comment">// 不允许用户在特定的版本上使用，因为多用户手机专利早已被Symbian注册，设计专利原因</span></div><div class="line">    <span class="keyword">if</span> (android.os.Build.ID.startsWith(<span class="string">"JVP"</span>)) <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    <span class="comment">// Svelte devices don't get multi-user.</span></div><div class="line">    <span class="comment">// 是否是低内存设备</span></div><div class="line">    <span class="keyword">if</span> (ActivityManager.isLowRamDeviceStatic()) <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    <span class="comment">// 读取设备的配置文件</span></div><div class="line">    <span class="keyword">return</span> SystemProperties.getInt(<span class="string">"fw.max_users"</span>,</div><div class="line">            Resources.getSystem().getInteger(R.integer.config_multiuserMaximumUsers));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先会读取系统配置<code>fw.show_multiuserui</code>和<code>fw.max_users</code>，如果系统没有这个配置项则从配置文件中读取默认值，配置文件在<code>frameworks/base/core/res/res/values/config.xml</code>中：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--  Maximum number of supported users --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">integer</span> <span class="attr">name</span>=<span class="string">"config_multiuserMaximumUsers"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></div><div class="line"><span class="comment">&lt;!-- Whether UI for multi user should be shown --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">bool</span> <span class="attr">name</span>=<span class="string">"config_enableMultiUserUI"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">bool</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>也可以看到，手机上默认是不支持多用户模式的。</p>
+<h4 id="查询是否是访客模式"><a href="#查询是否是访客模式" class="headerlink" title="查询是否是访客模式"></a>查询是否是访客模式</h4><p>查询当前进程的用户是否是访客。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);</div><div class="line"><span class="keyword">return</span> userManager.isGuestUser();</div></pre></td></tr></table></figure>
+<h4 id="查询用户权限"><a href="#查询用户权限" class="headerlink" title="查询用户权限"></a>查询用户权限</h4><p>查询当前进程的用户是否拥有某个权限，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);</div><div class="line"><span class="keyword">boolean</span> canSendSms = userManager.hasUserRestriction(UserManager.DISALLOW_SMS);</div></pre></td></tr></table></figure>
+<p>还有个方法是查询指定用户的权限：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasUserRestriction</span><span class="params">(String restrictionKey, UserHandle userHandle)</span></span></div></pre></td></tr></table></figure>
+<h3 id="如何创建Guest用户"><a href="#如何创建Guest用户" class="headerlink" title="如何创建Guest用户"></a>如何创建Guest用户</h3><p>比如要创建一个访客用户，就可以调用<code>UserManager.createGuest(Context context, String name)</code>方法来完成：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> UserInfo <span class="title">createGuest</span><span class="params">(Context context, String name)</span> </span>&#123;</div><div class="line">    UserInfo guest = createUser(name, UserInfo.FLAG_GUEST);</div><div class="line">    <span class="keyword">if</span> (guest != <span class="keyword">null</span>) &#123;</div><div class="line">        Settings.Secure.putStringForUser(context.getContentResolver(),</div><div class="line">                Settings.Secure.SKIP_FIRST_USE_HINTS, <span class="string">"1"</span>, guest.id);</div><div class="line">        <span class="comment">// 对Guset用户的权限进行约束</span></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Bundle guestRestrictions = mService.getDefaultGuestRestrictions();</div><div class="line">            <span class="comment">// 禁止发送信息</span></div><div class="line">            guestRestrictions.putBoolean(DISALLOW_SMS, <span class="keyword">true</span>);</div><div class="line">            <span class="comment">// 禁止安装来源不明的应用</span></div><div class="line">            guestRestrictions.putBoolean(DISALLOW_INSTALL_UNKNOWN_SOURCES, <span class="keyword">true</span>);</div><div class="line">            mService.setUserRestrictions(guestRestrictions, guest.id);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException re) &#123;</div><div class="line">            Log.w(TAG, <span class="string">"Could not update guest restrictions"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> guest;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从代码我们可以看到<code>createGuest</code>最终也会调用到<code>UserManagerService.createUser</code>方法，然后通过<code>setUserRestrictions</code>方法进一步对Guest用户的权限进行限制。因此，Guset用户和普通用户的区别也就在于权限的不同。<br>可以通过下面的方式创建一个访客用户：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initGuestUser</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">boolean</span> needCreate = <span class="keyword">true</span>;</div><div class="line">    List&lt;UserInfo&gt; users = mUserManager.getUsers(<span class="keyword">true</span>);</div><div class="line">    <span class="keyword">for</span> (UserInfo user : users) &#123;</div><div class="line">        <span class="keyword">if</span> (user.isGuest()) &#123;</div><div class="line">            mGuestUserHandle = <span class="keyword">new</span> UserHandle(user.id);</div><div class="line">            mDefaultGuestRestrictions = mUserManager.getUserRestrictions(mGuestUserHandle);</div><div class="line">            <span class="keyword">if</span> (!mDefaultGuestRestrictions.getBoolean(UserManager.DISALLOW_CONFIG_CREDENTIALS)) &#123;</div><div class="line">                mDefaultGuestRestrictions.putBoolean(UserManager.DISALLOW_CONFIG_CREDENTIALS, <span class="keyword">true</span>);</div><div class="line">                mUserManager.setUserRestrictions(mDefaultGuestRestrictions, mGuestUserHandle);</div><div class="line">            &#125;</div><div class="line">            needCreate = <span class="keyword">false</span>;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (needCreate) &#123;</div><div class="line">        createGuest(<span class="keyword">false</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">createGuest</span><span class="params">(<span class="keyword">boolean</span> fromRecreate)</span> </span>&#123;</div><div class="line">    UserInfo newGuest = mUserManager.createGuest(getActivity(), <span class="string">"Guest"</span>);</div><div class="line">    <span class="keyword">if</span> (newGuest != <span class="keyword">null</span>) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"new Guest:"</span> + newGuest.id);</div><div class="line">        mGuestUserHandle = <span class="keyword">new</span> UserHandle(newGuest.id);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        Log.d(TAG, <span class="string">"create guest failed!"</span>);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (fromRecreate) &#123;</div><div class="line">        mUserManager.setUserRestrictions(mDefaultGuestRestrictions, mGuestUserHandle);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Bundle guestRestrictions = ……</div><div class="line"></div><div class="line">    mUserManager.setUserRestrictions(guestRestrictions, mGuestUserHandle);</div><div class="line">    mDefaultGuestRestrictions = guestRestrictions;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="如何切换用户"><a href="#如何切换用户" class="headerlink" title="如何切换用户"></a>如何切换用户</h3><p>一般通过 <code>ActivityManagerNative.getDefault().switchUser(int userId)</code>进行调用，这个在后面会有详细介绍。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">enterGuestMode</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (lossMode())</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    <span class="keyword">int</span> id = -<span class="number">1</span>;</div><div class="line">    List&lt;UserInfo&gt; users = mUserManager.getUsers(<span class="keyword">true</span>);</div><div class="line">    <span class="keyword">for</span> (UserInfo user : users) &#123;</div><div class="line">        <span class="keyword">if</span> (user.isGuest()) &#123;</div><div class="line">            id = user.id;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        ActivityManagerNative.getDefault().switchUser(id);</div><div class="line">    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="用户权限"><a href="#用户权限" class="headerlink" title="用户权限"></a>用户权限</h3><p>不同的用户<code>UserManager</code>通过一些限制赋予了不同的权限，下面列举一些限制权限：</p>
+<ul>
+<li>DISALLOW_MODIFY_ACCOUNTS</li>
+<li>DISALLOW_CONFIG_WIFI</li>
+<li>DISALLOW_INSTALL_APPS</li>
+<li>DISALLOW_UNINSTALL_APPS</li>
+<li>DISALLOW_SHARE_LOCATION</li>
+<li>DISALLOW_INSTALL_UNKNOWN_SOURCES</li>
+<li>DISALLOW_CONFIG_BLUETOOTH</li>
+<li>DISALLOW_USB_FILE_TRANSFER</li>
+<li>DISALLOW_CONFIG_CREDENTIALS</li>
+<li>DISALLOW_REMOVE_USER</li>
+<li>DISALLOW_DEBUGGING_FEATURES</li>
+<li>DISALLOW_CONFIG_VPN</li>
+<li>DISALLOW_CONFIG_TETHERING</li>
+<li>DISALLOW_NETWORK_RESET</li>
+<li>DISALLOW_FACTORY_RESET</li>
+<li>DISALLOW_ADD_USER</li>
+<li>DISALLOW_CONFIG_CELL_BROADCASTS</li>
+<li>DISALLOW_CONFIG_MOBILE_NETWORKS</li>
+<li>DISALLOW_APPS_CONTROL</li>
+<li>DISALLOW_MOUNT_PHYSICAL_MEDIA</li>
+<li>DISALLOW_UNMUTE_MICROPHONE</li>
+<li>DISALLOW_ADJUST_VOLUME</li>
+<li>DISALLOW_OUTGOING_CALLS</li>
+<li>DISALLOW_SMS</li>
+<li>DISALLOW_FUN</li>
+<li>DISALLOW_CREATE_WINDOWS</li>
+<li>DISALLOW_CROSS_PROFILE_COPY_PASTE</li>
+<li>DISALLOW_OUTGOING_BEAM</li>
+<li>DISALLOW_WALLPAPER</li>
+<li>DISALLOW_SAFE_BOOT</li>
+<li>DISALLOW_RECORD_AUDIO</li>
+</ul>
+<h2 id="相关adb命令"><a href="#相关adb命令" class="headerlink" title="相关adb命令"></a>相关adb命令</h2><h3 id="获取用户信息"><a href="#获取用户信息" class="headerlink" title="获取用户信息"></a>获取用户信息</h3><p>用<code>adb shell dumpsys user</code>可以查看当前的用户情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Users:</div><div class="line">  UserInfo&#123;0:机主:13&#125; serialNo=0</div><div class="line">    Created: &lt;unknown&gt;</div><div class="line">    Last logged in: +1h26m30s184ms ago</div><div class="line">  UserInfo&#123;15:Guest:14&#125; serialNo=15</div><div class="line">    Created: +2d3h37m2s326ms ago</div><div class="line">    Last logged in: +1h27m49s171ms ago</div></pre></td></tr></table></figure>
+<p>上面的打印是在<code>UserManagerService.dump()</code>中打印的。<br>UserInfo{0:机主:13} 所代表的含义可以参考代码<code>UserInfo.toString()</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">"UserInfo&#123;"</span> + id + <span class="string">":"</span> + name + <span class="string">":"</span> + Integer.toHexString(flags) + <span class="string">"&#125;"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>0:id</li>
+<li>机主:name</li>
+<li>13:flags</li>
+</ul>
+<h2 id="UserManagerService"><a href="#UserManagerService" class="headerlink" title="UserManagerService"></a>UserManagerService</h2><p>UMS 是用来管理用户的系统服务，是创建、删除以及查询用户的执行者。<br>下面先看一下 UMS 的初始化过程。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>UMS 的创建是在<code>PackageManagerService</code>的构造函数中进行的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sUserManager = <span class="keyword">new</span> UserManagerService(context, <span class="keyword">this</span>,</div><div class="line">        mInstallLock, mPackages);</div></pre></td></tr></table></figure>
+<p>接下来再看一下 UMS 的构造函数：<br>UMS 构造函数有两个参数：分别是<code>/data</code>目录和<code>/data/user/</code>目录。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="title">UserManagerService</span><span class="params">(Context context, PackageManagerService pm,</span></span></div><div class="line">        Object installLock, Object packagesLock,</div><div class="line">        File dataDir, File baseUserPath) &#123;</div><div class="line">    mContext = context;</div><div class="line">    mPm = pm;</div><div class="line">    mInstallLock = installLock;</div><div class="line">    mPackagesLock = packagesLock;</div><div class="line">    mHandler = <span class="keyword">new</span> MainHandler();</div><div class="line">    <span class="keyword">synchronized</span> (mInstallLock) &#123;</div><div class="line">        <span class="keyword">synchronized</span> (mPackagesLock) &#123;</div><div class="line">            <span class="comment">// mUsersDir是/data/system/users目录</span></div><div class="line">            mUsersDir = <span class="keyword">new</span> File(dataDir, USER_INFO_DIR);</div><div class="line">            mUsersDir.mkdirs();</div><div class="line">            <span class="comment">// 创建第一个用户的目录/data/system/users/0</span></div><div class="line">            File userZeroDir = <span class="keyword">new</span> File(mUsersDir, <span class="string">"0"</span>);</div><div class="line">            userZeroDir.mkdirs();</div><div class="line">            <span class="comment">// 设置目录的权限</span></div><div class="line">            FileUtils.setPermissions(mUsersDir.toString(),</div><div class="line">                    FileUtils.S_IRWXU|FileUtils.S_IRWXG</div><div class="line">                    |FileUtils.S_IROTH|FileUtils.S_IXOTH,</div><div class="line">                    -<span class="number">1</span>, -<span class="number">1</span>);</div><div class="line">            <span class="comment">// 创建代表/data/system/users/userlist.xml文件的对象</span></div><div class="line">            mUserListFile = <span class="keyword">new</span> File(mUsersDir, USER_LIST_FILENAME);</div><div class="line">            <span class="comment">// 添加一些对访客用户的默认限制，DISALLOW_OUTGOING_CALLS和DISALLOW_SMS，不允许打电话和发信息</span></div><div class="line">            initDefaultGuestRestrictions();</div><div class="line">            <span class="comment">// 读取userlist.xml文件，将用户的信息保存在mUsers列表中</span></div><div class="line">            <span class="comment">// 如果该文件不存在则创建该文件</span></div><div class="line">            readUserListLocked();</div><div class="line">            sInstance = <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后再看一下<code>systemReady()</code>函数，这里面也有一些初始化的工作，它的调用是在<code>PackageManagerService.systemReady()</code>中进行的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">systemReady</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (mInstallLock) &#123;</div><div class="line">        <span class="keyword">synchronized</span> (mPackagesLock) &#123;</div><div class="line">            <span class="comment">// 寻找那些在userlist.xml文件中partially或者partial为true的用户</span></div><div class="line">            ArrayList&lt;UserInfo&gt; partials = <span class="keyword">new</span> ArrayList&lt;UserInfo&gt;();</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mUsers.size(); i++) &#123;</div><div class="line">                UserInfo ui = mUsers.valueAt(i);</div><div class="line">                <span class="keyword">if</span> ((ui.partial || ui.guestToRemove) &amp;&amp; i != <span class="number">0</span>) &#123;</div><div class="line">                    partials.add(ui);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 将这些未创建完成的用户从系统中移除掉</span></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; partials.size(); i++) &#123;</div><div class="line">                UserInfo ui = partials.get(i);</div><div class="line">                removeUserStateLocked(ui.id);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 更新一下OWNER用户的登陆时间</span></div><div class="line">    onUserForeground(UserHandle.USER_OWNER);</div><div class="line">    <span class="comment">// 调用AppOpsManager（权限管理器）设置每个用户的权限</span></div><div class="line">    mAppOpsService = IAppOpsService.Stub.asInterface(</div><div class="line">            ServiceManager.getService(Context.APP_OPS_SERVICE));</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mUserIds.length; ++i) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            mAppOpsService.setUserRestrictions(mUserRestrictions.get(mUserIds[i]), mUserIds[i]);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">            Log.w(LOG_TAG, <span class="string">"Unable to notify AppOpsService of UserRestrictions"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>初始化过程中，会创建<code>/data/system/users/</code>目录，以及在<code>/data/system/users/</code>下面创建<code>0/</code>目录，然后调用<code>readUserListLocked()</code>分析<code>/data/system/users/userlist.xml</code>文件，这个文件保存了系统中所有用户的Id信息。<br><code>/data/system/users</code>目录下面的文件有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">0</div><div class="line">0.xml</div><div class="line">10</div><div class="line">10.xml</div><div class="line">userlist.xml</div></pre></td></tr></table></figure>
+<p>0/目录下面的文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">accounts.db</div><div class="line">accounts.db-journal</div><div class="line">appwidgets.xml</div><div class="line">package-restrictions.xml</div><div class="line">registered_services</div><div class="line">runtime-permissions.xml</div><div class="line">settings_global.xml</div><div class="line">settings_secure.xml</div><div class="line">settings_system.xml</div><div class="line">wallpaper_info.xml</div></pre></td></tr></table></figure>
+<p>里面存放了针对该用户的各种设置数据。</p>
+<p>userlist.xml示例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version='1.0' encoding='utf-8' standalone='yes' ?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">users</span> <span class="attr">nextSerialNumber</span>=<span class="string">"11"</span> <span class="attr">version</span>=<span class="string">"5"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">guestRestrictions</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">restrictions</span> <span class="attr">no_outgoing_calls</span>=<span class="string">"true"</span> <span class="attr">no_sms</span>=<span class="string">"true"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">guestRestrictions</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">user</span> <span class="attr">id</span>=<span class="string">"0"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">user</span> <span class="attr">id</span>=<span class="string">"10"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">users</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>nextSerialNumber</code>指的是创建下一个用户时它的<code>serialNumber</code>，<code>version</code>指的是当前多用户的版本，使 userlist.xml 文件像数据库一样是可以升级的。<br><code>guestRestrictions</code>标签指的是为访客用户设置的权限，可以通过<code>UserManager.setDefaultGuestRestrictions()</code>来设置。<br>这里面有两个用户的信息，分别为 id 为 0 和 10 的用户。<br>得到 Id 信息后还要读取保存了用户注册信息的 xml 文件，这个文件也位于<code>/data/system/users</code>目录下，文件名用用户 Id 数字表示。<br>0.xml 示例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version='1.0' encoding='utf-8' standalone='yes' ?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">user</span> <span class="attr">id</span>=<span class="string">"0"</span> <span class="attr">serialNumber</span>=<span class="string">"0"</span> <span class="attr">flags</span>=<span class="string">"19"</span> <span class="attr">created</span>=<span class="string">"0"</span> <span class="attr">lastLoggedIn</span>=<span class="string">"1493886997408"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>机主<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">restrictions</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>10.xml：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version='1.0' encoding='utf-8' standalone='yes' ?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">user</span> <span class="attr">id</span>=<span class="string">"10"</span> <span class="attr">serialNumber</span>=<span class="string">"10"</span> <span class="attr">flags</span>=<span class="string">"4"</span> <span class="attr">created</span>=<span class="string">"1493886837832"</span> <span class="attr">lastLoggedIn</span>=<span class="string">"0"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Guest<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">restrictions</span> <span class="attr">no_install_apps</span>=<span class="string">"false"</span> <span class="attr">no_install_unknown_sources</span>=<span class="string">"true"</span> <span class="attr">no_config_credentials</span>=<span class="string">"true"</span> <span class="attr">no_outgoing_calls</span>=<span class="string">"false"</span> <span class="attr">no_sms</span>=<span class="string">"false"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>标签的属性值对应了<code>UserInfo</code>里面的成员变量，读取用户的xml文件后，会根据文件的内容来创建和初始化一个<code>UserInfo</code>来保存，并把该对象加入到<code>mUsers</code>列表中去。<br><code>restrictions</code>表示针对该用户做的权限限制，可以通过<code>UserManager.setUserRestriction()</code>或<code>UserManager.setUserRestrictions()</code>进行设置。<br>如果有未创建完成的用户，即<code>partial=true</code>的用户，则把它们从用户列表中移除出去。<br>因此，UMS 的初始化工作主要就是分析<code>userlist.xml</code>文件、创建用户列表<code>mUsers</code>以及设置用户权限。</p>
+<h2 id="UserInfo"><a href="#UserInfo" class="headerlink" title="UserInfo"></a>UserInfo</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// 用户类型</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_MASK_USER_TYPE = <span class="number">0x000000FF</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 机主用户的标志，通常是第一个ID为0的用户</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_PRIMARY = <span class="number">0x00000001</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 管理员标志，有此标志的才能创建和删除其他用户，通常是机主用户</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_ADMIN   = <span class="number">0x00000002</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 访客用户标志</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_GUEST   = <span class="number">0x00000004</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 标记权限受限的用户</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_RESTRICTED = <span class="number">0x00000008</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 标记改用户是否进行了初始化</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_INITIALIZED = <span class="number">0x00000010</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Indicates that this user is a profile of another user, for example holding a users</div><div class="line">     * corporate data.</div><div class="line">     */</div><div class="line">    <span class="comment">// 标志该UserInfo是否是另外一个用户的一份profile，Android中允许一个用户拥有另一份profile</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_MANAGED_PROFILE = <span class="number">0x00000020</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 标记该用户已经被禁止</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FLAG_DISABLED = <span class="number">0x00000040</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 无效值定义</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NO_PROFILE_GROUP_ID = -<span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> id;               <span class="comment">//用户id</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> serialNumber;     <span class="comment">//用户序列号，唯一的，不会重复</span></div><div class="line">    <span class="keyword">public</span> String name;          <span class="comment">//用户名称</span></div><div class="line">    <span class="keyword">public</span> String iconPath;      <span class="comment">//用户头像的路径</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> flags;            <span class="comment">//用户的标记信息</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">long</span> creationTime;    <span class="comment">//用户创建时间</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">long</span> lastLoggedInTime;<span class="comment">//用户上次登陆时间</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> profileGroupId;   <span class="comment">//用户的profile group id</span></div><div class="line"></div><div class="line">    <span class="comment">// 用来标记没有创建完成的用户</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> partial;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> guestToRemove;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>需要注意的是，用户的Id用来表示用户，如果用户被删除了它的Id会分配给下一个新建的用户，用来保持Id的连续性；<br>但是serialNumber是一个不会重复的数字，是不会被重复利用的，用来惟一标识一个用户。</p>
+<h2 id="UserHandle"><a href="#UserHandle" class="headerlink" title="UserHandle"></a>UserHandle</h2><p><code>UserHandle</code>就代表了设备中的一个用户，提供了一系列针对用户操作的API。<br>现在先来分析几个用户相关的概念：</p>
+<ul>
+<li>userId：用户id</li>
+<li>appId：是指跟用户无关的应用程序id，取值范围 <code>0 &lt;= appId &lt; 100000</code></li>
+<li>uid：是指跟用户紧密相关的应用程序id</li>
+</ul>
+<p>他们之间有一下的换算关系：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">uid = userId * <span class="number">100000</span>  + appId</div></pre></td></tr></table></figure>
+<p>在<code>UserHandle</code>中有常量<code>PER_USER_RANGE</code>，它的值为<code>100000</code>，也就是说每个 user 最大可以有 100000 个 appid 。</p>
+<p>下面介绍几个<code>UserHandle</code>的API：</p>
+<ul>
+<li>isApp(int uid)：是否是应用进程</li>
+<li>isIsolated(int uid)：是否是完全隔绝的沙箱进程，完全隔绝的沙箱进程每次启动都是独立的，不能复用已有的进程信息。这个进程与系统其他进程分开且没有自己的权限。</li>
+<li>isSameUser(int uid1, int uid2)：比较两个uid的userId是否相同，即它们是否属于同一个用户</li>
+<li>isSameApp(int uid1, int uid2)：比较两个uid的appId是否相同</li>
+<li>getUserId(int uid)：根据uid获取userId</li>
+<li>getAppId(int uid)：根据uid获取appId</li>
+</ul>
+<p>userId的几种类型：</p>
+<table>
+<thead>
+<tr>
+<th>userId</th>
+<th style="text-align:center">值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USER_OWNER</td>
+<td style="text-align:center">0</td>
+<td>机主用户</td>
+</tr>
+<tr>
+<td>USER_ALL</td>
+<td style="text-align:center">-1</td>
+<td>所有用户</td>
+</tr>
+<tr>
+<td>USER_CURRENT</td>
+<td style="text-align:center">-2</td>
+<td>当前用户</td>
+</tr>
+<tr>
+<td>USER_CURRENT_OR_SELF</td>
+<td style="text-align:center">-3</td>
+<td>当前用户或者调用者所在用户</td>
+</tr>
+<tr>
+<td>USER_NULL</td>
+<td style="text-align:center">-1000</td>
+<td>未定义用户</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public static final UserHandle OWNER = new UserHandle(USER_OWNER);</div><div class="line">public static final UserHandle CURRENT = new UserHandle(USER_CURRENT);</div></pre></td></tr></table></figure>
+<p><code>CURRENT</code>就代表了当前用户的<code>UserHandle</code>。</p>
+<h3 id="UID"><a href="#UID" class="headerlink" title="UID"></a>UID</h3><p>终端输入命令<code>adb shell ps</code>，可以得到设备的进程信息，下面仅列举部分具有代表性的进程信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">USER      PID   PPID  VSIZE  RSS   WCHAN              PC  NAME</div><div class="line">root      1     0     12844  1768  SyS_epoll_ 0000000000 S /init</div><div class="line">root      2     0     0      0       kthreadd 0000000000 S kthreadd</div><div class="line">root      3     2     0      0     smpboot_th 0000000000 S ksoftirqd/0</div><div class="line">root      5     2     0      0     worker_thr 0000000000 S kworker/0:0H</div><div class="line">root      7     2     0      0     rcu_gp_kth 0000000000 S rcu_preempt</div><div class="line">root      8     2     0      0     rcu_gp_kth 0000000000 S rcu_sched</div><div class="line">root      9     2     0      0     rcu_gp_kth 0000000000 S rcu_bh</div><div class="line">root      10    2     0      0     smpboot_th 0000000000 S migration/0</div><div class="line"></div><div class="line">root      202   1     14456  1324  SyS_epoll_ 0000000000 S /system/bin/lmkd</div><div class="line">system    203   1     14148  1492  binder_thr 0000000000 S /system/bin/servicemanager</div><div class="line">system    204   1     159072 10000 SyS_epoll_ 0000000000 S /system/bin/surfaceflinger</div><div class="line">system    207   1     13696  1248  poll_sched 0000000000 S /system/bin/6620_launcher</div><div class="line">root      209   1     28380  2532  hrtimer_na 0000000000 S /system/bin/netd</div><div class="line">root      210   1     12460  1764  poll_sched 0000000000 S /system/bin/debuggerd</div><div class="line">root      211   1     15752  1724  poll_sched 0000000000 S /system/bin/debuggerd64</div><div class="line">drm       212   1     53596  12036 binder_thr 0000000000 S /system/bin/drmserver</div><div class="line">media     213   1     299956 25568 binder_thr 0000000000 S /system/bin/mediaserver</div><div class="line">root      214   1     14004  1304  unix_strea 0000000000 S /system/bin/installd</div><div class="line">keystore  215   1     18784  2752  binder_thr 0000000000 S /system/bin/keystore</div><div class="line">shell     216   1     13164  1336  hrtimer_na 0000000000 S /system/bin/mobile_log_d</div><div class="line">shell     217   1     16148  1636  futex_wait 0000000000 S /system/bin/netdiag</div><div class="line">root      222   2     0      0     rescuer_th 0000000000 S pvr_workqueue</div><div class="line">root      223   2     0      0     rescuer_th 0000000000 S pvr_workqueue</div><div class="line">root      224   2     0      0     rescuer_th 0000000000 S pvr_workqueue</div><div class="line">gps       225   1     13564  1476  SyS_epoll_ 0000000000 S /system/xbin/mnld</div><div class="line"></div><div class="line">system    559   229   2306532 147320 SyS_epoll_ 0000000000 S system_server</div><div class="line">media_rw  686   185   16980  2064  inotify_re 0000000000 S /system/bin/sdcard</div><div class="line">u0_a24    716   229   2245132 180428 SyS_epoll_ 0000000000 S com.android.systemui</div><div class="line"></div><div class="line">wifi      1136  1     19712  4228  poll_sched 0000000000 S /system/bin/wpa_supplicant</div><div class="line">root      1223  2     0      0     worker_thr 0000000000 S kworker/2:2</div><div class="line"></div><div class="line">shell     9548  9482  13796  1260  __skb_recv 7fb24a54f4 S logcat</div><div class="line">u0_a6     9635  229   1605504 71224 SyS_epoll_ 0000000000 S android.process.acore</div><div class="line">root      10836 2     0      0     worker_thr 0000000000 S kworker/0:0</div><div class="line">root      11438 2     0      0     worker_thr 0000000000 S kworker/0:2</div><div class="line">root      11530 2     0      0     worker_thr 0000000000 S kworker/0:1</div></pre></td></tr></table></figure>
+<p>可以看到 UID 有root，system，shell等都属于系统 uid，它们定义在在<code>Process.java</code>文件，如下：</p>
+<table>
+<thead>
+<tr>
+<th>UID</th>
+<th style="text-align:center">值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ROOT_UID</td>
+<td style="text-align:center">0</td>
+<td>root UID</td>
+</tr>
+<tr>
+<td>SYSTEM_UID</td>
+<td style="text-align:center">1000</td>
+<td></td>
+</tr>
+<tr>
+<td>PHONE_UID</td>
+<td style="text-align:center">1001</td>
+<td></td>
+</tr>
+<tr>
+<td>SHELL_UID</td>
+<td style="text-align:center">2000</td>
+<td></td>
+</tr>
+<tr>
+<td>LOG_UID</td>
+<td style="text-align:center">1007</td>
+<td></td>
+</tr>
+<tr>
+<td>WIFI_UID</td>
+<td style="text-align:center">1010</td>
+<td></td>
+</tr>
+<tr>
+<td>MEDIA_UID</td>
+<td style="text-align:center">1013</td>
+<td></td>
+</tr>
+<tr>
+<td>DRM_UID</td>
+<td style="text-align:center">1019</td>
+<td></td>
+</tr>
+<tr>
+<td>VPN_UID</td>
+<td style="text-align:center">1016</td>
+<td></td>
+</tr>
+<tr>
+<td>NFC_UID</td>
+<td style="text-align:center">1017</td>
+<td></td>
+</tr>
+<tr>
+<td>BLUETOOTH_UID</td>
+<td style="text-align:center">1002</td>
+<td></td>
+</tr>
+<tr>
+<td>MEDIA_RW_GID</td>
+<td style="text-align:center">1023</td>
+<td></td>
+</tr>
+<tr>
+<td>PACKAGE_INFO_GID</td>
+<td style="text-align:center">1032</td>
+<td></td>
+</tr>
+<tr>
+<td>SHARED_RELRO_UID</td>
+<td style="text-align:center">1037</td>
+<td></td>
+</tr>
+<tr>
+<td>SHARED_USER_GID</td>
+<td style="text-align:center">9997</td>
+</tr>
+</tbody>
+</table>
+<p>在<code>Process.java</code>中还有下面常量：</p>
+<ul>
+<li>FIRST_APPLICATION_UID = 10000</li>
+<li>LAST_APPLICATION_UID = 19999</li>
+<li>FIRST_SHARED_APPLICATION_GID = 50000</li>
+<li>LAST_SHARED_APPLICATION_GID = 59999</li>
+<li>FIRST_ISOLATED_UID = 99000  //沙箱进程起始值</li>
+<li>LAST_ISOLATED_UID = 99999</li>
+</ul>
+<p>还有像<code>u0_a24</code>这种uid代表的uid为10024，代表user 0 的一个应用程序uid，这个转换方法在<code>UserHandle.formatUid()</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">formatUid</span><span class="params">(StringBuilder sb, <span class="keyword">int</span> uid)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (uid &lt; Process.FIRST_APPLICATION_UID) &#123;</div><div class="line">        sb.append(uid);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        sb.append(<span class="string">'u'</span>);</div><div class="line">        sb.append(getUserId(uid));</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> appId = getAppId(uid);</div><div class="line">        <span class="keyword">if</span> (appId &gt;= Process.FIRST_ISOLATED_UID &amp;&amp; appId &lt;= Process.LAST_ISOLATED_UID) &#123;</div><div class="line">            sb.append(<span class="string">'i'</span>);</div><div class="line">            sb.append(appId - Process.FIRST_ISOLATED_UID);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (appId &gt;= Process.FIRST_APPLICATION_UID) &#123;</div><div class="line">            sb.append(<span class="string">'a'</span>);</div><div class="line">            sb.append(appId - Process.FIRST_APPLICATION_UID);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            sb.append(<span class="string">'s'</span>);</div><div class="line">            sb.append(appId);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果我们切换到访客模式，还会发现一个UID为<code>u10_a24</code>的<code>com.android.systemui</code>进程，因为该应用的appid为10024，不同的是它们是在不同的用户下面创建的进程。<br>但是在访客模式下面，root，system，shell等这些系统进程是和主用户是共用的，不会再创建新的进程。</p>
+<h2 id="UserState"><a href="#UserState" class="headerlink" title="UserState"></a>UserState</h2><p>先了解一下用户的几个运行状态：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">UserState</span> </span>&#123;</div><div class="line">    <span class="comment">// 用户正在启动</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> STATE_BOOTING = <span class="number">0</span>;</div><div class="line">    <span class="comment">// 用户正在运行</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> STATE_RUNNING = <span class="number">1</span>;</div><div class="line">    <span class="comment">// 用户正在关闭</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> STATE_STOPPING = <span class="number">2</span>;</div><div class="line">    <span class="comment">// 用户已经被关闭</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> STATE_SHUTDOWN = <span class="number">3</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>UMS 有下列变量来存储用户的相关信息：</p>
+<ul>
+<li><code>mCurrentUserId</code>表示当前正在允许的用户的Id；</li>
+<li><code>mTargetUserId</code>记录当前正在切换到该用户；</li>
+<li><code>mStartedUsers</code>保存了当前已经运行过的用户的列表，这个列表中的用户会有上面的四种状态</li>
+<li><code>mUserLru</code>用最近最少使用算法保存的用户列表，最近的前台用户保存在列表的最后位置</li>
+<li><code>mStartedUserArray</code>表示mStartedUsers中当前正在运行的用户列表的index，即mStartedUsers中除去正在关闭和已经被关闭状态外的用户</li>
+</ul>
+<h2 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h2><h3 id="UserManagerService-1"><a href="#UserManagerService-1" class="headerlink" title="UserManagerService"></a>UserManagerService</h3><p>UMS 中创建用户是在<code>createUser()</code>方法中实现的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> UserInfo <span class="title">createUser</span><span class="params">(String name, <span class="keyword">int</span> flags)</span> </span>&#123;</div><div class="line">    checkManageUsersPermission(<span class="string">"Only the system can create users"</span>);</div><div class="line">    <span class="keyword">return</span> createUserInternal(name, flags, UserHandle.USER_NULL);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先检查调用者的权限，只有 UID 是 system 或者具有<code>android.Manifest.permission.MANAGE_USERS</code>的应用才有权限，否则抛出异常。然后就调用<code>createUserInternal</code>来执行真正的创建工作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> UserInfo <span class="title">createUserInternal</span><span class="params">(String name, <span class="keyword">int</span> flags, <span class="keyword">int</span> parentId)</span> </span>&#123;</div><div class="line">    <span class="comment">// 检查一下该用户是否被限制创建用户</span></div><div class="line">    <span class="keyword">if</span> (getUserRestrictions(UserHandle.getCallingUserId()).getBoolean(</div><div class="line">            UserManager.DISALLOW_ADD_USER, <span class="keyword">false</span>)) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 检查是否是低内存设备</span></div><div class="line">    <span class="keyword">if</span> (ActivityManager.isLowRamDeviceStatic()) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> isGuest = (flags &amp; UserInfo.FLAG_GUEST) != <span class="number">0</span>;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> isManagedProfile = (flags &amp; UserInfo.FLAG_MANAGED_PROFILE) != <span class="number">0</span>;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">long</span> ident = Binder.clearCallingIdentity();</div><div class="line">    UserInfo userInfo = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> userId;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">synchronized</span> (mInstallLock) &#123;</div><div class="line">            <span class="keyword">synchronized</span> (mPackagesLock) &#123;</div><div class="line">                UserInfo parent = <span class="keyword">null</span>;</div><div class="line">                <span class="keyword">if</span> (parentId != UserHandle.USER_NULL) &#123;</div><div class="line">                    parent = getUserInfoLocked(parentId);</div><div class="line">                    <span class="keyword">if</span> (parent == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (isManagedProfile &amp;&amp; !canAddMoreManagedProfiles()) &#123;</div><div class="line">                    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 如果添加的不是Guest用户，也不是用户的profile，而且已经到达用户的上限，则不允许再添加</span></div><div class="line">                <span class="keyword">if</span> (!isGuest &amp;&amp; !isManagedProfile &amp;&amp; isUserLimitReachedLocked()) &#123;</div><div class="line">                    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 如果添加的是Guest用户，但是系统中已经存在一个，则不允许再添加</span></div><div class="line">                <span class="keyword">if</span> (isGuest &amp;&amp; findCurrentGuestUserLocked() != <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 得到新用户的Id</span></div><div class="line">                userId = getNextAvailableIdLocked();</div><div class="line">                <span class="comment">// 为该新用户创建UserInfo</span></div><div class="line">                userInfo = <span class="keyword">new</span> UserInfo(userId, name, <span class="keyword">null</span>, flags);</div><div class="line">                <span class="comment">// 设置序列号</span></div><div class="line">                userInfo.serialNumber = mNextSerialNumber++;</div><div class="line">                <span class="comment">// 设置创建时间</span></div><div class="line">                <span class="keyword">long</span> now = System.currentTimeMillis();</div><div class="line">                userInfo.creationTime = (now &gt; EPOCH_PLUS_30_YEARS) ? now : <span class="number">0</span>;</div><div class="line">                <span class="comment">// 设置partial，表示正在创建</span></div><div class="line">                userInfo.partial = <span class="keyword">true</span>;</div><div class="line">                Environment.getUserSystemDirectory(userInfo.id).mkdirs();</div><div class="line">                <span class="comment">// 放入mUsers列表</span></div><div class="line">                mUsers.put(userId, userInfo);</div><div class="line">                <span class="comment">// 把用户信息写入userlist.xml</span></div><div class="line">                writeUserListLocked();</div><div class="line">                <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">if</span> (parent.profileGroupId == UserInfo.NO_PROFILE_GROUP_ID) &#123;</div><div class="line">                        parent.profileGroupId = parent.id;</div><div class="line">                        scheduleWriteUserLocked(parent);</div><div class="line">                    &#125;</div><div class="line">                    userInfo.profileGroupId = parent.profileGroupId;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 创建用户目录</span></div><div class="line">                <span class="keyword">final</span> StorageManager storage = mContext.getSystemService(StorageManager.class);</div><div class="line">                <span class="keyword">for</span> (VolumeInfo vol : storage.getWritablePrivateVolumes()) &#123;</div><div class="line">                    <span class="keyword">final</span> String volumeUuid = vol.getFsUuid();</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        <span class="keyword">final</span> File userDir = Environment.getDataUserDirectory(volumeUuid,</div><div class="line">                                userId);</div><div class="line">                        <span class="comment">// 创建userDir，如果volumeUuid为空，创建/data/user/&lt;userId&gt;/，不为空，创建/mnt/expand/&lt;volumeUuid&gt;/user/&lt;userId&gt;/</span></div><div class="line">                        prepareUserDirectory(userDir);</div><div class="line">                        enforceSerialNumber(userDir, userInfo.serialNumber);</div><div class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                        Log.wtf(LOG_TAG, <span class="string">"Failed to create user directory on "</span> + volumeUuid, e);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 调用PackageManagerService的createNewUserLILPw方法，此方法很重要，后面会单独分析</span></div><div class="line">                <span class="comment">// 这个函数会在新建用户的userDir目录下面为所有应用创建数据</span></div><div class="line">                <span class="comment">// 此方法将新用户可以使用的App在/data/user/&lt;用户Id&gt;文件夹下创建数据目录，目录名称为包名</span></div><div class="line">                mPm.createNewUserLILPw(userId);</div><div class="line">                <span class="comment">// 创建成功，将partial改为false</span></div><div class="line">                userInfo.partial = <span class="keyword">false</span>;</div><div class="line">                <span class="comment">// 会调用writeUserLocked()创建xxx.xml，类似0.xml，xxx是用户Id</span></div><div class="line">                scheduleWriteUserLocked(userInfo);</div><div class="line">                <span class="comment">// 更新mUserIds数组</span></div><div class="line">                updateUserIdsLocked();</div><div class="line">                Bundle restrictions = <span class="keyword">new</span> Bundle();</div><div class="line">                <span class="comment">// 添加为该用户设置的限制条件</span></div><div class="line">                mUserRestrictions.append(userId, restrictions);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 发送用户创建完成的广播，广播附带用户的id</span></div><div class="line">        <span class="keyword">if</span> (userInfo != <span class="keyword">null</span>) &#123;</div><div class="line">            Intent addedIntent = <span class="keyword">new</span> Intent(Intent.ACTION_USER_ADDED);</div><div class="line">            addedIntent.putExtra(Intent.EXTRA_USER_HANDLE, userInfo.id);</div><div class="line">            mContext.sendBroadcastAsUser(addedIntent, UserHandle.ALL,</div><div class="line">                    android.Manifest.permission.MANAGE_USERS);</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        Binder.restoreCallingIdentity(ident);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> userInfo;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由上面的代码可知，<code>createUser</code>主要做了一下工作：</p>
+<ol>
+<li>检查调用进程所属用户是否被限制添加用户、当前设备是否是低内存设备、当前用户数是否已达上限，如是则停止创建新用户</li>
+<li>为新用户设置用户信息，比如Id，序列号创建时间等</li>
+<li>将用户信息写入userlist.xml，注意，此时的userInfo.partial = true，表示正在创建</li>
+<li>创建用户目录/data/user/<userid>/或者/mnt/expand/<volumeuuid>/user/<userid>/</userid></volumeuuid></userid></li>
+<li>调用PackageManagerService的createNewUserLILPw方法，这个函数会在新建用户的目录下面为所有应用创建数据目录</li>
+<li>创建用户完成，将userInfo.partial设置为false，创建用户的信息文件，比如0.xml</li>
+<li>发送用户创建完成的广播</li>
+</ol>
+<h3 id="PackageManagerService"><a href="#PackageManagerService" class="headerlink" title="PackageManagerService"></a>PackageManagerService</h3><h4 id="创建用户数据createNewUserLILPw"><a href="#创建用户数据createNewUserLILPw" class="headerlink" title="创建用户数据createNewUserLILPw()"></a>创建用户数据createNewUserLILPw()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">createNewUserLILPw</span><span class="params">(<span class="keyword">int</span> userHandle)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (mInstaller != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">//通过mInstaller调用守护进程installd执行mkuserconfig，创建用户配置文件。</span></div><div class="line">        mInstaller.createUserConfig(userHandle);</div><div class="line">        <span class="comment">// 调用mSettings.createNewUserLILP为新用户中的应用创建应用数据目录</span></div><div class="line">        mSettings.createNewUserLILPw(<span class="keyword">this</span>, mInstaller, userHandle);</div><div class="line">        <span class="comment">// 设置默认的Browser</span></div><div class="line">        applyFactoryDefaultBrowserLPw(userHandle);</div><div class="line">        primeDomainVerificationsLPw(userHandle);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面来看一下<code>Settings.createNewUserLILP()</code>方法的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">createNewUserLILPw</span><span class="params">(PackageManagerService service, Installer installer, <span class="keyword">int</span> userHandle)</span> </span>&#123;</div><div class="line">    <span class="comment">// 为每一个应用创建数据目录</span></div><div class="line">    <span class="keyword">for</span> (PackageSetting ps : mPackages.values()) &#123;</div><div class="line">        <span class="keyword">if</span> (ps.pkg == <span class="keyword">null</span> || ps.pkg.applicationInfo == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// Only system apps are initially installed.</span></div><div class="line">        <span class="comment">//为系统应用修改PackageUserState的installed标志</span></div><div class="line">        ps.setInstalled((ps.pkgFlags&amp;ApplicationInfo.FLAG_SYSTEM) != <span class="number">0</span>, userHandle);</div><div class="line">        <span class="comment">// 通过mInstaller调用守护进程installd执行mkuserdata，为用户创建用户目录。</span></div><div class="line">        installer.createUserData(ps.volumeUuid, ps.name,</div><div class="line">                UserHandle.getUid(userHandle, ps.appId), userHandle,</div><div class="line">                ps.pkg.applicationInfo.seinfo);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// TODO</span></div><div class="line">    applyDefaultPreferredAppsLPw(service, userHandle);</div><div class="line">    writePackageRestrictionsLPr(userHandle);</div><div class="line">    writePackageListLPr(userHandle);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对每一个用户，系统都会以 <code>PackageuserState</code> 类来保护其安装的每一个包状态。它以<code>SparseArray</code>的形式由 <code>PackageSetting</code> 类来保护，<code>PackageSetting</code> 存储了每一个安装包的数据。也就是说对于每个安装包，里面都有个每个用户对应的列表 <code>userState</code> 来存储该安装包对于不同用户的不同状态，比如针对该用户是否隐藏以及是否标识为已安装状态。具体详细介绍参考我的介绍 <code>PackageManagerService</code> 的博客。</p>
+<h2 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h2><h3 id="ActivityManagerService"><a href="#ActivityManagerService" class="headerlink" title="ActivityManagerService"></a>ActivityManagerService</h3><h4 id="startUser"><a href="#startUser" class="headerlink" title="startUser()"></a>startUser()</h4><p>下面介绍一下切换用户的流程，比如我们从机主用户切换到访客用户是就是走的这个流程。<br>用户切换是通过调用<code>ActivityManager</code>的<code>public boolean switchUser(int userId)</code>方法进行。一般通过 <code>ActivityManagerNative.getDefault().switchUser(int userId)</code>进行调用。<br>最终会调用<code>ActivityManagerService.switchUser</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">switchUser</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> userId)</span> </span>&#123;</div><div class="line">    enforceShellRestriction(UserManager.DISALLOW_DEBUGGING_FEATURES, userId);</div><div class="line">    String userName;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        UserInfo userInfo = getUserManagerLocked().getUserInfo(userId);</div><div class="line">        <span class="keyword">if</span> (userInfo == <span class="keyword">null</span>) &#123;</div><div class="line">            Slog.w(TAG, <span class="string">"No user info for user #"</span> + userId);</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 该user只是一个user的profile，无法切换</span></div><div class="line">        <span class="keyword">if</span> (userInfo.isManagedProfile()) &#123;</div><div class="line">            Slog.w(TAG, <span class="string">"Cannot switch to User #"</span> + userId + <span class="string">": not a full user"</span>);</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        userName = userInfo.name;</div><div class="line">        <span class="comment">// 把该用户Id记录到mTargetUserId变量</span></div><div class="line">        mTargetUserId = userId;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 发送切换用户的消息</span></div><div class="line">    mUiHandler.removeMessages(START_USER_SWITCH_MSG);</div><div class="line">    mUiHandler.sendMessage(mUiHandler.obtainMessage(START_USER_SWITCH_MSG, userId, <span class="number">0</span>, userName));</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Handler</code>收到<code>START_USER_SWITCH_MSG</code>消息后，会调用<code>showUserSwitchDialog()</code>来弹出一个确认的对话框。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showUserSwitchDialog</span><span class="params">(<span class="keyword">int</span> userId, String userName)</span> </span>&#123;</div><div class="line">    <span class="comment">// The dialog will show and then initiate the user switch by calling startUserInForeground</span></div><div class="line">    Dialog d = <span class="keyword">new</span> UserSwitchingDialog(<span class="keyword">this</span>, mContext, userId, userName,</div><div class="line">            <span class="keyword">true</span> <span class="comment">/* above system */</span>);</div><div class="line">    d.show();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>点击确定后最终会调用到<code>startUser()</code>来执行切换用户的动作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">startUser</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> userId, <span class="keyword">final</span> <span class="keyword">boolean</span> foreground)</span> </span>&#123;</div><div class="line">    <span class="comment">//切换用话需要INTERACT_ACROSS_USERS_FULL权限</span></div><div class="line">    <span class="keyword">if</span> (checkCallingPermission(INTERACT_ACROSS_USERS_FULL)</div><div class="line">            != PackageManager.PERMISSION_GRANTED) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(msg);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">final</span> <span class="keyword">long</span> ident = Binder.clearCallingIdentity();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">            <span class="comment">// 如果当前用户已经是需要切换的用户，退出当前流程</span></div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> oldUserId = mCurrentUserId;</div><div class="line">            <span class="keyword">if</span> (oldUserId == userId) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            mStackSupervisor.setLockTaskModeLocked(<span class="keyword">null</span>, ActivityManager.LOCK_TASK_MODE_NONE,</div><div class="line">                    <span class="string">"startUser"</span>, <span class="keyword">false</span>);</div><div class="line"></div><div class="line">            <span class="comment">// 如果没有需要启动的用户的信息，则直接退出</span></div><div class="line">            <span class="keyword">final</span> UserInfo userInfo = getUserManagerLocked().getUserInfo(userId);</div><div class="line">            <span class="keyword">if</span> (userInfo == <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 如果是前台启动且是一份profile的话，则直接退出</span></div><div class="line">            <span class="keyword">if</span> (foreground &amp;&amp; userInfo.isManagedProfile()) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 如果是前台启动，则需要将屏幕冻结</span></div><div class="line">            <span class="keyword">if</span> (foreground) &#123;</div><div class="line">                mWindowManager.startFreezingScreen(R.anim.screen_user_exit,</div><div class="line">                        R.anim.screen_user_enter);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">boolean</span> needStart = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">            <span class="comment">// 如果当前已经启动过的用户列表中没有该用户，则需要先启动该用户</span></div><div class="line">            <span class="keyword">if</span> (mStartedUsers.get(userId) == <span class="keyword">null</span>) &#123;</div><div class="line">                mStartedUsers.put(userId, <span class="keyword">new</span> UserState(<span class="keyword">new</span> UserHandle(userId), <span class="keyword">false</span>));</div><div class="line">                updateStartedUserArrayLocked();</div><div class="line">                needStart = <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 调整该用户在mUserLru列表中的位置，当前用户放到最后位置</span></div><div class="line">            <span class="keyword">final</span> Integer userIdInt = Integer.valueOf(userId);</div><div class="line">            mUserLru.remove(userIdInt);</div><div class="line">            mUserLru.add(userIdInt);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (foreground) &#123;</div><div class="line">                <span class="comment">// 如果是前台切换，直接切换到需要启动的用户</span></div><div class="line">                mCurrentUserId = userId;</div><div class="line">                <span class="comment">// 重置mTargetUserId，因为userId已经赋值给mCurrentUserId了</span></div><div class="line">                mTargetUserId = UserHandle.USER_NULL; <span class="comment">// reset, mCurrentUserId has caught up</span></div><div class="line">                <span class="comment">// 更新与该用户相关的profile列表</span></div><div class="line">                updateCurrentProfileIdsLocked();</div><div class="line">                <span class="comment">// 在WindowManagerService中设置要启动的用户为当前用户</span></div><div class="line">                mWindowManager.setCurrentUser(userId, mCurrentProfileIds);</div><div class="line">                <span class="comment">// Once the internal notion of the active user has switched, we lock the device</span></div><div class="line">                <span class="comment">// with the option to show the user switcher on the keyguard.</span></div><div class="line">                <span class="comment">// 执行锁屏操作</span></div><div class="line">                mWindowManager.lockNow(<span class="keyword">null</span>);</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// 如果是后台启动</span></div><div class="line">                <span class="keyword">final</span> Integer currentUserIdInt = Integer.valueOf(mCurrentUserId);</div><div class="line">                <span class="comment">// 更新与该用户相关的profile列表</span></div><div class="line">                updateCurrentProfileIdsLocked();</div><div class="line">                mWindowManager.setCurrentProfileIds(mCurrentProfileIds);</div><div class="line">                <span class="comment">// 重新调整mUserLru</span></div><div class="line">                mUserLru.remove(currentUserIdInt);</div><div class="line">                mUserLru.add(currentUserIdInt);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">final</span> UserState uss = mStartedUsers.get(userId);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (uss.mState == UserState.STATE_STOPPING) &#123;</div><div class="line">                <span class="comment">// 如果该用户是正在停止，这个时候还没有发送ACTION_SHUTDOWN广播，则切换为正在运行</span></div><div class="line">                uss.mState = UserState.STATE_RUNNING;</div><div class="line">                <span class="comment">// 更新mStartedUserArray列表</span></div><div class="line">                updateStartedUserArrayLocked();</div><div class="line">                needStart = <span class="keyword">true</span>;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (uss.mState == UserState.STATE_SHUTDOWN) &#123;</div><div class="line">                <span class="comment">// 如果该用户是正在停止，这个时候已经发送ACTION_SHUTDOWN广播，则切换为正在启动状态</span></div><div class="line">                uss.mState = UserState.STATE_BOOTING;</div><div class="line">                updateStartedUserArrayLocked();</div><div class="line">                needStart = <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (uss.mState == UserState.STATE_BOOTING) &#123;</div><div class="line">                <span class="comment">// 如果用户的状态是正在启动，则发送一个SYSTEM_USER_START_MSG消息，该消息的处理下面会介绍</span></div><div class="line">                mHandler.sendMessage(mHandler.obtainMessage(SYSTEM_USER_START_MSG, userId, <span class="number">0</span>));</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (foreground) &#123;</div><div class="line">                <span class="comment">// 发送SYSTEM_USER_CURRENT_MSG消息</span></div><div class="line">                mHandler.sendMessage(mHandler.obtainMessage(SYSTEM_USER_CURRENT_MSG, userId,</div><div class="line">                        oldUserId));</div><div class="line">                <span class="comment">// 分别发送REPORT_USER_SWITCH_MSG和USER_SWITCH_TIMEOUT_MSG，防止切换时间过长，后面会介绍</span></div><div class="line">                mHandler.removeMessages(REPORT_USER_SWITCH_MSG);</div><div class="line">                mHandler.removeMessages(USER_SWITCH_TIMEOUT_MSG);</div><div class="line">                mHandler.sendMessage(mHandler.obtainMessage(REPORT_USER_SWITCH_MSG,</div><div class="line">                        oldUserId, userId, uss));</div><div class="line">                mHandler.sendMessageDelayed(mHandler.obtainMessage(USER_SWITCH_TIMEOUT_MSG,</div><div class="line">                        oldUserId, userId, uss), USER_SWITCH_TIMEOUT);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (needStart) &#123;</div><div class="line">                <span class="comment">// 发送一个 USER_STARTED 广播</span></div><div class="line">                Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_USER_STARTED);</div><div class="line">                intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY</div><div class="line">                        | Intent.FLAG_RECEIVER_FOREGROUND);</div><div class="line">                intent.putExtra(Intent.EXTRA_USER_HANDLE, userId);</div><div class="line">                broadcastIntentLocked(<span class="keyword">null</span>, <span class="keyword">null</span>, intent,</div><div class="line">                        <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, AppOpsManager.OP_NONE,</div><div class="line">                        <span class="keyword">null</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, MY_PID, Process.SYSTEM_UID, userId);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> ((userInfo.flags&amp;UserInfo.FLAG_INITIALIZED) == <span class="number">0</span>) &#123;</div><div class="line">                <span class="comment">// 当该用户还没有初始化，如果是普通用户则会发送ACTION_USER_INITIALIZE广播，如果是机主用户，则直接标记为已初始化</span></div><div class="line">                <span class="keyword">if</span> (userId != UserHandle.USER_OWNER) &#123;</div><div class="line">                    Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_USER_INITIALIZE);</div><div class="line">                    intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);</div><div class="line">                    broadcastIntentLocked(<span class="keyword">null</span>, <span class="keyword">null</span>, intent, <span class="keyword">null</span>,</div><div class="line">                            <span class="keyword">new</span> IIntentReceiver.Stub() &#123;</div><div class="line">                                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performReceive</span><span class="params">(Intent intent, <span class="keyword">int</span> resultCode,</span></span></div><div class="line">                                        String data, Bundle extras, <span class="keyword">boolean</span> ordered,</div><div class="line">                                        <span class="keyword">boolean</span> sticky, <span class="keyword">int</span> sendingUser) &#123;</div><div class="line">                                    onUserInitialized(uss, foreground, oldUserId, userId);</div><div class="line">                                &#125;</div><div class="line">                            &#125;, <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, AppOpsManager.OP_NONE,</div><div class="line">                            <span class="keyword">null</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, MY_PID, Process.SYSTEM_UID, userId);</div><div class="line">                    <span class="comment">// 标记为正在初始化，该变量会在completeSwitchAndInitialize()重置</span></div><div class="line">                    uss.initializing = <span class="keyword">true</span>;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    getUserManagerLocked().makeInitialized(userInfo.id);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (foreground) &#123;</div><div class="line">                <span class="comment">// 如果用户已经初始化过了，则设置为前台用户，后面会介绍这一部分</span></div><div class="line">                <span class="keyword">if</span> (!uss.initializing) &#123;</div><div class="line">                    moveUserToForeground(uss, oldUserId, userId);</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// 如果是后台启动用户，先加入到mStartingBackgroundUsers列表中去</span></div><div class="line">                mStackSupervisor.startBackgroundUserLocked(userId, uss);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (needStart) &#123;</div><div class="line">                Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_USER_STARTING);</div><div class="line">                intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);</div><div class="line">                intent.putExtra(Intent.EXTRA_USER_HANDLE, userId);</div><div class="line">                broadcastIntentLocked(<span class="keyword">null</span>, <span class="keyword">null</span>, intent,</div><div class="line">                        <span class="keyword">null</span>, <span class="keyword">new</span> IIntentReceiver.Stub() &#123;</div><div class="line">                            <span class="meta">@Override</span></div><div class="line">                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performReceive</span><span class="params">(Intent intent, <span class="keyword">int</span> resultCode,</span></span></div><div class="line">                                    String data, Bundle extras, <span class="keyword">boolean</span> ordered, <span class="keyword">boolean</span> sticky,</div><div class="line">                                    <span class="keyword">int</span> sendingUser) <span class="keyword">throws</span> RemoteException &#123;</div><div class="line">                            &#125;</div><div class="line">                        &#125;, <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>,</div><div class="line">                        <span class="keyword">new</span> String[] &#123;INTERACT_ACROSS_USERS&#125;, AppOpsManager.OP_NONE,</div><div class="line">                        <span class="keyword">null</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        Binder.restoreCallingIdentity(ident);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面来分析一下<code>moveUserToForeground()</code>函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">moveUserToForeground</span><span class="params">(UserState uss, <span class="keyword">int</span> oldUserId, <span class="keyword">int</span> newUserId)</span> </span>&#123;</div><div class="line">    <span class="comment">//从mStackSupervisor获取newUserId用户在切换之前的stack状态，以便将原来在前台的应用推到前台</span></div><div class="line">    <span class="keyword">boolean</span> homeInFront = mStackSupervisor.switchUserLocked(newUserId, uss);</div><div class="line">    <span class="keyword">if</span> (homeInFront) &#123;</div><div class="line">        <span class="comment">// 如果原来是从桌面切换的用户，则启动桌面</span></div><div class="line">        startHomeActivityLocked(newUserId, <span class="string">"moveUserToFroreground"</span>);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 如果是其他应用，则将此应用推到前台</span></div><div class="line">        mStackSupervisor.resumeTopActivitiesLocked();</div><div class="line">    &#125;</div><div class="line">    EventLogTags.writeAmSwitchUser(newUserId);</div><div class="line">    getUserManagerLocked().onUserForeground(newUserId);</div><div class="line">    <span class="comment">// 发送ACTION_USER_BACKGROUND广播，通知和oldUserId相关的用户(包括profile)进入后台的消息</span></div><div class="line">    <span class="comment">// 发送ACTION_USER_FOREGROUND广播，通知和newUserId相关的用户(包括profile)进入前台的消息</span></div><div class="line">    <span class="comment">// 发送ACTION_USER_SWITCHED广播，通知用户切换</span></div><div class="line">    sendUserSwitchBroadcastsLocked(oldUserId, newUserId);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="消息处理"><a href="#消息处理" class="headerlink" title="消息处理"></a>消息处理</h4><p>下面介绍一下<code>startUser()</code>中发出的几条消息的处理。<br>SYSTEM_USER_CURRENT_MSG：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> SYSTEM_USER_CURRENT_MSG: &#123;</div><div class="line">    mBatteryStatsService.noteEvent(</div><div class="line">            BatteryStats.HistoryItem.EVENT_USER_FOREGROUND_FINISH,</div><div class="line">            Integer.toString(msg.arg2), msg.arg2);</div><div class="line">    mBatteryStatsService.noteEvent(</div><div class="line">            BatteryStats.HistoryItem.EVENT_USER_FOREGROUND_START,</div><div class="line">            Integer.toString(msg.arg1), msg.arg1);</div><div class="line">    mSystemServiceManager.switchUser(msg.arg1);</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里主要是通知<code>BatteryStatsService</code>用户切换的消息以及让<code>SystemServiceManager</code>调用各个<code>SystemService</code>的<code>onSwitchUser(userHandle)</code>方法。</p>
+<p>REPORT_USER_SWITCH_MSG、USER_SWITCH_TIMEOUT_MSG、CONTINUE_USER_SWITCH_MSG和REPORT_USER_SWITCH_COMPLETE_MSG</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> REPORT_USER_SWITCH_MSG: &#123;</div><div class="line">    dispatchUserSwitch((UserState) msg.obj, msg.arg1, msg.arg2);</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">case</span> USER_SWITCH_TIMEOUT_MSG: &#123;</div><div class="line">    timeoutUserSwitch((UserState) msg.obj, msg.arg1, msg.arg2);</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">case</span> CONTINUE_USER_SWITCH_MSG: &#123;</div><div class="line">    continueUserSwitch((UserState) msg.obj, msg.arg1, msg.arg2);</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">case</span> REPORT_USER_SWITCH_COMPLETE_MSG: &#123;</div><div class="line">    dispatchUserSwitchComplete(msg.arg1);</div><div class="line">&#125; <span class="keyword">break</span>;</div></pre></td></tr></table></figure>
+<p><code>REPORT_USER_SWITCH_MSG</code>消息的处理方法是<code>dispatchUserSwitch()</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dispatchUserSwitch</span><span class="params">(<span class="keyword">final</span> UserState uss, <span class="keyword">final</span> <span class="keyword">int</span> oldUserId,</span></span></div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> newUserId) &#123;</div><div class="line">    <span class="comment">// 获取需要通知的观察者数量</span></div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> N = mUserSwitchObservers.beginBroadcast();</div><div class="line">    <span class="keyword">if</span> (N &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// 创建一个回调函数供观察者对象调用</span></div><div class="line">        <span class="keyword">final</span> IRemoteCallback callback = <span class="keyword">new</span> IRemoteCallback.Stub() &#123;</div><div class="line">            <span class="keyword">int</span> mCount = <span class="number">0</span>;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendResult</span><span class="params">(Bundle data)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">                <span class="keyword">synchronized</span> (ActivityManagerService.<span class="keyword">this</span>) &#123;</div><div class="line">                    <span class="keyword">if</span> (mCurUserSwitchCallback == <span class="keyword">this</span>) &#123;</div><div class="line">                        <span class="comment">// 收到一条返回结果mCount加一</span></div><div class="line">                        mCount++;</div><div class="line">                        <span class="keyword">if</span> (mCount == N) &#123; <span class="comment">//待所有结果都返回了，发送继续处理的消息，后面介绍该方法</span></div><div class="line">                            sendContinueUserSwitchLocked(uss, oldUserId, newUserId);</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">            <span class="comment">// 标记正在进行用户切换</span></div><div class="line">            uss.switching = <span class="keyword">true</span>;</div><div class="line">            mCurUserSwitchCallback = callback;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 调用观察者对象的onUserSwitching方法</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;N; i++) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                mUserSwitchObservers.getBroadcastItem(i).onUserSwitching(</div><div class="line">                        newUserId, callback);</div><div class="line">            &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">            sendContinueUserSwitchLocked(uss, oldUserId, newUserId);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 通知完成后清除状态</span></div><div class="line">    mUserSwitchObservers.finishBroadcast();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sendContinueUserSwitchLocked</span><span class="params">(UserState uss, <span class="keyword">int</span> oldUserId, <span class="keyword">int</span> newUserId)</span> </span>&#123;</div><div class="line">    mCurUserSwitchCallback = <span class="keyword">null</span>;</div><div class="line">    mHandler.removeMessages(USER_SWITCH_TIMEOUT_MSG);</div><div class="line">    mHandler.sendMessage(mHandler.obtainMessage(CONTINUE_USER_SWITCH_MSG,</div><div class="line">            oldUserId, newUserId, uss));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果系统中有对切换用户感兴趣的模块，可以调用AMS的<code>registerUserSwitchObserver()</code>方法来注册观察对象，这个对象会保存在<code>mUserSwitchObservers</code>中，当有用户切换时AMS会通过调用<code>onUserSwitching</code>来通知这些模块，模块处理完成后会调用参数中传递的<code>callback</code>来通知AMS。最后都调用完成后会调用<code>sendContinueUserSwitchLocked</code>来继续进行切换用户的工作。<br><code>sendContinueUserSwitchLocked()</code>方法会先清除前面延迟发送的<code>USER_SWITCH_TIMEOUT_MSG</code>消息，然后再发送一条<code>CONTINUE_USER_SWITCH_MSG</code>消息。<br><code>CONTINUE_USER_SWITCH_MSG</code>消息的执行函数是<code>completeSwitchAndInitialize()</code>方法，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">timeoutUserSwitch</span><span class="params">(UserState uss, <span class="keyword">int</span> oldUserId, <span class="keyword">int</span> newUserId)</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        sendContinueUserSwitchLocked(uss, oldUserId, newUserId);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">continueUserSwitch</span><span class="params">(UserState uss, <span class="keyword">int</span> oldUserId, <span class="keyword">int</span> newUserId)</span> </span>&#123;</div><div class="line">    completeSwitchAndInitialize(uss, newUserId, <span class="keyword">false</span>, <span class="keyword">true</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">completeSwitchAndInitialize</span><span class="params">(UserState uss, <span class="keyword">int</span> newUserId,</span></span></div><div class="line">        <span class="keyword">boolean</span> clearInitializing, <span class="keyword">boolean</span> clearSwitching) &#123;</div><div class="line">    <span class="keyword">boolean</span> unfrozen = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (clearInitializing) &#123;</div><div class="line">            <span class="comment">// 标记初始化完成</span></div><div class="line">            uss.initializing = <span class="keyword">false</span>;</div><div class="line">            getUserManagerLocked().makeInitialized(uss.mHandle.getIdentifier());</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (clearSwitching) &#123;</div><div class="line">            <span class="comment">// 标记用户切换完成</span></div><div class="line">            uss.switching = <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (!uss.switching &amp;&amp; !uss.initializing) &#123;</div><div class="line">            <span class="comment">// 结束冻屏</span></div><div class="line">            mWindowManager.stopFreezingScreen();</div><div class="line">            unfrozen = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (unfrozen) &#123;</div><div class="line">        <span class="comment">// 发送切换完成的消息</span></div><div class="line">        mHandler.removeMessages(REPORT_USER_SWITCH_COMPLETE_MSG);</div><div class="line">        mHandler.sendMessage(mHandler.obtainMessage(REPORT_USER_SWITCH_COMPLETE_MSG,</div><div class="line">                newUserId, <span class="number">0</span>));</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 停止在后台的访客用户</span></div><div class="line">    stopGuestUserIfBackground();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>REPORT_USER_SWITCH_COMPLETE_MSG</code>消息的处理函数是<code>dispatchUserSwitchComplete</code>，此方法的主要工作就是调用观察者的<code>onUserSwitchComplete()</code>方法，进行用户切换的收尾工作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dispatchUserSwitchComplete</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> observerCount = mUserSwitchObservers.beginBroadcast();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; observerCount; i++) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            mUserSwitchObservers.getBroadcastItem(i).onUserSwitchComplete(userId);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    mUserSwitchObservers.finishBroadcast();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再介绍一下<code>USER_SWITCH_TIMEOUT_MSG</code>消息，发送<code>REPORT_USER_SWITCH_MSG</code>消息的同时发送<code>USER_SWITCH_TIMEOUT_MSG</code>消息是为了防止用户切换时间过长，毕竟只有所有的观察者都处理完了才能继续进行切换用户的操作。发送完<code>USER_SWITCH_TIMEOUT_MSG</code>消息以后，如果后面没有进行清除该消息，那么时间一到就表示处理超时，就会调用<code>timeoutUserSwitch()</code>方法进行超时处理，<code>timeoutUserSwitch()</code>执行<code>sendContinueUserSwitchLocked()</code>来结束切换工作，不再等待各个观察者处理任务的结束。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">timeoutUserSwitch</span><span class="params">(UserState uss, <span class="keyword">int</span> oldUserId, <span class="keyword">int</span> newUserId)</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        sendContinueUserSwitchLocked(uss, oldUserId, newUserId);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面<code>startUser()</code>方法介绍完了，但是现在用户的状态还是在<code>UserState.STATE_BOOTING</code>的状态，那么什么时候切换到<code>UserState.STATE_RUNNING</code>状态呢？</p>
+<h4 id="更新用户状态，停止旧用户"><a href="#更新用户状态，停止旧用户" class="headerlink" title="更新用户状态，停止旧用户"></a>更新用户状态，停止旧用户</h4><p>在<code>Activity</code>进入Idle状态后会调用AMS的<code>activityIdle()</code>方法，此方法会调用<code>mStackSupervisor.activityIdleInternalLocked(token, false, config);</code>，在<code>activityIdleInternalLocked()</code>方法内有下面的处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (!booting) &#123;</div><div class="line">    <span class="comment">// Complete user switch</span></div><div class="line">    <span class="keyword">if</span> (startingUsers != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; startingUsers.size(); i++) &#123;</div><div class="line">            mService.finishUserSwitch(startingUsers.get(i));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// Complete starting up of background users</span></div><div class="line">    <span class="keyword">if</span> (mStartingBackgroundUsers.size() &gt; <span class="number">0</span>) &#123;</div><div class="line">        startingUsers = <span class="keyword">new</span> ArrayList&lt;UserState&gt;(mStartingBackgroundUsers);</div><div class="line">        mStartingBackgroundUsers.clear();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; startingUsers.size(); i++) &#123;</div><div class="line">            mService.finishUserBoot(startingUsers.get(i));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当前有正在切换的用户的话就会调用AMS的<code>finishUserSwitch()</code>和<code>finishUserBoot()</code>方法，来更新用户状态，发送广播以及处理需要停止的用户工作。<br>下面来看一下 AMS 的<code>finishUserSwitch()</code>和<code>finishUserBoot()</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">finishUserSwitch</span><span class="params">(UserState uss)</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        finishUserBoot(uss);</div><div class="line"></div><div class="line">        startProfilesLocked();</div><div class="line"></div><div class="line">        <span class="keyword">int</span> num = mUserLru.size();</div><div class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> (num &gt; MAX_RUNNING_USERS &amp;&amp; i &lt; mUserLru.size()) &#123;</div><div class="line">            Integer oldUserId = mUserLru.get(i);</div><div class="line">            UserState oldUss = mStartedUsers.get(oldUserId);</div><div class="line">            <span class="keyword">if</span> (oldUss == <span class="keyword">null</span>) &#123;</div><div class="line">                mUserLru.remove(i);</div><div class="line">                num--;</div><div class="line">                <span class="keyword">continue</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (oldUss.mState == UserState.STATE_STOPPING</div><div class="line">                    || oldUss.mState == UserState.STATE_SHUTDOWN) &#123;</div><div class="line">                <span class="comment">// 已经停止的用户不做处理</span></div><div class="line">                num--;</div><div class="line">                i++;</div><div class="line">                <span class="keyword">continue</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (oldUserId == UserHandle.USER_OWNER || oldUserId == mCurrentUserId) &#123;</div><div class="line">                <span class="comment">// 机主用户和当前用户会继续运行，不做处理</span></div><div class="line">                i++;</div><div class="line">                <span class="keyword">continue</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 将老用户停止，后面会介绍</span></div><div class="line">            stopUserLocked(oldUserId, <span class="keyword">null</span>);</div><div class="line">            num--;</div><div class="line">            i++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">finishUserBoot</span><span class="params">(UserState uss)</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (uss.mState == UserState.STATE_BOOTING</div><div class="line">                &amp;&amp; mStartedUsers.get(uss.mHandle.getIdentifier()) == uss) &#123;</div><div class="line">            uss.mState = UserState.STATE_RUNNING;</div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> userId = uss.mHandle.getIdentifier();</div><div class="line">            Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_BOOT_COMPLETED, <span class="keyword">null</span>);</div><div class="line">            intent.putExtra(Intent.EXTRA_USER_HANDLE, userId);</div><div class="line">            intent.addFlags(Intent.FLAG_RECEIVER_NO_ABORT);</div><div class="line">            broadcastIntentLocked(<span class="keyword">null</span>, <span class="keyword">null</span>, intent,</div><div class="line">                    <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>,</div><div class="line">                    <span class="keyword">new</span> String[] &#123;android.Manifest.permission.RECEIVE_BOOT_COMPLETED&#125;,</div><div class="line">                    AppOpsManager.OP_NONE, <span class="keyword">null</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, MY_PID, Process.SYSTEM_UID,</div><div class="line">                    userId);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过<code>finishUserSwitch</code>-&gt;<code>finishUserBoot</code>来将用户的状态置为<code>UserState.STATE_RUNNING</code>，并发出广播<code>Intent.ACTION_BOOT_COMPLETED</code>广播。<br>至此，用户切换工作全部结束。</p>
+<h2 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h2><h3 id="UserManagerService-2"><a href="#UserManagerService-2" class="headerlink" title="UserManagerService"></a>UserManagerService</h3><p><code>UserManagerService</code>中删除用户是在<code>removeUser()</code>方法中实现的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeUser</span><span class="params">(<span class="keyword">int</span> userHandle)</span> </span>&#123;</div><div class="line">    <span class="comment">// 检查该进程是否具有删除用户的权限</span></div><div class="line">    checkManageUsersPermission(<span class="string">"Only the system can remove users"</span>);</div><div class="line">    <span class="comment">// 检查一下该用户是否被限制删除用户</span></div><div class="line">    <span class="keyword">if</span> (getUserRestrictions(UserHandle.getCallingUserId()).getBoolean(</div><div class="line">            UserManager.DISALLOW_REMOVE_USER, <span class="keyword">false</span>)) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">long</span> ident = Binder.clearCallingIdentity();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">final</span> UserInfo user;</div><div class="line">        <span class="keyword">synchronized</span> (mPackagesLock) &#123;</div><div class="line">            user = mUsers.get(userHandle);</div><div class="line">            <span class="comment">// 检查被删除的用户是不是管理员用户userHandle=0，检查用户列表中是否有该用户，以及该用户是否是正在被删除的用户</span></div><div class="line">            <span class="keyword">if</span> (userHandle == <span class="number">0</span> || user == <span class="keyword">null</span> || mRemovingUserIds.get(userHandle)) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 将该用户放入mRemovingUserIds列表中，防止重复删除</span></div><div class="line">            <span class="comment">// mRemovingUserIds中的数据会一直保存直到系统重启，防止Id被重复使用</span></div><div class="line">            mRemovingUserIds.put(userHandle, <span class="keyword">true</span>);</div><div class="line"></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                mAppOpsService.removeUser(userHandle);</div><div class="line">            &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">                Log.w(LOG_TAG, <span class="string">"Unable to notify AppOpsService of removing user"</span>, e);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 将partial设置为true，这样如果后面的过程意外终止导致此次删除失败，系统重启后还是会继续删除工作的</span></div><div class="line">            user.partial = <span class="keyword">true</span>;</div><div class="line">            <span class="comment">// 设置FLAG_DISABLED，禁止该用户</span></div><div class="line">            user.flags |= UserInfo.FLAG_DISABLED;</div><div class="line">            <span class="comment">// 将上面更新的用户文件信息写入到xml文件中去</span></div><div class="line">            writeUserLocked(user);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 如果该user是一个user的一份profile，则发出一个ACTION_MANAGED_PROFILE_REMOVED广播</span></div><div class="line">        <span class="keyword">if</span> (user.profileGroupId != UserInfo.NO_PROFILE_GROUP_ID</div><div class="line">                &amp;&amp; user.isManagedProfile()) &#123;</div><div class="line">            sendProfileRemovedBroadcast(user.profileGroupId, user.id);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 调用AMS停止当前的用户，这部分后面会详细介绍</span></div><div class="line">        <span class="keyword">int</span> res;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            res = ActivityManagerNative.getDefault().stopUser(userHandle,</div><div class="line">                    <span class="comment">// 设置回调函数，调用finishRemoveUser继续后面的删除工作</span></div><div class="line">                    <span class="keyword">new</span> IStopUserCallback.Stub() &#123;</div><div class="line">                        <span class="meta">@Override</span></div><div class="line">                        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">userStopped</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</div><div class="line">                            finishRemoveUser(userId);</div><div class="line">                        &#125;</div><div class="line">                        <span class="meta">@Override</span></div><div class="line">                        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">userStopAborted</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</div><div class="line">                        &#125;</div><div class="line">                    &#125;);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> res == ActivityManager.USER_OP_SUCCESS;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        Binder.restoreCallingIdentity(ident);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>ActivityManagerNative.getDefault().stopUser</code>执行完后 UMS 会继续执行删除工作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">finishRemoveUser</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> userHandle)</span> </span>&#123;</div><div class="line">    <span class="comment">// Let other services shutdown any activity and clean up their state before completely</span></div><div class="line">    <span class="comment">// wiping the user's system directory and removing from the user list</span></div><div class="line">    <span class="keyword">long</span> ident = Binder.clearCallingIdentity();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        Intent addedIntent = <span class="keyword">new</span> Intent(Intent.ACTION_USER_REMOVED);</div><div class="line">        addedIntent.putExtra(Intent.EXTRA_USER_HANDLE, userHandle);</div><div class="line">        mContext.sendOrderedBroadcastAsUser(addedIntent, UserHandle.ALL,</div><div class="line">                android.Manifest.permission.MANAGE_USERS,</div><div class="line"></div><div class="line">                <span class="keyword">new</span> BroadcastReceiver() &#123;</div><div class="line">                    <span class="meta">@Override</span></div><div class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</div><div class="line">                        <span class="keyword">new</span> Thread() &#123;</div><div class="line">                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                                <span class="keyword">synchronized</span> (mInstallLock) &#123;</div><div class="line">                                    <span class="keyword">synchronized</span> (mPackagesLock) &#123;</div><div class="line">                                        removeUserStateLocked(userHandle);</div><div class="line">                                    &#125;</div><div class="line">                                &#125;</div><div class="line">                            &#125;</div><div class="line">                        &#125;.start();</div><div class="line">                    &#125;</div><div class="line">                &#125;,</div><div class="line">                <span class="keyword">null</span>, Activity.RESULT_OK, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        Binder.restoreCallingIdentity(ident);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>根据代码可以看到<code>finishRemoveUser</code>方法只是发送了一个有序广播ACTION_USER_REMOVED，同时注册了一个广播接收器，这个广播接收器是最后一个接收到该广播的接收器，这样做的目的是让关心该广播的其他接收器处理完之后， UMS 才会进行删除用户的收尾工作，即调用<code>removeUserStateLocked</code>来删除用户的相关文件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">removeUserStateLocked</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> userHandle)</span> </span>&#123;</div><div class="line">    <span class="comment">// 调用mPm.cleanUpUserLILPw来删除用户目录/data/user/&lt;用户id&gt;/下面的应用数据，后面会详细介绍</span></div><div class="line">    mPm.cleanUpUserLILPw(<span class="keyword">this</span>, userHandle);</div><div class="line"></div><div class="line">    <span class="comment">// 从mUsers列表中移除该用户信息</span></div><div class="line">    mUsers.remove(userHandle);</div><div class="line">    AtomicFile userFile = <span class="keyword">new</span> AtomicFile(<span class="keyword">new</span> File(mUsersDir, userHandle + XML_SUFFIX));</div><div class="line">    <span class="comment">// 删除用户信息文件 &lt;用户id&gt;.xml</span></div><div class="line">    userFile.delete();</div><div class="line">    <span class="comment">// 更新userlist.xml文件，将删除调用的用户从中移除</span></div><div class="line">    writeUserListLocked();</div><div class="line">    <span class="comment">// 更新mUserIds列表</span></div><div class="line">    updateUserIdsLocked();</div><div class="line">    <span class="comment">// 删除用户目录以及该用户的所有文件</span></div><div class="line">    removeDirectoryRecursive(Environment.getUserSystemDirectory(userHandle));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此，删除用户的工作已经全部完成。</p>
+<h3 id="ActivityManagerService-1"><a href="#ActivityManagerService-1" class="headerlink" title="ActivityManagerService"></a>ActivityManagerService</h3><p>UMS的<code>removeUser()</code>会调用AMS的<code>stopUser()</code>来处理停止用户的一些工作，在AMS内部也会调用<code>stopUser()</code>。该方法在进行了权限检查之后，主要的工作都是由<code>stopUserLocked()</code>来完成的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">stopUserLocked</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> userId, <span class="keyword">final</span> IStopUserCallback callback)</span> </span>&#123;</div><div class="line">    <span class="comment">// 当前用户是不能被停止的，如果是当前用户则直接返回</span></div><div class="line">    <span class="keyword">if</span> (mCurrentUserId == userId &amp;&amp; mTargetUserId == UserHandle.USER_NULL) &#123;</div><div class="line">        <span class="keyword">return</span> ActivityManager.USER_OP_IS_CURRENT;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">final</span> UserState uss = mStartedUsers.get(userId);</div><div class="line">    <span class="keyword">if</span> (uss == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">// 如果当前用户还没有被启动，那么直接结束当前流程，调用回调函数，返回操作成功标志</span></div><div class="line">        <span class="keyword">if</span> (callback != <span class="keyword">null</span>) &#123;</div><div class="line">            mHandler.post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        callback.userStopped(userId);</div><div class="line">                    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> ActivityManager.USER_OP_SUCCESS;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (callback != <span class="keyword">null</span>) &#123;</div><div class="line">        uss.mStopCallbacks.add(callback);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (uss.mState != UserState.STATE_STOPPING</div><div class="line">            &amp;&amp; uss.mState != UserState.STATE_SHUTDOWN) &#123;</div><div class="line">        <span class="comment">// 将状态切换到正在停止</span></div><div class="line">        uss.mState = UserState.STATE_STOPPING;</div><div class="line">        <span class="comment">// 更新mStartedUserArray列表</span></div><div class="line">        updateStartedUserArrayLocked();</div><div class="line"></div><div class="line">        <span class="keyword">long</span> ident = Binder.clearCallingIdentity();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">final</span> Intent stoppingIntent = <span class="keyword">new</span> Intent(Intent.ACTION_USER_STOPPING);</div><div class="line">            stoppingIntent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);</div><div class="line">            stoppingIntent.putExtra(Intent.EXTRA_USER_HANDLE, userId);</div><div class="line">            stoppingIntent.putExtra(Intent.EXTRA_SHUTDOWN_USERSPACE_ONLY, <span class="keyword">true</span>);</div><div class="line">            <span class="keyword">final</span> Intent shutdownIntent = <span class="keyword">new</span> Intent(Intent.ACTION_SHUTDOWN);</div><div class="line">            <span class="comment">// 注册一个Intent.ACTION_SHUTDOWN广播接收器</span></div><div class="line">            <span class="keyword">final</span> IIntentReceiver shutdownReceiver = <span class="keyword">new</span> IIntentReceiver.Stub() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performReceive</span><span class="params">(Intent intent, <span class="keyword">int</span> resultCode, String data,</span></span></div><div class="line">                        Bundle extras, <span class="keyword">boolean</span> ordered, <span class="keyword">boolean</span> sticky, <span class="keyword">int</span> sendingUser) &#123;</div><div class="line">                    <span class="comment">//收到Intent.ACTION_SHUTDOWN广播，下面介绍此方法</span></div><div class="line">                    finishUserStop(uss);</div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line">            <span class="comment">// 注册一个Intent.ACTION_USER_STOPPING广播接收器</span></div><div class="line">            <span class="keyword">final</span> IIntentReceiver stoppingReceiver = <span class="keyword">new</span> IIntentReceiver.Stub() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performReceive</span><span class="params">(Intent intent, <span class="keyword">int</span> resultCode, String data,</span></span></div><div class="line">                        Bundle extras, <span class="keyword">boolean</span> ordered, <span class="keyword">boolean</span> sticky, <span class="keyword">int</span> sendingUser) &#123;</div><div class="line">                    <span class="keyword">synchronized</span> (ActivityManagerService.<span class="keyword">this</span>) &#123;</div><div class="line">                        <span class="keyword">if</span> (uss.mState != UserState.STATE_STOPPING) &#123;</div><div class="line">                            <span class="keyword">return</span>;</div><div class="line">                        &#125;</div><div class="line">                        <span class="comment">// 收到Intent.ACTION_USER_STOPPING广播后更新用户状态</span></div><div class="line">                        uss.mState = UserState.STATE_SHUTDOWN;</div><div class="line">                    &#125;</div><div class="line">                    mBatteryStatsService.noteEvent(</div><div class="line">                            BatteryStats.HistoryItem.EVENT_USER_RUNNING_FINISH,</div><div class="line">                            Integer.toString(userId), userId);</div><div class="line">                    <span class="comment">// 回调各个SystemServer的onStopUser方法</span></div><div class="line">                    mSystemServiceManager.stopUser(userId);</div><div class="line">                    <span class="comment">//发送Intent.ACTION_SHUTDOWN广播，此为有序广播，确保shutdownReceiver最后一个调用</span></div><div class="line">                    broadcastIntentLocked(<span class="keyword">null</span>, <span class="keyword">null</span>, shutdownIntent,</div><div class="line">                            <span class="keyword">null</span>, shutdownReceiver, <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, AppOpsManager.OP_NONE,</div><div class="line">                            <span class="keyword">null</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, MY_PID, Process.SYSTEM_UID, userId);</div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line">            <span class="comment">// 发送Intent.ACTION_USER_STOPPING广播，此为有序广播，确保stoppingReceiver最后一个调用</span></div><div class="line">            broadcastIntentLocked(<span class="keyword">null</span>, <span class="keyword">null</span>, stoppingIntent,</div><div class="line">                    <span class="keyword">null</span>, stoppingReceiver, <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>,</div><div class="line">                    <span class="keyword">new</span> String[] &#123;INTERACT_ACROSS_USERS&#125;, AppOpsManager.OP_NONE,</div><div class="line">                    <span class="keyword">null</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            Binder.restoreCallingIdentity(ident);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> ActivityManager.USER_OP_SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>stopUserLocked()</code>方法首先检查当前的用户是否需要执行停止的工作，如果不需要直接调用参数的回调函数结束停止工作，如果需要，则先后发送<code>Intent.ACTION_USER_STOPPING</code>和<code>Intent.ACTION_SHUTDOWN</code>广播，方法中也注册了两个广播的接收器，在<code>Intent.ACTION_SHUTDOWN</code>广播接收器中执行<code>finishUserStop(uss)</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">finishUserStop</span><span class="params">(UserState uss)</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> userId = uss.mHandle.getIdentifier();</div><div class="line">    <span class="keyword">boolean</span> stopped;</div><div class="line">    ArrayList&lt;IStopUserCallback&gt; callbacks;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        callbacks = <span class="keyword">new</span> ArrayList&lt;IStopUserCallback&gt;(uss.mStopCallbacks);</div><div class="line">        <span class="keyword">if</span> (mStartedUsers.get(userId) != uss) &#123;</div><div class="line">            stopped = <span class="keyword">false</span>;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (uss.mState != UserState.STATE_SHUTDOWN) &#123;</div><div class="line">            stopped = <span class="keyword">false</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            stopped = <span class="keyword">true</span>;</div><div class="line">            <span class="comment">// User can no longer run.</span></div><div class="line">            mStartedUsers.remove(userId);</div><div class="line">            mUserLru.remove(Integer.valueOf(userId));</div><div class="line">            updateStartedUserArrayLocked();</div><div class="line"></div><div class="line">            <span class="comment">// 杀掉和该用户相关的所有进程</span></div><div class="line">            forceStopUserLocked(userId, <span class="string">"finish user"</span>);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 清除用户相关的Recent Task列表</span></div><div class="line">        mRecentTasks.removeTasksForUserLocked(userId);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//调用在stopUserLocked中添加的回调函数</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;callbacks.size(); i++) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">if</span> (stopped) callbacks.get(i).userStopped(userId);</div><div class="line">            <span class="keyword">else</span> callbacks.get(i).userStopAborted(userId);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (stopped) &#123;</div><div class="line">        <span class="comment">// 回调各个SystemServer的onCleanupUser方法</span></div><div class="line">        mSystemServiceManager.cleanupUser(userId);</div><div class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">            mStackSupervisor.removeUserLocked(userId);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>finishUserStop()</code>方法从<code>mStartedUsers</code>和<code>mUserLru</code>列表中删除该用户，更新<code>mStartedUserArray</code>列表，清理和该用户有关的进程，发送<code>Intent.ACTION_USER_STOPPED</code>广播来通知该用户已经停止，接下来清除用户相关的Recent Task列表以及从<code>mStackSupervisor</code>中删除用户的信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">forceStopUserLocked</span><span class="params">(<span class="keyword">int</span> userId, String reason)</span> </span>&#123;</div><div class="line">    <span class="comment">// 杀掉该用户相关的所有进程，具体流程会在ActivityManager相关文章中介绍</span></div><div class="line">    forceStopPackageLocked(<span class="keyword">null</span>, -<span class="number">1</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, userId, reason);</div><div class="line">    <span class="comment">// 发出Intent.ACTION_USER_STOPPED广播</span></div><div class="line">    Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_USER_STOPPED);</div><div class="line">    intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY</div><div class="line">            | Intent.FLAG_RECEIVER_FOREGROUND);</div><div class="line">    intent.putExtra(Intent.EXTRA_USER_HANDLE, userId);</div><div class="line">    broadcastIntentLocked(<span class="keyword">null</span>, <span class="keyword">null</span>, intent,</div><div class="line">            <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="number">0</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, AppOpsManager.OP_NONE,</div><div class="line">            <span class="keyword">null</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此，AMS相关的删除用户的相关工作全部完成。</p>
+<h3 id="PackageManagerService-1"><a href="#PackageManagerService-1" class="headerlink" title="PackageManagerService"></a>PackageManagerService</h3><p>删除用户数据cleanUpUserLILPw()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">cleanUpUserLILPw</span><span class="params">(UserManagerService userManager, <span class="keyword">int</span> userHandle)</span> </span>&#123;</div><div class="line">    mDirtyUsers.remove(userHandle);</div><div class="line">    mSettings.removeUserLPw(userHandle);</div><div class="line">    mPendingBroadcasts.remove(userHandle);</div><div class="line">    <span class="keyword">if</span> (mInstaller != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">// Technically, we shouldn't be doing this with the package lock</span></div><div class="line">        <span class="comment">// held.  However, this is very rare, and there is already so much</span></div><div class="line">        <span class="comment">// other disk I/O going on, that we'll let it slide for now.</span></div><div class="line">        <span class="keyword">final</span> StorageManager storage = mContext.getSystemService(StorageManager.class);</div><div class="line">        <span class="keyword">for</span> (VolumeInfo vol : storage.getWritablePrivateVolumes()) &#123;</div><div class="line">            <span class="keyword">final</span> String volumeUuid = vol.getFsUuid();</div><div class="line">            mInstaller.removeUserDataDirs(volumeUuid, userHandle);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    mUserNeedsBadging.delete(userHandle);</div><div class="line">    removeUnusedPackagesLILPw(userManager, userHandle);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>删除用户的工作比较简单，删除用户的数据。同时调用<code>mSettings.removeUserLPw(userHandle)</code>来删除和 PMS 中和用户相关的信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">removeUserLPw</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</div><div class="line">    <span class="comment">// 删除每个应用中的该用户的信息</span></div><div class="line">    Set&lt;Entry&lt;String, PackageSetting&gt;&gt; entries = mPackages.entrySet();</div><div class="line">    <span class="keyword">for</span> (Entry&lt;String, PackageSetting&gt; entry : entries) &#123;</div><div class="line">        entry.getValue().removeUser(userId);</div><div class="line">    &#125;</div><div class="line">    mPreferredActivities.remove(userId);</div><div class="line">    File file = getUserPackagesStateFile(userId);</div><div class="line">    file.delete();</div><div class="line">    file = getUserPackagesStateBackupFile(userId);</div><div class="line">    file.delete();</div><div class="line">    removeCrossProfileIntentFiltersLPw(userId);</div><div class="line"></div><div class="line">    mRuntimePermissionsPersistence.onUserRemoved(userId);</div><div class="line">    <span class="comment">// 更新/data/system/packages.list文件</span></div><div class="line">    writePackageListLPr();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android源码分析/" rel="tag"># Android源码分析</a>
+          
+            <a href="/tags/UserManager/" rel="tag"># UserManager</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/07/open-source-lottie-android-source-code-analysis/" rel="next" title="开源项目- Lottie 源码分析">
+                <i class="fa fa-chevron-left"></i> 开源项目- Lottie 源码分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/10/android-demo-live-wallpaper-snow/" rel="prev" title="Android 动态壁纸">
+                Android 动态壁纸 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UserManager"><span class="nav-number">2.</span> <span class="nav-text">UserManager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#几个常用方法介绍"><span class="nav-number">2.1.</span> <span class="nav-text">几个常用方法介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#判断是否支持多用户模式："><span class="nav-number">2.1.1.</span> <span class="nav-text">判断是否支持多用户模式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询是否是访客模式"><span class="nav-number">2.1.2.</span> <span class="nav-text">查询是否是访客模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询用户权限"><span class="nav-number">2.1.3.</span> <span class="nav-text">查询用户权限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何创建Guest用户"><span class="nav-number">2.2.</span> <span class="nav-text">如何创建Guest用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何切换用户"><span class="nav-number">2.3.</span> <span class="nav-text">如何切换用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户权限"><span class="nav-number">2.4.</span> <span class="nav-text">用户权限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关adb命令"><span class="nav-number">3.</span> <span class="nav-text">相关adb命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取用户信息"><span class="nav-number">3.1.</span> <span class="nav-text">获取用户信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UserManagerService"><span class="nav-number">4.</span> <span class="nav-text">UserManagerService</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">4.1.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UserInfo"><span class="nav-number">5.</span> <span class="nav-text">UserInfo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UserHandle"><span class="nav-number">6.</span> <span class="nav-text">UserHandle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UID"><span class="nav-number">6.1.</span> <span class="nav-text">UID</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UserState"><span class="nav-number">7.</span> <span class="nav-text">UserState</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建用户"><span class="nav-number">8.</span> <span class="nav-text">创建用户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UserManagerService-1"><span class="nav-number">8.1.</span> <span class="nav-text">UserManagerService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PackageManagerService"><span class="nav-number">8.2.</span> <span class="nav-text">PackageManagerService</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建用户数据createNewUserLILPw"><span class="nav-number">8.2.1.</span> <span class="nav-text">创建用户数据createNewUserLILPw()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切换用户"><span class="nav-number">9.</span> <span class="nav-text">切换用户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ActivityManagerService"><span class="nav-number">9.1.</span> <span class="nav-text">ActivityManagerService</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#startUser"><span class="nav-number">9.1.1.</span> <span class="nav-text">startUser()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息处理"><span class="nav-number">9.1.2.</span> <span class="nav-text">消息处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新用户状态，停止旧用户"><span class="nav-number">9.1.3.</span> <span class="nav-text">更新用户状态，停止旧用户</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除用户"><span class="nav-number">10.</span> <span class="nav-text">删除用户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UserManagerService-2"><span class="nav-number">10.1.</span> <span class="nav-text">UserManagerService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ActivityManagerService-1"><span class="nav-number">10.2.</span> <span class="nav-text">ActivityManagerService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PackageManagerService-1"><span class="nav-number">10.3.</span> <span class="nav-text">PackageManagerService</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

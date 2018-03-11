@@ -1,0 +1,903 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android源码分析,PackageManager," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="基于Android6.0来分析Android的应用卸载流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android PackageManager相关源码分析之卸载应用">
+<meta property="og:url" content="http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="基于Android6.0来分析Android的应用卸载流程">
+<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android PackageManager相关源码分析之卸载应用">
+<meta name="twitter:description" content="基于Android6.0来分析Android的应用卸载流程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/"/>
+
+
+
+
+
+  <title> Android PackageManager相关源码分析之卸载应用 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android PackageManager相关源码分析之卸载应用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-16T10:00:00+08:00">
+                2016-05-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/05/16/android-source-code-analysis-package-manager-uninstallation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/05/16/android-source-code-analysis-package-manager-uninstallation/" class="leancloud_visitors" data-flag-title="Android PackageManager相关源码分析之卸载应用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  基于Android6.0来分析Android的应用卸载流程
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="卸载应用"><a href="#卸载应用" class="headerlink" title="卸载应用"></a>卸载应用</h2><p>我们可以通过下面的代码执行一个应用的卸载工作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getPackageManager().deletePackage(mAppInfo.packageName, observer,  mAllUsers ? PackageManager.DELETE_ALL_USERS : <span class="number">0</span>);</div></pre></td></tr></table></figure>
+<p>它最后会调用到 <code>ApplicantPackageManger</code> 的<code>deletePackage()</code>方法，通过Binder调用，会调用 PMS 中的<code>deletePackageAsUser()</code>方法。<br>那么接下来我们就从 PMS 的 <code>deletePackageAsUser()</code> 方法来开始分析应用的卸载流程。<br>Android的应用卸载有下面几个阶段的工作：</p>
+<ul>
+<li>删除和该包相关的 acitivity、service、provider 等信息</li>
+<li>删除 code、library和resource 等信息</li>
+<li>调用 installd 删除 /data/data/ 以及 /data/dalvik-cache 下面的文件(经过dexopt过的文件)</li>
+<li>更新 <code>Settings</code> 中的 package 信息</li>
+</ul>
+<p>代码调用流程如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">├── PMS.deletePackageAsUser()</div><div class="line">    └── PMS.deletePackage()</div><div class="line">         ├── deletePackageX()</div><div class="line">         │    ├── deletePackageLI()</div><div class="line">         │    │    ├── Installer.clearUserData()</div><div class="line">         │    │    ├── removeKeystoreDataIfNeeded()</div><div class="line">         │    │    ├── schedulePackageCleaning()</div><div class="line">         │    │    ├── clearPackagePreferredActivitiesLPw()</div><div class="line">         │    │    ├── scheduleWritePackageRestrictionsLocked()</div><div class="line">         │    │    ├── resetUserChangesToRuntimePermissionsAndFlagsLPw()</div><div class="line">         │    │    ├── removePackageDataLI()</div><div class="line">         │    │    ├── <span class="number">1</span> deleteSystemPackageLI()</div><div class="line">         │    │    │      ├── deleteInstalledPackageLI</div><div class="line">         │    │    │      ├── Settings.enableSystemPackageLPw()</div><div class="line">         │    │    │      ├── NativeLibraryHelper.removeNativeBinariesLI()</div><div class="line">         │    │    │      ├── scanPackageLI()</div><div class="line">         │    │    │      ├── updatePermissionsLPw()</div><div class="line">         │    │    │      └── Settings.writeLPr()</div><div class="line">         │    │    ├── <span class="number">2</span> killApplication()</div><div class="line">         │    │    └── <span class="number">2</span> deleteInstalledPackageLI()</div><div class="line">         │    │           ├── removePackageDataLI()</div><div class="line">         │    │           │    ├── removePackageLI()</div><div class="line">         │    │           │    │    ├── PackageSetting.remove()</div><div class="line">         │    │           │    │    └── cleanPackageDataStructuresLILPw()</div><div class="line">         │    │           │    ├── removeDataDirsLI()</div><div class="line">         │    │           │    ├── schedulePackageCleaning()</div><div class="line">         │    │           │    │    │ post Message START_CLEANING_PACKAGE</div><div class="line">         │    │           │    │    └── startCleaningPackages()</div><div class="line">         │    │           │    ├── clearIntentFilterVerificationsLPw()</div><div class="line">         │    │           │    ├── clearDefaultBrowserIfNeeded()</div><div class="line">         │    │           │    ├── Settings.removePackageLPw()</div><div class="line">         │    │           │    ├── updatePermissionsLPw()</div><div class="line">         │    │           │    ├── clearPackagePreferredActivitiesLPw()</div><div class="line">         │    │           │    ├── PackageSetting.setInstalled()</div><div class="line">         │    │           │    ├── Settings.writeLPr()</div><div class="line">         │    │           │    └── removeKeystoreDataIfNeeded()</div><div class="line">         │    │           └── createInstallArgsForExisting()</div><div class="line">         │    ├── PackageRemovedInfo.sendBroadcast()</div><div class="line">         │    └── FileInstallArgs.doPostDeleteLI()</div><div class="line">         │         └── FileInstallArgs.cleanUpResourcesLI()</div><div class="line">         │              ├── PackageParser.parsePackageLite()</div><div class="line">         │              ├── FileInstallArgs.cleanUp()</div><div class="line">         │              └── removeDexFiles()</div><div class="line">         └── IPackageDeleteObserver.onPackageDeleted()</div></pre></td></tr></table></figure>
+<h3 id="deletePackage"><a href="#deletePackage" class="headerlink" title="deletePackage()"></a>deletePackage()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deletePackage</span><span class="params">(<span class="keyword">final</span> String packageName,</span></span></div><div class="line">        <span class="keyword">final</span> IPackageDeleteObserver2 observer, <span class="keyword">final</span> <span class="keyword">int</span> userId, <span class="keyword">final</span> <span class="keyword">int</span> flags) &#123;</div><div class="line">    <span class="comment">// 执行 DELETE_PACKAGES 权限检查</span></div><div class="line">    mContext.enforceCallingOrSelfPermission(</div><div class="line">            android.Manifest.permission.DELETE_PACKAGES, <span class="keyword">null</span>);</div><div class="line">    Preconditions.checkNotNull(packageName);</div><div class="line">    Preconditions.checkNotNull(observer);</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> uid = Binder.getCallingUid();</div><div class="line">    <span class="keyword">if</span> (UserHandle.getUserId(uid) != userId) &#123;</div><div class="line">        mContext.enforceCallingPermission(</div><div class="line">                android.Manifest.permission.INTERACT_ACROSS_USERS_FULL,</div><div class="line">                <span class="string">"deletePackage for user "</span> + userId);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 如果该用户不允许卸载应用，则执行回调函数并返回</span></div><div class="line">    <span class="keyword">if</span> (isUserRestricted(userId, UserManager.DISALLOW_UNINSTALL_APPS)) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            observer.onPackageDeleted(packageName,</div><div class="line">                    PackageManager.DELETE_FAILED_USER_RESTRICTED, <span class="keyword">null</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException re) &#123;&#125;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 查看是否禁止有某用户卸载该应用，可以通过PMS.setBlockUninstallForUser()来修改该标记</span></div><div class="line">    <span class="keyword">boolean</span> uninstallBlocked = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">if</span> ((flags &amp; PackageManager.DELETE_ALL_USERS) != <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">int</span>[] users = sUserManager.getUserIds();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; users.length; ++i) &#123;</div><div class="line">            <span class="keyword">if</span> (getBlockUninstallForUser(packageName, users[i])) &#123;</div><div class="line">                uninstallBlocked = <span class="keyword">true</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        uninstallBlocked = getBlockUninstallForUser(packageName, userId);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (uninstallBlocked) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            observer.onPackageDeleted(packageName, PackageManager.DELETE_FAILED_OWNER_BLOCKED,</div><div class="line">                    <span class="keyword">null</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException re) &#123;&#125;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 由于卸载应用可能耗时较长，因此通过异步来执行卸载工作</span></div><div class="line">    mHandler.post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            mHandler.removeCallbacks(<span class="keyword">this</span>);</div><div class="line">            <span class="comment">// 调用deletePackageX()来执行卸载工作</span></div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> returnCode = deletePackageX(packageName, userId, flags);</div><div class="line">            <span class="keyword">if</span> (observer != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    <span class="comment">// 卸载完成，调用回调函数</span></div><div class="line">                    observer.onPackageDeleted(packageName, returnCode, <span class="keyword">null</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (RemoteException e) &#123;&#125; <span class="comment">//end catch</span></div><div class="line">            &#125; <span class="comment">//end if</span></div><div class="line">        &#125; <span class="comment">//end run</span></div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="deletePackageX"><a href="#deletePackageX" class="headerlink" title="deletePackageX()"></a>deletePackageX()</h3><p>实际的卸载工作是由 <code>deletePackageX()</code> 方法来完成的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">deletePackageX</span><span class="params">(String packageName, <span class="keyword">int</span> userId, <span class="keyword">int</span> flags)</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> PackageRemovedInfo info = <span class="keyword">new</span> PackageRemovedInfo();</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> res;</div><div class="line"></div><div class="line">    <span class="keyword">final</span> UserHandle removeForUser = (flags &amp; PackageManager.DELETE_ALL_USERS) != <span class="number">0</span></div><div class="line">            ? UserHandle.ALL : <span class="keyword">new</span> UserHandle(userId);</div><div class="line">    <span class="comment">// 检查userId代表的用户是否有权限删除该应用</span></div><div class="line">    <span class="keyword">if</span> (isPackageDeviceAdmin(packageName, removeForUser.getIdentifier())) &#123;</div><div class="line">        <span class="keyword">return</span> PackageManager.DELETE_FAILED_DEVICE_POLICY_MANAGER;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">boolean</span> removedForAllUsers = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">boolean</span> systemUpdate = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">int</span>[] allUsers;</div><div class="line">    <span class="keyword">boolean</span>[] perUserInstalled;</div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        <span class="comment">// 获取Settings保存的该应用的信息</span></div><div class="line">        PackageSetting ps = mSettings.mPackages.get(packageName);</div><div class="line">        <span class="comment">// 检查一下是否系统中的所有用户都安装了这个应用</span></div><div class="line">        allUsers = sUserManager.getUserIds();</div><div class="line">        perUserInstalled = <span class="keyword">new</span> <span class="keyword">boolean</span>[allUsers.length];</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; allUsers.length; i++) &#123;</div><div class="line">            perUserInstalled[i] = ps != <span class="keyword">null</span> ? ps.getInstalled(allUsers[i]) : <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">synchronized</span> (mInstallLock) &#123;</div><div class="line">        <span class="comment">// 调用deletePackageLI()来卸载应用</span></div><div class="line">        res = deletePackageLI(packageName, removeForUser,</div><div class="line">                <span class="keyword">true</span>, allUsers, perUserInstalled,</div><div class="line">                flags | REMOVE_CHATTY, info, <span class="keyword">true</span>);</div><div class="line">        systemUpdate = info.isRemovedPackageSystemUpdate;</div><div class="line">        <span class="keyword">if</span> (res &amp;&amp; !systemUpdate &amp;&amp; mPackages.get(packageName) == <span class="keyword">null</span>) &#123;</div><div class="line">            removedForAllUsers = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (res) &#123;</div><div class="line">        info.sendBroadcast(<span class="keyword">true</span>, systemUpdate, removedForAllUsers);</div><div class="line"></div><div class="line">        <span class="comment">// 如果被卸载的是系统应用，那么它的低版本的应用将被重新使用</span></div><div class="line">        <span class="comment">// 因此下面通过广播来通知这种变化</span></div><div class="line">        <span class="keyword">if</span> (systemUpdate) &#123;</div><div class="line">            Bundle extras = <span class="keyword">new</span> Bundle(<span class="number">1</span>);</div><div class="line">            extras.putInt(Intent.EXTRA_UID, info.removedAppId &gt;= <span class="number">0</span></div><div class="line">                    ? info.removedAppId : info.uid);</div><div class="line">            extras.putBoolean(Intent.EXTRA_REPLACING, <span class="keyword">true</span>);</div><div class="line"></div><div class="line">            sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED, packageName,</div><div class="line">                    extras, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">            sendPackageBroadcast(Intent.ACTION_PACKAGE_REPLACED, packageName,</div><div class="line">                    extras, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">            sendPackageBroadcast(Intent.ACTION_MY_PACKAGE_REPLACED, <span class="keyword">null</span>,</div><div class="line">                    <span class="keyword">null</span>, packageName, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 卸载完成后执行一次GC操作</span></div><div class="line">    Runtime.getRuntime().gc();</div><div class="line">    <span class="comment">// Delete the resources here after sending the broadcast to let</span></div><div class="line">    <span class="comment">// other processes clean up before deleting resources.</span></div><div class="line">    <span class="comment">// 调用FileInstallArgs.doPostDeleteLI()方法来执行一些资源文件的清理工作，后面会详细介绍该方法</span></div><div class="line">    <span class="keyword">if</span> (info.args != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">synchronized</span> (mInstallLock) &#123;</div><div class="line">            info.args.doPostDeleteLI(<span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> res ? PackageManager.DELETE_SUCCEEDED : PackageManager.DELETE_FAILED_INTERNAL_ERROR;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="deletePackageLI"><a href="#deletePackageLI" class="headerlink" title="deletePackageLI()"></a>deletePackageLI()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">deletePackageLI</span><span class="params">(String packageName, UserHandle user,</span></span></div><div class="line">        <span class="keyword">boolean</span> deleteCodeAndResources, <span class="keyword">int</span>[] allUserHandles, <span class="keyword">boolean</span>[] perUserInstalled,</div><div class="line">        <span class="keyword">int</span> flags, PackageRemovedInfo outInfo,</div><div class="line">        <span class="keyword">boolean</span> writeSettings) &#123;</div><div class="line">    <span class="keyword">if</span> (packageName == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">    PackageSetting ps;</div><div class="line">    <span class="keyword">boolean</span> dataOnly = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">int</span> removeUser = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">int</span> appId = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        ps = mSettings.mPackages.get(packageName);</div><div class="line">        <span class="comment">// 判断该应用是否存在</span></div><div class="line">        <span class="keyword">if</span> (ps == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> ((!isSystemApp(ps) || (flags&amp;PackageManager.DELETE_SYSTEM_APP) != <span class="number">0</span>) &amp;&amp; user != <span class="keyword">null</span></div><div class="line">                &amp;&amp; user.getIdentifier() != UserHandle.USER_ALL) &#123;</div><div class="line">            <span class="comment">// 如果是只卸载某个用户下的应用</span></div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> userId = user.getIdentifier();</div><div class="line">            ps.setUserState(userId,</div><div class="line">                    COMPONENT_ENABLED_STATE_DEFAULT,</div><div class="line">                    <span class="keyword">false</span>, <span class="comment">//installed</span></div><div class="line">                    <span class="keyword">true</span>,  <span class="comment">//stopped</span></div><div class="line">                    <span class="keyword">true</span>,  <span class="comment">//notLaunched</span></div><div class="line">                    <span class="keyword">false</span>, <span class="comment">//hidden</span></div><div class="line">                    <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>,</div><div class="line">                    <span class="keyword">false</span>, <span class="comment">// blockUninstall</span></div><div class="line">                    ps.readUserState(userId).domainVerificationStatus, <span class="number">0</span>);</div><div class="line">            <span class="keyword">if</span> (!isSystemApp(ps)) &#123;</div><div class="line">                <span class="comment">// 非系统应用的卸载</span></div><div class="line">                <span class="keyword">if</span> (ps.isAnyInstalled(sUserManager.getUserIds())) &#123;</div><div class="line">                    <span class="comment">// 如果有其他用户还在使用这个应用，删除应用在这个用户下面的数据</span></div><div class="line">                    removeUser = user.getIdentifier();</div><div class="line">                    appId = ps.appId;</div><div class="line">                    scheduleWritePackageRestrictionsLocked(removeUser);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="comment">// 如果没有其他用户在使用了，设置一下PackageUserState.installed，这样可以完全删除这个应用</span></div><div class="line">                    ps.setInstalled(<span class="keyword">true</span>, user.getIdentifier());</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// 如果卸载的是系统应用，可能别的用户还在使用它，因此这里只需要清除需要卸载的应用目录下的数据即可</span></div><div class="line">                removeUser = user.getIdentifier();</div><div class="line">                appId = ps.appId;</div><div class="line">                scheduleWritePackageRestrictionsLocked(removeUser);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (removeUser &gt;= <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// 如果是单个用户应用卸载，继续执行这里</span></div><div class="line">        <span class="keyword">if</span> (outInfo != <span class="keyword">null</span>) &#123;</div><div class="line">            outInfo.removedPackage = packageName;</div><div class="line">            outInfo.removedAppId = appId;</div><div class="line">            outInfo.removedUsers = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;removeUser&#125;;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 调用installd执行rmuserdata，清除应用的该用户的数据</span></div><div class="line">        mInstaller.clearUserData(ps.volumeUuid, packageName, removeUser);</div><div class="line">        removeKeystoreDataIfNeeded(removeUser, appId);</div><div class="line">        schedulePackageCleaning(packageName, removeUser, <span class="keyword">false</span>);</div><div class="line">        <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">            <span class="keyword">if</span> (clearPackagePreferredActivitiesLPw(packageName, removeUser)) &#123;</div><div class="line">                scheduleWritePackageRestrictionsLocked(removeUser);</div><div class="line">            &#125;</div><div class="line">            resetUserChangesToRuntimePermissionsAndFlagsLPw(ps, removeUser);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (dataOnly) &#123;</div><div class="line">        <span class="comment">// 先删除应用的数据</span></div><div class="line">        removePackageDataLI(ps, <span class="keyword">null</span>, <span class="keyword">null</span>, outInfo, flags, writeSettings);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">boolean</span> ret = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">if</span> (isSystemApp(ps)) &#123;</div><div class="line">        <span class="comment">// 删除系统应用，这里会把当前版本的资源删除然后恢复旧版本</span></div><div class="line">        ret = deleteSystemPackageLI(ps, allUserHandles, perUserInstalled,</div><div class="line">                flags, outInfo, writeSettings);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 如果不是系统应用，停止该进程，然后删除文件</span></div><div class="line">        killApplication(packageName, ps.appId, <span class="string">"uninstall pkg"</span>);</div><div class="line">        ret = deleteInstalledPackageLI(ps, deleteCodeAndResources, flags,</div><div class="line">                allUserHandles, perUserInstalled,</div><div class="line">                outInfo, writeSettings);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> ret;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>deletePackageLI()</code>的主要工作就是根据不同用户的安装情况来删除应用的APK文件和数据。</p>
+<h3 id="deleteSystemPackageLI"><a href="#deleteSystemPackageLI" class="headerlink" title="deleteSystemPackageLI()"></a>deleteSystemPackageLI()</h3><p>顾名思义，<code>deleteSystemPackageLI()</code>就是用来删除系统应用的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">deleteSystemPackageLI</span><span class="params">(PackageSetting newPs,</span></span></div><div class="line">        <span class="keyword">int</span>[] allUserHandles, <span class="keyword">boolean</span>[] perUserInstalled,</div><div class="line">        <span class="keyword">int</span> flags, PackageRemovedInfo outInfo, <span class="keyword">boolean</span> writeSettings) &#123;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> applyUserRestrictions</div><div class="line">            = (allUserHandles != <span class="keyword">null</span>) &amp;&amp; (perUserInstalled != <span class="keyword">null</span>);</div><div class="line">    PackageSetting disabledPs = <span class="keyword">null</span>;</div><div class="line">    <span class="comment">// 首先从Settings里面看该应用是否是已经升级过的应用</span></div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        disabledPs = mSettings.getDisabledSystemPkgLPr(newPs.name);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (disabledPs == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">// 如果是没有升级过的应用，就直接返回，因为系统应用是无法完全卸载的，只能卸载更新</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">    <span class="comment">// 开始卸载更新</span></div><div class="line">    outInfo.isRemovedPackageSystemUpdate = <span class="keyword">true</span>;</div><div class="line">    <span class="keyword">if</span> (disabledPs.versionCode &lt; newPs.versionCode) &#123;</div><div class="line">        <span class="comment">// 当前应用版本小于被升级应用，不需要保留数据</span></div><div class="line">        flags &amp;= ~PackageManager.DELETE_KEEP_DATA;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 保留数据</span></div><div class="line">        flags |= PackageManager.DELETE_KEEP_DATA;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 调用deleteInstalledPackageLI删除应用数据，下面有详细介绍</span></div><div class="line">    <span class="keyword">boolean</span> ret = deleteInstalledPackageLI(newPs, <span class="keyword">true</span>, flags,</div><div class="line">            allUserHandles, perUserInstalled, outInfo, writeSettings);</div><div class="line">    <span class="keyword">if</span> (!ret) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// writer</span></div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        <span class="comment">// 继续使用旧的系统应用</span></div><div class="line">        mSettings.enableSystemPackageLPw(newPs.name);</div><div class="line">        <span class="comment">// 删除更新包的native依赖库</span></div><div class="line">        NativeLibraryHelper.removeNativeBinariesLI(newPs.legacyNativeLibraryPathString);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 开始安装旧的系统应用包</span></div><div class="line">    <span class="keyword">int</span> parseFlags = PackageParser.PARSE_MUST_BE_APK | PackageParser.PARSE_IS_SYSTEM;</div><div class="line">    <span class="keyword">if</span> (locationIsPrivileged(disabledPs.codePath)) &#123;</div><div class="line">        parseFlags |= PackageParser.PARSE_IS_PRIVILEGED;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 扫描</span></div><div class="line">    <span class="keyword">final</span> PackageParser.Package newPkg;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        newPkg = scanPackageLI(disabledPs.codePath, parseFlags, SCAN_NO_PATHS, <span class="number">0</span>, <span class="keyword">null</span>);</div><div class="line">    &#125; <span class="keyword">catch</span> (PackageManagerException e) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        PackageSetting ps = mSettings.mPackages.get(newPkg.packageName);</div><div class="line">        ps.getPermissionsState().copyFrom(newPs.getPermissionsState());</div><div class="line">        updatePermissionsLPw(newPkg.packageName, newPkg,</div><div class="line">                UPDATE_PERMISSIONS_ALL | UPDATE_PERMISSIONS_REPLACE_PKG);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (applyUserRestrictions) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; allUserHandles.length; i++) &#123;</div><div class="line">                ps.setInstalled(perUserInstalled[i], allUserHandles[i]);</div><div class="line">                mSettings.writeRuntimePermissionsForUserLPr(allUserHandles[i], <span class="keyword">false</span>);</div><div class="line">            &#125;</div><div class="line">            mSettings.writeAllUsersPackageRestrictionsLPr();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (writeSettings) &#123;</div><div class="line">            mSettings.writeLPr();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="deleteInstalledPackageLI"><a href="#deleteInstalledPackageLI" class="headerlink" title="deleteInstalledPackageLI()"></a>deleteInstalledPackageLI()</h3><p>卸载非系统应用，包括删除和该包相关的数据结构以及数据目录，以及创建一个<code>FileInstallArgs</code>来删除 code 和 resources 文件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">deleteInstalledPackageLI</span><span class="params">(PackageSetting ps,</span></span></div><div class="line">        <span class="keyword">boolean</span> deleteCodeAndResources, <span class="keyword">int</span> flags,</div><div class="line">        <span class="keyword">int</span>[] allUserHandles, <span class="keyword">boolean</span>[] perUserInstalled,</div><div class="line">        PackageRemovedInfo outInfo, <span class="keyword">boolean</span> writeSettings) &#123;</div><div class="line">    <span class="keyword">if</span> (outInfo != <span class="keyword">null</span>) &#123;</div><div class="line">        outInfo.uid = ps.appId;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 删除和该包相关的数据结构以及数据目录，下面有详细介绍</span></div><div class="line">    removePackageDataLI(ps, allUserHandles, perUserInstalled, outInfo, flags, writeSettings);</div><div class="line">    <span class="comment">// 删除 code 和 resources，在deletePackageX()的info.args.doPostDeleteLI(true)执行</span></div><div class="line">    <span class="keyword">if</span> (deleteCodeAndResources &amp;&amp; (outInfo != <span class="keyword">null</span>)) &#123;</div><div class="line">        outInfo.args = createInstallArgsForExisting(packageFlagsToInstallFlags(ps),</div><div class="line">                ps.codePathString, ps.resourcePathString, getAppDexInstructionSets(ps));</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="removePackageDataLI"><a href="#removePackageDataLI" class="headerlink" title="removePackageDataLI()"></a>removePackageDataLI()</h3><p>删除和该包相关的数据，包括activity、provider、service等数据，如果没有设置 <code>PackageManager.DELETE_KEEP_DATA</code>，还会删除/data/data下面的目录。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">removePackageDataLI</span><span class="params">(PackageSetting ps,</span></span></div><div class="line">        <span class="keyword">int</span>[] allUserHandles, <span class="keyword">boolean</span>[] perUserInstalled,</div><div class="line">        PackageRemovedInfo outInfo, <span class="keyword">int</span> flags, <span class="keyword">boolean</span> writeSettings) &#123;</div><div class="line">    String packageName = ps.name;</div><div class="line">    <span class="comment">// 删除和该包相关的数据，包括activity、provider、service等数据</span></div><div class="line">    removePackageLI(ps, (flags&amp;REMOVE_CHATTY) != <span class="number">0</span>);</div><div class="line">    <span class="keyword">final</span> PackageSetting deletedPs;</div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        deletedPs = mSettings.mPackages.get(packageName);</div><div class="line">        <span class="keyword">if</span> (outInfo != <span class="keyword">null</span>) &#123;</div><div class="line">            outInfo.removedPackage = packageName;</div><div class="line">            outInfo.removedUsers = deletedPs != <span class="keyword">null</span></div><div class="line">                    ? deletedPs.queryInstalledUsers(sUserManager.getUserIds(), <span class="keyword">true</span>)</div><div class="line">                    : <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> ((flags&amp;PackageManager.DELETE_KEEP_DATA) == <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// 调用installd去删除/data/data下面的目录</span></div><div class="line">        removeDataDirsLI(ps.volumeUuid, packageName);</div><div class="line">        <span class="comment">// 调用startCleaningPackages()，调用DefaultContainerService与该package相关的文件去删除</span></div><div class="line">        schedulePackageCleaning(packageName, UserHandle.USER_ALL, <span class="keyword">true</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// writer</span></div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        <span class="keyword">if</span> (deletedPs != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">if</span> ((flags&amp;PackageManager.DELETE_KEEP_DATA) == <span class="number">0</span>) &#123;</div><div class="line">                clearIntentFilterVerificationsLPw(deletedPs.name, UserHandle.USER_ALL);</div><div class="line">                clearDefaultBrowserIfNeeded(packageName);</div><div class="line">                <span class="keyword">if</span> (outInfo != <span class="keyword">null</span>) &#123;</div><div class="line">                    mSettings.mKeySetManagerService.removeAppKeySetDataLPw(packageName);</div><div class="line">                    <span class="comment">// 从Settings中删除该包的信息</span></div><div class="line">                    outInfo.removedAppId = mSettings.removePackageLPw(packageName);</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 检查mPermissionTrees和mPermissions两个数组中的权限是否是被删除的Package提供，如果有就删除。</span></div><div class="line">                updatePermissionsLPw(deletedPs.name, <span class="keyword">null</span>, <span class="number">0</span>);</div><div class="line">                <span class="keyword">if</span> (deletedPs.sharedUser != <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="comment">// Remove permissions associated with package. Since runtime</span></div><div class="line">                    <span class="comment">// permissions are per user we have to kill the removed package</span></div><div class="line">                    <span class="comment">// or packages running under the shared user of the removed</span></div><div class="line">                    <span class="comment">// package if revoking the permissions requested only by the removed</span></div><div class="line">                    <span class="comment">// package is successful and this causes a change in gids.</span></div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> userId : UserManagerService.getInstance().getUserIds()) &#123;</div><div class="line">                        <span class="keyword">final</span> <span class="keyword">int</span> userIdToKill = mSettings.updateSharedUserPermsLPw(deletedPs,</div><div class="line">                                userId);</div><div class="line">                        <span class="keyword">if</span> (userIdToKill == UserHandle.USER_ALL</div><div class="line">                                || userIdToKill &gt;= UserHandle.USER_OWNER) &#123;</div><div class="line">                            <span class="comment">// If gids changed for this user, kill all affected packages.</span></div><div class="line">                            mHandler.post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                                <span class="meta">@Override</span></div><div class="line">                                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                                    killApplication(deletedPs.name, deletedPs.appId,</div><div class="line">                                            KILL_APP_REASON_GIDS_CHANGED);</div><div class="line">                                &#125;</div><div class="line">                            &#125;);</div><div class="line">                            <span class="keyword">break</span>;</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 从Settings.mPreferredActivities中删除相关的PreferredActivity</span></div><div class="line">                clearPackagePreferredActivitiesLPw(deletedPs.name, UserHandle.USER_ALL);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 设置PackageUserState.installed状态，因为还有可能此次执行的是系统应用降级到初始版本</span></div><div class="line">            <span class="keyword">if</span> (allUserHandles != <span class="keyword">null</span> &amp;&amp; perUserInstalled != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; allUserHandles.length; i++) &#123;</div><div class="line">                    ps.setInstalled(perUserInstalled[i], allUserHandles[i]);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (writeSettings) &#123;</div><div class="line">            <span class="comment">// 将改动的信息写到package.xml中</span></div><div class="line">            mSettings.writeLPr();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (outInfo != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">// A user ID was deleted here. Go through all users and remove it</span></div><div class="line">        <span class="comment">// from KeyStore.</span></div><div class="line">        removeKeystoreDataIfNeeded(UserHandle.USER_ALL, outInfo.removedAppId);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="FileInstallArgs-cleanUpResourcesLI"><a href="#FileInstallArgs-cleanUpResourcesLI" class="headerlink" title="FileInstallArgs.cleanUpResourcesLI()"></a>FileInstallArgs.cleanUpResourcesLI()</h3><p>删除 code、resource、library 文件以及 /data/dalvik-cache 下面相关文件，/data/dalvik-cache 放的是经过 installd dexop t过的文件，可以看一下<a href="http://blog.csdn.net/cnzx219/article/details/48714121" target="_blank" rel="external">这篇文章</a>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">cleanUpResourcesLI</span><span class="params">()</span> </span>&#123;</div><div class="line">    List&lt;String&gt; allCodePaths = Collections.EMPTY_LIST;</div><div class="line">    <span class="keyword">if</span> (codeFile != <span class="keyword">null</span> &amp;&amp; codeFile.exists()) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">final</span> PackageLite pkg = PackageParser.parsePackageLite(codeFile, <span class="number">0</span>);</div><div class="line">            allCodePaths = pkg.getAllCodePaths();</div><div class="line">        &#125; <span class="keyword">catch</span> (PackageParserException e) &#123;&#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 删除code、resource、library文件</span></div><div class="line">    cleanUp();</div><div class="line">    <span class="comment">//删除apk文件</span></div><div class="line">    removeDexFiles(allCodePaths, instructionSets);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">cleanUp</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (codeFile == <span class="keyword">null</span> || !codeFile.exists()) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (codeFile.isDirectory()) &#123;</div><div class="line">        mInstaller.rmPackageDir(codeFile.getAbsolutePath());</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        codeFile.delete();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (resourceFile != <span class="keyword">null</span> &amp;&amp; !FileUtils.contains(codeFile, resourceFile)) &#123;</div><div class="line">        resourceFile.delete();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">removeDexFiles</span><span class="params">(List&lt;String&gt; allCodePaths, String[] instructionSets)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!allCodePaths.isEmpty()) &#123;</div><div class="line">        <span class="keyword">if</span> (instructionSets == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"instructionSet == null"</span>);</div><div class="line">        &#125;</div><div class="line">        String[] dexCodeInstructionSets = getDexCodeInstructionSets(instructionSets);</div><div class="line">        <span class="keyword">for</span> (String codePath : allCodePaths) &#123;</div><div class="line">            <span class="keyword">for</span> (String dexCodeInstructionSet : dexCodeInstructionSets) &#123;</div><div class="line">                <span class="comment">// 调用 installd 删除 /data/dalvik-cache 下面相关文件</span></div><div class="line">                <span class="keyword">int</span> retCode = mInstaller.rmdex(codePath, dexCodeInstructionSet);</div><div class="line">                <span class="keyword">if</span> (retCode &lt; <span class="number">0</span>) &#123;...&#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="adb-uninstall"><a href="#adb-uninstall" class="headerlink" title="adb uninstall"></a>adb uninstall</h2><p>可以通过下面的命令来执行一个应用的卸载工作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">adb uninstall [-k] &lt;package&gt; - remove this app package from the device</div><div class="line">                               (&apos;-k&apos; means keep the data and cache directories)</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android源码分析/" rel="tag"># Android源码分析</a>
+          
+            <a href="/tags/PackageManager/" rel="tag"># PackageManager</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/12/android-source-code-analysis-package-manager-installation/" rel="next" title="Android PackageManager相关源码分析之安装应用">
+                <i class="fa fa-chevron-left"></i> Android PackageManager相关源码分析之安装应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/18/android-source-code-analysis-package-manager-installd/" rel="prev" title="Android PackageManager相关源码分析之installd进程">
+                Android PackageManager相关源码分析之installd进程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#卸载应用"><span class="nav-number">1.</span> <span class="nav-text">卸载应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#deletePackage"><span class="nav-number">1.1.</span> <span class="nav-text">deletePackage()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deletePackageX"><span class="nav-number">1.2.</span> <span class="nav-text">deletePackageX()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deletePackageLI"><span class="nav-number">1.3.</span> <span class="nav-text">deletePackageLI()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deleteSystemPackageLI"><span class="nav-number">1.4.</span> <span class="nav-text">deleteSystemPackageLI()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deleteInstalledPackageLI"><span class="nav-number">1.5.</span> <span class="nav-text">deleteInstalledPackageLI()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#removePackageDataLI"><span class="nav-number">1.6.</span> <span class="nav-text">removePackageDataLI()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FileInstallArgs-cleanUpResourcesLI"><span class="nav-number">1.7.</span> <span class="nav-text">FileInstallArgs.cleanUpResourcesLI()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#adb-uninstall"><span class="nav-number">2.</span> <span class="nav-text">adb uninstall</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

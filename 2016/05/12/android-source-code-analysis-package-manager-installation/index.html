@@ -1,0 +1,960 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android源码分析,PackageManager," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="基于Android6.0来分析Android的应用安装源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android PackageManager相关源码分析之安装应用">
+<meta property="og:url" content="http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="基于Android6.0来分析Android的应用安装源码">
+<meta property="og:image" content="http://yoursite.com/images/android-source-code-analysis-package-manager-installation/packagemanager_install_function.png">
+<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android PackageManager相关源码分析之安装应用">
+<meta name="twitter:description" content="基于Android6.0来分析Android的应用安装源码">
+<meta name="twitter:image" content="http://yoursite.com/images/android-source-code-analysis-package-manager-installation/packagemanager_install_function.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/"/>
+
+
+
+
+
+  <title> Android PackageManager相关源码分析之安装应用 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android PackageManager相关源码分析之安装应用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-12T10:00:00+08:00">
+                2016-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/05/12/android-source-code-analysis-package-manager-installation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/05/12/android-source-code-analysis-package-manager-installation/" class="leancloud_visitors" data-flag-title="Android PackageManager相关源码分析之安装应用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  基于Android6.0来分析Android的应用安装源码
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android中应用的安装方式有多种：</p>
+<ul>
+<li>系统应用安装，这种方式在第一次开机时完成。这部分在上一篇博客<a href=""></a>中已经讲到。</li>
+<li>通过系统安装器安装，这种方式有UI界面交互。</li>
+<li>通过<code>adb install</code>命令安装。</li>
+<li>通过应用市场安装。<br>虽然有这么多的安装方式，但在PMS内部，后面三种的流程却是大同小异的。</li>
+</ul>
+<p>我们先来看一下<code>ApplicationPackageManager</code>给我们开发的安装应用的接口：</p>
+<p><img src="/images/android-source-code-analysis-package-manager-installation/packagemanager_install_function.png" alt="效果图"></p>
+<p>除了<code>ApplicationPackageManager.installExistingPackage()</code>之外，其他的几个方法都会通过<code>mPM.installPackage()</code>通过跨进程调用到PMS的<code>installPackage()</code>方法，因此，Android应用安装部分的介绍我们就从这个方法来说起。<br>Android的应用安装有下面几个阶段的工作：</p>
+<ol>
+<li>复制文件阶段<ol>
+<li>将文件复制到/data/app/目录</li>
+</ol>
+</li>
+<li>解析应用阶段<ol>
+<li>解析apk信息</li>
+<li>dexopt操作</li>
+<li>更新权限信息</li>
+<li>完成安装,发送<code>Intent.ACTION_PACKAGE_ADDED</code>广播</li>
+</ol>
+</li>
+</ol>
+<p>代码调用流程如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">├── PMS.installPackage()</div><div class="line">    └── PMS.installPackageAsUser()</div><div class="line">         |传递 InstallParams 参数</div><div class="line">        PackageHandler.doHandleMessage().INIT_COPY</div><div class="line">         |</div><div class="line">        PackageHandler.doHandleMessage().MCS_BOUND</div><div class="line">         ├── HandlerParams.startCopy()</div><div class="line">         │    ├── InstallParams.handleStartCopy()</div><div class="line">         │    │    └──InstallArgs.copyApk()</div><div class="line">         │    └── InstallParams.handleReturnCode()</div><div class="line">         │         └── PMS.processPendingInstall()</div><div class="line">         │              ├── InstallArgs.doPreInstall()</div><div class="line">         │              ├── PMS.installPackageLI()</div><div class="line">         │              │    ├── PackageParser.parsePackage()</div><div class="line">         │              │    ├── PackageParser.collectCertificates()</div><div class="line">         │              │    ├── PackageParser.collectManifestDigest()</div><div class="line">         │              │    ├── PackageDexOptimizer.performDexOpt()</div><div class="line">         │              │    ├── InstallArgs.doRename()</div><div class="line">         │              │    │    └── InstallArgs.getNextCodePath()</div><div class="line">         │              │    ├── replacePackageLI()</div><div class="line">         │              │    │    ├── shouldCheckUpgradeKeySetLP()</div><div class="line">         │              │    │    ├── compareSignatures()</div><div class="line">         │              │    │    ├── replaceSystemPackageLI()</div><div class="line">         │              │    │    │    ├── killApplication()</div><div class="line">         │              │    │    │    ├── removePackageLI()</div><div class="line">         │              │    │    │    ├── Settings.disableSystemPackageLPw()</div><div class="line">         │              │    │    │    ├── createInstallArgsForExisting()</div><div class="line">         │              │    │    │    ├── deleteCodeCacheDirsLI()</div><div class="line">         │              │    │    │    ├── scanPackageLI()</div><div class="line">         │              │    │    │    └── updateSettingsLI()</div><div class="line">         │              │    │    └── replaceNonSystemPackageLI()</div><div class="line">         │              │    │         ├── deletePackageLI()</div><div class="line">         │              │    │         ├── deleteCodeCacheDirsLI()</div><div class="line">         │              │    │         ├── scanPackageLI()</div><div class="line">         │              │    │         └── updateSettingsLI()</div><div class="line">         │              │    └── installNewPackageLI()</div><div class="line">         │              │         ├── scanPackageLI()</div><div class="line">         │              │         └── updateSettingsLI()</div><div class="line">         │              ├── InstallArgs.doPostInstall()</div><div class="line">         │              ├── BackupManager.restoreAtInstall()</div><div class="line">         │              └── sendMessage(POST_INSTALL)</div><div class="line">         │                   |</div><div class="line">         │                  PackageHandler.doHandleMessage().POST_INSTALL</div><div class="line">         │                   ├── grantRequestedRuntimePermissions()</div><div class="line">         │                   ├── sendPackageBroadcast()</div><div class="line">         │                   └── IPackageInstallObserver.onPackageInstalled()</div><div class="line">         └── PackageHandler.doHandleMessage().MCS_UNBIND</div><div class="line">              └── PackageHandler.disconnectService()</div></pre></td></tr></table></figure>
+<h2 id="adb-install"><a href="#adb-install" class="headerlink" title="adb install"></a>adb install</h2><p>安装 APK 命令可以用<code>adb install [-lrtsd] &lt;file&gt;</code>或者<code>adb install-multiple [-lrtsdp] &lt;file...&gt;</code>，<code>adb install-multiple</code>表示批量安装。<br>参数介绍：</p>
+<ul>
+<li>-l：锁定该程序</li>
+<li>-r：可以覆盖已有的应用，保留数据和缓存文件</li>
+<li>-t：允许测试该应用</li>
+<li>-s：安装在SD卡中</li>
+<li>-d：允许降低版本安装</li>
+<li>-p：部分应用程序安装</li>
+</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="复制文件阶段"><a href="#复制文件阶段" class="headerlink" title="复制文件阶段"></a>复制文件阶段</h3><p>这个阶段的主要工作就是把要安装的应用复制到/data/app目录下，这里主要针对安装第三方应用以及升级系统应用而言，系统应用的安装在初始化部分完成的，前面博客<a href=""></a>已经做过介绍。<br>下面开始分析复制文件过程的源码，首先是从<code>PMS.installPackageAsUser()</code>开始。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">installPackageAsUser</span><span class="params">(String originPath, IPackageInstallObserver2 observer,</span></span></div><div class="line">        <span class="keyword">int</span> installFlags, String installerPackageName, VerificationParams verificationParams,</div><div class="line">        String packageAbiOverride, <span class="keyword">int</span> userId) &#123;</div><div class="line">    <span class="comment">// 检查调用者或者自己有没有安装应用的权限</span></div><div class="line">    mContext.enforceCallingOrSelfPermission(android.Manifest.permission.INSTALL_PACKAGES, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> callingUid = Binder.getCallingUid();</div><div class="line">    enforceCrossUserPermission(callingUid, userId, <span class="keyword">true</span>, <span class="keyword">true</span>, <span class="string">"installPackageAsUser"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (isUserRestricted(userId, UserManager.DISALLOW_INSTALL_APPS)) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">if</span> (observer != <span class="keyword">null</span>) &#123;</div><div class="line">                observer.onPackageInstalled(<span class="string">""</span>, INSTALL_FAILED_USER_RESTRICTED, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException re) &#123;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ((callingUid == Process.SHELL_UID) || (callingUid == Process.ROOT_UID)) &#123;</div><div class="line">        installFlags |= PackageManager.INSTALL_FROM_ADB;</div><div class="line"></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// Caller holds INSTALL_PACKAGES permission, so we're less strict</span></div><div class="line">        <span class="comment">// about installerPackageName.</span></div><div class="line"></div><div class="line">        installFlags &amp;= ~PackageManager.INSTALL_FROM_ADB;</div><div class="line">        installFlags &amp;= ~PackageManager.INSTALL_ALL_USERS;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    UserHandle user;</div><div class="line">    <span class="keyword">if</span> ((installFlags &amp; PackageManager.INSTALL_ALL_USERS) != <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// 可以操作所有用户，意思是可以给所有用户安装应用</span></div><div class="line">        user = UserHandle.ALL;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 只允许给userId安装</span></div><div class="line">        user = <span class="keyword">new</span> UserHandle(userId);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Only system components can circumvent runtime permissions when installing.</span></div><div class="line">    <span class="keyword">if</span> ((installFlags &amp; PackageManager.INSTALL_GRANT_RUNTIME_PERMISSIONS) != <span class="number">0</span></div><div class="line">            &amp;&amp; mContext.checkCallingOrSelfPermission(Manifest.permission</div><div class="line">            .INSTALL_GRANT_RUNTIME_PERMISSIONS) == PackageManager.PERMISSION_DENIED) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(<span class="string">"You need the "</span></div><div class="line">                + <span class="string">"android.permission.INSTALL_GRANT_RUNTIME_PERMISSIONS permission "</span></div><div class="line">                + <span class="string">"to use the PackageManager.INSTALL_GRANT_RUNTIME_PERMISSIONS flag"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    verificationParams.setInstallerUid(callingUid);</div><div class="line"></div><div class="line">    <span class="keyword">final</span> File originFile = <span class="keyword">new</span> File(originPath);</div><div class="line">    <span class="keyword">final</span> OriginInfo origin = OriginInfo.fromUntrustedFile(originFile);</div><div class="line"></div><div class="line">    <span class="keyword">final</span> Message msg = mHandler.obtainMessage(INIT_COPY);</div><div class="line">    msg.obj = <span class="keyword">new</span> InstallParams(origin, <span class="keyword">null</span>, observer, installFlags, installerPackageName,</div><div class="line">            <span class="keyword">null</span>, verificationParams, user, packageAbiOverride, <span class="keyword">null</span>);</div><div class="line">    mHandler.sendMessage(msg);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>installPackageAsUser()</code>主要工作就是进行一系列权限的验证，然后发送 <code>INIT_COPY</code> 消息。<br>发送消息时会传递一个<code>InstallParams</code>参数，<code>InstallParams</code>是继承自<code>HandlerParams</code>抽象类的，用来记录安装应用的参数。<br>下面再来看一下对<code>INIT_COPY</code>消息的处理，该消息的处理在<code>PackageHandler.doHandleMessage()</code>中进行的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> INIT_COPY: &#123;</div><div class="line">    HandlerParams params = (HandlerParams) msg.obj;</div><div class="line">    <span class="keyword">int</span> idx = mPendingInstalls.size();</div><div class="line">    <span class="keyword">if</span> (!mBound) &#123;</div><div class="line">        <span class="comment">// 如果还没有进行绑定工作，要先绑定到DefaultContainerService</span></div><div class="line">        <span class="keyword">if</span> (!connectToService()) &#123;</div><div class="line">            params.serviceError();</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// 添加到等待列表中去，在`onServiceConnected()`发送`MCS_BOUND`消息</span></div><div class="line">            mPendingInstalls.add(idx, params);</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 添加到等待列表中去</span></div><div class="line">        mPendingInstalls.add(idx, params);</div><div class="line">        <span class="comment">// 如果列表中没有其他等待的消息，发送MCS_BOUND</span></div><div class="line">        <span class="keyword">if</span> (idx == <span class="number">0</span>) &#123;</div><div class="line">            mHandler.sendEmptyMessage(MCS_BOUND);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对<code>INIT_COPY</code>消息的处理就是要绑定<code>DefaultContainerService</code>服务，这个服务执行一些针对的文件 copy 等相关工作，然后把消息传递过来的<code>InstallParams</code>参数保存到<code>mPendingInstalls</code>列表。如果原来没有进行过绑定服务工作，那么就等待服务绑定好后在<code>onServiceConnected()</code>发送<code>MCS_BOUND</code>消息，并且传递<code>onServiceConnected()</code>参数中的<code>Binder</code>对象。如果已经连接好服务，当前只有一个安装请求那么就直接发送该消息，如果还有其他的请求，就需要进行排队处理，等待其他请求的<code>MCS_BOUND</code>消息处理完之后再往下接着处理。<br>下面来看一下对<code>MCS_BOUND</code>消息的处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> MCS_BOUND: &#123;</div><div class="line">    <span class="keyword">if</span> (msg.obj != <span class="keyword">null</span>) &#123;</div><div class="line">        mContainerService = (IMediaContainerService) msg.obj;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (mContainerService == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">//如果mContainerService没有初始化，而且`DefaultContainerService`服务也没有连接，抛出错误信息</span></div><div class="line">        <span class="keyword">if</span> (!mBound) &#123;</div><div class="line">            <span class="keyword">for</span> (HandlerParams params : mPendingInstalls) &#123;</div><div class="line">                params.serviceError();</div><div class="line">            &#125;</div><div class="line">            mPendingInstalls.clear();</div><div class="line">        <span class="comment">//如果已经连接，那么就等待服务绑定成功回调函数onServiceConnected()，会再次发送`MCS_BOUND`消息</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;&#125;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mPendingInstalls.size() &gt; <span class="number">0</span>) &#123;</div><div class="line">        HandlerParams params = mPendingInstalls.get(<span class="number">0</span>);</div><div class="line">        <span class="keyword">if</span> (params != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="comment">// 开始执行安装的第一步：文件复制</span></div><div class="line">            <span class="keyword">if</span> (params.startCopy()) &#123;</div><div class="line">                <span class="comment">// 如果复制成功，把这个请求从队列中移除</span></div><div class="line">                <span class="keyword">if</span> (mPendingInstalls.size() &gt; <span class="number">0</span>) &#123;</div><div class="line">                    mPendingInstalls.remove(<span class="number">0</span>);</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (mPendingInstalls.size() == <span class="number">0</span>) &#123;</div><div class="line">                    <span class="keyword">if</span> (mBound) &#123;</div><div class="line">                        <span class="comment">// 如果队列中没有其他的请求，延迟10妙发送MCS_UNBIND消息</span></div><div class="line">                        removeMessages(MCS_UNBIND);</div><div class="line">                        Message ubmsg = obtainMessage(MCS_UNBIND);</div><div class="line">                        sendMessageDelayed(ubmsg, <span class="number">10000</span>);</div><div class="line">                    &#125;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="comment">// 如果队列中还有其他的安装请求，继续发送MCS_BOUND消息</span></div><div class="line">                    mHandler.sendEmptyMessage(MCS_BOUND);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;&#125;</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对<code>MCS_BOUND</code>消息的处理主要就是调用<code>HandlerParams</code>的<code>startCopy()</code>方法开始执行安装任务，并判断安装队列中是否有其他任务，如果有就重复发送<code>MCS_BOUND</code>消息，没有的话就发送<code>MCS_UNBIND</code>消息。<br>对于<code>mContainerService</code>，上面我们知道，它是作为参数在<code>onServiceConnected()</code>发送过来的，它的实现在<code>DefaultContainerService</code>的<code>mBinder</code>。</p>
+<p>下面来看一下对<code>MCS_UNBIND</code>消息的处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> MCS_UNBIND: &#123;</div><div class="line">    <span class="comment">// 再对请求队列进行判断，如果确实为空，那么断开`DefaultContainerService`服务，安装过程结束</span></div><div class="line">    <span class="keyword">if</span> (mPendingInstalls.size() == <span class="number">0</span> &amp;&amp; mPendingVerification.size() == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (mBound) &#123;</div><div class="line">            disconnectService();</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mPendingInstalls.size() &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// 如果列表中又收到安装请求，继续发送MCS_BOUND消息</span></div><div class="line">        mHandler.sendEmptyMessage(MCS_BOUND);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面来开始分析<code>HandlerParams</code>的<code>startCopy()</code>方法的处理过程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">startCopy</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">boolean</span> res;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">// 如果重试超过4次，放弃此次安装，发送MCS_GIVE_UP消息</span></div><div class="line">        <span class="keyword">if</span> (++mRetries &gt; MAX_RETRIES) &#123;</div><div class="line">            mHandler.sendEmptyMessage(MCS_GIVE_UP);</div><div class="line">            handleServiceError();</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// 开始执行复制安装</span></div><div class="line">            handleStartCopy();</div><div class="line">            res = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">        <span class="comment">// 安装出错，发送MCS_RECONNECT重新连接</span></div><div class="line">        mHandler.sendEmptyMessage(MCS_RECONNECT);</div><div class="line">        res = <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 对handleStartCopy()的执行结果进行处理</span></div><div class="line">    handleReturnCode();</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面来开发分析<code>InstallParams</code>的<code>handleStartCopy()</code>方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleStartCopy</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">    <span class="comment">// 首先对安装的标志位进行判断，如果既有内部安装标志，又有外部安装标志，那么就设置</span></div><div class="line">    <span class="comment">//PackageManager.INSTALL_FAILED_INVALID_INSTALL_LOCATION返回值</span></div><div class="line">    ......</div><div class="line">    <span class="comment">//否则就调用mContainerService.getMinimalPackageInfo()来获取一些安装包的信息包括包大小，包名等等</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        pkgLite = mContainerService.getMinimalPackageInfo(origin.resolvedPath, installFlags,</div><div class="line">                packageAbiOverride);</div><div class="line"></div><div class="line">        <span class="comment">//如果空间不足，先释放部分缓存，如果还是不够，放弃此次安装</span></div><div class="line">        <span class="keyword">if</span> (!origin.staged &amp;&amp; pkgLite.recommendedInstallLocation</div><div class="line">                == PackageHelper.RECOMMEND_FAILED_INSUFFICIENT_STORAGE) &#123;</div><div class="line">            <span class="keyword">final</span> StorageManager storage = StorageManager.from(mContext);</div><div class="line">            <span class="keyword">final</span> <span class="keyword">long</span> lowThreshold = storage.getStorageLowBytes(</div><div class="line">                    Environment.getDataDirectory());</div><div class="line"></div><div class="line">            ......</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (ret == PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">        <span class="keyword">int</span> loc = pkgLite.recommendedInstallLocation;</div><div class="line">        ...</div><div class="line">        <span class="comment">// 这里处理一些对安装位置的校验</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 这里会根据`InstallParams`生成一个`InstallArgs`对象</span></div><div class="line">    <span class="keyword">final</span> InstallArgs args = createInstallArgs(<span class="keyword">this</span>);</div><div class="line">    mArgs = args;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (ret == PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">        ......</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> requiredUid = mRequiredVerifierPackage == <span class="keyword">null</span> ? -<span class="number">1</span></div><div class="line">                : getPackageUid(mRequiredVerifierPackage, userIdentifier);</div><div class="line">        <span class="keyword">if</span> (!origin.existing &amp;&amp; requiredUid != -<span class="number">1</span></div><div class="line">                &amp;&amp; isVerificationEnabled(userIdentifier, installFlags)) &#123;</div><div class="line">            <span class="keyword">final</span> Intent verification = <span class="keyword">new</span> Intent(</div><div class="line">                    Intent.ACTION_PACKAGE_NEEDS_VERIFICATION);</div><div class="line">            ...</div><div class="line">            <span class="comment">// 执行一些校验工作，校验成功之后在CHECK_PENDING_VERIFICATION消息处理方法中执行InstallArgs.copyApk()</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// 如果无需校验，执行InstallArgs.copyApk()方法继续</span></div><div class="line">            ret = args.copyApk(mContainerService, <span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    mRet = ret;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>handleStartCopy()</code>执行的工作如下：</p>
+<ol>
+<li>判断安装标志位是否合法</li>
+<li>获取安装包的一些信息</li>
+<li>判断安装空间是否足够</li>
+<li>对安装位置的校验</li>
+<li>判断是否需要对应用进行校验工作</li>
+<li>如果校验成功，执行<code>InstallArgs.copyApk()</code></li>
+<li>如果无需校验，直接执行<code>InstallArgs.copyApk()</code></li>
+</ol>
+<p><code>InstallArgs</code>是个抽象类，一共有三个实现类<code>MoveInstallArgs</code>（针对已有文件的Move）、<code>AsecInstallArgs</code>（针对SD卡）和<code>FileInstallArgs</code>（针对内部存储），会在<code>createInstallArgs()</code>方法中根据不同的参数返回不同的实现类。<br>接下来分析<code>FileInstallArgs.copyApk()</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">copyApk</span><span class="params">(IMediaContainerService imcs, <span class="keyword">boolean</span> temp)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">    <span class="comment">// 已经执行过copy了</span></div><div class="line">    <span class="keyword">if</span> (origin.staged) &#123;</div><div class="line">        codeFile = origin.file;</div><div class="line">        resourceFile = origin.file;</div><div class="line">        <span class="keyword">return</span> PackageManager.INSTALL_SUCCEEDED;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">// 在/data/app/下面生成一个类似vmdl1354353418.tmp的临时文件</span></div><div class="line">        <span class="keyword">final</span> File tempDir = mInstallerService.allocateStageDirLegacy(volumeUuid);</div><div class="line">        codeFile = tempDir;</div><div class="line">        resourceFile = tempDir;</div><div class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">        <span class="keyword">return</span> PackageManager.INSTALL_FAILED_INSUFFICIENT_STORAGE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 在imcs.copyPackage()中会调用target.open()，返回一个文件描述符</span></div><div class="line">    <span class="keyword">final</span> IParcelFileDescriptorFactory target = <span class="keyword">new</span> IParcelFileDescriptorFactory.Stub() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> ParcelFileDescriptor <span class="title">open</span><span class="params">(String name, <span class="keyword">int</span> mode)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">            <span class="keyword">if</span> (!FileUtils.isValidExtFilename(name)) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Invalid filename: "</span> + name);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="keyword">final</span> File file = <span class="keyword">new</span> File(codeFile, name);</div><div class="line">                <span class="keyword">final</span> FileDescriptor fd = Os.open(file.getAbsolutePath(),</div><div class="line">                        O_RDWR | O_CREAT, <span class="number">0644</span>);</div><div class="line">                Os.chmod(file.getAbsolutePath(), <span class="number">0644</span>);</div><div class="line">                <span class="keyword">return</span> <span class="keyword">new</span> ParcelFileDescriptor(fd);</div><div class="line">            &#125; <span class="keyword">catch</span> (ErrnoException e) &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RemoteException(<span class="string">"Failed to open: "</span> + e.getMessage());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> ret = PackageManager.INSTALL_SUCCEEDED;</div><div class="line">    <span class="comment">// 调用DefaultContainerService.mBinder.copyPackage()方法复制文件到target.open()方法指定的文件中，也即是上面产生的临时文件</span></div><div class="line">    ret = imcs.copyPackage(origin.file.getAbsolutePath(), target);</div><div class="line">    <span class="keyword">if</span> (ret != PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">final</span> File libraryRoot = <span class="keyword">new</span> File(codeFile, LIB_DIR_NAME);</div><div class="line">    NativeLibraryHelper.Handle handle = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        handle = NativeLibraryHelper.Handle.create(codeFile);</div><div class="line">        ret = NativeLibraryHelper.copyNativeBinariesWithOverride(handle, libraryRoot,</div><div class="line">                abiOverride);</div><div class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">        ret = PackageManager.INSTALL_FAILED_INTERNAL_ERROR;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        IoUtils.closeQuietly(handle);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> ret;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>复制完成后，apk会被复制到/data/app/目录下面。</p>
+<h3 id="解析应用阶段"><a href="#解析应用阶段" class="headerlink" title="解析应用阶段"></a>解析应用阶段</h3><p>这个阶段的工作是对安装包进行扫描优化，把应用转换成oat格式，然后装载到内存中去。<br>在<code>handleStartCopy()</code>执行完之后，文件复制工作阶段的工作已经完成了，接下来会在<code>startCopy()</code>中调用<code>handleReturnCode()</code>-&gt;<code>processPendingInstall()</code>来进行应用的解析和装载。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">processPendingInstall</span><span class="params">(<span class="keyword">final</span> InstallArgs args, <span class="keyword">final</span> <span class="keyword">int</span> currentStatus)</span> </span>&#123;</div><div class="line">    <span class="comment">// 以异步的方式执行安装，因为安装工作可能持续时间比较长</span></div><div class="line">    mHandler.post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="comment">// 防止重复调用</span></div><div class="line">            mHandler.removeCallbacks(<span class="keyword">this</span>);</div><div class="line">            PackageInstalledInfo res = <span class="keyword">new</span> PackageInstalledInfo();</div><div class="line">            res.returnCode = currentStatus;</div><div class="line">            res.uid = -<span class="number">1</span>;</div><div class="line">            res.pkg = <span class="keyword">null</span>;</div><div class="line">            res.removedInfo = <span class="keyword">new</span> PackageRemovedInfo();</div><div class="line">            <span class="keyword">if</span> (res.returnCode == PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">                <span class="comment">// 如果前面返回的是执行成功的返回值</span></div><div class="line">                args.doPreInstall(res.returnCode);</div><div class="line">                <span class="keyword">synchronized</span> (mInstallLock) &#123;</div><div class="line">                    <span class="comment">// 开始安装应用，带LI后缀的函数执行时要带mInstallLock锁</span></div><div class="line">                    installPackageLI(args, res);</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 执行doPostInstall()，这里主要分析一下FileInstallArgs.doPostInstall()</span></div><div class="line">                <span class="comment">// 如果没有安装成功，这里会清除前面生成的临时文件</span></div><div class="line">                args.doPostInstall(res.returnCode, res.uid);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 执行备份，在下面的情况下会执行备份：1.安装成功，2.是一个新的安装而不是一个升级的操作，3.新的安装包还没有执行过备份操作</span></div><div class="line">            <span class="keyword">final</span> <span class="keyword">boolean</span> update = res.removedInfo.removedPackage != <span class="keyword">null</span>;</div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span> flags = (res.pkg == <span class="keyword">null</span>) ? <span class="number">0</span> : res.pkg.applicationInfo.flags;</div><div class="line">            <span class="keyword">boolean</span> doRestore = !update</div><div class="line">                    &amp;&amp; ((flags &amp; ApplicationInfo.FLAG_ALLOW_BACKUP) != <span class="number">0</span>);</div><div class="line"></div><div class="line">            <span class="comment">// Set up the post-install work request bookkeeping.  This will be used</span></div><div class="line">            <span class="comment">// and cleaned up by the post-install event handling regardless of whether</span></div><div class="line">            <span class="comment">// there's a restore pass performed.  Token values are &gt;= 1.</span></div><div class="line">            <span class="keyword">int</span> token;</div><div class="line">            <span class="keyword">if</span> (mNextInstallToken &lt; <span class="number">0</span>) mNextInstallToken = <span class="number">1</span>;</div><div class="line">            token = mNextInstallToken++;</div><div class="line"></div><div class="line">            PostInstallData data = <span class="keyword">new</span> PostInstallData(args, res);</div><div class="line">            mRunningInstalls.put(token, data);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (res.returnCode == PackageManager.INSTALL_SUCCEEDED &amp;&amp; doRestore) &#123;</div><div class="line">                IBackupManager bm = IBackupManager.Stub.asInterface(</div><div class="line">                        ServiceManager.getService(Context.BACKUP_SERVICE));</div><div class="line">                <span class="keyword">if</span> (bm != <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        <span class="keyword">if</span> (bm.isBackupServiceActive(UserHandle.USER_OWNER)) &#123;</div><div class="line">                            bm.restoreAtInstall(res.pkg.applicationInfo.packageName, token);</div><div class="line">                        &#125; <span class="keyword">else</span> &#123;</div><div class="line">                            doRestore = <span class="keyword">false</span>;</div><div class="line">                        &#125;</div><div class="line">                    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">                    &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">                        doRestore = <span class="keyword">false</span>;</div><div class="line">                    &#125;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    doRestore = <span class="keyword">false</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (!doRestore) &#123;</div><div class="line">                <span class="comment">// 发送POST_INSTALL消息</span></div><div class="line">                Message msg = mHandler.obtainMessage(POST_INSTALL, token, <span class="number">0</span>);</div><div class="line">                mHandler.sendMessage(msg);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>processPendingInstall()</code>方法内部是以异步的方式继续执行安装工作的，首先来调用<code>installPackageLI()</code>执行安装工作，然后调用<code>doPostInstall()</code>对前面的工作的返回结果进行处理，如果没有安装成功，执行清除的工作。然后再执行备份操作。<br>下面来看一下<code>installPackageLI()</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installPackageLI</span><span class="params">(InstallArgs args, PackageInstalledInfo res)</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> installFlags = args.installFlags;</div><div class="line">    <span class="keyword">final</span> String installerPackageName = args.installerPackageName;</div><div class="line">    <span class="keyword">final</span> String volumeUuid = args.volumeUuid;</div><div class="line">    <span class="keyword">final</span> File tmpPackageFile = <span class="keyword">new</span> File(args.getCodePath());</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> forwardLocked = ((installFlags &amp; PackageManager.INSTALL_FORWARD_LOCK) != <span class="number">0</span>);</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> onExternal = (((installFlags &amp; PackageManager.INSTALL_EXTERNAL) != <span class="number">0</span>)</div><div class="line">            || (args.volumeUuid != <span class="keyword">null</span>));</div><div class="line">    <span class="keyword">boolean</span> replace = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">int</span> scanFlags = SCAN_NEW_INSTALL | SCAN_UPDATE_SIGNATURE;</div><div class="line">    <span class="keyword">if</span> (args.move != <span class="keyword">null</span>) &#123;</div><div class="line">        scanFlags |= SCAN_INITIAL;</div><div class="line">    &#125;</div><div class="line">    res.returnCode = PackageManager.INSTALL_SUCCEEDED;</div><div class="line"></div><div class="line">    <span class="comment">// 创建apk解析器</span></div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> parseFlags = mDefParseFlags | PackageParser.PARSE_CHATTY</div><div class="line">            | (forwardLocked ? PackageParser.PARSE_FORWARD_LOCK : <span class="number">0</span>)</div><div class="line">            | (onExternal ? PackageParser.PARSE_EXTERNAL_STORAGE : <span class="number">0</span>);</div><div class="line">    PackageParser pp = <span class="keyword">new</span> PackageParser();</div><div class="line">    pp.setSeparateProcesses(mSeparateProcesses);</div><div class="line">    pp.setDisplayMetrics(mMetrics);</div><div class="line"></div><div class="line">    <span class="keyword">final</span> PackageParser.Package pkg;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">// 开始解析文件，解析apk的信息存储在PackageParser.Package中</span></div><div class="line">        pkg = pp.parsePackage(tmpPackageFile, parseFlags);</div><div class="line">    &#125; <span class="keyword">catch</span> (PackageParserException e) &#123;</div><div class="line">        res.setError(<span class="string">"Failed parse during installPackageLI"</span>, e);</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ......</div><div class="line"></div><div class="line">    <span class="comment">// 获取安装包的签名和AndroidManifest摘要</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        pp.collectCertificates(pkg, parseFlags);</div><div class="line">        pp.collectManifestDigest(pkg);</div><div class="line">    &#125; <span class="keyword">catch</span> (PackageParserException e) &#123;</div><div class="line">        res.setError(<span class="string">"Failed collect during installPackageLI"</span>, e);</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (args.manifestDigest != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">// 与installPackage()方法传递过来的VerificationParams获取的AndroidManifest摘要进行对比</span></div><div class="line">        <span class="keyword">if</span> (!args.manifestDigest.equals(pkg.manifestDigest)) &#123;</div><div class="line">            res.setError(INSTALL_FAILED_PACKAGE_CHANGED, <span class="string">"Manifest digest changed"</span>);</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (DEBUG_INSTALL) &#123;...&#125;</div><div class="line"></div><div class="line">    <span class="comment">// Get rid of all references to package scan path via parser.</span></div><div class="line">    pp = <span class="keyword">null</span>;</div><div class="line">    String oldCodePath = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">boolean</span> systemApp = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        <span class="comment">// 判断是否是升级当前已有应用</span></div><div class="line">        <span class="keyword">if</span> ((installFlags &amp; PackageManager.INSTALL_REPLACE_EXISTING) != <span class="number">0</span>) &#123;</div><div class="line">            String oldName = mSettings.mRenamedPackages.get(pkgName);</div><div class="line">            <span class="keyword">if</span> (pkg.mOriginalPackages != <span class="keyword">null</span></div><div class="line">                    &amp;&amp; pkg.mOriginalPackages.contains(oldName)</div><div class="line">                    &amp;&amp; mPackages.containsKey(oldName)) &#123;</div><div class="line">                <span class="comment">// 如果当前应用已经被升级过</span></div><div class="line">                pkg.setPackageName(oldName);</div><div class="line">                pkgName = pkg.packageName;</div><div class="line">                replace = <span class="keyword">true</span>;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mPackages.containsKey(pkgName)) &#123;</div><div class="line">                <span class="comment">// 当前应用没有被升级过</span></div><div class="line">                replace = <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 如果已有应用oldTargetSdk大于LOLLIPOP_MR1(22)，新升级应用小于LOLLIPOP_MR1，则不允许降级安装</span></div><div class="line">            <span class="comment">// 因为AndroidM(23)引入了全新的权限管理方式：动态权限管理</span></div><div class="line">            <span class="keyword">if</span> (replace) &#123;</div><div class="line">                PackageParser.Package oldPackage = mPackages.get(pkgName);</div><div class="line">                <span class="keyword">final</span> <span class="keyword">int</span> oldTargetSdk = oldPackage.applicationInfo.targetSdkVersion;</div><div class="line">                <span class="keyword">final</span> <span class="keyword">int</span> newTargetSdk = pkg.applicationInfo.targetSdkVersion;</div><div class="line">                <span class="keyword">if</span> (oldTargetSdk &gt; Build.VERSION_CODES.LOLLIPOP_MR1</div><div class="line">                        &amp;&amp; newTargetSdk &lt;= Build.VERSION_CODES.LOLLIPOP_MR1) &#123;</div><div class="line">                    ...</div><div class="line">                    <span class="keyword">return</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        PackageSetting ps = mSettings.mPackages.get(pkgName);</div><div class="line">        <span class="keyword">if</span> (ps != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (shouldCheckUpgradeKeySetLP(ps, scanFlags)) &#123;</div><div class="line">                <span class="comment">// 判断签名是否一致</span></div><div class="line">                <span class="keyword">if</span> (!checkUpgradeKeySetLP(ps, pkg)) &#123;</div><div class="line">                    ...</div><div class="line">                    <span class="keyword">return</span>;</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    verifySignaturesLP(ps, pkg);</div><div class="line">                &#125; <span class="keyword">catch</span> (PackageManagerException e) &#123;</div><div class="line">                    ...</div><div class="line">                    <span class="keyword">return</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            oldCodePath = mSettings.mPackages.get(pkgName).codePathString;</div><div class="line">            <span class="keyword">if</span> (ps.pkg != <span class="keyword">null</span> &amp;&amp; ps.pkg.applicationInfo != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">// 判断是否是系统应用</span></div><div class="line">                systemApp = (ps.pkg.applicationInfo.flags &amp;</div><div class="line">              </div><div class="line">            <span class="comment">// 给origUsers赋值，此变量代表哪些用户以前已经安装过该应用</span></div><div class="line">            res.origUsers = ps.queryInstalledUsers(sUserManager.getUserIds(), <span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// Check whether the newly-scanned package wants to define an already-defined perm</span></div><div class="line">        <span class="keyword">int</span> N = pkg.permissions.size();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = N-<span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">            PackageParser.Permission perm = pkg.permissions.get(i);</div><div class="line">            BasePermission bp = mSettings.mPermissions.get(perm.info.name);</div><div class="line">            <span class="keyword">if</span> (bp != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">// If the defining package is signed with our cert, it's okay.  This</span></div><div class="line">                <span class="comment">// also includes the "updating the same package" case, of course.</span></div><div class="line">                <span class="comment">// "updating same package" could also involve key-rotation.</span></div><div class="line">                <span class="keyword">final</span> <span class="keyword">boolean</span> sigsOk;</div><div class="line">                <span class="keyword">if</span> (bp.sourcePackage.equals(pkg.packageName)</div><div class="line">                        &amp;&amp; (bp.packageSetting <span class="keyword">instanceof</span> PackageSetting)</div><div class="line">                        &amp;&amp; (shouldCheckUpgradeKeySetLP((PackageSetting) bp.packageSetting,</div><div class="line">                                scanFlags))) &#123;</div><div class="line">                    sigsOk = checkUpgradeKeySetLP((PackageSetting) bp.packageSetting, pkg);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    sigsOk = compareSignatures(bp.packageSetting.signatures.mSignatures,</div><div class="line">                            pkg.mSignatures) == PackageManager.SIGNATURE_MATCH;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (!sigsOk) &#123;</div><div class="line">                    <span class="comment">// If the owning package is the system itself, we log but allow</span></div><div class="line">                    <span class="comment">// install to proceed; we fail the install on all other permission</span></div><div class="line">                    <span class="comment">// redefinitions.</span></div><div class="line">                    <span class="keyword">if</span> (!bp.sourcePackage.equals(<span class="string">"android"</span>)) &#123;</div><div class="line">                        res.setError(INSTALL_FAILED_DUPLICATE_PERMISSION, <span class="string">"Package "</span></div><div class="line">                                + pkg.packageName + <span class="string">" attempting to redeclare permission "</span></div><div class="line">                                + perm.info.name + <span class="string">" already owned by "</span> + bp.sourcePackage);</div><div class="line">                        res.origPermission = perm.info.name;</div><div class="line">                        res.origPackage = bp.sourcePackage;</div><div class="line">                        <span class="keyword">return</span>;</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        pkg.permissions.remove(i);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 系统应用不允许安装在SDCard上</span></div><div class="line">    <span class="keyword">if</span> (systemApp &amp;&amp; onExternal) &#123;</div><div class="line">        res.setError(INSTALL_FAILED_INVALID_INSTALL_LOCATION,</div><div class="line">                <span class="string">"Cannot install updates to system apps on sdcard"</span>);</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 下面将会进行Dex优化操作</span></div><div class="line">    <span class="keyword">if</span> (args.move != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">// 如果是针对已有文件的Move，就不用在进行Dex优化了</span></div><div class="line">        scanFlags |= SCAN_NO_DEX;</div><div class="line">        scanFlags |= SCAN_MOVE;</div><div class="line"></div><div class="line">        <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">            <span class="keyword">final</span> PackageSetting ps = mSettings.mPackages.get(pkgName);</div><div class="line">            <span class="keyword">if</span> (ps == <span class="keyword">null</span>) &#123;</div><div class="line">                res.setError(INSTALL_FAILED_INTERNAL_ERROR,</div><div class="line">                        <span class="string">"Missing settings for moved package "</span> + pkgName);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            pkg.applicationInfo.primaryCpuAbi = ps.primaryCpuAbiString;</div><div class="line">            pkg.applicationInfo.secondaryCpuAbi = ps.secondaryCpuAbiString;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!forwardLocked &amp;&amp; !pkg.applicationInfo.isExternalAsec()) &#123;</div><div class="line">        <span class="comment">// 没有设置了PRIVATE_FLAG_FORWARD_LOCK标志且不是安装在外部SD卡</span></div><div class="line">        <span class="comment">// 使能 SCAN_NO_DEX 标志位，在后面的操作中会跳过 dexopt</span></div><div class="line">        scanFlags |= SCAN_NO_DEX;</div><div class="line"></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            derivePackageAbi(pkg, <span class="keyword">new</span> File(pkg.codePath), args.abiOverride,</div><div class="line">                    <span class="keyword">true</span> <span class="comment">/* extract libs */</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (PackageManagerException pme) &#123;</div><div class="line">            res.setError(INSTALL_FAILED_INTERNAL_ERROR, <span class="string">"Error deriving application ABI"</span>);</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 进行DexOpt操作，会调用install 的dexopt命令，优化后的文件放在 /data/dalvik-cache/ 下面</span></div><div class="line">        <span class="keyword">int</span> result = mPackageDexOptimizer</div><div class="line">                .performDexOpt(pkg, <span class="keyword">null</span> <span class="comment">/* instruction sets */</span>, <span class="keyword">false</span> <span class="comment">/* forceDex */</span>,</div><div class="line">                        <span class="keyword">false</span> <span class="comment">/* defer */</span>, <span class="keyword">false</span> <span class="comment">/* inclDependencies */</span>,</div><div class="line">                        <span class="keyword">true</span> <span class="comment">/* boot complete */</span>);</div><div class="line">        <span class="keyword">if</span> (result == PackageDexOptimizer.DEX_OPT_FAILED) &#123;</div><div class="line">            res.setError(INSTALL_FAILED_DEXOPT, <span class="string">"Dexopt failed for "</span> + pkg.codePath);</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 重命名/data/app/下面应用的目录名字，调用getNextCodePath()来获取目录名称，类似com.android.browser-1</span></div><div class="line">    <span class="keyword">if</span> (!args.doRename(res.returnCode, pkg, oldCodePath)) &#123;</div><div class="line">        res.setError(INSTALL_FAILED_INSUFFICIENT_STORAGE, <span class="string">"Failed rename"</span>);</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    startIntentFilterVerifications(args.user.getIdentifier(), replace, pkg);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (replace) &#123;</div><div class="line">        <span class="comment">// 如果是安装升级包，调用replacePackageLI</span></div><div class="line">        replacePackageLI(pkg, parseFlags, scanFlags | SCAN_REPLACING, args.user,</div><div class="line">                installerPackageName, volumeUuid, res);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 如果安装的新应用，调用installNewPackageLI</span></div><div class="line">        installNewPackageLI(pkg, parseFlags, scanFlags | SCAN_DELETE_DATA_ON_FAILURES,</div><div class="line">                args.user, installerPackageName, volumeUuid, res);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        <span class="keyword">final</span> PackageSetting ps = mSettings.mPackages.get(pkgName);</div><div class="line">        <span class="keyword">if</span> (ps != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="comment">// 安装完成后，给newUsers赋值，此变量代表哪些用户刚刚安装过该应用</span></div><div class="line">            res.newUsers = ps.queryInstalledUsers(sUserManager.getUserIds(), <span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>installPackageLI()</code>方法首先解析apk安装包，然后判断当前是否有安装该应用，然后根据不同的情况进行不同的处理，然后进行Dex优化操作。如果是升级安装，调用<code>replacePackageLI()</code>。如果是新安装，调用<code>installNewPackageLI()</code>。这两个方法会在下面详细介绍。</p>
+<p><code>processPendingInstall()</code>方法中执行安装的最后是发送<code>POST_INSTALL</code>消息，现在来看一下这个消息需要处理的事情：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> POST_INSTALL: &#123;</div><div class="line">    <span class="comment">//从正在安装队列中将当前正在安装的任务删除</span></div><div class="line">    PostInstallData data = mRunningInstalls.get(msg.arg1);</div><div class="line">    mRunningInstalls.delete(msg.arg1);</div><div class="line">    <span class="keyword">boolean</span> deleteOld = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (data != <span class="keyword">null</span>) &#123;</div><div class="line">        InstallArgs args = data.args;</div><div class="line">        PackageInstalledInfo res = data.res;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (res.returnCode == PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">            <span class="keyword">final</span> String packageName = res.pkg.applicationInfo.packageName;</div><div class="line">            res.removedInfo.sendBroadcast(<span class="keyword">false</span>, <span class="keyword">true</span>, <span class="keyword">false</span>);</div><div class="line">            Bundle extras = <span class="keyword">new</span> Bundle(<span class="number">1</span>);</div><div class="line">            extras.putInt(Intent.EXTRA_UID, res.uid);</div><div class="line"></div><div class="line">            <span class="comment">// 现在已经成功的安装了应用，在发送广播之前先授予一些必要的权限</span></div><div class="line">            <span class="comment">// 这些权限在 installPackageAsUser 中创建 InstallParams 时传递的，为null</span></div><div class="line">            <span class="keyword">if</span> ((args.installFlags</div><div class="line">                    &amp; PackageManager.INSTALL_GRANT_RUNTIME_PERMISSIONS) != <span class="number">0</span>) &#123;</div><div class="line">                grantRequestedRuntimePermissions(res.pkg, args.user.getIdentifier(),</div><div class="line">                        args.installGrantPermissions);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 看一下当前应用对于哪些用户是第一次安装，哪些用户是升级安装</span></div><div class="line">            <span class="keyword">int</span>[] firstUsers;</div><div class="line">            <span class="keyword">int</span>[] updateUsers = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">0</span>];</div><div class="line">            <span class="keyword">if</span> (res.origUsers == <span class="keyword">null</span> || res.origUsers.length == <span class="number">0</span>) &#123;</div><div class="line">                <span class="comment">// 所有用户都是第一次安装</span></div><div class="line">                firstUsers = res.newUsers;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                firstUsers = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">0</span>];</div><div class="line">                <span class="comment">// 这里再从刚刚已经安装该包的用户中选出哪些是以前已经安装过该包的用户</span></div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;res.newUsers.length; i++) &#123;</div><div class="line">                    <span class="keyword">int</span> user = res.newUsers[i];</div><div class="line">                    <span class="keyword">boolean</span> isNew = <span class="keyword">true</span>;</div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;res.origUsers.length; j++) &#123;</div><div class="line">                        <span class="keyword">if</span> (res.origUsers[j] == user) &#123;</div><div class="line">                            <span class="comment">// 找到以前安装过该包的用户</span></div><div class="line">                            isNew = <span class="keyword">false</span>;</div><div class="line">                            <span class="keyword">break</span>;</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">if</span> (isNew) &#123;</div><div class="line">                        <span class="keyword">int</span>[] newFirst = <span class="keyword">new</span> <span class="keyword">int</span>[firstUsers.length+<span class="number">1</span>];</div><div class="line">                        System.arraycopy(firstUsers, <span class="number">0</span>, newFirst, <span class="number">0</span>,</div><div class="line">                                firstUsers.length);</div><div class="line">                        newFirst[firstUsers.length] = user;</div><div class="line">                        firstUsers = newFirst;</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        <span class="keyword">int</span>[] newUpdate = <span class="keyword">new</span> <span class="keyword">int</span>[updateUsers.length+<span class="number">1</span>];</div><div class="line">                        System.arraycopy(updateUsers, <span class="number">0</span>, newUpdate, <span class="number">0</span>,</div><div class="line">                                updateUsers.length);</div><div class="line">                        newUpdate[updateUsers.length] = user;</div><div class="line">                        updateUsers = newUpdate;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//为新安装用户发送广播ACTION_PACKAGE_ADDED</span></div><div class="line">            sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED,</div><div class="line">                    packageName, extras, <span class="keyword">null</span>, <span class="keyword">null</span>, firstUsers);</div><div class="line">            <span class="keyword">final</span> <span class="keyword">boolean</span> update = res.removedInfo.removedPackage != <span class="keyword">null</span>;</div><div class="line">            <span class="keyword">if</span> (update) &#123;</div><div class="line">                extras.putBoolean(Intent.EXTRA_REPLACING, <span class="keyword">true</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//为升级安装用户发送广播ACTION_PACKAGE_ADDED</span></div><div class="line">            sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED,</div><div class="line">                    packageName, extras, <span class="keyword">null</span>, <span class="keyword">null</span>, updateUsers);</div><div class="line">            <span class="keyword">if</span> (update) &#123;</div><div class="line">                <span class="comment">// 如果是升级安装，还会发送ACTION_PACKAGE_REPLACED和ACTION_MY_PACKAGE_REPLACED广播</span></div><div class="line">                sendPackageBroadcast(Intent.ACTION_PACKAGE_REPLACED,</div><div class="line">                        packageName, extras, <span class="keyword">null</span>, <span class="keyword">null</span>, updateUsers);</div><div class="line">                sendPackageBroadcast(Intent.ACTION_MY_PACKAGE_REPLACED,</div><div class="line">                        <span class="keyword">null</span>, <span class="keyword">null</span>, packageName, <span class="keyword">null</span>, updateUsers);</div><div class="line"></div><div class="line">                <span class="comment">// 判断该包是否是设置了PRIVATE_FLAG_FORWARD_LOCK标志或者是安装在外部SD卡</span></div><div class="line">                <span class="keyword">if</span> (res.pkg.isForwardLocked() || isExternal(res.pkg)) &#123;</div><div class="line">                    <span class="keyword">int</span>[] uidArray = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; res.pkg.applicationInfo.uid &#125;;</div><div class="line">                    ArrayList&lt;String&gt; pkgList = <span class="keyword">new</span> ArrayList&lt;String&gt;(<span class="number">1</span>);</div><div class="line">                    pkgList.add(packageName);</div><div class="line">                    sendResourcesChangedBroadcast(<span class="keyword">true</span>, <span class="keyword">true</span>,</div><div class="line">                            pkgList,uidArray, <span class="keyword">null</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (res.removedInfo.args != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">// 删除被替换应用的资源目录标记位</span></div><div class="line">                deleteOld = <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 针对Browser的一些处理</span></div><div class="line">            <span class="keyword">if</span> (firstUsers.length &gt; <span class="number">0</span>) &#123;</div><div class="line">                <span class="keyword">if</span> (packageIsBrowser(packageName, firstUsers[<span class="number">0</span>])) &#123;</div><div class="line">                    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> userId : firstUsers) &#123;</div><div class="line">                            mSettings.setDefaultBrowserPackageNameLPw(<span class="keyword">null</span>, userId);</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 执行一次GC操作</span></div><div class="line">        Runtime.getRuntime().gc();</div><div class="line">        <span class="comment">// 执行删除操作</span></div><div class="line">        <span class="keyword">if</span> (deleteOld) &#123;</div><div class="line">            <span class="keyword">synchronized</span> (mInstallLock) &#123;</div><div class="line">                res.removedInfo.args.doPostDeleteLI(<span class="keyword">true</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (args.observer != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="comment">// 调用回调函数通知安装者此次安装的结果</span></div><div class="line">                Bundle extras = extrasForInstallResult(res);</div><div class="line">                args.observer.onPackageInstalled(res.name, res.returnCode,</div><div class="line">                        res.returnMsg, extras);</div><div class="line">            &#125; <span class="keyword">catch</span> (RemoteException e) &#123;...&#125;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;...&#125;</div><div class="line">&#125; <span class="keyword">break</span>;</div></pre></td></tr></table></figure>
+<p>对<code>POST_INSTALL</code>消息消息的处理主要就是一些权限处理、发送广播、通知相关应用处理安装结果，然后调用回调函数onPackageInstalled()，这个回调函数是调用installPackage()方法时作为参数传递进来的。</p>
+<p><em>总结一下解析应用阶段的工作</em>：</p>
+<ol>
+<li>解析apk信息</li>
+<li>dexopt操作</li>
+<li>更新权限信息</li>
+<li>完成安装,发送<code>Intent.ACTION_PACKAGE_ADDED</code>广播</li>
+</ol>
+<h2 id="其他相关方法分析"><a href="#其他相关方法分析" class="headerlink" title="其他相关方法分析"></a>其他相关方法分析</h2><h3 id="PackageManagerService获取新的apk目录名字"><a href="#PackageManagerService获取新的apk目录名字" class="headerlink" title="PackageManagerService获取新的apk目录名字"></a>PackageManagerService获取新的apk目录名字</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> File <span class="title">getNextCodePath</span><span class="params">(File targetDir, String packageName)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> suffix = <span class="number">1</span>;</div><div class="line">    File result;</div><div class="line">    <span class="keyword">do</span> &#123;</div><div class="line">        result = <span class="keyword">new</span> File(targetDir, packageName + <span class="string">"-"</span> + suffix);</div><div class="line">        suffix++;</div><div class="line">    &#125; <span class="keyword">while</span> (result.exists());</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>类似com.android.browser-1</p>
+<h3 id="replacePackageLI"><a href="#replacePackageLI" class="headerlink" title="replacePackageLI()"></a>replacePackageLI()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">replacePackageLI</span><span class="params">(PackageParser.Package pkg, <span class="keyword">int</span> parseFlags, <span class="keyword">int</span> scanFlags,</span></span></div><div class="line">        UserHandle user, String installerPackageName, String volumeUuid,</div><div class="line">        PackageInstalledInfo res) &#123;</div><div class="line">    <span class="keyword">final</span> PackageParser.Package oldPackage;</div><div class="line">    <span class="keyword">final</span> String pkgName = pkg.packageName;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span>[] allUsers;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span>[] perUserInstalled;</div><div class="line"></div><div class="line">    <span class="comment">// First find the old package info and check signatures</span></div><div class="line">    <span class="comment">// 获取老版本应用的信息并对比签名是否匹配</span></div><div class="line">    <span class="keyword">synchronized</span>(mPackages) &#123;</div><div class="line">        oldPackage = mPackages.get(pkgName);</div><div class="line">        <span class="keyword">final</span> PackageSetting ps = mSettings.mPackages.get(pkgName);</div><div class="line">        <span class="keyword">if</span> (shouldCheckUpgradeKeySetLP(ps, scanFlags)) &#123;</div><div class="line">            <span class="comment">// 如果是自定义的签名 defined-keyset</span></div><div class="line">            <span class="keyword">if</span>(!checkUpgradeKeySetLP(ps, pkg)) &#123;</div><div class="line">                res.setError(INSTALL_FAILED_UPDATE_INCOMPATIBLE,</div><div class="line">                        <span class="string">"New package not signed by keys specified by upgrade-keysets: "</span></div><div class="line">                        + pkgName);</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// 判断签名是否匹配</span></div><div class="line">            <span class="keyword">if</span> (compareSignatures(oldPackage.mSignatures, pkg.mSignatures)</div><div class="line">                != PackageManager.SIGNATURE_MATCH) &#123;</div><div class="line">                res.setError(INSTALL_FAILED_UPDATE_INCOMPATIBLE,</div><div class="line">                        <span class="string">"New package has a different signature: "</span> + pkgName);</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        allUsers = sUserManager.getUserIds();</div><div class="line">        perUserInstalled = <span class="keyword">new</span> <span class="keyword">boolean</span>[allUsers.length];</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; allUsers.length; i++) &#123;</div><div class="line">            perUserInstalled[i] = ps != <span class="keyword">null</span> ? ps.getInstalled(allUsers[i]) : <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">boolean</span> sysPkg = (isSystemApp(oldPackage));</div><div class="line">    <span class="keyword">if</span> (sysPkg) &#123;</div><div class="line">        <span class="comment">// 如果是系统应用，调用replaceSystemPackageLI()方法，下面会详细介绍</span></div><div class="line">        replaceSystemPackageLI(oldPackage, pkg, parseFlags, scanFlags,</div><div class="line">                user, allUsers, perUserInstalled, installerPackageName, volumeUuid, res);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 如果不是系统应用，调用replaceNonSystemPackageLI()方法，下面会详细介绍</span></div><div class="line">        replaceNonSystemPackageLI(oldPackage, pkg, parseFlags, scanFlags,</div><div class="line">                user, allUsers, perUserInstalled, installerPackageName, volumeUuid, res);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="replaceSystemPackageLI"><a href="#replaceSystemPackageLI" class="headerlink" title="replaceSystemPackageLI()"></a>replaceSystemPackageLI()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">replaceSystemPackageLI</span><span class="params">(PackageParser.Package deletedPackage,</span></span></div><div class="line">        PackageParser.Package pkg, <span class="keyword">int</span> parseFlags, <span class="keyword">int</span> scanFlags, UserHandle user,</div><div class="line">        <span class="keyword">int</span>[] allUsers, <span class="keyword">boolean</span>[] perUserInstalled, String installerPackageName,</div><div class="line">        String volumeUuid, PackageInstalledInfo res) &#123;</div><div class="line">    <span class="keyword">boolean</span> disabledSystem = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">boolean</span> updatedSettings = <span class="keyword">false</span>;</div><div class="line">    parseFlags |= PackageParser.PARSE_IS_SYSTEM;</div><div class="line">    <span class="keyword">if</span> ((deletedPackage.applicationInfo.privateFlags&amp;ApplicationInfo.PRIVATE_FLAG_PRIVILEGED)</div><div class="line">            != <span class="number">0</span>) &#123;</div><div class="line">        parseFlags |= PackageParser.PARSE_IS_PRIVILEGED;</div><div class="line">    &#125;</div><div class="line">    String packageName = deletedPackage.packageName;</div><div class="line">    <span class="keyword">if</span> (packageName == <span class="keyword">null</span>) &#123;</div><div class="line">        res.setError(INSTALL_FAILED_REPLACE_COULDNT_DELETE,</div><div class="line">                <span class="string">"Attempt to delete null packageName."</span>);</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    PackageParser.Package oldPkg;</div><div class="line">    PackageSetting oldPkgSetting;</div><div class="line">    <span class="comment">// 读取原来应用的信息</span></div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        oldPkg = mPackages.get(packageName);</div><div class="line">        oldPkgSetting = mSettings.mPackages.get(packageName);</div><div class="line">        <span class="keyword">if</span>((oldPkg == <span class="keyword">null</span>) || (oldPkg.applicationInfo == <span class="keyword">null</span>) ||</div><div class="line">                (oldPkgSetting == <span class="keyword">null</span>)) &#123;</div><div class="line">            res.setError(INSTALL_FAILED_REPLACE_COULDNT_DELETE,</div><div class="line">                    <span class="string">"Couldn't find package:"</span> + packageName + <span class="string">" information"</span>);</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 先杀掉原来应用的进程</span></div><div class="line">    killApplication(packageName, oldPkg.applicationInfo.uid, <span class="string">"replace sys pkg"</span>);</div><div class="line"></div><div class="line">    res.removedInfo.uid = oldPkg.applicationInfo.uid;</div><div class="line">    res.removedInfo.removedPackage = packageName;</div><div class="line">    <span class="comment">// 删除原有应用包，这个方法后面博客会详细介绍</span></div><div class="line">    removePackageLI(oldPkgSetting, <span class="keyword">true</span>);</div><div class="line">    <span class="comment">// writer</span></div><div class="line">    <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">        <span class="comment">//把这个结果保存到mSettings中，即在xml文件中用&lt;updated-package&gt;标签标记</span></div><div class="line">        disabledSystem = mSettings.disableSystemPackageLPw(packageName);</div><div class="line">        <span class="keyword">if</span> (!disabledSystem &amp;&amp; deletedPackage != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="comment">// 如果包名和资源路径没有变化，分别构造FileInstallArgs和AsecInstallArgs来完成code和resource资源的清除。</span></div><div class="line">            res.removedInfo.args = createInstallArgsForExisting(<span class="number">0</span>,</div><div class="line">                    deletedPackage.applicationInfo.getCodePath(),</div><div class="line">                    deletedPackage.applicationInfo.getResourcePath(),</div><div class="line">                    getAppDexInstructionSets(deletedPackage.applicationInfo));</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            res.removedInfo.args = <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 调用installd 的 rmcodecache 命令清除代码缓存文件</span></div><div class="line">    deleteCodeCacheDirsLI(pkg.volumeUuid, packageName);</div><div class="line"></div><div class="line">    res.returnCode = PackageManager.INSTALL_SUCCEEDED;</div><div class="line">    pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;</div><div class="line"></div><div class="line">    PackageParser.Package newPackage = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">// 开始扫描文件，scanPackageLI在上一篇博客中有详细介绍，这里会解析文件，设置apk路径以及资源路径</span></div><div class="line">        newPackage = scanPackageLI(pkg, parseFlags, scanFlags, <span class="number">0</span>, user);</div><div class="line">        <span class="keyword">if</span> (newPackage.mExtras != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="comment">// 更新安装时间与升级时间</span></div><div class="line">            <span class="keyword">final</span> PackageSetting newPkgSetting = (PackageSetting) newPackage.mExtras;</div><div class="line">            newPkgSetting.firstInstallTime = oldPkgSetting.firstInstallTime;</div><div class="line">            newPkgSetting.lastUpdateTime = System.currentTimeMillis();</div><div class="line"></div><div class="line">            <span class="comment">// is the update attempting to change shared user? that isn't going to work...</span></div><div class="line">            <span class="keyword">if</span> (oldPkgSetting.sharedUser != newPkgSetting.sharedUser) &#123;</div><div class="line">                res.setError(INSTALL_FAILED_SHARED_USER_INCOMPATIBLE,</div><div class="line">                        <span class="string">"Forbidding shared user change from "</span> + oldPkgSetting.sharedUser</div><div class="line">                        + <span class="string">" to "</span> + newPkgSetting.sharedUser);</div><div class="line">                updatedSettings = <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (res.returnCode == PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">            <span class="comment">// 扫描成功，更新配置文件</span></div><div class="line">            updateSettingsLI(newPackage, installerPackageName, volumeUuid, allUsers,</div><div class="line">                    perUserInstalled, res, user);</div><div class="line">            updatedSettings = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125; <span class="keyword">catch</span> (PackageManagerException e) &#123;</div><div class="line">        res.setError(<span class="string">"Package couldn't be installed in "</span> + pkg.codePath, e);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (res.returnCode != PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">        <span class="comment">// 如果安装失败，删除新安装的包，恢复以前的应用包</span></div><div class="line">        <span class="keyword">if</span> (newPackage != <span class="keyword">null</span>) &#123;</div><div class="line">            removeInstalledPackageLI(newPackage, <span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            scanPackageLI(oldPkg, parseFlags, SCAN_UPDATE_SIGNATURE, <span class="number">0</span>, user);</div><div class="line">        &#125; <span class="keyword">catch</span> (PackageManagerException e) &#123;...&#125;</div><div class="line">        <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">            <span class="keyword">if</span> (disabledSystem) &#123;</div><div class="line">                mSettings.enableSystemPackageLPw(packageName);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (updatedSettings) &#123;</div><div class="line">                mSettings.setInstallerPackageName(packageName,</div><div class="line">                        oldPkgSetting.installerPackageName);</div><div class="line">            &#125;</div><div class="line">            mSettings.writeLPr();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="replaceNonSystemPackageLI"><a href="#replaceNonSystemPackageLI" class="headerlink" title="replaceNonSystemPackageLI()"></a>replaceNonSystemPackageLI()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">replaceNonSystemPackageLI</span><span class="params">(PackageParser.Package deletedPackage,</span></span></div><div class="line">        PackageParser.Package pkg, <span class="keyword">int</span> parseFlags, <span class="keyword">int</span> scanFlags, UserHandle user,</div><div class="line">        <span class="keyword">int</span>[] allUsers, <span class="keyword">boolean</span>[] perUserInstalled, String installerPackageName,</div><div class="line">        String volumeUuid, PackageInstalledInfo res) &#123;</div><div class="line">    String pkgName = deletedPackage.packageName;</div><div class="line">    <span class="keyword">boolean</span> deletedPkg = <span class="keyword">true</span>;</div><div class="line">    <span class="keyword">boolean</span> updatedSettings = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">long</span> origUpdateTime;</div><div class="line">    <span class="keyword">if</span> (pkg.mExtras != <span class="keyword">null</span>) &#123;</div><div class="line">        origUpdateTime = ((PackageSetting)pkg.mExtras).lastUpdateTime;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        origUpdateTime = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 删除原有的包，这个方法后面博客会详细介绍</span></div><div class="line">    <span class="keyword">if</span> (!deletePackageLI(pkgName, <span class="keyword">null</span>, <span class="keyword">true</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, PackageManager.DELETE_KEEP_DATA,</div><div class="line">            res.removedInfo, <span class="keyword">true</span>)) &#123;</div><div class="line">        <span class="comment">// 删除失败</span></div><div class="line">        res.setError(INSTALL_FAILED_REPLACE_COULDNT_DELETE, <span class="string">"replaceNonSystemPackageLI"</span>);</div><div class="line">        deletedPkg = <span class="keyword">false</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 删除成功</span></div><div class="line">        <span class="keyword">if</span> (deletedPackage.isForwardLocked() || isExternal(deletedPackage)) &#123;</div><div class="line">            <span class="comment">// 如果设置PRIVATE_FLAG_FORWARD_LOCK标志或者是安装在外部SD卡，需要发送广播</span></div><div class="line">            <span class="keyword">final</span> <span class="keyword">int</span>[] uidArray = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; deletedPackage.applicationInfo.uid &#125;;</div><div class="line">            <span class="keyword">final</span> ArrayList&lt;String&gt; pkgList = <span class="keyword">new</span> ArrayList&lt;String&gt;(<span class="number">1</span>);</div><div class="line">            pkgList.add(deletedPackage.applicationInfo.packageName);</div><div class="line">            sendResourcesChangedBroadcast(<span class="keyword">false</span>, <span class="keyword">true</span>, pkgList, uidArray, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 调用installd 的 rmcodecache 命令清除代码缓存文件</span></div><div class="line">        deleteCodeCacheDirsLI(pkg.volumeUuid, pkgName);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="comment">//扫描文件，更新配置文件</span></div><div class="line">            <span class="keyword">final</span> PackageParser.Package newPackage = scanPackageLI(pkg, parseFlags,</div><div class="line">                    scanFlags | SCAN_UPDATE_TIME, System.currentTimeMillis(), user);</div><div class="line">            updateSettingsLI(newPackage, installerPackageName, volumeUuid, allUsers,</div><div class="line">                    perUserInstalled, res, user);</div><div class="line">            updatedSettings = <span class="keyword">true</span>;</div><div class="line">        &#125; <span class="keyword">catch</span> (PackageManagerException e) &#123;</div><div class="line">            res.setError(<span class="string">"Package couldn't be installed in "</span> + pkg.codePath, e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (res.returnCode != PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">        <span class="comment">// 如果安装失败，执行恢复原来的应用的工作</span></div><div class="line">        <span class="keyword">if</span>(updatedSettings) &#123;</div><div class="line">            deletePackageLI(</div><div class="line">                    pkgName, <span class="keyword">null</span>, <span class="keyword">true</span>, allUsers, perUserInstalled,</div><div class="line">                    PackageManager.DELETE_KEEP_DATA,</div><div class="line">                            res.removedInfo, <span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (deletedPkg) &#123;</div><div class="line">            File restoreFile = <span class="keyword">new</span> File(deletedPackage.codePath);</div><div class="line">            <span class="keyword">boolean</span> oldExternal = isExternal(deletedPackage);</div><div class="line">            <span class="keyword">int</span> oldParseFlags  = mDefParseFlags | PackageParser.PARSE_CHATTY |</div><div class="line">                    (deletedPackage.isForwardLocked() ? PackageParser.PARSE_FORWARD_LOCK : <span class="number">0</span>) |</div><div class="line">                    (oldExternal ? PackageParser.PARSE_EXTERNAL_STORAGE : <span class="number">0</span>);</div><div class="line">            <span class="keyword">int</span> oldScanFlags = SCAN_UPDATE_SIGNATURE | SCAN_UPDATE_TIME;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                scanPackageLI(restoreFile, oldParseFlags, oldScanFlags, origUpdateTime, <span class="keyword">null</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (PackageManagerException e) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">synchronized</span> (mPackages) &#123;</div><div class="line">                updatePermissionsLPw(deletedPackage.packageName, deletedPackage,</div><div class="line">                        UPDATE_PERMISSIONS_ALL);</div><div class="line">                mSettings.writeLPr();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="installNewPackageLI"><a href="#installNewPackageLI" class="headerlink" title="installNewPackageLI()"></a>installNewPackageLI()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installNewPackageLI</span><span class="params">(PackageParser.Package pkg, <span class="keyword">int</span> parseFlags, <span class="keyword">int</span> scanFlags,</span></span></div><div class="line">        UserHandle user, String installerPackageName, String volumeUuid,</div><div class="line">        PackageInstalledInfo res) &#123;</div><div class="line">    String pkgName = pkg.packageName;</div><div class="line"></div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> dataDirExists = Environment</div><div class="line">            .getDataUserPackageDirectory(volumeUuid, UserHandle.USER_OWNER, pkgName).exists();</div><div class="line">    <span class="keyword">synchronized</span>(mPackages) &#123;</div><div class="line">        <span class="keyword">if</span> (mSettings.mRenamedPackages.containsKey(pkgName)) &#123;</div><div class="line">            <span class="comment">// 和某个应用更改过包名前的名称相同，安装失败</span></div><div class="line">            res.setError(INSTALL_FAILED_ALREADY_EXISTS, <span class="string">"Attempt to re-install "</span> + pkgName</div><div class="line">                    + <span class="string">" without first uninstalling package running as "</span></div><div class="line">                    + mSettings.mRenamedPackages.get(pkgName));</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (mPackages.containsKey(pkgName)) &#123;</div><div class="line">            <span class="comment">// 已经有同名的应用，安装失败</span></div><div class="line">            res.setError(INSTALL_FAILED_ALREADY_EXISTS, <span class="string">"Attempt to re-install "</span> + pkgName</div><div class="line">                    + <span class="string">" without first uninstalling."</span>);</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">//扫描文件</span></div><div class="line">        PackageParser.Package newPackage = scanPackageLI(pkg, parseFlags, scanFlags,</div><div class="line">                System.currentTimeMillis(), user);</div><div class="line">        <span class="comment">//更新配置文件</span></div><div class="line">        updateSettingsLI(newPackage, installerPackageName, volumeUuid, <span class="keyword">null</span>, <span class="keyword">null</span>, res, user);</div><div class="line">        <span class="keyword">if</span> (res.returnCode != PackageManager.INSTALL_SUCCEEDED) &#123;</div><div class="line">            <span class="comment">// 如果安装失败，删除已经安装的数据</span></div><div class="line">            deletePackageLI(pkgName, UserHandle.ALL, <span class="keyword">false</span>, <span class="keyword">null</span>, <span class="keyword">null</span>,</div><div class="line">                    dataDirExists ? PackageManager.DELETE_KEEP_DATA : <span class="number">0</span>,</div><div class="line">                            res.removedInfo, <span class="keyword">true</span>);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125; <span class="keyword">catch</span> (PackageManagerException e) &#123;</div><div class="line">        res.setError(<span class="string">"Package couldn't be installed in "</span> + pkg.codePath, e);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android源码分析/" rel="tag"># Android源码分析</a>
+          
+            <a href="/tags/PackageManager/" rel="tag"># PackageManager</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/06/android-source-code-analysis-package-manager-init/" rel="next" title="Android PackageManager相关源码分析之PMS初始化">
+                <i class="fa fa-chevron-left"></i> Android PackageManager相关源码分析之PMS初始化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/16/android-source-code-analysis-package-manager-uninstallation/" rel="prev" title="Android PackageManager相关源码分析之卸载应用">
+                Android PackageManager相关源码分析之卸载应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#adb-install"><span class="nav-number">2.</span> <span class="nav-text">adb install</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">3.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#复制文件阶段"><span class="nav-number">3.1.</span> <span class="nav-text">复制文件阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析应用阶段"><span class="nav-number">3.2.</span> <span class="nav-text">解析应用阶段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他相关方法分析"><span class="nav-number">4.</span> <span class="nav-text">其他相关方法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PackageManagerService获取新的apk目录名字"><span class="nav-number">4.1.</span> <span class="nav-text">PackageManagerService获取新的apk目录名字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#replacePackageLI"><span class="nav-number">4.2.</span> <span class="nav-text">replacePackageLI()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#replaceSystemPackageLI"><span class="nav-number">4.3.</span> <span class="nav-text">replaceSystemPackageLI()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#replaceNonSystemPackageLI"><span class="nav-number">4.4.</span> <span class="nav-text">replaceNonSystemPackageLI()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#installNewPackageLI"><span class="nav-number">4.5.</span> <span class="nav-text">installNewPackageLI()</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
