@@ -275,6 +275,14 @@ date: 2016-12-1 10:00:00
 
  - [AndroidSdkSourceAnalysis](https://github.com/LittleFriendsGroup/AndroidSdkSourceAnalysis)：CJJ，网易的开发者，由他带领发起的Android SDK源码解析GitHub项目
 
+### GitBook
+
+ - [wizardforcel](https://www.gitbook.com/@wizardforcel)：目前收集了约223本书，偏向计算机科学，编程类等。
+ - [Python 核心编程 第二版](https://www.gitbook.com/book/wizardforcel/core-python-2e/details)
+ - [简明 Python 教程](https://www.gitbook.com/book/lenkimo/byte-of-python-chinese-edition/details)
+ - [编程之法：面试和算法心得](https://www.gitbook.com/book/wizardforcel/the-art-of-programming-by-july/details)
+ - [Linux Mint 学习笔记](https://www.gitbook.com/book/skyao/learning-linux-mint/details)
+ - [笨办法学C](https://www.gitbook.com/book/wizardforcel/lcthw/details)
 
 ## 必读书籍
 
