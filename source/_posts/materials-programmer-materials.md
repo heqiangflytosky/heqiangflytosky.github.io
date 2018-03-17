@@ -101,6 +101,7 @@ date: 2016-12-1 10:00:00
 #### 个人主页
 
  - [阮一峰的网络日志](http://www.ruanyifeng.com/home.html)：著有《ECMAScript 6入门》一书，并在该网站开源。
+ - [廖雪峰的官方网站](https://www.liaoxuefeng.com/)
  - [胡凯](http://hukai.me/)：腾讯开发者，翻译了一系列的Google Android性能优化典范的文章。
  - [Gityuan](http://gityuan.com/)：作者是小米的MIUI系统工程师Gityuan(如果你想了解Android系统中常见模块的实现细节的话，非常推荐阅读这位开发者的博客，他的博客中文章的质量都非常高)，里面的“Friends”专栏有很多开发学习资料。
  - [Hujiawei Bujidao](https://hujiaweibujidao.github.io/)：很多Android系统性能相关的文章
