@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2016/01/11/blog-hexo-optimize/</loc>
+    
+    <lastmod>2018-03-20T11:03:04.483Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/404.html</loc>
     
     <lastmod>2018-03-20T10:55:09.526Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
     
     <lastmod>2018-03-17T15:18:53.776Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/09/05/android-architecture-google-samples/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
@@ -37,14 +37,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
+    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
+    <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -58,14 +58,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/08/development-tool-android-studio-debug-skill/</loc>
+    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/08/development-tool-gradle-android-dsl-extension/</loc>
+    <loc>http://yoursite.com/2016/02/08/development-tool-android-studio-debug-skill/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -79,6 +79,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2016/03/08/development-tool-gradle-android-dsl-extension/</loc>
+    
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/09/06/android-architecture-google-mvp-basic/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
@@ -86,7 +93,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
+    <loc>http://yoursite.com/2016/03/26/development-tool-gradle-command-line/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -121,6 +128,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2016/03/13/development-tool-gradle-task/</loc>
+    
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/07/08/development-tool-markdown-plant-uml/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
@@ -135,7 +149,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/13/development-tool-gradle-task/</loc>
+    <loc>http://yoursite.com/2017/09/05/android-architecture-google-samples/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -156,21 +170,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/26/development-tool-gradle-command-line/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
+    <loc>http://yoursite.com/2016/12/03/development-tool-import-source-to-android-studio/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -184,7 +184,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/01/11/blog-hexo-optimize/</loc>
+    <loc>http://yoursite.com/2015/03/20/android-get-dir-path/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -205,7 +205,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/03/20/android-get-dir-path/</loc>
+    <loc>http://yoursite.com/2015/02/02/android-ipc-messenger/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -213,13 +213,6 @@
   
   <url>
     <loc>http://yoursite.com/2015/02/01/android-ipc-aidl/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2015/02/02/android-ipc-messenger/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -268,14 +261,21 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/12/03/development-tool-import-source-to-android-studio/</loc>
+    <loc>http://yoursite.com/2017/04/26/android-performance-optimization-rotate-screen/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/04/26/android-performance-optimization-rotate-screen/</loc>
+    <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/04/08/android-source-code-analysis-ams-app-ipc/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -296,7 +296,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
+    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -310,14 +310,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/04/08/android-source-code-analysis-ams-app-ipc/</loc>
+    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
+    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -338,13 +338,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -352,7 +345,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -360,6 +353,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/05/08/open-source-android-plugins-small-sample/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -387,7 +387,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
+    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -408,14 +408,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-begin-to-study/</loc>
+    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -423,6 +416,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/10/react-native-begin-to-study/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -492,7 +492,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
+    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
