@@ -174,6 +174,31 @@ tags:
 在主题配置文件中添加
 menu:
   tags: /tags
+
+### 创建404页面
+
+在 source 目录下创建 404.html 文件，页面内容可以自己定义，比如：
+
+```
+
+<html>
+    <head>
+         <meta charset="UTF-8" />
+         <title>404</title>                                                                                                                                        
+    </head>
+    <body>
+         <p> 有可能博客调整导致您所访问的文章地址发生变化，在此深感抱歉！ </p>
+         <p> 请在在首页、归档或者分类里面找您需要的文章。  </p>
+         <p> 
+             <a href="http://www.heqiangfly.com/">回到首页</a>
+             <a href="http://www.heqiangfly.com/archives/">归档</a>
+             <a href="http://www.heqiangfly.com/categories/">分类</a>   
+         </p>
+    </body>
+</html>
+
+```
+
 ### 主题
 [官方推荐的一些主题](https://hexo.io/themes/) 。
 在 Hexo 中有两份主要的配置文件，其名称都是 _config.yml。博客的整体配置在hexo\_config.yml文件中进行。默认使用的主题是landscape，主题的配置在hexo\themes\landscape\_config.yml。
