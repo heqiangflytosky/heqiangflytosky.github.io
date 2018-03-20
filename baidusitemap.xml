@@ -3,9 +3,10 @@
 
 
     
+    
   <url>
     <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
-    <lastmod>2018-03-11T14:49:10.000Z</lastmod>
+    <lastmod>2018-03-17T15:18:53.776Z</lastmod>
     <data>
         <display>
         <title>程序员学习资料汇总</title>
@@ -17,28 +18,6 @@
            
              
               <breadCrumb title="学习资料" url="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>Gradle 使用指南 -- 基础配置</title>
-        <pubTime>2016-03-03T02:00:00.000Z</pubTime>
-        
-        <tag>开发工具</tag>
-         
-        <tag>Gradle</tag>
-         
-         
-           
-             
-              <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
           
         </display>
     </data>
@@ -202,28 +181,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>Git 常用命令</title>
-        <pubTime>2015-03-07T02:00:00.000Z</pubTime>
-        
-        <tag>开发工具</tag>
-         
-        <tag>Git</tag>
-         
-         
-           
-             
-              <breadCrumb title="开发工具" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2016/03/08/development-tool-gradle-android-dsl-extension/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
@@ -239,6 +196,28 @@
            
              
               <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Git 常用命令</title>
+        <pubTime>2015-03-07T02:00:00.000Z</pubTime>
+        
+        <tag>开发工具</tag>
+         
+        <tag>Git</tag>
+         
+         
+           
+             
+              <breadCrumb title="开发工具" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
           
         </display>
     </data>
@@ -268,14 +247,14 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/03/26/development-tool-gradle-command-line/</loc>
+    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Gradle 使用指南 -- 玩转命令行</title>
-        <pubTime>2016-03-26T02:00:00.000Z</pubTime>
+        <title>Gradle 使用指南 -- 基础配置</title>
+        <pubTime>2016-03-03T02:00:00.000Z</pubTime>
         
-        <tag>Android</tag>
+        <tag>开发工具</tag>
          
         <tag>Gradle</tag>
          
@@ -314,26 +293,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/03/20/development-tool-gradle-groovy-basic/</loc>
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>Groovy 教程系列（一）-- Groovy 入门</title>
-        <pubTime>2016-03-20T02:00:00.000Z</pubTime>
-        
-        <tag>Groovy</tag>
-         
-         
-           
-             
-              <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2016/03/15/development-tool-gradle-customized-plugin/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
@@ -346,6 +305,26 @@
         <tag>Android Studio</tag>
          
         <tag>Gradle</tag>
+         
+         
+           
+             
+              <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/03/20/development-tool-gradle-groovy-basic/</loc>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Groovy 教程系列（一）-- Groovy 入门</title>
+        <pubTime>2016-03-20T02:00:00.000Z</pubTime>
+        
+        <tag>Groovy</tag>
          
          
            
@@ -492,6 +471,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2016/03/26/development-tool-gradle-command-line/</loc>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Gradle 使用指南 -- 玩转命令行</title>
+        <pubTime>2016-03-26T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Gradle</tag>
+         
+         
+           
+             
+              <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -536,21 +537,21 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
+    <loc>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android PackageManager相关源码分析之PMS初始化</title>
-        <pubTime>2016-05-06T02:00:00.000Z</pubTime>
+        <title>Android：使用JitPack发布Github开源库</title>
+        <pubTime>2017-07-21T02:00:00.000Z</pubTime>
         
-        <tag>Android源码分析</tag>
+        <tag>Android</tag>
          
-        <tag>PackageManager</tag>
+        <tag>JitPack</tag>
          
          
            
              
-              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -558,21 +559,19 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
+    <loc>http://yoursite.com/2016/01/11/blog-hexo-optimize/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android PackageManager相关源码分析之installd进程</title>
-        <pubTime>2016-05-18T02:00:00.000Z</pubTime>
+        <title>Hexo博客配置优化</title>
+        <pubTime>2016-01-11T02:00:00.000Z</pubTime>
         
-        <tag>Android源码分析</tag>
-         
-        <tag>PackageManager</tag>
+        <tag>Hexo</tag>
          
          
            
              
-              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+              <breadCrumb title="Hexo" url="http://yoursite.com/categories/Hexo/"/>
           
         </display>
     </data>
@@ -590,26 +589,6 @@
         <tag>Hexo</tag>
          
         <tag>Next Theme</tag>
-         
-         
-           
-             
-              <breadCrumb title="Hexo" url="http://yoursite.com/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/01/11/blog-hexo-optimize/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Hexo博客配置优化</title>
-        <pubTime>2016-01-11T02:00:00.000Z</pubTime>
-        
-        <tag>Hexo</tag>
          
          
            
@@ -1120,6 +1099,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        
+        <tag>V8</tag>
+         
+        <tag>J2V8</tag>
+         
+         
+           
+             
+              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/05/08/open-source-android-plugins-small-sample/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -1137,28 +1138,6 @@
            
              
               <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
-        
-        <tag>V8</tag>
-         
-        <tag>J2V8</tag>
-         
-         
-           
-             
-              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
           
         </display>
     </data>
@@ -1254,28 +1233,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/10/14/open-source-rxjava-guide-flowable/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>RxJava 使用指南（二）-- Flowable 和 Subscriber</title>
-        <pubTime>2017-10-14T02:00:00.000Z</pubTime>
-        
-        <tag>Android开源项目</tag>
-         
-        <tag>RxJava</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -1298,21 +1255,43 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</loc>
+    <loc>http://yoursite.com/2017/10/14/open-source-rxjava-guide-flowable/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android：使用JitPack发布Github开源库</title>
-        <pubTime>2017-07-21T02:00:00.000Z</pubTime>
+        <title>RxJava 使用指南（二）-- Flowable 和 Subscriber</title>
+        <pubTime>2017-10-14T02:00:00.000Z</pubTime>
         
-        <tag>Android</tag>
+        <tag>Android开源项目</tag>
          
-        <tag>JitPack</tag>
+        <tag>RxJava</tag>
          
          
            
              
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android PackageManager相关源码分析之PMS初始化</title>
+        <pubTime>2016-05-06T02:00:00.000Z</pubTime>
+        
+        <tag>Android源码分析</tag>
+         
+        <tag>PackageManager</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
           
         </display>
     </data>
@@ -1532,6 +1511,28 @@
         <tag>Android源码分析</tag>
          
         <tag>startActivity</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android PackageManager相关源码分析之installd进程</title>
+        <pubTime>2016-05-18T02:00:00.000Z</pubTime>
+        
+        <tag>Android源码分析</tag>
+         
+        <tag>PackageManager</tag>
          
          
            
