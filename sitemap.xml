@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2018/03/20/python-practice-web-crawler-iqiyi/</loc>
+    
+    <lastmod>2018-03-23T15:04:12.901Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2016/01/11/blog-hexo-optimize/</loc>
     
     <lastmod>2018-03-20T11:03:04.483Z</lastmod>
@@ -23,21 +30,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -51,6 +44,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
+    
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2016/02/16/android-problem-multidex-verifyerror/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
@@ -58,7 +58,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
+    <loc>http://yoursite.com/2016/03/26/development-tool-gradle-command-line/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -86,14 +86,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/09/06/android-architecture-google-mvp-basic/</loc>
+    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/26/development-tool-gradle-command-line/</loc>
+    <loc>http://yoursite.com/2017/09/06/android-architecture-google-mvp-basic/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -121,14 +121,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/12/02/android-architecture-components-room/</loc>
+    <loc>http://yoursite.com/2016/03/13/development-tool-gradle-task/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/13/development-tool-gradle-task/</loc>
+    <loc>http://yoursite.com/2017/12/02/android-architecture-components-room/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -170,14 +170,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/12/03/development-tool-import-source-to-android-studio/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</loc>
+    <loc>http://yoursite.com/2016/12/03/development-tool-import-source-to-android-studio/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -205,14 +205,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/02/02/android-ipc-messenger/</loc>
+    <loc>http://yoursite.com/2015/02/01/android-ipc-aidl/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/02/01/android-ipc-aidl/</loc>
+    <loc>http://yoursite.com/2015/02/02/android-ipc-messenger/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -310,14 +310,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
+    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
+    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -415,7 +415,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -423,6 +423,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/10/react-native-begin-to-study/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -492,7 +499,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
+    <loc>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
