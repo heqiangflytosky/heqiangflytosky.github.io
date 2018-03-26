@@ -29,7 +29,7 @@ date: 2016-2-8 10:00:00
  - 求值表达式：计算表达式的值；
  - 变量观察区：显示当前可以观察到的对象及其属性值；
  - 指定变量观察区：观察指定变量或者表达式的变化；
- - 当前线程堆栈区：查看当前断点所在的线程以及调用堆栈；
+ - 当前线程堆栈区：（点击Restore ‘Threads’ View 按钮）查看当前断点所在的线程以及调用堆栈；
 
 #### 调试功能键
 
@@ -131,15 +131,11 @@ date: 2016-2-8 10:00:00
 https://www.jianshu.com/p/f695b8f8839c
 https://www.jianshu.com/p/f19ee61126ef
 https://www.jianshu.com/p/011eb88f4e0d/
-http://blog.csdn.net/huangxiaominglipeng/article/details/53100811
-http://blog.csdn.net/yy1300326388/article/details/46501871
 -->
 
 ## 设置技巧
 
 http://blog.csdn.net/heqiangflytosky/article/details/51140346
-
-http://liukun.engineer/2016/04/10/Android-Studio-advanced-configuration/
 
 ## 常用插件
 

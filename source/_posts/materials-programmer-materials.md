@@ -480,6 +480,7 @@ date: 2016-12-1 10:00:00
 ### 专利检索
 
  - [专利检索及分析](http://www.pss-system.gov.cn)
+ - [专利探索者](http://www.patexplorer.com/)
 
 ### 其他
 
