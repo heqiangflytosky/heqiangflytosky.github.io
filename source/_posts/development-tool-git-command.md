@@ -39,6 +39,19 @@ date: 2015-3-7 10:00:00
  - `git stash show -p stash@{0}`  查看名为stash{0}缓存的文件差异
  - `git stash drop stash@{0}` 丢弃名为stash{0}缓存
 
+## git config
+
+先说一下--local、--global和--system三个参数的区别：
+
+ 1. --local的作用域最小，仅对当前的git项目的配置
+ 2. --global的作用域是针对当前用户
+ 3. --system的作用域最大，是针对整个计算机系统
+
+再来说一下他们的优先级，如果在三个级别都有配置，那么优先级为：
+--local > --global > --system
+
+ - 查看配置：git config --local -l
+ - 配置用户名和邮箱：git config --local user.name "xx"  git config --global user.email "xx"
 
 ## git reset
 
