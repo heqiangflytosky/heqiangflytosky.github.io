@@ -296,12 +296,19 @@ dependencies {
         compile ('com.jakewharton:butterknife:8.5.1'){
             exclude module: 'support-compat'
         }
+
+        // gradle 3.0以后版本支持的写法
+        implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+        api 'com.android.support:design:26.1.0'
 }
 ```
 
  - `compile`和`provided`
 `compile`表示编译时提供并打包进apk。
 `provided`表示只在编译时提供，不打包进apk。
+ - `implementation` 和 `api`
+`implementation` 会将依赖隐藏在内部而不对外公开，就是说使用 `implementation` 的依赖不会传递。比如：一个项目中app模块依赖A模块，A模块使用 `implementation` 来依赖 fastjson ，那么app里面如果不添加依赖的话就不能直接引用fastjson。
+`api` 和以前的 `compile` 是一样的。
  - `exclude` 防止重复依赖，后面会重点介绍
  - `transitive` 排除所有的传递依赖，后面会重点介绍
  - `include`
