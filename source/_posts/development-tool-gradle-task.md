@@ -101,6 +101,20 @@ Hello world!
 Greetings from the hello task.
 ```
 
+### 在Task中调用其他Task
+
+```
+task A << {
+    C.execute()
+}
+
+task C << {
+    println 'Hello from C'
+}
+```
+
+上面代码通过 `execute()` 方法来调用 Task C。
+
 ## 任务依赖
 
 ### 创建依赖
@@ -236,6 +250,10 @@ task hello2 (type: Copy){
 }
 ```
 其他 Type 具体详见文档，此处不详细解释。
+
+### Exec
+
+[Exec Task](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.Exec.html)用来执行命令行。
 
 ## 任务的执行条件
 
