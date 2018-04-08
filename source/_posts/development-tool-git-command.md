@@ -10,10 +10,20 @@ date: 2015-3-7 10:00:00
 
 ## git log
 
- - `git log -p`：显示每一次的提交的差异，用 -2 则仅显示最近的两次更新。
- - `git log -p -x` （x为次数，整数）：指定了显示差异的次数
- - `git log --stat`：显示简要的增改行数统计，用 -2 则仅显示最近的两次更新。
- - `git log --author=寒江蓑笠`：显示某个作者的提交记录
+ - `git log -p`：显示每一次的提交的差异。
+ - `git log -p -n` （n为次数，整数）：指定了显示差异的次数，用 -2 则仅显示最近的两次更新.
+ - `git log --stat`：显示简要的增改行数统计，后面跟次数比如 -2 则仅显示最近的两次更新。
+ - `git log --author=寒江蓑笠`：显示某个作者的提交记录。
+ - `git log --committer=寒江蓑笠`：显示某个提交者的提交记录。
+ - `git log --since, --after`：仅显示指定时间之后的提交。
+ - `git log --until, --before`：仅显示指定时间之前的提交。
+ - `git log --pretty=oneline`：`--pretty` 选项可以指定使用完全不同于默认格式的方式展示提交历史。比如用 `oneline` 将 每个提交 放在一行显示，这在提交数很大时非常有用。另外还有 `short`，`full` 和 `fuller` 可以用。 `format` 可以定制要显示的记录格式，这样的输出便于后期编程提取分析。
+ - `git log --shortstat`：只显示 --stat 中最后的行数修改添加移除统计。
+ - `git log --name-only`：仅在提交信息后显示已修改的文件清单。
+ - `git log --name-status`：显示新增、修改、删除的文件清单。
+ - `git log --abbrev-commit`：仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。
+ - `git log --relative-date`：使用较短的相对时间显示（比如，"2 weeks ago"）。
+ - `git log --graph`：显示 ASCII 图形表示的分支合并历史。
 
 ## git checkout
 
