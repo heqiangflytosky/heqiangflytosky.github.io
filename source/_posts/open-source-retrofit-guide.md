@@ -26,8 +26,8 @@ Retrofit 是 Squareup 公司开源的网络请求框架，它其实是对 OkHttp
 注意 `compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'` 是添加了对RxJava2的支持，一定要注意RxJava的版本对应问题，否则会报错：
 
 ```
-                                                  Caused by: java.lang.IllegalArgumentException: Unable to create call adapter for io.reactivex.Observable<com.example.heqiang.testsomething.testretrofit.TestRetrofit$TestBean>
-                                                     for method MyService.getDataRx
+                                                  Caused by: java.lang.IllegalArgumentException: Unable to create call adapter for io.reactivex.Observable<com.example.heqiang.testsomething.testretrofit.RequestManager$TestBean>
+                                                     for method RequestService.getDataRx
                                                      at retrofit2.ServiceMethod$Builder.methodError(ServiceMethod.java:752)
                                                      at retrofit2.ServiceMethod$Builder.createCallAdapter(ServiceMethod.java:237)
                                                      at retrofit2.ServiceMethod$Builder.build(ServiceMethod.java:162)
@@ -35,10 +35,10 @@ Retrofit 是 Squareup 公司开源的网络请求框架，它其实是对 OkHttp
                                                      at retrofit2.Retrofit$1.invoke(Retrofit.java:147)
                                                      at java.lang.reflect.Proxy.invoke(Proxy.java:393)
                                                      at $Proxy0.getDataRx(Unknown Source)
-                                                     at com.example.heqiang.testsomething.testretrofit.TestRetrofit.getDataRx(TestRetrofit.java:68)
+                                                     at com.example.heqiang.testsomething.testretrofit.RequestManager.getDataRx(RequestManager.java:68)
                                                      at com.example.heqiang.testsomething.rxjava.RxJavaActivity.testRetrofitRx(RxJavaActivity.java:105)
                                                      	... 11 more
-                                                  Caused by: java.lang.IllegalArgumentException: Could not locate call adapter for io.reactivex.Observable<com.example.heqiang.testsomething.testretrofit.TestRetrofit$TestBean>.
+                                                  Caused by: java.lang.IllegalArgumentException: Could not locate call adapter for io.reactivex.Observable<com.example.heqiang.testsomething.testretrofit.RequestManager$TestBean>.
                                                    Tried:
                                                     * retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
                                                     * retrofit2.ExecutorCallAdapterFactory
@@ -49,27 +49,37 @@ Retrofit 是 Squareup 公司开源的网络请求框架，它其实是对 OkHttp
 
 先上代码：
 
-MyService.java
+CallBack.java
+
+```
+public interface CallBack<T> {
+    void onSuccess(T t);
+    void onFail(Exception e);
+}
+```
+
+RequestService.java
 
 ```java
-public interface MyService {
+public interface RequestService {
     @GET("hq/urls")
-    Call<TestRetrofit.TestBean> getData();
+    Call<RequestManager.TestBean> getData();
     // 支持RxJava
     @GET("hq/urls")
-    Observable<TestRetrofit.TestBean> getDataRx();
+    Observable<RequestManager.TestBean> getDataRx();
 }
 
 ```
 
-TestRetrofit.java
+RequestManager.java
 
 ```java
-public class TestRetrofit {
+public class RequestManager {
 
-    private MyService mMyService;
+    private RequestService mRequestService;
+    private static volatile RequestManager sInstance;
 
-    public TestRetrofit(Context context){
+    private RequestManager(Context context){
 
         Cache cache = new Cache(new File(context.getExternalCacheDir(),"test"),100*1024*1024);
         Log.e("Test", "cache dir = " + context.getExternalCacheDir());
@@ -87,11 +97,22 @@ public class TestRetrofit {
                 //加入对RxJava2的支持
                 //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-        mMyService = retrofit.create(MyService.class);
+        mRequestService = retrofit.create(RequestService.class);
+    }
+
+    public static RequestManager getInstance(){
+        if(sInstance == null){
+            synchronized (RequestManager.class){
+                if(sInstance == null){
+                    sInstance = new RequestManager();
+                }
+            }
+        }
+        return sInstance;
     }
 
     public void getData(){
-        Call<TestBean> call = mMyService.getData();
+        Call<TestBean> call = mRequestService.getData();
         call.enqueue(new Callback<TestBean>() {
 
             @Override
@@ -120,18 +141,26 @@ public class TestRetrofit {
 }
 ```
 
-## 结合RxJava
+## 结合RxJava和RxAndroid
 
-在上面的代码中去掉 `addCallAdapterFactory(RxJava2CallAdapterFactory.create())` 的注释，再加上定义的 `Observable<TestRetrofit.TestBean> getDataRx()` 方法，就添加了对 RxJava2 的支持。
+在上面的代码中去掉 `addCallAdapterFactory(RxJava2CallAdapterFactory.create())` 的注释，再加上定义的 `Observable<RequestManager.TestBean> getDataRx()` 方法，就添加了对 RxJava2 的支持。
+如果需要使用 RxAndroid 还要在build.gradle中添加依赖：
+
+```
+compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+```
+
 
 ```java
-    public void getDataRx(){
-        mMyService.getDataRx().subscribeOn(Schedulers.io())
+    public void getDataRx(final CallBack<TestBean> callBack){
+        mRequestService.getDataRx().subscribeOn(Schedulers.io())
+                // 依赖RxAndroid
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TestBean>() {
                     @Override
                     public void onError(Throwable e) {
                         Log.e("Test","onError");
+                        callBack.onFail(new Exception(e));
                     }
 
                     @Override
@@ -147,6 +176,7 @@ public class TestRetrofit {
                     @Override
                     public void onNext(TestBean testBean) {
                         Log.e("Test","onNext = "+testBean.toString());
+                        callBack.onSuccess(testBean);
                     }
                 });
 ```
@@ -208,7 +238,8 @@ HTTP 方式是对上面 6 中的扩展，用法：
 ```
 
  - Field ：POST请求，提交单个数据
- - Body：POST请求，相当于多个@Field，以对象的形式提交
+ - FieldMap：POST请求，和@Filed作用一致，用于不确定表单参数
+ - Body：POST请求，以对象的形式提交，多用于post请求发送非表单数据,比如想要以post方式传递json格式数据
 
 ```java
     @FormUrlEncoded
@@ -221,6 +252,16 @@ HTTP 方式是对上面 6 中的扩展，用法：
     @POST("add2gank")
     Call<Response> add2Gank(@Body ExtrasBean bean);
 ```
+
+```java
+    @FormUrlEncoded
+    @POST("add2gank")
+    void add2Gank(@FieldMap Map<String, String> map)
+```
+
+可以看到这里多了一个 `@FormUrlEncoded` 注解，如果去掉 `@FromUrlEncoded` 在 post 请求中使用 `@Field` 和 `@FieldMap`，那么程序会抛出 `java.lang.IllegalArgumentException: @Field parameters can only be used with form encoding. (parameter #1)` 的错误异常。
+如果将 `@FromUrlEncoded` 添加在 `@GET` 上面呢，同样的也会抛出 `java.lang.IllegalArgumentException:FormUrlEncoded can only be specified on HTTP methods with request body (e.g., @POST)` 的错误异常。
+如果是使用 `@Body`，也是不用加 `@FormUrlEncoded` 注解的。
 
 ### 动态Url
 
