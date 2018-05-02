@@ -476,8 +476,45 @@ final class OkHttpCall<T> implements Call<T> {
 `serviceMethod.callFactory.newCall(request)` 会调用 `Retrofit.callFactory` 来生成请求，`Retrofit.callFactory` 是通过 `Retrofit.client(OkHttpClient client)` 方法来设置的。
 因此， `okhttp3.Call` 是最终由 `OkHttpClient` 来创建的，那么请求的执行也是由 `OkHttpClient` 来执行的。 
 
-## 处理请求流程
+## CallAdapter 和 CallAdapter.Factory
 
+`CallAdapter`是一个接口，前文所说的适配器都是实现了这个接口。`ExecutorCallAdapterFactory` 的匿名内部类和 `RxJava2CallAdapter`。
+这里再来介绍一下 `CallAdapter.Factory ` 类。它是 `CallAdapter` 的工厂类，是一个抽象类，`ExecutorCallAdapterFactory` 和 `RxJava2CallAdapterFactory` 都是继承这个类。
+
+```
+public interface CallAdapter<R, T> {
+  // 从http的响应数据转换成java类时用到的数据的类型 如Call<T> 中的 T
+  // 这个 T 会作为Converter.Factory.responseBodyConverter 的第一个参数
+  Type responseType();
+
+  // 这个方法就是动态代理类中执行的方法，委托Call生成一个T对象	
+  T adapt(Call<R> call);
+
+  // 用于向Retrofit提供CallAdapter的工厂类
+  abstract class Factory {
+    // 在这个方法中判断是否是我们支持的类型，returnType 即Call<Requestbody>和Observable<Requestbody>
+    // RxJavaCallAdapterFactory 就是判断returnType是不是Observable<?> 类型
+    // 不支持时返回null
+    public abstract @Nullable CallAdapter<?, ?> get(Type returnType, Annotation[] annotations,
+        Retrofit retrofit);
+
+    // 用于根据index获取泛型的参数 如 Call<Requestbody> 中 index为0时的Requestbody，
+    // index为 1 时 Map<String, ? extends Runnable> 的 Runnable
+    protected static Type getParameterUpperBound(int index, ParameterizedType type) {
+      return Utils.getParameterUpperBound(index, type);
+    }
+
+    // 用于获取泛型的原始类型 如 Call<Requestbody> 中的 Call
+    // 上面的get方法需要使用该方法。
+    protected static Class<?> getRawType(Type type) {
+      return Utils.getRawType(type);
+    }
+  }
+}
+```
+
+## 处理请求流程
+``
 请求的处理是在动态代理类的 `serviceMethod.callAdapter.adapt(okHttpCall)` 方法处理。我们前面已经介绍过，使用使用内置适配器时，会由 `ExecutorCallAdapterFactory.get()` 方法生成的 `CallAdapter` 对象的 `adapt()` 方法执行。
 
 ```
