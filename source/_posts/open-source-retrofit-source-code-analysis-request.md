@@ -13,7 +13,7 @@ date: 2017-11-8 10:00:00
 
 ![效果图](http://www.plantuml.com/plantuml/svg/bP51IWD144NtTOeYgsGHJp18H1HtGiW5ofu_qgJj6RkhHL5FuYbS2zv6l8PT4jlPPZUy-V_NWzvabQJbBj3EQm0ljj0q3bw_tp--tZuNH3ugqY0EV2uXy3CnRv6dCMPqkrF68rnHB5ULFuo-PyJxWeAbfM_4xIta3jyhUYKN96U-tb-fJfOvW8lVdJ4PEkjbgaSlnLNmT3B_PIlDWtdmKKBhjZj_O9Qnagdq2BWLHJKXOzozhDTpdGQFLIBwN-7k-3xJ1h6lJ_43)
 
-## 创建请求流程
+# 初始化请求流程
 
 先来看一下如何创建一个请求。
 
@@ -48,7 +48,8 @@ public interface RequestService {
         });
 ```
 
-来看一下 `Builder().build()` 的源码。
+首先这里是创建一个 `Retrofit` 对象，这里用到了建造者模式。
+那么就先来看一下 `Builder().build()` 的源码。
 先来看一下 `platform` 这个变量，因为后面会用到它。通过 `Builder` 的构造函数，可以看到它是通过 `Platform.get()` 来实例化的，在 Android 平台上是一个 `Platform.Android` 对象。
 
 ```
@@ -64,6 +65,7 @@ public interface RequestService {
         callFactory = new OkHttpClient();
       }
 
+      // callbackExecutor 是callbackExecutor()方法设置的，如果不设置，会添加平台默认的回调执行器
       Executor callbackExecutor = this.callbackExecutor;
       if (callbackExecutor == null) {
         // 这里会返回一个 Android.MainThreadExecutor 对象
@@ -72,6 +74,7 @@ public interface RequestService {
 
       List<CallAdapter.Factory> adapterFactories = new ArrayList<>(this.adapterFactories);
       // 这里会把 ExecutorCallAdapterFactory 添加到 adapterFactories 中。这个是 Retrofit 内置的适配器。
+      // callbackExecutor 为请求结果返回后调用客户端回调的执行器
       adapterFactories.add(platform.defaultCallAdapterFactory(callbackExecutor));
 
       // Make a defensive copy of the converters.
@@ -88,6 +91,7 @@ public interface RequestService {
 ```
 
 再来看一下 `Retrofit.create`。
+这部分是重点，因为请求方法的执行其实就是执行到了这里动态代理对象的 `invoke()` 方法。后面会分开来介绍。
 
 ```
   public <T> T create(final Class<T> service) {
@@ -118,14 +122,17 @@ public interface RequestService {
                 (ServiceMethod<Object, Object>) loadServiceMethod(method);
             // 生成一个 Call 对象，OkHttpCall实现了 Call 接口
             OkHttpCall<Object> okHttpCall = new OkHttpCall<>(serviceMethod, args);
-            // 调用适配器的adapter生成一个 Call 对象。
+            // 调用适配器的adapter生成一个 范型 对象（请求方法定义的返回类型）。
             return serviceMethod.callAdapter.adapt(okHttpCall);
           }
         });
   }
 ```
 
-再来看一下如何生成 `ServiceMethod`：
+# 执行请求流程
+
+比如我们Demo中的一个请求方法的执行 `mRequestService.getData()`，其实执行的方法体就是前面的动态代理对象的 `invoke()` 方法，返回一个 `RequestService` 接口中此方法定义的一个范型对象。
+先来看一下如何生成 `ServiceMethod`：
 `ServiceMethod` 和我们前面定义的请求方法是一一对应关系的，每个 Method 对应一个 `ServiceMethod`。比如就像例子中我们调用 `RequestService.getData()` 方法就会生成一个对应的 `ServiceMethod` 对象，保存了 baseUrl、请求参数、请求类型等信息。
 如果缓存里没有，则新建一个并放入到缓存中。至于这个 `ServiceMethod` 是我们后面再详细分析。
 
@@ -210,6 +217,7 @@ final class ServiceMethod<R, T> {
       // 获取该方法对应的转换器
       responseConverter = createResponseConverter();
 
+      // 解析方法注解，根据方法注解调用不同的方法生成请求参数
       for (Annotation annotation : methodAnnotations) {
         parseMethodAnnotation(annotation);
       }
@@ -226,6 +234,7 @@ final class ServiceMethod<R, T> {
 
         Annotation[] parameterAnnotations = parameterAnnotationsArray[p];
         ......
+        // 解析参数
         parameterHandlers[p] = parseParameter(p, parameterType, parameterAnnotations);
       }
 
@@ -370,7 +379,7 @@ ExecutorCallAdapterFactory.get():
 ## OkHttpCall
 
 这部分主要针对动态代理类中 `OkHttpCall<Object> okHttpCall = new OkHttpCall<>(serviceMethod, args)` 这段方法的执行。
-前面我们说过，适配器生成的 Call 对象对网络请求都是委托给 OkHttpCall 来处理的。
+前面我们说过，适配器处理对网络请求（内置适配器是生成的 Call 对象）都是委托给 OkHttpCall 来处理的。
 先来看一下这个类：
 
 ```
@@ -513,9 +522,9 @@ public interface CallAdapter<R, T> {
 }
 ```
 
-## 处理请求流程
-``
-请求的处理是在动态代理类的 `serviceMethod.callAdapter.adapt(okHttpCall)` 方法处理。我们前面已经介绍过，使用使用内置适配器时，会由 `ExecutorCallAdapterFactory.get()` 方法生成的 `CallAdapter` 对象的 `adapt()` 方法执行。
+## 适配器处理请求流程
+
+适配器处理请求是在动态代理类的 `serviceMethod.callAdapter.adapt(okHttpCall)` 方法处理。我们前面已经介绍过，使用使用内置适配器时，会由 `ExecutorCallAdapterFactory.get()` 方法生成的 `CallAdapter` 对象的 `adapt()` 方法执行。
 
 ```
       @Override public Call<Object> adapt(Call<Object> call) {
@@ -551,6 +560,7 @@ public interface CallAdapter<R, T> {
 ```
 
 `mRequestService.getData()` 返回的其实就是 `ExecutorCallAdapterFactor.ExecutorCallbackCall` 对象，后面的 `call.enqueue` 方式其实就是调用的 `ExecutorCallAdapterFactor.ExecutorCallbackCall.enqueue()` 方法。
+返回相应结果时，需要调用客户端设置的回调方法，这个回调方法是在客户端设置的回调执行器中调用的，如果没有设置，那么默认就是 `Android.MainThreadExecutor`。
 
 ```
     @Override public void enqueue(final Callback<T> callback) {
@@ -558,6 +568,7 @@ public interface CallAdapter<R, T> {
 
       delegate.enqueue(new Callback<T>() {
         @Override public void onResponse(Call<T> call, final Response<T> response) {
+          // 结果的执行由客户端设置的回调执行器来执行。
           callbackExecutor.execute(new Runnable() {
             @Override public void run() {
               if (delegate.isCanceled()) {
@@ -593,7 +604,6 @@ public interface CallAdapter<R, T> {
 ├── OkHttpCall.parseResponse()
     └── ServiceMethod.toResponse()
         └── GsonResponseBodyConverter.convert()
-            └── 
 ```
 
 `OkHttpCall.parseResponse()`：
