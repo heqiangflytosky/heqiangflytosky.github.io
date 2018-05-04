@@ -166,6 +166,7 @@ date: 2016-12-1 10:00:00
  - GitChat：一种全新的IT知识交流方式
  - HenCoder：大神扔物线的给高阶Android工程师的进阶手册
  - 视觉求索：计算机视觉领域资深华人教授与研究员共同发起的、非盈利性的、独立于产业界的移动新媒体平台
+ - 云栖社区：由阿里云负责运营、阿里巴巴技术协会和阿里巴巴集团各技术团队提供内容支持的开放式技术社区
 
 #### 其他
 
@@ -296,6 +297,7 @@ date: 2016-12-1 10:00:00
  - 《Android开发精要》
  - 《深入理解Android5.0系统》
  - 《深入理解Android（卷3）》
+ - 《阿里巴巴Android开发手册》
 
 ### Gradle
 
@@ -316,6 +318,7 @@ date: 2016-12-1 10:00:00
  - 《Effective Java》
  - 《Java多线程编程核心技术》
  - 《Java NIO》
+ - 《阿里巴巴Java开发手册》
 
 ### Linux
 
@@ -368,6 +371,7 @@ date: 2016-12-1 10:00:00
  - 《写给大家看的项目管理》
  - 《有效沟通-管理者的沟通艺术》
  - 《最后期限》
+ - 《Scrum实战——敏捷软件项目管理与开发》
 
 ### 投资理财
 
@@ -476,6 +480,7 @@ date: 2016-12-1 10:00:00
  - [Github](https://developer.github.com/v3/)
  - [微博API](http://open.weibo.com/wiki/API)
  - [Dribbble](http://developer.dribbble.com/)
+ - [Meting](https://github.com/metowolf/Meting)：Github上面的音乐API
 
 ### 专利检索
 
