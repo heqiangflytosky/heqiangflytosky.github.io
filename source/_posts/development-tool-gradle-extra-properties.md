@@ -184,6 +184,38 @@ if (project.hasProperty('custom')){
 }
 ```
 
+我们还可以通过 -D 来添加系统属性。
+
+## grade.properties 文件扩展属性
+
+可以通过 gradle.properties 文件中声明直接添加到项目中使用，在这个属性文件中声明的属性对所有的项目可用。
+比如在 gradle.properties 文件中声明：
+
+```
+testProperties = "testProperties"
+```
+
+在 app subproject 中使用：
+
+```
+    println rootProject.hasProperty("testProperties")
+    println this.hasProperty("testProperties")
+```
+
+另外，我们还可以在 gradle.properties 文件中添加系统属性。如果有 systemProp. 为前缀的属性会被识别为系统属性。
+
+比如在 gradle.properties 文件中声明：
+
+```
+systemProp.testProperties="testProperties"
+```
+
+可以通过下面方式使用：
+
+```
+    println System.properties["testProperties"]
+```
+
 <!--  
 https://blog.csdn.net/zxc123e/article/details/72846762
 https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
