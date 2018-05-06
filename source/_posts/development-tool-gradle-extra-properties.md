@@ -168,6 +168,21 @@ set
  project["foo"] = "bar"
 ```
 
+## 命令行自定义扩展属性
+
+在 [Gradle 使用指南 -- 基础配置](http://www.heqiangfly.com/2016/03/03/development-tool-gradle-command-config/) 一文中我们也介绍了如何在命令行自定义扩展属性。
+
+```
+./gradlew assembleDebug -Pcustom=true
+```
+
+在脚本中使用：
+
+```
+if (project.hasProperty('custom')){
+
+}
+```
 
 <!--  
 https://blog.csdn.net/zxc123e/article/details/72846762
