@@ -4,7 +4,7 @@ categories: Android源码分析
 comments: true
 tags: [Android源码分析, startActivity]
 description: 基于Android6.0来分析 Activity 的启动过程
-date: 2016-4-10 10:00:00
+date: 2016-6-10 10:00:00
 ---
 
 ## 概述

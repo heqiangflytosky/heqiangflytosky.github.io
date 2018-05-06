@@ -5,7 +5,7 @@ categories: Gradle
 comments: true
 tags: [Android, Gradle, Android Studio]
 description: 介绍如何在 Android Studio 中自定义 Gradle 插件
-date: 2016-3-15 10:00:00
+date: 2016-4-15 10:00:00
 ---
 
 ## 概述

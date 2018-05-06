@@ -4,7 +4,7 @@ categories: Android源码分析
 comments: true
 tags: [Android源码分析, 进程通信]
 description: 基于Android6.0来分析 AMS 与 APP 进程通信
-date: 2016-4-8 10:00:00
+date: 2016-6-8 10:00:00
 ---
 
 ## 概述

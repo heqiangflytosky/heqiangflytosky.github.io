@@ -57,6 +57,7 @@ task hello doLast
  - 配置状态（Configuration State）
  - 执行状态（Execution State）
 
+这其实对应了 Gradle 三个生命周期中的配置阶段和执行阶段，task 的配置块永远在 task 动作执行之前被执行。
 Gradle 会在进入执行之前，配置所有 Task，而 `println 'config task hello'` 这段代码就是在配置时进行执行。所以哪怕没有显式调用 `gradlew hello`，只是调用列出所有 task 的命令，hello task 仍然需要进入到配置状态，也就仍然执行了一遍。
 hello1 task的声明方式 << 只是简写的 `doLast`，或者说当这个任务不需要任何在配置状态下运行的内容时，这两种声明方式是一样的。
 实际上大部分时候 task 都应该是在执行状态下才真正执行的，配置状态大部分时候用于声明执行时需要用到的变量等为执行服务的前置动作。
