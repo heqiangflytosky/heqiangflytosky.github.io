@@ -1,0 +1,911 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android开源项目,Retrofit," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Retrofit 2 中 RxJava2 相关部分源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Retrofit 2 源码分析二 -- RxJava2">
+<meta property="og:url" content="http://yoursite.com/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="Retrofit 2 中 RxJava2 相关部分源码">
+<meta property="og:image" content="http://yoursite.com/images/open-source-retrofit-source-code-analysis-rxjava/rxjava-classes.png">
+<meta property="og:updated_time" content="2018-05-06T07:22:25.867Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Retrofit 2 源码分析二 -- RxJava2">
+<meta name="twitter:description" content="Retrofit 2 中 RxJava2 相关部分源码">
+<meta name="twitter:image" content="http://yoursite.com/images/open-source-retrofit-source-code-analysis-rxjava/rxjava-classes.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/"/>
+
+
+
+
+
+  <title> Retrofit 2 源码分析二 -- RxJava2 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Retrofit 2 源码分析二 -- RxJava2
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-10T10:00:00+08:00">
+                2017-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android开源项目/" itemprop="url" rel="index">
+                    <span itemprop="name">Android开源项目</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/" class="leancloud_visitors" data-flag-title="Retrofit 2 源码分析二 -- RxJava2">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  Retrofit 2 中 RxJava2 相关部分源码
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>RxJava的优势这里不再赘述，可以参考我前面 RxJava 系列的博客。Retrofit 2 良好的扩展性使它非常方便的添加了 RxJava 的支持。</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>参考我的博客<a href="http://www.heqiangfly.com/2017/10/22/open-source-retrofit-guide/" target="_blank" rel="external">Retrofit 2 使用指南 </a>。<br>和上一篇博客中用内置的适配器不同的是：<br>方法声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public interface RequestService &#123;</div><div class="line">    ...</div><div class="line">    // 支持RxJava</div><div class="line">    @GET(&quot;heqiang/urls&quot;)</div><div class="line">    Observable&lt;RequestManager.TestBean&gt; getDataRx();</div><div class="line">    ...</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>初始化请求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Retrofit retrofit = new Retrofit.Builder()</div><div class="line">        .client(client)</div><div class="line">        .baseUrl(&quot;http://172.17.137.69/&quot;)</div><div class="line">        .addConverterFactory(GsonConverterFactory.create())</div><div class="line">        //加入对RxJava2的支持</div><div class="line">        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</div><div class="line">        .build();</div><div class="line">mMyService = retrofit.create(RequestService.class);</div></pre></td></tr></table></figure>
+<p>方法执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">public void getDataRx(final CallBack&lt;TestBean&gt; callBack)&#123;</div><div class="line">    mMyService.getDataRx().subscribeOn(Schedulers.io())</div><div class="line">            .observeOn(AndroidSchedulers.mainThread())</div><div class="line">            .subscribe(new Observer&lt;TestBean&gt;() &#123;</div><div class="line">                @Override</div><div class="line">                public void onError(Throwable e) &#123;</div><div class="line">                    Log.e(&quot;Test&quot;,&quot;onError&quot;);</div><div class="line">                    callBack.onFail(new Exception(e));</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                @Override</div><div class="line">                public void onComplete() &#123;</div><div class="line"></div><div class="line">                &#125;</div><div class="line"></div><div class="line">                @Override</div><div class="line">                public void onSubscribe(Disposable d) &#123;</div><div class="line"></div><div class="line">                &#125;</div><div class="line"></div><div class="line">                @Override</div><div class="line">                public void onNext(TestBean testBean) &#123;</div><div class="line">                    Log.e(&quot;Test&quot;,&quot;onNext = &quot;+testBean.toString());</div><div class="line">                    callBack.onSuccess(testBean);</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h2><p>Rxjava 相关代码结构：</p>
+<p><img src="/images/open-source-retrofit-source-code-analysis-rxjava/rxjava-classes.png" alt="效果图"></p>
+<p>可以看到代码量不是很多。<br><code>RxJava2CallAdapterFactory</code> 和 <code>RxJava2CallAdapter</code> 两个类分别对应上篇博客分析使用内置适配器时的 <code>ExecutorCallAdapterFactory</code> 和 <code>ExecutorCallAdapterFactory.CallAdapter</code> 类，是适配器工厂和适配器类。</p>
+<h3 id="RxJava2CallAdapterFactory"><a href="#RxJava2CallAdapterFactory" class="headerlink" title="RxJava2CallAdapterFactory"></a>RxJava2CallAdapterFactory</h3><p>先来看一下适配器工厂类。<br>上面的Demo中通过 <code>Retrofit.Builder()</code> 的 <code>addCallAdapterFactory(RxJava2CallAdapterFactory.create())</code> 方法指定了适配器工厂。<br><code>RxJava2CallAdapterFactory</code> 提供了三个静态的方法生成适配器工厂，它们分别可以生成同步的 <code>Observable</code>、异步的 <code>Observable</code> 以及可以制定线程调度器同步 <code>Observable</code>。<br>不理解没关系，下面会详细介绍他们的区别。<br>先来看一下这三个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// 生成同步的 Observable 的适配器工厂</div><div class="line">public static RxJava2CallAdapterFactory create() &#123;</div><div class="line">  return new RxJava2CallAdapterFactory(null, false);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 生成异步的 Observable 的适配器工厂</div><div class="line">public static RxJava2CallAdapterFactory createAsync() &#123;</div><div class="line">  return new RxJava2CallAdapterFactory(null, true);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 生成同步的 Observable 并制定线程调度器的适配器工厂</div><div class="line">@SuppressWarnings(&quot;ConstantConditions&quot;) // Guarding public API nullability.</div><div class="line">public static RxJava2CallAdapterFactory createWithScheduler(Scheduler scheduler) &#123;</div><div class="line">  if (scheduler == null) throw new NullPointerException(&quot;scheduler == null&quot;);</div><div class="line">  return new RxJava2CallAdapterFactory(scheduler, false);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因此在动态代理类的 <code>serviceMethod.callAdapter.adapt(okHttpCall)</code> 其实执行的是 <code>RxJava2CallAdapterFactory.get()</code> 方法生成的 <code>RxJava2CallAdapter</code> 对象的 <code>adapt()</code> 方法。<br>我们先来看一下 <code>RxJava2CallAdapterFactory.get()</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public CallAdapter&lt;?, ?&gt; get(Type returnType, Annotation[] annotations, Retrofit retrofit) &#123;</div><div class="line">  // 这里的 returnType 指的是请求方法定义的类型，比如 Observable&lt;RequestManager.TestBean&gt;</div><div class="line">  // 获取返回数据类型，比如Call&lt;Requestbody&gt;的Call，Observable&lt;RequestManager.TestBean&gt; 中的 Observable</div><div class="line">  Class&lt;?&gt; rawType = getRawType(returnType);</div><div class="line"></div><div class="line">  if (rawType == Completable.class) &#123;</div><div class="line">    // 当定义的返回值是Completable类时，对于Completable我们前面也介绍过，它的特点是用户只关心 onComplete 事件</div><div class="line">    return new RxJava2CallAdapter(Void.class, scheduler, isAsync, false, true, false, false,</div><div class="line">        false, true);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  boolean isFlowable = rawType == Flowable.class;</div><div class="line">  boolean isSingle = rawType == Single.class;</div><div class="line">  boolean isMaybe = rawType == Maybe.class;</div><div class="line">  if (rawType != Observable.class &amp;&amp; !isFlowable &amp;&amp; !isSingle &amp;&amp; !isMaybe) &#123;</div><div class="line">    return null;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  boolean isResult = false;</div><div class="line">  boolean isBody = false;</div><div class="line">  Type responseType;</div><div class="line">  if (!(returnType instanceof ParameterizedType)) &#123;</div><div class="line">    ......</div><div class="line">  &#125;</div><div class="line">  // 获取响应数据类型，即泛型的参数 如 Call&lt;Requestbody&gt; 中 Requestbody</div><div class="line">  Type observableType = getParameterUpperBound(0, (ParameterizedType) returnType);</div><div class="line">  // 再次获取数据类型，observableType 是 Observable&lt;RequestManager.TestBean&gt; 中的 TestBean，这里还是返回 TestBean</div><div class="line">  Class&lt;?&gt; rawObservableType = getRawType(observableType);</div><div class="line">  if (rawObservableType == Response.class) &#123;</div><div class="line">    if (!(observableType instanceof ParameterizedType)) &#123;</div><div class="line">      throw new IllegalStateException(&quot;Response must be parameterized&quot;</div><div class="line">          + &quot; as Response&lt;Foo&gt; or Response&lt;? extends Foo&gt;&quot;);</div><div class="line">    &#125;</div><div class="line">    responseType = getParameterUpperBound(0, (ParameterizedType) observableType);</div><div class="line">  &#125; else if (rawObservableType == Result.class) &#123;</div><div class="line">    if (!(observableType instanceof ParameterizedType)) &#123;</div><div class="line">      throw new IllegalStateException(&quot;Result must be parameterized&quot;</div><div class="line">          + &quot; as Result&lt;Foo&gt; or Result&lt;? extends Foo&gt;&quot;);</div><div class="line">    &#125;</div><div class="line">    responseType = getParameterUpperBound(0, (ParameterizedType) observableType);</div><div class="line">    isResult = true;</div><div class="line">  &#125; else &#123;</div><div class="line">    responseType = observableType;</div><div class="line">    isBody = true;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return new RxJava2CallAdapter(responseType, scheduler, isAsync, isResult, isBody, isFlowable,</div><div class="line">      isSingle, isMaybe, false);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个方法就是生成来一个 <code>RxJava2CallAdapter</code> 对象。</p>
+<h3 id="RxJava2CallAdapter"><a href="#RxJava2CallAdapter" class="headerlink" title="RxJava2CallAdapter"></a>RxJava2CallAdapter</h3><p>先来看一下构造函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">RxJava2CallAdapter(Type responseType, @Nullable Scheduler scheduler, boolean isAsync,</div><div class="line">    boolean isResult, boolean isBody, boolean isFlowable, boolean isSingle, boolean isMaybe,</div><div class="line">    boolean isCompletable) &#123;</div><div class="line">  this.responseType = responseType;</div><div class="line">  this.scheduler = scheduler;</div><div class="line">  this.isAsync = isAsync;</div><div class="line">  this.isResult = isResult;</div><div class="line">  this.isBody = isBody;</div><div class="line">  this.isFlowable = isFlowable;</div><div class="line">  this.isSingle = isSingle;</div><div class="line">  this.isMaybe = isMaybe;</div><div class="line">  this.isCompletable = isCompletable;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里是一些条件的配置。<br>对于这个类重点关注它的 <code>adapt()</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">@Override public Object adapt(Call&lt;R&gt; call) &#123;</div><div class="line">  // 这里根据同步或者异步生成不同的 Observable，后面介绍</div><div class="line">  Observable&lt;Response&lt;R&gt;&gt; responseObservable = isAsync</div><div class="line">      ? new CallEnqueueObservable&lt;&gt;(call)</div><div class="line">      : new CallExecuteObservable&lt;&gt;(call);</div><div class="line"></div><div class="line">  // 生成不同的 Observable</div><div class="line">  Observable&lt;?&gt; observable;</div><div class="line">  if (isResult) &#123;</div><div class="line">    observable = new ResultObservable&lt;&gt;(responseObservable);</div><div class="line">  &#125; else if (isBody) &#123;</div><div class="line">    observable = new BodyObservable&lt;&gt;(responseObservable);</div><div class="line">  &#125; else &#123;</div><div class="line">    observable = responseObservable;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  if (scheduler != null) &#123;</div><div class="line">    observable = observable.subscribeOn(scheduler);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  if (isFlowable) &#123;</div><div class="line">    return observable.toFlowable(BackpressureStrategy.LATEST);</div><div class="line">  &#125;</div><div class="line">  if (isSingle) &#123;</div><div class="line">    return observable.singleOrError();</div><div class="line">  &#125;</div><div class="line">  if (isMaybe) &#123;</div><div class="line">    return observable.singleElement();</div><div class="line">  &#125;</div><div class="line">  if (isCompletable) &#123;</div><div class="line">    return observable.ignoreElements();</div><div class="line">  &#125;</div><div class="line">  return RxJavaPlugins.onAssembly(observable);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="CallEnqueueObservable-和-CallExecuteObservable"><a href="#CallEnqueueObservable-和-CallExecuteObservable" class="headerlink" title="CallEnqueueObservable 和 CallExecuteObservable"></a>CallEnqueueObservable 和 CallExecuteObservable</h3><p>从名字就可以看出来，这两个类分别处理异步和同步的Observable。<br>这里主要看一下这两个类的 <code>subscribeActual()</code> 方法。</p>
+<p>CallEnqueueObservable.subscribeActual()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@Override protected void subscribeActual(Observer&lt;? super Response&lt;T&gt;&gt; observer) &#123;</div><div class="line">  // Since Call is a one-shot type, clone it for each new observer.</div><div class="line">  Call&lt;T&gt; call = originalCall.clone();</div><div class="line">  CallCallback&lt;T&gt; callback = new CallCallback&lt;&gt;(call, observer);</div><div class="line">  observer.onSubscribe(callback);</div><div class="line">  call.enqueue(callback);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>CallExecuteObservable.subscribeActual()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">@Override protected void subscribeActual(Observer&lt;? super Response&lt;T&gt;&gt; observer) &#123;</div><div class="line">  // Since Call is a one-shot type, clone it for each new observer.</div><div class="line">  Call&lt;T&gt; call = originalCall.clone();</div><div class="line">  CallDisposable disposable = new CallDisposable(call);</div><div class="line">  observer.onSubscribe(disposable);</div><div class="line"></div><div class="line">  boolean terminated = false;</div><div class="line">  try &#123;</div><div class="line">    Response&lt;T&gt; response = call.execute();</div><div class="line">    if (!disposable.isDisposed()) &#123;</div><div class="line">      observer.onNext(response);</div><div class="line">    &#125;</div><div class="line">    if (!disposable.isDisposed()) &#123;</div><div class="line">      terminated = true;</div><div class="line">      observer.onComplete();</div><div class="line">    &#125;</div><div class="line">  &#125; catch (Throwable t) &#123;</div><div class="line">    Exceptions.throwIfFatal(t);</div><div class="line">    if (terminated) &#123;</div><div class="line">      RxJavaPlugins.onError(t);</div><div class="line">    &#125; else if (!disposable.isDisposed()) &#123;</div><div class="line">      try &#123;</div><div class="line">        observer.onError(t);</div><div class="line">      &#125; catch (Throwable inner) &#123;</div><div class="line">        Exceptions.throwIfFatal(inner);</div><div class="line">        RxJavaPlugins.onError(new CompositeException(t, inner));</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其实这里主要做了下面几件事：</p>
+<ol>
+<li>clone了原有的call，因为OkHttp.Call只能使用一次</li>
+<li>设置了 CallDisposable，可用于解除订阅</li>
+<li>调用 Call 的 execute() 或者 enqueue() 方法。</li>
+<li>同步方法可能会调用onNext和onComplete，异步方法设置回调函数，在回调函数中调用这些方法。</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android开源项目/" rel="tag"># Android开源项目</a>
+          
+            <a href="/tags/Retrofit/" rel="tag"># Retrofit</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/08/open-source-retrofit-source-code-analysis-request/" rel="next" title="Retrofit 2 源码分析一 -- 数据请求流程解析">
+                <i class="fa fa-chevron-left"></i> Retrofit 2 源码分析一 -- 数据请求流程解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/02/android-architecture-components-room/" rel="prev" title="Android Architecture Components -- Room">
+                Android Architecture Components -- Room <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">2.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码解析"><span class="nav-number">3.</span> <span class="nav-text">源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RxJava2CallAdapterFactory"><span class="nav-number">3.1.</span> <span class="nav-text">RxJava2CallAdapterFactory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RxJava2CallAdapter"><span class="nav-number">3.2.</span> <span class="nav-text">RxJava2CallAdapter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CallEnqueueObservable-和-CallExecuteObservable"><span class="nav-number">3.3.</span> <span class="nav-text">CallEnqueueObservable 和 CallExecuteObservable</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

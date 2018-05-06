@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/07/development-tool-git-command/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="列举一些常用的Git命令">
-<meta property="og:updated_time" content="2018-03-11T13:47:48.000Z">
+<meta property="og:updated_time" content="2018-04-28T15:12:51.265Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="列举一些常用的Git命令">
@@ -401,10 +401,20 @@
 
       
         <h2 id="git-log"><a href="#git-log" class="headerlink" title="git log"></a>git log</h2><ul>
-<li><code>git log -p</code>：显示每一次的提交的差异，用 -2 则仅显示最近的两次更新。</li>
-<li><code>git log -p -x</code> （x为次数，整数）：指定了显示差异的次数</li>
-<li><code>git log --stat</code>：显示简要的增改行数统计，用 -2 则仅显示最近的两次更新。</li>
-<li><code>git log --author=寒江蓑笠</code>：显示某个作者的提交记录</li>
+<li><code>git log -p</code>：显示每一次的提交的差异。</li>
+<li><code>git log -p -n</code> （n为次数，整数）：指定了显示差异的次数，用 -2 则仅显示最近的两次更新.</li>
+<li><code>git log --stat</code>：显示简要的增改行数统计，后面跟次数比如 -2 则仅显示最近的两次更新。</li>
+<li><code>git log --author=寒江蓑笠</code>：显示某个作者的提交记录。</li>
+<li><code>git log --committer=寒江蓑笠</code>：显示某个提交者的提交记录。</li>
+<li><code>git log --since, --after</code>：仅显示指定时间之后的提交。</li>
+<li><code>git log --until, --before</code>：仅显示指定时间之前的提交。</li>
+<li><code>git log --pretty=oneline</code>：<code>--pretty</code> 选项可以指定使用完全不同于默认格式的方式展示提交历史。比如用 <code>oneline</code> 将 每个提交 放在一行显示，这在提交数很大时非常有用。另外还有 <code>short</code>，<code>full</code> 和 <code>fuller</code> 可以用。 <code>format</code> 可以定制要显示的记录格式，这样的输出便于后期编程提取分析。</li>
+<li><code>git log --shortstat</code>：只显示 –stat 中最后的行数修改添加移除统计。</li>
+<li><code>git log --name-only</code>：仅在提交信息后显示已修改的文件清单。</li>
+<li><code>git log --name-status</code>：显示新增、修改、删除的文件清单。</li>
+<li><code>git log --abbrev-commit</code>：仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。</li>
+<li><code>git log --relative-date</code>：使用较短的相对时间显示（比如，”2 weeks ago”）。</li>
+<li><code>git log --graph</code>：显示 ASCII 图形表示的分支合并历史。</li>
 </ul>
 <h2 id="git-checkout"><a href="#git-checkout" class="headerlink" title="git checkout"></a>git checkout</h2><ul>
 <li><code>git checkout -- **(file)</code>：还原对file的修改</li>
@@ -426,6 +436,17 @@
 <li><code>git stash show stash@{0}</code> 查看名为stash{0}缓存的文件列表</li>
 <li><code>git stash show -p stash@{0}</code>  查看名为stash{0}缓存的文件差异</li>
 <li><code>git stash drop stash@{0}</code> 丢弃名为stash{0}缓存</li>
+</ul>
+<h2 id="git-config"><a href="#git-config" class="headerlink" title="git config"></a>git config</h2><p>先说一下–local、–global和–system三个参数的区别：</p>
+<ol>
+<li>–local的作用域最小，仅对当前的git项目的配置</li>
+<li>–global的作用域是针对当前用户</li>
+<li>–system的作用域最大，是针对整个计算机系统</li>
+</ol>
+<p>再来说一下他们的优先级，如果在三个级别都有配置，那么优先级为：<br>–local &gt; –global &gt; –system</p>
+<ul>
+<li>查看配置：git config –local -l</li>
+<li>配置用户名和邮箱：git config –local user.name “xx”  git config –global user.email “xx”</li>
 </ul>
 <h2 id="git-reset"><a href="#git-reset" class="headerlink" title="git reset"></a>git reset</h2><ul>
 <li><code>git reset --mixed</code>：此为默认方式，不带任何参数的<code>git reset</code>，即时这种方式，它回退到某个版本，只保留源码，回退commit和index信息</li>
@@ -582,7 +603,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -662,7 +683,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-log"><span class="nav-number">1.</span> <span class="nav-text">git log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-checkout"><span class="nav-number">2.</span> <span class="nav-text">git checkout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-branch"><span class="nav-number">3.</span> <span class="nav-text">git branch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-stash"><span class="nav-number">4.</span> <span class="nav-text">git stash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-reset"><span class="nav-number">5.</span> <span class="nav-text">git reset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#删除远程仓库上最近的提交："><span class="nav-number">5.1.</span> <span class="nav-text">删除远程仓库上最近的提交：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-rm"><span class="nav-number">6.</span> <span class="nav-text">git rm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-commit"><span class="nav-number">7.</span> <span class="nav-text">git commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-rebase"><span class="nav-number">8.</span> <span class="nav-text">git rebase</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作"><span class="nav-number">8.1.</span> <span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并提交"><span class="nav-number">8.2.</span> <span class="nav-text">合并提交</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-pull"><span class="nav-number">9.</span> <span class="nav-text">git pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#patch"><span class="nav-number">10.</span> <span class="nav-text">patch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-remote"><span class="nav-number">11.</span> <span class="nav-text">git remote</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-merge"><span class="nav-number">12.</span> <span class="nav-text">git merge</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-merge-s-ours"><span class="nav-number">12.1.</span> <span class="nav-text">git merge -s ours</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-fetch"><span class="nav-number">13.</span> <span class="nav-text">git fetch</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-log"><span class="nav-number">1.</span> <span class="nav-text">git log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-checkout"><span class="nav-number">2.</span> <span class="nav-text">git checkout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-branch"><span class="nav-number">3.</span> <span class="nav-text">git branch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-stash"><span class="nav-number">4.</span> <span class="nav-text">git stash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-config"><span class="nav-number">5.</span> <span class="nav-text">git config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-reset"><span class="nav-number">6.</span> <span class="nav-text">git reset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#删除远程仓库上最近的提交："><span class="nav-number">6.1.</span> <span class="nav-text">删除远程仓库上最近的提交：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-rm"><span class="nav-number">7.</span> <span class="nav-text">git rm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-commit"><span class="nav-number">8.</span> <span class="nav-text">git commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-rebase"><span class="nav-number">9.</span> <span class="nav-text">git rebase</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作"><span class="nav-number">9.1.</span> <span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并提交"><span class="nav-number">9.2.</span> <span class="nav-text">合并提交</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-pull"><span class="nav-number">10.</span> <span class="nav-text">git pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#patch"><span class="nav-number">11.</span> <span class="nav-text">patch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-remote"><span class="nav-number">12.</span> <span class="nav-text">git remote</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-merge"><span class="nav-number">13.</span> <span class="nav-text">git merge</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-merge-s-ours"><span class="nav-number">13.1.</span> <span class="nav-text">git merge -s ours</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-fetch"><span class="nav-number">14.</span> <span class="nav-text">git fetch</span></a></li></ol></div>
             
 
           </div>

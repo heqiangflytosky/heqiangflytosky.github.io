@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android源码分析,进程通信," />
+  <meta name="keywords" content="Gradle" />
 
 
 
@@ -86,19 +86,16 @@
 
 
 
-<meta name="description" content="基于Android6.0来分析 AMS 与 APP 进程通信">
+<meta name="description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android AMS 与 APP 进程通信">
-<meta property="og:url" content="http://yoursite.com/2016/04/08/android-source-code-analysis-ams-app-ipc/index.html">
+<meta property="og:title" content="Gradle 使用指南 -- 一些小技巧">
+<meta property="og:url" content="http://yoursite.com/2016/11/12/development-tool-gradle-skills/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="基于Android6.0来分析 AMS 与 APP 进程通信">
-<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/jLHDRzD04BtlhnZrn8TIn9LQbb8EA1Af8j9xDRQtpGfxrzhTM4HGn8KJFI3K4wc4UiiLzOA8rFmPB8T_mHhRn8ut7nTkA-VDUs_UpEIKwP32GRS_XFJB5NG70_ZzuUklnMqs_P5-lCk-pzFf_G5HhncFKM84VeXAmLi2S2naGELp4GhfE6gYD8tE59K9bQuBGuel9ALy7OTnV1PBuLEb3AgF5vHh99T021UQ0YeuUKeSptNy7F-ieW4NbelFozkhz6QMtSsp-RVbOfhDFe7pv2yGt5fHoLglINzUPzUpLWtb0UIwX32kgJn7dqAlLpr9qUinuyP_7T7rDKkOdlIH6wdcJt4SCXyr4_nq92a613sb9VgwJAu5E37lX0AiPvD7_1ZYiMVWu0aHKkHWYYHoPUWUF3mYbsG3vq2ADnDeJoNdx40iMO8cx7F6COHUqHz4hsXaeZYgonQ8HB00F8EgwUJoTg3oHpGOX_GbZha_ggBQQdT7y__9HNE8GvCHCnEqXxOcOGOEIgFKTMAx4TGQZO6cvmqUobNOOM77BZGfgqrenxlQWsqRiAlJ_NlSDkhtbfs8pAVYcNDL7frtXuVLHVxxrEdOasmYx8T7oEhW2_RMURS1hICdwqK5qZQC_Q2bkRPKYRPU_FxmglSD2sX9jBmFikd_ovxnIg6qyyY6-WC0">
-<meta property="og:image" content="http://yoursite.com/images/android-source-code-analysis-ams-app-ipc/ams-ipc-app.png">
-<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta property="og:description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
+<meta property="og:updated_time" content="2018-04-04T02:22:41.820Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android AMS 与 APP 进程通信">
-<meta name="twitter:description" content="基于Android6.0来分析 AMS 与 APP 进程通信">
-<meta name="twitter:image" content="http://www.plantuml.com/plantuml/svg/jLHDRzD04BtlhnZrn8TIn9LQbb8EA1Af8j9xDRQtpGfxrzhTM4HGn8KJFI3K4wc4UiiLzOA8rFmPB8T_mHhRn8ut7nTkA-VDUs_UpEIKwP32GRS_XFJB5NG70_ZzuUklnMqs_P5-lCk-pzFf_G5HhncFKM84VeXAmLi2S2naGELp4GhfE6gYD8tE59K9bQuBGuel9ALy7OTnV1PBuLEb3AgF5vHh99T021UQ0YeuUKeSptNy7F-ieW4NbelFozkhz6QMtSsp-RVbOfhDFe7pv2yGt5fHoLglINzUPzUpLWtb0UIwX32kgJn7dqAlLpr9qUinuyP_7T7rDKkOdlIH6wdcJt4SCXyr4_nq92a613sb9VgwJAu5E37lX0AiPvD7_1ZYiMVWu0aHKkHWYYHoPUWUF3mYbsG3vq2ADnDeJoNdx40iMO8cx7F6COHUqHz4hsXaeZYgonQ8HB00F8EgwUJoTg3oHpGOX_GbZha_ggBQQdT7y__9HNE8GvCHCnEqXxOcOGOEIgFKTMAx4TGQZO6cvmqUobNOOM77BZGfgqrenxlQWsqRiAlJ_NlSDkhtbfs8pAVYcNDL7frtXuVLHVxxrEdOasmYx8T7oEhW2_RMURS1hICdwqK5qZQC_Q2bkRPKYRPU_FxmglSD2sX9jBmFikd_ovxnIg6qyyY6-WC0">
+<meta name="twitter:title" content="Gradle 使用指南 -- 一些小技巧">
+<meta name="twitter:description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
 
 
 
@@ -126,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/04/08/android-source-code-analysis-ams-app-ipc/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/11/12/development-tool-gradle-skills/"/>
 
 
 
 
 
-  <title> Android AMS 与 APP 进程通信 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Gradle 使用指南 -- 一些小技巧 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -281,7 +278,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/08/android-source-code-analysis-ams-app-ipc/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/12/development-tool-gradle-skills/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="寒江蓑笠">
@@ -305,7 +302,7 @@
             
             
               
-                Android AMS 与 APP 进程通信
+                Gradle 使用指南 -- 一些小技巧
               
             
           </h1>
@@ -320,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-08T10:00:00+08:00">
-                2016-04-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-12T10:00:00+08:00">
+                2016-11-12
               </time>
             
 
@@ -343,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android源码分析/" itemprop="url" rel="index">
-                    <span itemprop="name">Android源码分析</span>
+                  <a href="/categories/Gradle/" itemprop="url" rel="index">
+                    <span itemprop="name">Gradle</span>
                   </a>
                 </span>
 
@@ -361,7 +358,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2016/04/08/android-source-code-analysis-ams-app-ipc/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2016/11/12/development-tool-gradle-skills/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -372,7 +369,7 @@
 
           
           
-             <span id="/2016/04/08/android-source-code-analysis-ams-app-ipc/" class="leancloud_visitors" data-flag-title="Android AMS 与 APP 进程通信">
+             <span id="/2016/11/12/development-tool-gradle-skills/" class="leancloud_visitors" data-flag-title="Gradle 使用指南 -- 一些小技巧">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -388,7 +385,7 @@
 
           
               <div class="post-description">
-                  基于Android6.0来分析 AMS 与 APP 进程通信
+                  介绍在Android开发过程中Gradle的一些常见命令和配置
               </div>
           
 
@@ -403,79 +400,12 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 Android 中，APK 运行在 App 进程，而 AMS 运行在 system_server 进程，AMS 承担着对 Activity 的生命周期的管理等工作，而 Activity 生命周期函数的回调又是在 App 进程中进行的，App 进程需要频繁的和 AMS 进程进行通信。那么理解 AMS 进程和 App 进程之间的通信就对 Activity 的启动流程的理解有很好的铺垫作用。因此在介绍 Activity 的启动流程之前我们先来学习一下 AMS 进程和 App 进程之间是如何通信的。<br>提起到 Android 进程间通信，我们自然就想到了 Binder。是的，AMS 和 APP 之间肯定也是通过 Binder 进行通信的。下面进行详细的介绍。<br>本文涉及到的类包含：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">frameworks/base/core/java/android/app/ActivityManagerNative.java</div><div class="line">frameworks/base/core/java/android/app/ActivityManagerNative$ActivityManagerProxy.java</div><div class="line">frameworks/base/core/java/android/app/ApplicationThreadNative.java</div><div class="line">frameworks/base/core/java/android/app/ApplicationThreadNative$ApplicationThreadProxy.java</div><div class="line">frameworks/base/core/java/android/app/ActivityThread.java</div><div class="line">frameworks/base/core/java/android/app/ActivityThread$ApplicationThread.java</div></pre></td></tr></table></figure>
-<h2 id="相关类关系图"><a href="#相关类关系图" class="headerlink" title="相关类关系图"></a>相关类关系图</h2><p><img src="http://www.plantuml.com/plantuml/svg/jLHDRzD04BtlhnZrn8TIn9LQbb8EA1Af8j9xDRQtpGfxrzhTM4HGn8KJFI3K4wc4UiiLzOA8rFmPB8T_mHhRn8ut7nTkA-VDUs_UpEIKwP32GRS_XFJB5NG70_ZzuUklnMqs_P5-lCk-pzFf_G5HhncFKM84VeXAmLi2S2naGELp4GhfE6gYD8tE59K9bQuBGuel9ALy7OTnV1PBuLEb3AgF5vHh99T021UQ0YeuUKeSptNy7F-ieW4NbelFozkhz6QMtSsp-RVbOfhDFe7pv2yGt5fHoLglINzUPzUpLWtb0UIwX32kgJn7dqAlLpr9qUinuyP_7T7rDKkOdlIH6wdcJt4SCXyr4_nq92a613sb9VgwJAu5E37lX0AiPvD7_1ZYiMVWu0aHKkHWYYHoPUWUF3mYbsG3vq2ADnDeJoNdx40iMO8cx7F6COHUqHz4hsXaeZYgonQ8HB00F8EgwUJoTg3oHpGOX_GbZha_ggBQQdT7y__9HNE8GvCHCnEqXxOcOGOEIgFKTMAx4TGQZO6cvmqUobNOOM77BZGfgqrenxlQWsqRiAlJ_NlSDkhtbfs8pAVYcNDL7frtXuVLHVxxrEdOasmYx8T7oEhW2_RMURS1hICdwqK5qZQC_Q2bkRPKYRPU_FxmglSD2sX9jBmFikd_ovxnIg6qyyY6-WC0" alt="效果图"></p>
-<!--   
-@startuml
-Title "AMS 和 APP 通信相关类图"
-skinparam class {
-  BorderColor<<system_server>> SeaGreen
-  BorderColor<<app_process>> Magenta
-} 
-
-note as N1
-<b><color:SeaGreen > 运行在系统进程 </color >
-<b><color:Magenta > 运行在应用进程 </color >
-end note
-
-interface IInterface
-class Binder
-interface IActivityManager
-interface IApplicationThread
-abstract class ApplicationThreadNative  <<app_process>> {
-  + public boolean onTransact();
-}
-class ApplicationThreadProxy <<system_server>> {
-  - private final IBinder mRemote;
-  + public final void bindApplication();
-  + public final void scheduleLaunchActivity();
-}
-class ApplicationThread  <<app_process>> {
-  + public final void bindApplication();
-  + public final void scheduleLaunchActivity();
-}
-class ActivityManagerService <<system_server>> {
-  + public final int startActivity();
-  + public final void attachApplication();
-}
-class ActivityManagerNative <<system_server>> {
-  + public boolean onTransact();
-}
-class ActivityManagerProxy <<app_process>> {
-  - private IBinder mRemote;
-  + public int startActivity();
-  + public void attachApplication();
-}
-class ActivityThread  <<app_process>> {
-  ~ ApplicationThread mAppThread;
-}
-IBinder <|.. Binder
-Binder <|-- ActivityManagerNative
-Binder <|-- ApplicationThreadNative
-
-IInterface <|.. IActivityManager
-IInterface <|.. IApplicationThread
-
-IActivityManager <|.. ActivityManagerProxy
-IActivityManager <|.. ActivityManagerNative
-IApplicationThread <|.. ApplicationThreadProxy
-IApplicationThread <|.. ApplicationThreadNative
-
-ActivityManagerNative <|-- ActivityManagerService
-ApplicationThreadNative <|-- ApplicationThread
-
-ActivityThread *-- ApplicationThread
-@enduml
--->
-<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><p>下面通过一个图来表示一下 AMS 和 APP 的通信，该图片摘自<a href="http://weishu.me/2016/01/12/binder-index-for-newer/" target="_blank" rel="external">Weishu Note</a>，描述的很好，直接拿来用来。</p>
-<p><img src="/images/android-source-code-analysis-ams-app-ipc/ams-ipc-app.png" alt="效果图"></p>
-<p>在 App 进程侧，App 进程作为Binder的客户端当发起启动 <code>Activity</code> 时，通过作为服务端的代理对象的 <code>ActivityManagerProxy</code> 来发起远程调用，此时 system 进程作为服务端，<code>ActivityManagerNative</code> 作为 <code>Binder</code> 本地对象收到远程调用后，由它的实现类 <code>ActivityManagerService</code> 完成相应的生命周期管理以及任务栈管理后，会把控制权交给App进程，让App进程完成Activity类对象的创建，以及生命周期回调。<br>接下来的调用 system 进程作为客户端，App 进程作为服务端，通过system进程作为服务端的代理对象的 <code>ApplicationThreadProxy</code> 发起调用，<code>ApplicationThread</code> 作为服务端的 <code>Binder</code> 本地对象收到远程调用后，通过 <code>Handler</code> 发送消息由 <code>ActivityThread</code> 进程处理。<br>了解了这些知识后再看<a href="http://www.heqiangfly.com/2016/04/10/android-source-code-analysis-activity-start-process/" target="_blank" rel="external">Android startActivity 流程分析</a>的流程图，会有助于理解。</p>
-<!--   
-http://duanqz.github.io/2016-01-29-Activity-IPC
-http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
-http://weishu.me/2016/01/12/binder-index-for-newer/
--->
+        <h2 id="运行-Linux-命令行"><a href="#运行-Linux-命令行" class="headerlink" title="运行 Linux 命令行"></a>运行 Linux 命令行</h2><p>方法 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">task A &lt;&lt; &#123;</div><div class="line">    def content = &quot;ls -al&quot;.execute().text.trim()</div><div class="line">    print content</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过调用 <code>ProcessGroovyMethods</code> 的 <code>execute()</code> 方法来执行命令行。</p>
+<p>方法 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">task C (type: Exec) &#123;</div><div class="line">    println &apos;Hello from C&apos;</div><div class="line"></div><div class="line">    workingDir &apos;.&apos;</div><div class="line">    commandLine &apos;ls&apos;,&apos;-al&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过 <a href="https://docs.gradle.org/current/dsl/org.gradle.api.tasks.Exec.html" target="_blank" rel="external">Exec Task</a>来实现。</p>
 
       
     </div>
@@ -499,9 +429,9 @@ http://weishu.me/2016/01/12/binder-index-for-newer/
       
         <div class="post-tags">
           
-            <a href="/tags/Android源码分析/" rel="tag"># Android源码分析</a>
+            <a href="/tags/开发工具/" rel="tag"># 开发工具</a>
           
-            <a href="/tags/进程通信/" rel="tag"># 进程通信</a>
+            <a href="/tags/Gradle/" rel="tag"># Gradle</a>
           
         </div>
       
@@ -510,8 +440,8 @@ http://weishu.me/2016/01/12/binder-index-for-newer/
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/26/development-tool-gradle-command-line/" rel="next" title="Gradle 使用指南 -- 玩转命令行">
-                <i class="fa fa-chevron-left"></i> Gradle 使用指南 -- 玩转命令行
+              <a href="/2016/11/08/android-app-ganktoutiao/" rel="next" title="GankTouTiao —— 一个技术干货分享的APP">
+                <i class="fa fa-chevron-left"></i> GankTouTiao —— 一个技术干货分享的APP
               </a>
             
           </div>
@@ -520,8 +450,8 @@ http://weishu.me/2016/01/12/binder-index-for-newer/
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/04/10/android-source-code-analysis-activity-start-process/" rel="prev" title="Android startActivity 流程分析">
-                Android startActivity 流程分析 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/12/01/materials-programmer-materials/" rel="prev" title="程序员学习资料汇总">
+                程序员学习资料汇总 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -594,7 +524,7 @@ http://weishu.me/2016/01/12/binder-index-for-newer/
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -674,7 +604,7 @@ http://weishu.me/2016/01/12/binder-index-for-newer/
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关类关系图"><span class="nav-number">2.</span> <span class="nav-text">相关类关系图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程间通信"><span class="nav-number">3.</span> <span class="nav-text">进程间通信</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行-Linux-命令行"><span class="nav-number">1.</span> <span class="nav-text">运行 Linux 命令行</span></a></li></ol></div>
             
 
           </div>
