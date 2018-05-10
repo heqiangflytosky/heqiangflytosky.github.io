@@ -145,7 +145,8 @@ public class Student implements Parcelable {
 }
 ```
 
-在这里注意一下，我们知道如果是要在不同的应用中进行进程通信，两个应用必须要相同的aidl文件，这里为了方便移植，我们把进程通信需要的文件都放在aidl目录下面，当然也包括了Student.java这个java文件，但是Android Studio默认是只在`src/main/java`找源文件的，因此需要进行下面的配置，在 build.gradle 文件的`android{}`里面加上下面代码：
+在这里注意一下，我们知道如果是要在不同的应用中进行进程通信，两个应用必须要相同的aidl文件。或者是 Client 端 BookManager.aidl 定义的接口在 Service 端必须存在，即 Service 端的接口大于或等于 Client 端的接口。
+这里为了方便移植，我们把进程通信需要的文件都放在aidl目录下面，当然也包括了Student.java这个java文件，但是Android Studio默认是只在`src/main/java`找源文件的，因此需要进行下面的配置，在 build.gradle 文件的`android{}`里面加上下面代码：
 
 ```
     sourceSets {

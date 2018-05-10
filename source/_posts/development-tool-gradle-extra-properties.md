@@ -202,7 +202,7 @@ testProperties = "testProperties"
     println this.hasProperty("testProperties")
 ```
 
-另外，我们还可以在 gradle.properties 文件中添加系统属性。如果有 systemProp. 为前缀的属性会被识别为系统属性。
+另外，我们还可以在 gradle.properties 文件中添加系统属性。如果有 `systemProp.` 为前缀的属性会被识别为系统属性。
 
 比如在 gradle.properties 文件中声明：
 

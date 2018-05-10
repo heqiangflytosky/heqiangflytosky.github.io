@@ -72,6 +72,7 @@ date: 2016-12-1 10:00:00
  - [W3Cschool](https://www.w3cschool.cn/)：注意和W3School一字之差。W3Cschool是一个专业的编程入门学习及技术文档查询网站,提供包括HTML,CSS,Javascript,jQuery,C,PHP,Java,Python,Sql,Mysql等编程语言和开源技术的在线教程及使用手册。设计前端、服务器、大数据、移动端等技术。
  - [菜鸟教程](http://www.runoob.com/)：涵盖前端、服务器、Android等教程
  - [Leetcode](https://leetcode.com/)：编程做题
+ - [牛客网](https://www.nowcoder.com/)：专业IT笔试面试备考平台
 
 ### 技术博客
 
