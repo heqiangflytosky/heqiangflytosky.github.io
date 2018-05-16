@@ -145,8 +145,8 @@ public class Student implements Parcelable {
 }
 ```
 
-在这里注意一下，我们知道如果是要在不同的应用中进行进程通信，两个应用必须要相同的aidl文件。或者是 Client 端 BookManager.aidl 定义的接口在 Service 端必须存在，即 Service 端的接口大于或等于 Client 端的接口。
-这里为了方便移植，我们把进程通信需要的文件都放在aidl目录下面，当然也包括了Student.java这个java文件，但是Android Studio默认是只在`src/main/java`找源文件的，因此需要进行下面的配置，在 build.gradle 文件的`android{}`里面加上下面代码：
+在这里注意一下，我们知道如果是要在不同的应用中进行进程通信，两个应用必须要相同的 aidl 文件（包名也要一样）。或者是 Client 端 BookManager.aidl 定义的接口在 Service 端必须存在，即 Service 端的接口大于或等于 Client 端的接口。
+这里为了方便移植，我们把进程通信需要的文件都放在 aidl 目录下面，当然也包括了 Student.java 这个java文件，但是Android Studio默认是只在`src/main/java`找源文件的，因此需要进行下面的配置，在 build.gradle 文件的`android{}`里面加上下面代码：
 
 ```
     sourceSets {
@@ -321,9 +321,31 @@ AIDLService.java
 ```java
 public class AIDLService extends Service {
     private final static String TAG = "AIDLService";
-    private List<Student> mStudents = new ArrayList<>();
 
-    private final StudentManager.Stub mStudentManager = new StudentManager.Stub(){
+    private final MyStudentManager mStudentManager = new MyStudentManager();
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.d(TAG, "called onBind");
+        return mStudentManager;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+    }
+
+    public static class MyStudentManager extends StudentManager.Stub{
+        private List<Student> mStudents = new ArrayList<>();
+
+        public MyStudentManager() {
+            Student student = new Student();
+            student.setName("John");
+            student.setAge(6);
+            student.setGrade(1);
+            mStudents.add(student);
+        }
 
         @Override
         public List<Student> getStudents() throws RemoteException {
@@ -344,22 +366,6 @@ public class AIDLService extends Service {
             }
             Log.d(TAG, "sleep end !");
         }
-    };
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        Log.d(TAG, "called onBind");
-        return mStudentManager;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Student student = new Student();
-        student.setName("John");
-        student.setAge(6);
-        student.setGrade(1);
-        mStudents.add(student);
     }
 }
 ```

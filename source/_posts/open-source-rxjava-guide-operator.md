@@ -7,6 +7,198 @@ description: 本文介绍 RxJava 的操作符的用法
 date: 2017-10-12 10:00:00
 ---
 
+本文将会介绍一些常用 RxJava 的操作符的用法。
+
+## 创建Observable 操作符
+
+前面的例子介绍了使用 `Observable.create()` 操作符来创建 `Observable`，下面再介绍一下 RxJava 提供的其他方法。
+
+### just()
+
+`just(T item1, ...)`创建 `Observable` 并自动调用 `onNext()`发射数据，可以接受一个或者多个参数， `just()` 中传递的参数将在 `Observer` 的 `onNext()` 方法中接收到。
+
+```java
+        Observable.just("Hello", "World")
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull String s) {
+                        Log.i(TAG,"onNext : " + s);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.i(TAG,"onComplete");
+                    }
+        });
+```
+
+```
+I/RxJava: onNext : Hello
+I/RxJava: onNext : World
+I/RxJava: onComplete
+```
+
+### defer()
+
+`defer(Callable<? extends ObservableSource<? extends T>> supplier)` 当观察者订阅时，才创建 Observable。
+
+```java
+        Observable.defer(new Callable<ObservableSource<String>>() {
+            @Override
+            public ObservableSource<String> call() throws Exception {
+                Log.i(TAG,"defer call");
+                return Observable.just("Hello", "World");
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                Log.i(TAG,"accept : " + s);
+            }
+        });
+```
+
+这里新建了一个 `Consumer` 对象来作为观察者。
+
+### fromArray()
+
+`fromArray(T... items)` 接受一个数组参数，创建 `Observable` 并自动调用 `onNext()` 将数组中的数据逐一发送。
+
+```java
+        Observable.fromArray(new String[]{"Hello","World"})
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.i(TAG,"accept : " + s);
+                    }
+                });
+```
+
+### fromIterable()
+
+`fromIterable(Iterable<? extends T> source)` 接受一个集合参数，创建 `Observable` 并将集合中的数据逐一发送。
+
+```java
+        ArrayList<String> list = new ArrayList();
+        list.add("Hello");
+        list.add("World");
+        Observable.fromIterable(list)
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.i(TAG,"accept : " + s);
+                    }
+                });
+```
+
+### interval()
+
+`interval(long period, TimeUnit unit)` 按照一个固定的时间间隔 `period` 来发射数据，可以作为一个定时器来使用。
+
+```java
+        Observable.interval(2, TimeUnit.SECONDS)
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Long aLong) {
+                        Log.i(TAG,"onNext : " + aLong);
+                        if(aLong == 5)
+                            mDisposable.dispose();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+```
+上面例子中当数据等于5解除订阅关系，停止发射数据。
+
+### range()
+
+`range(final int start, final int count)` 创建一个被观察者并发射从 `start` 到 `count` 的整数序列给观察者。
+
+```java
+        Observable.range(1,5)
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.i(TAG,"accept : " + integer);
+                    }
+                });
+```
+
+### timer()
+
+`timer(long delay, TimeUnit unit)`创建一个 Observable 并在它在一个给定的延迟 `delay` 后发射一个特殊的值（0）给观察者。
+
+```java
+        Observable.timer(5, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        Log.i(TAG,"accept : " + aLong);
+                    }
+                });
+```
+
+### concat()
+
+`concat()` 方法会将参数中的多个数据源合并，并按顺序发射。
+
+```
+        Observable source1 = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
+                e.onNext("Hello");
+                e.onComplete();
+                //e.onError(new Exception("Test Error"));
+            }
+        });
+
+        Observable source2 = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
+                e.onNext("World");
+                e.onComplete();
+            }
+        });
+
+        Observable.concat(source1, source2).subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
+        .subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                Log.e("Test",s);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e("Test",throwable.getMessage());
+            }
+        });
+```
+
+这里需要注意的是，如果前一个数据源发出 `onError`，那么将会中断后面数据的发射。
+
+### concatMap()
+
 ## map 和 flatmap （变换）
 
 这一组操作符提供数据的变换工作，就是把数据对象变换成其他类型的数据对象，它们都接受一个 `Function` 类型的参数。但是它们的用法上还是有区别的。
