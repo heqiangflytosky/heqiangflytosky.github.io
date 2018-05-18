@@ -32,8 +32,13 @@ public interface RequestService {
                 //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         mRequestService = retrofit.create(RequestService.class);
-        
-        Call<TestBean> call = mRequestService.getData();
+```
+
+异步请求
+
+```
+    public void getData(CallBack callBack){
+        Call<TestBean> call = mMyService.getData();
         call.enqueue(new Callback<TestBean>() {
 
             @Override
@@ -43,9 +48,26 @@ public interface RequestService {
 
             @Override
             public void onFailure(Call<TestBean> call, Throwable t) {
-
+                Log.e("Test","onFailure = ");
             }
         });
+    }
+```
+
+同步请求
+
+```
+    public TestBean getDataSync(){
+        Call<TestBean> call = mRequestService.getData();
+        Response<TestBean> data = null;
+        try {
+            data = call.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return data != null ? data.body() : null;
+    }
 ```
 
 首先这里是创建一个 `Retrofit` 对象，这里用到了建造者模式。
@@ -464,10 +486,43 @@ final class OkHttpCall<T> implements Call<T> {
       }
     });
   }
+
+  @Override public Response<T> execute() throws IOException {
+    okhttp3.Call call;
+
+    synchronized (this) {
+      if (executed) throw new IllegalStateException("Already executed.");
+      executed = true;
+
+      if (creationFailure != null) {
+        if (creationFailure instanceof IOException) {
+          throw (IOException) creationFailure;
+        } else {
+          throw (RuntimeException) creationFailure;
+        }
+      }
+
+      call = rawCall;
+      if (call == null) {
+        try {
+          call = rawCall = createRawCall();
+        } catch (IOException | RuntimeException e) {
+          creationFailure = e;
+          throw e;
+        }
+      }
+    }
+
+    if (canceled) {
+      call.cancel();
+    }
+
+    return parseResponse(call.execute());
+  }
 }
 ```
-
-主要来分析一下 `enqueue()` 方法。请求加入队列的方法最终也是由 `okhttp3.Call` 来执行的。那么就要来看一下 `okhttp3.Call` 是如何生成的。
+`execute()` 对应的就是同步请求方法。
+主要来分析一下 `enqueue()` 方法，这个方法对应的就是异步请求方法。请求加入队列的方法最终也是由 `okhttp3.Call` 来执行的。那么就要来看一下 `okhttp3.Call` 是如何生成的。
 
 ```
   private okhttp3.Call createRawCall() throws IOException {

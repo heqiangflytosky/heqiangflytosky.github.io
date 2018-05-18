@@ -197,6 +197,31 @@ I/RxJava: onComplete
 
 这里需要注意的是，如果前一个数据源发出 `onError`，那么将会中断后面数据的发射。
 
+### first()
+
+再来介绍一下 `first()` 操作符，只发送符合条件的第一个事件，可以与前面的 `contact` 操作符结合使用。
+
+```
+        Observable.concat(source1, source2).subscribeOn(Schedulers.io())
+                .first("Default")
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.e("Test",s);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("Test",throwable.getMessage());
+                    }
+                });
+```
+
+如果 source1 和 source2 都有条件发射数据，那么就只发射 source1 的数据。如果只有 source2 有条件发射数据，那么就发送 source2 的数据。如果都不发射，就发送 `first()` 默认数据。
+就是说顺序发射数据时，只要有一个 `Observable` 发射了数据，那么就不会发射后面的数据了。如果都不发射数据，那么就发送 `first(default)` 参数里面的默认数据。
+
+这个操作符做网络缓存的时候很有用。举个例子：依次检查 Disk 与 Network，如果 Disk 存在缓存，则不做网络请求，否则进行网络请求。
+
 ### concatMap()
 
 ## map 和 flatmap （变换）

@@ -1,5 +1,5 @@
 ---
-title: Weex 源码研究 -- Component 和 Module注册过程
+title: Weex 源码研究 -- Component 、Module 和 DomObject 注册过程
 categories: Weex
 comments: true
 tags: [Weex]
@@ -7,12 +7,11 @@ description: 介绍 Weex Component 和 Module注册过程
 date: 2018-3-20 10:00:00
 ---
 
-## 注册 Component 和 Module
 
-在 WXSDKEngine 的 `register()` 方法中进行。这个方法里面是注册 Weex 原生自带的一些组件和模块，如果你想扩展组件或者模块，也是需要走注册流程的，流程和这里的是一样的。
-http://weex.apache.org/cn/guide/extend-android.html
+在 WXSDKEngine 的 `register()` 方法中进行。这个方法里面是注册 Weex 原生自带的一些组件、模块以及 DomObject，如果你想扩展组件或者模块，也是需要走注册流程的，流程和这里的是一样的。
+[扩展 Android 的功能 ](http://weex.apache.org/cn/guide/extend-android.html)
 
-### 注册 Component
+## 注册 Component
 
 ```
 ├── WXSDKEngine.registerComponent()
@@ -144,7 +143,7 @@ http://weex.apache.org/cn/guide/extend-android.html
 这里再来介绍一下 `appendTree` 这个参数。
 Weex 注册的 `Component` 有两种类型，一类是有 `{@"append":@"tree"}` 属性的标签，另一类是没有 `{@"append":@"tree"}` 属性的标签。
 
-### 注册 Module
+## 注册 Module
 
 ```
 ├── WXSDKEngine.registerModule()
@@ -241,3 +240,50 @@ WXBridgeManager.invokeRegisterModules()
     } catch (Throwable e) {
   }
 ```
+
+## 注册 DomObject
+
+前面博客中也说过，DomObject 包括了 `<template>` 在 Dom 树中的所有信息，如 style、attr、event、ref（结点的唯一标识符）、parent、children 等。
+在源码中注册过 Component 和 Moudle 后，紧接着是注册 DomObject。
+
+```
+      registerDomObject(WXBasicComponentType.TEXT, WXTextDomObject.class);
+```
+
+注册流程：
+
+```
+├── WXSDKEngine.registerDomObject()
+    ├── WXDomRegistry.registerDomObject()
+```
+
+WXDomRegistry.registerDomObject():
+
+```
+  public static boolean registerDomObject(String type, Class<? extends WXDomObject> clazz) throws WXException {
+    if (clazz == null || TextUtils.isEmpty(type)) {
+      return false;
+    }
+
+    if (sDom.containsKey(type)) {
+      if (WXEnvironment.isApkDebugable()) {
+        throw new WXException("WXDomRegistry had duplicate Dom:" + type);
+      } else {
+        WXLogUtils.e("WXDomRegistry had duplicate Dom: " + type);
+        return false;
+      }
+    }
+    sDom.put(type, clazz);
+    return true;
+  }
+```
+
+可以看到，这部分是比较简单的。仅仅是把注册的 `WXDomObject` 放到一个 `Map` 中去，在生成 Native Dom 的时候再生成 `WXDomObject` 对象。
+
+```
+├── AbstractAddElementAction.addDomInternal()
+    ├── WXDomObject.parse()
+        ├── WXDomObjectFactory.newInstance(type)
+            ├── WXDomRegistry.getDomObjectClass()
+```
+

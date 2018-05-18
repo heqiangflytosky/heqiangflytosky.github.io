@@ -63,7 +63,7 @@ mDomThread = new WXThread("WeeXDomThread", new WXDomHandler(this));
 
 ## WXDomObject
  
- - DomObject 包括了 <template> 在 Dom 树中的所有信息，如 style、attr、event、ref（结点的唯一标识符）、parent、children
+ - DomObject 包括了 `<template>` 在 Dom 树中的所有信息，如 style、attr、event、ref（结点的唯一标识符）、parent、children
 
 ## ImmutableDomObject
 
