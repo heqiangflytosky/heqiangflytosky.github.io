@@ -11,7 +11,7 @@ date: 2018-3-26 10:00:00
 
 先来看一下网上有开发者绘制的渲染流程图。
 
-![效果图](http://img.blog.csdn.net/20160818173031427)
+![效果图](/images/open-source-weex-android-component-render/render_process.png)
 
 这里目前的版本和这张图相比已经有了改变，比如 `WXDomStatement` -> `DOMActionContextImpl`，`WXRenderStatement` -> `RenderActionContextImpl`。
 渲染的流程包括：
