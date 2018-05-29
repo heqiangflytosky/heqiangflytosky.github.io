@@ -33,3 +33,12 @@ task C (type: Exec) {
 ```
 
 通过 [Exec Task](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.Exec.html)来实现。
+
+方法 3:
+通过 Project 的 `exec()` 方法实现。
+
+```
+    println  exec {
+        commandLine 'ls', '-al'
+    }
+```
