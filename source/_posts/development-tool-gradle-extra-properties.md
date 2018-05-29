@@ -192,7 +192,16 @@ if (project.hasProperty('custom')){
 比如在 gradle.properties 文件中声明：
 
 ```
+VERSION_CODE=200100
+VERSION_NAME=2.1.0
 testProperties = "testProperties"
+```
+
+在 root project中使用：
+
+```
+versionCode project.VERSION_CODE as int
+versionName project.VERSION_NAME
 ```
 
 在 app subproject 中使用：

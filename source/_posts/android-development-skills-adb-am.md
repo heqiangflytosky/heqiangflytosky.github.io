@@ -464,3 +464,16 @@ am broadcast [--user <USER_ID> | all | current] <INTENT>
  - `am task size-task-test <TASK_ID> <STEP_SIZE> [DELAY_MS]`：
 
 ## am get-config
+
+## am send-trim-memory
+
+发送回收内存的命令，会调用 Application 和 Activity 的 `onTrimMemory(int level)` 方法。
+
+```
+ am send-trim-memory [--user <USER_ID>] <PROCESS>
+[HIDDEN|RUNNING_MODERATE|BACKGROUND|RUNNING_LOW|MODERATE|RUNNING_CRITICAL|COMPLETE]
+```
+
+```
+adb shell am send-trim-memory com.example.heqiang.testsomething RUNNING_CRITICAL
+```
