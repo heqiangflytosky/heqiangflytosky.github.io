@@ -1,9 +1,9 @@
 ---
-title: Weex 源码研究 -- Component 、Module 和 DomObject 注册过程
+title: Weex 源码研究 -- Component 和 DomObject 注册过程
 categories: Weex
 comments: true
 tags: [Weex]
-description: 介绍 Weex Component 和 Module注册过程
+description: 介绍 Weex Component 和 DomObject注册过程
 date: 2018-3-20 10:00:00
 ---
 
@@ -143,103 +143,6 @@ date: 2018-3-20 10:00:00
 这里再来介绍一下 `appendTree` 这个参数。
 Weex 注册的 `Component` 有两种类型，一类是有 `{@"append":@"tree"}` 属性的标签，另一类是没有 `{@"append":@"tree"}` 属性的标签。
 
-## 注册 Module
-
-```
-├── WXSDKEngine.registerModule()
-    └── WXModuleManager.registerModule()
-        ├── WXModuleManager.registerNativeModule()
-        └── WXModuleManager.WXSDKManager.getInstance().registerModules()
-            └── WXBridgeManager.registerModules()
-                 └── WXBridgeManager.invokeRegisterModules()
-                     └── WXBridge.execJS()
-                 
-```
-
-注册 Module 的流程和注册 Component 流程比较类似。
-`registerModule()` 也有多个重载方法，但最终调用的是 `WXModuleManager.registerModule()` 方法。
-在介绍 `WXModuleManager.registerModule()` 方法之前，我们先看一下它的参数之一 `ModuleFactory`。这个类和注册 Component 时的 ComponentHolder 类比较类似。
-一般情况下，我们会调用 `registerModule(String moduleName, Class<T> moduleClass,boolean global)` 方法来注册 Module，比如：
-
-```
-registerModule("modal", WXModalUIModule.class, false);
-```
-
-这时候会以 `WXModalUIModule.class` 为参数生成一个 `TypeModuleFactory` 实例。它有三个作用分别对应三个方法：
-
- - buildInstance()：生成一个 Module 对应 class 的实例
- - getMethods()：获取 class 所有的 JSMethod 注解的方法 
- - getMethodInvoker(String name)：获取注册 Module 提供的API的执行体
-
-WXModuleManager.registerModule() 方法：
-
-```
-  public static boolean registerModule(final String moduleName, final ModuleFactory factory, final boolean global) throws WXException {
-    ...
-    // 在JS线程中执行注册任务
-    WXBridgeManager.getInstance()
-        .post(new Runnable() {
-      @Override
-      public void run() {
-        ...
-        // 如果这个Module是全局的，则直接生成该Module对象，然后存储在 sGlobalModuleMap 中，那么就可以通过 WXModuleManager.findModule() 方法直接调用 Module 的方法。
-        if (global) {
-          try {
-            WXModule wxModule = factory.buildInstance();
-            wxModule.setModuleName(moduleName);
-            sGlobalModuleMap.put(moduleName, wxModule);
-          } catch (Exception e) {
-            WXLogUtils.e(moduleName + " class must have a default constructor without params. ", e);
-          }
-        }
-
-        // 在 Java 层注册 Module
-        try {
-          registerNativeModule(moduleName, factory);
-        } catch (WXException e) {
-          WXLogUtils.e("", e);
-        }
-        // 在 JS 层注册 Module
-        registerJSModule(moduleName, factory);
-      }
-    });
-    return true;
-
-  }
-```
-
-Native 层的注册过程很简单，在 `sModuleFactoryMap` 中保存了 Module 的 Name 及对应的 `ModuleFactory`，提供给 `callModuleMethod()` 方法调用。
-
-```
-static boolean registerNativeModule(String moduleName, ModuleFactory factory) throws WXException {
-    if (factory == null) {
-      return false;
-    }
-
-    try {
-      sModuleFactoryMap.put(moduleName, factory);
-    }catch (ArrayStoreException e){
-      e.printStackTrace();
-    }
-    return true;
-  }
-```
-
-JS 层的注册也比较简单，调用 `WXBridge.execJS()` 注册。
-WXBridgeManager.invokeRegisterModules()
-
-```
-  private void invokeRegisterModules(Map<String, Object> modules, List<Map<String, Object>> failReceiver) {
-    ...
-    // 生成参数：{"modal":["confirm","removeAllEventListeners","toast","prompt","alert","addEventListener"]}
-    WXJSObject[] args = {new WXJSObject(WXJSObject.JSON,
-        WXJsonUtils.fromObjectToJSONString(modules))};
-    try {
-    // 通过jni运行js方法
-      mWXBridge.execJS("", null, METHOD_REGISTER_MODULES, args);
-    } catch (Throwable e) {
-  }
-```
 
 ## 注册 DomObject
 
