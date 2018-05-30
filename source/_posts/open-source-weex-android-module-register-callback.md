@@ -1,10 +1,10 @@
 ---
-title: Weex 源码研究 -- Module 注册和调用流程
+title: Weex 源码研究 -- Module 注册、调用和回调函数的执行流程
 categories: Weex
 comments: true
 tags: [Weex]
-description: 介绍 Weex Module 注册和调用流程
-date: 2018-3-20 10:00:00
+description: 介绍 Weex Module 注册、调用流程以及回调函数的执行流程
+date: 2018-4-10 10:00:00
 ---
 
 ## 注册 Module
@@ -152,7 +152,7 @@ WXBridgeManager.invokeRegisterModules()
 
 ## Module 方法调用流程
 
-方法执行流程图：
+### 方法执行流程图
 
 ```
 ├── WXBridge.callNativeModule
@@ -163,7 +163,9 @@ WXBridgeManager.invokeRegisterModules()
             ├── NativeInvokeHelper.invoke
                 ├── NativeInvokeHelper.prepareArguments
                 ├── MethodInvoker.isRunOnUIThread()
-```    
+```
+
+### 代码分析
 
 ```
   public Object invoke(final Object target,final Invoker invoker,JSONArray args) throws Exception {
