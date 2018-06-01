@@ -1,5 +1,5 @@
 ---
-title: RxJava 使用指南（二）-- 操作符介绍
+title: RxJava 使用指南 -- 操作符介绍
 categories: Android开源项目
 comments: true
 tags: [Android开源项目, RxJava]

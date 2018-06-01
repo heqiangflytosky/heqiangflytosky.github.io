@@ -1,6 +1,6 @@
 
 ---
-title: RxJava 使用指南（一）-- 基本概念、数据流创建和线程调度
+title: RxJava 使用指南 -- 基本概念、数据流创建和线程调度
 categories: Android开源项目
 comments: true
 tags: [Android开源项目, RxJava]
@@ -31,21 +31,19 @@ RxJava 的异步的实现，是通过一种扩展的观察者模式来实现的�
 RxJava 提供众多的操作符以及它的链式操作可以替代深度回调逻辑，可以使代码简短优雅。
 想要使用RxJava，我们先来了解一下几个基本概念。
 
- - Observable (可观察者，即被观察者)：发射数据流
- - Observer (观察者)：接收数据流
+ - <font color=#ff0000>Observable/Observer (可观察者，即被观察者/观察者)</font>：发射数据流/接收数据流
  - Consumer：它也是一个 Observer，只有一个 accept() 回调
  - subscribe (订阅)：建立 Observable 和 Observer 的联系
  - subscribeOn：为 Observable 对数据的处理指定一个调度器
  - observeOn：为下游对数据的操作指定一个调度器
  - Disposable：用于解除订阅以及查询订阅关系是否解除
  - Operators操作符：可以理解为对数据流的操作，包括创建、过滤、变换、组合、聚合等。
- - Flowable：(被观察者)：发射数据流，支持背压
+ - <font color=#ff0000>Flowable/Subscriber：(被观察者/观察者)</font>：一种观察者模式组合，支持背压
  - Publisher：Flowable 的父类
- - Subscriber：(观察者)，支持背压
  - Subscription：可以通过request发起请求数据，通过cancel取消订阅关系。
- - Single/SingleObserver：一种观察者模式组合
- - Completable/CompletableObserver：一种观察者模式组合
- - Maybe/MaybeObserver：一种观察者模式组合
+ - <font color=#ff0000>Single/SingleObserver</font>：一种观察者模式组合
+ - <font color=#ff0000>Completable/CompletableObserver</font>：一种观察者模式组合
+ - <font color=#ff0000>Maybe/MaybeObserver</font>：一种观察者模式组合
 
 
 订阅关系：Observable/Observer是一对，Flowable/Subscriber是一对。

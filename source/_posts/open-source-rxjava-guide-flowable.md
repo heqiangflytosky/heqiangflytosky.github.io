@@ -1,5 +1,5 @@
 ---
-title: RxJava 使用指南（二）-- Flowable 和 Subscriber
+title: RxJava 使用指南 -- Flowable 和 Subscriber
 categories: Android开源项目
 comments: true
 tags: [Android开源项目, RxJava]
