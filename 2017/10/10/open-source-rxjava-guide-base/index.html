@@ -88,13 +88,13 @@
 
 <meta name="description" content="本文介绍 RxJava 的基本概念以及简单使用，介绍 Observable 创建数据流的多种操作符的用法以及线程调度的方法和它们之间的区别。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RxJava 使用指南（一）-- 基本概念、数据流创建和线程调度">
+<meta property="og:title" content="RxJava 使用指南 -- 基本概念、数据流创建和线程调度">
 <meta property="og:url" content="http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 RxJava 的基本概念以及简单使用，介绍 Observable 创建数据流的多种操作符的用法以及线程调度的方法和它们之间的区别。">
-<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta property="og:updated_time" content="2018-06-02T09:24:04.975Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RxJava 使用指南（一）-- 基本概念、数据流创建和线程调度">
+<meta name="twitter:title" content="RxJava 使用指南 -- 基本概念、数据流创建和线程调度">
 <meta name="twitter:description" content="本文介绍 RxJava 的基本概念以及简单使用，介绍 Observable 创建数据流的多种操作符的用法以及线程调度的方法和它们之间的区别。">
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title> RxJava 使用指南（一）-- 基本概念、数据流创建和线程调度 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> RxJava 使用指南 -- 基本概念、数据流创建和线程调度 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -302,7 +302,7 @@
             
             
               
-                RxJava 使用指南（一）-- 基本概念、数据流创建和线程调度
+                RxJava 使用指南 -- 基本概念、数据流创建和线程调度
               
             
           </h1>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2017/10/10/open-source-rxjava-guide-base/" class="leancloud_visitors" data-flag-title="RxJava 使用指南（一）-- 基本概念、数据流创建和线程调度">
+             <span id="/2017/10/10/open-source-rxjava-guide-base/" class="leancloud_visitors" data-flag-title="RxJava 使用指南 -- 基本概念、数据流创建和线程调度">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -405,21 +405,19 @@
 <p>RxAndroid 是一个 RxJava 扩展库，更好的兼容了 Android 特性，比如主线程，UI事件等。</p>
 <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>RxJava 官方的解释是一个在 Java VM 上使用可观测的序列来组成异步的、基于事件的程序的库。简要概括一下，它就是一个实现异步操作的库。它的本质体现在异步两个字上面。<br>RxJava 的异步的实现，是通过一种扩展的观察者模式来实现的，观察者模式相信我们都不陌生。<br>RxJava 提供众多的操作符以及它的链式操作可以替代深度回调逻辑，可以使代码简短优雅。<br>想要使用RxJava，我们先来了解一下几个基本概念。</p>
 <ul>
-<li>Observable (可观察者，即被观察者)：发射数据流</li>
-<li>Observer (观察者)：接收数据流</li>
+<li><font color="#ff0000">Observable/Observer (可观察者，即被观察者/观察者)</font>：发射数据流/接收数据流</li>
 <li>Consumer：它也是一个 Observer，只有一个 accept() 回调</li>
 <li>subscribe (订阅)：建立 Observable 和 Observer 的联系</li>
 <li>subscribeOn：为 Observable 对数据的处理指定一个调度器</li>
 <li>observeOn：为下游对数据的操作指定一个调度器</li>
 <li>Disposable：用于解除订阅以及查询订阅关系是否解除</li>
 <li>Operators操作符：可以理解为对数据流的操作，包括创建、过滤、变换、组合、聚合等。</li>
-<li>Flowable：(被观察者)：发射数据流，支持背压</li>
+<li><font color="#ff0000">Flowable/Subscriber：(被观察者/观察者)</font>：一种观察者模式组合，支持背压</li>
 <li>Publisher：Flowable 的父类</li>
-<li>Subscriber：(观察者)，支持背压</li>
 <li>Subscription：可以通过request发起请求数据，通过cancel取消订阅关系。</li>
-<li>Single/SingleObserver：一种观察者模式组合</li>
-<li>Completable/CompletableObserver：一种观察者模式组合</li>
-<li>Maybe/MaybeObserver：一种观察者模式组合</li>
+<li><font color="#ff0000">Single/SingleObserver</font>：一种观察者模式组合</li>
+<li><font color="#ff0000">Completable/CompletableObserver</font>：一种观察者模式组合</li>
+<li><font color="#ff0000">Maybe/MaybeObserver</font>：一种观察者模式组合</li>
 </ul>
 <p>订阅关系：Observable/Observer是一对，Flowable/Subscriber是一对。</p>
 <h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>正如我们实现一个基本的观察者模式一样，你要创建被观察者和观察者，然后通过订阅事件使他们联系起来。<br>下面介绍一个RxJava的最基本的实现：</p>
@@ -431,24 +429,7 @@
 <p>执行后输出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">I/RxJava: onNext : Hello </div><div class="line">I/RxJava: onNext : World</div><div class="line">I/RxJava: onComplete</div></pre></td></tr></table></figure>
 <p>通过上面三步实现了 RxJava 最简单的用法，其中并没有涉及到线程切换等操作，这些后面再介绍。</p>
-<h2 id="创建Observable-1"><a href="#创建Observable-1" class="headerlink" title="创建Observable"></a>创建Observable</h2><p>前面的例子介绍了使用 <code>Observable.create()</code> 操作符来创建 <code>Observable</code>，下面再介绍一下 RxJava 提供的其他方法。</p>
-<h3 id="just"><a href="#just" class="headerlink" title="just()"></a>just()</h3><p><code>just(T item1, ...)</code>创建 <code>Observable</code> 并自动调用 <code>onNext()</code>发射数据，可以接受一个或者多个参数， <code>just()</code> 中传递的参数将在 <code>Observer</code> 的 <code>onNext()</code> 方法中接收到。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">Observable.just(<span class="string">"Hello"</span>, <span class="string">"World"</span>)</div><div class="line">        .subscribe(<span class="keyword">new</span> Observer&lt;String&gt;() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(@NonNull Disposable d)</span> </span>&#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(@NonNull String s)</span> </span>&#123;</div><div class="line">                Log.i(TAG,<span class="string">"onNext : "</span> + s);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(@NonNull Throwable e)</span> </span>&#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</div><div class="line">                Log.i(TAG,<span class="string">"onComplete"</span>);</div><div class="line">            &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">I/RxJava: onNext : Hello</div><div class="line">I/RxJava: onNext : World</div><div class="line">I/RxJava: onComplete</div></pre></td></tr></table></figure>
-<h3 id="defer"><a href="#defer" class="headerlink" title="defer()"></a>defer()</h3><p><code>defer(Callable&lt;? extends ObservableSource&lt;? extends T&gt;&gt; supplier)</code> 当观察者订阅时，才创建 Observable。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Observable.defer(<span class="keyword">new</span> Callable&lt;ObservableSource&lt;String&gt;&gt;() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> ObservableSource&lt;String&gt; <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        Log.i(TAG,<span class="string">"defer call"</span>);</div><div class="line">        <span class="keyword">return</span> Observable.just(<span class="string">"Hello"</span>, <span class="string">"World"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;).subscribe(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        Log.i(TAG,<span class="string">"accept : "</span> + s);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>这里新建了一个 <code>Consumer</code> 对象来作为观察者。</p>
-<h3 id="fromArray"><a href="#fromArray" class="headerlink" title="fromArray()"></a>fromArray()</h3><p><code>fromArray(T... items)</code> 接受一个数组参数，创建 <code>Observable</code> 并自动调用 <code>onNext()</code> 将数组中的数据逐一发送。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Observable.fromArray(<span class="keyword">new</span> String[]&#123;<span class="string">"Hello"</span>,<span class="string">"World"</span>&#125;)</div><div class="line">        .subscribe(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">                Log.i(TAG,<span class="string">"accept : "</span> + s);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
-<h3 id="fromIterable"><a href="#fromIterable" class="headerlink" title="fromIterable()"></a>fromIterable()</h3><p><code>fromIterable(Iterable&lt;? extends T&gt; source)</code> 接受一个集合参数，创建 <code>Observable</code> 并将集合中的数据逐一发送。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ArrayList&lt;String&gt; list = <span class="keyword">new</span> ArrayList();</div><div class="line">list.add(<span class="string">"Hello"</span>);</div><div class="line">list.add(<span class="string">"World"</span>);</div><div class="line">Observable.fromIterable(list)</div><div class="line">        .subscribe(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">                Log.i(TAG,<span class="string">"accept : "</span> + s);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
-<h3 id="interval"><a href="#interval" class="headerlink" title="interval()"></a>interval()</h3><p><code>interval(long period, TimeUnit unit)</code> 按照一个固定的时间间隔 <code>period</code> 来发射数据，可以作为一个定时器来使用。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">Observable.interval(<span class="number">2</span>, TimeUnit.SECONDS)</div><div class="line">        .subscribe(<span class="keyword">new</span> Observer&lt;Long&gt;() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(@NonNull Disposable d)</span> </span>&#123;</div><div class="line">                mDisposable = d;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(@NonNull Long aLong)</span> </span>&#123;</div><div class="line">                Log.i(TAG,<span class="string">"onNext : "</span> + aLong);</div><div class="line">                <span class="keyword">if</span>(aLong == <span class="number">5</span>)</div><div class="line">                    mDisposable.dispose();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(@NonNull Throwable e)</span> </span>&#123;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
-<p>上面例子中当数据等于5解除订阅关系，停止发射数据。</p>
-<h3 id="range"><a href="#range" class="headerlink" title="range()"></a>range()</h3><p><code>range(final int start, final int count)</code> 创建一个被观察者并发射从 <code>start</code> 到 <code>count</code> 的整数序列给观察者。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Observable.range(<span class="number">1</span>,<span class="number">5</span>)</div><div class="line">        .subscribe(<span class="keyword">new</span> Consumer&lt;Integer&gt;() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Integer integer)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">                Log.i(TAG,<span class="string">"accept : "</span> + integer);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
-<h3 id="timer"><a href="#timer" class="headerlink" title="timer()"></a>timer()</h3><p><code>timer(long delay, TimeUnit unit)</code>创建一个 Observable 并在它在一个给定的延迟 <code>delay</code> 后发射一个特殊的值（0）给观察者。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Observable.timer(<span class="number">5</span>, TimeUnit.SECONDS)</div><div class="line">        .subscribe(<span class="keyword">new</span> Consumer&lt;Long&gt;() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Long aLong)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">                Log.i(TAG,<span class="string">"accept : "</span> + aLong);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<h2 id="创建Observable-1"><a href="#创建Observable-1" class="headerlink" title="创建Observable"></a>创建Observable</h2><p>关于这方面请看 <a href="http://www.heqiangfly.com/2017/10/12/open-source-rxjava-guide-operator/" target="_blank" rel="external">RxJava 使用指南（二）– 操作符介绍 </a>一文。</p>
 <h2 id="创建Observer-1"><a href="#创建Observer-1" class="headerlink" title="创建Observer"></a>创建Observer</h2><p>RxJava 支持多种不同方式的 <code>Observer</code> 回调。</p>
 <ul>
 <li>subscribe()：忽略 <code>onNext</code> 以及 <code>onComplete</code> 等事件。</li>
@@ -570,8 +551,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/12/open-source-rxjava-guide-operator/" rel="prev" title="RxJava 使用指南（二）-- 操作符介绍">
-                RxJava 使用指南（二）-- 操作符介绍 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/10/12/open-source-rxjava-guide-operator/" rel="prev" title="RxJava 使用指南 -- 操作符介绍">
+                RxJava 使用指南 -- 操作符介绍 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -644,7 +625,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">87</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -653,7 +634,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -662,7 +643,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -724,7 +705,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本用法"><span class="nav-number">3.</span> <span class="nav-text">基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Observable"><span class="nav-number">3.1.</span> <span class="nav-text">创建Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Observer"><span class="nav-number">3.2.</span> <span class="nav-text">创建Observer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subscribe（订阅）"><span class="nav-number">3.3.</span> <span class="nav-text">subscribe（订阅）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建Observable-1"><span class="nav-number">4.</span> <span class="nav-text">创建Observable</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#just"><span class="nav-number">4.1.</span> <span class="nav-text">just()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#defer"><span class="nav-number">4.2.</span> <span class="nav-text">defer()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fromArray"><span class="nav-number">4.3.</span> <span class="nav-text">fromArray()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fromIterable"><span class="nav-number">4.4.</span> <span class="nav-text">fromIterable()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interval"><span class="nav-number">4.5.</span> <span class="nav-text">interval()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range"><span class="nav-number">4.6.</span> <span class="nav-text">range()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#timer"><span class="nav-number">4.7.</span> <span class="nav-text">timer()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建Observer-1"><span class="nav-number">5.</span> <span class="nav-text">创建Observer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程调度"><span class="nav-number">6.</span> <span class="nav-text">线程调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Scheduler（调度器）"><span class="nav-number">6.1.</span> <span class="nav-text">Scheduler（调度器）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现线程调度"><span class="nav-number">6.2.</span> <span class="nav-text">实现线程调度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例1"><span class="nav-number">6.2.1.</span> <span class="nav-text">示例1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例2"><span class="nav-number">6.2.2.</span> <span class="nav-text">示例2</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doOnSubscribe"><span class="nav-number">6.3.</span> <span class="nav-text">doOnSubscribe()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐阅读"><span class="nav-number">7.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本用法"><span class="nav-number">3.</span> <span class="nav-text">基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Observable"><span class="nav-number">3.1.</span> <span class="nav-text">创建Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Observer"><span class="nav-number">3.2.</span> <span class="nav-text">创建Observer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subscribe（订阅）"><span class="nav-number">3.3.</span> <span class="nav-text">subscribe（订阅）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建Observable-1"><span class="nav-number">4.</span> <span class="nav-text">创建Observable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建Observer-1"><span class="nav-number">5.</span> <span class="nav-text">创建Observer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程调度"><span class="nav-number">6.</span> <span class="nav-text">线程调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Scheduler（调度器）"><span class="nav-number">6.1.</span> <span class="nav-text">Scheduler（调度器）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现线程调度"><span class="nav-number">6.2.</span> <span class="nav-text">实现线程调度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例1"><span class="nav-number">6.2.1.</span> <span class="nav-text">示例1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例2"><span class="nav-number">6.2.2.</span> <span class="nav-text">示例2</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doOnSubscribe"><span class="nav-number">6.3.</span> <span class="nav-text">doOnSubscribe()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐阅读"><span class="nav-number">7.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
             
 
           </div>

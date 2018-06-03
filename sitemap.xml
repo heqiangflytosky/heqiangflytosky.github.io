@@ -2,9 +2,135 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2014/04/10/android-knowledge-debug-skill-one/</loc>
+    
+    <lastmod>2018-06-03T06:25:50.583Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/04/10/open-source-weex-android-module-register-callback/</loc>
+    
+    <lastmod>2018-06-02T09:24:04.977Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/10/14/open-source-rxjava-guide-flowable/</loc>
+    
+    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/10/12/open-source-rxjava-guide-operator/</loc>
+    
+    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/</loc>
+    
+    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/03/20/open-source-weex-android-component-module-register/</loc>
+    
+    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/</loc>
+    
+    <lastmod>2018-06-02T09:24:04.975Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/11/12/development-tool-gradle-skills/</loc>
+    
+    <lastmod>2018-05-29T02:28:46.415Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/02/20/python-practice-web-crawler-iqiyi/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.839Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.838Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/03/26/open-source-weex-android-component-render/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.838Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.838Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/03/10/open-source-weex-android-classes-introduction/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.837Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/11/08/open-source-retrofit-source-code-analysis-request/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.836Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.836Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2015/02/02/android-ipc-messenger/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.835Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2016/03/15/development-tool-gradle-extra-properties/</loc>
     
-    <lastmod>2018-05-06T14:38:33.953Z</lastmod>
+    <lastmod>2018-05-29T02:28:24.835Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2015/02/01/android-ipc-aidl/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.835Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2015/03/26/android-development-skills-adb-am/</loc>
+    
+    <lastmod>2018-05-29T02:28:24.833Z</lastmod>
     
   </url>
   
@@ -65,13 +191,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/11/06/open-source-retrofit-source-code-analysis-start/</loc>
-    
-    <lastmod>2018-05-06T07:22:25.867Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/</loc>
     
     <lastmod>2018-05-06T07:22:25.867Z</lastmod>
@@ -79,16 +198,9 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/11/08/open-source-retrofit-source-code-analysis-request/</loc>
+    <loc>http://yoursite.com/2017/11/06/open-source-retrofit-source-code-analysis-start/</loc>
     
-    <lastmod>2018-05-06T07:22:25.866Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
-    
-    <lastmod>2018-05-06T07:22:25.865Z</lastmod>
+    <lastmod>2018-05-06T07:22:25.867Z</lastmod>
     
   </url>
   
@@ -121,23 +233,9 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/11/12/development-tool-gradle-skills/</loc>
-    
-    <lastmod>2018-04-04T02:22:41.820Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2016/02/08/development-tool-android-studio-debug-skill/</loc>
     
     <lastmod>2018-03-31T08:55:50.015Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/03/20/python-practice-web-crawler-iqiyi/</loc>
-    
-    <lastmod>2018-03-23T15:04:12.901Z</lastmod>
     
   </url>
   
@@ -156,14 +254,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/12/02/android-architecture-components-room/</loc>
+    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -177,14 +268,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2017/07/08/development-tool-markdown-plant-uml/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -198,35 +282,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/07/08/development-tool-markdown-plant-uml/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/10/12/open-source-rxjava-guide-operator/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2016/03/08/development-tool-gradle-android-dsl-extension/</loc>
-    
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/09/05/android-architecture-google-samples/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -240,28 +296,42 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/03/10/android-demo-live-wallpaper-snow/</loc>
+    <loc>http://yoursite.com/2017/12/02/android-architecture-components-room/</loc>
     
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2015/03/20/android-get-dir-path/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/10/08/android-knowledge-point-taskdescription/</loc>
+    <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
     
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/04/26/android-performance-optimization-rotate-screen/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/09/05/android-architecture-google-samples/</loc>
+    
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/02/20/development-tool-mat-to-analyse-leak/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -275,62 +345,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/02/02/android-ipc-messenger/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/02/20/development-tool-mat-to-analyse-leak/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/02/25/development-tool-traceview/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/12/03/development-tool-import-source-to-android-studio/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2015/04/10/java-dynamic-proxy-invocationhandler-demo/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -338,14 +352,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</loc>
+    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
+    <loc>http://yoursite.com/2016/01/10/blog-use-hexo-to-build-blog/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -366,14 +380,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
+    <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
+    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -415,7 +429,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
+    <loc>http://yoursite.com/2015/03/20/android-get-dir-path/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -429,21 +443,28 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/01/10/blog-use-hexo-to-build-blog/</loc>
+    <loc>http://yoursite.com/2017/06/15/android-knowledge-point-drawable-cache/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/02/01/android-ipc-aidl/</loc>
+    <loc>http://yoursite.com/2015/01/08/android-compnent-activitygroup/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/</loc>
+    <loc>http://yoursite.com/2017/03/10/android-demo-live-wallpaper-snow/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/10/08/android-knowledge-point-taskdescription/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -457,14 +478,56 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/10/14/open-source-rxjava-guide-flowable/</loc>
+    <loc>http://yoursite.com/2017/04/26/android-performance-optimization-rotate-screen/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/01/08/android-compnent-activitygroup/</loc>
+    <loc>http://yoursite.com/2014/10/15/android-development-skills-dumpsys/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/12/03/development-tool-import-source-to-android-studio/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -485,6 +548,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/01/11/react-native-first-step/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -492,7 +562,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -506,7 +576,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -527,13 +597,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/03/06/android-source-code-analysis-usermanager/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -541,14 +604,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2014/10/15/android-development-skills-dumpsys/</loc>
+    <loc>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/06/15/android-knowledge-point-drawable-cache/</loc>
+    <loc>http://yoursite.com/2016/02/25/development-tool-traceview/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     

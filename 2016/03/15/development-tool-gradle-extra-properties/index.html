@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/03/15/development-tool-gradle-extra-properties/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Gradle 扩展属性的使用">
-<meta property="og:updated_time" content="2018-05-06T14:38:33.953Z">
+<meta property="og:updated_time" content="2018-05-29T02:28:24.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 使用指南 -- Extra Properties">
 <meta name="twitter:description" content="介绍 Gradle 扩展属性的使用">
@@ -443,10 +443,12 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (project.hasProperty(&apos;custom&apos;))&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>我们还可以通过 -D 来添加系统属性。</p>
 <h2 id="grade-properties-文件扩展属性"><a href="#grade-properties-文件扩展属性" class="headerlink" title="grade.properties 文件扩展属性"></a>grade.properties 文件扩展属性</h2><p>可以通过 gradle.properties 文件中声明直接添加到项目中使用，在这个属性文件中声明的属性对所有的项目可用。<br>比如在 gradle.properties 文件中声明：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">testProperties = &quot;testProperties&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">VERSION_CODE=200100</div><div class="line">VERSION_NAME=2.1.0</div><div class="line">testProperties = &quot;testProperties&quot;</div></pre></td></tr></table></figure>
+<p>在 root project中使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">versionCode project.VERSION_CODE as int</div><div class="line">versionName project.VERSION_NAME</div></pre></td></tr></table></figure>
 <p>在 app subproject 中使用：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">println rootProject.hasProperty(&quot;testProperties&quot;)</div><div class="line">println this.hasProperty(&quot;testProperties&quot;)</div></pre></td></tr></table></figure>
-<p>另外，我们还可以在 gradle.properties 文件中添加系统属性。如果有 systemProp. 为前缀的属性会被识别为系统属性。</p>
+<p>另外，我们还可以在 gradle.properties 文件中添加系统属性。如果有 <code>systemProp.</code> 为前缀的属性会被识别为系统属性。</p>
 <p>比如在 gradle.properties 文件中声明：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemProp.testProperties=&quot;testProperties&quot;</div></pre></td></tr></table></figure>
 <p>可以通过下面方式使用：</p>
@@ -573,7 +575,7 @@ https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtens
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">87</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -582,7 +584,7 @@ https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtens
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -591,7 +593,7 @@ https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtens
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

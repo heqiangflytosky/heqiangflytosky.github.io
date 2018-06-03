@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/11/12/development-tool-gradle-skills/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
-<meta property="og:updated_time" content="2018-04-04T02:22:41.820Z">
+<meta property="og:updated_time" content="2018-05-29T02:28:46.415Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 使用指南 -- 一些小技巧">
 <meta name="twitter:description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
@@ -406,6 +406,8 @@
 <p>方法 2:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">task C (type: Exec) &#123;</div><div class="line">    println &apos;Hello from C&apos;</div><div class="line"></div><div class="line">    workingDir &apos;.&apos;</div><div class="line">    commandLine &apos;ls&apos;,&apos;-al&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>通过 <a href="https://docs.gradle.org/current/dsl/org.gradle.api.tasks.Exec.html" target="_blank" rel="external">Exec Task</a>来实现。</p>
+<p>方法 3:<br>通过 Project 的 <code>exec()</code> 方法实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">println  exec &#123;</div><div class="line">    commandLine &apos;ls&apos;, &apos;-al&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -524,7 +526,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">87</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -533,7 +535,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -542,7 +544,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
