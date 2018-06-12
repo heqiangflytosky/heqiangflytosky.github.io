@@ -8,6 +8,19 @@ date: 2018-4-16 10:00:00
 ---
 
 ## 调用流程
+
+### 注册流程
+
+```
+├── WXComponent.addEvents()
+    ├── WXComponent.addEvent(String type)
+        ├── WXComponent.addClickListener()
+        ├── WXComponent.addFocusChangeListener()
+    ├── WXComponent.setActiveTouchListener()
+```
+
+### 响应流程
+
 ```
 ├── WXComponent.addClickListener
     ├── onClick()
@@ -26,6 +39,40 @@ date: 2018-4-16 10:00:00
 ```
 
 ## 代码解析
+
+### 注册流程
+
+```
+  private void addEvents() {
+    int count = mDomObj.getEvents().size();
+    for (int i = 0; i < count; ++i) {
+      addEvent(mDomObj.getEvents().get(i));
+    }
+    setActiveTouchListener();
+  }
+```
+
+`addEvents()` 会获取 `mDomObj` 中的所有事件，然后根据每个时间的名称在 `addEvent()` 方法中为每一个事件注册监听器。
+
+```
+  public void addEvent(String type) {
+    if (TextUtils.isEmpty(type)
+            || mAppendEvents.contains(type)
+            || getRealView() == null) {
+      return;
+    }
+    mAppendEvents.add(type);
+
+    View view = getRealView();
+    if (type.equals(Constants.Event.CLICK) && view != null) {
+      addClickListener(mClickEventListener);
+    } else if ((type.equals( Constants.Event.FOCUS) || type.equals( Constants.Event.BLUR)) ) {
+      ......
+    }
+  }
+```
+
+### 响应流程
 
 ```
     public void onHostViewClick() {
