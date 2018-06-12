@@ -228,6 +228,13 @@ B onTouchEvent ACTION_UP
  - 如果只拦截 DOWM 事件而不做处理，那么认为没有 View 对这组手势事件感兴趣，那么后面直接交由 Activity 处理。
  - 如果对 DOWN 事件处理，那么后续事件都会分发给 ViewGroup 的 `onTouchEvent` ，如果不处理再直接传递给 Activity 处理。
 
+
+## 阻止拦截事件
+
+子 View 是可以阻止父 View 对事件拦截的，这就要用到 `ViewGroup` 的 `requestDisallowInterceptTouchEvent`，子 `View` 中调用 `getParent().requestDisallowInterceptTouchEvent(true)` 即可。
+但是这个调用却要在合适的位置才能生效，具体原因在后面的源码分析中会介绍。
+在 `onTouchEvent` 的处理 `DOWN` 事件时设置是合适的位置，因为在事件处理的开始(ACTION_DOWN)时会重新清理这个标志位，因此，设置过早是不生效的。
+
 ## 几个问题
 
 在总结几个关于 Android 事件分发经常遇到的几个问题：
