@@ -30,6 +30,7 @@ mmm development/tools/idegen/
 development/tools/idegen/idegen.sh
 ```
 会在根目录下面生成`android.ipr`和`android.iml`。
+这里如果你不想编译源码，只想导入进来查看源代码的话，也可以使用其他工程生成的 `android.ipr` 和 `android.iml` ，复制到根目录即可。
 `android.ipr` 一般保存了工程相关的设置，比如modules和modules libraries的路径，编译器配置，入口点等。
 `android.iml` 用来描述modules。它包括modules路径、 依赖关系，顺序设置等。一个项目可以包含多个 *.iml 文件。
 到这一步我们其实就可以导入到Android Studio里面去了。

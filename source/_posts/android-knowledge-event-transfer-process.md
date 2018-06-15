@@ -1,8 +1,8 @@
 ---
-title: Android 事件处理流程
-categories: Android
+title: Android View 事件处理流程
+categories: Android 事件分发知识
 comments: true
-tags: [Android]
+tags: [Android 事件分发]
 description: 介绍 Android 事件处理流程
 date: 2015-11-2 10:00:00
 ---
@@ -11,14 +11,14 @@ date: 2015-11-2 10:00:00
 首先我们先来熟悉一下几个在处理Android事件分发过程中可能用到的几个方法：
 `View` 中的方法：
 
- - boolean dispatchTouchEvent(MotionEvent event)：事件分发。
- - boolean onTouchEvent(MotionEvent event)：事件处理。返回true表示处理该事件，false表示不处理事件。
+ - boolean dispatchTouchEvent(MotionEvent event)：事件分发。返回true表示处理该事件，中断分发，false表示会继续分发。
+ - boolean onTouchEvent(MotionEvent event)：事件处理。返回true表示处理该事件，false表示不处理事件。该方法在 dispatchTouchEvent 中调用。
  - void setOnTouchListener(OnTouchListener l)
  - void setTouchDelegate(TouchDelegate delegate)
 
 `ViewGroup` 中的方法：我们知道 `ViewGroup` 是继承了 `View` 类的，因此也继承了上面的几个方法，另外还有：
 
- - boolean onInterceptTouchEvent(MotionEvent ev)：事件拦截。它只存在于 `ViewGroup` 中，普通的 `View` 中没有这个方法。在任何一个 `View` 的 `onTouchEvent` 被调用之前，它的父辈们将先获得拦截这个事件的一次机会。换句话说，它们可以窃取该事件。返回 true 表示拦截，false 表示不拦截。
+ - boolean onInterceptTouchEvent(MotionEvent ev)：事件拦截。它只存在于 `ViewGroup` 中，普通的 `View` 中没有这个方法。在任何一个 `View` 的 `onTouchEvent` 被调用之前，它的父辈们将先获得拦截这个事件的一次机会。换句话说，它们可以窃取该事件。返回 true 表示拦截，false 表示不拦截。该方法在 dispatchTouchEvent 中调用。
  - requestDisallowInterceptTouchEvent(boolean disallowIntercept)：阻止事件传递：当前 View 可以调用父View的 `requestDisallowInterceptTouchEvent` 方法来阻止父View对事件的拦截，`getParent().requestDisallowInterceptTouchEvent(true)`。那么父 View 将无法通过 `onInterceptTouchEvent` 来拦截事件。
 
 
@@ -234,6 +234,31 @@ B onTouchEvent ACTION_UP
 子 View 是可以阻止父 View 对事件拦截的，这就要用到 `ViewGroup` 的 `requestDisallowInterceptTouchEvent`，子 `View` 中调用 `getParent().requestDisallowInterceptTouchEvent(true)` 即可。
 但是这个调用却要在合适的位置才能生效，具体原因在后面的源码分析中会介绍。
 在 `onTouchEvent` 的处理 `DOWN` 事件时设置是合适的位置，因为在事件处理的开始(ACTION_DOWN)时会重新清理这个标志位，因此，设置过早是不生效的。
+下面是 C 处理了事件，并且在 `onTouchEvent` 处理 `DOWN` 事件时设置了 `getParent().requestDisallowInterceptTouchEvent(true)` 的流程。
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouchEvent ACTION_DOWN
+
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+C dispatchTouchEvent ACTION_MOVE
+C onTouchEvent ACTION_MOVE
+
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+C dispatchTouchEvent ACTION_UP
+C onTouchEvent ACTION_UP
+```
+
+可以看出，除了 DOWN 事件 C 的父元素们将无法通过 `onInterceptTouchEvent` 拦截 MOVE 和 UP 事件。
 
 ## 几个问题
 
