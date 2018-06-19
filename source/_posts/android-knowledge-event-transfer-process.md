@@ -1,8 +1,8 @@
 ---
 title: Android View 事件处理流程
-categories: Android 事件分发知识
+categories: Android 事件分发体系
 comments: true
-tags: [Android 事件分发]
+tags: [Android 事件分发体系]
 description: 介绍 Android 事件处理流程
 date: 2015-11-2 10:00:00
 ---
