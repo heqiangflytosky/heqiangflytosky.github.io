@@ -1,8 +1,8 @@
 ---
 title: Android 插件化框架Small解析--初始化
-categories: Android开源项目
+categories: Android 插件化
 comments: true
-tags: [Android开源项目, 插件化框架, Small]
+tags: [Android开源项目, Android 插件化, Small]
 description: 分析Small框架的初始化流程，包括预处理，加载插件等
 date: 2017-5-10 10:00:00
 ---

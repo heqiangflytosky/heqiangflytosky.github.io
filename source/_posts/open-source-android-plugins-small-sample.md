@@ -1,8 +1,8 @@
 ---
 title: Android 插件化框架Small解析--开始了解Small
-categories: Android开源项目
+categories: Android 插件化
 comments: true
-tags: [Android开源项目, 插件化框架, Small]
+tags: [Android开源项目, Android 插件化, Small]
 description: 根据官方提供的例子初步了解Small的用法
 date: 2017-5-8 10:00:00
 ---

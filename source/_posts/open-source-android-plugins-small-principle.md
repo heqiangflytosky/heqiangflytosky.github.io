@@ -1,9 +1,9 @@
 
 ---
 title: Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程
-categories: Android开源项目
+categories: Android 插件化
 comments: true
-tags: [Android开源项目, 插件化框架, Small]
+tags: [Android开源项目, Android 插件化, Small]
 description: 结合 Activity 的启动流程来分析如何启动插件 Activity，以此来介绍Small插件化一个核心技术--动态注册组件
 date: 2017-5-12 10:00:00
 ---
