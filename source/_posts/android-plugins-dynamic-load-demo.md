@@ -38,12 +38,17 @@ public class PathClassLoader extends BaseDexClassLoader {
 可以看到，这两个类都是继承自 `BaseDexClassLoader`，不同的是构造函数接受的参数不同：
 先来看一下 `DexClassLoader` 的参数：
 
- - dexPath：包含 class.dex 的 apk、jar 文件路径 ，多个用文件分隔符（默认是：）分隔
+ - dexPath：包含 class.dex 的 apk、jar 文件路径 ，多个用文件分隔符 `File.pathSeparator` 分隔。
  - optimizedDirectory：用来缓存优化的 dex 文件的路径，即从 apk 或 jar 文件中提取出来的 dex 文件。该路径不可以为空。
- - librarySearchPath：存储 C/C++ 库文件的路径集
+ - librarySearchPath：存储 C/C++ 库文件的路径。
  - parent：父类加载器，可以通过 `ClassLoader.getSystemClassLoader()` 或者 `Context.getClassLoader()` 获取。
 
 再来看一下 `PathClassLoader` 的参数，少了 `optimizedDirectory` 参数，也证实了前面说的 `PathClassLoader` 只能加载安装过即已经进行过 odex 优化过的文件。
+这里指出一下，dex 和 apk 是可以直接加载的，因为它们都是或者内部有 dex 文件，而原始的 jar 是不行的，必须转换成 dalvik 所能识别的字节码文件，转换工具可以使用android sdk中platform-tools目录下的 dx 工具：
+
+```
+dx --dex --output=dest.jar src.jar
+```
 
 ## 实例
 
