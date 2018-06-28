@@ -66,6 +66,19 @@ public class TestDynamicLoad {
         Log.e("Test","pid = "+android.os.Process.myPid() );
         return a + b;
     }
+    // 主要为了测试一个类中实例话另外一个类的情况
+    public void testAnotherClass() {
+        TestDynamicLoad2 dynamicLoad2 = new TestDynamicLoad2();
+        dynamicLoad2.printStr();
+    }
+}
+```
+
+```
+public class TestDynamicLoad2 {
+    public void printStr(){
+        Log.e("Test","This is TestDynamicLoad2" );
+    }
 }
 ```
 
@@ -102,6 +115,10 @@ public class TestDynamicLoad {
             int addResult = (int) add.invoke(instance, 6,8);
             Log.e("Test","Dynamic load class add = "+addResult);
 
+            Method print = localClass.getMethod("testAnotherClass");
+            print.setAccessible(true);
+            print.invoke(instance);
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
@@ -127,6 +144,7 @@ pid = 30702
 Dynamic load class getString = This is a test case
 pid = 30702
 Dynamic load class add = 14
+This is TestDynamicLoad2
 ```
 
 ### PathClassLoader 加载
@@ -153,6 +171,10 @@ Dynamic load class add = 14
             int addResult = (int) add.invoke(instance, 6,8);
             Log.e("Test","Dynamic load class add = "+addResult);
 
+            Method print = localClass.getMethod("testAnotherClass");
+            print.setAccessible(true);
+            print.invoke(instance);
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
@@ -176,4 +198,7 @@ pid = 32385
 Dynamic load class getString = This is a test case
 pid = 32385
 Dynamic load class add = 14
+This is TestDynamicLoad2
 ```
+
+可见，只要把类动态加载进来，`TestDynamicLoad` 中实例化 `TestDynamicLoad2` 以及调用它的方法和正常的调用没什么区别。
