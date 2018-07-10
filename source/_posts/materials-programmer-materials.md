@@ -36,6 +36,7 @@ date: 2016-12-1 10:00:00
  - [MOZILLA 开发者网络](https://developer.mozilla.org/zh-CN/)：MOZILLA开发者社区
  - [百度开发者中心](http://developer.baidu.com)：
  - [PHPChina开发者社区](http://www.phpchina.com/)：
+ - [并发编程网](http://ifeve.com/)：致力于让天下没有难学的技术这一使命，包括Java，C++，JS，开源框架，管理和架构等，致力于精品技术的研究和传播。
 
 #### Android开发
 

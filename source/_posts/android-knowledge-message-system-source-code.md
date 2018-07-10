@@ -348,7 +348,7 @@ class MessageQueue {
             if (nextPollTimeoutMillis != 0) {
                 Binder.flushPendingCommands();
             }
-
+            // 调用native方法来阻塞nextPollTimeoutMillis秒的时间
             nativePollOnce(ptr, nextPollTimeoutMillis);
 
             synchronized (this) {
@@ -383,6 +383,9 @@ class MessageQueue {
                     }
                 } else {
                     // 通过前面的一步没有找到消息，说明消息队列已经空了
+                    // 先设置为-1,如果后面的没有可以执行的 IdleHandler，那么就一直阻塞下去
+                    // 直到有新的消息被唤醒
+                    // 如果后面有 可以执行的 IdleHandler，nextPollTimeoutMillis被赋值为 0
                     nextPollTimeoutMillis = -1;
                 }
 
@@ -442,6 +445,13 @@ class MessageQueue {
         }
     }
 ```
+
+关于 `nativePollOnce(ptr, nextPollTimeoutMillis)` 方法，这里做一下介绍。
+循环体内首先调用 `nativePollOnce(ptr, nextPollTimeoutMillis)`，这是一个Native方法，实际作用就是通过Native层的 `MessageQueue` 阻塞 `nextPollTimeoutMillis` 毫秒的时间。
+
+ - 如果nextPollTimeoutMillis=-1，一直阻塞不会超时。
+ - 如果nextPollTimeoutMillis=0，不会阻塞，立即返回。
+ - 如果nextPollTimeoutMillis>0，最长阻塞nextPollTimeoutMillis毫秒(超时)，如果期间有程序唤醒会立即返回。
 
 ## 同步消息、异步消息和同步栅栏
 
