@@ -202,7 +202,7 @@ date: 2017-5-18 10:00:00
 
 ## 加载类
 
-下面来看一下类的加载过程：
+下面来看一下类的加载过程，这里我们要关注一下 ClassLoader 的双亲委托机制：
 
 ```
     protected Class<?> loadClass(String name, boolean resolve)
@@ -213,19 +213,19 @@ date: 2017-5-18 10:00:00
             if (c == null) {
                 long t0 = System.nanoTime();
                 try {
-                    // 如果没有找到，如果制定了父加载器，
+                    // 如果没有找到，如果指定了父加载器，
                     // 就调用父加载器的loadClass方法去加载
                     if (parent != null) {
                         c = parent.loadClass(name, false);
                     } else {
-                    // 否则调用 findBootstrapClassOrNull 去加载
+                    // 如果没有父类加载器，则委托bootstrap加载器加载
                         c = findBootstrapClassOrNull(name);
                     }
                 } catch (ClassNotFoundException e) {
                 }
 
                 if (c == null) {
-                    // 如果还是没有加载，就调用 findClass 方法加载
+                    // 如果还是没有加载，就调用自己的 findClass 方法加载
                     // 在ClassLoader中findClass是个空实现，需要子类来实现
                     long t1 = System.nanoTime();
                     c = findClass(name);
