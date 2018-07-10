@@ -43,6 +43,61 @@ M 层负责数据的存储与查询。
 
 ![效果图](http://www.plantuml.com/plantuml/svg/XLHBJiCm4Dtx55PNYL1xWYugg92Gg5JHgdjZ3wr5OaVsj1M2xhW5Kk_0XWqIjw5S0pjfVeQqMJbltlER6OyziiWChjE4p2KcG7kJnVIm_pZiNt_UFx_Vldg4I8LW7XW7EcVsqOuPifbU6mw4a4jcOI5XIuSl_NuU7mCocLnfXOPn7FWWwS2TQ31eYAuDMwQWa9IBSDUAaFjE3LZmkNMQLmnoAXYcKQj8K73Dj7UGQIjHcwSZgmRei9NDoIIADdJm6vsl-lnCBgW5h4ZHd6RbEYQxK5CNcGlzMKS1hIihBzXeARpThMP2gkMD4f8pLsDqhtK2J577bXk8A-fARoVIMiVrsqOnzLyPNKa1-PH5BK41pT0u5KN_4pSLOx3So0obLcrTCt1KYnewNsMxD_cs82GMYPU8W0GGsXZNQVONpLl1AjIvyuHP-y_uEh_JuqhJUWZE77VeqIog7uugJSFPxRop1RK8v7TuHqQWX7ieVW40)
 
+<!--  
+@startuml
+Title "MVP架构类图"
+
+interface TasksDataSource
+
+
+BaseView <|-- TaskDetailContract.View
+TaskDetailContract.View <|.. TaskDetailFragment
+Fragment <|-- TaskDetailFragment
+
+BasePresenter <|-- TaskDetailContract.Presenter
+TaskDetailContract.Presenter <|.. TaskDetailPresenter
+
+TasksDataSource <|.. TasksRepository
+
+TasksRepository <-- TaskDetailPresenter
+TaskDetailContract.View <-- TaskDetailPresenter
+
+interface BaseView {
++ setPresenter(T presenter)
+}
+
+interface BasePresenter {
++ start()
+}
+
+interface TaskDetailContract.View {
++ void setLoadingIndicator(boolean active)
++ void showMissingTask()     
++ void hideTitle()
++ void showTitle(String title)
++ void hideDescription()
++ void showDescription(String description)
+}
+
+interface TaskDetailContract.Presenter {
++ void editTask()
++ void deleteTask()
++ void completeTask()
++ void activateTask()
+}
+
+class TaskDetailFragment {
+- TaskDetailContract.Presenter mPresenter
++ setPresenter(T presenter)
+}
+
+class TaskDetailPresenter {
+- TasksRepository mTasksRepository
+- TaskDetailContract.View mTaskDetailView
+}
+@enduml
+-->
+
 ### V 和 P 的基类
 
 先来看一下 V 的基类 `BaseView<T>`：
