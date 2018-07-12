@@ -13,7 +13,7 @@ date: 2016-10-10 10:00:00
 
  - Handler：用于发送消息 `Handler.sendMessage` 和处理消息 `Handler.handleMessage` 的类。
  - Message：用于传输的消息体的类。
- - MessageQueue：消息队列，主要用来存放消息 `MessageQueue.enqueueMessage` 和发出消息 `MessageQueue.next()` 。
+ - MessageQueue：消息队列，主要用来存放消息 `MessageQueue.enqueueMessage` 和发出消息 `MessageQueue.next()` 。`MessageQueue` 是一个单向链表，`Message` 对象有个 `next` 变量保存列表中的下一个，`MessageQueue` 中的 `mMessages` 保存链表的第一个元素。
  - Looper：不断循环执行 `Looper.loop`，按分发机制将消息分发给目标处理者。
 
 看一下它们之间的关系图：
