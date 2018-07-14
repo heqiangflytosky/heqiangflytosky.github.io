@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-02T09:24:04.977Z</updated>
+  <updated>2018-06-12T10:58:52.763Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,40 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Weex 源码研究 -- 事件响应流程</title>
+    <link href="http://yoursite.com/2018/04/16/open-source-weex-android-event-reponse/"/>
+    <id>http://yoursite.com/2018/04/16/open-source-weex-android-event-reponse/</id>
+    <published>2018-04-16T02:00:00.000Z</published>
+    <updated>2018-06-12T10:58:52.763Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="调用流程"><a href="#调用流程" class="headerlink" title="调用流程"></a>调用流程</h2><h3 id="注册流程"><a href="#注册流程" class="headerlink" title="注册流程"></a>注册流程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">├── WXComponent.addEvents()</div><div class="line">    ├── WXComponent.addEvent(String type)</div><div class="line">        ├── WXComponent.addClickListener()</div><div class="line">        ├── WXComponent.addFocusChangeListener()</div><div class="line">    ├── WXComponent.setActiveTouchListener()</div></pre></td></tr></table></figure>
+<h3 id="响应流程"><a href="#响应流程" class="headerlink" title="响应流程"></a>响应流程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">├── WXComponent.addClickListener</div><div class="line">    ├── onClick()</div><div class="line">        ├── WXComponent.OnClickListener.onHostViewClick()</div><div class="line">            ├── WXComponent.fireEvent()</div><div class="line">                ├── WXSDKInstance.fireEvent()</div><div class="line">                    ├── WXBridgeManager.fireEventOnNode()</div><div class="line">                        ├── WXBridgeManager.addJSEventTask()</div><div class="line">                        ├── WXBridgeManager.sendMessage(WXJSBridgeMsgType.CALL_JS_BATCH)</div><div class="line">                        ----------------------------------------------------------------</div><div class="line">                        ├── WXBridgeManager.handleMessage(WXJSBridgeMsgType.CALL_JS_BATCH)</div><div class="line">                            ├── WXBridgeManager.invokeCallJSBatch()</div><div class="line">                                ├── WXJsonUtils.wsonWXJSObject(tasks)</div><div class="line">                                ├── WXBridgeManager.invokeExecJS()</div><div class="line">                                    ├── WXBridge.execJS()</div></pre></td></tr></table></figure>
+<h2 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h2><h3 id="注册流程-1"><a href="#注册流程-1" class="headerlink" title="注册流程"></a>注册流程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">private void addEvents() &#123;</div><div class="line">  int count = mDomObj.getEvents().size();</div><div class="line">  for (int i = 0; i &lt; count; ++i) &#123;</div><div class="line">    addEvent(mDomObj.getEvents().get(i));</div><div class="line">  &#125;</div><div class="line">  setActiveTouchListener();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>addEvents()</code> 会获取 <code>mDomObj</code> 中的所有事件，然后根据每个时间的名称在 <code>addEvent()</code> 方法中为每一个事件注册监听器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public void addEvent(String type) &#123;</div><div class="line">  if (TextUtils.isEmpty(type)</div><div class="line">          || mAppendEvents.contains(type)</div><div class="line">          || getRealView() == null) &#123;</div><div class="line">    return;</div><div class="line">  &#125;</div><div class="line">  mAppendEvents.add(type);</div><div class="line"></div><div class="line">  View view = getRealView();</div><div class="line">  if (type.equals(Constants.Event.CLICK) &amp;&amp; view != null) &#123;</div><div class="line">    addClickListener(mClickEventListener);</div><div class="line">  &#125; else if ((type.equals( Constants.Event.FOCUS) || type.equals( Constants.Event.BLUR)) ) &#123;</div><div class="line">    ......</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="响应流程-1"><a href="#响应流程-1" class="headerlink" title="响应流程"></a>响应流程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public void onHostViewClick() &#123;</div><div class="line">  Map&lt;String, Object&gt; param= WXDataStructureUtil.newHashMapWithExpectedSize(1);</div><div class="line">  Map&lt;String, Object&gt; position = WXDataStructureUtil.newHashMapWithExpectedSize(4);</div><div class="line">  int[] location = new int[2];</div><div class="line">  mHost.getLocationOnScreen(location);</div><div class="line">  position.put(&quot;x&quot;, WXViewUtils.getWebPxByWidth(location[0],mInstance.getInstanceViewPortWidth()));</div><div class="line">  position.put(&quot;y&quot;, WXViewUtils.getWebPxByWidth(location[1],mInstance.getInstanceViewPortWidth()));</div><div class="line">  position.put(&quot;width&quot;, WXViewUtils.getWebPxByWidth(mDomObj.getLayoutWidth(),mInstance.getInstanceViewPortWidth()));</div><div class="line">  position.put(&quot;height&quot;, WXViewUtils.getWebPxByWidth(mDomObj.getLayoutHeight(),mInstance.getInstanceViewPortWidth()));</div><div class="line">  param.put(Constants.Name.POSITION, position);</div><div class="line">  fireEvent(Constants.Event.CLICK,param);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在 <code>WXComponent.onHostViewClick()</code> 方法中会把当前 <code>View</code> 的 location 和宽高作为参数传递给 <code>fireEvent</code> 方法。</p>
+<p>来看一下 <code>WXBridgeManager.fireEventOnNode()</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public void fireEventOnNode(final String instanceId, final String ref,</div><div class="line">                            final String type, final Map&lt;String, Object&gt; data,</div><div class="line">                            final Map&lt;String, Object&gt; domChanges, List&lt;Object&gt; params,  EventResult callback) &#123;</div><div class="line">  if (TextUtils.isEmpty(instanceId) || TextUtils.isEmpty(ref)</div><div class="line">      || TextUtils.isEmpty(type) || mJSHandler == null) &#123;</div><div class="line">    return;</div><div class="line">  &#125;</div><div class="line">  if (!checkMainThread()) &#123;</div><div class="line">    throw new WXRuntimeException(</div><div class="line">        &quot;fireEvent must be called by main thread&quot;);</div><div class="line">  &#125;</div><div class="line">  // 这里会根据是否注册回调函数分两种不同情况来执行</div><div class="line">  if(callback == null) &#123;</div><div class="line">    // 没有注册回调，添加fireEvent事件到待执行的JSEventTask列表，并向 mJSHandler 发送 CALL_JS_BATCH 消息</div><div class="line">    addJSEventTask(METHOD_FIRE_EVENT, instanceId, params, ref, type, data, domChanges);</div><div class="line">    sendMessage(instanceId, WXJSBridgeMsgType.CALL_JS_BATCH);</div><div class="line">  &#125;else&#123;</div><div class="line">    // 注册了回调函数，则在 JS 线程立即执行，并执行回调函数。</div><div class="line">    asyncCallJSEventWithResult(callback, METHD_FIRE_EVENT_SYNC, instanceId, params, ref, type, data, domChanges);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里 <code>onClick</code> 事件并没有注册回调函数，因此会向 <code>mJSHandler</code> 发送 <code>CALL_JS_BATCH</code> 消息。<br>后面执行的 <code>invokeCallJSBatch</code> 和前面博客 <a href="http://www.heqiangfly.com/2018/04/10/open-source-weex-android-module-register-callback/" target="_blank" rel="external">Module 注册、调用和回调函数的执行流程</a> 执行流程是一样的，这里不在介绍。<br>这里 <code>WXBridge.execJS</code> 执行的参数为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[&#123;&quot;args&quot;:[&quot;11&quot;,&quot;click&quot;,&#123;&quot;position&quot;:&#123;&quot;height&quot;:19.791666,&quot;width&quot;:106.25,&quot;x&quot;:321.875,&quot;y&quot;:1315.625&#125;&#125;,null],&quot;method&quot;:&quot;fireEvent&quot;&#125;]</div></pre></td></tr></table></figure>
+<p>把参数传递给前端后会根据 instanceId 和当前元素的 Id 执行对应的方法。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 Weex 事件响应流程
+    
+    </summary>
+    
+      <category term="Weex" scheme="http://yoursite.com/categories/Weex/"/>
+    
+    
+      <category term="Weex" scheme="http://yoursite.com/tags/Weex/"/>
+    
+  </entry>
   
   <entry>
     <title>Weex 源码研究 -- Module 注册、调用和回调函数的执行流程</title>
@@ -1133,7 +1167,7 @@ http://www.jianshu.com/p/308f3c54abdd
     <link href="http://yoursite.com/2017/09/06/android-architecture-google-mvp-basic/"/>
     <id>http://yoursite.com/2017/09/06/android-architecture-google-mvp-basic/</id>
     <published>2017-09-06T02:00:00.000Z</published>
-    <updated>2018-03-11T13:47:48.000Z</updated>
+    <updated>2018-07-10T11:07:46.640Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>todo-mvp 是对 MVP 的一种基础的实现，里面没有用到其他的框架，下面来具体分析一下。<br><a href="https://github.com/googlesamples/android-architecture/tree/todo-mvp/" target="_blank" rel="external">Github地址</a></p>
 <h2 id="源码简介"><a href="#源码简介" class="headerlink" title="源码简介"></a>源码简介</h2><p>按功能划分模块，包结构如图：</p>
@@ -1155,6 +1189,60 @@ http://www.jianshu.com/p/308f3c54abdd
 <p>V 层监听用户的操作，并把用户的操作传递到P层，并把P层中的指令转化为UI操作，并呈现出来。<br>P 层建立 M 和 V 的联系，响应 V 层的操作并向 M 层获取数据，然后传递到 V 层。<br>M 层负责数据的存储与查询。</p>
 <p>以 taskdetail 为例，用一个类图来展示它们的关系：</p>
 <p><img src="http://www.plantuml.com/plantuml/svg/XLHBJiCm4Dtx55PNYL1xWYugg92Gg5JHgdjZ3wr5OaVsj1M2xhW5Kk_0XWqIjw5S0pjfVeQqMJbltlER6OyziiWChjE4p2KcG7kJnVIm_pZiNt_UFx_Vldg4I8LW7XW7EcVsqOuPifbU6mw4a4jcOI5XIuSl_NuU7mCocLnfXOPn7FWWwS2TQ31eYAuDMwQWa9IBSDUAaFjE3LZmkNMQLmnoAXYcKQj8K73Dj7UGQIjHcwSZgmRei9NDoIIADdJm6vsl-lnCBgW5h4ZHd6RbEYQxK5CNcGlzMKS1hIihBzXeARpThMP2gkMD4f8pLsDqhtK2J577bXk8A-fARoVIMiVrsqOnzLyPNKa1-PH5BK41pT0u5KN_4pSLOx3So0obLcrTCt1KYnewNsMxD_cs82GMYPU8W0GGsXZNQVONpLl1AjIvyuHP-y_uEh_JuqhJUWZE77VeqIog7uugJSFPxRop1RK8v7TuHqQWX7ieVW40" alt="效果图"></p>
+<!--  
+@startuml
+Title "MVP架构类图"
+
+interface TasksDataSource
+
+
+BaseView <|-- TaskDetailContract.View
+TaskDetailContract.View <|.. TaskDetailFragment
+Fragment <|-- TaskDetailFragment
+
+BasePresenter <|-- TaskDetailContract.Presenter
+TaskDetailContract.Presenter <|.. TaskDetailPresenter
+
+TasksDataSource <|.. TasksRepository
+
+TasksRepository <-- TaskDetailPresenter
+TaskDetailContract.View <-- TaskDetailPresenter
+
+interface BaseView {
++ setPresenter(T presenter)
+}
+
+interface BasePresenter {
++ start()
+}
+
+interface TaskDetailContract.View {
++ void setLoadingIndicator(boolean active)
++ void showMissingTask()     
++ void hideTitle()
++ void showTitle(String title)
++ void hideDescription()
++ void showDescription(String description)
+}
+
+interface TaskDetailContract.Presenter {
++ void editTask()
++ void deleteTask()
++ void completeTask()
++ void activateTask()
+}
+
+class TaskDetailFragment {
+- TaskDetailContract.Presenter mPresenter
++ setPresenter(T presenter)
+}
+
+class TaskDetailPresenter {
+- TasksRepository mTasksRepository
+- TaskDetailContract.View mTaskDetailView
+}
+@enduml
+-->
 <h3 id="V-和-P-的基类"><a href="#V-和-P-的基类" class="headerlink" title="V 和 P 的基类"></a>V 和 P 的基类</h3><p>先来看一下 V 的基类 <code>BaseView&lt;T&gt;</code>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BaseView</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setPresenter</span><span class="params">(T presenter)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><code>BaseView</code> 是一个泛型接口，里面只有一个抽象方法 <code>setPresenter(T presenter)</code> ，用来设置 Presenter 。<br>P 的基类 <code>BasePresenter</code>：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BasePresenter</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -1231,53 +1319,6 @@ http://www.jianshu.com/p/308f3c54abdd
       <category term="Android 架构" scheme="http://yoursite.com/tags/Android-%E6%9E%B6%E6%9E%84/"/>
     
       <category term="android-architecture" scheme="http://yoursite.com/tags/android-architecture/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>J2V8 -- 注册 Java 回调函数</title>
-    <link href="http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/"/>
-    <id>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</id>
-    <published>2017-08-10T02:00:00.000Z</published>
-    <updated>2017-12-01T15:59:47.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>本文译自<a href="https://eclipsesource.com/blogs/2015/06/06/registering-java-callbacks-with-j2v8/" target="_blank" rel="external">Registering Java Callbacks with J2V8</a>，并加入了自己的一些理解。</p>
-<p>使用 J2V8 时是可以使用 JavaScript 来调用 Java 的方法的，下面就介绍一些如何注册 Java 的回调函数来供 JavaScript 调用。</p>
-<h2 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h2><p>在 JavaScript 中，函数也即是对象，可以被操作也可以被传递。在使用 J2V8 时，任何的 JavaScript 方法都可以映射到 Java 的方法之上，当这些方法被调用时，J2V8 就会调用 Java 的方法来代替，并把参数传递给 Java 的方法。</p>
-<h2 id="注册-Java-方法"><a href="#注册-Java-方法" class="headerlink" title="注册 Java 方法"></a>注册 Java 方法</h2><p>Java 的方法可以通过两种方法注册为回调函数，可以通过实现 <code>JavaCallback</code> 接口来实现（如果没有返回值时，也可以通过 <code>JavaVoidCallback</code> 来实现），或者是反射地把已经实现的 Java 方法注册为回调函数。</p>
-<h3 id="JavaCallback"><a href="#JavaCallback" class="headerlink" title="JavaCallback"></a>JavaCallback</h3><p>先来看下面一段代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">V8 v8 = V8.createV8Runtime();</div><div class="line">JavaVoidCallback callback = <span class="keyword">new</span> JavaVoidCallback() &#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">(<span class="keyword">final</span> V8Object receiver, <span class="keyword">final</span> V8Array parameters)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (parameters.length() &gt; <span class="number">0</span>) &#123;</div><div class="line">            Object arg1 = parameters.get(<span class="number">0</span>);</div><div class="line">            Log.e(<span class="string">"Test"</span>, <span class="string">"arg1 = "</span> + arg1);</div><div class="line">            <span class="keyword">if</span> (arg1 <span class="keyword">instanceof</span> Releasable) &#123;</div><div class="line">                ((Releasable) arg1).release();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">v8.registerJavaMethod(callback, <span class="string">"print"</span>);</div><div class="line">v8.executeScript(<span class="string">"print('hello, world');"</span>);</div><div class="line"></div><div class="line">v8.release();</div></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">arg1 = hello, world</div></pre></td></tr></table></figure>
-<p>上面的例子中创建了 <code>JavaVoidCallback</code> 的一个匿名内部类，把该类的一个实例注册为一个全局的作用域中的方法，并命名为 <code>print</code> 方法，那么我们在 JavaScript 中就可以向调用其他 JavaScript 的方法一样来调用 <code>print</code> 方法了。</p>
-<h3 id="通过反射来注册"><a href="#通过反射来注册" class="headerlink" title="通过反射来注册"></a>通过反射来注册</h3><p>先来看下面一段代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Console</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(<span class="keyword">final</span> String message)</span> </span>&#123;</div><div class="line">        Log.i(<span class="string">"Test INFO"</span>,<span class="string">"[INFO] "</span> + message);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">error</span><span class="params">(<span class="keyword">final</span> String message)</span> </span>&#123;</div><div class="line">        Log.e(<span class="string">"Test ERROR"</span>,<span class="string">"[ERROR] "</span> + message);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</div><div class="line">    V8 v8 = V8.createV8Runtime();</div><div class="line">    Console console = <span class="keyword">new</span> Console();</div><div class="line">    V8Object v8Console = <span class="keyword">new</span> V8Object(v8);</div><div class="line">    v8.add(<span class="string">"console"</span>, v8Console);</div><div class="line">    v8Console.registerJavaMethod(console, <span class="string">"log"</span>, <span class="string">"log"</span>, <span class="keyword">new</span> Class&lt;?&gt;[] &#123; String.class &#125;);</div><div class="line">    v8Console.registerJavaMethod(console, <span class="string">"error"</span>, <span class="string">"error"</span>, <span class="keyword">new</span> Class&lt;?&gt;[] &#123; String.class &#125;);</div><div class="line">    v8Console.release();</div><div class="line">    v8.executeScript(<span class="string">"console.log('hello, world');"</span>);</div><div class="line">    v8.release();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[INFO] hello, world</div></pre></td></tr></table></figure>
-<p>在上面的例子中，一个已经实现的类的方法被注册为回调函数。</p>
-<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>参数可以从 JavaScript  传递到 Java，如果是通过实现 <code>JavaCallback</code> 来注册回调函数，那么参数会以 <code>V8Array</code> 的形式来传递。<code>V8Array</code> 包含了一些 <code>V8Object</code> 对象或者是一些原始数据。这些 <code>V8Array</code> 并不需要我们去释放，因为它不是由开发者创建的。但是任何从这个 <code>V8Array</code> 中获取的作为参数的 <code>V8Object</code> 都需要手动的进行释放，因为它们是作为方法调用的结果返回给你的。<br>如果方法是通过反射的方式进行注册的，那么这个方法的所有的参数类型都是已知的。在这种情形下，传递给 Javascript 函数的参数必须与作为它的回调函数的 Java 方法的一致。</p>
-<h2 id="接收器"><a href="#接收器" class="headerlink" title="接收器"></a>接收器</h2><p>当 JavaScript 调用通过 Java 注册的回调函数时，这个被调用的 JavaScript 对象会作为第一个参数进行传递。<br>看下面一段 JavaScript 代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array1 = [&#123;<span class="attr">first</span>:<span class="string">'Ian'</span>&#125;, &#123;<span class="attr">first</span>:<span class="string">'Jordi'</span>&#125;, &#123;<span class="attr">first</span>:<span class="string">'Holger'</span>&#125;];</div><div class="line"><span class="keyword">for</span> ( <span class="keyword">var</span> i = <span class="number">0</span>; i &lt; array1.length; i++ ) &#123;</div><div class="line">  print.call(array1[i], <span class="string">" says Hi."</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这中情况下 <code>print</code> 方法会被调用，并且 “says Hi.” 会被作为参数传递到 Java。但是当前的 JavaScript 会作为一个接收器被传递过来。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PersonPrinter</span> <span class="keyword">implements</span> <span class="title">JavaVoidCallback</span> </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">(<span class="keyword">final</span> V8Object receiver, <span class="keyword">final</span> V8Array parameters)</span> </span>&#123;</div><div class="line">        Log.e(<span class="string">"Test"</span>,receiver.getString(<span class="string">"first"</span>) + parameters.get(<span class="number">0</span>));</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testReceiver</span><span class="params">()</span> </span>&#123;</div><div class="line">    V8 v8 = V8.createV8Runtime();</div><div class="line">    v8.registerJavaMethod(<span class="keyword">new</span> PersonPrinter(), <span class="string">"print"</span>);</div><div class="line">    v8.executeVoidScript(<span class="string">""</span></div><div class="line">            + <span class="string">"var array1 = [&#123;first:'Ian'&#125;, &#123;first:'Jordi'&#125;, &#123;first:'Holger'&#125;];\n"</span></div><div class="line">            + <span class="string">"for ( var i = 0; i &lt; array1.length; i++ ) &#123;\n"</span></div><div class="line">            + <span class="string">"  print.call(array1[i], \" says Hi.\");\n"</span></div><div class="line">            + <span class="string">"&#125;\n"</span>);</div><div class="line">    v8.release();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Ian says Hi.</div><div class="line">Jordi says Hi.</div><div class="line">Holger says Hi.</div></pre></td></tr></table></figure>
-<p>把调用者也打印出来了。</p>
-<h2 id="V8Function-类"><a href="#V8Function-类" class="headerlink" title="V8Function 类"></a>V8Function 类</h2><p>在 J2V8 3.0 版本中，引入了一种 <code>V8Function</code> 类。<code>V8Function</code> 类是 <code>V8Object</code> 的子类，只要一个函数通过是 <code>getObject()</code> 调用被返回的话，那么返回的就是一个 <code>V8Function</code> 对象。<code>V8Function</code> 类有一个 <code>call()</code> 方法，可以使用它来在 Java 中调用 JavaScript 方法。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      介绍 J2V8 如何注册 Java 回调函数
-    
-    </summary>
-    
-      <category term="V8" scheme="http://yoursite.com/categories/V8/"/>
-    
-    
-      <category term="V8" scheme="http://yoursite.com/tags/V8/"/>
-    
-      <category term="J2V8" scheme="http://yoursite.com/tags/J2V8/"/>
     
   </entry>
   

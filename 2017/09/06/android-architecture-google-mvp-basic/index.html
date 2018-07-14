@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://yoursite.com/images/android-architecture-google-mvp-basic/image2.png">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/XLHBJiCm4Dtx55PNYL1xWYugg92Gg5JHgdjZ3wr5OaVsj1M2xhW5Kk_0XWqIjw5S0pjfVeQqMJbltlER6OyziiWChjE4p2KcG7kJnVIm_pZiNt_UFx_Vldg4I8LW7XW7EcVsqOuPifbU6mw4a4jcOI5XIuSl_NuU7mCocLnfXOPn7FWWwS2TQ31eYAuDMwQWa9IBSDUAaFjE3LZmkNMQLmnoAXYcKQj8K73Dj7UGQIjHcwSZgmRei9NDoIIADdJm6vsl-lnCBgW5h4ZHd6RbEYQxK5CNcGlzMKS1hIihBzXeARpThMP2gkMD4f8pLsDqhtK2J577bXk8A-fARoVIMiVrsqOnzLyPNKa1-PH5BK41pT0u5KN_4pSLOx3So0obLcrTCt1KYnewNsMxD_cs82GMYPU8W0GGsXZNQVONpLl1AjIvyuHP-y_uEh_JuqhJUWZE77VeqIog7uugJSFPxRop1RK8v7TuHqQWX7ieVW40">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/dPB1IWCn48RlUOhGKqNR9-XXfO88RH5Rl8_9j0sTtPHaTa7KcsyXz1syU15y6-jh6BVhrYvn1M_9Fr--6S8adi5ndfAO6IQKdV7rvNRpijqyZgr6-dX-VNzwwmWn0x_oPy0mjRbJA0Vt_Ruimv5LGFjA2tc5Q-iDMtVR2gMMyOUlwjre8mUzNjpQ54H9OJ96DuTGRevo9uxb0hcCkyd4PfESI8uiw38Q0j4Dg9LKrU4ey8Kr-llH_isKdSaMaaDueKzadP_lmDzD7WeyL7tTIb7DA9kk2VcVtC5eDGkAJG5_E-DStAa8mGsh8NPVsAsB3kSE_RAHXhqBx2bHD6zj-Y0Ip7HOvqy0">
-<meta property="og:updated_time" content="2018-03-11T13:47:48.000Z">
+<meta property="og:updated_time" content="2018-07-10T11:07:46.640Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 架构 android-architecture 之 todo-mvp 介绍">
 <meta name="twitter:description" content="介绍 Google 开源的 Android 架构中的 MVP 架构">
@@ -425,6 +425,60 @@
 <p>V 层监听用户的操作，并把用户的操作传递到P层，并把P层中的指令转化为UI操作，并呈现出来。<br>P 层建立 M 和 V 的联系，响应 V 层的操作并向 M 层获取数据，然后传递到 V 层。<br>M 层负责数据的存储与查询。</p>
 <p>以 taskdetail 为例，用一个类图来展示它们的关系：</p>
 <p><img src="http://www.plantuml.com/plantuml/svg/XLHBJiCm4Dtx55PNYL1xWYugg92Gg5JHgdjZ3wr5OaVsj1M2xhW5Kk_0XWqIjw5S0pjfVeQqMJbltlER6OyziiWChjE4p2KcG7kJnVIm_pZiNt_UFx_Vldg4I8LW7XW7EcVsqOuPifbU6mw4a4jcOI5XIuSl_NuU7mCocLnfXOPn7FWWwS2TQ31eYAuDMwQWa9IBSDUAaFjE3LZmkNMQLmnoAXYcKQj8K73Dj7UGQIjHcwSZgmRei9NDoIIADdJm6vsl-lnCBgW5h4ZHd6RbEYQxK5CNcGlzMKS1hIihBzXeARpThMP2gkMD4f8pLsDqhtK2J577bXk8A-fARoVIMiVrsqOnzLyPNKa1-PH5BK41pT0u5KN_4pSLOx3So0obLcrTCt1KYnewNsMxD_cs82GMYPU8W0GGsXZNQVONpLl1AjIvyuHP-y_uEh_JuqhJUWZE77VeqIog7uugJSFPxRop1RK8v7TuHqQWX7ieVW40" alt="效果图"></p>
+<!--  
+@startuml
+Title "MVP架构类图"
+
+interface TasksDataSource
+
+
+BaseView <|-- TaskDetailContract.View
+TaskDetailContract.View <|.. TaskDetailFragment
+Fragment <|-- TaskDetailFragment
+
+BasePresenter <|-- TaskDetailContract.Presenter
+TaskDetailContract.Presenter <|.. TaskDetailPresenter
+
+TasksDataSource <|.. TasksRepository
+
+TasksRepository <-- TaskDetailPresenter
+TaskDetailContract.View <-- TaskDetailPresenter
+
+interface BaseView {
++ setPresenter(T presenter)
+}
+
+interface BasePresenter {
++ start()
+}
+
+interface TaskDetailContract.View {
++ void setLoadingIndicator(boolean active)
++ void showMissingTask()     
++ void hideTitle()
++ void showTitle(String title)
++ void hideDescription()
++ void showDescription(String description)
+}
+
+interface TaskDetailContract.Presenter {
++ void editTask()
++ void deleteTask()
++ void completeTask()
++ void activateTask()
+}
+
+class TaskDetailFragment {
+- TaskDetailContract.Presenter mPresenter
++ setPresenter(T presenter)
+}
+
+class TaskDetailPresenter {
+- TasksRepository mTasksRepository
+- TaskDetailContract.View mTaskDetailView
+}
+@enduml
+-->
 <h3 id="V-和-P-的基类"><a href="#V-和-P-的基类" class="headerlink" title="V 和 P 的基类"></a>V 和 P 的基类</h3><p>先来看一下 V 的基类 <code>BaseView&lt;T&gt;</code>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BaseView</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setPresenter</span><span class="params">(T presenter)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><code>BaseView</code> 是一个泛型接口，里面只有一个抽象方法 <code>setPresenter(T presenter)</code> ，用来设置 Presenter 。<br>P 的基类 <code>BasePresenter</code>：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BasePresenter</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -577,7 +631,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">89</span>
+                <span class="site-state-item-count">100</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -586,7 +640,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -595,7 +649,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">64</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

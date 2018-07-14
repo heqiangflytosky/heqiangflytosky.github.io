@@ -97,7 +97,7 @@
 <meta property="og:image" content="http://yoursite.com/images/development-tool-import-source-to-android-studio/modules-added.png">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-import-source-to-android-studio/debug-add.png">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-import-source-to-android-studio/debug-added.png">
-<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta property="og:updated_time" content="2018-06-16T07:19:36.647Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Studio 导入 Android 源码">
 <meta name="twitter:description" content="介绍一些如何使用 Android Studio 导入 Android 源码以及一些配置方法">
@@ -410,7 +410,7 @@
 <h2 id="导入源码"><a href="#导入源码" class="headerlink" title="导入源码"></a>导入源码</h2><h3 id="修改Android-Studio的配置文件"><a href="#修改Android-Studio的配置文件" class="headerlink" title="修改Android Studio的配置文件"></a>修改Android Studio的配置文件</h3><p>由于导入源码时需要消耗大量内存，所以建议修改<code>studio64.vmoptions</code>文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-Xms1024m</div><div class="line">-Xmx1024m</div></pre></td></tr></table></figure></p>
 <h3 id="生成导入到Android-Studio所需的配置文件"><a href="#生成导入到Android-Studio所需的配置文件" class="headerlink" title="生成导入到Android Studio所需的配置文件"></a>生成导入到Android Studio所需的配置文件</h3><p>首先要编译一次源码，然后看有没有<code>out/host/linux-x86/framework/idegen.jar</code><br>如果没有的话就执行一下下面的命令，生成<code>out/host/linux-x86/framework/idegen.jar</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">source build/envsetup.sh</div><div class="line">mmm development/tools/idegen/</div></pre></td></tr></table></figure></p>
 <p>然后执行一下下面的命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">development/tools/idegen/idegen.sh</div></pre></td></tr></table></figure></p>
-<p>会在根目录下面生成<code>android.ipr</code>和<code>android.iml</code>。<br><code>android.ipr</code> 一般保存了工程相关的设置，比如modules和modules libraries的路径，编译器配置，入口点等。<br><code>android.iml</code> 用来描述modules。它包括modules路径、 依赖关系，顺序设置等。一个项目可以包含多个 *.iml 文件。<br>到这一步我们其实就可以导入到Android Studio里面去了。</p>
+<p>会在根目录下面生成<code>android.ipr</code>和<code>android.iml</code>。<br>这里如果你不想编译源码，只想导入进来查看源代码的话，也可以使用其他工程生成的 <code>android.ipr</code> 和 <code>android.iml</code> ，复制到根目录即可。<br><code>android.ipr</code> 一般保存了工程相关的设置，比如modules和modules libraries的路径，编译器配置，入口点等。<br><code>android.iml</code> 用来描述modules。它包括modules路径、 依赖关系，顺序设置等。一个项目可以包含多个 *.iml 文件。<br>到这一步我们其实就可以导入到Android Studio里面去了。</p>
 <h3 id="过滤一些模块"><a href="#过滤一些模块" class="headerlink" title="过滤一些模块"></a>过滤一些模块</h3><p>如果把Android所有的源码全部导入到Android Studio里面去，工程将会非常大，而且会很耗时间，那么我们就可以把不需要的模块给过滤掉。<br>打开<code>android.iml</code>文件，加入以下代码，修改<code>excludeFolder</code>的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/.repo&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/abi&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/frameworks/base/docs&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/art&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/bionic&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/bootable&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/build&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/cts&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/dalvik&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/developers&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/development&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/device&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/docs&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/external&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/hardware&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/kernel-3.18&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/libcore&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/libnativehelper&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/ndk&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/out&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/pdk&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/platform_testing&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/prebuilts&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/rc_projects&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/sdk&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/system&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/tools&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/trusty&quot;/&gt;</div><div class="line">&lt;excludeFolder url=&quot;file://$MODULE_DIR$/vendor&quot;/&gt;</div></pre></td></tr></table></figure></p>
 <p>这样我们就只导入了<code>frameworks</code>和<code>packages</code>的代码。</p>
 <h3 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h3><p><code>File</code> -&gt; <code>Open</code> 选择源码目录就可以导入了，整个导入过程需要3分钟左右，然后就可以去阅读源码了。</p>
@@ -542,7 +542,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">89</span>
+                <span class="site-state-item-count">100</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -551,7 +551,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -560,7 +560,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">64</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

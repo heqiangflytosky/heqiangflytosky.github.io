@@ -1,0 +1,981 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android 事件分发体系," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 Android 事件处理流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android View 事件处理流程">
+<meta property="og:url" content="http://yoursite.com/2015/11/02/android-knowledge-event-transfer-process/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 Android 事件处理流程">
+<meta property="og:image" content="http://yoursite.com/images/android-knowledge-event-transfer-process/android-touch.png">
+<meta property="og:updated_time" content="2018-06-28T11:44:25.411Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android View 事件处理流程">
+<meta name="twitter:description" content="介绍 Android 事件处理流程">
+<meta name="twitter:image" content="http://yoursite.com/images/android-knowledge-event-transfer-process/android-touch.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/11/02/android-knowledge-event-transfer-process/"/>
+
+
+
+
+
+  <title> Android View 事件处理流程 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/11/02/android-knowledge-event-transfer-process/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android View 事件处理流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-11-02T10:00:00+08:00">
+                2015-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-事件分发体系/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 事件分发体系</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/11/02/android-knowledge-event-transfer-process/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/11/02/android-knowledge-event-transfer-process/" class="leancloud_visitors" data-flag-title="Android View 事件处理流程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 Android 事件处理流程
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>网上流传着一篇被誉为<a href="http://balpha.de/2013/07/android-development-what-i-wish-i-had-known-earlier/" target="_blank" rel="external">可能是讲解Android事件分发最好的文章</a>，我看了之后也觉得受益匪浅，文章虽然很短，但是却明了的阐述了Android事件分发机制。本文是在研读这篇文章的基础上做了一些自己理解，在此记录下来，以备后面查阅。<br>首先我们先来熟悉一下几个在处理Android事件分发过程中可能用到的几个方法：<br><code>View</code> 中的方法：</p>
+<ul>
+<li>boolean dispatchTouchEvent(MotionEvent event)：事件分发。返回true表示处理该事件，中断分发，false表示会继续分发。</li>
+<li>boolean onTouchEvent(MotionEvent event)：事件处理。返回true表示处理该事件，false表示不处理事件。该方法在 dispatchTouchEvent 中调用。</li>
+<li>void setOnTouchListener(OnTouchListener l)</li>
+<li>void setTouchDelegate(TouchDelegate delegate)</li>
+</ul>
+<p><code>ViewGroup</code> 中的方法：我们知道 <code>ViewGroup</code> 是继承了 <code>View</code> 类的，因此也继承了上面的几个方法，另外还有：</p>
+<ul>
+<li>boolean onInterceptTouchEvent(MotionEvent ev)：事件拦截。它只存在于 <code>ViewGroup</code> 中，普通的 <code>View</code> 中没有这个方法。在任何一个 <code>View</code> 的 <code>onTouchEvent</code> 被调用之前，它的父辈们将先获得拦截这个事件的一次机会。换句话说，它们可以窃取该事件。返回 true 表示拦截，false 表示不拦截。该方法在 dispatchTouchEvent 中调用。</li>
+<li>requestDisallowInterceptTouchEvent(boolean disallowIntercept)：阻止事件传递：当前 View 可以调用父View的 <code>requestDisallowInterceptTouchEvent</code> 方法来阻止父View对事件的拦截，<code>getParent().requestDisallowInterceptTouchEvent(true)</code>。那么父 View 将无法通过 <code>onInterceptTouchEvent</code> 来拦截事件。</li>
+</ul>
+<h2 id="一些假设"><a href="#一些假设" class="headerlink" title="一些假设"></a>一些假设</h2><p>我们只考虑最重要的四个触摸事件，即：DOWN,MOVE,UP和CANCEL。一个手势（gesture）是一个事件列，以一个DOWN事件开始（当用户触摸屏幕时产生），后跟0个或多个MOVE事件（当用户四处移动手指时产生），最后跟一个单独的UP或CANCEL事件（当用户手指离开屏幕或者系统告诉你手势（gesture）由于其他原因结束时产生）。当我们说到“手势剩余部分”时指的是手势后续的MOVE事件和最后的UP或CANCEL事件。<br>在这里我也不考虑多点触摸手势（我们只假设用一个手指）并且忽略多个MOVE事件可以被归为一组这一实际情况。最后，我们假设文中的view都没有注册onTouchListener。<br>我们将要讨论的视图层次是这样的：最外层是一个ViewGroup A，包含一个或多个子view（children），其中一个子view是ViewGroup B，ViewGroupB中又包含一个或多个子view，其中一个子view是 View C,C不是一个ViewGroup。这里我们忽略同层级view之间可能的交叉叠加。</p>
+<p><img src="/images/android-knowledge-event-transfer-process/android-touch.png" alt="效果图"></p>
+<p>假设用户首先触摸到的屏幕上的点是C上的某个点，该点被标记为触摸点（touch point），DOWN事件就在该点产生。然后用户移动手指并最后离开屏幕，此过程中手指是否离开C的区域无关紧要，关键是手势（gesture）是从哪里开始的。</p>
+<h2 id="默认情况"><a href="#默认情况" class="headerlink" title="默认情况"></a>默认情况</h2><p>假设上面的A,B,C都没有覆写默认的事件传播行为，那么下面就是事件传播的过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Activity dispatchTouchEvent ACTION_DOWN</div><div class="line">A dispatchTouchEvent ACTION_DOWN</div><div class="line">A onInterceptTouchEvent ACTION_DOWN</div><div class="line">B dispatchTouchEvent ACTION_DOWN</div><div class="line">B onInterceptTouchEvent ACTION_DOWN</div><div class="line">C dispatchTouchEvent ACTION_DOWN</div><div class="line">C onTouchEvent ACTION_DOWN</div><div class="line">B onTouchEvent ACTION_DOWN</div><div class="line">A onTouchEvent ACTION_DOWN</div><div class="line">Activity onTouchEvent ACTION_DOWN</div><div class="line">Activity dispatchTouchEvent ACTION_MOVE</div><div class="line">Activity onTouchEvent ACTION_UP</div></pre></td></tr></table></figure>
+<ol>
+<li>DOWN事件首先由 Activity 进程分发。</li>
+<li>首先传递给 A，由 A 进行分发，A 没有进行时间拦截。</li>
+<li>事件传递给 B，由 B 进行分发，B 没有进行时间拦截。</li>
+<li>事件传递给 C，C 没有处理这个事件。</li>
+<li>再把事件传递给 B，B 没有处理这个事件。</li>
+<li>再把事件传递给 A，A 没有处理这个事件。</li>
+<li>最终把 DOWN 事件传递给 Activity。</li>
+<li>Activity 处理后面的 MOVE 和 UP 事件。</li>
+</ol>
+<p>由于没有 View 对这个事件感兴趣。后面的 MOVE 和 UP 事件不再进行逐级分发和传递，直接由 Activity 进行处理。<br>从这个流程我们可以得到下面的结论：</p>
+<ul>
+<li>假如 DOWN 事件传给 C 的 <code>onTouchEvent</code> 方法时，它返回了 false，DOWN 事件会继续向上传递给 B 和 A 的 <code>onTouchEvent</code>，即使它们在 <code>onInterceptTouchEvent</code> 方法中说它们不想拦截这个 DOWN 事件，但没办法，没有子 <code>View</code> 愿意处理该事件。</li>
+<li>如果所有的 <code>View</code> 都不愿意处理事件，那么最后只能交给 Activity 来处理了。</li>
+</ul>
+<h2 id="处理事件"><a href="#处理事件" class="headerlink" title="处理事件"></a>处理事件</h2><p>现在我们假设 C 对 DOWN 事件感兴趣，我们可以通过下面方法实现：</p>
+<ul>
+<li>覆写了 C 的 <code>onTouchEvent</code> 方法，处理 DOWN 事件，并返回 true 。</li>
+<li>调用 <code>setOnClickListener</code> 设置监听。</li>
+<li>调用 <code>setOnTouchListener</code> 设置监听，并且 <code>onTouch</code> 方法返回true。</li>
+<li>设置 <code>setClickable(true)</code>。</li>
+</ul>
+<p>先来看一下事件传递流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Activity dispatchTouchEvent ACTION_DOWN</div><div class="line">A dispatchTouchEvent ACTION_DOWN</div><div class="line">A onInterceptTouchEvent ACTION_DOWN</div><div class="line">B dispatchTouchEvent ACTION_DOWN</div><div class="line">B onInterceptTouchEvent ACTION_DOWN</div><div class="line">C dispatchTouchEvent ACTION_DOWN</div><div class="line">C onTouchEvent ACTION_DOWN</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_UP</div><div class="line">A dispatchTouchEvent ACTION_UP</div><div class="line">A onInterceptTouchEvent ACTION_UP</div><div class="line">B dispatchTouchEvent ACTION_UP</div><div class="line">B onInterceptTouchEvent ACTION_UP</div><div class="line">C dispatchTouchEvent ACTION_UP</div><div class="line">C onTouchEvent ACTION_UP</div></pre></td></tr></table></figure>
+<ul>
+<li>前面几步的流程和前面一样。</li>
+<li>DOWN 事件传递到 C 的 onTouchEvent 方法时，C 需要对这个事件做处理，即消费了这个事件。</li>
+<li>DOWN事件不会继续传递，将不再被传递给 B 和 A 的 onTouchEvent 方法。</li>
+<li>因为 C 对当前的事件感兴趣，所以剩余的手势事件（MOVE 和 UP）也将传递给 C 的 onTouchEvent 方法，此时该方法返回 true 或 false 都无关紧要了，但是为保持一致最好还是返回 true。</li>
+</ul>
+<p>从这里可以看出，各个 <code>View</code> 的 <code>onTouchEvent</code> 方法对 DOWN 事件的处理，代表了该 <code>View</code> 对以此 DOWN 开始的整个手势（gesture）的处理意愿，返回 true 代表愿意处理该 gesture，返回 false 代表不愿意处理该 gesture。</p>
+<p>从这个流程我们可以得到下面的结论：</p>
+<ul>
+<li>虽然 A 和 B 的 <code>onInterceptTouchEvent</code> 方法对 DOWN 事件返回了 false，后续的事件依然会传递给它们的 <code>onInterceptTouchEvent</code> 方法，这一点与 <code>onTouchEvent</code> 的行为是不一样的。</li>
+</ul>
+<p>下面把 B 接受该事件的流程也列出来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Activity dispatchTouchEvent ACTION_DOWN</div><div class="line">A dispatchTouchEvent ACTION_DOWN</div><div class="line">A onInterceptTouchEvent ACTION_DOWN</div><div class="line">B dispatchTouchEvent ACTION_DOWN</div><div class="line">B onInterceptTouchEvent ACTION_DOWN</div><div class="line">C dispatchTouchEvent ACTION_DOWN</div><div class="line">C onTouchEvent ACTION_DOWN</div><div class="line">B onTouchEvent ACTION_DOWN</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_UP</div><div class="line">A dispatchTouchEvent ACTION_UP</div><div class="line">A onInterceptTouchEvent ACTION_UP</div><div class="line">B dispatchTouchEvent ACTION_UP</div><div class="line">B onTouchEvent ACTION_UP</div></pre></td></tr></table></figure>
+<h2 id="拦截事件"><a href="#拦截事件" class="headerlink" title="拦截事件"></a>拦截事件</h2><p>上面的事件处理的例子中，DOWN 事件被 C 消费了，那么后面的 MOVE 和 UP 事件默认都会给 C 来处理。但是如果后面的 MOVE 事件 B 又想处理了怎么办呢？这个时候就需要 <code>onInterceptTouchEvent</code> 上场了。<br>前面也讲过，<code>onInterceptTouchEvent</code> 只存在于 <code>ViewGroup</code> 中，普通的 <code>View</code> 中没有这个方法。在任何一个 <code>View</code> 的 <code>onTouchEvent</code> 被调用之前，它的父辈们将先获得拦截这个事件的一次机会，换句话说，它们可以窃取该事件。<br>从上面的流程中也可以看出，事件在交给 C 的 <code>onTouchEvent</code> 处理之间，都会经过 A 和 B 的 <code>onInterceptTouchEvent</code> 方法。<br>那么如果 B 想拦截这个事件，只需要 <code>onInterceptTouchEvent</code> 中处理并返回 true 就行了。<br>先来看一下事件传递流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">Activity dispatchTouchEvent ACTION_DOWN</div><div class="line">A dispatchTouchEvent ACTION_DOWN</div><div class="line">A onInterceptTouchEvent ACTION_DOWN</div><div class="line">B dispatchTouchEvent ACTION_DOWN</div><div class="line">B onInterceptTouchEvent ACTION_DOWN</div><div class="line">C dispatchTouchEvent ACTION_DOWN</div><div class="line">C onTouchEvent ACTION_DOWN</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_MOVE</div><div class="line">A dispatchTouchEvent ACTION_MOVE</div><div class="line">A onInterceptTouchEvent ACTION_MOVE</div><div class="line">B dispatchTouchEvent ACTION_MOVE</div><div class="line">B onInterceptTouchEvent ACTION_MOVE</div><div class="line"></div><div class="line">C dispatchTouchEvent ACTION_CANCEL</div><div class="line">C onTouchEvent ACTION_CANCEL</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_MOVE</div><div class="line">A dispatchTouchEvent ACTION_MOVE</div><div class="line">A onInterceptTouchEvent ACTION_MOVE</div><div class="line">B dispatchTouchEvent ACTION_MOVE</div><div class="line">B onTouchEvent ACTION_MOVE</div><div class="line">（Activity onTouchEvent ACTION_MOVE）如果 B onTouchEvent返回false</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_UP</div><div class="line">A dispatchTouchEvent ACTION_UP</div><div class="line">A onInterceptTouchEvent ACTION_UP</div><div class="line">B dispatchTouchEvent ACTION_UP</div><div class="line">B onTouchEvent ACTION_UP</div><div class="line">（Activity onTouchEvent ACTION_UP）如果 B onTouchEvent返回false</div></pre></td></tr></table></figure>
+<ul>
+<li>前面几步的流程和前面一样。C 处理了 DOWN 事件。</li>
+<li>MOVE 事件传递到 B 的 <code>onInterceptTouchEvent</code> 方法时，B 想对这个事件做处理，那么就返回了 true。</li>
+<li>MOVE 事件中断传递，这时 C 分发了 CANCEL 事件，<code>onTouchEvent</code> 也将会接收到 CANCEL 事件。</li>
+<li>那么后面的 MOVE 和 UP 事件不会再通过 B 的 <code>onInterceptTouchEvent</code>，将会直接分发到 B 的 <code>onTouchEvent</code> 进行处理。</li>
+<li>后面的 MOVE 和 UP 事件如果 B 的 <code>onTouchEvent</code> 做了处理并返回true，那么 UP 事件将被消费，不再继续传递，如果 B 的 <code>onTouchEvent</code> 不处理返回 false，那么这个事件将直接返回给 <code>Activity</code> 进行处理。</li>
+<li>事件被拦截后，除了 CANCEL 事件，C 将不会再收到任何事件。</li>
+</ul>
+<p>从这个流程我们可以得到下面的结论：</p>
+<ul>
+<li>DOWN 事件的处理实际上经历了一下一上两个过程，下是指 A-&gt;B 的 <code>onInterceptTouchEvent</code>，上是指 C-&gt;B-&gt;A 的 <code>onTouchEvent</code>，当然，任意一步的方法中返回 true,都能阻止它继续传播。</li>
+<li>如果 ViewGroup 拦截了一个半路的事件（比如 MOVE），这个事件将会被系统变成一个 CANCEL 事件，并传递给之前处理该手势（gesture）的子 View，而且不会再传递（无论是被拦截的 MOVE 还是系统生成的 CANCEL）给 <code>ViewGroup</code> 的 <code>onTouchEvent</code> 方法。只有再到来的事件才会传递到 <code>ViewGroup</code> 的 <code>onTouchEvent</code> 方法中。</li>
+<li>事件被拦截后，如果本身的 <code>onTouchEvent</code> 也不做处理，那么直接返回给 <code>Activity</code> 处理。</li>
+</ul>
+<p>下面我们再来做一个实验：B 在 <code>onInterceptTouchEvent</code> 中拦截了最初的 DOWN 事件。<br>先看第一种情况：DOWN 事件只在 <code>onInterceptTouchEvent</code> 中拦截，<code>onTouchEvent</code> 不做处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Activity dispatchTouchEvent ACTION_DOWN</div><div class="line">A dispatchTouchEvent ACTION_DOWN</div><div class="line">A onInterceptTouchEvent ACTION_DOWN</div><div class="line">B dispatchTouchEvent ACTION_DOWN</div><div class="line">B onInterceptTouchEvent ACTION_DOWN</div><div class="line">B onTouchEvent ACTION_DOWN</div><div class="line">A onTouchEvent ACTION_DOWN</div><div class="line">Activity onTouchEvent ACTION_DOWN</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_MOVE</div><div class="line">Activity onTouchEvent ACTION_MOVE</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_UP</div><div class="line">Activity onTouchEvent ACTION_UP</div></pre></td></tr></table></figure>
+<p>第二种情况：DOWN 事件在 <code>onInterceptTouchEvent</code> 中拦截，<code>onTouchEvent</code> 中处理并返回true。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Activity dispatchTouchEvent ACTION_DOWN</div><div class="line">A dispatchTouchEvent ACTION_DOWN</div><div class="line">A onInterceptTouchEvent ACTION_DOWN</div><div class="line">B dispatchTouchEvent ACTION_DOWN</div><div class="line">B onInterceptTouchEvent ACTION_DOWN</div><div class="line">B onTouchEvent ACTION_DOWN</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_MOVE</div><div class="line">A dispatchTouchEvent ACTION_MOVE</div><div class="line">A onInterceptTouchEvent ACTION_MOVE</div><div class="line">B dispatchTouchEvent ACTION_MOVE</div><div class="line">B onTouchEvent ACTION_MOVE</div><div class="line">（Activity onTouchEvent ACTION_MOVE）如果B的`onTouchEvent`不处理MOVE事件</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_UP</div><div class="line">A dispatchTouchEvent ACTION_UP</div><div class="line">A onInterceptTouchEvent ACTION_UP</div><div class="line">B dispatchTouchEvent ACTION_UP</div><div class="line">B onTouchEvent ACTION_UP</div><div class="line">（Activity onTouchEvent ACTION_UP）如果B的`onTouchEvent`不处理UP事件</div></pre></td></tr></table></figure>
+<ul>
+<li>如果一个 <code>ViewGroup</code> 拦截了最初的 DOWN 事件，该事件仍然会传递到该 <code>ViewGroup</code> 的 <code>onTouchEvent</code> 方法中。</li>
+<li><code>onInterceptTouchEvent</code> 只会拦截事件的传递，具体事件如何传递还要看 <code>onTouchEvent</code> 的处理。</li>
+<li>如果只拦截 DOWM 事件而不做处理，那么认为没有 View 对这组手势事件感兴趣，那么后面直接交由 Activity 处理。</li>
+<li>如果对 DOWN 事件处理，那么后续事件都会分发给 ViewGroup 的 <code>onTouchEvent</code> ，如果不处理再直接传递给 Activity 处理。</li>
+</ul>
+<h2 id="阻止拦截事件"><a href="#阻止拦截事件" class="headerlink" title="阻止拦截事件"></a>阻止拦截事件</h2><p>子 View 是可以阻止父 View 对事件拦截的，这就要用到 <code>ViewGroup</code> 的 <code>requestDisallowInterceptTouchEvent</code>，子 <code>View</code> 中调用 <code>getParent().requestDisallowInterceptTouchEvent(true)</code> 即可。<br>但是这个调用却要在合适的位置才能生效，具体原因在后面的源码分析中会介绍。<br>在 <code>onTouchEvent</code> 的处理 <code>DOWN</code> 事件时设置是合适的位置，因为在事件处理的开始(ACTION_DOWN)时会重新清理这个标志位，因此，设置过早是不生效的。<br>下面是 C 处理了事件，并且在 <code>onTouchEvent</code> 处理 <code>DOWN</code> 事件时设置了 <code>getParent().requestDisallowInterceptTouchEvent(true)</code> 的流程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Activity dispatchTouchEvent ACTION_DOWN</div><div class="line">A dispatchTouchEvent ACTION_DOWN</div><div class="line">A onInterceptTouchEvent ACTION_DOWN</div><div class="line">B dispatchTouchEvent ACTION_DOWN</div><div class="line">B onInterceptTouchEvent ACTION_DOWN</div><div class="line">C dispatchTouchEvent ACTION_DOWN</div><div class="line">C onTouchEvent ACTION_DOWN</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_MOVE</div><div class="line">A dispatchTouchEvent ACTION_MOVE</div><div class="line">B dispatchTouchEvent ACTION_MOVE</div><div class="line">C dispatchTouchEvent ACTION_MOVE</div><div class="line">C onTouchEvent ACTION_MOVE</div><div class="line"></div><div class="line">Activity dispatchTouchEvent ACTION_UP</div><div class="line">A dispatchTouchEvent ACTION_UP</div><div class="line">B dispatchTouchEvent ACTION_UP</div><div class="line">C dispatchTouchEvent ACTION_UP</div><div class="line">C onTouchEvent ACTION_UP</div></pre></td></tr></table></figure>
+<p>可以看出，除了 DOWN 事件 C 的父元素们将无法通过 <code>onInterceptTouchEvent</code> 拦截 MOVE 和 UP 事件。</p>
+<h2 id="几个问题"><a href="#几个问题" class="headerlink" title="几个问题"></a>几个问题</h2><p>在总结几个关于 Android 事件分发经常遇到的几个问题：</p>
+<ul>
+<li>如果B、C都没有处理ACTION_DOWN事件，包括没有注册touch和click监听，那么B的onInterceptTouchEvent执行几次？<ul>
+<li>处理一次ACTION_DOWN，因为所有的View对此次时间都没有兴趣，那以后的Move和Up就不传回来了。</li>
+</ul>
+</li>
+<li>如果B、C没有注册touch和click监听，B的onTouchEvent对MotionEvent.ACTION_DOWN返回true，那么B的onInterceptTouchEvent执行几次？<ul>
+<li>处理一次ACTION_DOWN，因为B表示对这个时间感兴趣，以后的move和up就没必要再调用onInterceptTouchEvent了。B的onTouchEvent会对这些事件响应。</li>
+</ul>
+</li>
+<li>如果B、C都没有拦截和处理ACTION_DOWN事件，C注册了click监听，那么B的onInterceptTouchEvent和onTouchEvent会执行几次？ <ul>
+<li>B的onInterceptTouchEvent会对ACTION_DOWN、ACTION_MOVE和ACTION_UP都会响应，但onTouchEvent对此都不响应，因为子View已经表示对此次事件感兴趣了。但是父View仍然有权利对事件拦截。</li>
+</ul>
+</li>
+<li>ACTION_CANCEL事件如何被触发<ul>
+<li>当C响应了ACTION_DOWN事件后（比如ACTION_CANCEL对down事件返回true），B突然插手把ACTION_MOVE事件拦截了，那么以后的move和up事件都交由B的onTouchEvent来处理，C的onTouchEvent就会收到ACTION_CANCEL事件。</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://balpha.de/2013/07/android-development-what-i-wish-i-had-known-earlier/" target="_blank" rel="external">http://balpha.de/2013/07/android-development-what-i-wish-i-had-known-earlier/</a><br><a href="https://mp.weixin.qq.com/s?__biz=MzI0MjE3OTYwMg==&amp;mid=2649547708&amp;idx=1&amp;sn=143add3bcceba00c4e3292b49557d4bc#rd" target="_blank" rel="external">https://mp.weixin.qq.com/s?__biz=MzI0MjE3OTYwMg==&amp;mid=2649547708&amp;idx=1&amp;sn=143add3bcceba00c4e3292b49557d4bc#rd</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-事件分发体系/" rel="tag"># Android 事件分发体系</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/10/android-thread-handlerthread-source-code/" rel="next" title="Android 线程 -- HandlerThread 使用及源码分析">
+                <i class="fa fa-chevron-left"></i> Android 线程 -- HandlerThread 使用及源码分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/06/android-knowledge-event-transfer-process-source-code/" rel="prev" title="Android View 事件处理流程源码解析">
+                Android View 事件处理流程源码解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">100</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些假设"><span class="nav-number">1.</span> <span class="nav-text">一些假设</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#默认情况"><span class="nav-number">2.</span> <span class="nav-text">默认情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理事件"><span class="nav-number">3.</span> <span class="nav-text">处理事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拦截事件"><span class="nav-number">4.</span> <span class="nav-text">拦截事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阻止拦截事件"><span class="nav-number">5.</span> <span class="nav-text">阻止拦截事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个问题"><span class="nav-number">6.</span> <span class="nav-text">几个问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">7.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
