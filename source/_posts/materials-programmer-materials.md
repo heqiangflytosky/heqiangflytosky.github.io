@@ -83,6 +83,7 @@ date: 2016-12-1 10:00:00
  - [魅族内核团队](http://kernel.meizu.com/)：魅族内核团队发表的一些博客
  - [今日头条技术博客](https://techblog.toutiao.com/)：众所周知今日头条有着一项强大的技术武器——推荐引擎。这个博客里面关于机器学习的内容非常丰富。文章也清晰有条理，他会交代实践背景、要求、失败案例、难点、最后给出一个甚至几个优选方案。
  - [Tencent ISUX](https://isux.tencent.com/articles/)：ISUX是腾讯核心设计团队,负责腾讯社交网络相关产品的用户体验设计与研究。主要涉及互联网产品的设计、重构、前端、用研等。
+ - [淘宝前端团队（FED）](http://taobaofed.org/)
  - [TGidea](http://tgideas.qq.com/#4)：腾讯游戏的专业设计团队，工作范围涉及腾讯游戏旗下各类网游产品的包装、创意、网站等设计工作。
  - [Alloy Team](http://www.alloyteam.com/)：这个团队就厉害了，是腾讯的核心团队。他们致力于Web前端技术的研究，热衷HTML5、移动Web技术，用最酷的新技术开发各种有趣的开源项目。
  - [UED](http://www.aliued.cn/)：阿里巴巴集团最为资深的用户体验设计部门之一，涉及领域有用户研究、交互设计、视觉设计、前端开发等。
@@ -169,6 +170,7 @@ date: 2016-12-1 10:00:00
  - HenCoder：大神扔物线的给高阶Android工程师的进阶手册
  - 视觉求索：计算机视觉领域资深华人教授与研究员共同发起的、非盈利性的、独立于产业界的移动新媒体平台
  - 云栖社区：由阿里云负责运营、阿里巴巴技术协会和阿里巴巴集团各技术团队提供内容支持的开放式技术社区
+ - 淘宝前端团队
 
 #### 其他
 
@@ -257,6 +259,11 @@ date: 2016-12-1 10:00:00
 #### VR/AR
 
  - [ArCore](https://github.com/google-ar)：Google 发布的基于 Android 平台的 AR SDK。
+
+#### 图形图像处理
+
+ - [GCanvas](https://github.com/alibaba/GCanvas)：阿里巴巴跨平台图形渲染引擎
+ - [G3D](https://github.com/alibaba/G3D)：阿里巴巴基于WebGL的Javascript 3D绘图引擎
 
 #### 其他
 

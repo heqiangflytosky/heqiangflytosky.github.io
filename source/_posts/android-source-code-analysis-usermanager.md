@@ -444,6 +444,7 @@ public class UserInfo implements Parcelable {
      * corporate data.
      */
     // 标志该UserInfo是否是另外一个用户的一份profile，Android中允许一个用户拥有另一份profile
+    // 比如现在好多定制系统开发的应用分身，就是基于这个开发的，比如可以在同一个手机上启动两个微信帐号
     public static final int FLAG_MANAGED_PROFILE = 0x00000020;
 
     // 标记该用户已经被禁止
