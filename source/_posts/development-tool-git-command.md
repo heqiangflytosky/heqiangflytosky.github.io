@@ -131,7 +131,10 @@ http://blog.chinaunix.net/uid-27714502-id-3479018.html
 ## git remote
  - git remote: 不带参数，列出已经存在的远程分支
  - git remote -v | --verbose: 列出详细信息，在每一个名字后面列出其远程url
- - git remote add: 添加远程仓库
+ - git remote add <name> <url>: 添加远程仓库
+ - git remote show <origin>：查看本地和远程分支的状态，origin为远程分支的名称
+ - git remote rename <原名字> <新名字>：重命名远程库
+ - git remote remove <name>：删除添加的远程库
 
 ## git merge
 

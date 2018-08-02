@@ -72,7 +72,7 @@ date: 2016-12-1 10:00:00
  - [W3School](http://www.w3school.com.cn/)
  - [W3Cschool](https://www.w3cschool.cn/)：注意和W3School一字之差。W3Cschool是一个专业的编程入门学习及技术文档查询网站,提供包括HTML,CSS,Javascript,jQuery,C,PHP,Java,Python,Sql,Mysql等编程语言和开源技术的在线教程及使用手册。设计前端、服务器、大数据、移动端等技术。
  - [菜鸟教程](http://www.runoob.com/)：涵盖前端、服务器、Android等教程
- - [Leetcode](https://leetcode.com/)：编程做题
+ - [Leetcode](https://leetcode.com/)，[Leetcode中文版](https://leetcode-cn.com/)：在线技术平台，编程做题
  - [牛客网](https://www.nowcoder.com/)：专业IT笔试面试备考平台
 
 ### 技术博客
@@ -171,6 +171,7 @@ date: 2016-12-1 10:00:00
  - 视觉求索：计算机视觉领域资深华人教授与研究员共同发起的、非盈利性的、独立于产业界的移动新媒体平台
  - 云栖社区：由阿里云负责运营、阿里巴巴技术协会和阿里巴巴集团各技术团队提供内容支持的开放式技术社区
  - 淘宝前端团队
+ - LeetCode领扣：LeetCode官方微信公众号
 
 #### 其他
 

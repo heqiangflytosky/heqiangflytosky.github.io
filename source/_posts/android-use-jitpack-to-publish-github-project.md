@@ -1,8 +1,8 @@
 ---
 title: Android：使用JitPack发布Github开源库 
-categories: Android
+categories: 开发工具
 comments: true
-tags: [Android, JitPack]
+tags: [开发工具, JitPack]
 description: 介绍使用JitPack发布Github开源库的流程
 date: 2017-7-21 10:00:00
 ---
