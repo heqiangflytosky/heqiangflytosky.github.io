@@ -7,6 +7,8 @@ description: 类的动态加载源码分析
 date: 2017-5-18 10:00:00
 ---
 
+在博客 [Android 插件化 -- 类的动态加载实践 ](http://www.heqiangfly.com/2017/05/15/android-plugins-dynamic-load-demo/) 中我们通过一个实例来实践了类的动态加载以及使用。接下来从源码角度来分析一下类的动态加载是如何实现的。
+
 ## 流程图
 
 ```
