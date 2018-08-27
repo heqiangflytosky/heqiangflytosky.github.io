@@ -10,7 +10,7 @@ date: 2017-5-15 10:00:00
 实现 Android 类的动态加载，我们一般通过两个类实现 `DexClassLoader` 和 `PathClassLoader`。
 这两个类的区别在很多类似的文章里面也有介绍：
 
- - DexClassLoader：可以加载jar、apk、dex，支持从 SD 卡中加载。
+ - DexClassLoader：可以加载jar、apk、dex，并且支持从 SD 卡中加载文件。
  - PathClassLoader：只能加载已经安装到系统中的Apk文件，也就是/data/app目录下的apk文件。
 
 下面我们来看一下这两个类的源码：
@@ -151,7 +151,19 @@ This is TestDynamicLoad2
 
 ```
         String className = "com.example.hq.myapplication.TestDynamicLoad";
-        String dexPath = "/data/app/com.example.hq.myapplication-1/base.apk";
+
+        ApplicationInfo ai;
+        try {
+            ai = getPackageManager().getApplicationInfo("com.example.hq.myapplication", 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        String dexPath = ai.sourceDir;
+        String nativePath = ai.nativeLibraryDir;
+        Log.e("Test", "dexPath = " + dexPath);
+        Log.e("Test", "nativePath = " + nativePath);
+
         ClassLoader localClassLoader = getClassLoader();
         PathClassLoader pathClassLoader = new PathClassLoader(dexPath, null, localClassLoader);
         Log.e("Test", "pathClassLoader = " + pathClassLoader);
@@ -160,21 +172,17 @@ This is TestDynamicLoad2
             Constructor<?> localConstructor = localClass.getConstructor(new Class[]{});
             Object instance = localConstructor.newInstance(new Object[] {});
             Log.e("Test", "instance = " + instance);
-
             Method getString = localClass.getMethod("getString");
             getString.setAccessible(true);
             String str = (String) getString.invoke(instance);
             Log.e("Test","Dynamic load class getString = "+str);
-
             Method add = localClass.getMethod("add", int.class, int.class);
             add.setAccessible(true);
             int addResult = (int) add.invoke(instance, 6,8);
             Log.e("Test","Dynamic load class add = "+addResult);
-
             Method print = localClass.getMethod("testAnotherClass");
             print.setAccessible(true);
             print.invoke(instance);
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
@@ -186,13 +194,16 @@ This is TestDynamicLoad2
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
 ```
 
 结果：
 
 ```
+dexPath = /data/app/com.example.hq.myapplication-1/base.apk
+nativePath = /data/app/com.example.hq.myapplication-1/lib/arm64
 process id 32385
-pathClassLoader = dalvik.system.PathClassLoader[DexPathList[[zip file "/data/app/com.example.hq.myapplication-1/base.apk"],nativeLibraryDirectories=[/system/lib64, /vendor/lib64]]]
+pathClassLoader = dalvik.system.PathClassLoader[DexPathList[[zip file "/data/app/com.example.hq.myapplication-1/base.apk"],nativeLibraryDirectories=[/system/lib, /vendor/lib]]]
 instance = com.example.hq.myapplication.TestDynamicLoad@5ff77f5
 pid = 32385
 Dynamic load class getString = This is a test case
