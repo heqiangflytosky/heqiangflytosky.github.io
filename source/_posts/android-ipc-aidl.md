@@ -471,3 +471,24 @@ mRemote.transact(Stub.TRANSACTION_addStudent, _data, _reply, 0);
         throws RemoteException;
 ```
 `flags` 为0时是普通的RPC调用，为 `FLAG_ONEWAY` 时是 one-way RPC，是单向调用，执行后立即返回，无需等待Server端 `transact()` 返回。这个时候就是异步执行了。
+
+## 注意事项
+
+### Server 端 AIDL 文件升级问题
+
+当我们把 AIDL 公开接口给外部第三方应用时，通常的做法是会将 AIDL 以及对应 Java 文件打包给第三方使用，这样做没有任何问题。但要注意的是在后续升级这个接口的时候，得保持接口中方法顺序不变，即只能在aidl的后面添加新方法，而不能在中间插入新方法。否则 Client 端后调用错乱导致调用不成功。
+为什么呢？因为编译器会给我们自动根据 AILD 文件生成对应的 Java 文件，在这个 Java 文件中的 `onTransact` 方法中，自动为我们分配好了每一个方法的 code，这个code 的分配顺序是按照 AIDL 文件中的声明顺序来进行的，详细请看下面的代码。通过分析 android 进程间通信 binder 机制可以知道，则是客户端最后是通过调用 transact 方法，并传递这个 code 给 server 端，来完成调用。如果中间插入新的接口，会导致这个 code 错乱，调用的不是我们想要的方法。
+
+```
+static final int TRANSACTION_testAIDL1 = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+static final int TRANSACTION_testAIDL2 = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+```
+
+### Client 和 Server AIDL 对应问题
+
+从上面的分析得到一个结论，Client 端和 Server 端的 AIDL 可以不一致，Client 端的 AIDL 文件的接口可以是 Server 端的AILD 接口的一个子集，但这个子集必须是前面所有连续的接口的一个子集，方法顺序不能变。
+另外，Client 端和 Server 端的 AIDL 的包名必须一致。
+
+### AIDL 接口不能重载
+
+从上面的代码中可以看到，接口 code 的分配是根据方法名来分配的，没有涉及到参数，因此是不能重载的，如果重载的话编译是会报错的。

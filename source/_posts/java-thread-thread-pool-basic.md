@@ -10,8 +10,7 @@ date: 2015-9-20 10:00:00
 
 ## 概述
 
-谈到 Java 多线程，就不得
-不提起线程池，线程池的运用为线程生命周期的开销和资源不足问题提供了解决方案。
+谈到 Java 多线程，就不得不提起线程池，线程池的运用为线程生命周期的开销和资源不足问题提供了解决方案。
 Executor 框架是 Java 线程池的一种实现方案。
 与 Executor 框架相关的类有：Executor， ExecutorService， AbstractExecutorService， ThreadPoolExecutor， ScheduledExecutorService， ScheduledThreadPoolExecutor， CompletionService， ExecutorCompletionService， Future， Callable ， Executors 等。
 
@@ -265,14 +264,13 @@ public interface ThreadFactory {
 关于多线程，在阿里巴巴出品的《Java 开发手册》中提到：
 
 1. 创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。
-
-```
-public class TimerTaskThread extends Thread { 
+ ```
+ public class TimerTaskThread extends Thread { 
     public TimerTaskThread() {
         super.setName("TimerTaskThread");
         ... 
-}
-```
+ }
+ ```
 
 2. 线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。
 > 说明:使用线程池的好处是减少在创建和销毁线程上所花的时间以及系统资源的开销，解决资源不足的问题。如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者 “过度切换”的问题。
@@ -283,6 +281,8 @@ public class TimerTaskThread extends Thread {
 允许的请求队列长度为 Integer.MAX_VALUE，可能会堆积大量的请求，从而导致 OOM。 
 2)CachedThreadPool 和 ScheduledThreadPool:
 允许的创建线程数量为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM。
+
+
 
 <!--  
 
