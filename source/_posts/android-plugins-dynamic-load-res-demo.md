@@ -3,11 +3,16 @@ title: Android 插件化 -- 资源的动态加载实践
 categories: Android 插件化
 comments: true
 tags: [Android 插件化]
-description: 类的动态加载源码分析
+description: 介绍使用 createPackageContext 方法和自定义 AssetManager 两种方法实现加载不同应用的资源
 date: 2017-5-22 10:00:00
 ---
 
 ## 预备知识
+
+本文通过代码实践来实现两种动态加载资源的方法：
+
+ - 通过 createPackageContext： 可以实现获取系统中已经安装的应用的资源
+ - 自定义 AssetManager：这种方法是插件化动态加载资源的原理
 
 ### 资源类
 
