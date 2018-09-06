@@ -1,8 +1,8 @@
 ---
 title: 区块链 -- 区块链基础100问
-categories: Java
+categories: 区块链
 comments: true
-tags: [Java范型]
+tags: [区块链]
 description: 区块链基础100问，让你变身区块链达人
 date: 2018-5-2 10:00:00
 ---
