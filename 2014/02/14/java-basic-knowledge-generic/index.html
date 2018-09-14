@@ -1,0 +1,943 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java范型," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本文介绍 Java 范型的特点和使用方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 基础 -- 范型">
+<meta property="og:url" content="http://yoursite.com/2014/02/14/java-basic-knowledge-generic/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="本文介绍 Java 范型的特点和使用方法">
+<meta property="og:updated_time" content="2018-09-14T14:27:47.781Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 基础 -- 范型">
+<meta name="twitter:description" content="本文介绍 Java 范型的特点和使用方法">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/02/14/java-basic-knowledge-generic/"/>
+
+
+
+
+
+  <title> Java 基础 -- 范型 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/02/14/java-basic-knowledge-generic/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java 基础 -- 范型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-02-14T10:00:00+08:00">
+                2014-02-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2014/02/14/java-basic-knowledge-generic/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2014/02/14/java-basic-knowledge-generic/" class="leancloud_visitors" data-flag-title="Java 基础 -- 范型">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  本文介绍 Java 范型的特点和使用方法
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>所谓范型，就是允许在定义类、接口、方法时使用类型形参，这个类型形参将在声明变量、创建对象、调用方法时动态地指定（即传入实际的类型参数，也可称为类型实参）。<br>范型可以减少强制类型的转换，可以规范集合的元素类型，还可以提高代码的安全性和可读性，正是因为有这些优点，自从 Java 引入范型后，项目的编码规则上便多了一条：优先使用范型。</p>
+<h2 id="范型的使用"><a href="#范型的使用" class="headerlink" title="范型的使用"></a>范型的使用</h2><h3 id="类型通配符"><a href="#类型通配符" class="headerlink" title="类型通配符"></a>类型通配符</h3><p>类型通配符的形式有 <code>&lt;?&gt;</code>、 <code>&lt;? extends Class&gt;</code> 和 <code>&lt;? super Class&gt;</code></p>
+<h4 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h4><p>为了表示各种范型 List 的父类，我们需要使用类型通配符，类型的通配符就是一个问号 ?，将它作为类型实参传给 List集合：<code>List&lt;?&gt;</code>，就标示未知类型元素的 List，它的元素类型可以匹配任何类型。<br>比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public void testGeneric() &#123;</div><div class="line">    List&lt;String&gt; name = new ArrayList&lt;String&gt;();</div><div class="line">    List&lt;Integer&gt; age = new ArrayList&lt;Integer&gt;();</div><div class="line">    List&lt;Shape&gt; shape = new ArrayList&lt;Shape&gt;();</div><div class="line"></div><div class="line">    name.add(&quot;icon&quot;);</div><div class="line">    age.add(18);</div><div class="line">    shape.add(new Shape());</div><div class="line"></div><div class="line">    getData(name);</div><div class="line">    getData(age);</div><div class="line">    getData(shape);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void getData(List&lt;?&gt; data) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;data :&quot; + data.get(0));</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Shape &#123;</div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;Shape&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译没问题，运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">E/Test: data :icon</div><div class="line">E/Test: data :18</div><div class="line">E/Test: data :Shape</div></pre></td></tr></table></figure>
+<p>因为 <code>getData()</code> 方法的参数是 <code>List</code> 类型的，所以 name，age，shape 都可以作为这个方法的实参，这就是通配符的作用。</p>
+<blockquote>
+<p>上面程序中使用的 <code>List&lt;?&gt;</code>，其实这种写法可以适用于任何支持范型声明的接口和类，比如 <code>Set&lt;?&gt;</code>、<code>Map&lt;?,?&gt;</code>等。</p>
+</blockquote>
+<h4 id="设定类型通配符的上限"><a href="#设定类型通配符的上限" class="headerlink" title="设定类型通配符的上限"></a>设定类型通配符的上限</h4><p>假设有下面的使用场景，我们不想使 <code>List&lt;?&gt;</code> 使任何范型 List 的父类，只想表示它是某一类范型List的父类，这时候我们就要限定通配符的上限了。<br><code>&lt;? extends Class&gt;</code> 表示该通配符所代表的类型是 Class 类型本身或者它的子类。<br>把上面的 <code>getData</code> 方法修改一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">public void testGeneric() &#123;</div><div class="line">    List&lt;String&gt; name = new ArrayList&lt;String&gt;();</div><div class="line">    List&lt;Integer&gt; age = new ArrayList&lt;Integer&gt;();</div><div class="line">    List&lt;Shape&gt; shape = new ArrayList&lt;Shape&gt;();</div><div class="line">    List&lt;Circle&gt; circle = new ArrayList&lt;Circle&gt;();</div><div class="line"></div><div class="line">    name.add(&quot;icon&quot;);</div><div class="line">    age.add(18);</div><div class="line">    shape.add(new Shape());</div><div class="line"></div><div class="line">    getData(name);  // 编译报错</div><div class="line">    getData(age);   // 编译报错</div><div class="line">    getData(shape); // 编译通过</div><div class="line">    getData(circle);// 编译通过</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void getData(List&lt;? extends Shape&gt; data) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;data :&quot; + data.get(0));</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Shape &#123;</div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;Shape&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Circle extends Shape &#123;</div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;Circle&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>前面两个用法就会报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Error:(74, 17) 错误: 不兼容的类型: List&lt;String&gt;无法转换为List&lt;? extends Shape&gt;</div><div class="line">Error:(75, 17) 错误: 不兼容的类型: List&lt;Integer&gt;无法转换为List&lt;? extends Shape&gt;</div></pre></td></tr></table></figure>
+<h4 id="设定类型通配符的下限"><a href="#设定类型通配符的下限" class="headerlink" title="设定类型通配符的下限"></a>设定类型通配符的下限</h4><p><code>&lt;? super Class&gt;</code> 表示该通配符所代表的类型是 Class 类本身或者它的父类。<br>把上面的 <code>getData</code> 方法再修改一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public static void getData(List&lt;? super Shape&gt; data) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;data :&quot; + data.get(0));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">getData(name);  // 编译报错</div><div class="line">getData(age);   // 编译报错</div><div class="line">getData(shape); // 编译通过</div><div class="line">getData(circle);// 编译报错</div></pre></td></tr></table></figure>
+<h3 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h3><p>范型方法就是在声明方法时定义一个或多个类型形参，该方法在调用时可以接收不同类型的参数。根据传递给泛型方法的参数类型，编译器适当地处理每一个方法调用。<br>范型方法的类型作用域是整个方法。<br>范型方法的用法格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">修饰符 &lt;T, S&gt; 返回值类型 方法名 (形参列表) &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面是定义泛型方法的规则：</p>
+<ul>
+<li>所有泛型方法声明都有一个类型参数声明部分（由尖括号分隔），该类型参数声明部分在方法返回类型之前（在上面例子中的<code>&lt;T, S&gt;</code>）。</li>
+<li>每一个类型参数声明部分包含一个或多个类型参数，参数间用逗号隔开。一个泛型参数，也被称为一个类型变量，是用于指定一个泛型类型名称的标识符。</li>
+<li>类型参数可以用来声明方法参数。</li>
+<li>类型参数能被用来声明返回值类型。</li>
+</ul>
+<p>先来看一个范型参数来声明方法参数的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public &lt;T&gt; String getData(T t) &#123;</div><div class="line">    return String.valueOf(t);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再来看一个范型参数来声明返回值类型的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">private Map&lt;String, Object&gt; mDatas = new ArrayMap&lt;&gt;();</div><div class="line"></div><div class="line">public &lt;T&gt; T getData(String name) &#123;</div><div class="line">    return (T) mDatas.get(name);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h3><p>泛型类的声明和非泛型类的声明类似，除了在类名后面添加了类型参数声明部分。<br>和泛型方法一样，泛型类的类型参数声明部分也包含一个或多个类型参数，参数间用逗号隔开。<br>一个泛型参数，也被称为一个类型变量，是用于指定一个泛型类型名称的标识符。因为他们接受一个或多个参数，这些类被称为参数化的类或参数化的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Box&lt;T&gt; &#123;</div><div class="line">    private T t;</div><div class="line">    public void add(T t) &#123;</div><div class="line">        this.t = t;</div><div class="line">    &#125;</div><div class="line">    public T get() &#123;</div><div class="line">        return t;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="限定类型参数上限"><a href="#限定类型参数上限" class="headerlink" title="限定类型参数上限"></a>限定类型参数上限</h3><p>Java 范型不仅允许在使用通配符形参时设定上限，而且也可以在定义类型参数时设定上限，用于表示传给该类型形参的实际类型要么是该类型上限，要么使该类型的子类。<br>这种做法可以用在范型方法和范型类中。<br>用法：<code>&lt;U, T extends Class1&gt;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public &lt;T extends Shape &amp; Serializable&gt; String getData(T t) &#123;</div><div class="line">    return String.valueOf(t);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Shape &#123;</div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;Shape&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>形如 <code>&lt;U, T extends Class1 &amp; Interface1&gt;</code> 表示 T 是继承了 Class1 的类以及实现了 Interface1，后面的接口可以有多个，因为 Java 是单继承，因此父类只能有1个。类要写在接口的前面。</p>
+<h2 id="范型的特点"><a href="#范型的特点" class="headerlink" title="范型的特点"></a>范型的特点</h2><h3 id="范型是类型擦除的"><a href="#范型是类型擦除的" class="headerlink" title="范型是类型擦除的"></a>范型是类型擦除的</h3><p>Java 的范型在编译器有效，在运行期被删除，也就是说所有的反省参数类型在编译期后都会被清除掉。<br>下面看一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public void listMethod(List&lt;String&gt; strings) &#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">public void listMethod(List&lt;Integer&gt; strings) &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码是否能编译呢？<br>事实上，这段代码时无法编译的，编译时报错信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`listMethod(List&lt;String&gt;)` clashes with `listMethod(List&lt;Integer&gt;)`; both methods have same erasure</div></pre></td></tr></table></figure>
+<p>此错误信息是说 <code>listMethod(List&lt;String&gt;)</code> 方法在编译时擦除类型后的方法是 <code>listMethod(List&lt;E&gt;)</code>，它与另一个方法相冲突。这就是 Java 范型擦除引起的问题：在编译后所有的范型类型都会做相应的转化：<br>转化规则如下：</p>
+<ul>
+<li><code>List&lt;String&gt;</code>、<code>List&lt;Integer&gt;</code>、<code>List&lt;T&gt;</code>擦除后的类型为<code>List</code></li>
+<li><code>List&lt;String&gt;[]</code>擦除后的类型为<code>List[]</code></li>
+<li><code>List&lt;? extends E&gt;、List&lt;? super E&gt;</code> 擦除后的类型为 <code>List&lt;E&gt;</code></li>
+<li><code>List&lt;T extends Serializable &amp; Cloneable&gt;</code> 擦除后为 <code>List&lt;Serializable&gt;</code></li>
+</ul>
+<p>范型的擦除还表现在当把一个具有范型信息的对象赋给另一个没有范型信息的变量时，所有再尖括号之间的类型信息都将被扔掉。<br>比如：一个 <code>List&lt;String&gt;</code> 类型被转换为 <code>List</code>，则该 <code>List</code> 对集合元素的类型检查变成了类型变量的上限（即 Object）。<br>下面用一个例子来示范这种擦除：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public void testGenericErasure() &#123;</div><div class="line">    // 传入 Integer 作为类型形参的值</div><div class="line">    Box&lt;Integer&gt; box = new Box&lt;&gt;(8);</div><div class="line">    // box 的 get 方法返回 Integer 对象</div><div class="line">    Integer size = box.get();</div><div class="line">    // 把 box 对象赋值给b变量，此时会丢失&lt;&gt;里的类型信息</div><div class="line">    Box b = box;</div><div class="line">    //这个代码会引起编译错误</div><div class="line">    Integer size1 = b.get();</div><div class="line">    // b只知道size的类型是Number，但具体是Number的哪个子类就不清楚了。</div><div class="line">    //下面的用法是正确的</div><div class="line">    Number size2 = b.get();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Box&lt;T extends Number&gt; &#123;</div><div class="line"></div><div class="line">    private T size;</div><div class="line">    public Box(T size) &#123;</div><div class="line">        this.size = size;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void add(T size) &#123;</div><div class="line">        this.size = size;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public T get() &#123;</div><div class="line">        return size;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>类型转换：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public void testGenericConvert() &#123;</div><div class="line">    List&lt;Integer&gt; li = new ArrayList&lt;&gt;();</div><div class="line">    li.add(8);</div><div class="line">    // 类型擦除</div><div class="line">    List list = li;</div><div class="line">    // 类型转换</div><div class="line">    List&lt;String&gt; ls = list;</div><div class="line">    // 下面的代码会引起运行时异常</div><div class="line">    // Caused by: java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String</div><div class="line">    Log.e(&quot;Test&quot;,ls.get(0));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>明白了这些，对下面的代码就容易理解了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; stringList = new ArrayList&lt;&gt;();</div><div class="line">List&lt;Integer&gt; integerList = new ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+stringList.getClass().equals(integerList.getClass()));</div></pre></td></tr></table></figure>
+<p>返回结果为 true。 <code>List&lt;String&gt;</code> 和 <code>List&lt;Integer&gt;</code> 擦除后的类型都是 List，没有任何区别。<br>之所以设计成可擦除的，有下面两个原因：</p>
+<ul>
+<li>避免JVM大换血。由于范型是Java5以后才支持的，如果JVM也把范型类型延续到运行期，那么JVM就需要进行大量的重构工作了。</li>
+<li>版本兼容问题。在编译器擦除可以更好地支持原生类型，在Java5或者Java6平台上，即使声明一个List这样的原生类型也是支</li>
+</ul>
+<h3 id="不能创建一个范型类型实例"><a href="#不能创建一个范型类型实例" class="headerlink" title="不能创建一个范型类型实例"></a>不能创建一个范型类型实例</h3><p>如果 T 是一个类型变量，那么下面的语句是非法的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">T obj = new T();</div></pre></td></tr></table></figure>
+<p>T 由它的限界代替，这可能是 Object，或者是抽象类，因此对 <code>new T()</code> 的调用没有意义。</p>
+<h3 id="不能初始化范型数组"><a href="#不能初始化范型数组" class="headerlink" title="不能初始化范型数组"></a>不能初始化范型数组</h3><p>数组元素的类型不能包含类型变量或者类型形参，除非是无上限的类型通配符。但是可以声明元素类型包含类型变量或类型形参的数据。<br>也就是说，下面的代码是OK的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt;[] stringList ;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Box&lt;T extends Number&gt; &#123;</div><div class="line"></div><div class="line">    private List&lt;T&gt; list = new ArrayList&lt;T&gt;();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面的代码，等号后面的代码是非法的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt;[] stringList = new ArrayList&lt;String&gt;[10];</div></pre></td></tr></table></figure>
+<h3 id="基本类型不能做类型参数"><a href="#基本类型不能做类型参数" class="headerlink" title="基本类型不能做类型参数"></a>基本类型不能做类型参数</h3><p>因此，<code>List&lt;int&gt;</code> 是非法的，我们必须使用包装类。</p>
+<h3 id="static-的语境不能引用类型变量"><a href="#static-的语境不能引用类型变量" class="headerlink" title="static 的语境不能引用类型变量"></a>static 的语境不能引用类型变量</h3><p>在一个范型类中，static 方法和 static 域均不可以引用类的类型变量，因为类型擦除后类型变量就不存在了。而且，static 域在该类的诸范型实例之间是共享的。因此，static 的语境不能引用类型变量。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java范型/" rel="tag"># Java范型</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/02/12/java-basic-knowledge-auto-boxing/" rel="next" title="Java 基础 -- 关于自动装箱和拆箱机制">
+                <i class="fa fa-chevron-left"></i> Java 基础 -- 关于自动装箱和拆箱机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/04/10/android-knowledge-debug-skill-one/" rel="prev" title="Android 常用调试知识">
+                Android 常用调试知识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#范型的使用"><span class="nav-number">2.</span> <span class="nav-text">范型的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类型通配符"><span class="nav-number">2.1.</span> <span class="nav-text">类型通配符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本使用"><span class="nav-number">2.1.1.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设定类型通配符的上限"><span class="nav-number">2.1.2.</span> <span class="nav-text">设定类型通配符的上限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设定类型通配符的下限"><span class="nav-number">2.1.3.</span> <span class="nav-text">设定类型通配符的下限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型方法"><span class="nav-number">2.2.</span> <span class="nav-text">泛型方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型类"><span class="nav-number">2.3.</span> <span class="nav-text">泛型类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#限定类型参数上限"><span class="nav-number">2.4.</span> <span class="nav-text">限定类型参数上限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#范型的特点"><span class="nav-number">3.</span> <span class="nav-text">范型的特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#范型是类型擦除的"><span class="nav-number">3.1.</span> <span class="nav-text">范型是类型擦除的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不能创建一个范型类型实例"><span class="nav-number">3.2.</span> <span class="nav-text">不能创建一个范型类型实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不能初始化范型数组"><span class="nav-number">3.3.</span> <span class="nav-text">不能初始化范型数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本类型不能做类型参数"><span class="nav-number">3.4.</span> <span class="nav-text">基本类型不能做类型参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-的语境不能引用类型变量"><span class="nav-number">3.5.</span> <span class="nav-text">static 的语境不能引用类型变量</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

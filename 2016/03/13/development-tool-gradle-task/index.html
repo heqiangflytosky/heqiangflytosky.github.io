@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/03/13/development-tool-gradle-task/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Gradle 中 Task 的使用">
-<meta property="og:updated_time" content="2018-05-06T07:24:19.327Z">
+<meta property="og:updated_time" content="2018-09-14T15:16:02.111Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 使用指南 -- Gradle Task">
 <meta name="twitter:description" content="介绍 Gradle 中 Task 的使用">
@@ -406,7 +406,16 @@
 <li><code>./gradlew tasks</code>：列出当前工程的所有Task</li>
 <li><code>./gradlew [-q] &lt;task name&gt;</code>：单独执行某个task，-q 代表 quite 模式，它不会生成 Gradle 的日志信息 (log messages)，所以用户只能看到 tasks 的输出。</li>
 </ul>
-<h2 id="创建任务"><a href="#创建任务" class="headerlink" title="创建任务"></a>创建任务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">task hello &#123;</div><div class="line">    doFirst &#123;</div><div class="line">        println &apos;task hello doFirst&apos;</div><div class="line">    &#125;</div><div class="line">    doLast &#123;</div><div class="line">        println &apos;task hello doLast&apos;</div><div class="line">    &#125;</div><div class="line">    println &apos;config task hello&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">task hello1 &lt;&lt; &#123;</div><div class="line">    println &apos;task hello1&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">task hello2 (type: Copy)&#123;</div><div class="line">    from &apos;src/main/AndroidManifest.xml&apos;</div><div class="line">    into &apos;build/test&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="创建任务"><a href="#创建任务" class="headerlink" title="创建任务"></a>创建任务</h2><h3 id="Task-构造方法"><a href="#Task-构造方法" class="headerlink" title="Task 构造方法"></a>Task 构造方法</h3><p>可以通过下面几个方法来构造 Task：</p>
+<ul>
+<li>task myTask</li>
+<li>task myTask { configure closure }</li>
+<li>task myTask(type: SomeType)</li>
+<li>task myTask(type: SomeType) { configure closure }</li>
+</ul>
+<h3 id="Task-示例"><a href="#Task-示例" class="headerlink" title="Task 示例"></a>Task 示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">task hello &#123;</div><div class="line">    doFirst &#123;</div><div class="line">        println &apos;task hello doFirst&apos;</div><div class="line">    &#125;</div><div class="line">    doLast &#123;</div><div class="line">        println &apos;task hello doLast&apos;</div><div class="line">    &#125;</div><div class="line">    println &apos;config task hello&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">task hello1 &lt;&lt; &#123;</div><div class="line">    println &apos;task hello1&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">task hello2 (type: Copy)&#123;</div><div class="line">    from &apos;src/main/AndroidManifest.xml&apos;</div><div class="line">    into &apos;build/test&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">task hello3(group: &quot;myTest&quot;, description:&quot;This is test task paras&quot;, dependsOn: [&quot;A&quot;, &quot;B&quot;])&#123;</div><div class="line">    println &apos;task hello3&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">project.task(&quot;hello4&quot;, group: &quot;myTest&quot;, description:&quot;This is test task para name&quot;)&#123;</div><div class="line">    println &apos;task hello4&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行 <code>./gradlew  tasks</code>，上面的 Task 就会在列表中显示出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">MyTest tasks</div><div class="line">------------</div><div class="line">hello3 - This is test task paras</div><div class="line">hello4 - This is test task para name</div><div class="line"></div><div class="line">Other tasks</div><div class="line">-----------</div><div class="line">...</div><div class="line">hello</div><div class="line">hello1</div><div class="line">hello2</div></pre></td></tr></table></figure>
 <p>我们执行 <code>./gradlew -q hello</code>，会有下面的输出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">config task hello</div><div class="line">task hello doFirst</div><div class="line">task hello doLast</div></pre></td></tr></table></figure>
 <p>这里会有个奇怪的现象，我们在执行 <code>./gradlew -q hello</code> 时有上面三条输出是容易理解的，但是在执行 <code>./gradlew tasks</code> 或者是执行其他 Task 比如 <code>./gradlew -q hello1</code> 时，<code>config task hello</code> 这个打印也会输出，为什么呢？<br>这是因为 Task 有两种状态，分别是：</p>
@@ -415,6 +424,43 @@
 <li>执行状态（Execution State）</li>
 </ul>
 <p>这其实对应了 Gradle 三个生命周期中的配置阶段和执行阶段，task 的配置块永远在 task 动作执行之前被执行。<br>Gradle 会在进入执行之前，配置所有 Task，而 <code>println &#39;config task hello&#39;</code> 这段代码就是在配置时进行执行。所以哪怕没有显式调用 <code>gradlew hello</code>，只是调用列出所有 task 的命令，hello task 仍然需要进入到配置状态，也就仍然执行了一遍。<br>hello1 task的声明方式 &lt;&lt; 只是简写的 <code>doLast</code>，或者说当这个任务不需要任何在配置状态下运行的内容时，这两种声明方式是一样的。<br>实际上大部分时候 task 都应该是在执行状态下才真正执行的，配置状态大部分时候用于声明执行时需要用到的变量等为执行服务的前置动作。<br>hello2: Task创建的时候可以通过 <code>type: SomeType</code> 指定Type，Type其实就是告诉Gradle，这个新建的Task对象会从哪个基类Task派生。比如，Gradle本身提供了一些通用的Task，最常见的有CopyC、Delete、Sync、Tar等任务。Copy是Gradle中的一个类。当我们：task myTask(type:Copy)的时候，创建的Task就是一个Copy Task。下面会详细介绍。</p>
+<h3 id="Task-参数"><a href="#Task-参数" class="headerlink" title="Task 参数"></a>Task 参数</h3><p>我们用命令查看 Task 信息时一般是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Build tasks</div><div class="line">-----------</div><div class="line">assemble - Assembles all variants of all applications and secondary packages.</div><div class="line">assembleAndroidTest - Assembles all the Test applications.</div><div class="line">assembleDdd - Assembles all Ddd builds.</div><div class="line">assembleDebug - Assembles all Debug builds.</div><div class="line">assembleRelease - Assembles all Release builds.</div></pre></td></tr></table></figure>
+<p>一般是由 group、name 和 description组成，其实在上面的示例中大家应该看到 hello3、hello4和其他任务的不同了。他们两个处在同一个 group 中并且 Task 名称后面有一些描述信息。<br>Task的一般的属性有下面几种，可以在创建 Task 的时候在闭包中声明：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Property</th>
+<th style="text-align:center">Property</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">name</td>
+<td style="text-align:center">task的名字</td>
+</tr>
+<tr>
+<td style="text-align:center">type</td>
+<td style="text-align:center">task的“父类”</td>
+</tr>
+<tr>
+<td style="text-align:center">overwrite</td>
+<td style="text-align:center">是否替换已经存在的task</td>
+</tr>
+<tr>
+<td style="text-align:center">dependsOn</td>
+<td style="text-align:center">task依赖的task的集合</td>
+</tr>
+<tr>
+<td style="text-align:center">group</td>
+<td style="text-align:center">task属于哪个组</td>
+</tr>
+<tr>
+<td style="text-align:center">description</td>
+<td style="text-align:center">task的描述</td>
+</tr>
+</tbody>
+</table>
 <h3 id="动态任务"><a href="#动态任务" class="headerlink" title="动态任务"></a>动态任务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">4.times &#123; counter -&gt;</div><div class="line">    task &quot;task$counter&quot; &lt;&lt; &#123;</div><div class="line">        println &quot;I&apos;m task number $counter&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这里动态的创建了 task0，task1，task2，task3。<br>执行 <code>./gradlew -q task1</code>，输出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">I&apos;m task number 1</div></pre></td></tr></table></figure>
@@ -589,7 +635,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -598,7 +644,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -607,7 +653,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">65</span>
+                <span class="site-state-item-count">67</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -669,7 +715,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-相关命令"><span class="nav-number">2.</span> <span class="nav-text">Task 相关命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建任务"><span class="nav-number">3.</span> <span class="nav-text">创建任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#动态任务"><span class="nav-number">3.1.</span> <span class="nav-text">动态任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用任务"><span class="nav-number">4.</span> <span class="nav-text">调用任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#短标记法"><span class="nav-number">4.1.</span> <span class="nav-text">短标记法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在Task中调用其他Task"><span class="nav-number">4.2.</span> <span class="nav-text">在Task中调用其他Task</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务依赖"><span class="nav-number">5.</span> <span class="nav-text">任务依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建依赖"><span class="nav-number">5.1.</span> <span class="nav-text">创建依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入依赖"><span class="nav-number">5.2.</span> <span class="nav-text">插入依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务排序"><span class="nav-number">6.</span> <span class="nav-text">任务排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mustRunAfter-与-shouldRunAfter"><span class="nav-number">6.1.</span> <span class="nav-text">mustRunAfter 与 shouldRunAfter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finalizedBy"><span class="nav-number">6.2.</span> <span class="nav-text">finalizedBy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-Type"><span class="nav-number">7.</span> <span class="nav-text">Task Type</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy"><span class="nav-number">7.1.</span> <span class="nav-text">Copy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exec"><span class="nav-number">7.2.</span> <span class="nav-text">Exec</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务的执行条件"><span class="nav-number">8.</span> <span class="nav-text">任务的执行条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用判断条件"><span class="nav-number">8.1.</span> <span class="nav-text">使用判断条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-StopExecutionException"><span class="nav-number">8.2.</span> <span class="nav-text">使用 StopExecutionException</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#激活和注销任务"><span class="nav-number">8.3.</span> <span class="nav-text">激活和注销任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明任务的输入和输出"><span class="nav-number">9.</span> <span class="nav-text">声明任务的输入和输出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UP-TO-DATE-原理"><span class="nav-number">9.1.</span> <span class="nav-text">UP-TO-DATE 原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">10.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-相关命令"><span class="nav-number">2.</span> <span class="nav-text">Task 相关命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建任务"><span class="nav-number">3.</span> <span class="nav-text">创建任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Task-构造方法"><span class="nav-number">3.1.</span> <span class="nav-text">Task 构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Task-示例"><span class="nav-number">3.2.</span> <span class="nav-text">Task 示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Task-参数"><span class="nav-number">3.3.</span> <span class="nav-text">Task 参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态任务"><span class="nav-number">3.4.</span> <span class="nav-text">动态任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用任务"><span class="nav-number">4.</span> <span class="nav-text">调用任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#短标记法"><span class="nav-number">4.1.</span> <span class="nav-text">短标记法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在Task中调用其他Task"><span class="nav-number">4.2.</span> <span class="nav-text">在Task中调用其他Task</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务依赖"><span class="nav-number">5.</span> <span class="nav-text">任务依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建依赖"><span class="nav-number">5.1.</span> <span class="nav-text">创建依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入依赖"><span class="nav-number">5.2.</span> <span class="nav-text">插入依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务排序"><span class="nav-number">6.</span> <span class="nav-text">任务排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mustRunAfter-与-shouldRunAfter"><span class="nav-number">6.1.</span> <span class="nav-text">mustRunAfter 与 shouldRunAfter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finalizedBy"><span class="nav-number">6.2.</span> <span class="nav-text">finalizedBy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-Type"><span class="nav-number">7.</span> <span class="nav-text">Task Type</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy"><span class="nav-number">7.1.</span> <span class="nav-text">Copy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exec"><span class="nav-number">7.2.</span> <span class="nav-text">Exec</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务的执行条件"><span class="nav-number">8.</span> <span class="nav-text">任务的执行条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用判断条件"><span class="nav-number">8.1.</span> <span class="nav-text">使用判断条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-StopExecutionException"><span class="nav-number">8.2.</span> <span class="nav-text">使用 StopExecutionException</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#激活和注销任务"><span class="nav-number">8.3.</span> <span class="nav-text">激活和注销任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明任务的输入和输出"><span class="nav-number">9.</span> <span class="nav-text">声明任务的输入和输出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UP-TO-DATE-原理"><span class="nav-number">9.1.</span> <span class="nav-text">UP-TO-DATE 原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">10.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
 
           </div>

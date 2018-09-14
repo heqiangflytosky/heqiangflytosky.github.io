@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://yoursite.com/images/android-ipc-aidl/add-aidl-structure.png">
 <meta property="og:image" content="http://yoursite.com/images/android-ipc-aidl/add-source-structure.png">
 <meta property="og:image" content="http://yoursite.com/images/android-ipc-aidl/process.png">
-<meta property="og:updated_time" content="2018-05-29T02:28:24.835Z">
+<meta property="og:updated_time" content="2018-08-31T14:44:25.885Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android IPC 之 AIDL">
 <meta name="twitter:description" content="介绍编写AIDL文件的方式实现进程间通信">
@@ -457,6 +457,10 @@
 <p>再来看一下 <code>IBinder</code> 中对这个方法的介绍：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Perform a generic operation with the object.</div><div class="line"> * </div><div class="line"> * <span class="doctag">@param</span> code The action to perform.  This should</div><div class="line"> * be a number between &#123;<span class="doctag">@link</span> #FIRST_CALL_TRANSACTION&#125; and</div><div class="line"> * &#123;<span class="doctag">@link</span> #LAST_CALL_TRANSACTION&#125;.</div><div class="line"> * <span class="doctag">@param</span> data Marshalled data to send to the target.  Must not be null.</div><div class="line"> * If you are not sending any data, you must create an empty Parcel</div><div class="line"> * that is given here.</div><div class="line"> * <span class="doctag">@param</span> reply Marshalled data to be received from the target.  May be</div><div class="line"> * null if you are not interested in the return value.</div><div class="line"> * <span class="doctag">@param</span> flags Additional operation flags.  Either 0 for a normal</div><div class="line"> * RPC, or &#123;<span class="doctag">@link</span> #FLAG_ONEWAY&#125; for a one-way RPC.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">transact</span><span class="params">(<span class="keyword">int</span> code, Parcel data, Parcel reply, <span class="keyword">int</span> flags)</span></span></div><div class="line">    <span class="keyword">throws</span> RemoteException;</div></pre></td></tr></table></figure>
 <p><code>flags</code> 为0时是普通的RPC调用，为 <code>FLAG_ONEWAY</code> 时是 one-way RPC，是单向调用，执行后立即返回，无需等待Server端 <code>transact()</code> 返回。这个时候就是异步执行了。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><h3 id="Server-端-AIDL-文件升级问题"><a href="#Server-端-AIDL-文件升级问题" class="headerlink" title="Server 端 AIDL 文件升级问题"></a>Server 端 AIDL 文件升级问题</h3><p>当我们把 AIDL 公开接口给外部第三方应用时，通常的做法是会将 AIDL 以及对应 Java 文件打包给第三方使用，这样做没有任何问题。但要注意的是在后续升级这个接口的时候，得保持接口中方法顺序不变，即只能在aidl的后面添加新方法，而不能在中间插入新方法。否则 Client 端后调用错乱导致调用不成功。<br>为什么呢？因为编译器会给我们自动根据 AILD 文件生成对应的 Java 文件，在这个 Java 文件中的 <code>onTransact</code> 方法中，自动为我们分配好了每一个方法的 code，这个code 的分配顺序是按照 AIDL 文件中的声明顺序来进行的，详细请看下面的代码。通过分析 android 进程间通信 binder 机制可以知道，则是客户端最后是通过调用 transact 方法，并传递这个 code 给 server 端，来完成调用。如果中间插入新的接口，会导致这个 code 错乱，调用的不是我们想要的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">static final int TRANSACTION_testAIDL1 = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);</div><div class="line">static final int TRANSACTION_testAIDL2 = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);</div></pre></td></tr></table></figure>
+<h3 id="Client-和-Server-AIDL-对应问题"><a href="#Client-和-Server-AIDL-对应问题" class="headerlink" title="Client 和 Server AIDL 对应问题"></a>Client 和 Server AIDL 对应问题</h3><p>从上面的分析得到一个结论，Client 端和 Server 端的 AIDL 可以不一致，Client 端的 AIDL 文件的接口可以是 Server 端的AILD 接口的一个子集，但这个子集必须是前面所有连续的接口的一个子集，方法顺序不能变。<br>另外，Client 端和 Server 端的 AIDL 的包名必须一致。</p>
+<h3 id="AIDL-接口不能重载"><a href="#AIDL-接口不能重载" class="headerlink" title="AIDL 接口不能重载"></a>AIDL 接口不能重载</h3><p>从上面的代码中可以看到，接口 code 的分配是根据方法名来分配的，没有涉及到参数，因此是不能重载的，如果重载的话编译是会报错的。</p>
 
       
     </div>
@@ -577,7 +581,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -586,7 +590,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -595,7 +599,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">65</span>
+                <span class="site-state-item-count">67</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -657,7 +661,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建AIDL接口"><span class="nav-number">2.1.</span> <span class="nav-text">创建AIDL接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果"><span class="nav-number">3.</span> <span class="nav-text">结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">4.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android进程间通信是异步的还是同步的？"><span class="nav-number">4.1.</span> <span class="nav-text">Android进程间通信是异步的还是同步的？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建AIDL接口"><span class="nav-number">2.1.</span> <span class="nav-text">创建AIDL接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果"><span class="nav-number">3.</span> <span class="nav-text">结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">4.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android进程间通信是异步的还是同步的？"><span class="nav-number">4.1.</span> <span class="nav-text">Android进程间通信是异步的还是同步的？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">5.</span> <span class="nav-text">注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Server-端-AIDL-文件升级问题"><span class="nav-number">5.1.</span> <span class="nav-text">Server 端 AIDL 文件升级问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client-和-Server-AIDL-对应问题"><span class="nav-number">5.2.</span> <span class="nav-text">Client 和 Server AIDL 对应问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIDL-接口不能重载"><span class="nav-number">5.3.</span> <span class="nav-text">AIDL 接口不能重载</span></a></li></ol></li></ol></div>
             
 
           </div>
