@@ -22,6 +22,17 @@ Gradle 中的每一个 Project 都是由一个或者多个 Task 来构成的，�
 
 ## 创建任务
 
+### Task 构造方法
+
+可以通过下面几个方法来构造 Task：
+
+ - task myTask
+ - task myTask { configure closure }
+ - task myTask(type: SomeType)
+ - task myTask(type: SomeType) { configure closure }
+
+### Task 示例
+
 ```
 task hello {
     doFirst {
@@ -41,6 +52,30 @@ task hello2 (type: Copy){
     from 'src/main/AndroidManifest.xml'
     into 'build/test'
 }
+
+task hello3(group: "myTest", description:"This is test task paras", dependsOn: ["A", "B"]){
+    println 'task hello3'
+}
+
+project.task("hello4", group: "myTest", description:"This is test task para name"){
+    println 'task hello4'
+}
+```
+
+执行 `./gradlew  tasks`，上面的 Task 就会在列表中显示出来。
+
+```
+MyTest tasks
+------------
+hello3 - This is test task paras
+hello4 - This is test task para name
+
+Other tasks
+-----------
+...
+hello
+hello1
+hello2
 ```
 
 我们执行 `./gradlew -q hello`，会有下面的输出：
@@ -62,6 +97,33 @@ Gradle 会在进入执行之前，配置所有 Task，而 `println 'config task 
 hello1 task的声明方式 << 只是简写的 `doLast`，或者说当这个任务不需要任何在配置状态下运行的内容时，这两种声明方式是一样的。
 实际上大部分时候 task 都应该是在执行状态下才真正执行的，配置状态大部分时候用于声明执行时需要用到的变量等为执行服务的前置动作。
 hello2: Task创建的时候可以通过 `type: SomeType` 指定Type，Type其实就是告诉Gradle，这个新建的Task对象会从哪个基类Task派生。比如，Gradle本身提供了一些通用的Task，最常见的有CopyC、Delete、Sync、Tar等任务。Copy是Gradle中的一个类。当我们：task myTask(type:Copy)的时候，创建的Task就是一个Copy Task。下面会详细介绍。
+
+### Task 参数
+
+我们用命令查看 Task 信息时一般是这样的：
+
+```
+Build tasks
+-----------
+assemble - Assembles all variants of all applications and secondary packages.
+assembleAndroidTest - Assembles all the Test applications.
+assembleDdd - Assembles all Ddd builds.
+assembleDebug - Assembles all Debug builds.
+assembleRelease - Assembles all Release builds.
+```
+
+一般是由 group、name 和 description组成，其实在上面的示例中大家应该看到 hello3、hello4和其他任务的不同了。他们两个处在同一个 group 中并且 Task 名称后面有一些描述信息。
+Task的一般的属性有下面几种，可以在创建 Task 的时候在闭包中声明：
+
+| Property | Property |
+|:-------------:|:-------------:|
+| name  |  task的名字 |
+| type | task的“父类” |
+| overwrite | 是否替换已经存在的task |
+| dependsOn | task依赖的task的集合 |
+| group | task属于哪个组 |
+| description | task的描述 |
+
 
 ### 动态任务
 
