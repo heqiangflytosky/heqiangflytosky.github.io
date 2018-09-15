@@ -63,11 +63,10 @@ import org.gradle.api.Project;
 public class TestPlugin implements Plugin<Project>{
     @Override
     void apply(Project project) {
-        // 实现一个名称为testPlugin的task
-        project.task('testPlugin') << {
+        // 实现一个名称为testPlugin的task，设置分组为 myPlugin，并设置描述信息
+        project.task('testPlugin', group: "myPlugin", description: "This is my test plugin") << {
             println "## This is my first gradle plugin in testPlugin task"
         }
-
         println "** This is my first gradle plugin"
     }
 }
@@ -87,7 +86,7 @@ apply plugin: com.android.hq.testplugin.TestPlugin
 
 
 ### 测试
-1. 在 Gradle 的 task 视窗里面: app/other 下多了一个 testPlugin 的 task。
+1. 在 Gradle 的 task 视窗里面: app/myplugin 下多了一个 testPlugin 的 task。
 
 2. 输入 `./gradlew tasks`，我们可以看到 testPlugin 已经在task列表中。
 
@@ -114,12 +113,9 @@ build - Assembles and tests this project.
 
 ......
 
-Other tasks
------------
-jarDebugClasses
-jarReleaseClasses
-lintVitalRelease - Runs lint on just the fatal issues in the Release build.
-testPlugin
+MyPlugin tasks
+--------------
+testPlugin - This is my test plugin
 ```
 
 执行 testPlugin task，输出：
@@ -240,11 +236,10 @@ import org.gradle.api.Project;
 public class TestPlugin implements Plugin<Project>{
     @Override
     void apply(Project project) {
-        // 实现一个名称为testPlugin的task
-        project.task('testPlugin') << {
+        // 实现一个名称为testPlugin的task，设置分组为 myPlugin，并设置描述信息
+        project.task('testPlugin', group: "myPlugin", description: "This is my test plugin") << {
             println "## This is my first gradle plugin in testPlugin task"
         }
-
         println "** This is my first gradle plugin"
     }
 }
@@ -276,7 +271,7 @@ uploadArchives {
 
 现在我们定义好了打包地址以及打包相关配置，还需要我们让这个打包 task 执行。点击 AndroidStudio 右侧的 gradle 工具，如下图所示：
 
-![效果图](/images/development-tool-customized-gradle-plugin/gradle-plugin-independent.png)
+![效果图](/images/development-tool-customized-gradle-plugin/gradle-plugin-upload-archives.png)
 
 可以看到有 uploadArchives 这个 Task,双击 uploadArchives 就会执行打包上传。执行完成后，去我们的 Maven 本地仓库查看一下：
 
