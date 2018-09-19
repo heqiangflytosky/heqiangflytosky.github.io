@@ -1,9 +1,9 @@
 ---
-title: Android 插件化 -- 类的动态加载源码分析
+title: Android 插件化 -- ClassLoader 源码分析
 categories: Android 插件化
 comments: true
 tags: [Android 插件化]
-description: 类的动态加载源码分析
+description: ClassLoader 源码分析
 date: 2017-5-18 10:00:00
 ---
 

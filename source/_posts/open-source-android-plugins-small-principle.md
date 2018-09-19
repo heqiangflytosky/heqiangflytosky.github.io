@@ -7,6 +7,10 @@ tags: [Android开源项目, Android 插件化, Small]
 description: 结合 Activity 的启动流程来分析如何启动插件 Activity，以此来介绍Small插件化一个核心技术--动态注册组件
 date: 2017-5-12 10:00:00
 ---
+
+我们知道，如果我们实现了一个 `Activity`，那么就必须在 your AndroidManifest.xml 中申明，否则会报 `android.content.ActivityNotFoundException: Unable to find explicit activity class {XXXXXX}; have you declared this activity in your AndroidManifest.xml?` 的错误。
+下面介绍的的动态注册组件就是为了绕开这个机制。当然，如果你在宿主的 AndroidManifest.xml 里面把插件需要的 `Activity` 都申明一下，那么下面的工作就完全不用做了。
+
 ## 动态注册组件原理
 动态的注册组件就是我们常说的Hook技术。
 想要了解插件化的Hook技术我们需要先了解一下 `Activity` 的启动流程，`Activity` 的启动流程要涉及到App进程以及system_server进程，system_server进程的AMS负责 `Activity` 的真实性校验以及生命周期管理，App进程负责创建 `Activity` 对象以及回调生命周期的方法。

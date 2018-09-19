@@ -185,6 +185,7 @@ Small 想要做到动态注册 `Activity`，首先在宿主 Manifest 中注册�
 </manifest>
 ```
 
+所作的这一切都是为了实现动态注册 `Activity`，如果你把插件里面的 `Activity` 都在宿主的 AndroidManifest.xml 文件里面都申明一下，那么上面的这些 Hook 的工作就可以省去了。
 这也就是 Small 插件化的基本原理，该原理部分后面会有博客详细介绍。
 
 ### 第二阶段：加载插件
