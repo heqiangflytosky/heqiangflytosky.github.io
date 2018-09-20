@@ -84,6 +84,7 @@ date: 2015-3-7 10:00:00
 
  - `git commit --amend` ：对最后一次的 commit进行修改
  - `git commit --amend -m "Test"` 对最后一次的 commit进行修改，并修改提交信息
+ - `git commit -s`：添加 Signed-off-by: 信息
 
 ## git rebase
 假设`mywork`是以远程分支`origin`创建的本地分支。
