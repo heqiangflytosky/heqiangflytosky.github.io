@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/10/15/android-development-skills-dumpsys/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍dumpsys的使用">
-<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta property="og:updated_time" content="2018-09-20T01:08:29.046Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android实用技巧之adb命令：dumpsys命令的使用">
 <meta name="twitter:description" content="介绍dumpsys的使用">
@@ -411,6 +411,7 @@
 <p>比如<code>adb shell dumpsys window -d enable 10</code>就是打开<code>DEBUG_ORIENTATION</code>，这样就把代码中的关于屏幕方向旋转相关的Log打印出来。</p>
 <h2 id="一些常用命令解释"><a href="#一些常用命令解释" class="headerlink" title="一些常用命令解释"></a>一些常用命令解释</h2><ul>
 <li>adb shell dumpsys activity： 显示activity的相关信息，包括任务栈等</li>
+<li>adb shell dumpsys activity top：查看当前应用的 activity 信息</li>
 <li>adb shell dumpsys meminfo：查看各个进程内存使用情况。（<code>meminfo $package_name or $pid</code> 使用程序的包名或者进程id显示内存信息比如浏览器：<code>adb shell dumpsys meminfo com.android.browser</code>）</li>
 <li>adb shell dumpsys SurfaceFlinger： 查看UI绘制的各个层级信息</li>
 <li>adb shell dumpsys window： 显示键盘，窗口和它们的关系</li>
@@ -422,6 +423,7 @@
 <li>adb shell dumpsys alarm： 显示Alarm信息</li>
 <li>adb shell dumpsys wifi： 显示wifi信息</li>
 <li>adb shell dumpsys user：查看当前的用户情况</li>
+<li>adb shell dumpsys dbinfo &lt;包名&gt;：查看指定包名应用的数据库存储信息（包括存储的SQL语句）</li>
 </ul>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.open-open.com/lib/view/open1405061994872.html" target="_blank" rel="external">http://www.open-open.com/lib/view/open1405061994872.html</a><br><a href="https://source.android.com/devices/tech/input/dumpsys.html" target="_blank" rel="external">https://source.android.com/devices/tech/input/dumpsys.html</a></p>
 

@@ -88,13 +88,13 @@
 
 <meta name="description" content="介绍 Android 中常用的获取目录路径的方法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 获取目录路径方法汇总">
+<meta property="og:title" content="Android 文件存储以及获取目录路径方法汇总">
 <meta property="og:url" content="http://yoursite.com/2015/03/20/android-get-dir-path/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Android 中常用的获取目录路径的方法">
-<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta property="og:updated_time" content="2018-09-20T02:11:06.343Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 获取目录路径方法汇总">
+<meta name="twitter:title" content="Android 文件存储以及获取目录路径方法汇总">
 <meta name="twitter:description" content="介绍 Android 中常用的获取目录路径的方法">
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title> Android 获取目录路径方法汇总 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android 文件存储以及获取目录路径方法汇总 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -302,7 +302,7 @@
             
             
               
-                Android 获取目录路径方法汇总
+                Android 文件存储以及获取目录路径方法汇总
               
             
           </h1>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2015/03/20/android-get-dir-path/" class="leancloud_visitors" data-flag-title="Android 获取目录路径方法汇总">
+             <span id="/2015/03/20/android-get-dir-path/" class="leancloud_visitors" data-flag-title="Android 文件存储以及获取目录路径方法汇总">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -400,7 +400,22 @@
       
 
       
-        <h2 id="Environment中的方法"><a href="#Environment中的方法" class="headerlink" title="Environment中的方法"></a>Environment中的方法</h2><p>先来看一下 <code>Environment</code> 中的一些方法，主要是获取一些系统的目录：</p>
+        <h2 id="关于-Android-存储的基础知识"><a href="#关于-Android-存储的基础知识" class="headerlink" title="关于 Android 存储的基础知识"></a>关于 Android 存储的基础知识</h2><p>Android 开发中经常会使用 Android 存储的相关知识，首先先介绍下面几个知识点。</p>
+<h3 id="内部存储和外部存储"><a href="#内部存储和外部存储" class="headerlink" title="内部存储和外部存储"></a>内部存储和外部存储</h3><p>Android 中的文件存储可以分为内部存储和外部存储。<br>内部存储是指这些文件默认是只能被你的应用访问到，且一个应用所创建的所有文件都在和应用包名相同的目录下。也就是说应用创建于内部存储的文件，与这个应用是关联起来的。当一个应用卸载之后，内部存储中的这些文件也被删除。从技术上来讲如果你在创建内部存储文件的时候将文件属性设置成可读，其他app能够访问自己应用的数据，前提是他知道你这个应用的包名，如果一个文件的属性是私有（private），那么即使知道包名其他应用也无法访问。<br>内部存储一般用 <code>Context</code> 来获取和操作。<br>访问内部存储的API方法：</p>
+<ul>
+<li>Environment.getDataDirectory() </li>
+<li>getFilesDir().getAbsolutePath() </li>
+<li>getCacheDir().getAbsolutePath() </li>
+<li>getDir(“myFile”, MODE_PRIVATE).getAbsolutePath()</li>
+</ul>
+<p>Android 外部存储可以分为两类：一个是机身存储的外部存储，另外一个是扩展的SD卡。他们统称为外部存储。<br>机身外部存储的路径在 Android4.4 以后是 /storage/emulated/0/，SD卡是 /storage/B3E4-1711/。<br>访问外部存储的API方法：</p>
+<ul>
+<li>Environment.getExternalStorageDirectory().getAbsolutePath() </li>
+<li>Environment.getExternalStoragePublicDirectory(“”).getAbsolutePath()</li>
+<li>getExternalFilesDir(“”).getAbsolutePath() </li>
+<li>getExternalCacheDir().getAbsolutePath() </li>
+</ul>
+<h2 id="获取文件存储路径的方法"><a href="#获取文件存储路径的方法" class="headerlink" title="获取文件存储路径的方法"></a>获取文件存储路径的方法</h2><h3 id="Environment中的方法"><a href="#Environment中的方法" class="headerlink" title="Environment中的方法"></a>Environment中的方法</h3><p>先来看一下 <code>Environment</code> 中的一些方法，主要是获取一些系统的目录：</p>
 <table>
 <thead>
 <tr>
@@ -445,7 +460,7 @@
 <li>DIRECTORY_DOCUMENTS</li>
 <li>任何在/storage/emulated/0/的目录</li>
 </ul>
-<h2 id="Context中的方法"><a href="#Context中的方法" class="headerlink" title="Context中的方法"></a>Context中的方法</h2><p>主要是获取一些和应用相关的目录：</p>
+<h3 id="Context中的方法"><a href="#Context中的方法" class="headerlink" title="Context中的方法"></a>Context中的方法</h3><p>主要是获取一些和应用相关的目录：</p>
 <table>
 <thead>
 <tr>
@@ -490,9 +505,65 @@
 <td style="text-align:center">getFilesDir()</td>
 <td style="text-align:center">/data/user/0/com.example.hq.testsomething/files</td>
 </tr>
+<tr>
+<td style="text-align:center">getObbDir()</td>
+<td style="text-align:center">/storage/emulated/0/Android/obb/com.example.hq.testsomething</td>
+</tr>
 </tbody>
 </table>
 <p><code>getExternalFilesDir(String type)</code> 的参数类型和前面的 <code>getExternalStoragePublicDirectory(String type)</code> 一样。</p>
+<h2 id="Android-不同版本存储路径的区别"><a href="#Android-不同版本存储路径的区别" class="headerlink" title="Android 不同版本存储路径的区别"></a>Android 不同版本存储路径的区别</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">方法名称</th>
+<th style="text-align:center">Android 版本</th>
+<th style="text-align:center">目录路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">getExternalStorageDirectory()</td>
+<td style="text-align:center">4.0</td>
+<td style="text-align:center">/mnt/sdcard</td>
+</tr>
+<tr>
+<td style="text-align:center">getExternalStorageDirectory()</td>
+<td style="text-align:center">4.1</td>
+<td style="text-align:center">/storage/sdcard0</td>
+</tr>
+<tr>
+<td style="text-align:center">getExternalStorageDirectory()</td>
+<td style="text-align:center">4.4</td>
+<td style="text-align:center">/storage/emulated/0</td>
+</tr>
+<tr>
+<td style="text-align:center">getExternalStorageDirectory()</td>
+<td style="text-align:center">6.0</td>
+<td style="text-align:center">/storage/emulated/0</td>
+</tr>
+<tr>
+<td style="text-align:center">getFilesDir()</td>
+<td style="text-align:center">4.0</td>
+<td style="text-align:center">/data/data/com.example.hq.testsomething/files</td>
+</tr>
+<tr>
+<td style="text-align:center">getFilesDir()</td>
+<td style="text-align:center">4.1</td>
+<td style="text-align:center">/data/data/com.example.hq.testsomething/files</td>
+</tr>
+<tr>
+<td style="text-align:center">getFilesDir()</td>
+<td style="text-align:center">4.4</td>
+<td style="text-align:center">/data/data/com.example.hq.testsomething/files</td>
+</tr>
+<tr>
+<td style="text-align:center">getFilesDir()</td>
+<td style="text-align:center">6.0</td>
+<td style="text-align:center">/data/user/0/com.example.hq.testsomething/files</td>
+</tr>
+</tbody>
+</table>
+<p>因此，我们需要获取文件存储路径时，不要用字符串来写死文件路径，这样容易带来Android版本兼容性文件，而是要用 Android 提供的方法来获取。虽然 Android 为了兼容以前的版本，建立了软连接（sdcard/、mnt/sdcard、storage/emulated/0）来指向外部存储。</p>
 
       
     </div>
@@ -689,7 +760,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Environment中的方法"><span class="nav-number">1.</span> <span class="nav-text">Environment中的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Context中的方法"><span class="nav-number">2.</span> <span class="nav-text">Context中的方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于-Android-存储的基础知识"><span class="nav-number">1.</span> <span class="nav-text">关于 Android 存储的基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内部存储和外部存储"><span class="nav-number">1.1.</span> <span class="nav-text">内部存储和外部存储</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取文件存储路径的方法"><span class="nav-number">2.</span> <span class="nav-text">获取文件存储路径的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Environment中的方法"><span class="nav-number">2.1.</span> <span class="nav-text">Environment中的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context中的方法"><span class="nav-number">2.2.</span> <span class="nav-text">Context中的方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-不同版本存储路径的区别"><span class="nav-number">3.</span> <span class="nav-text">Android 不同版本存储路径的区别</span></a></li></ol></div>
             
 
           </div>

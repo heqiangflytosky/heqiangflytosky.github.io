@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/07/development-tool-git-command/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="列举一些常用的Git命令">
-<meta property="og:updated_time" content="2018-08-12T09:06:02.903Z">
+<meta property="og:updated_time" content="2018-09-20T02:11:06.344Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="列举一些常用的Git命令">
@@ -464,6 +464,7 @@
 <h2 id="git-commit"><a href="#git-commit" class="headerlink" title="git commit"></a>git commit</h2><ul>
 <li><code>git commit --amend</code> ：对最后一次的 commit进行修改</li>
 <li><code>git commit --amend -m &quot;Test&quot;</code> 对最后一次的 commit进行修改，并修改提交信息</li>
+<li><code>git commit -s</code>：添加 Signed-off-by: 信息</li>
 </ul>
 <h2 id="git-rebase"><a href="#git-rebase" class="headerlink" title="git rebase"></a>git rebase</h2><p>假设<code>mywork</code>是以远程分支<code>origin</code>创建的本地分支。<br><code>rebase</code>个人理解就是重新在base分支提交的意思。<br><code>git rebase</code>用于把一个分支的修改合并到当前分支。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git checkout mywork</div><div class="line">$ git rebase origin</div></pre></td></tr></table></figure></p>
 <p>这些命令会把你的”mywork”分支里的每个提交(commit)取消掉，并且把它们临时 保存为补丁(patch)(这些补丁放到<code>.git/rebase</code>目录中),然后把<code>mywork</code>分支更新 为最新的<code>origin</code>分支，最后把保存的这些补丁应用到<code>mywork</code>分支上。相当于在<code>mywork</code>上更新了它的 “base” <code>origin</code>分支。<br>这个要注意和<code>git merge</code>的区别。</p>
@@ -532,8 +533,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/03/20/android-get-dir-path/" rel="prev" title="Android 获取目录路径方法汇总">
-                Android 获取目录路径方法汇总 <i class="fa fa-chevron-right"></i>
+              <a href="/2015/03/20/android-get-dir-path/" rel="prev" title="Android 文件存储以及获取目录路径方法汇总">
+                Android 文件存储以及获取目录路径方法汇总 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
