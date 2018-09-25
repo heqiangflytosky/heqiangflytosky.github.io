@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Weex," />
+  <meta name="keywords" content="Android 图形系统," />
 
 
 
@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="介绍 Weex 里面比较重要的几个类">
+<meta name="description" content="介绍 LockCanvas() 方法获取的 Canvas 无法使用硬件加速的原因。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Weex 源码研究 -- 相关类概述">
-<meta property="og:url" content="http://yoursite.com/2018/03/10/open-source-weex-android-classes-introduction/index.html">
+<meta property="og:title" content="Android 图形系统 -- 硬件加速渲染">
+<meta property="og:url" content="http://yoursite.com/2016/09/05/android-graphic-system-hardwareaccelerated/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="介绍 Weex 里面比较重要的几个类">
-<meta property="og:updated_time" content="2018-05-29T02:28:24.837Z">
+<meta property="og:description" content="介绍 LockCanvas() 方法获取的 Canvas 无法使用硬件加速的原因。">
+<meta property="og:updated_time" content="2018-09-25T14:14:52.254Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Weex 源码研究 -- 相关类概述">
-<meta name="twitter:description" content="介绍 Weex 里面比较重要的几个类">
+<meta name="twitter:title" content="Android 图形系统 -- 硬件加速渲染">
+<meta name="twitter:description" content="介绍 LockCanvas() 方法获取的 Canvas 无法使用硬件加速的原因。">
 
 
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/10/open-source-weex-android-classes-introduction/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/09/05/android-graphic-system-hardwareaccelerated/"/>
 
 
 
 
 
-  <title> Weex 源码研究 -- 相关类概述 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android 图形系统 -- 硬件加速渲染 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/10/open-source-weex-android-classes-introduction/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/05/android-graphic-system-hardwareaccelerated/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="寒江蓑笠">
@@ -302,7 +302,7 @@
             
             
               
-                Weex 源码研究 -- 相关类概述
+                Android 图形系统 -- 硬件加速渲染
               
             
           </h1>
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-10T10:00:00+08:00">
-                2018-03-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-05T10:00:00+08:00">
+                2016-09-05
               </time>
             
 
@@ -340,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Weex/" itemprop="url" rel="index">
-                    <span itemprop="name">Weex</span>
+                  <a href="/categories/Android-图形系统/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 图形系统</span>
                   </a>
                 </span>
 
@@ -358,7 +358,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2018/03/10/open-source-weex-android-classes-introduction/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2016/09/05/android-graphic-system-hardwareaccelerated/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2018/03/10/open-source-weex-android-classes-introduction/" class="leancloud_visitors" data-flag-title="Weex 源码研究 -- 相关类概述">
+             <span id="/2016/09/05/android-graphic-system-hardwareaccelerated/" class="leancloud_visitors" data-flag-title="Android 图形系统 -- 硬件加速渲染">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -385,7 +385,7 @@
 
           
               <div class="post-description">
-                  介绍 Weex 里面比较重要的几个类
+                  介绍 LockCanvas() 方法获取的 Canvas 无法使用硬件加速的原因。
               </div>
           
 
@@ -400,82 +400,22 @@
       
 
       
-        <p>这里先来介绍几个 Component 相关的几个类：</p>
-<h2 id="WXSDKManager"><a href="#WXSDKManager" class="headerlink" title="WXSDKManager"></a>WXSDKManager</h2><p>这个是 weex 的核心所在，直接或者间接的管理着 weex 上下文相关的所有类。以组合的形式带上 <code>WXBridgeManager</code>、<code>WXRendermanager</code> 和 <code>WXDomManager</code>。三个管理类如名称一样，负责各自的功能区域。后面会分别再介绍这三个类</p>
-<h2 id="WXBridgeManager"><a href="#WXBridgeManager" class="headerlink" title="WXBridgeManager"></a>WXBridgeManager</h2><p>主要负责 和 JS 引擎交互 ，发送 native 端 java 的请求到 jni 层，并接收js引擎处理后从jni上返回的消息。</p>
-<h2 id="WXRendermanager"><a href="#WXRendermanager" class="headerlink" title="WXRendermanager"></a>WXRendermanager</h2><p>将对应的Dom的节点渲染成组件。<br><code>WXRenderManager</code> 中的 <code>WXRenderHandler</code> 根据代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public WXRenderHandler() &#123;</div><div class="line">  super(Looper.getMainLooper());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>可以看到是运行在 UI 线程中的，因此，渲染都是在 UI 线程中执行的。</p>
-<h2 id="RenderActionContextImpl"><a href="#RenderActionContextImpl" class="headerlink" title="RenderActionContextImpl"></a>RenderActionContextImpl</h2><p>是 <code>RenderActionContext</code> 的实现类。是渲染动作的执行类。<code>mRegistry</code> 保存了 <code>WXSDKInstance</code> 对应的所有的组件。</p>
-<h2 id="RenderAction"><a href="#RenderAction" class="headerlink" title="RenderAction"></a>RenderAction</h2><h2 id="WXDomManager"><a href="#WXDomManager" class="headerlink" title="WXDomManager"></a>WXDomManager</h2><p>负责构建客户端的dom结构，在 <code>WXBridgeManager</code> 接收到消息后，会交给 <code>WxDomManager</code> 处理，<code>WxDomManager</code> 根据消息创建自己的 Dom 结构，添加、删除、修改元素。<br>WXDomManager.batch() 批处理dom操作。<br><code>WXDomManager</code> 中的 <code>mDomHandler</code> 我们根据代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mDomThread = new WXThread(&quot;WeeXDomThread&quot;, new WXDomHandler(this));</div></pre></td></tr></table></figure>
-<p>可以知道它是一个名称为 WeeXDomThread 的后台线程。</p>
-<h2 id="DOMActionContextImpl"><a href="#DOMActionContextImpl" class="headerlink" title="DOMActionContextImpl"></a>DOMActionContextImpl</h2><h2 id="DOMAction"><a href="#DOMAction" class="headerlink" title="DOMAction"></a>DOMAction</h2><ul>
-<li>AddEventAction</li>
-<li>AnimationAction</li>
-<li>RemoveElementAction</li>
-<li>RemoveEventAction</li>
-<li>ScrollToElementAction</li>
-<li>UpdateAttributeAction</li>
-<li>UpdateFinishAction</li>
-<li>UpdateStyleAction</li>
-</ul>
-<h2 id="WXDomObject"><a href="#WXDomObject" class="headerlink" title="WXDomObject"></a>WXDomObject</h2><ul>
-<li>DomObject 包括了 <code>&lt;template&gt;</code> 在 Dom 树中的所有信息，如 style、attr、event、ref（结点的唯一标识符）、parent、children</li>
-</ul>
-<h2 id="ImmutableDomObject"><a href="#ImmutableDomObject" class="headerlink" title="ImmutableDomObject"></a>ImmutableDomObject</h2><ul>
-<li>表示一个 Dom 节点</li>
-</ul>
-<h2 id="WXComponent"><a href="#WXComponent" class="headerlink" title="WXComponent"></a>WXComponent</h2><ul>
-<li>Component 负责承载 Native View，可以通过泛型指定承载 View的类型。</li>
-<li>所有组件相关的类都要继承这个类。</li>
-<li>Component 会保留 DomObject 的强引用，两者实例是一一对应的。</li>
-<li><p>通过调用 initComponentHostView 创建 Component 需要承载的 View，所有 的Component 必须重写 initComponentHostView 方法，返回需要承载的 View 的最外层容器。如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Component(lazyload = false)</div><div class="line">public class WXText extends WXComponent&lt;WXTextView&gt; implements FlatComponent&lt;TextWidget&gt; &#123;</div><div class="line"> protected WXTextView initComponentHostView(@NonNull Context context) &#123;</div><div class="line">   WXTextView textView =new WXTextView(context);</div><div class="line">   textView.holdComponent(this);</div><div class="line">   return textView;</div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="WXModule"><a href="#WXModule" class="headerlink" title="WXModule"></a>WXModule</h2><ul>
-<li>通过 Module 可以将 Native Api 暴露给Js。</li>
-<li>所有的模块都要继承这个类。</li>
-</ul>
-<h2 id="WXSDKInstance"><a href="#WXSDKInstance" class="headerlink" title="WXSDKInstance"></a>WXSDKInstance</h2><p>这个类前面的 demo 中已经展示了它的用法。</p>
-<ul>
-<li>Weex 的渲染单位，是 weex 渲染的实例对象。</li>
-<li>它可以是一个纯 weex View，和可以和 Native 混合。</li>
-<li>它提供了一系列跟页面渲染相关的接口：render()、renderByUrl()等。</li>
-<li>提供了几个比较重要的回调接口，比如生命周期回调和渲染结果回调。方便开发者根据不同的业务场景去处理他们的逻辑。</li>
-<li>这里明确两个容器的概念： <ul>
-<li>Instance RootView：Weex 最外层容器， Native 接入方可以设置 Instance RootView 大小, 最终通过 <code>onViewCreated()</code> 返回给用户的View也就是 Instance RootView。用 <code>RenderContainer</code> 类来表示。</li>
-<li>JS Root: JS 可以描述的最外层容器， 为 RootView 的唯一子节点， 受 JS 样式的控制。用 <code>WXComponent</code> 来表示。</li>
-</ul>
-</li>
-<li>Instance 宽高设置遵循以下几个原则：<ul>
-<li>Instance RootView 的宽高优先遵循 instance。 设置的宽高，如果开发者没有设置，则与 JS Root 节点的宽高保持一致。</li>
-<li>JS Root 节点的宽高优先遵循 CSS 样式设置的宽高，如果没有设置，则使用 instance 上设置的宽高，如果 instance 也没有设置，则使用 layout 出来的宽高</li>
-<li>特殊情况，当 <code>scroller</code> 和 <code>list</code> 作为 <code>JS Root</code> 时，如果不设置高度, 会给 <code>scroller</code> 和 <code>list</code> 设置 <code>flex:1</code>。</li>
-<li>综上所述，Instance RootView 和 JS Root 的宽高可以不一致，应该根据需求正确的设置 Instance 的宽高，也可以在运行时动态的改变 Instance 的宽高。</li>
-</ul>
-</li>
-</ul>
-<h2 id="WXDomModule"><a href="#WXDomModule" class="headerlink" title="WXDomModule"></a>WXDomModule</h2><p>派发渲染指令的枢纽，提供了 <code>callDomMethod()</code> 和 <code>postAction()</code>方法来派发渲染指令。</p>
-<ul>
-<li>JSFramework 根据 Virtual Dom 计算出来的 dif，将渲染指令（Json）通过 Js Engine 发送给 Native Render 进行渲染。而 <code>WXDomModule</code> 会接收到所有渲染指令，然后将指令post 给 <code>DomHandler</code>，最后由 <code>DomHandler</code> 来派发渲染任务。</li>
-<li><code>DomStatement</code> 在 Dom 线程中创建 <code>DomObject</code> 和 <code>Component</code>，<code>RenderStatement</code> 负责在 UI 线程中渲染 View；每个 <code>WXSDKInstance</code> 会持有一个 <code>DomStatement</code> 和 <code>RenderStatement</code> 实例。</li>
-<li><code>RenderStatement</code> 会从 <code>DomStatementclone</code> 一份 <code>DomObject</code>，是为了避免两个线程同时操作 Dom 造成的同步问题。</li>
-<li>主要有如下指令：<ul>
-<li>createBody：<code>DomStatement</code> 首先在 Dom 线程中创建 JS Root 对应的 Component，然后会将 JS Root 添加到 <code>WXSDKInstance</code> 作为 GodCom 的子节点，从而生成 Component 树的最顶端。生成 Component 树后，将 createBody 任务 post 到 UI 线程，由<code>RenderStatement</code> 创建 <code>WXSDKInstance</code> 的 Rootview，并通过 onViewCreated 回调给 WXSDKInstance 的上下文。</li>
-<li>addElement：首先，<code>DomStatement</code> 在 Dom 线程中创建 DomObject 和对应的 Component 实例，加入 Dom 树和 Component 树；然后将 addElement 任务 post 到 UI 线程，<code>RenderStatement</code> 会触发 Component 完成以下任务： createView（初始化 Component 承载的 View）、applyLayoutAndEvent（触发 setLayout 和 setPadding、绑定 Event）、bindData（给 View 设置 style、attr）、addChild（将 View 加入 View 树）</li>
-<li>removeElement：是 addElement 的逆向操作，将 View、Component、DomObject 分别从各自的树中删除，并销毁数据回收资源。</li>
-<li>moveElement：将 View、Component、DomObject 在树中移动位置，move 操作最终被拆分成一次 remove 操作和一次 add 操作。</li>
-<li>addEvent：绑定事件。</li>
-<li>removeEvent：撤销事件绑定。</li>
-<li>updateAttrs：当结点 attr 被改变时，会触发 updateAttrs，最终会触发 <code>WXComponent</code> 中的 updateProperties 刷新 UI。</li>
-<li>updateStyle：与 updateAttrs 类似。</li>
-<li>createFinish：JsFramework 将所有渲染指令都发出后，会触发 createFinish，最后会触发 <code>onRenderSuccess</code> 回调。</li>
-<li>updateFinish：JsFramework 将所有 update 指令发出后，会触发 updateFinish，最后会触发 <code>onUpdateFinish</code> 回调。</li>
-</ul>
-</li>
-</ul>
+        <p>我们在开发过程中经常会遇到硬件加速这个概念，</p>
+<h2 id="硬件加速的设置"><a href="#硬件加速的设置" class="headerlink" title="硬件加速的设置"></a>硬件加速的设置</h2><p>Android 3.0 (API level 11), 开始支持<br>所有的 <code>View</code> 的 canvas 都会使用GPU，但是硬件的加速会占有一定的RAM。<br>在API &gt;= 14上，默认是开启的，如果你的应用只是标准的 <code>View</code> 和 <code>Drawable</code>，全局都打开硬件加速，是不会有任何问题的。<br>然而，硬件加速并不支持所有的2D画图的操作，这时开着它，可能会影响到你的自定义控件或者绘画，出现异常等行为，<br>所以android对于硬件加速提供了可选性<br>硬件加速的级别<br>Application</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;application </div><div class="line">    android:hardwareAccelerated=&quot;false&quot; </div><div class="line">...&gt;</div><div class="line">&lt;/application&gt;</div></pre></td></tr></table></figure>
+<p>Activity</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;application </div><div class="line">    android:hardwareAccelerated=&quot;true&quot;&gt;</div><div class="line">    &lt;activity ... /&gt;</div><div class="line">    &lt;activity android:hardwareAccelerated=&quot;false&quot; /&gt;</div><div class="line">&lt;/application&gt;</div></pre></td></tr></table></figure>
+<p>Window</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">getWindow().setFlags(</div><div class="line">   WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,</div><div class="line">   WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);</div></pre></td></tr></table></figure>
+<p>View</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);</div></pre></td></tr></table></figure>
+<p>application 和 activity 都可以单独控制硬件加速的打开和关闭。<br>window级别无法关闭硬件加速，可以开启硬件加速。<br>view级别只能关闭硬件加速，无法开启硬件加速。<br>通过window开启硬件加速后，<code>onDraw</code> 的  <code>canvas</code> 是 <code>DisplayListCanvas</code> 实例。<br>另外只要通过 <code>View</code> 的 <code>setLayerType</code> 设置了关闭或者开启（虽然不能成功），<code>onDraw</code> 的  <code>canvas</code> 都变成了 <code>Canvas</code> 实例。也就是说 通过 <code>View</code> 的 <code>setLayerType</code> 可以把 <code>View</code> 中的画布换成  <code>Canvas</code>，具体是不是硬件加速是由 <code>Canvas</code> 类来决定。这部分的源码分析我们后面再介绍。<br>可以在 application 中关闭，activity 中打开；<br>可以在 application 中打开，activity 中关闭；</p>
+<h2 id="硬件加速的限制"><a href="#硬件加速的限制" class="headerlink" title="硬件加速的限制"></a>硬件加速的限制</h2><p>目前，Android对硬件加速的支持并非完美，有些绘制操作在开启硬件加速的情况下不能正常工作。<br><a href="https://developer.android.com/guide/topics/graphics/hardware-accel#unsupported" target="_blank" rel="external">硬件加速不支持的操作列表</a></p>
+<h2 id="硬件加速之Canvas"><a href="#硬件加速之Canvas" class="headerlink" title="硬件加速之Canvas"></a>硬件加速之Canvas</h2><p>在实际开发中或许你有下面的经历：<br>尽管已经设置了硬件加速，通过 <code>TextureView.lockCanvas()</code> 或者通过 <code>SurfaceView.getHolder().lockCanvas()</code> 得到的 <code>Canvas</code> 通过打印 <code>Canvas.isHardwareAccelerated()</code> 会返回 false。而 <code>TextureView.isHardwareAccelerated()</code> 或者 <code>SurfaceView.isHardwareAccelerated()</code> 是返回true的。<br>这是正确的，通过 <code>lockCanvas()</code> 得到的 <code>Canvas</code> 只能用软件绘制的。<br>如果想通过硬件渲染，只能通过 <code>lockHardwareCanvas</code> 或者调用OpenGL接口实现。<br>具体可以参考：systemui/ImageWallpaper.java，里面提供了用 <code>OpenGL</code> 和 <code>Canvas</code> 来绘制壁纸的两种方法。<br>先来看一下 <code>View</code> 的情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class CustomView extends TextView &#123;</div><div class="line">    ......</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onDraw(Canvas canvas) &#123;</div><div class="line">        super.onDraw(canvas);</div><div class="line">        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);</div><div class="line">        canvas.drawBitmap(bitmap1,0,0,new Paint());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果开启了硬件加速，在 <code>onDraw</code> 这里打断点，你会发现 <code>canvas</code> 其实是 <code>DisplayListCanvas</code> 实例。<br>通过调试 <code>canvas.isHardwareAccelerated();</code> 的执行结果是返回 true。</p>
+<p>如果通过 application 或者 activity 关闭了硬件加速，<code>onDraw</code> 的  <code>canvas</code> 其实是 <code>Surface.CompatibleCanvas</code> 实例。<br>如果通过 view 关闭了硬件加速，<code>onDraw</code> 的  <code>canvas</code> 其实是 <code>Canvas</code> 实例。</p>
+<p>使用多种方式(<code>View/SurfaceView/TextureView</code>)实现高效绘制<br>能实现使用GPU绘制的只有 <code>View</code>，因为它使用 <code>SurfaceView/TextureView</code> 实现时并没有使用到 OpenGL 的 API，<code>canvas.drawText(...)</code> 的 <code>Canvas</code> 是使用 CPU 的，所以如果在CPU资源缺少的情况下效率并不高。<br>总结可得，使用 <code>Canvas</code> 要注意是否有硬件加速，一般的 View 是有的，而 SurfaceView 和 TextureView 通过 <code>lockCanvas()</code> 得到的 <code>Canvas</code> 是没有的。</p>
 
       
     </div>
@@ -499,7 +439,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Weex/" rel="tag"># Weex</a>
+            <a href="/tags/Android-图形系统/" rel="tag"># Android 图形系统</a>
           
         </div>
       
@@ -508,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/02/open-source-weex-android-introduction/" rel="next" title="Weex 源码研究 -- 序言">
-                <i class="fa fa-chevron-left"></i> Weex 源码研究 -- 序言
+              <a href="/2016/09/02/android-knowledge-intent-service-source-code/" rel="next" title="Android 线程 -- IntentService 使用及源码分析">
+                <i class="fa fa-chevron-left"></i> Android 线程 -- IntentService 使用及源码分析
               </a>
             
           </div>
@@ -518,8 +458,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/15/open-source-weex-android-init/" rel="prev" title="Weex 源码研究 -- 初始化过程">
-                Weex 源码研究 -- 初始化过程 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/10/10/android-knowledge-message-system-source-code/" rel="prev" title="Android 消息机制 -- 源码分析">
+                Android 消息机制 -- 源码分析 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -672,7 +612,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WXSDKManager"><span class="nav-number">1.</span> <span class="nav-text">WXSDKManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WXBridgeManager"><span class="nav-number">2.</span> <span class="nav-text">WXBridgeManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WXRendermanager"><span class="nav-number">3.</span> <span class="nav-text">WXRendermanager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RenderActionContextImpl"><span class="nav-number">4.</span> <span class="nav-text">RenderActionContextImpl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RenderAction"><span class="nav-number">5.</span> <span class="nav-text">RenderAction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WXDomManager"><span class="nav-number">6.</span> <span class="nav-text">WXDomManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOMActionContextImpl"><span class="nav-number">7.</span> <span class="nav-text">DOMActionContextImpl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOMAction"><span class="nav-number">8.</span> <span class="nav-text">DOMAction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WXDomObject"><span class="nav-number">9.</span> <span class="nav-text">WXDomObject</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ImmutableDomObject"><span class="nav-number">10.</span> <span class="nav-text">ImmutableDomObject</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WXComponent"><span class="nav-number">11.</span> <span class="nav-text">WXComponent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WXModule"><span class="nav-number">12.</span> <span class="nav-text">WXModule</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WXSDKInstance"><span class="nav-number">13.</span> <span class="nav-text">WXSDKInstance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WXDomModule"><span class="nav-number">14.</span> <span class="nav-text">WXDomModule</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件加速的设置"><span class="nav-number">1.</span> <span class="nav-text">硬件加速的设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件加速的限制"><span class="nav-number">2.</span> <span class="nav-text">硬件加速的限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件加速之Canvas"><span class="nav-number">3.</span> <span class="nav-text">硬件加速之Canvas</span></a></li></ol></div>
             
 
           </div>
