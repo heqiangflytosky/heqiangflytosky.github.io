@@ -77,3 +77,6 @@ deploy:
   name: heqiang
   email: heqiangfly@163.com
 
+# rss
+feed:
+  limit: false

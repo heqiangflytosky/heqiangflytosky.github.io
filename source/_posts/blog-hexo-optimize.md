@@ -47,10 +47,24 @@ language: zh-CN
 timezone: Asia/Shanghai
 ```
 ### 添加RSS
+
 安装RSS插件
+
 ```
 $ npm install hexo-generator-feed --save
 ```
+现在重新发布一下，就可以在根目录找到 atom.xml 文件了。在个人站点处看到 RSS 的订阅图标，点击这个图标就可以出现RSS订阅的地址，就可以添加到你的 RSS 阅读器方便查看博客的最新文章。
+配置：
+然后在在_config.yml文件中配置该插件：
+
+```
+# rss
+feed:
+  limit: false
+```
+
+如果不配置的话是有个默认配置的，这里默认只会显示 20 篇文章，这里去掉这个限制。
+
 ### 添加百度sitemap
 站点地图，方便搜索引擎的收录
 ```
