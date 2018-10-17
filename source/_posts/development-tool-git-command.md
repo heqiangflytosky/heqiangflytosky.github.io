@@ -145,4 +145,27 @@ cherry pick 与 git merge
 
 ## git fetch
 
+## 解 gerrit 冲突
 
+<!--  https://www.cnblogs.com/xiaoerlang/p/3810206.html -->
+
+### 解决本地有提交记录的远程冲突
+
+### 解决本地没有提交记录的远程冲突
+
+```
+// 下面的 url 指的是 pull request 对应的地址，比如： ssh://name@test.com:29418/app/ProjectName refs/changes/40/1000/3
+git fetch <url> && git checkout FETCH_HEAD
+git checkout -b new_branch_name        // 新建一个本地分支用来解冲突
+git fetch origin                       //远程仓库的名称可以用  git remote -v 来查看
+git rebase origin/develop              //rebase 你冲突的代码分支，develop为当前提交代码所在的分支
+修改冲突文件
+git rebase --continue
+git push origin new_branch_name:refs/for/develop
+git checkout develop
+git branch -D new_branch_name
+//不会产生新的 changes 记录，将原 changes 记录重新 review 提交即可，这时在原冲突机器上直接pull会本地冲突，需要
+git reset --hard HEAD^
+//否则会出现cannot do a partial commit during a merge.最后更新下代码
+git pull
+```
