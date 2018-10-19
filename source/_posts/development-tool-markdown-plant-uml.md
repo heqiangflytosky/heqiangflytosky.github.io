@@ -12,7 +12,8 @@ date: 2017-7-8 10:00:00
 
 ## PlantUML简介
 
-可以登陆[PlantUML官网](http://plantuml.com/)看一下，里面有支持的UML类型以及使用方法。
+可以登陆 [PlantUML官网](http://plantuml.com/) 看一下，里面有支持的UML类型以及使用方法。
+点击下载 [使用 PlantUML 绘制 UML 语言参考指南 中文版](http://s.plantuml.com/PlantUML_Language_Reference_Guide_ZH.pdf)。
 
 ![支持的类型](/images/development-tool-markdown-plant-uml/plantuml-uml-supported.png)
 
