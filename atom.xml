@@ -1701,10 +1701,10 @@ http://blog.csdn.net/edu_enth/article/details/56007422
     <link href="http://yoursite.com/2017/07/08/development-tool-markdown-plant-uml/"/>
     <id>http://yoursite.com/2017/07/08/development-tool-markdown-plant-uml/</id>
     <published>2017-07-08T02:00:00.000Z</published>
-    <updated>2018-03-11T13:47:48.000Z</updated>
+    <updated>2018-10-24T07:52:54.165Z</updated>
     
     <content type="html"><![CDATA[<p>我们在工作中会经常使用UML图，实现UML的工具有很多，首先是绘图软件，但是所有的绘图软件有这样一个问题：这些软件绘制成的图片无法进行版本控制。也就是说如果后面你想修改软件的话，如果在软件里面的原图没有保存的话，就要重新再画了。这对于我们习惯于版本控制的码农来说显然是无法忍受的。<br>那么下面介绍一种可以在Markdown中使用的绘制UML工具 —— PlantUML，以及渲染引擎 Gravizo。</p>
-<h2 id="PlantUML简介"><a href="#PlantUML简介" class="headerlink" title="PlantUML简介"></a>PlantUML简介</h2><p>可以登陆<a href="http://plantuml.com/" target="_blank" rel="external">PlantUML官网</a>看一下，里面有支持的UML类型以及使用方法。</p>
+<h2 id="PlantUML简介"><a href="#PlantUML简介" class="headerlink" title="PlantUML简介"></a>PlantUML简介</h2><p>可以登陆 <a href="http://plantuml.com/" target="_blank" rel="external">PlantUML官网</a> 看一下，里面有支持的UML类型以及使用方法。<br>点击下载 <a href="http://s.plantuml.com/PlantUML_Language_Reference_Guide_ZH.pdf" target="_blank" rel="external">使用 PlantUML 绘制 UML 语言参考指南 中文版</a>。</p>
 <p><img src="/images/development-tool-markdown-plant-uml/plantuml-uml-supported.png" alt="支持的类型"></p>
 <h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>打开<a href="http://www.plantuml.com/plantuml" target="_blank" rel="external">在线作图网址</a>，在上面的代码框里面输入代码。<br>完成后点击 Submit 按钮提交查看预览图，同时在预览图下面的 URL 地址框里面会有生成的 UML 图的 png 地址图，当然你也可以选择生成 SVG 或者 ASCII Art。把这个图片地址复制到 Markdown 就可以使用了。<br>比如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">@startuml</div><div class="line">Title &quot;BundleLauncher类图&quot;</div><div class="line">interface BundleExtractor</div><div class="line">abstract class BundleLauncher</div><div class="line">abstract class SoBundleLauncher</div><div class="line">abstract class AssetBundleLauncher</div><div class="line"></div><div class="line">BundleLauncher &lt;|-- ActivityLauncher</div><div class="line">BundleLauncher &lt;|-- SoBundleLauncher</div><div class="line">SoBundleLauncher &lt;|-- ApkBundleLauncher</div><div class="line">BundleExtractor &lt;|.. SoBundleLauncher</div><div class="line">SoBundleLauncher &lt;|-- AssetBundleLauncher</div><div class="line">AssetBundleLauncher &lt;|-- WebBundleLauncher</div><div class="line"></div><div class="line">class ActivityLauncher &#123;</div><div class="line">+ public preloadBundle(Bundle bundle)</div><div class="line">&#125;</div><div class="line"></div><div class="line">class SoBundleLauncher &#123;</div><div class="line">+ public preloadBundle(Bundle bundle)</div><div class="line">&#125;</div><div class="line"></div><div class="line">class ApkBundleLauncher &#123;</div><div class="line">+ public loadBundle(Bundle bundle)</div><div class="line">&#125;</div><div class="line"></div><div class="line">class AssetBundleLauncher &#123;</div><div class="line">+ public loadBundle(Bundle bundle)</div><div class="line">&#125;</div><div class="line">@enduml</div></pre></td></tr></table></figure>
@@ -2454,7 +2454,7 @@ http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
     <link href="http://yoursite.com/2017/03/06/android-source-code-analysis-usermanager/"/>
     <id>http://yoursite.com/2017/03/06/android-source-code-analysis-usermanager/</id>
     <published>2017-03-06T02:00:00.000Z</published>
-    <updated>2018-08-12T09:06:02.902Z</updated>
+    <updated>2018-10-24T07:52:39.956Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android从4.2开始支持多用户模式，不同的用户运行在独立的用户空间，它们的的锁屏设置，PIN码和壁纸等系统设置是各不相同的，而且不同用户安装的应用和应用数据都是不一样的，但是系统中和硬件相关的设置则是共用的，比如网络设置等。通常第一个在系统中注册的用户将成为系统管理员，可以管理手机上的其他用户。但由于专利的原因，目前手机上并没有开启多用户模式，这种模式只能用在平板上面。<br>手机上经常见到的一个功能就是访客模式，它是多用户模式的一种应用。访客模式下用户的所有数据（通讯录，短信，应用等）会被隐藏，访客只能查看和使用手机的基本功能，另外你还可以设置访客是否有接听电话、发送短信等权限。<br>与其它系统服务的实现类似，用户管理也采用了经由<code>Binder</code>调用的远程服务机制。<code>UserManagerService</code>（以下简称 UMS ）继承自<code>IUserManager.Stub</code>为接口的底层实现，作为Binder的服务端。<code>UserManager</code>为暴露给用户的接口，它的成员变量<code>mService</code>是<code>IUserManager.Stub.Proxy</code>的实例，作为Binder的客户端，<code>UserManager</code>的大部分工作都是通过<code>mService</code>与服务端进行通信调用UMS的对应方法来完成的。<br>本文的代码是基于Android6.0来进行介绍。<br><code>UserManager</code>相关代码位置：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">frameworks/base/core/java/android/os/UserManager.java</div><div class="line">frameworks/base/services/core/java/com/android/server/pm/UserManagerService.java</div><div class="line">frameworks/base/core/java/android/content/pm/UserInfo.java</div><div class="line">frameworks/base/core/java/android/os/UserHandle.java</div><div class="line">frameworks/base/core/java/com/android/server/pm/PackageManagerService.java</div><div class="line">frameworks/base/core/java/com/android/server/wm/WindowManagerService.java</div><div class="line">frameworks/base/core/java/com/android/server/am/ActivityManagerService.java</div><div class="line">frameworks/base/core/java/android/os/Process.java</div></pre></td></tr></table></figure>
@@ -3599,7 +3599,7 @@ http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
     <link href="http://yoursite.com/2016/12/01/materials-programmer-materials/"/>
     <id>http://yoursite.com/2016/12/01/materials-programmer-materials/</id>
     <published>2016-12-01T02:00:00.000Z</published>
-    <updated>2018-08-31T14:44:25.886Z</updated>
+    <updated>2018-10-24T07:52:39.958Z</updated>
     
     <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记录一些作为一名程序员在学习道路上经常用到的一些资料，以备不时之需。</p>
 <a id="more"></a>
@@ -7033,6 +7033,56 @@ https://www.jianshu.com/p/011eb88f4e0d/
   </entry>
   
   <entry>
+    <title>Android JNI -- Android Studio JNI 开发基础</title>
+    <link href="http://yoursite.com/2015/12/10/android-jni-android-studio-base/"/>
+    <id>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</id>
+    <published>2015-12-10T02:00:00.000Z</published>
+    <updated>2018-10-24T07:52:54.164Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍如何在 Android Studio 环境下进行 JNI 开发。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>首先要在 AS 的 Project Structure 中配置 Android NDK Location。</p>
+<h2 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h2><h3 id="Java-类"><a href="#Java-类" class="headerlink" title="Java 类"></a>Java 类</h3><p>首先创建一个声明 native 方法的 Java 类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public class JniUtils &#123;</div><div class="line">    public static native String getString();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>rebuild 一下工程，然后就可以在 <code>JniUtils</code> 类所在的 Module 的  <code>build/intermediates/classes/debug/&lt;包名&gt;</code> 下面找到 JniUtils.class 文件。</p>
+<h3 id="生成头文件"><a href="#生成头文件" class="headerlink" title="生成头文件"></a>生成头文件</h3><p>进入 <code>build/intermediates/classes/debug</code> 目录，执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">javah -jni com.example.heqiang.testsomething.util.JniUtils</div></pre></td></tr></table></figure>
+<p>就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。</p>
+<h3 id="JNI-开发"><a href="#JNI-开发" class="headerlink" title="JNI 开发"></a>JNI 开发</h3><p>在 src/main 路径下新建一个名为 jni 的文件夹，再将前面生成的头文件放到该目录下面。<br>然后可以在目前下面创建 native 文件，名字可以随意定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#include &quot;com_example_heqiang_testsomething_util_JniUtils.h&quot;</div><div class="line"></div><div class="line">JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getKey(JNIEnv *env, jobject obj) &#123;</div><div class="line">    return (*env)-&gt;NewStringUTF(env,&quot;abcdefghijk&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><h3 id="AS-自动编译"><a href="#AS-自动编译" class="headerlink" title="AS 自动编译"></a>AS 自动编译</h3><p>首先配置 build.gradle :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">defaultConfig &#123;</div><div class="line">    ndk &#123;</div><div class="line">        ndk &#123;</div><div class="line">            moduleName &quot;JniDemo&quot;                       //生成的so名字</div><div class="line">            abiFilters &quot;armeabi&quot;, &quot;armeabi-v7a&quot;, &quot;x86&quot; //输出指定三种abi体系结构下的so库</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>触发编译，这个时候可以会报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Error:Execution failed for task &apos;:app:compileDebugNdk&apos;.</div><div class="line">&gt; Error: NDK integration is deprecated in the current plugin.  Consider trying the new experimental plugin.  For details, see http://tools.android.com/tech-docs/new-build-system/gradle-experimental.  Set &quot;$USE_DEPRECATED_NDK=true&quot; in gradle.properties to continue using the current NDK integration.</div></pre></td></tr></table></figure>
+<p>在 gradle.properties 文件中配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android.useDeprecatedNdk=true</div></pre></td></tr></table></figure>
+<p>然后再次编译，在 <code>build/intermediates/ndk/debug/</code> 目录下会找到生成的各个平台的 so 文件。</p>
+<h3 id="手动编译"><a href="#手动编译" class="headerlink" title="手动编译"></a>手动编译</h3><p>上面的方法容易受到 AS 版本的影响，下面来介绍创建 Android.mk 文件的方法来生成so。<br>其实在上面的方法中在 build/intermediates/ndk/debug 路径下也有生成 Android.mk 文件。<br>首先我们在 jni 目录下面创建 Application.mk 文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">APP_ABI := armeabi,armeabi-v7a,arm64-v8a</div></pre></td></tr></table></figure>
+<p>创建 Android.mk：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line"></div><div class="line">LOCAL_MODULE    := JniDemo</div><div class="line">LOCAL_SRC_FILES := Constants.c</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
+<p>在 jni 目录下面运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ndk-build</div></pre></td></tr></table></figure>
+<p>这样会在 <code>src/main/libs</code> 下面生成 so 文件。<br>然后在 build.gradle 中配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sourceSets.main &#123;</div><div class="line">    // JNI build</div><div class="line">    jniLibs.srcDirs = [&apos;src/main/libs&apos;] //set libs as .so&apos;s location instead of jni</div><div class="line">    jni.srcDirs = []                    //disable automatic ndk-build call with auto-generated Android.mk file</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="加载so"><a href="#加载so" class="headerlink" title="加载so"></a>加载so</h2><p>在 JniUtils 类中添加下面代码记载so：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class JniUtils &#123;</div><div class="line">    static &#123;</div><div class="line">        System.loadLibrary(&quot;JniDemo&quot;);</div><div class="line">    &#125;</div><div class="line">    public static native String getString();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后就可以通过 <code>JniUtils.getString()</code> </p>
+]]></content>
+    
+    <summary type="html">
+    
+      Android Studio JNI 开发基础
+    
+    </summary>
+    
+      <category term="Android" scheme="http://yoursite.com/categories/Android/"/>
+    
+    
+      <category term="JNI" scheme="http://yoursite.com/tags/JNI/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android LaunchMode 与 Intent Flag 详解</title>
     <link href="http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/"/>
     <id>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</id>
@@ -8853,7 +8903,7 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
     <link href="http://yoursite.com/2014/02/14/java-basic-knowledge-generic/"/>
     <id>http://yoursite.com/2014/02/14/java-basic-knowledge-generic/</id>
     <published>2014-02-14T02:00:00.000Z</published>
-    <updated>2018-09-14T14:27:47.781Z</updated>
+    <updated>2018-10-24T07:52:54.166Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>所谓范型，就是允许在定义类、接口、方法时使用类型形参，这个类型形参将在声明变量、创建对象、调用方法时动态地指定（即传入实际的类型参数，也可称为类型实参）。<br>范型可以减少强制类型的转换，可以规范集合的元素类型，还可以提高代码的安全性和可读性，正是因为有这些优点，自从 Java 引入范型后，项目的编码规则上便多了一条：优先使用范型。</p>
 <h2 id="范型的使用"><a href="#范型的使用" class="headerlink" title="范型的使用"></a>范型的使用</h2><h3 id="类型通配符"><a href="#类型通配符" class="headerlink" title="类型通配符"></a>类型通配符</h3><p>类型通配符的形式有 <code>&lt;?&gt;</code>、 <code>&lt;? extends Class&gt;</code> 和 <code>&lt;? super Class&gt;</code></p>
@@ -8909,7 +8959,7 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; stringList = new ArrayList&lt;&gt;();</div><div class="line">List&lt;Integer&gt; integerList = new ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+stringList.getClass().equals(integerList.getClass()));</div></pre></td></tr></table></figure>
 <p>返回结果为 true。 <code>List&lt;String&gt;</code> 和 <code>List&lt;Integer&gt;</code> 擦除后的类型都是 List，没有任何区别。<br>之所以设计成可擦除的，有下面两个原因：</p>
 <ul>
-<li>避免JVM大换血。由于范型是Java5以后才支持的，如果JVM也把范型类型延续到运行期，那么JVM就需要进行大量的重构工作了。</li>
+<li>避免JVM大换血。由于范型是Java5以后才支持的，如果JVM也把范型类型延续到运行期，那么JVM就需要进行大量的重构工作了。也就是说，Java 中的泛型机制其实就是一颗语法糖，并不涉及JVM的改动。</li>
 <li>版本兼容问题。在编译器擦除可以更好地支持原生类型，在Java5或者Java6平台上，即使声明一个List这样的原生类型也是支</li>
 </ul>
 <h3 id="不能创建一个范型类型实例"><a href="#不能创建一个范型类型实例" class="headerlink" title="不能创建一个范型类型实例"></a>不能创建一个范型类型实例</h3><p>如果 T 是一个类型变量，那么下面的语句是非法的：</p>
