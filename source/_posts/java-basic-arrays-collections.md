@@ -3,7 +3,7 @@ title: Java 基础 -- 算法类 Arrays 和 Collections
 categories:  Java
 comments: true
 tags: [String]
-description: 深入理解 String
+description: 简单介绍算法类 Arrays 和 Collections 的使用
 date: 2013-6-8 10:00:00
 ---
 ## 概述

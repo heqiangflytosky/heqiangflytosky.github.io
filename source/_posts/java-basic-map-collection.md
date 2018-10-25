@@ -3,7 +3,7 @@ title: Java 基础 -- 集合的使用
 categories:  Java
 comments: true
 tags: [String]
-description: 深入理解 String
+description: 简单介绍集合的使用
 date: 2013-6-6 10:00:00
 ---
 
@@ -41,8 +41,10 @@ ArrayList适合于进行大量的随机访问的情况下使用，LinkedList适�
 Vector 是线程安全的，它是 ArrayList 的多线程版本。
 HashTable 是线程安全的，它是 HashMap 的多线程版本。
 
-Set 和 List 都继承自 Collection 接口，都存储对象。它们最大的最大区别就是 Set 中的元素不可以重复，List 中允许重复元素。
-Map 中存储的是键值对，Map中不允许出现重复的键（Key）。
+Colleciton 用于存放多个单对象，Map 用于存放 Key-Value 形式的键值对。
+
+Set 和 List 都继承自 Collection 接口。它们最大的最大区别就是 Set 中的元素不可以重复，List 中允许重复元素。
+Map中不允许出现重复的键（Key）。
 
 WeakHashMap，直接使用HashMap有时候会带来内存溢出的风险，使用WaekHashMap实例化Map。当使用者不再有对象引用的时候，WeakHashMap将自动被移除对应Key值的对象。
 
