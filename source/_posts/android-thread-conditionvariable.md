@@ -1,5 +1,5 @@
 ---
-title: Android 多线程 -- ConditionVariable 用法
+title: Android 线程 -- ConditionVariable 用法
 categories:  Android 线程
 comments: true
 tags: [ConditionVariable]

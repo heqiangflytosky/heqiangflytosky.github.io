@@ -37,7 +37,7 @@ rebuild 一下工程，然后就可以在 `JniUtils` 类所在的 Module 的  `b
 javah -jni com.example.heqiang.testsomething.util.JniUtils
 ```
 
-就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。
+就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。当然这个头文件的文件名你也可以自定义成其他。
 
 ### JNI 开发
 
