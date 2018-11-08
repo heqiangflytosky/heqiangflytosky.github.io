@@ -317,8 +317,8 @@ am get-current-user: returns id of the current foreground user.
  - `[-c <CATEGORY> [-c <CATEGORY>] ...]`：指定 intent 类别（addCategory(String category)），如“android.intent.category.APP_CONTACTS”。 
  - `[-n <COMPONENT>]`：指定带有包名前缀的组件名称以创建显式 intent，如“com.example.heqiang.testsomething/.commontest.OtherTestActivity”。 
  - `[--f <FLAG>]`：将标志添加到intent
- - `[-e|--es <EXTRA_KEY> <EXTRA_STRING_VALUE> ...]`：添加一个 null extra。URI intent 不支持此选项。 `adb shell am start -a android.intent.action.hq.TEST_AM --esn TEST`
- - `[--esn <EXTRA_KEY> ...]`：添加字符串数据作为键值对。 `adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test`
+ - `[-e|--es <EXTRA_KEY> <EXTRA_STRING_VALUE> ...]`：添加一个 null extra。URI intent 不支持此选项。 `adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test`，如果有多个参数：`adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test --es TEST1 test1`
+ - `[--esn <EXTRA_KEY> ...]`：添加字符串数据作为键值对。 `adb shell am start -a android.intent.action.hq.TEST_AM --esn TEST`
  - `[--ez <EXTRA_KEY> <EXTRA_BOOLEAN_VALUE> ...]`：添加布尔型数据作为键值对。 `adb shell am start -a android.intent.action.hq.TEST_AM --ez TEST true`
  - `[--ei <EXTRA_KEY> <EXTRA_INT_VALUE> ...]`：添加整数型数据作为键值对。 
  - `[--el <EXTRA_KEY> <EXTRA_LONG_VALUE> ...]`：添加长整型数据作为键值对。 
