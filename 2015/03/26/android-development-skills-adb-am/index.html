@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/26/android-development-skills-adb-am/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 am 的使用">
-<meta property="og:updated_time" content="2018-05-29T02:28:24.833Z">
+<meta property="og:updated_time" content="2018-11-11T12:08:47.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android实用技巧之adb命令：am 命令的使用">
 <meta name="twitter:description" content="介绍 am 的使用">
@@ -414,8 +414,8 @@
 <li><code>[-c &lt;CATEGORY&gt; [-c &lt;CATEGORY&gt;] ...]</code>：指定 intent 类别（addCategory(String category)），如“android.intent.category.APP_CONTACTS”。 </li>
 <li><code>[-n &lt;COMPONENT&gt;]</code>：指定带有包名前缀的组件名称以创建显式 intent，如“com.example.heqiang.testsomething/.commontest.OtherTestActivity”。 </li>
 <li><code>[--f &lt;FLAG&gt;]</code>：将标志添加到intent</li>
-<li><code>[-e|--es &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt; ...]</code>：添加一个 null extra。URI intent 不支持此选项。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --esn TEST</code></li>
-<li><code>[--esn &lt;EXTRA_KEY&gt; ...]</code>：添加字符串数据作为键值对。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test</code></li>
+<li><code>[-e|--es &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt; ...]</code>：添加一个 null extra。URI intent 不支持此选项。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test</code>，如果有多个参数：<code>adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test --es TEST1 test1</code></li>
+<li><code>[--esn &lt;EXTRA_KEY&gt; ...]</code>：添加字符串数据作为键值对。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --esn TEST</code></li>
 <li><code>[--ez &lt;EXTRA_KEY&gt; &lt;EXTRA_BOOLEAN_VALUE&gt; ...]</code>：添加布尔型数据作为键值对。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --ez TEST true</code></li>
 <li><code>[--ei &lt;EXTRA_KEY&gt; &lt;EXTRA_INT_VALUE&gt; ...]</code>：添加整数型数据作为键值对。 </li>
 <li><code>[--el &lt;EXTRA_KEY&gt; &lt;EXTRA_LONG_VALUE&gt; ...]</code>：添加长整型数据作为键值对。 </li>
@@ -635,7 +635,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">120</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -653,7 +653,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-count">72</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

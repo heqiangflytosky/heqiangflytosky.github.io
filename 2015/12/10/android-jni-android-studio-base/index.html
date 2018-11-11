@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/12/10/android-jni-android-studio-base/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="Android Studio JNI 开发基础">
-<meta property="og:updated_time" content="2018-10-24T07:52:54.164Z">
+<meta property="og:updated_time" content="2018-11-06T09:32:04.282Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android JNI -- Android Studio JNI 开发基础">
 <meta name="twitter:description" content="Android Studio JNI 开发基础">
@@ -407,7 +407,7 @@
 <p>rebuild 一下工程，然后就可以在 <code>JniUtils</code> 类所在的 Module 的  <code>build/intermediates/classes/debug/&lt;包名&gt;</code> 下面找到 JniUtils.class 文件。</p>
 <h3 id="生成头文件"><a href="#生成头文件" class="headerlink" title="生成头文件"></a>生成头文件</h3><p>进入 <code>build/intermediates/classes/debug</code> 目录，执行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">javah -jni com.example.heqiang.testsomething.util.JniUtils</div></pre></td></tr></table></figure>
-<p>就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。</p>
+<p>就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。当然这个头文件的文件名你也可以自定义成其他。</p>
 <h3 id="JNI-开发"><a href="#JNI-开发" class="headerlink" title="JNI 开发"></a>JNI 开发</h3><p>在 src/main 路径下新建一个名为 jni 的文件夹，再将前面生成的头文件放到该目录下面。<br>然后可以在目前下面创建 native 文件，名字可以随意定。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#include &quot;com_example_heqiang_testsomething_util_JniUtils.h&quot;</div><div class="line"></div><div class="line">JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getKey(JNIEnv *env, jobject obj) &#123;</div><div class="line">    return (*env)-&gt;NewStringUTF(env,&quot;abcdefghijk&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><h3 id="AS-自动编译"><a href="#AS-自动编译" class="headerlink" title="AS 自动编译"></a>AS 自动编译</h3><p>首先配置 build.gradle :</p>
@@ -544,7 +544,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">120</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -562,7 +562,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-count">72</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

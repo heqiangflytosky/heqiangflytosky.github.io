@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-09-14T14:27:47.781Z</updated>
+  <updated>2018-11-11T12:08:10.534Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,62 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Gradle 使用指南 -- Plugin 断点调试</title>
+    <link href="http://yoursite.com/2018/08/02/development-tool-gradle-plugin-debug/"/>
+    <id>http://yoursite.com/2018/08/02/development-tool-gradle-plugin-debug/</id>
+    <published>2018-08-02T02:00:00.000Z</published>
+    <updated>2018-11-11T12:08:10.534Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>大家都知道 Gradle 插件的开发是基于Groovy，而Groovy 是一种基于 Java 平台的语言。平时我们用 Android Studio 开发 Android 时，可以使用到它强大的调试功能。那么插件开发过程中是不是可以调试呢？答案是可以的。下面就来简单介绍一下。</p>
+<h2 id="调试方法"><a href="#调试方法" class="headerlink" title="调试方法"></a>调试方法</h2><h3 id="创建-Remote-调试任务"><a href="#创建-Remote-调试任务" class="headerlink" title="创建 Remote 调试任务"></a>创建 Remote 调试任务</h3><p>选择 Edit Configurations …，在弹出的对话框中选择 Remote。</p>
+<p><img src="/images/development-tool-gradle-plugin-debug/edig-config.png" alt="效果图"></p>
+<p><img src="/images/development-tool-gradle-plugin-debug/create-remote-debug.png" alt="效果图"></p>
+<p>这时会生成一个 Remote debug 配置，名字可以随意制定，其他按照默认配置就可以，点击 OK 按钮。</p>
+<p><img src="/images/development-tool-gradle-plugin-debug/remote-debug-config.png" alt="效果图"></p>
+<h3 id="配置调试环境"><a href="#配置调试环境" class="headerlink" title="配置调试环境"></a>配置调试环境</h3><p>在终端中输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export GRADLE_OPTS=&quot;-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005&quot;</div></pre></td></tr></table></figure>
+<h3 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h3><p>首先在 Groovy 文件中添加断点。<br><strong>注意</strong>：.gradle 文件是无法断点调试的。<br>然后在终端中输入下面命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./gradlew small  -Dorg.gradle.debug=true</div></pre></td></tr></table></figure>
+<p>这时会打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Listening for transport dt_socket at address: 5005</div></pre></td></tr></table></figure>
+<p>表示在等待 attach 调试器了。</p>
+<p>点击图中 Debug 按钮：</p>
+<p><img src="/images/development-tool-gradle-plugin-debug/debug-button.png" alt="效果图"></p>
+<p>这时在 Android Studio 的调试器终端中会打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Connected to the target VM, address: &apos;localhost:5005&apos;, transport: &apos;socket&apos;</div></pre></td></tr></table></figure>
+<p>在刚才输入执行 task 任务的终端中打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Starting a Gradle Daemon, 1 incompatible and 1 stopped Daemons could not be reused, use --status for details</div><div class="line"></div><div class="line">&gt; Starting Daemon</div></pre></td></tr></table></figure>
+<p>这时需要再点击一下 Debug 按钮，这时就可以断点调试了。</p>
+<p><img src="/images/development-tool-gradle-plugin-debug/debug-result.png" alt="效果图"></p>
+<h2 id="断开调试"><a href="#断开调试" class="headerlink" title="断开调试"></a>断开调试</h2><p>如果想断开调试，点击 Debug 面板中的小红叉❌，在弹出对话框中点击 Disconnect 按钮就行了。</p>
+<p><img src="/images/development-tool-gradle-plugin-debug/debug-cancel.png" alt="效果图"></p>
+<p><img src="/images/development-tool-gradle-plugin-debug/debug-cancel-dialog.png" alt="效果图"></p>
+<h2 id="继续调试"><a href="#继续调试" class="headerlink" title="继续调试"></a>继续调试</h2><p>如果想继续调试，首先要点击工具栏中的 Debug 按钮，然后在终端中输入 Gradle 命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./gradlew small  -Dorg.gradle.debug=true</div></pre></td></tr></table></figure>
+<p>然后再点击 Debug 按钮，才能继续断点调试。<br>如果不点击 Debug 按钮，直接输入 Gradle 命令，会有下面报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ERROR: transport error 202: bind failed: Address already in use</div><div class="line">ERROR: JDWP Transport dt_socket failed to initialize, TRANSPORT_INIT(510)</div><div class="line">JDWP exit error AGENT_ERROR_TRANSPORT_INIT(197): No transports initialized [debugInit.c:750]</div></pre></td></tr></table></figure>
+<!-- 
+https://segmentfault.com/a/1190000008266525
+https://fucknmb.com/2017/04/07/Intellij-IDEA%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95/
+https://blog.csdn.net/ceabie/article/details/55271161
+-->]]></content>
+    
+    <summary type="html">
+    
+      介绍如何在 Gradle Plugin 开发过程中进行断点调试
+    
+    </summary>
+    
+      <category term="Gradle" scheme="http://yoursite.com/categories/Gradle/"/>
+    
+    
+      <category term="开发工具" scheme="http://yoursite.com/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    
+      <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
+    
+  </entry>
   
   <entry>
     <title>区块链 -- 区块链基础100问</title>
@@ -1693,6 +1749,42 @@ http://blog.csdn.net/edu_enth/article/details/56007422
       <category term="开发工具" scheme="http://yoursite.com/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
     
       <category term="JitPack" scheme="http://yoursite.com/tags/JitPack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android 线程 -- ConditionVariable 用法</title>
+    <link href="http://yoursite.com/2017/07/10/android-thread-conditionvariable/"/>
+    <id>http://yoursite.com/2017/07/10/android-thread-conditionvariable/</id>
+    <published>2017-07-10T02:00:00.000Z</published>
+    <updated>2018-11-06T09:32:04.282Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 Java 开发中，如果要进行线程同步操作，经常会用到 <code>wait</code> 和 <code>notify</code>，但用起来可能会有点繁琐，于是在 Android 中就把它包装了一下，以 <code>ConditionVariable</code> 类的形式带给开发者使用。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><code>ConditionVariable</code> 用一个 <code>boolean mCondition</code> 变量来作为状态控制 <code>wait</code> 和 <code>notify</code> 方法的执行。<br><code>ConditionVariable</code> 类提供了下面几个方法：</p>
+<ul>
+<li>ConditionVariable()：构造方法</li>
+<li>ConditionVariable(boolean state)：根据给定的状态构造对象</li>
+<li>open()：打开 <code>mCondition</code> 状态，并释放所有被阻塞的线程。任何线程在调用 <code>open()</code> 后调用 <code>block()</code> 都不会生效，除非先调用了 <code>close()</code> ，后调用 <code>block()</code>。 </li>
+<li>close()：重置 <code>mCondition</code> 为关闭状态。后面任何调用 <code>block()</code> 方法的线程将会被阻塞，直到调用了  <code>open()</code> 方法。</li>
+<li>block()：阻塞当前线程直到调用 <code>open()</code> 方法。如果当前的 <code>mCondition</code> 为打开状态，则会立即返回，不会阻塞线程。</li>
+<li>boolean block(long timeout)：阻塞当前线程直到调用 <code>open()</code> 方法或者是设置的超时时间到。如果当前的 <code>mCondition</code> 为打开状态，则会立即返回，不会阻塞线程。<ul>
+<li>如果返回 true，表示 <code>mCondition</code> 为打开状态。</li>
+<li>如果返回 false，表示超时返回。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 ConditionVariable 的用法
+    
+    </summary>
+    
+      <category term="Android 线程" scheme="http://yoursite.com/categories/Android-%E7%BA%BF%E7%A8%8B/"/>
+    
+    
+      <category term="ConditionVariable" scheme="http://yoursite.com/tags/ConditionVariable/"/>
     
   </entry>
   
@@ -3549,6 +3641,52 @@ http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
       <category term="热修复" scheme="http://yoursite.com/tags/%E7%83%AD%E4%BF%AE%E5%A4%8D/"/>
     
       <category term="AndFix" scheme="http://yoursite.com/tags/AndFix/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 基础 -- Fork/Join 框架</title>
+    <link href="http://yoursite.com/2016/12/06/java-basic-fork-join-base/"/>
+    <id>http://yoursite.com/2016/12/06/java-basic-fork-join-base/</id>
+    <published>2016-12-06T02:00:00.000Z</published>
+    <updated>2018-11-11T12:08:47.867Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Fork/Join 框架是 Java7 提供的一个用于并行执行任务的框架，是一个把大任务分割成若干个小任务，最终汇总每个小任务结果后得到大任务结果的框架。<br>下图是网上流传的 Fork Join 的运行流程图，直接拿过来用了：</p>
+<p><img src="/images/java-basic-fork-join-base/fork-join-principle.png" alt="效果图"></p>
+<h2 id="工作窃取算法"><a href="#工作窃取算法" class="headerlink" title="工作窃取算法"></a>工作窃取算法</h2><p>工作窃取（work-stealing）算法是指某个线程从其他队列里窃取任务来执行。<br>那么为什么要使用这个算法呢？<br>假如我们需要做一个比较大的任务，可以把这个任务分割为若干个互不依赖的子任务，为了减少线程间的竞争，把这些子任务分别放到不同的队列里，并为每个队列创建一个单独的线程来执行队列里的任务，线程和队列一一对应。比如A线程负责处理A队列里的任务。但是，有的线程会先把自己队列里的任务干完，而其他线程队列对应的队列里还有任务等待处理。干完活的线程与其等着，不如去帮其他线程干活，于是它就去其他线程的队列里窃取一个任务来执行。而在这时它们会访问同一个队列，为了减少窃取任务线程和被窃取任务线程之间的竞争，通常会使用双端队列，被窃取任务线程永远从双端队列的头部拿任务执行，而窃取任务的线程永远从双端队列的尾部拿任务执行。<br>工作窃取算法的优缺点：</p>
+<ul>
+<li>优点：充分利用线程进行并行计算，减少了线程间的竞争。</li>
+<li>缺点：在某些情况下还是存在竞争，比如双端队列里只有一个任务时。并且该算法会消耗了更多的系统资源，比如创建多个线程和多个双端队列。</li>
+</ul>
+<h2 id="Fork-Join-框架工作流程"><a href="#Fork-Join-框架工作流程" class="headerlink" title="Fork/Join 框架工作流程"></a>Fork/Join 框架工作流程</h2><p>首先，是分割任务。需要有个fork类来把大任务分割成子任务，有可能子任务还是很大，那么还需要不停的分割，知道分割的任务足够小。<br>然后，执行任务的合并结果。分割的子任务分别放在双端队列里，然后几个启动线程分别从双端队列里获取任务执行。子任务执行完的结果统一放在一个队列里，启动一个线程从队列里拿数据，然后合并这些数据。</p>
+<h2 id="Fork-Join-框架的使用"><a href="#Fork-Join-框架的使用" class="headerlink" title="Fork/Join 框架的使用"></a>Fork/Join 框架的使用</h2><p>Fork/Join 的使用需要使用两个类：</p>
+<ul>
+<li>ForkJoinTask：要使用 Fork/Join 框架首先要创建一个 ForkJoin 任务，它提供在任务中执行 fork() 和 join() 操作的机制。通常情况下，我们不需要直接继承ForkJoinTask类，只需要继承它的子类，Fork/Join 框架提供了下面两个子类：<ul>
+<li>RecursiveAction：用于没有返回结果的任务。</li>
+<li>RecursizeTask：用于有返回结果的任务。</li>
+</ul>
+</li>
+<li>ForkJoinPool：ForkJoinTask 需要通过 ForkJoinPool 来执行。</li>
+</ul>
+<p>任务分割出的子任务会添加到当前工作线程所维护的双端队列中，进入队列的头部。当一个工作线程的队列暂时没有其他任务时，它会随机从其他工作线程的队列的尾部获取一个任务。<br>下面我们通过一个简单的例子来了解一下 Fork/Join 框架的使用：计算 1+2+3+…..+10的结果。<br>使用 Fork/Join 框架首先要考虑的是如何分割任务，这个需要我们在代码里面实现。<br>因为这个是需要返回结果的任务，因此只能使用 <code>RecursiveTask</code> 来实现。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">public static void testForkJoin() &#123;</div><div class="line">    ForkJoinPool forkJoinPool = new ForkJoinPool();</div><div class="line">    // 生成一个计算任务</div><div class="line">    CountTask countTask = new CountTask(1, 10);</div><div class="line">    // 执行任务</div><div class="line">    Future&lt;Integer&gt; result =  forkJoinPool.submit(countTask);</div><div class="line">    int sum = 0;</div><div class="line">    try &#123;</div><div class="line">        sum = result.get();</div><div class="line">    &#125; catch (InterruptedException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125; catch (ExecutionException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;sum = &quot;+sum);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class CountTask extends RecursiveTask&lt;Integer&gt; &#123;</div><div class="line">    // 设置一个阈值</div><div class="line">    private static final int  THRESHOLD = 2;</div><div class="line">    private int mStart;</div><div class="line">    private int mEnd;</div><div class="line"></div><div class="line">    public CountTask(int start, int end) &#123;</div><div class="line">        mStart = start;</div><div class="line">        mEnd = end;</div><div class="line">        Log.e(&quot;Test&quot;, &quot;CountTask start = &quot;+start+&quot;, end= = &quot;+end);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected Integer compute() &#123;</div><div class="line">        int sum = 0;</div><div class="line">        boolean canCompute = (mEnd - mStart) &lt;= THRESHOLD;</div><div class="line">        if (canCompute) &#123;</div><div class="line">            for(int i = mStart; i&lt;=mEnd;i++)&#123;</div><div class="line">                sum += i;</div><div class="line">            &#125;</div><div class="line">        &#125; else &#123;</div><div class="line">            // 如果大于阈值，就要继续分割任务</div><div class="line">            int middle = (mStart + mEnd) / 2;</div><div class="line">            CountTask leftTask = new CountTask(mStart, middle);</div><div class="line">            CountTask rightTask = new CountTask(middle + 1, mEnd);</div><div class="line">            // 执行子任务</div><div class="line">            leftTask.fork();</div><div class="line">            rightTask.fork();</div><div class="line">            //等待子任务执行完，并获取执行结果</div><div class="line">            int leftResult = leftTask.join();</div><div class="line">            int rightResult = rightTask.join();</div><div class="line">            // 合并子任务</div><div class="line">            sum = leftResult + rightResult;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">        return sum;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>ForkJoinTask</code> 与一般任务的主要区别在于它需要实现 <code>compute</code> 方法，在这个方法里面，首先要判断任务是否足够小，如果足够小就直接执行任务，如果不够小，就必须分割成两个子任务，每个子任务在调用 <code>fork</code> 方法时，又会进入 <code>compute</code> 方法，看看当前子任务是否需要继续分割成子任务，如果不继续分割，则执行当前任务并返回结果。使用 <code>join</code> 方法会等待任务执行完并得到其结果。</p>
+<h2 id="Fork-Join-框架的异常处理"><a href="#Fork-Join-框架的异常处理" class="headerlink" title="Fork/Join 框架的异常处理"></a>Fork/Join 框架的异常处理</h2><p><code>ForkJoinTask</code> 在执行任务的时候可能会抛出异常，但是我们没有办法在主线程里直接捕获异常，所以 <code>ForkJoinTask</code> 提供了 <code>isCompletedAbnormally()</code> 方法来判断任务是否已经抛出异常或者已经取消了，并且可以通过 <code>ForkJoinTask</code> 的 <code>getException()</code> 方法获取异常。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">if (leftTask.isCompletedAbnormally()) &#123;</div><div class="line">    if (leftTask.getException() != null ) &#123;</div><div class="line">        leftTask.getException().printStackTrace();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>getException()</code> 方法返回 <code>Throwable</code> 对象，如果任务取消了则返回 <code>CancellationException</code>。如果任务没有完成或者没有抛出异常则返回 null。</p>
+<h2 id="Fork-Join-框架的实现原理"><a href="#Fork-Join-框架的实现原理" class="headerlink" title="Fork/Join 框架的实现原理"></a>Fork/Join 框架的实现原理</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《Java 并发编程的艺术》</p>
+]]></content>
+    
+    <summary type="html">
+    
+      Fork/Join 框架的使用
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Fork/Join" scheme="http://yoursite.com/tags/Fork-Join/"/>
     
   </entry>
   
@@ -7037,7 +7175,7 @@ https://www.jianshu.com/p/011eb88f4e0d/
     <link href="http://yoursite.com/2015/12/10/android-jni-android-studio-base/"/>
     <id>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</id>
     <published>2015-12-10T02:00:00.000Z</published>
-    <updated>2018-10-24T07:52:54.164Z</updated>
+    <updated>2018-11-06T09:32:04.282Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍如何在 Android Studio 环境下进行 JNI 开发。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>首先要在 AS 的 Project Structure 中配置 Android NDK Location。</p>
@@ -7046,7 +7184,7 @@ https://www.jianshu.com/p/011eb88f4e0d/
 <p>rebuild 一下工程，然后就可以在 <code>JniUtils</code> 类所在的 Module 的  <code>build/intermediates/classes/debug/&lt;包名&gt;</code> 下面找到 JniUtils.class 文件。</p>
 <h3 id="生成头文件"><a href="#生成头文件" class="headerlink" title="生成头文件"></a>生成头文件</h3><p>进入 <code>build/intermediates/classes/debug</code> 目录，执行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">javah -jni com.example.heqiang.testsomething.util.JniUtils</div></pre></td></tr></table></figure>
-<p>就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。</p>
+<p>就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。当然这个头文件的文件名你也可以自定义成其他。</p>
 <h3 id="JNI-开发"><a href="#JNI-开发" class="headerlink" title="JNI 开发"></a>JNI 开发</h3><p>在 src/main 路径下新建一个名为 jni 的文件夹，再将前面生成的头文件放到该目录下面。<br>然后可以在目前下面创建 native 文件，名字可以随意定。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#include &quot;com_example_heqiang_testsomething_util_JniUtils.h&quot;</div><div class="line"></div><div class="line">JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getKey(JNIEnv *env, jobject obj) &#123;</div><div class="line">    return (*env)-&gt;NewStringUTF(env,&quot;abcdefghijk&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><h3 id="AS-自动编译"><a href="#AS-自动编译" class="headerlink" title="AS 自动编译"></a>AS 自动编译</h3><p>首先配置 build.gradle :</p>
@@ -8039,7 +8177,7 @@ ScheduledThreadPoolExecutor <.. Executors
     <link href="http://yoursite.com/2015/03/26/android-development-skills-adb-am/"/>
     <id>http://yoursite.com/2015/03/26/android-development-skills-adb-am/</id>
     <published>2015-03-26T02:00:00.000Z</published>
-    <updated>2018-05-29T02:28:24.833Z</updated>
+    <updated>2018-11-11T12:08:47.867Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 adb shell 中，您可以使用 Activity Manager (am) 工具发出命令以执行各种系统操作，如启动 Activity、强行停止进程、广播 intent、修改设备屏幕属性及其他操作。在 shell 中，此语法为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">am &lt;command&gt;</div></pre></td></tr></table></figure>
@@ -8055,8 +8193,8 @@ ScheduledThreadPoolExecutor <.. Executors
 <li><code>[-c &lt;CATEGORY&gt; [-c &lt;CATEGORY&gt;] ...]</code>：指定 intent 类别（addCategory(String category)），如“android.intent.category.APP_CONTACTS”。 </li>
 <li><code>[-n &lt;COMPONENT&gt;]</code>：指定带有包名前缀的组件名称以创建显式 intent，如“com.example.heqiang.testsomething/.commontest.OtherTestActivity”。 </li>
 <li><code>[--f &lt;FLAG&gt;]</code>：将标志添加到intent</li>
-<li><code>[-e|--es &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt; ...]</code>：添加一个 null extra。URI intent 不支持此选项。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --esn TEST</code></li>
-<li><code>[--esn &lt;EXTRA_KEY&gt; ...]</code>：添加字符串数据作为键值对。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test</code></li>
+<li><code>[-e|--es &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt; ...]</code>：添加一个 null extra。URI intent 不支持此选项。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test</code>，如果有多个参数：<code>adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test --es TEST1 test1</code></li>
+<li><code>[--esn &lt;EXTRA_KEY&gt; ...]</code>：添加字符串数据作为键值对。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --esn TEST</code></li>
 <li><code>[--ez &lt;EXTRA_KEY&gt; &lt;EXTRA_BOOLEAN_VALUE&gt; ...]</code>：添加布尔型数据作为键值对。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --ez TEST true</code></li>
 <li><code>[--ei &lt;EXTRA_KEY&gt; &lt;EXTRA_INT_VALUE&gt; ...]</code>：添加整数型数据作为键值对。 </li>
 <li><code>[--el &lt;EXTRA_KEY&gt; &lt;EXTRA_LONG_VALUE&gt; ...]</code>：添加长整型数据作为键值对。 </li>
@@ -8903,10 +9041,22 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
     <link href="http://yoursite.com/2014/02/14/java-basic-knowledge-generic/"/>
     <id>http://yoursite.com/2014/02/14/java-basic-knowledge-generic/</id>
     <published>2014-02-14T02:00:00.000Z</published>
-    <updated>2018-10-24T07:52:54.166Z</updated>
+    <updated>2018-11-11T12:08:47.868Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>所谓范型，就是允许在定义类、接口、方法时使用类型形参，这个类型形参将在声明变量、创建对象、调用方法时动态地指定（即传入实际的类型参数，也可称为类型实参）。<br>范型可以减少强制类型的转换，可以规范集合的元素类型，还可以提高代码的安全性和可读性，正是因为有这些优点，自从 Java 引入范型后，项目的编码规则上便多了一条：优先使用范型。</p>
-<h2 id="范型的使用"><a href="#范型的使用" class="headerlink" title="范型的使用"></a>范型的使用</h2><h3 id="类型通配符"><a href="#类型通配符" class="headerlink" title="类型通配符"></a>类型通配符</h3><p>类型通配符的形式有 <code>&lt;?&gt;</code>、 <code>&lt;? extends Class&gt;</code> 和 <code>&lt;? super Class&gt;</code></p>
+<h2 id="范型的使用"><a href="#范型的使用" class="headerlink" title="范型的使用"></a>范型的使用</h2><h3 id="类型参数"><a href="#类型参数" class="headerlink" title="类型参数"></a>类型参数</h3><p>类型参数就是我们在定义泛型类或者方法是动态指定的参数。</p>
+<h4 id="类型参数的命名规则"><a href="#类型参数的命名规则" class="headerlink" title="类型参数的命名规则"></a>类型参数的命名规则</h4><p>类型参数名称命名为单个大写字母，比如 <code>Collection&lt;E&gt;</code>。<br>但是这个命名规则我们一般会遵循一般的约定，以便可以在使用普通类或接口名称时能够容易地区分类型参数，增加代码的可读性。<br>以下是常用的类型参数名称列表：</p>
+<ul>
+<li>E：元素 Element，主要由Java集合(Collections)框架使用。</li>
+<li>K：键 Key，主要用于表示映射中的键的参数类型。</li>
+<li>V：值 Value，主要用于表示映射中的值的参数类型。</li>
+<li>N：数字 Number，主要用于表示数字。</li>
+<li>T：类型，主要用于表示第一类通用型参数。</li>
+<li>S：类型，主要用于表示第二类通用类型参数。</li>
+<li>U：类型，主要用于表示第三类通用类型参数。</li>
+<li>V：类型，主要用于表示第四个通用类型参数。</li>
+</ul>
+<h3 id="类型通配符"><a href="#类型通配符" class="headerlink" title="类型通配符"></a>类型通配符</h3><p>类型通配符一般是使用 <code>?</code> 代替具体的类型参数，表示未知类型。例如 <code>List&lt;?&gt;</code> 在逻辑上是 <code>List&lt;String&gt;</code>，<code>List&lt;Integer&gt;</code> 等所有 <code>List&lt;具体类型实参&gt;</code> 的父类。<br>类型通配符的形式有 <code>&lt;?&gt;</code>、 <code>&lt;? extends Class&gt;</code> 和 <code>&lt;? super Class&gt;</code></p>
 <h4 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h4><p>为了表示各种范型 List 的父类，我们需要使用类型通配符，类型的通配符就是一个问号 ?，将它作为类型实参传给 List集合：<code>List&lt;?&gt;</code>，就标示未知类型元素的 List，它的元素类型可以匹配任何类型。<br>比如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public void testGeneric() &#123;</div><div class="line">    List&lt;String&gt; name = new ArrayList&lt;String&gt;();</div><div class="line">    List&lt;Integer&gt; age = new ArrayList&lt;Integer&gt;();</div><div class="line">    List&lt;Shape&gt; shape = new ArrayList&lt;Shape&gt;();</div><div class="line"></div><div class="line">    name.add(&quot;icon&quot;);</div><div class="line">    age.add(18);</div><div class="line">    shape.add(new Shape());</div><div class="line"></div><div class="line">    getData(name);</div><div class="line">    getData(age);</div><div class="line">    getData(shape);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void getData(List&lt;?&gt; data) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;data :&quot; + data.get(0));</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Shape &#123;</div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;Shape&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>编译没问题，运行结果：</p>
@@ -9137,6 +9287,216 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
     <summary type="html">
     
       深入理解 String
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="String" scheme="http://yoursite.com/tags/String/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 基础 -- 算法类 Arrays 和 Collections</title>
+    <link href="http://yoursite.com/2013/06/08/java-basic-arrays-collections/"/>
+    <id>http://yoursite.com/2013/06/08/java-basic-arrays-collections/</id>
+    <published>2013-06-08T02:00:00.000Z</published>
+    <updated>2018-11-06T09:32:04.282Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>Arrays</code> 和 <code>Collections</code> 是 Java 提供的工具类，提供了一些算法类的方法，比如：排序、搜索等。它们都在 java.util.* 包下面。<code>Arrays</code> 用来操作数组，<code>Collections</code> 用来操作集合。<br>本文就对这两个类做一些介绍。</p>
+<h2 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h2><h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><p><code>Arrays</code> 提供了两种排序的方法：</p>
+<ul>
+<li><code>sort(T[])：所有的对象都必须实现</code>Comparable` 接口，它用来确定对象之间的大小关系。</li>
+<li><code>sort(T[], Comparator)</code>：对象不必实现 <code>Comparable</code> 接口，由 <code>Comparator</code> 来确定对象之间的大小关系。使用这种方式我们可以自定义排序的比较方式。</li>
+</ul>
+<p>另外在 JDK 1.8 以后还提供了并行排序：</p>
+<ul>
+<li><code>public static &lt;T extends Comparable&lt;? super T&gt;&gt; void parallelSort(T[] a)</code></li>
+<li><code>public static &lt;T&gt; void parallelSort(T[] a, Comparator&lt;? super T&gt; cmp)</code></li>
+</ul>
+<p>并行排序 使用 Fork/Join 框架使排序任务可以在线程池中的多个线程中进行。当小于某个临界值时或者分块为1，其实和普通的 sort 方法一样。否则就用的是 Fork/Join。</p>
+<p>先来看一个上面两个方法的应用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">int[] nums = &#123;2,6,9,4,5,0,1&#125;;</div><div class="line">Arrays.sort(nums);</div><div class="line">for(int i = 0; i &lt; nums.length; i++)</div><div class="line">System.out.println(nums[i] + &quot;,&quot;);</div></pre></td></tr></table></figure>
+<p>由于 <code>Integer</code> 实现了 <code>Comparable</code> 接口，而且 <code>compareTo</code> 的实现是按照升序排列：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public int compareTo(Integer anotherInteger) &#123;</div><div class="line">    return compare(this.value, anotherInteger.value);</div><div class="line">&#125;</div><div class="line">public static int compare(int x, int y) &#123;</div><div class="line">    return (x &lt; y) ? -1 : ((x == y) ? 0 : 1);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果我们想降序排列要怎么做呢？这就需要使用 <code>Comparator</code> 来自定义了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    Integer[] nums = &#123;2,6,9,4,5,0,1&#125;;</div><div class="line">    Arrays.sort(nums, new MyComparator());</div><div class="line">    for(int i = 0; i &lt; nums.length; i++)</div><div class="line">    System.out.println(nums[i] + &quot;,&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class MyComparator implements Comparator&lt;Integer&gt; &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int compare(Integer t1, Integer t2) &#123;</div><div class="line">        return (t1 &lt; t2) ? 1 : ((t1 == t2) ? 0 : -1);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再来介绍一下排序所用的算法。<br>其实 <code>Collections</code> 的排序算法最后调用的也是 <code>Arrays.sort</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public static &lt;T&gt; void sort(T[] a, Comparator&lt;? super T&gt; c) &#123;</div><div class="line">    if (c == null) &#123;</div><div class="line">        sort(a);</div><div class="line">    &#125; else &#123;</div><div class="line">        if (LegacyMergeSort.userRequested)</div><div class="line">            legacyMergeSort(a, c);</div><div class="line">        else</div><div class="line">            TimSort.sort(a, 0, a.length, c, null, 0, 0);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在不指定 <code>Comparator</code> 情况下，用的是 <code>DualPivotQuicksort</code>（快速排序） 和 <code>ComparableTimSort</code>（归并排序升级版，结合了合并排序和插入排序算法）。<br>在指定 <code>Comparator</code> 情况下一般用的是 <code>TimSort</code>，<code>legacyMergeSort</code> 基本已经废弃不用。<code>TimSort</code> 和 <code>ComparableTimSort</code> 的区别是 <code>ComparableTimSort</code> 需要对象是 <code>Comparable</code> 可比较的，不需要特定 <code>Comparator</code> ，而 <code>TimSort</code> 利用提供的 <code>Comparator</code> 进行排序。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li><code>binarySearch</code>：搜索，采用二分法查找数组中的数据对应的索引。</li>
+<li><code>copyOf</code>：复制。</li>
+<li><code>equals</code>：判断两个数组是否相等。</li>
+<li><code>fill</code>：填充</li>
+<li><code>hashCode</code>：返回数组的内容的哈希码。</li>
+<li><code>toString</code>：数组转为字符串</li>
+<li><code>stream</code>：数组转为流</li>
+</ul>
+<h2 id="Collections"><a href="#Collections" class="headerlink" title="Collections"></a>Collections</h2><h3 id="排序-1"><a href="#排序-1" class="headerlink" title="排序"></a>排序</h3><ul>
+<li><code>public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list)</code></li>
+<li><code>public static &lt;T&gt; void sort(List&lt;T&gt; list, Comparator&lt;? super T&gt; c)</code></li>
+</ul>
+<h3 id="返回线程安全的集合"><a href="#返回线程安全的集合" class="headerlink" title="返回线程安全的集合"></a>返回线程安全的集合</h3><ul>
+<li><code>synchronizedCollection(Collection&lt;T&gt; c)</code></li>
+<li><code>synchronizedCollection(Collection&lt;T&gt; c, Object mutex)</code></li>
+<li><code>synchronizedList(List&lt;T&gt; list)</code></li>
+<li><code>synchronizedList(List&lt;T&gt; list, Object mutex)</code></li>
+<li><code>synchronizedMap(Map&lt;K,V&gt; m)</code></li>
+<li><code>synchronizedSet(Set&lt;T&gt; s)</code></li>
+<li><code>synchronizedSet(Set&lt;T&gt; s, Object mutex)</code></li>
+<li><code>synchronizedSortedMap(SortedMap&lt;K,V&gt; m)</code></li>
+<li><code>synchronizedSortedSet(SortedSet&lt;T&gt; s)</code></li>
+</ul>
+<p>部分方法对应一个可以设置同步对象锁的重载方法。</p>
+<h3 id="返回只读的集合"><a href="#返回只读的集合" class="headerlink" title="返回只读的集合"></a>返回只读的集合</h3><ul>
+<li><code>unmodifiableCollection(Collection&lt;? extends T&gt; c)</code></li>
+<li><code>unmodifiableList(List&lt;? extends T&gt; list)</code></li>
+<li><code>unmodifiableMap(Map&lt;? extends K, ? extends V&gt; m)</code></li>
+<li><code>unmodifiableSet(Set&lt;? extends T&gt; s)</code></li>
+<li><code>unmodifiableSortedMap(SortedMap&lt;K, ? extends V&gt; m)</code></li>
+<li><code>unmodifiableSortedSet(SortedSet&lt;T&gt; s)</code></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      简单介绍算法类 Arrays 和 Collections 的使用
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="String" scheme="http://yoursite.com/tags/String/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 基础 -- 集合的使用</title>
+    <link href="http://yoursite.com/2013/06/06/java-basic-map-collection/"/>
+    <id>http://yoursite.com/2013/06/06/java-basic-map-collection/</id>
+    <published>2013-06-06T02:00:00.000Z</published>
+    <updated>2018-11-06T09:32:04.283Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java 开发过程中，集合类是我们经常要接触和使用的类，从本文开始，将用一系列的文章来对这个知识点进行梳理和总结。<br>本文先对 Java 集合相关知识做一个概括性的描述，后面会有一系列的文章再细分介绍集合框架。<br>下面先来看一下 Java 集合框架的类图。</p>
+<p><img src="http://www.plantuml.com/plantuml/svg/XLEnRXH13EtdAqRfao-W2882K4125q7jx1aOtTpkCJCRwGIfa29A2X12aP3egA10eipVt05_mNd7hCUQMr9aitxsivzzRuzZWf3wfJUdBdcq1m_W7EoVgylDkxVRBvVRppytLzS7nhImnBY21kslRn-tFpxOLwRn4AEz7GAi8mTtEk-nIQvhexaeITllxtzVlzby-ieyAbsk8C2PHmsaBcZgGrZjIAvD69vnN4IpBYISQ-mHdBldr9bWE8ifG9Cio-LmJ-gk6vH3MBEYUn1VK5sEdY8iD7BYsWNEDKPHAhQwFySskRJ-LyNmQK0SGjhkrkkZ8oLCtYbvUCXAweGIbVzpGccJAI9FjhMP8IcgpfXSDxz9fhXnBMjSJwfO06TgIdKevG7nbLX1mGLuuc8g3O9bzBZ77Ylxg1fPZU09-yZagGgICPNxJ-CiS9BtigShWH-w5vQZZk8iYSG6WZt19dM1Wrc2Pb5-ojHPaVCe8nkpmNPm1TArAv2FBh0slE2cXjXjwgZqiDoZnCj0QFNTRXv3M-p-U8Q0DpFpgiDJs9AO8IihZ3U-SIljlsAwVARx4kCFBtJUOCmGLHHeQzJ7Ov_iouXHwWjBMM6Vt2h3sN4NvXZRUR_qVm40" alt="效果图"></p>
+<p>整个集合框架就围绕一组标准接口而设计。你可以直接使用这些接口的标准实现，诸如： <code>LinkedList</code>、<code>HashSet</code>和 <code>TreeSet</code> 等,除此之外你也可以通过这些接口实现自己的集合，比如通过实现 <code>List</code> 接口来实现线程安全的 <code>CopyOnWriteArrayList</code> 类等。<br>上面图中的类都在 java.util.<em> 包下面，本文也只介绍这个包下面的类，其他比如 java.util.concurrent.</em> 包的类将放在另外的文章中介绍。</p>
+<h2 id="集合类型"><a href="#集合类型" class="headerlink" title="集合类型"></a>集合类型</h2><p>Java 集合框架的容器类可以主要分为两种外加一种算法类：</p>
+<ul>
+<li>集合（Collection）：存储一个元素集合。</li>
+<li>图（Map）：存储键/值对映射。</li>
+<li>算法类：Arrays、Collections。它们实现集合接口的对象里的方法执行的一些有用的计算，例如：搜索和排序。</li>
+</ul>
+<p>从另外一个维度分，又可以分为：</p>
+<ul>
+<li>接口：Map、SortedMap、Collection、List、Queue、Set</li>
+<li>抽象类：AbstractMap、AbstrCollection、AbstrList等</li>
+<li>具体类：HashMap、TreeMap、Vector、ArrayList等</li>
+<li>算法类：Arrays、Collections</li>
+</ul>
+<h2 id="特点介绍"><a href="#特点介绍" class="headerlink" title="特点介绍"></a>特点介绍</h2><p>ArrayList适合于进行大量的随机访问的情况下使用，LinkedList适合在表中进行插入、删除时使用，二者都是非线程安全。</p>
+<p>Vector 是线程安全的，它是 ArrayList 的多线程版本。<br>HashTable 是线程安全的，它是 HashMap 的多线程版本。</p>
+<p>Colleciton 用于存放多个单对象，Map 用于存放 Key-Value 形式的键值对。</p>
+<p>Set 和 List 都继承自 Collection 接口。它们最大的最大区别就是 Set 中的元素不可以重复，List 中允许重复元素。<br>Map中不允许出现重复的键（Key）。</p>
+<p>WeakHashMap，直接使用HashMap有时候会带来内存溢出的风险，使用WaekHashMap实例化Map。当使用者不再有对象引用的时候，WeakHashMap将自动被移除对应Key值的对象。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.runoob.com/java/java-collections.html" target="_blank" rel="external">http://www.runoob.com/java/java-collections.html</a><br><a href="http://www.runoob.com/java/java-vector-class.html" target="_blank" rel="external">http://www.runoob.com/java/java-vector-class.html</a></p>
+<!-- plantuml 代码 -->
+<!--  
+
+@startuml
+Title "Java 集合框架图"
+
+namespace 算法 {
+class Arrays
+class Collections
+}
+
+namespace 比较器 {
+class Comparable
+class Comparator
+}
+
+namespace Map {
+interface Map
+interface SortedMap
+interface NavigableMap
+abstract class AbstractMap
+abstract class Dictionary
+class HashMap
+class WeakHashMap
+class LinkedHashMap
+class Hashtable
+class IdentityHashMap
+
+class TreeMap
+
+Map <|.. AbstractMap
+AbstractMap <|-- HashMap
+AbstractMap <|-- WeakHashMap
+HashMap <|-- LinkedHashMap
+Map <|.. Hashtable
+Dictionary  <|-- Hashtable
+Map  <|-- SortedMap
+SortedMap  <|-- NavigableMap
+AbstractMap <|-- TreeMap
+NavigableMap <|.. TreeMap
+AbstractMap <|-- IdentityHashMap
+}
+
+namespace Collection {
+interface Collection
+interface List
+interface Set
+interface Queue
+interface SortedSet
+interface NavigableSet
+abstract class AbstractCollection
+abstract class AbstractList
+abstract class AbstractSet
+abstract class AbstractQueue
+abstract class AbstractSequentialList
+
+class HashSet
+class TreeSet
+class LinkedHashSet
+class Vector
+class Stack
+class ArrayList
+class LinkedList
+
+
+Collection <|-- List
+Collection <|--  Set
+Collection <|--  Queue
+Collection <|.. AbstractCollection
+AbstractCollection  <|-- AbstractList
+List  <|.. AbstractList
+AbstractList <|-- AbstractSequentialList
+AbstractCollection  <|-- AbstractSet
+Set <|.. AbstractSet
+AbstractCollection  <|-- AbstractQueue
+Queue <|.. AbstractQueue
+Set <|--  SortedSet
+SortedSet  <|--  NavigableSet
+AbstractSet <|-- HashSet
+AbstractSet <|-- TreeSet
+NavigableSet <|.. TreeSet
+HashSet <|--  LinkedHashSet
+AbstractList <|--  Vector
+AbstractList <|--  ArrayList
+AbstractSequentialList <|-- LinkedList
+Vector <|-- Stack
+}
+@enduml
+
+-->
+]]></content>
+    
+    <summary type="html">
+    
+      简单介绍集合的使用
     
     </summary>
     
