@@ -40,6 +40,8 @@ ArrayList适合于进行大量的随机访问的情况下使用，LinkedList适�
 
 Vector 是线程安全的，它是 ArrayList 的多线程版本。
 HashTable 是线程安全的，它是 HashMap 的多线程版本。`HashTable` 内部是通过使用 `synchronized` 方法来保证线程安全的，但在线程竞争激烈的情况下它的效率就比较低。这时可以考虑使用 `ConcurrentHashMap`，这个后面会介绍。
+HashTable 即不支持 null key也不支持null value。HashMap 中null可以作为key，这样的key只有一个，可以有一个或者多个value所对应的key为null。
+HashMap 底层主要是基于数组和链表来实现的，它之所以有相当快的查询速度主要是因为它是通过计算散列码来决定存储的位置。
 
 Colleciton 用于存放多个单对象，Map 用于存放 Key-Value 形式的键值对。
 
