@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="简单介绍集合的使用">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/XLEnRXH13EtdAqRfao-W2882K4125q7jx1aOtTpkCJCRwGIfa29A2X12aP3egA10eipVt05_mNd7hCUQMr9aitxsivzzRuzZWf3wfJUdBdcq1m_W7EoVgylDkxVRBvVRppytLzS7nhImnBY21kslRn-tFpxOLwRn4AEz7GAi8mTtEk-nIQvhexaeITllxtzVlzby-ieyAbsk8C2PHmsaBcZgGrZjIAvD69vnN4IpBYISQ-mHdBldr9bWE8ifG9Cio-LmJ-gk6vH3MBEYUn1VK5sEdY8iD7BYsWNEDKPHAhQwFySskRJ-LyNmQK0SGjhkrkkZ8oLCtYbvUCXAweGIbVzpGccJAI9FjhMP8IcgpfXSDxz9fhXnBMjSJwfO06TgIdKevG7nbLX1mGLuuc8g3O9bzBZ77Ylxg1fPZU09-yZagGgICPNxJ-CiS9BtigShWH-w5vQZZk8iYSG6WZt19dM1Wrc2Pb5-ojHPaVCe8nkpmNPm1TArAv2FBh0slE2cXjXjwgZqiDoZnCj0QFNTRXv3M-p-U8Q0DpFpgiDJs9AO8IihZ3U-SIljlsAwVARx4kCFBtJUOCmGLHHeQzJ7Ov_iouXHwWjBMM6Vt2h3sN4NvXZRUR_qVm40">
-<meta property="og:updated_time" content="2018-11-06T09:32:04.283Z">
+<meta property="og:updated_time" content="2018-11-13T05:04:50.798Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基础 -- 集合的使用">
 <meta name="twitter:description" content="简单介绍集合的使用">
@@ -419,10 +419,11 @@
 <li>算法类：Arrays、Collections</li>
 </ul>
 <h2 id="特点介绍"><a href="#特点介绍" class="headerlink" title="特点介绍"></a>特点介绍</h2><p>ArrayList适合于进行大量的随机访问的情况下使用，LinkedList适合在表中进行插入、删除时使用，二者都是非线程安全。</p>
-<p>Vector 是线程安全的，它是 ArrayList 的多线程版本。<br>HashTable 是线程安全的，它是 HashMap 的多线程版本。</p>
+<p>Vector 是线程安全的，它是 ArrayList 的多线程版本。<br>HashTable 是线程安全的，它是 HashMap 的多线程版本。<code>HashTable</code> 内部是通过使用 <code>synchronized</code> 方法来保证线程安全的，但在线程竞争激烈的情况下它的效率就比较低。这时可以考虑使用 <code>ConcurrentHashMap</code>，这个后面会介绍。<br>HashTable 即不支持 null key也不支持null value。HashMap 中null可以作为key，这样的key只有一个，可以有一个或者多个value所对应的key为null。<br>HashMap 底层主要是基于数组和链表来实现的，它之所以有相当快的查询速度主要是因为它是通过计算散列码来决定存储的位置。</p>
 <p>Colleciton 用于存放多个单对象，Map 用于存放 Key-Value 形式的键值对。</p>
 <p>Set 和 List 都继承自 Collection 接口。它们最大的最大区别就是 Set 中的元素不可以重复，List 中允许重复元素。<br>Map中不允许出现重复的键（Key）。</p>
-<p>WeakHashMap，直接使用HashMap有时候会带来内存溢出的风险，使用WaekHashMap实例化Map。当使用者不再有对象引用的时候，WeakHashMap将自动被移除对应Key值的对象。</p>
+<p>WeakHashMap，直接使用 HashMap 有时候会带来内存溢出的风险，使用 WaekHashMap 实例化 Map。当使用者不再有对象引用的时候，WeakHashMap 将自动被移除对应 Key 值的对象。</p>
+<p>TreeMap 底层通过红黑树（Red-Black tree）实现，也就意味着 <code>containsKey()</code>，<code>get()</code>, <code>put()</code>, <code>remove()</code> 都有着 log(n) 的时间复杂度。</p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.runoob.com/java/java-collections.html" target="_blank" rel="external">http://www.runoob.com/java/java-collections.html</a><br><a href="http://www.runoob.com/java/java-vector-class.html" target="_blank" rel="external">http://www.runoob.com/java/java-vector-class.html</a></p>
 <!-- plantuml 代码 -->
 <!--  
@@ -626,7 +627,7 @@ Vector <|-- Stack
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">120</span>
+                <span class="site-state-item-count">121</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
