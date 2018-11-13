@@ -8663,6 +8663,75 @@ https://blog.csdn.net/daweibalang717/article/details/40738073
   </entry>
   
   <entry>
+    <title>Android  应该了解的知识系列 - 资源引用的那些事儿</title>
+    <link href="http://yoursite.com/2015/02/20/android-knowledge-using-resources/"/>
+    <id>http://yoursite.com/2015/02/20/android-knowledge-using-resources/</id>
+    <published>2015-02-20T02:00:00.000Z</published>
+    <updated>2018-11-13T11:47:08.181Z</updated>
+    
+    <content type="html"><![CDATA[<p>android-knowledge-using-resources.md</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android 开发过程中避免不了的会引用 xml 资源，现在针对资源的引用方式总结如下。</p>
+<h2 id="资源引用方式"><a href="#资源引用方式" class="headerlink" title="资源引用方式"></a>资源引用方式</h2><p>先介绍一下下面一些名称代表的意义：</p>
+<ul>
+<li>package_name：资源文件所在的包名</li>
+<li>resource_type：资源文件的类型，比如string、color等</li>
+<li>resource_name：资源文件的名称</li>
+</ul>
+<h3 id="引用自定义资源"><a href="#引用自定义资源" class="headerlink" title="引用自定义资源"></a>引用自定义资源</h3><blockquote>
+<p><code>@[&lt;package_name&gt;:]&lt;resource_type&gt;/&lt;resource_name&gt;</code></p>
+</blockquote>
+<p>比如：</p>
+<ul>
+<li><code>android:textColor=&quot;@color/Blue_1&quot;</code></li>
+</ul>
+<p>另外：</p>
+<ul>
+<li>@+id/资源ID名： 表示创建一个新的资源ID</li>
+<li>@id/资源ID名： 应用现有已定义的资源ID，包括系统ID</li>
+<li>@android:id/资源ID名：引用系统ID，其等效于@id/资源ID名</li>
+</ul>
+<h3 id="引用系统资源"><a href="#引用系统资源" class="headerlink" title="引用系统资源"></a>引用系统资源</h3><h4 id="引用-public-资源"><a href="#引用-public-资源" class="headerlink" title="引用 public 资源"></a>引用 public 资源</h4><p> public 资源是指在 <code>&lt;sdk_path&gt;/platforms/android-21/data/res/values/public.xml</code> 中定义的资源</p>
+<p>引用方式：</p>
+<blockquote>
+<p><code>@android:&lt;resource_type&gt;/&lt;resource_name&gt;</code></p>
+</blockquote>
+<p>比如：</p>
+<ul>
+<li><code>android:textColor=&quot;@android:color/black&quot;</code></li>
+</ul>
+<h4 id="引用非-public-资源"><a href="#引用非-public-资源" class="headerlink" title="引用非 public 资源"></a>引用非 public 资源</h4><p>引用方式：</p>
+<blockquote>
+<p><code>@*android:&lt;resource_type&gt;/&lt;resource_name&gt;</code></p>
+</blockquote>
+<p>这种引用方式是google不推荐使用的。</p>
+<p>如果 Java 代码中引用可以<code>com.android.internal.R.&lt;resource_type&gt;.&lt;resource_name&gt;</code>，但是这种方式第三方应用是不适用的，可以通过反射 <code>com.android.internal.R</code> 的方式实现。<br>或者是通过在 xml 引用，在通过 <code>getResources</code> 方式使用。</p>
+<h3 id="引用主题属性"><a href="#引用主题属性" class="headerlink" title="引用主题属性"></a>引用主题属性</h3><blockquote>
+<p><code>?[&lt;package_name&gt;:]&lt;resource_type&gt;/&lt;resource_name&gt;</code></p>
+</blockquote>
+<p>？表示从当前 Theme 中查找引用的资源名，这个 google 叫预定义样式，用在多主题时的场景，属性值会随着主题而改变。这样我们就不必提供具体的值，而可以通过改变主题来改变UI元素的外观。<br>用法：</p>
+<ul>
+<li><code>android:textColor=&quot;?color&quot;</code>：引用自定义的</li>
+<li><code>android:textColor=&quot;?attr/color&quot;</code>：引用自定义的，和上面等效</li>
+<li><code>android:textColor=&quot;?android:colorButtonNormal&quot;</code>：引用系统的</li>
+<li><code>android:textColor=&quot;?android:attr/colorButtonNormal&quot;</code>：引用系统的，和上面等效</li>
+<li><code>android:textColor=&quot;?attr/android:colorButtonNormal&quot;</code>：引用系统的，和上面等效</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍Android 中资源引用的几种方法
+    
+    </summary>
+    
+      <category term="Android" scheme="http://yoursite.com/categories/Android/"/>
+    
+    
+      <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android IPC 之 Messenger</title>
     <link href="http://yoursite.com/2015/02/02/android-ipc-messenger/"/>
     <id>http://yoursite.com/2015/02/02/android-ipc-messenger/</id>
