@@ -48,9 +48,9 @@ Colleciton 用于存放多个单对象，Map 用于存放 Key-Value 形式的键
 Set 和 List 都继承自 Collection 接口。它们最大的最大区别就是 Set 中的元素不可以重复，List 中允许重复元素。
 Map中不允许出现重复的键（Key）。
 
-WeakHashMap，直接使用HashMap有时候会带来内存溢出的风险，使用WaekHashMap实例化Map。当使用者不再有对象引用的时候，WeakHashMap将自动被移除对应Key值的对象。
+WeakHashMap，直接使用 HashMap 有时候会带来内存溢出的风险，使用 WaekHashMap 实例化 Map。当使用者不再有对象引用的时候，WeakHashMap 将自动被移除对应 Key 值的对象。
 
-
+TreeMap 底层通过红黑树（Red-Black tree）实现，也就意味着 `containsKey()`，`get()`, `put()`, `remove()` 都有着 log(n) 的时间复杂度。
 
 ## 参考文章
 
