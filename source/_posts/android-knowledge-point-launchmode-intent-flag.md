@@ -1,12 +1,21 @@
 
 ---
-title: Android LaunchMode 与 Intent Flag 详解
+title: Android LaunchMode taskAffinity 与 Intent Flag 详解
 categories: Android
 comments: true
 tags: [Android, LaunchMode, Intent Flag]
 description: 介绍 Android LaunchMode 与 Intent Flag
 date: 2015-12-8 10:00:00
 ---
+
+## taskAffinity
+
+我们可以在 AndroidManifest.xml 中通过 `android:taskAffinity` 属性为 Activity 指定 taskAffinity。
+那么什么是 taskAffinity 呢？
+taskAffinity 可以为 Activity 指定归属于那个 Task。
+一般情况下，如果应用中的 Activity 都没有特殊的显式指定 taskAffinity，那么它的这个属性就等于 Application 指明的 taskAffinity，如果 Application 也没有指明，那么该 taskAffinity 的值就等于应用的包名。
+taskAffinity 可以为任意字符串，但是非空的话必须至少包含一个“.”，否则会编译报错。但是你可以指定taskAffinity为空字符串，这时它就不属于任何 Task。
+Activity 的启动都会在它通过 taskAffinity 指定的 Task 里面启动。
 
 ## LaunchMode
 
@@ -20,7 +29,8 @@ Android L(Android 5.0)前后对这种启动模式的处理方式是不同的：
 
 ### singleTop
 
-这种模式下仅有一个栈顶的 Activity 实例，如果当前任务的顶部就是待启动的 Activity 实例，那么并不会再创建一个新的 Activity 实例，而是仅仅调用已有实例的 `onNewIntent()` 方法，所以对于要以 singleTop 启动的Activity，需要处理 `onCreate()` 和 `onNewIntent()` 这两种情况下的启动参数。
+这种模式下栈顶仅有一个 Activity 实例，也就是说不会有多个相同的 Activity 叠加在栈顶。如果当前任务的顶部就是待启动的 Activity 实例，那么并不会再创建一个新的 Activity 实例，而是仅仅调用已有实例的 `onNewIntent()` 方法，所以对于要以 singleTop 启动的Activity，需要处理 `onCreate()` 和 `onNewIntent()` 这两种情况下的启动参数。
+但是如果任务中已经有这个 Activity 实例，但是不在栈顶，还是会重新创建一个新的 Activity 实例。
 
 ### singleTask
 
@@ -85,8 +95,126 @@ A 启动 B：
 
 ### 区别
 
- - standard 和 singleTop：如果栈顶已经存在待启动 Activity 的实例，singleTop 会利用已有的实例，而 standard 仍然会新建一个。 然而，singleTop 只对当前应用启动有效，对于跨应用启动的情况，singleTop 与 standard 模式没有区别。在跨应用启动这种情况下，Intent 并不会去寻找已有任务的 Activity，而是直接创建一个新的 Activity 实例：在 Android L 之前，将 Activity 实例置于发起者的任务顶，在 Android L 之后，将 Activity 实例置于新任务的根部。
+ - standard 和 singleTop：这两种模式下 Activity 在系统中可以有多个实例。如果栈顶已经存在待启动 Activity 的实例，singleTop 会利用已有的实例，而 standard 仍然会新建一个。 然而，singleTop 只对当前应用启动有效，对于跨应用启动的情况，singleTop 与 standard 模式没有区别。在跨应用启动这种情况下，Intent 并不会去寻找已有任务的 Activity，而是直接创建一个新的 Activity 实例：在 Android L 之前，将 Activity 实例置于发起者的任务顶，在 Android L 之后，将 Activity 实例置于新任务的根部。
  - singleTask 和 singleInstance 模式的 Activity 在系统中都只有一个实例（当然也就只有一个该 Activity 的Task），但是 singleTask 模式的 Task 中允许有别的 Activity 存在，而 singleInstance 模式的 Task 中只有该 Activity 一个实例，不允许有其他 Activity 存在。
+
+## LaunchMode 和 taskAffinity 的关系
+
+### standard 模式下指定 taskAffinity
+
+A (MainActivity) 以 standard 模式启动 B(OtherTestActivity)，为 B 指定一个不同于 A 的 taskAffinity。
+
+```
+    Task id #21330
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+      TaskRecord{ff958fa #21330 A=com.example.heqiang.testsomething U=0 StackId=1 sz=2}
+      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity }
+        Hist #1: ActivityRecord{967b73e u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t21330}
+          Intent { cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity }
+          ProcessRecord{1a33eab 14060:com.example.heqiang.testsomething/u0a172}
+        Hist #0: ActivityRecord{daf4dea u0 com.example.heqiang.testsomething/.MainActivity t21330}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity }
+          ProcessRecord{1a33eab 14060:com.example.heqiang.testsomething/u0a172}
+
+```
+
+可以看到，他们仍然在同一个 Task 中，这个 Task 为 A Activity 所在的 Task。
+因此在 standard 模式下设置 taskAffinity 好像没什么作用。
+
+### singleTask 模式下指定 taskAffinity
+
+这种模式下启动和 taskAffinity 的关系上面已经介绍了一些普通的情况，这里不再介绍。
+下面来看一个不同的 Activity 指定同一个 taskAffinity 的情况。
+我们先来看一下同一个应用中的情况。首先，这两个 Activity 没有指定特殊进程，他们运行在一个进程中。
+在 A（MainActivity） 中以 singleTask 启动同一个 taskAffinity （但不同于A）的 B（OtherTestActivity） 和 C（EventActivity） 。
+
+```
+    Task id #21332
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+      TaskRecord{a989fd7 #21332 A=com.hq.test U=0 StackId=1 sz=2}
+      Intent { flg=0x10000000 cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity }
+        Hist #1: ActivityRecord{6c49b46 u0 com.example.heqiang.testsomething/.event.EventActivity t21332}
+          Intent { flg=0x10400000 cmp=com.example.heqiang.testsomething/.event.EventActivity }
+          ProcessRecord{64a0ee2 22782:com.example.heqiang.testsomething/u0a172}
+        Hist #0: ActivityRecord{ce7925e u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t21332}
+          Intent { flg=0x10000000 cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity }
+          ProcessRecord{64a0ee2 22782:com.example.heqiang.testsomething/u0a172}
+    Task id #21331
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+      TaskRecord{aafbad #21331 A=com.example.heqiang.testsomething U=0 StackId=1 sz=1}
+      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity }
+        Hist #0: ActivityRecord{f944c08 u0 com.example.heqiang.testsomething/.MainActivity t21331}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity }
+          ProcessRecord{64a0ee2 22782:com.example.heqiang.testsomething/u0a172}
+
+```
+
+可以看到，这种情况下，B 和 C 在同一个 Task中，而且在同一个进程中。
+不在同一个进程的情况这里就不再测试了， B 和 C 这时候仍在 在同一个 Task 中。也就是说 Task 和 进程没有联系。
+
+下面来说明一种情况，就是 A 应用和 B 应用依赖了SDK包，他们以 singleTask 模式启动 SDK 中的同一个 Activity C，这又该什么情况呢？
+其实这种情况只要你理解了下面的事实，那么 LaunchMode 、taskAffinity 以及 Task 的关系就很容易理解了。
+也就是虽然 SDK 中的 C 从代码层面上讲是同一个，但是对于A 应用和 B 应用来说，调用的确实两个不同的 Activity ，因为它们的包名不同，比如：
+
+ - `com.hq.test.sdkdemo/com.hq.sdk.TestActivity`
+ - `com.example.heqiang.testsomething/com.hq.sdk.TestActivity`
+
+可以下面的信息：
+
+```
+    Task id #21313
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+      TaskRecord{6cf314a #21313 A=com.hq.test U=0 StackId=1 sz=2}
+      Intent { flg=0x10000000 cmp=com.example.heqiang.testsomething/com.hq.sdk.TestActivity }
+        Hist #1: ActivityRecord{88936eb u0 com.hq.test.sdkdemo/com.hq.sdk.TestActivity t21313}
+          Intent { flg=0x10400000 cmp=com.hq.test.sdkdemo/com.hq.sdk.TestActivity }
+          ProcessRecord{7571816 5028:com.hq.test.sdkdemo/u0a137}
+        Hist #0: ActivityRecord{dc4f387 u0 com.example.heqiang.testsomething/com.hq.sdk.TestActivity t21313}
+          Intent { flg=0x10000000 cmp=com.example.heqiang.testsomething/com.hq.sdk.TestActivity }
+          ProcessRecord{702597 3847:com.example.heqiang.testsomething/u0a172}
+    Task id #21315
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+      TaskRecord{751d1d8 #21315 A=com.hq.test.sdkdemo U=0 StackId=1 sz=1}
+      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.hq.test.sdkdemo/.MainActivity }
+        Hist #0: ActivityRecord{7b3c6a6 u0 com.hq.test.sdkdemo/.MainActivity t21315}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.hq.test.sdkdemo/.MainActivity }
+          ProcessRecord{7571816 5028:com.hq.test.sdkdemo/u0a137}
+    Task id #21312
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+      TaskRecord{d65931 #21312 A=com.example.heqiang.testsomething U=0 StackId=1 sz=1}
+      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity }
+        Hist #0: ActivityRecord{85b37c0 u0 com.example.heqiang.testsomething/.MainActivity t21312}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity }
+          ProcessRecord{702597 3847:com.example.heqiang.testsomething/u0a172}
+
+```
+
+在 com.hq.test Task中，有两个 `TestActivity`，他们属于不同进程。
+
 
 ## Intent Flag
 

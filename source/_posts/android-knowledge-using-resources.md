@@ -6,7 +6,7 @@ tags: [Android]
 description: 介绍Android 中资源引用的几种方法
 date: 2015-2-20 10:00:00
 ---
-android-knowledge-using-resources.md
+
 ## 概述
 
 Android 开发过程中避免不了的会引用 xml 资源，现在针对资源的引用方式总结如下。
