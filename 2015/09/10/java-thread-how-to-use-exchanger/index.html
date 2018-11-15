@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Gradle" />
+  <meta name="keywords" content="Android 线程," />
 
 
 
@@ -86,24 +86,16 @@
 
 
 
-<meta name="description" content="介绍如何在 Gradle Plugin 开发过程中进行断点调试">
+<meta name="description" content="本文介绍 Exchanger 的使用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Gradle 使用指南 -- Plugin 断点调试">
-<meta property="og:url" content="http://yoursite.com/2018/08/02/development-tool-gradle-plugin-debug/index.html">
+<meta property="og:title" content="Java 线程 -- Exchanger">
+<meta property="og:url" content="http://yoursite.com/2015/09/10/java-thread-how-to-use-exchanger/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="介绍如何在 Gradle Plugin 开发过程中进行断点调试">
-<meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-plugin-debug/edig-config.png">
-<meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-plugin-debug/create-remote-debug.png">
-<meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-plugin-debug/remote-debug-config.png">
-<meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-plugin-debug/debug-button.png">
-<meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-plugin-debug/debug-result.png">
-<meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-plugin-debug/debug-cancel.png">
-<meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-plugin-debug/debug-cancel-dialog.png">
-<meta property="og:updated_time" content="2018-11-11T12:08:10.534Z">
+<meta property="og:description" content="本文介绍 Exchanger 的使用">
+<meta property="og:updated_time" content="2018-11-15T07:41:13.822Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gradle 使用指南 -- Plugin 断点调试">
-<meta name="twitter:description" content="介绍如何在 Gradle Plugin 开发过程中进行断点调试">
-<meta name="twitter:image" content="http://yoursite.com/images/development-tool-gradle-plugin-debug/edig-config.png">
+<meta name="twitter:title" content="Java 线程 -- Exchanger">
+<meta name="twitter:description" content="本文介绍 Exchanger 的使用">
 
 
 
@@ -131,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/02/development-tool-gradle-plugin-debug/"/>
+  <link rel="canonical" href="http://yoursite.com/2015/09/10/java-thread-how-to-use-exchanger/"/>
 
 
 
 
 
-  <title> Gradle 使用指南 -- Plugin 断点调试 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Java 线程 -- Exchanger | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -286,7 +278,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/development-tool-gradle-plugin-debug/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/10/java-thread-how-to-use-exchanger/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="寒江蓑笠">
@@ -310,7 +302,7 @@
             
             
               
-                Gradle 使用指南 -- Plugin 断点调试
+                Java 线程 -- Exchanger
               
             
           </h1>
@@ -325,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-02T10:00:00+08:00">
-                2018-08-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-10T10:00:00+08:00">
+                2015-09-10
               </time>
             
 
@@ -348,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Gradle/" itemprop="url" rel="index">
-                    <span itemprop="name">Gradle</span>
+                  <a href="/categories/Android-线程/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 线程</span>
                   </a>
                 </span>
 
@@ -366,7 +358,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2018/08/02/development-tool-gradle-plugin-debug/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2015/09/10/java-thread-how-to-use-exchanger/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -377,7 +369,7 @@
 
           
           
-             <span id="/2018/08/02/development-tool-gradle-plugin-debug/" class="leancloud_visitors" data-flag-title="Gradle 使用指南 -- Plugin 断点调试">
+             <span id="/2015/09/10/java-thread-how-to-use-exchanger/" class="leancloud_visitors" data-flag-title="Java 线程 -- Exchanger">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -393,7 +385,7 @@
 
           
               <div class="post-description">
-                  介绍如何在 Gradle Plugin 开发过程中进行断点调试
+                  本文介绍 Exchanger 的使用
               </div>
           
 
@@ -408,39 +400,16 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>大家都知道 Gradle 插件的开发是基于Groovy，而Groovy 是一种基于 Java 平台的语言。平时我们用 Android Studio 开发 Android 时，可以使用到它强大的调试功能。那么插件开发过程中是不是可以调试呢？答案是可以的。下面就来简单介绍一下。</p>
-<h2 id="调试方法"><a href="#调试方法" class="headerlink" title="调试方法"></a>调试方法</h2><h3 id="创建-Remote-调试任务"><a href="#创建-Remote-调试任务" class="headerlink" title="创建 Remote 调试任务"></a>创建 Remote 调试任务</h3><p>选择 Edit Configurations …，在弹出的对话框中选择 Remote。</p>
-<p><img src="/images/development-tool-gradle-plugin-debug/edig-config.png" alt="效果图"></p>
-<p><img src="/images/development-tool-gradle-plugin-debug/create-remote-debug.png" alt="效果图"></p>
-<p>这时会生成一个 Remote debug 配置，名字可以随意制定，其他按照默认配置就可以，点击 OK 按钮。</p>
-<p><img src="/images/development-tool-gradle-plugin-debug/remote-debug-config.png" alt="效果图"></p>
-<h3 id="配置调试环境"><a href="#配置调试环境" class="headerlink" title="配置调试环境"></a>配置调试环境</h3><p>在终端中输入：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export GRADLE_OPTS=&quot;-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005&quot;</div></pre></td></tr></table></figure>
-<h3 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h3><p>首先在 Groovy 文件中添加断点。<br><strong>注意</strong>：.gradle 文件是无法断点调试的。<br>然后在终端中输入下面命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./gradlew small  -Dorg.gradle.debug=true</div></pre></td></tr></table></figure>
-<p>这时会打印：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Listening for transport dt_socket at address: 5005</div></pre></td></tr></table></figure>
-<p>表示在等待 attach 调试器了。</p>
-<p>点击图中 Debug 按钮：</p>
-<p><img src="/images/development-tool-gradle-plugin-debug/debug-button.png" alt="效果图"></p>
-<p>这时在 Android Studio 的调试器终端中会打印：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Connected to the target VM, address: &apos;localhost:5005&apos;, transport: &apos;socket&apos;</div></pre></td></tr></table></figure>
-<p>在刚才输入执行 task 任务的终端中打印：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Starting a Gradle Daemon, 1 incompatible and 1 stopped Daemons could not be reused, use --status for details</div><div class="line"></div><div class="line">&gt; Starting Daemon</div></pre></td></tr></table></figure>
-<p>这时需要再点击一下 Debug 按钮，这时就可以断点调试了。</p>
-<p><img src="/images/development-tool-gradle-plugin-debug/debug-result.png" alt="效果图"></p>
-<h2 id="断开调试"><a href="#断开调试" class="headerlink" title="断开调试"></a>断开调试</h2><p>如果想断开调试，点击 Debug 面板中的小红叉❌，在弹出对话框中点击 Disconnect 按钮就行了。</p>
-<p><img src="/images/development-tool-gradle-plugin-debug/debug-cancel.png" alt="效果图"></p>
-<p><img src="/images/development-tool-gradle-plugin-debug/debug-cancel-dialog.png" alt="效果图"></p>
-<h2 id="继续调试"><a href="#继续调试" class="headerlink" title="继续调试"></a>继续调试</h2><p>如果想继续调试，首先要点击工具栏中的 Debug 按钮，然后在终端中输入 Gradle 命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./gradlew small  -Dorg.gradle.debug=true</div></pre></td></tr></table></figure>
-<p>然后再点击 Debug 按钮，才能继续断点调试。<br>如果不点击 Debug 按钮，直接输入 Gradle 命令，会有下面报错：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ERROR: transport error 202: bind failed: Address already in use</div><div class="line">ERROR: JDWP Transport dt_socket failed to initialize, TRANSPORT_INIT(510)</div><div class="line">JDWP exit error AGENT_ERROR_TRANSPORT_INIT(197): No transports initialized [debugInit.c:750]</div></pre></td></tr></table></figure>
-<!-- 
-https://segmentfault.com/a/1190000008266525
-https://fucknmb.com/2017/04/07/Intellij-IDEA%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95/
-https://blog.csdn.net/ceabie/article/details/55271161
--->
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Exchanger 按字面意思理解是交换的意思。在Java并发编程中，引入了 <code>Exchanger</code> 类来实现不同线程之间数据的就交换。<br>它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。两个线程各自调用 <code>exchange</code> 方法进行交换，当线程 A 调用 <code>Exchange</code> 对象的 <code>exchange</code> 方法后，它会陷入阻塞状态，直到线程 B 也调用了 <code>exchange</code> 方法，然后以线程安全的方式交换数据，之后线程 A 和 B 继续运行。<br><code>exchange</code> 方法有两个重载实现：</p>
+<ul>
+<li><code>V exchange(V x)</code>：交换数据，返回从其他线程交换回来的数据。</li>
+<li><code>V exchange(V x, long timeout, TimeUnit unit)</code>：可以设置超时时间，如果超过这个时间还没有与其他线程交换数据，则会抛出 <code>TimeoutException</code> 异常。</li>
+</ul>
+<p>这个类在遇到类似生产者和消费者问题时，是非常有用的。只是 <code>Exchange</code> 类只能同步2个线程，所以你只能在你的生产者和消费者问题中只有一个生产者和一个消费者时使用这个类。<br><code>Exchanger</code>可以用于遗传算法，遗传算法里需要选出两个人作为交配对象，这时候会交换两人的数据，并使用交叉规则得出2个交配结果。<br>它还可以用于校对工作，比如银行需要将银行流水录入电子银行流水，为了避免错误，采用AB两人进行录入，录入之后再加载两人的数据进行校对，看录入是否一致。</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">public static void testExchanger() &#123;</div><div class="line">    Exchanger&lt;String&gt; exchanger = new Exchanger&lt;&gt;();</div><div class="line">    new Tomato(exchanger).start();</div><div class="line">    new Potato(exchanger).start();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Tomato extends Thread &#123;</div><div class="line">    private Exchanger mExchanger;</div><div class="line">    public Tomato (Exchanger exchanger) &#123;</div><div class="line">        mExchanger = exchanger;</div><div class="line">        setName(&quot;Tomato&quot;);</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        Log.e(getName() + &quot;Test&quot;,&quot;enter &quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(2000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        Log.e(&quot;Test&quot;,getName() + &quot; after sleep &quot;);</div><div class="line">        try &#123;</div><div class="line">            Log.e(&quot;Test&quot;,getName() + &quot; exchanger =  &quot;+mExchanger.exchange(&quot;Tomato&quot;));</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Potato extends Thread &#123;</div><div class="line">    private Exchanger mExchanger;</div><div class="line">    public Potato (Exchanger exchanger) &#123;</div><div class="line">        mExchanger = exchanger;</div><div class="line">        setName(&quot;Potato&quot;);</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        Log.e(getName() + &quot;Test&quot;,&quot;enter &quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(1000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        Log.e(&quot;Test&quot;,getName() + &quot; after sleep &quot;);</div><div class="line">        try &#123;</div><div class="line">            Log.e(&quot;Test&quot;,getName() + &quot; exchanger =  &quot;+mExchanger.exchange(&quot;Potato&quot;));</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">14:04:18.911 E/TomatoTest: enter </div><div class="line">14:04:18.911 E/PotatoTest: enter </div><div class="line">14:04:19.911 E/Test: Potato after sleep </div><div class="line">14:04:20.911 E/Test: Tomato after sleep </div><div class="line">14:04:20.911 E/Test: Tomato exchanger =  Potato</div><div class="line">14:04:20.911 E/Test: Potato exchanger =  Tomato</div></pre></td></tr></table></figure>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2>
       
     </div>
 
@@ -463,9 +432,7 @@ https://blog.csdn.net/ceabie/article/details/55271161
       
         <div class="post-tags">
           
-            <a href="/tags/开发工具/" rel="tag"># 开发工具</a>
-          
-            <a href="/tags/Gradle/" rel="tag"># Gradle</a>
+            <a href="/tags/Android-线程/" rel="tag"># Android 线程</a>
           
         </div>
       
@@ -474,8 +441,8 @@ https://blog.csdn.net/ceabie/article/details/55271161
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/02/block-chain-basic-questions/" rel="next" title="区块链 -- 区块链基础100问">
-                <i class="fa fa-chevron-left"></i> 区块链 -- 区块链基础100问
+              <a href="/2015/09/07/java-thread-how-to-use-semaphore/" rel="next" title="Java 线程 -- Semaphore">
+                <i class="fa fa-chevron-left"></i> Java 线程 -- Semaphore
               </a>
             
           </div>
@@ -483,6 +450,10 @@ https://blog.csdn.net/ceabie/article/details/55271161
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/20/java-thread-thread-pool-basic/" rel="prev" title="Java 线程池 -- 线程池基础">
+                Java 线程池 -- 线程池基础 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -634,7 +605,7 @@ https://blog.csdn.net/ceabie/article/details/55271161
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调试方法"><span class="nav-number">2.</span> <span class="nav-text">调试方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-Remote-调试任务"><span class="nav-number">2.1.</span> <span class="nav-text">创建 Remote 调试任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置调试环境"><span class="nav-number">2.2.</span> <span class="nav-text">配置调试环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始调试"><span class="nav-number">2.3.</span> <span class="nav-text">开始调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#断开调试"><span class="nav-number">3.</span> <span class="nav-text">断开调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继续调试"><span class="nav-number">4.</span> <span class="nav-text">继续调试</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">2.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现原理"><span class="nav-number">3.</span> <span class="nav-text">实现原理</span></a></li></ol></div>
             
 
           </div>

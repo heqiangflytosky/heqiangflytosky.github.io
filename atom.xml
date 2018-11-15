@@ -7840,6 +7840,37 @@ ScheduledThreadPoolExecutor <.. Executors
   </entry>
   
   <entry>
+    <title>Java 线程 -- Exchanger</title>
+    <link href="http://yoursite.com/2015/09/10/java-thread-how-to-use-exchanger/"/>
+    <id>http://yoursite.com/2015/09/10/java-thread-how-to-use-exchanger/</id>
+    <published>2015-09-10T02:00:00.000Z</published>
+    <updated>2018-11-15T07:41:13.822Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Exchanger 按字面意思理解是交换的意思。在Java并发编程中，引入了 <code>Exchanger</code> 类来实现不同线程之间数据的就交换。<br>它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。两个线程各自调用 <code>exchange</code> 方法进行交换，当线程 A 调用 <code>Exchange</code> 对象的 <code>exchange</code> 方法后，它会陷入阻塞状态，直到线程 B 也调用了 <code>exchange</code> 方法，然后以线程安全的方式交换数据，之后线程 A 和 B 继续运行。<br><code>exchange</code> 方法有两个重载实现：</p>
+<ul>
+<li><code>V exchange(V x)</code>：交换数据，返回从其他线程交换回来的数据。</li>
+<li><code>V exchange(V x, long timeout, TimeUnit unit)</code>：可以设置超时时间，如果超过这个时间还没有与其他线程交换数据，则会抛出 <code>TimeoutException</code> 异常。</li>
+</ul>
+<p>这个类在遇到类似生产者和消费者问题时，是非常有用的。只是 <code>Exchange</code> 类只能同步2个线程，所以你只能在你的生产者和消费者问题中只有一个生产者和一个消费者时使用这个类。<br><code>Exchanger</code>可以用于遗传算法，遗传算法里需要选出两个人作为交配对象，这时候会交换两人的数据，并使用交叉规则得出2个交配结果。<br>它还可以用于校对工作，比如银行需要将银行流水录入电子银行流水，为了避免错误，采用AB两人进行录入，录入之后再加载两人的数据进行校对，看录入是否一致。</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">public static void testExchanger() &#123;</div><div class="line">    Exchanger&lt;String&gt; exchanger = new Exchanger&lt;&gt;();</div><div class="line">    new Tomato(exchanger).start();</div><div class="line">    new Potato(exchanger).start();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Tomato extends Thread &#123;</div><div class="line">    private Exchanger mExchanger;</div><div class="line">    public Tomato (Exchanger exchanger) &#123;</div><div class="line">        mExchanger = exchanger;</div><div class="line">        setName(&quot;Tomato&quot;);</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        Log.e(getName() + &quot;Test&quot;,&quot;enter &quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(2000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        Log.e(&quot;Test&quot;,getName() + &quot; after sleep &quot;);</div><div class="line">        try &#123;</div><div class="line">            Log.e(&quot;Test&quot;,getName() + &quot; exchanger =  &quot;+mExchanger.exchange(&quot;Tomato&quot;));</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class Potato extends Thread &#123;</div><div class="line">    private Exchanger mExchanger;</div><div class="line">    public Potato (Exchanger exchanger) &#123;</div><div class="line">        mExchanger = exchanger;</div><div class="line">        setName(&quot;Potato&quot;);</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        Log.e(getName() + &quot;Test&quot;,&quot;enter &quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(1000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        Log.e(&quot;Test&quot;,getName() + &quot; after sleep &quot;);</div><div class="line">        try &#123;</div><div class="line">            Log.e(&quot;Test&quot;,getName() + &quot; exchanger =  &quot;+mExchanger.exchange(&quot;Potato&quot;));</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">14:04:18.911 E/TomatoTest: enter </div><div class="line">14:04:18.911 E/PotatoTest: enter </div><div class="line">14:04:19.911 E/Test: Potato after sleep </div><div class="line">14:04:20.911 E/Test: Tomato after sleep </div><div class="line">14:04:20.911 E/Test: Tomato exchanger =  Potato</div><div class="line">14:04:20.911 E/Test: Potato exchanger =  Tomato</div></pre></td></tr></table></figure>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2>]]></content>
+    
+    <summary type="html">
+    
+      本文介绍 Exchanger 的使用
+    
+    </summary>
+    
+      <category term="Android 线程" scheme="http://yoursite.com/categories/Android-%E7%BA%BF%E7%A8%8B/"/>
+    
+    
+      <category term="Android 线程" scheme="http://yoursite.com/tags/Android-%E7%BA%BF%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java 线程 -- Semaphore</title>
     <link href="http://yoursite.com/2015/09/07/java-thread-how-to-use-semaphore/"/>
     <id>http://yoursite.com/2015/09/07/java-thread-how-to-use-semaphore/</id>
