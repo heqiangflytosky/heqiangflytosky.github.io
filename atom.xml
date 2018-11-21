@@ -9517,7 +9517,7 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
     <link href="http://yoursite.com/2013/06/08/java-basic-arrays-collections/"/>
     <id>http://yoursite.com/2013/06/08/java-basic-arrays-collections/</id>
     <published>2013-06-08T02:00:00.000Z</published>
-    <updated>2018-11-06T09:32:04.282Z</updated>
+    <updated>2018-11-21T08:48:08.413Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>Arrays</code> 和 <code>Collections</code> 是 Java 提供的工具类，提供了一些算法类的方法，比如：排序、搜索等。它们都在 java.util.* 包下面。<code>Arrays</code> 用来操作数组，<code>Collections</code> 用来操作集合。<br>本文就对这两个类做一些介绍。</p>
 <h2 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h2><h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><p><code>Arrays</code> 提供了两种排序的方法：</p>
@@ -9558,7 +9558,7 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
 <li><code>synchronizedCollection(Collection&lt;T&gt; c, Object mutex)</code></li>
 <li><code>synchronizedList(List&lt;T&gt; list)</code></li>
 <li><code>synchronizedList(List&lt;T&gt; list, Object mutex)</code></li>
-<li><code>synchronizedMap(Map&lt;K,V&gt; m)</code></li>
+<li><code>synchronizedMap(Map&lt;K,V&gt; m)</code>：返回一个线程安全的 SynchronizedMap 类，但是同样是线程安全的 ConcurrentHashMap 类性能优于  SynchronizedMap。</li>
 <li><code>synchronizedSet(Set&lt;T&gt; s)</code></li>
 <li><code>synchronizedSet(Set&lt;T&gt; s, Object mutex)</code></li>
 <li><code>synchronizedSortedMap(SortedMap&lt;K,V&gt; m)</code></li>
@@ -9593,10 +9593,10 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
     <link href="http://yoursite.com/2013/06/06/java-basic-map-collection/"/>
     <id>http://yoursite.com/2013/06/06/java-basic-map-collection/</id>
     <published>2013-06-06T02:00:00.000Z</published>
-    <updated>2018-11-13T05:04:50.798Z</updated>
+    <updated>2018-11-21T08:48:08.413Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java 开发过程中，集合类是我们经常要接触和使用的类，从本文开始，将用一系列的文章来对这个知识点进行梳理和总结。<br>本文先对 Java 集合相关知识做一个概括性的描述，后面会有一系列的文章再细分介绍集合框架。<br>下面先来看一下 Java 集合框架的类图。</p>
-<p><img src="http://www.plantuml.com/plantuml/svg/XLEnRXH13EtdAqRfao-W2882K4125q7jx1aOtTpkCJCRwGIfa29A2X12aP3egA10eipVt05_mNd7hCUQMr9aitxsivzzRuzZWf3wfJUdBdcq1m_W7EoVgylDkxVRBvVRppytLzS7nhImnBY21kslRn-tFpxOLwRn4AEz7GAi8mTtEk-nIQvhexaeITllxtzVlzby-ieyAbsk8C2PHmsaBcZgGrZjIAvD69vnN4IpBYISQ-mHdBldr9bWE8ifG9Cio-LmJ-gk6vH3MBEYUn1VK5sEdY8iD7BYsWNEDKPHAhQwFySskRJ-LyNmQK0SGjhkrkkZ8oLCtYbvUCXAweGIbVzpGccJAI9FjhMP8IcgpfXSDxz9fhXnBMjSJwfO06TgIdKevG7nbLX1mGLuuc8g3O9bzBZ77Ylxg1fPZU09-yZagGgICPNxJ-CiS9BtigShWH-w5vQZZk8iYSG6WZt19dM1Wrc2Pb5-ojHPaVCe8nkpmNPm1TArAv2FBh0slE2cXjXjwgZqiDoZnCj0QFNTRXv3M-p-U8Q0DpFpgiDJs9AO8IihZ3U-SIljlsAwVARx4kCFBtJUOCmGLHHeQzJ7Ov_iouXHwWjBMM6Vt2h3sN4NvXZRUR_qVm40" alt="效果图"></p>
+<p><img src="http://www.plantuml.com/plantuml/svg/XLCnRzHW3DtpAwBkxIzWAA83e8A4heBPpHc8BfTSly-fT89EI1KZ0mYXIaXiJ30WCVRVt07_WZh-Wcrz3JUqb_VivpnRBuUH852_R8gJcXeiznx2EPH_hYutxzvklrnkF__SN5tl5KKBIumhgB3yzUtZziU7ybLHDH1ZUJS4MCS4xdLDWnNLNHkB2olQVd__-_hDvjFNfEFMvGe2d3Re2Ug2bpw2rOseRWd3yuGDcdM1SEwvnt1Ul-39JCDff00LbSbkWhUKZkh1EOHrSdGVualk4_GCOU6PuxfTuDnpZCXizM2EBTMq7hiIVH8G1yZRtNbzSE2CwJCNz_UJaxpWJCcl5BmtVOlQqsrBKMY9kuNJwygJLkoDSrlZUhPB34WbbsI7SXdGN6aK76t8upgI3GXQzAJ77Wq-mZE7PKsdqLMPdeYJEfdgO5jJjVyC5iEJkhEUhmRDCDr4a2TgqXHfB9HxYXLr8O4PGRMmdpPFTc9vLQ4RZu6Bb95y_PoKdPJs7u3oHKv9-lnH-L_fPWXlWShok-r-3MznyoVliEImYVHAadQE6XIYqt5Qc66oQfBuxocDye4qTlGxlhKm9i7AnSDOOQawy5d9hpa69w-OvEGdrpQJ9nabj4JmeZZ4Tjulcxy0" alt="效果图"></p>
 <p>整个集合框架就围绕一组标准接口而设计。你可以直接使用这些接口的标准实现，诸如： <code>LinkedList</code>、<code>HashSet</code>和 <code>TreeSet</code> 等,除此之外你也可以通过这些接口实现自己的集合，比如通过实现 <code>List</code> 接口来实现线程安全的 <code>CopyOnWriteArrayList</code> 类等。<br>上面图中的类都在 java.util.<em> 包下面，本文也只介绍这个包下面的类，其他比如 java.util.concurrent.</em> 包的类将放在另外的文章中介绍。</p>
 <h2 id="集合类型"><a href="#集合类型" class="headerlink" title="集合类型"></a>集合类型</h2><p>Java 集合框架的容器类可以主要分为两种外加一种算法类：</p>
 <ul>
@@ -9612,11 +9612,12 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
 <li>算法类：Arrays、Collections</li>
 </ul>
 <h2 id="特点介绍"><a href="#特点介绍" class="headerlink" title="特点介绍"></a>特点介绍</h2><p>ArrayList适合于进行大量的随机访问的情况下使用，LinkedList适合在表中进行插入、删除时使用，二者都是非线程安全。</p>
-<p>Vector 是线程安全的，它是 ArrayList 的多线程版本。<br>HashTable 是线程安全的，它是 HashMap 的多线程版本。<code>HashTable</code> 内部是通过使用 <code>synchronized</code> 方法来保证线程安全的，但在线程竞争激烈的情况下它的效率就比较低。这时可以考虑使用 <code>ConcurrentHashMap</code>，这个后面会介绍。<br>HashTable 即不支持 null key也不支持null value。HashMap 中null可以作为key，这样的key只有一个，可以有一个或者多个value所对应的key为null。<br>HashMap 底层主要是基于数组和链表来实现的，它之所以有相当快的查询速度主要是因为它是通过计算散列码来决定存储的位置。</p>
+<p>Vector 是线程安全的，它是 ArrayList 的多线程版本。<br>HashTable 是线程安全的，它是 HashMap 的多线程版本。<code>HashTable</code> 内部是通过使用 <code>synchronized</code> 方法来保证线程安全的，但在线程竞争激烈的情况下它的效率就比较低。这时可以考虑使用 <code>ConcurrentHashMap</code>，这个后面会介绍。<br>HashTable 即不支持 null key也不支持null value。HashMap 中null可以作为key，这样的key只有一个，可以有一个或者多个value所对应的key为null。<br>HashMap 非线程安全，底层主要是基于数组和链表来实现的，它之所以有相当快的查询速度主要是因为它是通过计算散列码来决定存储的位置。适用于在Map中插入、删除和定位元素。</p>
 <p>Colleciton 用于存放多个单对象，Map 用于存放 Key-Value 形式的键值对。</p>
 <p>Set 和 List 都继承自 Collection 接口。它们最大的最大区别就是 Set 中的元素不可以重复，List 中允许重复元素。<br>Map中不允许出现重复的键（Key）。</p>
 <p>WeakHashMap，直接使用 HashMap 有时候会带来内存溢出的风险，使用 WaekHashMap 实例化 Map。当使用者不再有对象引用的时候，WeakHashMap 将自动被移除对应 Key 值的对象。</p>
-<p>TreeMap 底层通过红黑树（Red-Black tree）实现，也就意味着 <code>containsKey()</code>，<code>get()</code>, <code>put()</code>, <code>remove()</code> 都有着 log(n) 的时间复杂度。</p>
+<p>TreeMap 非线程安全，底层通过红黑树（Red-Black tree）实现，也就意味着 <code>containsKey()</code>，<code>get()</code>, <code>put()</code>, <code>remove()</code> 都有着 log(n) 的时间复杂度。TreeMap 是自动实现排序的，按照key的字典顺序来排序（升序）或者自定义的 Comparator 接口来排序。在需要使用排序的 Map 时推荐使用 TreeMap。</p>
+<p>Deque 是双端队列，你可以从任意一端插入或者抽取元素。</p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.runoob.com/java/java-collections.html" target="_blank" rel="external">http://www.runoob.com/java/java-collections.html</a><br><a href="http://www.runoob.com/java/java-vector-class.html" target="_blank" rel="external">http://www.runoob.com/java/java-vector-class.html</a></p>
 <!-- plantuml 代码 -->
 <!--  
@@ -9666,6 +9667,7 @@ interface Collection
 interface List
 interface Set
 interface Queue
+interface Deque
 interface SortedSet
 interface NavigableSet
 abstract class AbstractCollection
@@ -9692,6 +9694,7 @@ List  <|.. AbstractList
 AbstractList <|-- AbstractSequentialList
 AbstractCollection  <|-- AbstractSet
 Set <|.. AbstractSet
+Queue <|-- Deque
 AbstractCollection  <|-- AbstractQueue
 Queue <|.. AbstractQueue
 Set <|--  SortedSet
