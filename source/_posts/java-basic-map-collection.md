@@ -13,7 +13,7 @@ Java 开发过程中，集合类是我们经常要接触和使用的类，从本
 本文先对 Java 集合相关知识做一个概括性的描述，后面会有一系列的文章再细分介绍集合框架。
 下面先来看一下 Java 集合框架的类图。
 
-![效果图](http://www.plantuml.com/plantuml/svg/XLEnRXH13EtdAqRfao-W2882K4125q7jx1aOtTpkCJCRwGIfa29A2X12aP3egA10eipVt05_mNd7hCUQMr9aitxsivzzRuzZWf3wfJUdBdcq1m_W7EoVgylDkxVRBvVRppytLzS7nhImnBY21kslRn-tFpxOLwRn4AEz7GAi8mTtEk-nIQvhexaeITllxtzVlzby-ieyAbsk8C2PHmsaBcZgGrZjIAvD69vnN4IpBYISQ-mHdBldr9bWE8ifG9Cio-LmJ-gk6vH3MBEYUn1VK5sEdY8iD7BYsWNEDKPHAhQwFySskRJ-LyNmQK0SGjhkrkkZ8oLCtYbvUCXAweGIbVzpGccJAI9FjhMP8IcgpfXSDxz9fhXnBMjSJwfO06TgIdKevG7nbLX1mGLuuc8g3O9bzBZ77Ylxg1fPZU09-yZagGgICPNxJ-CiS9BtigShWH-w5vQZZk8iYSG6WZt19dM1Wrc2Pb5-ojHPaVCe8nkpmNPm1TArAv2FBh0slE2cXjXjwgZqiDoZnCj0QFNTRXv3M-p-U8Q0DpFpgiDJs9AO8IihZ3U-SIljlsAwVARx4kCFBtJUOCmGLHHeQzJ7Ov_iouXHwWjBMM6Vt2h3sN4NvXZRUR_qVm40)
+![效果图](http://www.plantuml.com/plantuml/svg/XLCnRzHW3DtpAwBkxIzWAA83e8A4heBPpHc8BfTSly-fT89EI1KZ0mYXIaXiJ30WCVRVt07_WZh-Wcrz3JUqb_VivpnRBuUH852_R8gJcXeiznx2EPH_hYutxzvklrnkF__SN5tl5KKBIumhgB3yzUtZziU7ybLHDH1ZUJS4MCS4xdLDWnNLNHkB2olQVd__-_hDvjFNfEFMvGe2d3Re2Ug2bpw2rOseRWd3yuGDcdM1SEwvnt1Ul-39JCDff00LbSbkWhUKZkh1EOHrSdGVualk4_GCOU6PuxfTuDnpZCXizM2EBTMq7hiIVH8G1yZRtNbzSE2CwJCNz_UJaxpWJCcl5BmtVOlQqsrBKMY9kuNJwygJLkoDSrlZUhPB34WbbsI7SXdGN6aK76t8upgI3GXQzAJ77Wq-mZE7PKsdqLMPdeYJEfdgO5jJjVyC5iEJkhEUhmRDCDr4a2TgqXHfB9HxYXLr8O4PGRMmdpPFTc9vLQ4RZu6Bb95y_PoKdPJs7u3oHKv9-lnH-L_fPWXlWShok-r-3MznyoVliEImYVHAadQE6XIYqt5Qc66oQfBuxocDye4qTlGxlhKm9i7AnSDOOQawy5d9hpa69w-OvEGdrpQJ9nabj4JmeZZ4Tjulcxy0)
 
 整个集合框架就围绕一组标准接口而设计。你可以直接使用这些接口的标准实现，诸如： `LinkedList`、`HashSet`和 `TreeSet` 等,除此之外你也可以通过这些接口实现自己的集合，比如通过实现 `List` 接口来实现线程安全的 `CopyOnWriteArrayList` 类等。
 上面图中的类都在 java.util.* 包下面，本文也只介绍这个包下面的类，其他比如 java.util.concurrent.* 包的类将放在另外的文章中介绍。
@@ -41,7 +41,7 @@ ArrayList适合于进行大量的随机访问的情况下使用，LinkedList适�
 Vector 是线程安全的，它是 ArrayList 的多线程版本。
 HashTable 是线程安全的，它是 HashMap 的多线程版本。`HashTable` 内部是通过使用 `synchronized` 方法来保证线程安全的，但在线程竞争激烈的情况下它的效率就比较低。这时可以考虑使用 `ConcurrentHashMap`，这个后面会介绍。
 HashTable 即不支持 null key也不支持null value。HashMap 中null可以作为key，这样的key只有一个，可以有一个或者多个value所对应的key为null。
-HashMap 底层主要是基于数组和链表来实现的，它之所以有相当快的查询速度主要是因为它是通过计算散列码来决定存储的位置。
+HashMap 非线程安全，底层主要是基于数组和链表来实现的，它之所以有相当快的查询速度主要是因为它是通过计算散列码来决定存储的位置。适用于在Map中插入、删除和定位元素。
 
 Colleciton 用于存放多个单对象，Map 用于存放 Key-Value 形式的键值对。
 
@@ -50,7 +50,9 @@ Map中不允许出现重复的键（Key）。
 
 WeakHashMap，直接使用 HashMap 有时候会带来内存溢出的风险，使用 WaekHashMap 实例化 Map。当使用者不再有对象引用的时候，WeakHashMap 将自动被移除对应 Key 值的对象。
 
-TreeMap 底层通过红黑树（Red-Black tree）实现，也就意味着 `containsKey()`，`get()`, `put()`, `remove()` 都有着 log(n) 的时间复杂度。
+TreeMap 非线程安全，底层通过红黑树（Red-Black tree）实现，也就意味着 `containsKey()`，`get()`, `put()`, `remove()` 都有着 log(n) 的时间复杂度。TreeMap 是自动实现排序的，按照key的字典顺序来排序（升序）或者自定义的 Comparator 接口来排序。在需要使用排序的 Map 时推荐使用 TreeMap。
+
+Deque 是双端队列，你可以从任意一端插入或者抽取元素。
 
 ## 参考文章
 
@@ -107,6 +109,7 @@ interface Collection
 interface List
 interface Set
 interface Queue
+interface Deque
 interface SortedSet
 interface NavigableSet
 abstract class AbstractCollection
@@ -133,6 +136,7 @@ List  <|.. AbstractList
 AbstractList <|-- AbstractSequentialList
 AbstractCollection  <|-- AbstractSet
 Set <|.. AbstractSet
+Queue <|-- Deque
 AbstractCollection  <|-- AbstractQueue
 Queue <|.. AbstractQueue
 Set <|--  SortedSet

@@ -108,7 +108,7 @@ date: 2013-6-8 10:00:00
  - `synchronizedCollection(Collection<T> c, Object mutex)`
  - `synchronizedList(List<T> list)`
  - `synchronizedList(List<T> list, Object mutex)`
- - `synchronizedMap(Map<K,V> m)`
+ - `synchronizedMap(Map<K,V> m)`：返回一个线程安全的 SynchronizedMap 类，但是同样是线程安全的 ConcurrentHashMap 类性能优于  SynchronizedMap。
  - `synchronizedSet(Set<T> s)`
  - `synchronizedSet(Set<T> s, Object mutex)`
  - `synchronizedSortedMap(SortedMap<K,V> m)`
