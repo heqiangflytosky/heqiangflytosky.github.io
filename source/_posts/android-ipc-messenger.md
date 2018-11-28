@@ -69,13 +69,30 @@ AndroidManifest.xml
 ### Client端
 ```java
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     private static final int MSG_ADD = 0;
+
     private Messenger mService = null;
-    private boolean mConnected = false;
+    // 缓存在bindService之前请求发送的消息
+    private ArrayList<Runnable> mPendingTask = new ArrayList<>();
+    private static final int STATUS_UNBIND = 0;
+    private static final int STATUS_BINDING = 1;
+    private static final int STATUS_BOUND = 2;
+    private int mBindStatus = STATUS_UNBIND;
+    private IBinder.DeathRecipient mDeathRecipient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDeathRecipient = new IBinder.DeathRecipient(){
+            @Override
+            public void binderDied() {
+                Log.d(TAG,"binderDied");
+                mServiceConnection.onServiceDisconnected(null);
+                doBindService();
+            }
+        };
         doBindService();
     }
 
@@ -86,37 +103,68 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doBindService(){
-        Intent intent = new Intent();
-        intent.setAction("com.android.hq.messenger");
-        intent.setPackage("com.android.hq.messengerserver");
-//        intent.setClassName("com.android.hq.messengerserver", "com.android.hq.messengerserver.MessengerService");
-        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        if(mBindStatus == STATUS_UNBIND){
+            mBindStatus = STATUS_BINDING;
+            Intent intent = new Intent();
+            intent.setAction("com.android.hq.messenger");
+            intent.setPackage("com.android.hq.messengerserver");
+//            intent.setClassName("com.android.hq.messengerserver", "com.android.hq.messengerserver.MessengerService");
+            bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        }
+
     }
 
     public void onAddClick(View v){
-        if(!mConnected)
-            return;
         Message message = Message.obtain(null, MSG_ADD, 100, 100);
         message.replyTo = mMessenger;
-        try {
-            mService.send(message);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        sendMessage(message);
+    }
+
+    private void sendMessage(final Message message) {
+        if(message == null)
+            return;
+        if (mService == null) {
+            doBindService();
+            synchronized (mPendingTask) {
+                mPendingTask.add(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendMessage(message);
+                    }
+                });
+            }
+        } else {
+            try {
+                mService.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            mBindStatus = STATUS_BOUND;
             mService = new Messenger(service);
-            mConnected = true;
             Toast.makeText(MainActivity.this, "onServiceConnected", Toast.LENGTH_SHORT).show();
+            try {
+                service.linkToDeath(mDeathRecipient, 0);
+            } catch (RemoteException e) {
+                Log.d(TAG, "linkToDeath", e);
+            }
+            synchronized (mPendingTask) {
+                for (int i = 0; i < mPendingTask.size(); i++) {
+                    mPendingTask.get(i).run();
+                }
+                mPendingTask.clear();
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mService = null;
-            mConnected = false;
+            mBindStatus = STATUS_UNBIND;
             Toast.makeText(MainActivity.this, "onServiceDisconnected", Toast.LENGTH_SHORT).show();
         }
     };
@@ -200,4 +248,3 @@ Messenger是以串行的方式处理客户端发来的消息，如果有大量�
 
 ## 参考资料 
 http://blog.csdn.net/lmj623565791/article/details/47017485
-
