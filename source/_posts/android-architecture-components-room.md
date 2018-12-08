@@ -1,6 +1,6 @@
 ---
 title: Android Architecture Components -- Room
-categories: Android
+categories: Android 架构
 comments: true
 tags: [Architecture Components, Room]
 description: 本文介绍 Android 数据库架构组件 Room 的基本使用
