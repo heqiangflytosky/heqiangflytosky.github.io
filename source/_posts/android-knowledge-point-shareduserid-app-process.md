@@ -1,5 +1,5 @@
 ---
-title: Android sharedUserId App 和 Process 的关系
+title: Android App Process 以及 sharedUserId的关系
 categories: Android
 comments: true
 tags: [Android]
@@ -12,6 +12,10 @@ date: 2015-12-16 10:00:00
 ### 一个应用内的多进程
 
 Activity 可以通过 `android:process` 来运行在指定的进程。
+指定方法：
+
+ - 冒号开头的字符串：比如 `：remote`，那么该进程就是私有进程。
+ - 其他字符串，必须包含一个 . ，否则安装 apk 时会报错“Invalid process name ** in package *.*.*.*: must have at least one '.' separator”。那么它就是公有进程，这样拥有相同 ShareUID 的不同应用可以跑在同一进程里。 
 
 ### 调用其他App中的 Activity
 

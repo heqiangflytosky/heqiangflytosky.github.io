@@ -16,7 +16,7 @@ date: 2018-8-2 10:00:00
 
 ### 创建 Remote 调试任务
 
-选择 Edit Configurations ...，在弹出的对话框中选择 Remote。
+选择 Edit Configurations ...，点击添加，在弹出的对话框中选择 Remote。
 
 ![效果图](/images/development-tool-gradle-plugin-debug/edig-config.png)
 

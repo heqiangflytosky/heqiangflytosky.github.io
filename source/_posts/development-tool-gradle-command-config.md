@@ -307,7 +307,7 @@ dependencies {
 `compile`表示编译时提供并打包进apk。
 `provided`表示只在编译时提供，不打包进apk。
  - `implementation` 和 `api`
-`implementation` 会将依赖隐藏在内部而不对外公开，就是说使用 `implementation` 的依赖不会传递。比如：一个项目中app模块依赖A模块，A模块使用 `implementation` 来依赖 fastjson ，那么app里面如果不添加依赖的话就不能直接引用fastjson。这样做的好处是1.加快编译速度，2. 隐藏对外不必要的接口。
+这两个是 Gradle 3.0 以后的依赖方法，`implementation` 在编译期会将依赖隐藏在内部而不对外公开，就是说使用 `implementation` 的依赖不会传递。只有在运行时其他模块才能获取依赖。比如：一个项目中app模块依赖A模块，A模块使用 `implementation` 来依赖 fastjson ，那么app里面如果不添加依赖的话就不能直接引用fastjson。这样做的好处是1.加快编译速度，2. 隐藏对外不必要的接口。
 `api` 和以前的 `compile` 是一样的。
 gradle 3.0以后使用 `compileOnly` 来代替 `provided`，使用 `runtimeOnly` 来代替 `apk`
  - `exclude` 防止重复依赖，后面会重点介绍
@@ -522,9 +522,14 @@ apply from:"config.gradle"
 android节点读取ext中android对应项，dependencies读取dependencies对应项，如果配置有变化就可以只在config.gradle中修改，是不是很方便进行配置的管理呢？
 
 ## 检查依赖报告
-运行命令`./gradlew <projectname>:dependencies --configuration compile` （projectname为settings.gradle里面配置的各个project，如果没有配置，直接运行`./gradlew dependencies --configuration compile`），会把依赖树会打印出来，依赖树显示了你 build 脚本声明的顶级依赖和它们的传递依赖：
+运行命令`./gradlew <projectname>:dependencies` （projectname为settings.gradle里面配置的各个project，如果没有配置，直接运行`./gradlew dependencies`），会把该模块所有配置的依赖树会打印出来，依赖树显示了你 build 脚本声明的顶级依赖和它们的传递依赖。
+为了减少输出内容我们只对 compile configuration感兴趣，那么可以运行下面的命令：
+`./gradlew <projectname>:dependencies --configuration compile`
 ![依赖树](/images/development-tool-gradle-command-config/gradle-dependencies.png)
-仔细观察你会发现有些传递依赖标注了*号，表示这个依赖被忽略了，这是因为其他顶级依赖中也依赖了这个传递的依赖，Gradle会自动分析下载最合适的依赖。
+仔细观察你会发现有些传递依赖标注了（*）星号，表示这个依赖被忽略了，这是因为其他顶级依赖中也依赖了这个传递的依赖，Gradle会自动分析下载最合适的依赖，一般是比较新的版本。
+（->）箭头表示被强转变依赖于箭头后面的版本
+如果在 Gradle 3.0 以后可以运行：
+`./gradlew <projectname>:dependencies --configuration releaseRuntimeClasspath`
 
 ## 排除传递依赖
 Gradle允许你完全控制传递依赖，你可以选择排除全部的传递依赖也可以排除指定的依赖。
@@ -553,6 +558,16 @@ Gradle允许你完全控制传递依赖，你可以选择排除全部的传递�
         }
     }
 ```
+
+或者：
+
+```
+        compile ('com.jakewharton:butterknife:8.5.1'){
+            // 冲突时优先使用该版本
+            force = true
+        }
+```
+
 这样，应用中对`org.hamcrest:hamcrest-core` 依赖就会变成1.3版本。
 
 ## 动态版本声明

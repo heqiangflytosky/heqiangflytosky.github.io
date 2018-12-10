@@ -1,5 +1,5 @@
 ---
-title: Android：SharedPreferences 源码分析以及跨进程读写问题
+title: Android SharedPreferences 源码分析以及跨进程读写问题
 categories: Android
 comments: true
 tags: [Android]
@@ -499,7 +499,7 @@ get 方法使用了对象的同步锁，说明这个方法是线程安全的。
 
 综合性能考虑，如果在主线程操作且不需要返回值的情况下，优先使用 apply 来提交修改。
 
-<!--
+<!--  
 
 https://www.jianshu.com/p/875d13458538
 

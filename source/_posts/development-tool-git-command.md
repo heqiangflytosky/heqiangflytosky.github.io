@@ -151,6 +151,18 @@ cherry pick 与 git merge
 
 ### 解决本地有提交记录的远程冲突
 
+```
+git fetch origin
+git rebase origin/develop
+//修改冲突文件
+...
+git add .
+git rebase --continue
+git push origin HEAD:refs/changes/<changeID>
+//不会产生新的changes记录，将原changes记录重新review提交即可
+git pull
+```
+
 ### 解决本地没有提交记录的远程冲突
 
 ```
