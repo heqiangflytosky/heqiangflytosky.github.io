@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/07/development-tool-git-command/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="列举一些常用的Git命令">
-<meta property="og:updated_time" content="2018-10-17T09:34:53.035Z">
+<meta property="og:updated_time" content="2018-12-12T01:56:07.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="列举一些常用的Git命令">
@@ -490,7 +490,8 @@
 </ul>
 <h2 id="git-merge"><a href="#git-merge" class="headerlink" title="git merge"></a>git merge</h2><h3 id="git-merge-s-ours"><a href="#git-merge-s-ours" class="headerlink" title="git merge -s ours"></a>git merge -s ours</h3><p>cherry pick 与 git merge</p>
 <h2 id="git-fetch"><a href="#git-fetch" class="headerlink" title="git fetch"></a>git fetch</h2><h2 id="解-gerrit-冲突"><a href="#解-gerrit-冲突" class="headerlink" title="解 gerrit 冲突"></a>解 gerrit 冲突</h2><!--  https://www.cnblogs.com/xiaoerlang/p/3810206.html -->
-<h3 id="解决本地有提交记录的远程冲突"><a href="#解决本地有提交记录的远程冲突" class="headerlink" title="解决本地有提交记录的远程冲突"></a>解决本地有提交记录的远程冲突</h3><h3 id="解决本地没有提交记录的远程冲突"><a href="#解决本地没有提交记录的远程冲突" class="headerlink" title="解决本地没有提交记录的远程冲突"></a>解决本地没有提交记录的远程冲突</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// 下面的 url 指的是 pull request 对应的地址，比如： ssh://name@test.com:29418/app/ProjectName refs/changes/40/1000/3</div><div class="line">git fetch &lt;url&gt; &amp;&amp; git checkout FETCH_HEAD</div><div class="line">git checkout -b new_branch_name        // 新建一个本地分支用来解冲突</div><div class="line">git fetch origin                       //远程仓库的名称可以用  git remote -v 来查看</div><div class="line">git rebase origin/develop              //rebase 你冲突的代码分支，develop为当前提交代码所在的分支</div><div class="line">修改冲突文件</div><div class="line">git rebase --continue</div><div class="line">git push origin new_branch_name:refs/for/develop</div><div class="line">git checkout develop</div><div class="line">git branch -D new_branch_name</div><div class="line">//不会产生新的 changes 记录，将原 changes 记录重新 review 提交即可，这时在原冲突机器上直接pull会本地冲突，需要</div><div class="line">git reset --hard HEAD^</div><div class="line">//否则会出现cannot do a partial commit during a merge.最后更新下代码</div><div class="line">git pull</div></pre></td></tr></table></figure>
+<h3 id="解决本地有提交记录的远程冲突"><a href="#解决本地有提交记录的远程冲突" class="headerlink" title="解决本地有提交记录的远程冲突"></a>解决本地有提交记录的远程冲突</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">git fetch origin</div><div class="line">git rebase origin/develop</div><div class="line">//修改冲突文件</div><div class="line">...</div><div class="line">git add .</div><div class="line">git rebase --continue</div><div class="line">git push origin HEAD:refs/changes/&lt;changeID&gt;</div><div class="line">//不会产生新的changes记录，将原changes记录重新review提交即可</div><div class="line">git pull</div></pre></td></tr></table></figure>
+<h3 id="解决本地没有提交记录的远程冲突"><a href="#解决本地没有提交记录的远程冲突" class="headerlink" title="解决本地没有提交记录的远程冲突"></a>解决本地没有提交记录的远程冲突</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// 下面的 url 指的是 pull request 对应的地址，比如： ssh://name@test.com:29418/app/ProjectName refs/changes/40/1000/3</div><div class="line">git fetch &lt;url&gt; &amp;&amp; git checkout FETCH_HEAD</div><div class="line">git checkout -b new_branch_name        // 新建一个本地分支用来解冲突</div><div class="line">git fetch origin                       //远程仓库的名称可以用  git remote -v 来查看</div><div class="line">git rebase origin/develop              //rebase 你冲突的代码分支，develop为当前提交代码所在的分支</div><div class="line">修改冲突文件</div><div class="line">git rebase --continue</div><div class="line">git push origin new_branch_name:refs/for/develop</div><div class="line">git checkout develop</div><div class="line">git branch -D new_branch_name</div><div class="line">//不会产生新的 changes 记录，将原 changes 记录重新 review 提交即可，这时在原冲突机器上直接pull会本地冲突，需要</div><div class="line">git reset --hard HEAD^</div><div class="line">//否则会出现cannot do a partial commit during a merge.最后更新下代码</div><div class="line">git pull</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -609,7 +610,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">127</span>
+                <span class="site-state-item-count">128</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -627,7 +628,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">75</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

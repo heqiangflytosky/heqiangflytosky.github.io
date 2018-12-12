@@ -88,13 +88,13 @@
 
 <meta name="description" content="介绍 sharedUserId App 和 Process 的关系">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android sharedUserId App 和 Process 的关系">
+<meta property="og:title" content="Android App Process 以及 sharedUserId的关系">
 <meta property="og:url" content="http://yoursite.com/2015/12/16/android-knowledge-point-shareduserid-app-process/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 sharedUserId App 和 Process 的关系">
-<meta property="og:updated_time" content="2018-11-15T01:14:42.551Z">
+<meta property="og:updated_time" content="2018-12-12T01:56:07.188Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android sharedUserId App 和 Process 的关系">
+<meta name="twitter:title" content="Android App Process 以及 sharedUserId的关系">
 <meta name="twitter:description" content="介绍 sharedUserId App 和 Process 的关系">
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title> Android sharedUserId App 和 Process 的关系 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android App Process 以及 sharedUserId的关系 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -302,7 +302,7 @@
             
             
               
-                Android sharedUserId App 和 Process 的关系
+                Android App Process 以及 sharedUserId的关系
               
             
           </h1>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2015/12/16/android-knowledge-point-shareduserid-app-process/" class="leancloud_visitors" data-flag-title="Android sharedUserId App 和 Process 的关系">
+             <span id="/2015/12/16/android-knowledge-point-shareduserid-app-process/" class="leancloud_visitors" data-flag-title="Android App Process 以及 sharedUserId的关系">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -400,7 +400,11 @@
       
 
       
-        <h2 id="应用和进程之间的关系"><a href="#应用和进程之间的关系" class="headerlink" title="应用和进程之间的关系"></a>应用和进程之间的关系</h2><h3 id="一个应用内的多进程"><a href="#一个应用内的多进程" class="headerlink" title="一个应用内的多进程"></a>一个应用内的多进程</h3><p>Activity 可以通过 <code>android:process</code> 来运行在指定的进程。</p>
+        <h2 id="应用和进程之间的关系"><a href="#应用和进程之间的关系" class="headerlink" title="应用和进程之间的关系"></a>应用和进程之间的关系</h2><h3 id="一个应用内的多进程"><a href="#一个应用内的多进程" class="headerlink" title="一个应用内的多进程"></a>一个应用内的多进程</h3><p>Activity 可以通过 <code>android:process</code> 来运行在指定的进程。<br>指定方法：</p>
+<ul>
+<li>冒号开头的字符串：比如 <code>：remote</code>，那么该进程就是私有进程。</li>
+<li>其他字符串，必须包含一个 . ，否则安装 apk 时会报错“Invalid process name <em>* in package </em>.<em>.</em>.*: must have at least one ‘.’ separator”。那么它就是公有进程，这样拥有相同 ShareUID 的不同应用可以跑在同一进程里。 </li>
+</ul>
 <h3 id="调用其他App中的-Activity"><a href="#调用其他App中的-Activity" class="headerlink" title="调用其他App中的 Activity"></a>调用其他App中的 Activity</h3><p>我们先来简单测试一下从应用 A 中启动应用 B 中的 Activity A1。<br>启动后 ps 进程关系：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">u0_a267   2163  2669  1946936 110492 SyS_epoll_ 7da55ef488 S com.example.heqiang.myapplication</div><div class="line">u0_a266   2198  2669  2048192 122872 SyS_epoll_ 7da55ef488 S com.example.heqiang.testsomething</div></pre></td></tr></table></figure>
 <p>它们位于不同的进程，其实这里不管启动模式是什么，他们都是在不同的进程。<br>即 A 启动的 Activity A1，它并不运行A自己的进程，而是运行在 A1 所属的应用 B 的进程。</p>
@@ -542,7 +546,7 @@ https://www.cnblogs.com/scarecrow-blog/p/4876560.html
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">127</span>
+                <span class="site-state-item-count">128</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -560,7 +564,7 @@ https://www.cnblogs.com/scarecrow-blog/p/4876560.html
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">75</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

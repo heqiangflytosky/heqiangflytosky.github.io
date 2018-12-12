@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-command-config/gradle-dependencies.png">
-<meta property="og:updated_time" content="2018-04-04T02:22:41.820Z">
+<meta property="og:updated_time" content="2018-12-12T01:56:07.193Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 使用指南 -- 基础配置">
 <meta name="twitter:description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
@@ -487,7 +487,7 @@
 <h3 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">        compile files(&apos;libs/android-support-v4.jar&apos;)</div><div class="line">        //在flatDir.dirs下面找依赖的aar</div><div class="line">        compile (name:&apos;ui&apos;, ext:&apos;aar&apos;)</div><div class="line">        // 编译extras目录下的ShimmerAndroid模块</div><div class="line">        // 使用transitive属性设置为false来排除所有的传递依赖，默认为true</div><div class="line">        compile project(&apos;:extras:ShimmerAndroid&apos;)&#123;</div><div class="line">            transitive = false</div><div class="line">        &#125;</div><div class="line">        // 编译CommonSDK模块，但是去掉此模块中对com.android.support的依赖，防止重复依赖报错</div><div class="line">        compile (project(&apos;:CommonSDK&apos;)) &#123; exclude group: &quot;com.android.support&quot; &#125;</div><div class="line">        provided fileTree(dir: &apos;src/android5/libs&apos;, include: [&apos;*.jar&apos;])</div><div class="line">        provided &apos;com.android.support:support-v4:21.0.3&apos;</div><div class="line">        provided project(&apos;:main-host&apos;)</div><div class="line">        //通用使用exclude排除support-compat模块的依赖</div><div class="line">        compile (&apos;com.jakewharton:butterknife:8.5.1&apos;)&#123;</div><div class="line">            exclude module: &apos;support-compat&apos;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // gradle 3.0以后版本支持的写法</div><div class="line">        implementation &apos;com.android.support.constraint:constraint-layout:1.0.2&apos;</div><div class="line">        api &apos;com.android.support:design:26.1.0&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
 <li><code>compile</code>和<code>provided</code><br><code>compile</code>表示编译时提供并打包进apk。<br><code>provided</code>表示只在编译时提供，不打包进apk。</li>
-<li><code>implementation</code> 和 <code>api</code><br><code>implementation</code> 会将依赖隐藏在内部而不对外公开，就是说使用 <code>implementation</code> 的依赖不会传递。比如：一个项目中app模块依赖A模块，A模块使用 <code>implementation</code> 来依赖 fastjson ，那么app里面如果不添加依赖的话就不能直接引用fastjson。这样做的好处是1.加快编译速度，2. 隐藏对外不必要的接口。<br><code>api</code> 和以前的 <code>compile</code> 是一样的。<br>gradle 3.0以后使用 <code>compileOnly</code> 来代替 <code>provided</code>，使用 <code>runtimeOnly</code> 来代替 <code>apk</code></li>
+<li><code>implementation</code> 和 <code>api</code><br>这两个是 Gradle 3.0 以后的依赖方法，<code>implementation</code> 在编译期会将依赖隐藏在内部而不对外公开，就是说使用 <code>implementation</code> 的依赖不会传递。只有在运行时其他模块才能获取依赖。比如：一个项目中app模块依赖A模块，A模块使用 <code>implementation</code> 来依赖 fastjson ，那么app里面如果不添加依赖的话就不能直接引用fastjson。这样做的好处是1.加快编译速度，2. 隐藏对外不必要的接口。<br><code>api</code> 和以前的 <code>compile</code> 是一样的。<br>gradle 3.0以后使用 <code>compileOnly</code> 来代替 <code>provided</code>，使用 <code>runtimeOnly</code> 来代替 <code>apk</code></li>
 <li><code>exclude</code> 防止重复依赖，后面会重点介绍</li>
 <li><code>transitive</code> 排除所有的传递依赖，后面会重点介绍</li>
 <li><code>include</code></li>
@@ -530,7 +530,7 @@
 <p>targetSdkVersion的版本还有依赖库的版本升级都在这里进行统一管理，所有的module以及主项目都从这里同意读取就可以了。<br>在build.gradle文件中加入：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply from:&quot;config.gradle&quot;</div></pre></td></tr></table></figure>
 <p>意思是所有的子项目或者所有的modules都可以从这个配置文件中读取内容。<br>android节点读取ext中android对应项，dependencies读取dependencies对应项，如果配置有变化就可以只在config.gradle中修改，是不是很方便进行配置的管理呢？</p>
-<h2 id="检查依赖报告"><a href="#检查依赖报告" class="headerlink" title="检查依赖报告"></a>检查依赖报告</h2><p>运行命令<code>./gradlew &lt;projectname&gt;:dependencies --configuration compile</code> （projectname为settings.gradle里面配置的各个project，如果没有配置，直接运行<code>./gradlew dependencies --configuration compile</code>），会把依赖树会打印出来，依赖树显示了你 build 脚本声明的顶级依赖和它们的传递依赖：<br><img src="/images/development-tool-gradle-command-config/gradle-dependencies.png" alt="依赖树"><br>仔细观察你会发现有些传递依赖标注了*号，表示这个依赖被忽略了，这是因为其他顶级依赖中也依赖了这个传递的依赖，Gradle会自动分析下载最合适的依赖。</p>
+<h2 id="检查依赖报告"><a href="#检查依赖报告" class="headerlink" title="检查依赖报告"></a>检查依赖报告</h2><p>运行命令<code>./gradlew &lt;projectname&gt;:dependencies</code> （projectname为settings.gradle里面配置的各个project，如果没有配置，直接运行<code>./gradlew dependencies</code>），会把该模块所有配置的依赖树会打印出来，依赖树显示了你 build 脚本声明的顶级依赖和它们的传递依赖。<br>为了减少输出内容我们只对 compile configuration感兴趣，那么可以运行下面的命令：<br><code>./gradlew &lt;projectname&gt;:dependencies --configuration compile</code><br><img src="/images/development-tool-gradle-command-config/gradle-dependencies.png" alt="依赖树"><br>仔细观察你会发现有些传递依赖标注了（*）星号，表示这个依赖被忽略了，这是因为其他顶级依赖中也依赖了这个传递的依赖，Gradle会自动分析下载最合适的依赖，一般是比较新的版本。<br>（-&gt;）箭头表示被强转变依赖于箭头后面的版本<br>如果在 Gradle 3.0 以后可以运行：<br><code>./gradlew &lt;projectname&gt;:dependencies --configuration releaseRuntimeClasspath</code></p>
 <h2 id="排除传递依赖"><a href="#排除传递依赖" class="headerlink" title="排除传递依赖"></a>排除传递依赖</h2><p>Gradle允许你完全控制传递依赖，你可以选择排除全部的传递依赖也可以排除指定的依赖。</p>
 <ul>
 <li><p>exclude：前面已经介绍过，可以设置不编译指定的模块，排除指定模块的依赖。后的参数有<code>group</code>和<code>module</code>，可以分别单独使用，会排除所有匹配项。</p>
@@ -544,6 +544,8 @@
 <li>force：强制设置某个模块的版本。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">configurations.all&#123;</div><div class="line">    resolutionStrategy&#123;</div><div class="line">        force&apos;org.hamcrest:hamcrest-core:1.3&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
+<p>或者：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">compile (&apos;com.jakewharton:butterknife:8.5.1&apos;)&#123;</div><div class="line">    // 冲突时优先使用该版本</div><div class="line">    force = true</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这样，应用中对<code>org.hamcrest:hamcrest-core</code> 依赖就会变成1.3版本。</p>
 <h2 id="动态版本声明"><a href="#动态版本声明" class="headerlink" title="动态版本声明"></a>动态版本声明</h2><p>如果你想使用一个依赖的最新版本，你可以使用latest.integration，比如声明 Cargo Ant tasks的最新版本，你可以这样写org.codehaus .cargo:cargo-ant:latest-integration，你也可以用一个+号来动态的声明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">	//依赖最新的1.x版本</div><div class="line">	compile &quot;org.codehaus.cargo:cargo-ant:1.+&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>然后在依赖树里面可以清晰的看到选择了哪个版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\--- org.codehaus.cargo:cargo-ant:1.+ -&gt; 1.3.1</div></pre></td></tr></table></figure></p>
@@ -679,7 +681,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">127</span>
+                <span class="site-state-item-count">128</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -697,7 +699,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">75</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
