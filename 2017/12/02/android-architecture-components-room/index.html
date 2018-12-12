@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/12/02/android-architecture-components-room/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 Android 数据库架构组件 Room 的基本使用">
-<meta property="og:updated_time" content="2018-12-12T01:56:43.882Z">
+<meta property="og:updated_time" content="2018-12-12T11:25:53.857Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Architecture Components -- Room">
 <meta name="twitter:description" content="本文介绍 Android 数据库架构组件 Room 的基本使用">
@@ -400,8 +400,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><a href="https://developer.android.com/training/data-storage/room/index.html" target="_blank" rel="external">官方文档</a><br>首先来介绍一下 Google 推出的 Android 架构组件（Architecture Components），测试版组件 Google 2017 IO 大会上发布，1.0 稳定版已经于2017年11月07正式推出。为 App 开发构架提供指南，并为常见任务，如生命周期管理、数据持久性等提供了一系列库。有了这些基础组件的帮助，开发者能够使用更少的样板代码写出模块化 App，将精力用于创新而非重复体力劳动。</p>
-<p>Room 是一个基于 SQLite 实现的 ORM 框架，使用他能帮助程序员方便快捷地实现数据存储功能。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><a href="https://developer.android.com/training/data-storage/room/index.html" target="_blank" rel="external">官方文档</a><br>首先来介绍一下 Google 推出的 Android 架构组件（Architecture Components），测试版组件 Google 2017 IO 大会上发布，1.0 稳定版已经于2017年11月07正式推出。为 App 开发构架提供指南，并为常见任务，如生命周期管理、数据持久性等提供了一系列库。有了这些基础组件的帮助，开发者能够使用更少的样板代码写出模块化 App，将精力用于创新而非重复体力劳动。<br>在 Android 中直接使用 SQLite 数据库存在多个缺点，你必须编写大量的模版代码，必须为编写的每个查询实现对象映射，很难实施数据库迁移，还有无法随时保证在后台线程操作数据库。为了解决这些问题，Google 推出了 Room 框架。一个在 SQLite 上提供抽象层的持久存储库。<br>Room 是一个基于 SQLite 实现的 ORM 框架，使用他能帮助程序员方便快捷地实现数据存储功能。</p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="组件介绍"><a href="#组件介绍" class="headerlink" title="组件介绍"></a>组件介绍</h3><ul>
 <li>数据库（Database）：你可以使用该组件创建数据库的持有者。该注解定义了实体列表，该类的内容定义了数据库中的 DAO 列表。这也是访问底层连接的主要入口点。注解类应该是抽象的并且扩展自 <code>RoomDatabase</code>。在运行时，你可以通过调用 <code>Room.databaseBuilder()</code> 或者 <code>Room.inMemoryDatabaseBuilder()</code> 获取实例。</li>
 <li>实体（Entity）：这个组件代表了持有数据库表记录的类。对每种实体来说，创建了一个数据库表来持有所有项。你必须通过 Database中 的 <code>entities</code> 数组来引用实体类。实体的每个成员变量都被持久化在数据库中，除非你注解其为 <code>@Ignore</code>。</li>
@@ -543,7 +542,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">128</span>
+                <span class="site-state-item-count">129</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -561,7 +560,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-count">76</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
