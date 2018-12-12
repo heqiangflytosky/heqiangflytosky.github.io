@@ -149,6 +149,14 @@ public class MyObserver implements LifecycleObserver {
 }
 ```
 
+要想使用 DefaultLifecycleObserver 需要添加下面的支持 java8 的依赖：
+
+
+```
+implementation 'android.arch.lifecycle:common-java8:1.1.1'
+```
+
+
 ```
 public class MyObserver implements DefaultLifecycleObserver {
     @Override
@@ -343,7 +351,7 @@ ObserverWithState 封装了 State 和 GenericLifecycleObserver，后面事件的
 
 其实事件的分发主要就是 ObserverWithState.dispatchEvent 的调用，然后调用生成的 GenericLifecycleObserver 对象的 onStateChanged 方法。
 
-### ReflectiveGenericLifecycleObserver.onStateChanged
+#### ReflectiveGenericLifecycleObserver.onStateChanged
 
 ```
 class ReflectiveGenericLifecycleObserver implements GenericLifecycleObserver {
@@ -376,7 +384,7 @@ CallbackInfo 保存了添加了 OnLifecycleEvent 注解的方法以及它对应�
 
 通过反射来调用注册的回调方法。
 
-### FullLifecycleObserverAdapter.onStateChanged
+#### FullLifecycleObserverAdapter.onStateChanged
 
 这个方法其实很简单，就是直接调用 FullLifecycleObserver 的几个生命周期回调方法。
 

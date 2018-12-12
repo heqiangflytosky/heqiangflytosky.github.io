@@ -12,7 +12,7 @@ date: 2017-12-2 10:00:00
 [官方文档](https://developer.android.com/training/data-storage/room/index.html)
 首先来介绍一下 Google 推出的 Android 架构组件（Architecture Components），测试版组件 Google 2017 IO 大会上发布，1.0 稳定版已经于2017年11月07正式推出。为 App 开发构架提供指南，并为常见任务，如生命周期管理、数据持久性等提供了一系列库。有了这些基础组件的帮助，开发者能够使用更少的样板代码写出模块化 App，将精力用于创新而非重复体力劳动。
 
-Room 相当于一个 ORM 框架，使用他能帮助程序员方便快捷地实现数据存储功能。
+Room 是一个基于 SQLite 实现的 ORM 框架，使用他能帮助程序员方便快捷地实现数据存储功能。
 
 ## 使用
 

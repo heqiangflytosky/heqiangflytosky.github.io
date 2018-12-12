@@ -142,3 +142,4 @@ http://blog.csdn.net/heqiangflytosky/article/details/51140346
 http://blog.csdn.net/heqiangflytosky/article/details/50764020
 
  - jclasslib bytecode viewer：查看 Java 类字节码的插件。安装成功后，选中类文件，在View->Show Bytecode With jclasslib
+ - database navigator：查看数据库插件
