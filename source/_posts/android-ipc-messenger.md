@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int STATUS_BOUND = 2;
     private int mBindStatus = STATUS_UNBIND;
     private IBinder.DeathRecipient mDeathRecipient;
+    private ServiceConnection mServiceConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConnection);
+        if (mBindStatus == STATUS_BOUND && mServiceConnection != null) {
+            unbindService(mServiceConnection);
+        }
     }
 
     private void doBindService(){
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setAction("com.android.hq.messenger");
             intent.setPackage("com.android.hq.messengerserver");
 //            intent.setClassName("com.android.hq.messengerserver", "com.android.hq.messengerserver.MessengerService");
-            bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+            bindService(intent, getServiceConnection(), Context.BIND_AUTO_CREATE);
         }
 
     }
@@ -142,32 +145,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBindStatus = STATUS_BOUND;
-            mService = new Messenger(service);
-            Toast.makeText(MainActivity.this, "onServiceConnected", Toast.LENGTH_SHORT).show();
-            try {
-                service.linkToDeath(mDeathRecipient, 0);
-            } catch (RemoteException e) {
-                Log.d(TAG, "linkToDeath", e);
-            }
-            synchronized (mPendingTask) {
-                for (int i = 0; i < mPendingTask.size(); i++) {
-                    mPendingTask.get(i).run();
+    private ServiceConnection getServiceConnection() {
+        if (mServiceConnection == null) {
+            mServiceConnection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    mBindStatus = STATUS_BOUND;
+                    mService = new Messenger(service);
+                    Toast.makeText(MainActivity.this, "onServiceConnected", Toast.LENGTH_SHORT).show();
+                    try {
+                        service.linkToDeath(mDeathRecipient, 0);
+                    } catch (RemoteException e) {
+                        Log.d(TAG, "linkToDeath", e);
+                    }
+                    synchronized (mPendingTask) {
+                        for (int i = 0; i < mPendingTask.size(); i++) {
+                            mPendingTask.get(i).run();
+                        }
+                        mPendingTask.clear();
+                    }
                 }
-                mPendingTask.clear();
-            }
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-            mBindStatus = STATUS_UNBIND;
-            Toast.makeText(MainActivity.this, "onServiceDisconnected", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    mService = null;
+                    mBindStatus = STATUS_UNBIND;
+                    Toast.makeText(MainActivity.this, "onServiceDisconnected", Toast.LENGTH_SHORT).show();
+                }
+            };
         }
-    };
+        return mServiceConnection;
+    }
 
     private Messenger mMessenger = new Messenger(new Handler(){
         @Override
