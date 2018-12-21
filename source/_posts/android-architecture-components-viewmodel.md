@@ -88,7 +88,7 @@ ViewModel的默认构造函数是没有任何参数的，如果你想要修改�
 ViewModel 的生命周期是由传递给 `ViewModelProviders.of(this)` 的生命周期决定的，ViewModel 初始化后保留在内存中，直到 Activity 永久消失，比如退出并销毁。
 下图展示了 ViewModel 的生命周期：
 
-![效果图](https://developer.android.google.cn/images/topic/libraries/architecture/viewmodel-lifecycle.png)
+![效果图](/images/android-architecture-components-viewmodel/viewmodel-lifecycle.png)
 
 在系统第一次调用 Activity 的 onCreate() 方法时初始化 ViewModel，系统可能会在Activity的整个生命周期内多次调用 onCreate()，例如当设备屏幕旋转时。 ViewModel 的生命周期从第一次请求 ViewModel 开始，直到 Activity 被 FINISHED 并销毁。
 
@@ -146,11 +146,11 @@ public class DetailFragment extends Fragment {
 在之前我们会经常使用 CursorLoader 来保持应用程序中的数据与数据库同步。那么现在就可以用 ViewModel 来代替 Loader 的使用了。使用 ViewModel 可以将 UI controller 与数据加载操作分开，这意味着在类之间的强引用减少了。
 Loader 通用的做法是使用 CursorLoader 来观察数据库中的数据，当数据库的数据变化时，Loader 会自动触发一次数据加载并更新UI，如下图：
 
-![效果图](https://developer.android.google.cn/images/topic/libraries/architecture/viewmodel-loader.png)
+![效果图](/images/android-architecture-components-viewmodel/viewmodel-loader.png)
 
 现在我们可以使用 ViewModel + LiveData + Room 的组合来代替 Loader，ViewModel 确保设备配置改变后数据仍然存在，当数据发生变化时，Room 会通知 LiveData，而 LiveData 可以来更新 UI。如下图：
 
-![效果图](https://developer.android.google.cn/images/topic/libraries/architecture/viewmodel-replace-loader.png)
+![效果图](/images/android-architecture-components-viewmodel/viewmodel-replace-loader.png)
 
 ## 注意事项
 
