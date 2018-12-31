@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/12/16/android-knowledge-point-shareduserid-app-process/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 sharedUserId App 和 Process 的关系">
-<meta property="og:updated_time" content="2018-12-12T01:56:07.188Z">
+<meta property="og:updated_time" content="2018-12-31T13:43:51.361Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android App Process 以及 sharedUserId的关系">
 <meta name="twitter:description" content="介绍 sharedUserId App 和 Process 的关系">
@@ -424,6 +424,7 @@
 <h3 id="sharedUserId-相同，process-属性相同的两个App"><a href="#sharedUserId-相同，process-属性相同的两个App" class="headerlink" title="sharedUserId 相同，process 属性相同的两个App"></a>sharedUserId 相同，process 属性相同的两个App</h3><p>配置两个包名不同的 App 为相同的 sharedUserId，它们的 MainActivity 的 <code>android:process</code> 统一配置成 <code>com.hq.test.process</code>。<br>看一下ps结果：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">u0_a271   14865 2669  2197988 156772 SyS_epoll_ 7da55ef488 S com.hq.test.process</div></pre></td></tr></table></figure>
 <p>两个 Activity 运行在同一个进程。</p>
+<h2 id="sharedUserId-和包名之间的关系"><a href="#sharedUserId-和包名之间的关系" class="headerlink" title="sharedUserId 和包名之间的关系"></a>sharedUserId 和包名之间的关系</h2><p>sharedUserId 和包名之间没有什么关系，两个包名不同的应用要想拥有相同的 sharedUserId 必须要同时显式指定，不指定的话默认是没有 sharedUserId 的。</p>
 <!--  
 https://blog.csdn.net/furuidelei123/article/details/7255188
 
@@ -546,7 +547,7 @@ https://www.cnblogs.com/scarecrow-blog/p/4876560.html
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">131</span>
+                <span class="site-state-item-count">132</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -555,7 +556,7 @@ https://www.cnblogs.com/scarecrow-blog/p/4876560.html
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -564,7 +565,7 @@ https://www.cnblogs.com/scarecrow-blog/p/4876560.html
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -626,7 +627,7 @@ https://www.cnblogs.com/scarecrow-blog/p/4876560.html
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用和进程之间的关系"><span class="nav-number">1.</span> <span class="nav-text">应用和进程之间的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个应用内的多进程"><span class="nav-number">1.1.</span> <span class="nav-text">一个应用内的多进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用其他App中的-Activity"><span class="nav-number">1.2.</span> <span class="nav-text">调用其他App中的 Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-android-process-来指定进程"><span class="nav-number">1.3.</span> <span class="nav-text">通过 android:process 来指定进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sharedUserId-和进程之间的关系"><span class="nav-number">2.</span> <span class="nav-text">sharedUserId 和进程之间的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sharedUserId-相同，process-属性不同的两个App"><span class="nav-number">2.1.</span> <span class="nav-text">sharedUserId 相同，process 属性不同的两个App</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sharedUserId-相同，process-属性相同的两个App"><span class="nav-number">2.2.</span> <span class="nav-text">sharedUserId 相同，process 属性相同的两个App</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用和进程之间的关系"><span class="nav-number">1.</span> <span class="nav-text">应用和进程之间的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个应用内的多进程"><span class="nav-number">1.1.</span> <span class="nav-text">一个应用内的多进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用其他App中的-Activity"><span class="nav-number">1.2.</span> <span class="nav-text">调用其他App中的 Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-android-process-来指定进程"><span class="nav-number">1.3.</span> <span class="nav-text">通过 android:process 来指定进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sharedUserId-和进程之间的关系"><span class="nav-number">2.</span> <span class="nav-text">sharedUserId 和进程之间的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sharedUserId-相同，process-属性不同的两个App"><span class="nav-number">2.1.</span> <span class="nav-text">sharedUserId 相同，process 属性不同的两个App</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sharedUserId-相同，process-属性相同的两个App"><span class="nav-number">2.2.</span> <span class="nav-text">sharedUserId 相同，process 属性相同的两个App</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sharedUserId-和包名之间的关系"><span class="nav-number">3.</span> <span class="nav-text">sharedUserId 和包名之间的关系</span></a></li></ol></div>
             
 
           </div>

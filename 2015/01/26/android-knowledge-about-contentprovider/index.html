@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/01/26/android-knowledge-about-contentprovider/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 ContentProvider 的基本使用">
-<meta property="og:updated_time" content="2018-12-21T05:59:54.701Z">
+<meta property="og:updated_time" content="2018-12-31T13:43:51.361Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android ContentProvider 使用以及源码分析">
 <meta name="twitter:description" content="本文介绍 ContentProvider 的基本使用">
@@ -485,6 +485,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);</div><div class="line">static &#123;</div><div class="line">    final UriMatcher matcher = URI_MATCHER;</div><div class="line">    matcher.addURI(&quot;hq.testprovider&quot;, &quot;students&quot;, 0x0001);</div><div class="line">    matcher.addURI(&quot;hq.testprovider&quot;, &quot;teachers&quot;, 0x0002);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后，根据 URI 来执行对应的动作或者获取对应的数据表进行操作：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int match = URI_MATCHER.match(uri);</div></pre></td></tr></table></figure>
+<h2 id="ContentProviderOperation"><a href="#ContentProviderOperation" class="headerlink" title="ContentProviderOperation"></a>ContentProviderOperation</h2><p>为了使批量更新、插入、删除数据更加方便，android系统引入了 ContentProviderOperation类。<br>在官方开发文档中推荐使用ContentProviderOperations，有以下原因：</p>
+<ul>
+<li>所有的操作都在一个事务中执行，这样可以保证数据完整性</li>
+<li>由于批量操作在一个事务中执行，只需要打开和关闭一个事务，比多次打开关闭多个事务性能要好些</li>
+<li>使用批量操作和多次单个操作相比，减少了应用和ContentProvider之间的上下文切换，这样也会提升应用的性能，并且减少占用CPU的时间，当然也会减少电量的消耗。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ArrayList&lt;ContentProviderOperation&gt; ops = new ArrayList&lt;ContentProviderOperation&gt;();</div><div class="line">ContentProviderOperation operation = ContentProviderOperation.newDelete(uri)</div><div class="line">        .withSelection(&quot;name=?&quot;,new String[]&#123;&quot;James&quot;&#125;)</div><div class="line">        .build();</div><div class="line">ops.add(operation);</div><div class="line">ContentProviderOperation operation2 = ContentProviderOperation.newDelete(uri)</div><div class="line">        .withSelection(&quot;name=?&quot;,new String[]&#123;&quot;Wade&quot;&#125;)</div><div class="line">        .build();</div><div class="line">ops.add(operation2);</div><div class="line"></div><div class="line">try &#123;</div><div class="line">    getContentResolver().applyBatch(uri.getAuthority(), ops);</div><div class="line">&#125; catch (RemoteException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125; catch (OperationApplicationException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="ContentProvider-源码分析"><a href="#ContentProvider-源码分析" class="headerlink" title="ContentProvider 源码分析"></a>ContentProvider 源码分析</h2><!--  
 
 
@@ -610,7 +617,7 @@ https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&mid=2653579366&idx=1&sn=49361b
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">131</span>
+                <span class="site-state-item-count">132</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -619,7 +626,7 @@ https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&mid=2653579366&idx=1&sn=49361b
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -628,7 +635,7 @@ https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&mid=2653579366&idx=1&sn=49361b
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -690,7 +697,7 @@ https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&mid=2653579366&idx=1&sn=49361b
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentProvider"><span class="nav-number">2.</span> <span class="nav-text">ContentProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentResolver"><span class="nav-number">3.</span> <span class="nav-text">ContentResolver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQLiteOpenHelper"><span class="nav-number">4.</span> <span class="nav-text">SQLiteOpenHelper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URI"><span class="nav-number">5.</span> <span class="nav-text">URI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MatrixCursor"><span class="nav-number">6.</span> <span class="nav-text">MatrixCursor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UriMatcher"><span class="nav-number">7.</span> <span class="nav-text">UriMatcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentProvider-源码分析"><span class="nav-number">8.</span> <span class="nav-text">ContentProvider 源码分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentProvider"><span class="nav-number">2.</span> <span class="nav-text">ContentProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentResolver"><span class="nav-number">3.</span> <span class="nav-text">ContentResolver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQLiteOpenHelper"><span class="nav-number">4.</span> <span class="nav-text">SQLiteOpenHelper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URI"><span class="nav-number">5.</span> <span class="nav-text">URI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MatrixCursor"><span class="nav-number">6.</span> <span class="nav-text">MatrixCursor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UriMatcher"><span class="nav-number">7.</span> <span class="nav-text">UriMatcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentProviderOperation"><span class="nav-number">8.</span> <span class="nav-text">ContentProviderOperation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentProvider-源码分析"><span class="nav-number">9.</span> <span class="nav-text">ContentProvider 源码分析</span></a></li></ol></div>
             
 
           </div>
