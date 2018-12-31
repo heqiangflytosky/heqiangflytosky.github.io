@@ -117,6 +117,10 @@ u0_a271   14865 2669  2197988 156772 SyS_epoll_ 7da55ef488 S com.hq.test.process
 
 两个 Activity 运行在同一个进程。
 
+## sharedUserId 和包名之间的关系
+
+sharedUserId 和包名之间没有什么关系，两个包名不同的应用要想拥有相同的 sharedUserId 必须要同时显式指定，不指定的话默认是没有 sharedUserId 的。
+
 <!--  
 https://blog.csdn.net/furuidelei123/article/details/7255188
 

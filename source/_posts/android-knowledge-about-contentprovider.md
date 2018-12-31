@@ -132,6 +132,34 @@ UriMatcher 只有两个方法：
 int match = URI_MATCHER.match(uri);
 ```
 
+## ContentProviderOperation
+
+为了使批量更新、插入、删除数据更加方便，android系统引入了 ContentProviderOperation类。
+在官方开发文档中推荐使用ContentProviderOperations，有以下原因：
+
+ - 所有的操作都在一个事务中执行，这样可以保证数据完整性
+ - 由于批量操作在一个事务中执行，只需要打开和关闭一个事务，比多次打开关闭多个事务性能要好些
+ - 使用批量操作和多次单个操作相比，减少了应用和ContentProvider之间的上下文切换，这样也会提升应用的性能，并且减少占用CPU的时间，当然也会减少电量的消耗。
+
+```
+                ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+                ContentProviderOperation operation = ContentProviderOperation.newDelete(uri)
+                        .withSelection("name=?",new String[]{"James"})
+                        .build();
+                ops.add(operation);
+                ContentProviderOperation operation2 = ContentProviderOperation.newDelete(uri)
+                        .withSelection("name=?",new String[]{"Wade"})
+                        .build();
+                ops.add(operation2);
+
+                try {
+                    getContentResolver().applyBatch(uri.getAuthority(), ops);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (OperationApplicationException e) {
+                    e.printStackTrace();
+                }
+```
 
 ## ContentProvider 源码分析
 

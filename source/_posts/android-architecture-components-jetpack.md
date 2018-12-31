@@ -11,6 +11,7 @@ date: 2018-9-2 10:00:00
 [Android Architecture Components -- Room](http://www.heqiangfly.com/2017/12/02/android-architecture-components-room/)
 [Android Architecture Components -- LifeCycle](http://www.heqiangfly.com/2018/09/10/android-architecture-components-lifecycle/)
 [Android Architecture Components -- LiveData](http://www.heqiangfly.com/2018/09/16/android-architecture-components-livedata/)
+[Android Architecture Components -- ViewModel ](http://www.heqiangfly.com/2018/09/20/android-architecture-components-viewmodel/)
 
 ## 概述
 
