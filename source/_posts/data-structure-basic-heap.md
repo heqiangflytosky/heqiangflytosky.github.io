@@ -1,198 +1,146 @@
 ---
-title: 数据结构 -- 树
+title: 数据结构 -- 堆
 categories: 数据结构与算法
 comments: true
 tags: [数据结构]
-description: 介绍树的基础知识
+description: 介绍堆的基础知识
 date: 2014-7-5 10:00:00
 ---
 
-https://www.imooc.com/article/17707
+## 概述
 
-https://www.cnblogs.com/songwenjie/p/8878851.html
+堆也是一种树形结构，我们平时接触到的堆一般时二叉堆，它是二叉树的一种。除了二叉堆，还有二项堆，斐波那契堆等等。本文下面说的堆都是指二叉堆。
 
-https://blog.csdn.net/qq_28171461/article/details/78855987
+二叉堆具有如下的特点：
 
-二叉平衡树和红黑树
+ - 堆是一种完全二叉树
+ - 它的子结点的值大于或者等于父结点的值，或者子结点的值小于或者等于父结点的值
 
-https://www.sohu.com/a/201923614_466939
+堆是局部有序的，任何一个结点与其兄弟结点之间都没有必然的顺序关系，但它与其父子结点有大小顺序关系。
+根据它的特点我们可以将堆分为两类：
 
-## 什么是树
+ - 最大堆：根结点的值是所有堆结点值中最大的
+ - 最小堆：根结点的值是所有堆结点值中最小的
 
-树是我们在数据结构中经常遇到到，而且是面试必备知识。通常我们为树做如下定义：
+![效果图](/images/data-structure-basic-heap/big-small-heap.png)
 
- - 是有 n (n>=0) 的有限集，n 为 0 时称为空树。
- - 非空树有且仅有一个称为根节点的节点。
- - 非空树可以分为 m 个互不相交的有限集，其中每个集合本首又是一颗树，并且称为根节点的子树。
+堆是左平衡的树，所以随着结点的增加，树会逐级从左至右增长，因此对于堆来说，一个比较好的表示左平衡二叉树的方式是，将结点通过水平遍历的方式存储到一个数组中。数组中处于i处的结点，其父结点位于(i-1)/2处。其左右子结点分别位于2i+1和2i+2位置上。这样的组织结构对于堆来说非常重要，因为通过它我们能迅速定位堆的最后一个结点：最后一个结点指处于树中最深层最右端的结点，这在实现某些堆操作时非常重要。
+比如，上图中的最大堆我们可以用数组来表示：
 
-下图符合树的定义：
+![效果图](/images/data-structure-basic-heap/heap-array.png)
 
-![效果图](/images/data-structure-basic-tree/tree.png)
+## 堆的操作
 
-下图不符合树的定义，违背了子树互不相交的原则。
+堆的操作可以分为下面几种：
 
-![效果图](/images/data-structure-basic-tree/not-tree.png)
+ - 创建堆
+ - 插入结点
+ - 删除结点
+ - 堆排序
 
-## 相关术语
+## 创建堆
 
- - 节点的度：一个节点含有的子树的个数称为该节点的度
- - 树的度：一棵树中，所有节点中的度的最大值称为树的度
- - 叶节点或终端节点：度为0的节点称为叶节点
- - 节点的层次：从根开始定义起，根为第1层，根的子节点为第2层，以此类推
- - 树的高度或深度：树中节点的最大层次
+### 图解
 
-## 二叉树
+首先，假设给定无序数列如下，并用数组如下表示：
 
-二叉树（Binary Tree）的特点：
+![效果图](/images/data-structure-basic-heap/heap-int-1.png)
 
- - 每个节点最多有两棵子树，也即是二叉树中不存在度大于2的节点
- - 两棵子树是有顺序的，为左子树和右子树。即使有一棵子树，也要区分是左子树还是右子树
+接着，从最后一个非叶子结点开始，即下图中的第 10/2 - 1 = 4 个结点，从右到左，从下到上进行调整。如图1所示。
+先和它的左右叶子结点中的最大值即第10个结点进行比较，发现比第10个小，那么交换他们的位置，那么较大的值13位置上移。如图2所示。
+接着看第3个结点，它和它的左右叶子结点大小符合最大堆特征，不用交换。
+接着看第2个结点，按照前面的方法交换第2、5结点。如图3所示。
+接着看第1个结点，先和它的叶子中最大值也就是左叶子结点交换，如图4所示。
+交换后，对左子树的最大堆特性造成了影响，那么就要对左子树进行重新构建，交换第3、8结点后，符合了最大堆特性。如图5所示。
+继续进行排列，直到进行到根节点位置。如图6所示。构造最大堆完成。
+**注意**：一定要牢记，每次交换都要把改变了的那个节点所在的树重新构建一下直到符合最大堆特性。
 
-### 完全二叉树
+![效果图](/images/data-structure-basic-heap/heap-int-2.png)
 
-完全二叉树特点：
+### 代码实现
 
- - 叶子节点只能出现在最下面两层。
- - 最下层叶子一定集中在左部连续区域
- - 如果节点度为1，那么该节点只有左子树，不存在只有右子树的情况
- - 将完全二叉树进行从上到下，从左到右编号。我们发现如果完全二叉树的一个父结点编号为k，那么它左儿子的编号就是2*k（如果存在），右儿子的编号就是2*k+1（如果存在）。如果已知儿子（左儿子或右儿子）的编号是x，那么它父结点的编号就是x/2。知道了这个规律，我们完全可以用一个一维数组来存储完全二叉树。
+```
+    private void heapInit(int[] array) {
+        // 根据数组构造一个最大堆
+        // 从最后一个非叶子结点开始，对堆进行调整。最后一个非叶子结点的右结点为 2*i+1 = array.length
+        // 这个调整是自上而下的，意思是针对某个结点进行调整时，它的左右子树的已经符合最大堆特性
+        for(int i = array.length/2 - 1; i >=0; i--) {
+            heapAdjust(array, i, array.length);
+        }
+    }
 
-![效果图](/images/data-structure-basic-tree/complete-binary-tree.png)
+    private void heapAdjust(int[] array, int parent, int length) {
+        int tmp = 0;
 
+        int j = 2 * parent + 1;// 左子结点
 
+        while (j < length) {
+            if(j + 1 < length && array[j + 1] > array[j]) {
+                j++;
+            }
+            // 如果顺序已经排好，跳出循环，表示当前子树已经排好序
+            if (array[parent] >= array[j]) {
+                break;
+            }
+
+            //较小节点下移
+            tmp = array[parent];
+            array[parent] = array[j];
+            array[j] = tmp;
+
+            // 交换数据后，可能对子树的顺序产生影响，因此还要继续对子树进行调整
+            // 将即将进行调整的子树的父结点设置为前面被交换的子结点
+            parent = j;
+            // 被移动结点的左子树
+            j = 2 * parent +1;
+        }
+    }
+```
+
+## 插入结点
+
+对于堆的插入，处理思想很简单，首先在堆的最后添加一个新结点，然后对这个新的堆重新调整即可。这个过程涉及结点的向上筛选，直到新结点找到自己合适的位置为止。
+
+### 代码实现
+
+针对最大堆的代码实现：
+
+```
+    private void shiftUp(int[] array, int position) {
+        int num = array[position];
+        int father = (position - 1)/2;
+
+        while (position > 0 && array[father] < num) {
+            array[position] = array[father];
+            position = father;
+            father = (position - 1)/2;
+        }
+        array[position] = num;
+    }
+```
+
+## 删除结点
+
+堆的结点删除的处理思想是把堆尾元素剪切，覆盖到删除的结点位置，然后对堆进行一轮调整，这个过程涉及到元素的向下筛选，知道该堆尾元素重新找到自己的位置。
+
+### 代码实现
+
+针对最大堆的代码实现，可以利用前面的构建堆时的 heapAdjust 方法：
+
+```
+    private void shiftDown(int[] array, int position) {
+        array[position] = array[array.length - 1];
+        array[array.length - 1] = -1;
+        heapAdjust(array, position, array.length - 1);
+    }
+```
+
+## 堆排序
+
+参考 [算法系列 -- 排序算法](http://www.heqiangfly.com/2014/06/02/algorithms-basic-sort/) 一文中的堆排序。
+
+<!-- 
 https://blog.csdn.net/qq_41117236/article/details/81029618
+https://blog.csdn.net/u013384984/article/details/79496052
 
-### 满二叉树
-
-满二叉树可以看成是一种特殊的完全二叉树。
-满二叉树特点：
-
- - 所有的分支节点都存在左子树和右子树
- - 叶子节点只能出现在最下面一层
- - 非叶子节点的度一定是2。即要么为叶子节点，要么同时具有左右孩子节点。
- - 同深度的二叉树中，满二叉树节点数量最多，叶子节点数最多
-
-![效果图](/images/data-structure-basic-tree/full-binary-tree.png)
-
-### 二叉排序树
-
-二叉排序树（Binary Sort Tree），又称二叉查找树（Binary Search Tree），亦称二叉搜索树。
-二叉排序树或者是一棵空树，或者是具有下列性质的二叉树：
-
- - 若左子树不空，则左子树上所有结点的值均小于它的根结点的值
- - 若右子树不空，则右子树上所有结点的值均大于它的根结点的值
- - 左、右子树也分别为二叉排序树
- - 没有键值相等的节点
-
-![效果图](/images/data-structure-basic-tree/binary-sort-tree.png)
-
-### 平衡二叉树
-
-平衡二叉树是二叉排序树的一种，又叫平衡二叉排序树，或AVL树，它具有下面特点：
-
- - 它是一棵空树或它的左右两个子树的高度差的绝对值不超过1
- - 左、右两个子树都是一棵平衡二叉树
-
-![效果图](/images/data-structure-basic-tree/banlanced-binary-tree.png)
-
-### 二叉堆
-
-
-
-## 二叉树的遍历
-
-二叉树最基本的操作是遍历，一般我们约定遍历时左节点优先于右节点，这样二叉树的遍历一般我们分为三种：
-
- - 前序遍历：先遍历根节点，再处理左右节点
- - 中序遍历：先遍历左节点，然后处理根节点，最后处理右节点
- - 后序遍历：先遍历左右节点，最后处理根节点
-
-![效果图](https://img-blog.csdn.net/20170803221343901)
-
-针对上图做遍历：
-先序遍历的结果为：0  1  3  7  4  2  5  6
-中序遍历的结果为：7  3  1  4  0  5  2  6
-后序遍历的结果为：7  3  4  1  5  6  2  0
-
-还可以分为：
-
- - 广度优先遍历：
- - 深度优先遍历：
-
-代码实现：
-
-```
-    {
-        TreeNode node = createTree();
-        preOrderTraverse(node);
-    }
-
-    public class TreeNode{
-        int data;
-        TreeNode leftNode;
-        TreeNode rightNode;
-        public TreeNode(){
-        }
-        public TreeNode(int data){
-            this.data = data;
-            this.leftNode = null;
-            this.rightNode = null;
-        }
-        public TreeNode(int data,TreeNode leftNode,TreeNode rightNode){
-            this.data = data;
-            this.leftNode = leftNode;
-            this.rightNode = rightNode;
-        }
-    }
-
-    //建立一个完全二叉树
-    public TreeNode createTree(){
-        int data[] = {1,2,0,0,3,4,5,0,6,7,8,0,0,9};
-        ArrayList<TreeNode> list = new ArrayList();
-        for(int i = 0; i < data.length; i++) {
-            list.add(new TreeNode(data[i]));
-        }
-
-        TreeNode root = list.get(0);
-        for(int i = 0; i<data.length/2; i++){
-            if (2*i+1 < data.length)
-                list.get(i).leftNode = list.get(2*i+1);
-            if (2*i+2 < data.length)
-                list.get(i).rightNode = list.get(2*i+2);
-        }
-        return root;
-    }
-
-    // 前序遍历
-    public void preOrderTraverse(TreeNode node) {
-        if (node == null) {
-            return;
-        }
-
-        Log.e("Test", ""+node.data);
-        preOrderTraverse(node.leftNode);
-        preOrderTraverse(node.rightNode);
-    }
-
-    // 中序遍历
-    public void inOrderTraverse(TreeNode node) {
-        if (node == null) {
-            return;
-        }
-
-        inOrderTraverse(node.leftNode);
-        Log.e("Test", ""+node.data);
-        inOrderTraverse(node.rightNode);
-    }
-    
-    // 后序遍历
-    public void postOrderTraverse(TreeNode node) {
-        if (node == null) {
-            return;
-        }
-
-        postOrderTraverse(node.leftNode);
-        postOrderTraverse(node.rightNode);
-        Log.e("Test", ""+node.data);
-    }
-```
+-->
