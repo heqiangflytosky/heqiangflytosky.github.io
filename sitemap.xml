@@ -4,7 +4,7 @@
   <url>
     <loc>http://yoursite.com/2014/07/05/data-structure-basic-heap/</loc>
     
-    <lastmod>2019-01-02T09:38:09.623Z</lastmod>
+    <lastmod>2019-01-02T09:41:28.329Z</lastmod>
     
   </url>
   
@@ -163,13 +163,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/03/26/android-development-skills-adb-am/</loc>
-    
-    <lastmod>2018-11-11T12:08:47.867Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2016/12/06/java-basic-fork-join-base/</loc>
     
     <lastmod>2018-11-11T12:08:47.867Z</lastmod>
@@ -177,14 +170,21 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
+    <loc>http://yoursite.com/2015/03/26/android-development-skills-adb-am/</loc>
+    
+    <lastmod>2018-11-11T12:08:47.867Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/07/10/android-thread-conditionvariable/</loc>
     
     <lastmod>2018-11-06T09:32:04.282Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/07/10/android-thread-conditionvariable/</loc>
+    <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
     
     <lastmod>2018-11-06T09:32:04.282Z</lastmod>
     
@@ -345,14 +345,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/09/04/java-thread-how-to-use-reentrantlock/</loc>
+    <loc>http://yoursite.com/2015/09/04/java-thread-how-to-use-synchronized/</loc>
     
     <lastmod>2018-08-17T16:16:33.891Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/09/04/java-thread-how-to-use-synchronized/</loc>
+    <loc>http://yoursite.com/2015/09/04/java-thread-how-to-use-reentrantlock/</loc>
     
     <lastmod>2018-08-17T16:16:33.891Z</lastmod>
     
@@ -506,6 +506,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/</loc>
+    
+    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/10/12/open-source-rxjava-guide-operator/</loc>
     
     <lastmod>2018-06-02T09:24:04.976Z</lastmod>
@@ -514,13 +521,6 @@
   
   <url>
     <loc>http://yoursite.com/2017/10/14/open-source-rxjava-guide-flowable/</loc>
-    
-    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/</loc>
     
     <lastmod>2018-06-02T09:24:04.976Z</lastmod>
     
@@ -625,14 +625,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/11/06/open-source-retrofit-source-code-analysis-start/</loc>
+    <loc>http://yoursite.com/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/</loc>
     
     <lastmod>2018-05-06T07:22:25.867Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/</loc>
+    <loc>http://yoursite.com/2017/11/06/open-source-retrofit-source-code-analysis-start/</loc>
     
     <lastmod>2018-05-06T07:22:25.867Z</lastmod>
     
@@ -709,14 +709,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
+    <loc>http://yoursite.com/2015/04/10/java-dynamic-proxy-invocationhandler-demo/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -737,14 +737,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2015/04/10/java-dynamic-proxy-invocationhandler-demo/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
+    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -752,6 +745,13 @@
   
   <url>
     <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -793,7 +793,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/01/12/blog-optimize-next-theme/</loc>
+    <loc>http://yoursite.com/2016/02/25/development-tool-traceview/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -807,14 +807,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/25/development-tool-traceview/</loc>
+    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
+    <loc>http://yoursite.com/2016/01/12/blog-optimize-next-theme/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -842,14 +842,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-begin-to-study/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -864,6 +857,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/10/react-native-begin-to-study/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -933,14 +933,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/categories/index.html</loc>
+    <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -954,6 +947,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/categories/index.html</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/links/index.html</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -961,7 +961,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
