@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="简单介绍集合的使用">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/XLCnRzHW3DtpAwBkxIzWAA83e8A4heBPpHc8BfTSly-fT89EI1KZ0mYXIaXiJ30WCVRVt07_WZh-Wcrz3JUqb_VivpnRBuUH852_R8gJcXeiznx2EPH_hYutxzvklrnkF__SN5tl5KKBIumhgB3yzUtZziU7ybLHDH1ZUJS4MCS4xdLDWnNLNHkB2olQVd__-_hDvjFNfEFMvGe2d3Re2Ug2bpw2rOseRWd3yuGDcdM1SEwvnt1Ul-39JCDff00LbSbkWhUKZkh1EOHrSdGVualk4_GCOU6PuxfTuDnpZCXizM2EBTMq7hiIVH8G1yZRtNbzSE2CwJCNz_UJaxpWJCcl5BmtVOlQqsrBKMY9kuNJwygJLkoDSrlZUhPB34WbbsI7SXdGN6aK76t8upgI3GXQzAJ77Wq-mZE7PKsdqLMPdeYJEfdgO5jJjVyC5iEJkhEUhmRDCDr4a2TgqXHfB9HxYXLr8O4PGRMmdpPFTc9vLQ4RZu6Bb95y_PoKdPJs7u3oHKv9-lnH-L_fPWXlWShok-r-3MznyoVliEImYVHAadQE6XIYqt5Qc66oQfBuxocDye4qTlGxlhKm9i7AnSDOOQawy5d9hpa69w-OvEGdrpQJ9nabj4JmeZZ4Tjulcxy0">
-<meta property="og:updated_time" content="2018-11-21T09:58:58.832Z">
+<meta property="og:updated_time" content="2019-01-03T01:37:50.030Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基础 -- 集合的使用">
 <meta name="twitter:description" content="简单介绍集合的使用">
@@ -425,6 +425,13 @@
 <p>WeakHashMap，直接使用 HashMap 有时候会带来内存溢出的风险，使用 WaekHashMap 实例化 Map。当使用者不再有对象引用的时候，WeakHashMap 将自动被移除对应 Key 值的对象。</p>
 <p>TreeMap 非线程安全，底层通过红黑树（Red-Black tree）实现，也就意味着 <code>containsKey()</code>，<code>get()</code>, <code>put()</code>, <code>remove()</code> 都有着 log(n) 的时间复杂度。TreeMap 是自动实现排序的，按照key的字典顺序来排序（升序）或者自定义的 Comparator 接口来排序。在需要使用排序的 Map 时推荐使用 TreeMap。</p>
 <p>Deque 是双端队列，你可以从任意一端插入或者抽取元素。</p>
+<h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><ul>
+<li>iterator() 是 Collection 接口的方法；listIterator() 是 List 接口的方法；</li>
+<li>listIterator 有add()方法，可以向List中添加对象；而 iterator 不能；</li>
+<li>listIterator 和 iterator 都有hasNext()和next()方法，可以实现顺序向后遍历；但是 listIterator 有hasPrevious()和previous()方法，可以实现逆向（顺序向前）遍历；iterator 就不可以；</li>
+<li>listIterator 可以定位当前的索引位置，nextIndex()和previousIndex()可以实现；iterator 没有此功能；</li>
+<li>都可实现删除对象，但是 listIterator 可以实现对象的修改，set()方法可以实现；iterator 仅能遍历，不能修改；</li>
+</ul>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.runoob.com/java/java-collections.html" target="_blank" rel="external">http://www.runoob.com/java/java-collections.html</a><br><a href="http://www.runoob.com/java/java-vector-class.html" target="_blank" rel="external">http://www.runoob.com/java/java-vector-class.html</a></p>
 <!-- plantuml 代码 -->
 <!--  
@@ -630,7 +637,7 @@ Vector <|-- Stack
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">133</span>
+                <span class="site-state-item-count">134</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -710,7 +717,7 @@ Vector <|-- Stack
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集合类型"><span class="nav-number">2.</span> <span class="nav-text">集合类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特点介绍"><span class="nav-number">3.</span> <span class="nav-text">特点介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集合类型"><span class="nav-number">2.</span> <span class="nav-text">集合类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特点介绍"><span class="nav-number">3.</span> <span class="nav-text">特点介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代器"><span class="nav-number">4.</span> <span class="nav-text">迭代器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>
