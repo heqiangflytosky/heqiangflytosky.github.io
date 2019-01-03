@@ -55,6 +55,14 @@ TreeMap 非线程安全，底层通过红黑树（Red-Black tree）实现，也�
 
 Deque 是双端队列，你可以从任意一端插入或者抽取元素。
 
+## 迭代器
+
+ - iterator() 是 Collection 接口的方法；listIterator() 是 List 接口的方法；
+ - listIterator 有add()方法，可以向List中添加对象；而 iterator 不能；
+ - listIterator 和 iterator 都有hasNext()和next()方法，可以实现顺序向后遍历；但是 listIterator 有hasPrevious()和previous()方法，可以实现逆向（顺序向前）遍历；iterator 就不可以；
+ - listIterator 可以定位当前的索引位置，nextIndex()和previousIndex()可以实现；iterator 没有此功能；
+ - 都可实现删除对象，但是 listIterator 可以实现对象的修改，set()方法可以实现；iterator 仅能遍历，不能修改；
+
 ## 参考文章
 
 http://www.runoob.com/java/java-collections.html
