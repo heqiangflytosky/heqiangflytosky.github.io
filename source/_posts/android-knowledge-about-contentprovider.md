@@ -55,7 +55,7 @@ public abstract @Nullable String getType(@NonNull Uri uri);
 | projection | 来表示查询数据时要返回数据的列。比如获取 Student 表中的数据时我们只想要 Student 的名字和地址，那么 projection参数就可以如下表示：`new String []{DBOpenHelper.StudentTAB.NAME,DBOpenHelper.StudentTAB.ADDR}`，那么返回的 Cursor 中的数据就只有名字和地址两列。 | 可以为空，表示查询所有列 |
 | selection | 设置的筛选条件，表示接下来的删改查操作只针对符合条件的行进行。`DBOpenHelper.StudentTAB.COUNTRY + "=? AND " + DBOpenHelper.StudentTAB.GENDER + "=?"` 表示指操作指定国家或者性别的行。或者 `DBOpenHelper.StudentTAB.COUNTRY + "='China' AND " + DBOpenHelper.StudentTAB.GENDER + "='male'"` | 可以为空，表示，不进行筛选，查询所有列 |
 | selectionArgs | 配合 selection 使用的参数，将会替换掉 selection 参数中的 `?`：`new String []{"China", "male"}` 。当然也可以写在 selection，效果也是一样的。 | 可以为空 |
-| sortOrder | 为返回数据的排序方式，比如是升序还是降序 | 可以为空 |
+| sortOrder | 为返回数据的排序方式，比如是升序还是降序，还可以添加一些其他的限制语法，比如 `updateTime DESC LIMIT 1 OFFSET 1`，这个下面会具体介绍 | 可以为空 |
 
 然后需要在 AndroidManifest.xml 中对 ContentProvider 进行注册
 
@@ -75,6 +75,25 @@ public abstract @Nullable String getType(@NonNull Uri uri);
 
 我们使用 ContentResolver 来对 ContentProvider 的数据进行增删改查的操作。
 ContentResolver 对象可以通过 `Context.getContentResolver()` 来获取，它提供了一系列针对 ContentProvider 操作的方法，和 ContentProvider 里面的方法一一对应。
+
+### 查询时的限制语法
+
+LIMIT <skip>, <count>
+等价于
+LIMIT <count> OFFSET <skip>
+
+LIMIT <跳过的数据数目>, <取数据数目>
+等价于
+LIMIT <取数据数目> OFFSET <跳过的数据数目>
+
+其实可以通过 orderby 作假来加上limit offset，反正最后其实也是由db的query去拼接的sql的，如orderby变为 ID DESC LIMIT 100 OFFSET 0。
+
+```
+getContentResolver().query(uri,null,null,null,"updateTime DESC LIMIT 10 OFFSET 5");
+```
+
+等价于 select * from <table> order by updateTime DESC LIMIT 10 OFFSET 5
+
 
 ## SQLiteOpenHelper
 
