@@ -78,21 +78,23 @@ ContentResolver 对象可以通过 `Context.getContentResolver()` 来获取，�
 
 ### 查询时的限制语法
 
-LIMIT <skip>, <count>
-等价于
-LIMIT <count> OFFSET <skip>
+[SQLite Limit 子句](http://www.runoob.com/sqlite/sqlite-limit-clause.html)
 
-LIMIT <跳过的数据数目>, <取数据数目>
+`LIMIT <skip>, <count>`
 等价于
-LIMIT <取数据数目> OFFSET <跳过的数据数目>
+`LIMIT <count> OFFSET <skip>`
 
-其实可以通过 orderby 作假来加上limit offset，反正最后其实也是由db的query去拼接的sql的，如orderby变为 ID DESC LIMIT 100 OFFSET 0。
+`LIMIT <跳过的数据数目>, <取数据数目>`
+等价于
+`LIMIT <取数据数目> OFFSET <跳过的数据数目>`
+
+其实可以通过 orderby 作假来加上limit offset，反正最后其实也是由db的query去拼接的sql的，如orderby变为 `updateTime DESC LIMIT 10 OFFSET 5`。
 
 ```
 getContentResolver().query(uri,null,null,null,"updateTime DESC LIMIT 10 OFFSET 5");
 ```
 
-等价于 select * from <table> order by updateTime DESC LIMIT 10 OFFSET 5
+等价于 `select * from <table> order by updateTime DESC LIMIT 10 OFFSET 5`
 
 
 ## SQLiteOpenHelper
