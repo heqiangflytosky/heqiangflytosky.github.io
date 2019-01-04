@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/01/26/android-knowledge-about-contentprovider/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 ContentProvider 的基本使用">
-<meta property="og:updated_time" content="2019-01-03T09:39:27.730Z">
+<meta property="og:updated_time" content="2019-01-04T07:22:34.766Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android ContentProvider 使用以及源码分析">
 <meta name="twitter:description" content="本文介绍 ContentProvider 的基本使用">
@@ -465,11 +465,12 @@
 <li>android:multiProcess：是否允许在调用者进程启动 ContentProvider。一般情况下，ContentProvider 都是在创建者的进程启动的，如果该进程没有启动，那么会把该进程启动。如果设置了这个属性，就可以在调用者进程启动。但前提是调用者和创建者的 android:sharedUserId 相同才行，否则还是不能在调用者进程启动 ContentProvider。</li>
 </ul>
 <h2 id="ContentResolver"><a href="#ContentResolver" class="headerlink" title="ContentResolver"></a>ContentResolver</h2><p>我们使用 ContentResolver 来对 ContentProvider 的数据进行增删改查的操作。<br>ContentResolver 对象可以通过 <code>Context.getContentResolver()</code> 来获取，它提供了一系列针对 ContentProvider 操作的方法，和 ContentProvider 里面的方法一一对应。</p>
-<h3 id="查询时的限制语法"><a href="#查询时的限制语法" class="headerlink" title="查询时的限制语法"></a>查询时的限制语法</h3><p>LIMIT <skip>, <count><br>等价于<br>LIMIT <count> OFFSET <skip></skip></count></count></skip></p>
-<p>LIMIT &lt;跳过的数据数目&gt;, &lt;取数据数目&gt;<br>等价于<br>LIMIT &lt;取数据数目&gt; OFFSET &lt;跳过的数据数目&gt;</p>
-<p>其实可以通过 orderby 作假来加上limit offset，反正最后其实也是由db的query去拼接的sql的，如orderby变为 ID DESC LIMIT 100 OFFSET 0。</p>
+<h3 id="查询时的限制语法"><a href="#查询时的限制语法" class="headerlink" title="查询时的限制语法"></a>查询时的限制语法</h3><p><a href="http://www.runoob.com/sqlite/sqlite-limit-clause.html" target="_blank" rel="external">SQLite Limit 子句</a></p>
+<p><code>LIMIT &lt;skip&gt;, &lt;count&gt;</code><br>等价于<br><code>LIMIT &lt;count&gt; OFFSET &lt;skip&gt;</code></p>
+<p><code>LIMIT &lt;跳过的数据数目&gt;, &lt;取数据数目&gt;</code><br>等价于<br><code>LIMIT &lt;取数据数目&gt; OFFSET &lt;跳过的数据数目&gt;</code></p>
+<p>其实可以通过 orderby 作假来加上limit offset，反正最后其实也是由db的query去拼接的sql的，如orderby变为 <code>updateTime DESC LIMIT 10 OFFSET 5</code>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getContentResolver().query(uri,null,null,null,&quot;updateTime DESC LIMIT 10 OFFSET 5&quot;);</div></pre></td></tr></table></figure>
-<p>等价于 select * from <table> order by updateTime DESC LIMIT 10 OFFSET 5</table></p>
+<p>等价于 <code>select * from &lt;table&gt; order by updateTime DESC LIMIT 10 OFFSET 5</code></p>
 <h2 id="SQLiteOpenHelper"><a href="#SQLiteOpenHelper" class="headerlink" title="SQLiteOpenHelper"></a>SQLiteOpenHelper</h2><p>数据库操作帮助类，如果我们的 ContentProvider 时结合 SQLite 数据库来实现，那么就会用到这个类。</p>
 <h2 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h2><p>上面介绍的几个 ContentProvider 几个方法中，大多都有一个 URI 的参数，它表示我们想操作的数据资源的位置。比如：<code>content://hq.testprovider/table1/</code>。<br>完整的 URI 一般由下面三部分组成：<br><code>&lt;standard_prefix&gt;://&lt;authority&gt;/&lt;data_path&gt;/</code></p>
 <ul>
