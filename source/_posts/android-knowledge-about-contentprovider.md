@@ -11,12 +11,32 @@ date: 2015-1-26 10:00:00
 
 ## 概述
 
-ContentProvider 内容提供者，作为 Android 的四大组件之一，我们会经常使用到。它是 Android 中提供的用于数据共享的组件，你可以跨进城、跨应用来访问这些数据。
+ContentProvider 内容提供者，作为 Android 的四大组件之一，我们会经常使用到。它是 Android 中提供的用于数据共享的组件，你可以跨进城、跨应用来访问这些数据。除了跨进城访问数据，ContentProvider 还可以进行跨进程方法调用。
 对于数据的存储，Android 提供了多种方式供我们选择：SQLite 数据库、Shared Preferences、文件存储等。如果在同一个应用中我们可以直接共享使用这些数据，但是如果时不同的应用需要共享这些数据，那么就需要借助于 ContentProvider。我们平时最常见的是 ContentProvider + SQLite 数据库的组合，当然 ContentProvider 也可以和其他的数据存储方式相结合。
 当外部应用需要对 ContentProvider 里面的数据进行增删改查操作时就需要用到 ContentResolver，Andriod 的 Context 提供了 getContentResolver() 方法来获取 ContentResolver 对象。
 如果我们使用比如 ContentProvider + Shared Preferences 的组合时，你可能需要将数据转换为 Cursor 返回给 ContentProvider 提供给其他应用查询，那么本文也将介绍如果创建一个 Cursor，通常我们使用 MatrixCursor。
+我们也可以使用 ContentProvider + File 的方式来直接操作文件，其他的应用可以通过该方式读写当前应用的私有文件。 这时我们要重写 openFile 等方法来实现。
+另外，我们也可以使用 ContentProvider 进行跨进程方法调用。这时我们需要重写 call 方法。根据该方法的参数来调用相对应地方法。
 
 ## ContentProvider
+
+### 注册 ContentProvider
+
+创建我们自己的 ContentProvider 需要在 AndroidManifest.xml 中对 ContentProvider 进行注册
+
+```
+        <provider
+            android:authorities="hq.testprovider"
+            android:name=".contentprovider.MyContentProvider"
+            android:exported="true"/>
+```
+
+ - android:authorities：ContentProvider 的唯一标识符，外部应用可以通过URI中的此属性值来找到想要访问的 ContentProvider，建议用包名来标示，当然你也可以随意指定，但要有唯一性。
+ - android:name： ContentProvider 的类名
+ - android:exported：是否允许其他应用访问该 ContentProvider，true为允许，false为禁止。
+ - android:multiProcess：是否允许在调用者进程启动 ContentProvider。一般情况下，ContentProvider 都是在创建者的进程启动的，如果该进程没有启动，那么会把该进程启动。如果设置了这个属性，就可以在调用者进程启动。但前提是调用者和创建者的 android:sharedUserId 相同才行，否则还是不能在调用者进程启动 ContentProvider。
+
+### 封装数据库或者 Shared Preferences
 
 创建我们自己的 ContentProvider 通常需要继承 ContentProvider 类并实现它的六个抽象方法。
 ContentProvider 提供了下面的四个抽象方法进行增删改查操作，
@@ -57,24 +77,25 @@ public abstract @Nullable String getType(@NonNull Uri uri);
 | selectionArgs | 配合 selection 使用的参数，将会替换掉 selection 参数中的 `?`：`new String []{"China", "male"}` 。当然也可以写在 selection，效果也是一样的。 | 可以为空 |
 | sortOrder | 为返回数据的排序方式，比如是升序还是降序，还可以添加一些其他的限制语法，比如 `updateTime DESC LIMIT 1 OFFSET 1`，这个下面会具体介绍 | 可以为空 |
 
-然后需要在 AndroidManifest.xml 中对 ContentProvider 进行注册
+### 文件读写
 
-```
-        <provider
-            android:authorities="hq.testprovider"
-            android:name=".contentprovider.MyContentProvider"
-            android:exported="true"/>
-```
+ContentProvider 提供了下面的方法来实现文件共享功能：
 
- - android:authorities：ContentProvider 的唯一标识符，外部应用可以通过URI中的此属性值来找到想要访问的 ContentProvider，建议用包名来标示，当然你也可以随意指定，但要有唯一性。
- - android:name： ContentProvider 的类名
- - android:exported：是否允许其他应用访问该 ContentProvider，true为允许，false为禁止。
- - android:multiProcess：是否允许在调用者进程启动 ContentProvider。一般情况下，ContentProvider 都是在创建者的进程启动的，如果该进程没有启动，那么会把该进程启动。如果设置了这个属性，就可以在调用者进程启动。但前提是调用者和创建者的 android:sharedUserId 相同才行，否则还是不能在调用者进程启动 ContentProvider。
+ - `openAssetFile(@NonNull Uri uri, @NonNull String mode)`
+ - `openFile(@NonNull Uri uri, @NonNull String mode) `
+
+### 跨进程方法调用
+
+ContentProvider 提供了下面的方法来跨进程方法调用：
+
+ - `call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras)`
 
 ## ContentResolver
 
 我们使用 ContentResolver 来对 ContentProvider 的数据进行增删改查的操作。
 ContentResolver 对象可以通过 `Context.getContentResolver()` 来获取，它提供了一系列针对 ContentProvider 操作的方法，和 ContentProvider 里面的方法一一对应。
+ContentResolver 提供了 openOutputStream 和 openInputStream 等方法来实现对共享文件的读写。
+ContentResolver 提供了 call 方法来对 ContentProvider 提供的方法进行跨进程调用。
 
 ### 查询时的限制语法
 
