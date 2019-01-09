@@ -72,10 +72,20 @@ public abstract @Nullable String getType(@NonNull Uri uri);
 |:-------------|:-------------|:---------|
 | uri | 为数据资源的位置，比如想查询某个表的数据或者想执行某个操作：content://hq.testprovider/table1/ | 不能为空 |
 | values | 想要增加或更新的数据实体 | 是 |
-| projection | 来表示查询数据时要返回数据的列。比如获取 Student 表中的数据时我们只想要 Student 的名字和地址，那么 projection参数就可以如下表示：`new String []{DBOpenHelper.StudentTAB.NAME,DBOpenHelper.StudentTAB.ADDR}`，那么返回的 Cursor 中的数据就只有名字和地址两列。 | 可以为空，表示查询所有列 |
-| selection | 设置的筛选条件，表示接下来的删改查操作只针对符合条件的行进行。`DBOpenHelper.StudentTAB.COUNTRY + "=? AND " + DBOpenHelper.StudentTAB.GENDER + "=?"` 表示指操作指定国家或者性别的行。或者 `DBOpenHelper.StudentTAB.COUNTRY + "='China' AND " + DBOpenHelper.StudentTAB.GENDER + "='male'"` | 可以为空，表示，不进行筛选，查询所有列 |
+| projection | 相当于 SQL 语法中 SELECT 后面的语句。来表示查询数据时要返回数据的列。比如获取 Student 表中的数据时我们只想要 Student 的名字和地址，那么 projection参数就可以如下表示：`new String []{DBOpenHelper.StudentTAB.NAME,DBOpenHelper.StudentTAB.ADDR}`，那么返回的 Cursor 中的数据就只有名字和地址两列。 | 可以为空，表示查询所有列 |
+| selection | 相当于 SQL 语法中 WHERE 后面的语句。设置的筛选条件，表示接下来的删改查操作只针对符合条件的行进行。这里可以写一些 SQL 语句。`DBOpenHelper.StudentTAB.COUNTRY + "=? AND " + DBOpenHelper.StudentTAB.GENDER + "=?"` 表示指操作指定国家或者性别的行。或者 `DBOpenHelper.StudentTAB.COUNTRY + "='China' AND " + DBOpenHelper.StudentTAB.GENDER + "='male'"`，或者 `id BETWEEN 10 AND 20` 用 between 子句查询某个区间的值。 | 可以为空，表示，不进行筛选，查询所有列 |
 | selectionArgs | 配合 selection 使用的参数，将会替换掉 selection 参数中的 `?`：`new String []{"China", "male"}` 。当然也可以写在 selection，效果也是一样的。 | 可以为空 |
-| sortOrder | 为返回数据的排序方式，比如是升序还是降序，还可以添加一些其他的限制语法，比如 `updateTime DESC LIMIT 1 OFFSET 1`，这个下面会具体介绍 | 可以为空 |
+| sortOrder | 相当于 SQL 语法中 ORDER BY 后面的语句。为返回数据的排序方式，比如是升序还是降序，还可以添加一些其他的 SQL 字句，比如 `updateTime DESC LIMIT 1 OFFSET 1`，这个下面会具体介绍 | 可以为空 |
+
+依据这些参数，方法的调用后面基本都可以翻译成下的 SQL 语句：
+
+```
+SELECT column1, column2....columnN
+FROM   table_name
+WHERE  column_name BETWEEN val-1 AND val-2 LIMIT [no of rows] OFFSET [row num]
+ORDER BY column_name {ASC|DESC} LIMIT [no of rows] OFFSET [row num];
+```
+等等。
 
 ### 文件读写
 
@@ -97,7 +107,11 @@ ContentResolver 对象可以通过 `Context.getContentResolver()` 来获取，�
 ContentResolver 提供了 openOutputStream 和 openInputStream 等方法来实现对共享文件的读写。
 ContentResolver 提供了 call 方法来对 ContentProvider 提供的方法进行跨进程调用。
 
-### 查询时的限制语法
+### SQLite 语法
+
+[SQLite 教程](http://www.runoob.com/sqlite/sqlite-tutorial.html)
+
+#### LIMIT 和 OFFSET 字句
 
 [SQLite Limit 子句](http://www.runoob.com/sqlite/sqlite-limit-clause.html)
 
@@ -116,6 +130,25 @@ getContentResolver().query(uri,null,null,null,"updateTime DESC LIMIT 10 OFFSET 5
 ```
 
 等价于 `select * from <table> order by updateTime DESC LIMIT 10 OFFSET 5`
+
+LIMIT 和 OFFSET 字句也可以添加在 WHERE 子句后面。
+
+#### BETWEEN 字句
+
+```
+SELECT column1, column2....columnN
+FROM   table_name
+WHERE  column_name BETWEEN val-1 AND val-2;
+```
+
+
+#### IN 字句
+
+```
+SELECT column1, column2....columnN
+FROM   table_name
+WHERE  column_name IN (val-1, val-2,...val-N);
+```
 
 
 ## SQLiteOpenHelper
