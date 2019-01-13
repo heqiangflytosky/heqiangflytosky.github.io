@@ -21,7 +21,7 @@ Activity 的启动都会在它通过 taskAffinity 指定的 Task 里面启动。
 
 ### standard
 
-如果不显式的指定 launchMode，Activity都会按照此种模式启动。这种模式下的 Activity 可以有多个实例，不同任务中可以有不同的 Activity 实例，同一个任务中也可以有多个 Activity 实例。这种模式下启动Activity总是会重新创建Activity，对应调用 `onCreate()` 方法。
+标准模式。如果不显式的指定 launchMode，Activity都会按照此种模式启动。这种模式下的 Activity 可以有多个实例，不同任务中可以有不同的 Activity 实例，同一个任务中也可以有多个 Activity 实例。这种模式下启动Activity总是会重新创建Activity，对应调用 `onCreate()` 方法。
 Android L(Android 5.0)前后对这种启动模式的处理方式是不同的：
 
  - Android L之前：每次以该模式启动的 Activity 都会被压入当前任务的顶部，启动 N 次，在当前任务就会出现 N 个 Activity 的实例，每次Back键就会销毁一个，直到按了 N 次Back键。
@@ -29,11 +29,12 @@ Android L(Android 5.0)前后对这种启动模式的处理方式是不同的：
 
 ### singleTop
 
-这种模式下栈顶仅有一个 Activity 实例，也就是说不会有多个相同的 Activity 叠加在栈顶。如果当前任务的顶部就是待启动的 Activity 实例，那么并不会再创建一个新的 Activity 实例，而是仅仅调用已有实例的 `onNewIntent()` 方法，所以对于要以 singleTop 启动的Activity，需要处理 `onCreate()` 和 `onNewIntent()` 这两种情况下的启动参数。
+栈顶复用模式。这种模式下栈顶仅有一个 Activity 实例，也就是说不会有多个相同的 Activity 叠加在栈顶。如果当前任务的顶部就是待启动的 Activity 实例，那么并不会再创建一个新的 Activity 实例，而是仅仅调用已有实例的 `onNewIntent()` 方法，所以对于要以 singleTop 启动的Activity，需要处理 `onCreate()` 和 `onNewIntent()` 这两种情况下的启动参数。
 但是如果任务中已经有这个 Activity 实例，但是不在栈顶，还是会重新创建一个新的 Activity 实例。
 
 ### singleTask
 
+栈内复用模式，也是单实例模式。该模式下该 Activity 实例仅有一个 Task 存在。但是该 Task 中可能会有多个 Activity。
 系统在该类型的 Task 不存在时创建一个新的 Task，并将该 Activity 放入 Task 底部。具体启动 singleTask 会不会新建一个 Task，则和 TaskAffinity 有关。在我们不设置 `android:taskAffinity` 的情况下，同一个应用的 Activity 默认具有相同的 TaskAffinity，除非你自己设置了 Activity 的 `android:taskAffinity`。
 以 A 启动 B（singleTask）为例，下面我们分集中情况来介绍：
 
@@ -49,7 +50,7 @@ Android L(Android 5.0)前后对这种启动模式的处理方式是不同的：
 
 ### singleInstance
 
-该模式下，系统中只允许有一个存在该 Activity 的 Task 存在，而且该 Task 中只允许有该 Activity 一个实例存在。
+单实例模式，也是增强型 singleTask 模式。该模式下，系统中只允许有一个存在该 Activity 的 Task 存在，而且该 Task 中只允许有该 Activity 一个实例存在。
 
  - Activity 不存在：总是新建一个 Task，并且创建一个 Activity。
  - Activity 存在：则会重用该 Activity。
@@ -319,6 +320,20 @@ Task 中已经有A（standard）和B，现在B以 `FLAG_ACTIVITY_NEW_TASK` 的�
 standard 模式：系统收到新的 Intent 时，如果 Task 中存在该 Activity 则弹出 Activity 和 Activity 上面的所有对象，并重新初始化一个新的 Activity 对象放入栈顶，以处理 Intent 请求。因为 standard 总是初始化新的 Activity 来处理 Intent请求。
 其他模式：则会将 Activity 上面的对象弹出，使该 Activity 在栈顶部，以处理 Intent请求。
 
+### FLAG_ACTIVITY_CLEAR_TASK
+
+启动 Activity 时如果加入了这个标志，那么如果存放该 Activity 的 Task 已经存在，会先把该 Task 里面所有的 Activity 清空，然后再启动该 Activity。那么该 Activity 就成了该 Task 里面唯一的一个 Activity。
+应用场景：如果在同一 Task 里面 A 启动 B，B 启动 C，但是在 C 里面后退的话会默认返回 B，然后再返回 A，如果不想返回 B 和 A，那么就可以用该 Flag，启动 C 时把 A 和 B 清除掉，比如在登陆界面跳转到到主界面。从主界面后退肯定不想返回登陆界面的。
+
+### FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+
+通过这个 Flag 启动的 Activity 将不会添加到最近使用应用列表中，我们从任务管理器中无法找到这个 Activity。
+
+### FLAG_ACTIVITY_NO_HISTORY
+
+通过这个 Flag 启动的 Activity 一旦退出后，就不会存在栈中。比如 A 添加这个 Flag 启动 B，B启动 C，这是栈中就只有 A、C。
+
+## LaunchMode 与 StartActivityForResult 的关系
 
 <!--   
 
