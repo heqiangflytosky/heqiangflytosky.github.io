@@ -9,7 +9,7 @@ date: 2017-12-10 10:00:00
 
 ## 概述
 
-EventBus 是有 [greenrobot](http://greenrobot.org/) 贡献的一个Android事件发布/订阅轻量级框架。使用它可以方便的实现 Android 端的 publish/subscribe 消息总线，在某些场景来代替 Intent、Handler、BroadCast 等实现在Activity、Fragment或者不同线程间的事件通信。
+EventBus 是有 [greenrobot](http://greenrobot.org/) 贡献的一个基于观察者模式的Android事件发布/订阅轻量级框架。使用它可以方便的实现 Android 端的 publish/subscribe 消息总线，在某些场景来代替 Intent、Handler、BroadCast 等实现在Activity、Fragment或者不同线程间的事件通信。
 
 ![效果图](https://raw.githubusercontent.com/greenrobot/EventBus/master/EventBus-Publish-Subscribe.png)
 
@@ -75,6 +75,7 @@ public class Event {
 ```
 
 使用 Subscribe 注解订阅方法，使用 Event 作为参数来接受 Event 类型的消息事件。threadMode 用来指定该方法允许的线程。onReceiveEvent 这个方法的名字可以随意命名。
+订阅方法必须是 public 的，而且不能有 Modifier.ABSTRACT | Modifier.STATIC | Modifier.VOLATILE | Modifier.SYNTHETIC。
 
 然后在另外一个 Activity 中发送消息事件：
 
