@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍EventBus的用法">
 <meta property="og:image" content="https://raw.githubusercontent.com/greenrobot/EventBus/master/EventBus-Publish-Subscribe.png">
-<meta property="og:updated_time" content="2019-01-16T10:56:06.044Z">
+<meta property="og:updated_time" content="2019-01-18T07:53:55.592Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="EventBus -- 基本用法">
 <meta name="twitter:description" content="介绍EventBus的用法">
@@ -402,7 +402,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>EventBus 是有 <a href="http://greenrobot.org/" target="_blank" rel="external">greenrobot</a> 贡献的一个Android事件发布/订阅轻量级框架。使用它可以方便的实现 Android 端的 publish/subscribe 消息总线，在某些场景来代替 Intent、Handler、BroadCast 等实现在Activity、Fragment或者不同线程间的事件通信。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>EventBus 是有 <a href="http://greenrobot.org/" target="_blank" rel="external">greenrobot</a> 贡献的一个基于观察者模式的Android事件发布/订阅轻量级框架。使用它可以方便的实现 Android 端的 publish/subscribe 消息总线，在某些场景来代替 Intent、Handler、BroadCast 等实现在Activity、Fragment或者不同线程间的事件通信。</p>
 <p><img src="https://raw.githubusercontent.com/greenrobot/EventBus/master/EventBus-Publish-Subscribe.png" alt="效果图"></p>
 <p>作为一个 Android 开发者，我们平时都会用到或者了解它的用法，本文就将它的用法来做一个总结，已备查用。后面还会写一篇 EventBus 源码分析的文章。</p>
 <p><a href="http://greenrobot.org/eventbus/documentation/" target="_blank" rel="external">官方使用文档</a><br><a href="https://github.com/greenrobot/EventBus" target="_blank" rel="external">github 源码地址</a></p>
@@ -425,7 +425,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public class Event &#123;</div><div class="line">    public String msg;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在一个 Activity 里面订阅消息事件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">    ......</div><div class="line">    EventBus.getDefault().register(this);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">protected void onDestroy() &#123;</div><div class="line">    super.onDestroy();</div><div class="line">    EventBus.getDefault().unregister(this);</div><div class="line">    ......</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Subscribe(threadMode = ThreadMode.MAIN)</div><div class="line">public void onReceiveEvent(Event event) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Receive event = &quot;+event.msg);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>使用 Subscribe 注解订阅方法，使用 Event 作为参数来接受 Event 类型的消息事件。threadMode 用来指定该方法允许的线程。onReceiveEvent 这个方法的名字可以随意命名。</p>
+<p>使用 Subscribe 注解订阅方法，使用 Event 作为参数来接受 Event 类型的消息事件。threadMode 用来指定该方法允许的线程。onReceiveEvent 这个方法的名字可以随意命名。<br>订阅方法必须是 public 的，而且不能有 Modifier.ABSTRACT | Modifier.STATIC | Modifier.VOLATILE | Modifier.SYNTHETIC。</p>
 <p>然后在另外一个 Activity 中发送消息事件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public void testEvent(View view) &#123;</div><div class="line">    Event event = new Event();</div><div class="line">    event.msg = &quot;Test Event&quot;;</div><div class="line">    EventBus.getDefault().post(event);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>另外注意要配置 proguard：</p>
@@ -575,7 +575,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">137</span>
+                <span class="site-state-item-count">138</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

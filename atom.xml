@@ -893,9 +893,9 @@ http://weex.apache.org/cn/wiki/module-introduction.html
     <link href="http://yoursite.com/2017/12/10/open-source-eventbus-guide-base/"/>
     <id>http://yoursite.com/2017/12/10/open-source-eventbus-guide-base/</id>
     <published>2017-12-10T02:00:00.000Z</published>
-    <updated>2019-01-16T10:56:06.044Z</updated>
+    <updated>2019-01-18T07:53:55.592Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>EventBus 是有 <a href="http://greenrobot.org/" target="_blank" rel="external">greenrobot</a> 贡献的一个Android事件发布/订阅轻量级框架。使用它可以方便的实现 Android 端的 publish/subscribe 消息总线，在某些场景来代替 Intent、Handler、BroadCast 等实现在Activity、Fragment或者不同线程间的事件通信。</p>
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>EventBus 是有 <a href="http://greenrobot.org/" target="_blank" rel="external">greenrobot</a> 贡献的一个基于观察者模式的Android事件发布/订阅轻量级框架。使用它可以方便的实现 Android 端的 publish/subscribe 消息总线，在某些场景来代替 Intent、Handler、BroadCast 等实现在Activity、Fragment或者不同线程间的事件通信。</p>
 <p><img src="https://raw.githubusercontent.com/greenrobot/EventBus/master/EventBus-Publish-Subscribe.png" alt="效果图"></p>
 <p>作为一个 Android 开发者，我们平时都会用到或者了解它的用法，本文就将它的用法来做一个总结，已备查用。后面还会写一篇 EventBus 源码分析的文章。</p>
 <p><a href="http://greenrobot.org/eventbus/documentation/" target="_blank" rel="external">官方使用文档</a><br><a href="https://github.com/greenrobot/EventBus" target="_blank" rel="external">github 源码地址</a></p>
@@ -918,7 +918,7 @@ http://weex.apache.org/cn/wiki/module-introduction.html
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public class Event &#123;</div><div class="line">    public String msg;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在一个 Activity 里面订阅消息事件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">    ......</div><div class="line">    EventBus.getDefault().register(this);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">protected void onDestroy() &#123;</div><div class="line">    super.onDestroy();</div><div class="line">    EventBus.getDefault().unregister(this);</div><div class="line">    ......</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Subscribe(threadMode = ThreadMode.MAIN)</div><div class="line">public void onReceiveEvent(Event event) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Receive event = &quot;+event.msg);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>使用 Subscribe 注解订阅方法，使用 Event 作为参数来接受 Event 类型的消息事件。threadMode 用来指定该方法允许的线程。onReceiveEvent 这个方法的名字可以随意命名。</p>
+<p>使用 Subscribe 注解订阅方法，使用 Event 作为参数来接受 Event 类型的消息事件。threadMode 用来指定该方法允许的线程。onReceiveEvent 这个方法的名字可以随意命名。<br>订阅方法必须是 public 的，而且不能有 Modifier.ABSTRACT | Modifier.STATIC | Modifier.VOLATILE | Modifier.SYNTHETIC。</p>
 <p>然后在另外一个 Activity 中发送消息事件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public void testEvent(View view) &#123;</div><div class="line">    Event event = new Event();</div><div class="line">    event.msg = &quot;Test Event&quot;;</div><div class="line">    EventBus.getDefault().post(event);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>另外注意要配置 proguard：</p>
@@ -3866,6 +3866,143 @@ http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
     
     
       <category term="React Native" scheme="http://yoursite.com/tags/React-Native/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java基础 -- 注解</title>
+    <link href="http://yoursite.com/2016/12/22/java-basic-annotation/"/>
+    <id>http://yoursite.com/2016/12/22/java-basic-annotation/</id>
+    <published>2016-12-22T02:00:00.000Z</published>
+    <updated>2019-01-18T07:52:45.496Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java 从1.5 版本后开始引入了注解（Annotation），其目的是不影响代码语义的情况下增强代码的可读性，并且不改变代码的执行逻辑。<br>注解相当于一种标记，在程序中加上了注解就等于为程序加上了某种标记，以后，JAVAC编译器，开发工具和其他程序可以用反射来了解你的类以及各种元素上有无任何标记，看你有什么标记，就去干相应的事。<br>注解可以用来注解类、方法、属性和方法参数等。</p>
+<p>其实关于注解的使用有两派的争论，正方认为注解有助于数据和代码的耦合，在有代码的周边集合数据，反方认为注解把代码和数据混淆在一起，增加了代码的易变性，削弱了代码的健壮性和稳定性。<br>我们姑且不去看这些争论，在合适的地方去使用注解，确实能给我们带来不少便利。<br>目前看到的很多开源框架大部分都会有注解使用的影子，本文就简单的介绍一下注解的使用。</p>
+<h2 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h2><h3 id="Java-注解"><a href="#Java-注解" class="headerlink" title="Java 注解"></a>Java 注解</h3><ul>
+<li>@Override</li>
+<li>@JavascriptInterface</li>
+<li>@Deprecated</li>
+<li>@SuppressWarnings</li>
+<li>@Nullable</li>
+<li>@NonNull</li>
+<li>@StringRes</li>
+<li>@DrawableRes</li>
+<li>@ColorRes</li>
+<li>@InterpolatorRes</li>
+<li>@AnyRes</li>
+<li>@IntDef</li>
+</ul>
+<h3 id="Android-注解"><a href="#Android-注解" class="headerlink" title="Android 注解"></a>Android 注解</h3><p>使用时要在build.gradle中加上 <code>compile &#39;com.android.support:support-annotations:22.0.0&#39;</code></p>
+<ul>
+<li>@StringDef</li>
+<li>@UiThread</li>
+<li>@MainThread</li>
+<li>@WorkerThread</li>
+<li>@BinderThread</li>
+<li>@ColorInt</li>
+<li>@Size</li>
+<li>@IntRange</li>
+<li>@FloatRange</li>
+<li>@RequiresPermission</li>
+<li>@CallSuper</li>
+<li>@CheckResult</li>
+<li>@VisibleForTesting</li>
+<li>@Keep</li>
+<li>@CheckResult</li>
+</ul>
+<h2 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h2><p>元注解是 java API 提供，是专门用来定义注解的注解。<br>元注解有四个：</p>
+<ul>
+<li>@Retention</li>
+<li>@Target</li>
+<li>@Document</li>
+<li>@Inherited</li>
+</ul>
+<h3 id="Retention"><a href="#Retention" class="headerlink" title="Retention"></a>Retention</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(&#123;ElementType.ANNOTATION_TYPE&#125;)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</div><div class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> RetentionPolicy &#123;</div><div class="line">    SOURCE,</div><div class="line">    CLASS,</div><div class="line">    RUNTIME;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">RetentionPolicy</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Retention</code> 表示该注解信息保存在什么级别，可选的参数值在枚举类型 RetentionPolicy 中，包括：</p>
+<ul>
+<li>RetentionPolicy.SOURCE：在编译阶段丢弃。这些注解在编译结束之后就不再有任何意义，所以它们不会写入字节码。<code>@Override</code>, <code>@SuppressWarnings</code> 都属于这类注解。 </li>
+<li>RetentionPolicy.CLASS：默认值，编译器仅把注解保存在 class 文件中，在运行 Java 程序时，JVM 不会保留注释，即不能用反射（在运行期）来获取注释。</li>
+<li>RetentionPolicy.RUNTIME：编译器不仅把注解保存在 class 文件中，同时在运行 Java 程序时，JVM 也会保留注释，即可以通过反射来获取注释。</li>
+</ul>
+<h3 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(&#123;ElementType.ANNOTATION_TYPE&#125;)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</div><div class="line">    ElementType[] value();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ElementType &#123;</div><div class="line">    TYPE,</div><div class="line">    FIELD,</div><div class="line">    METHOD,</div><div class="line">    PARAMETER,</div><div class="line">    CONSTRUCTOR,</div><div class="line">    LOCAL_VARIABLE,</div><div class="line">    ANNOTATION_TYPE,</div><div class="line">    PACKAGE,</div><div class="line">    TYPE_PARAMETER,</div><div class="line">    TYPE_USE;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">ElementType</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Target</code> 表示该注解用于什么地方，可能的值在枚举类 ElemenetType 中，包括：</p>
+<ul>
+<li>ElemenetType.TYPE：修饰类、接口或枚举（enum) </li>
+<li>ElemenetType.FIELD：注解成员变量</li>
+<li>ElemenetType.METHOD：注解方法</li>
+<li>ElemenetType.PARAMETER：注解方法参数 </li>
+<li>ElemenetType.CONSTRUCTOR：注解构造函数</li>
+<li>ElemenetType.LOCAL_VARIABLE：注解局部变量 </li>
+<li>ElemenetType.ANNOTATION_TYPE：注解另一个自定义注解 </li>
+<li>ElemenetType.PACKAGE：注解包</li>
+<li>ElemenetType.TYPE_PARAMETER：该注解能写在类型变量的声明语句中</li>
+<li>ElemenetType.TYPE_USE：该注解能写在使用类型的任何语句中</li>
+</ul>
+<h3 id="Document"><a href="#Document" class="headerlink" title="Document"></a>Document</h3><p>将此注解包含在 javadoc 中 ，它代表着此注解会被javadoc工具提取成文档。在 doc 文档中的内容会因为此注解的信息内容不同而不同。相当与@see,@param 等。</p>
+<h3 id="Inherited"><a href="#Inherited" class="headerlink" title="Inherited"></a>Inherited</h3><p>允许子类继承父类中的注解。如果不标记@Inherited，那么父类的注解子类将无法继承。</p>
+<h2 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h2><p>使用@interface自定义注解时，自动继承了 <code>java.lang.annotation.Annotation</code> 接口，由编译程序自动完成其他细节。在定义注解时，不能继承其他的注解或接口。<code>@interface</code> 用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。可以通过default来声明参数的默认值。<br>自定义注解格式：<br>public @interface 注解名 {定义体}<br>注解参数的可支持数据类型：</p>
+<ul>
+<li>所有基本数据类型（int,float,boolean,byte,double,char,long,short)</li>
+<li>String类型</li>
+<li>Class类型</li>
+<li>enum类型</li>
+<li>Annotation类型</li>
+<li>以上所有类型的数组</li>
+</ul>
+<p>参数设定：</p>
+<ul>
+<li>只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；</li>
+<li>参数成员只能用上面列举的集中类型</li>
+<li>参数可以设置默认值，如果不设置，必须在添加注解时指定。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Target</span>(&#123; ElementType.TYPE &#125;)</div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Fruit&#123;</div><div class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">grade</span><span class="params">()</span> <span class="keyword">default</span> 0</span>;</div><div class="line">    <span class="function">String <span class="title">country</span><span class="params">()</span> <span class="keyword">default</span> "China"</span>;</div><div class="line">    String[] saleTo() <span class="keyword">default</span> &#123;&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="注解解析"><a href="#注解解析" class="headerlink" title="注解解析"></a>注解解析</h2><p>我们添加自定义注解的目的就是对标注的类或者方法进行一些特殊处理，这个就需要我们添加注解处理器。<br><code>Class</code> 类提供了下面的方法来获取类的注解信息：</p>
+<ul>
+<li><code>&lt;A extends Annotation&gt; A getAnnotation(Class&lt;A&gt; annotationType)</code>：获取指定的注解，该注解可以是自己声明的，也可以是继承的</li>
+<li><code>Annotation[] getAnnotations()</code>：获取所有的注解，包括自己声明的以及继承的</li>
+<li><code>Annotation[] getDeclaredAnnotations()</code>：获取自己声明的注解</li>
+<li><code>isAnnotationPresent(Class&lt;? extends Annotation&gt; annotationType)</code>：检查类是否有注解</li>
+<li><code>&lt;A extends Annotation&gt; A[] getAnnotationsByType(Class&lt;A&gt; annotationClass)</code></li>
+<li><code>&lt;A extends Annotation&gt; A getDeclaredAnnotation(Class&lt;A&gt; var1)</code></li>
+</ul>
+<p><code>Method</code> 类提供了下面的方法来获取方法的注解信息：</p>
+<ul>
+<li><code>&lt;A extends Annotation&gt; A getAnnotation(Class&lt;A&gt; annotationType)</code></li>
+<li><code>Annotation[][] getParameterAnnotations()</code></li>
+</ul>
+<p><code>Field</code> 类提供了下面的方法来获取属性的注解信息：</p>
+<ul>
+<li><code>isAnnotationPresent(Class&lt;? extends Annotation&gt; annotationType)</code></li>
+<li><code>&lt;A extends Annotation&gt; A getAnnotation(Class&lt;A&gt; annotationType)</code></li>
+<li><code>Annotation[] getDeclaredAnnotations()</code></li>
+</ul>
+<p>测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Target(&#123; ElementType.TYPE &#125;)</div><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">public @interface Fruit&#123;</div><div class="line">    String name();</div><div class="line">    int grade() default 0;</div><div class="line">    String country() default &quot;China&quot;;</div><div class="line">    String[] saleTo() default &#123;&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Fruit(name = &quot;Apple&quot;, saleTo = &#123;&quot;China&quot;,&quot;USA&quot;&#125;)</div><div class="line">public class TestAnnotation &#123;</div><div class="line">    public void commonMethod() &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @InternalAPI(name = &quot;annotationAPI&quot;, callerList = &#123;&quot;MainActivity&quot;,&quot;Custom&quot;&#125;)</div><div class="line">    public void annotationAPI(String para) &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Fruit(name = &quot;Apple&quot;, saleTo = &#123;&quot;China&quot;,&quot;USA&quot;&#125;)</div><div class="line">public class TestAnnotation &#123;</div><div class="line">    public void commonMethod() &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @InternalAPI(name = &quot;annotationAPI&quot;, callerList = &#123;&quot;MainActivity&quot;,&quot;Custom&quot;&#125;)</div><div class="line">    public void annotationAPI(String para) &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="类的注解处理"><a href="#类的注解处理" class="headerlink" title="类的注解处理"></a>类的注解处理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public void classAnnotationProcessor(Object object) &#123;</div><div class="line">    Class&lt;?&gt; cls = object.getClass();</div><div class="line"></div><div class="line">    if (cls.isAnnotationPresent(Fruit.class)) &#123;</div><div class="line">        Fruit fruit = cls.getAnnotation(Fruit.class);</div><div class="line">        if (fruit != null) &#123;</div><div class="line">            String name = fruit.name();</div><div class="line">            String country = fruit.country();</div><div class="line">            int grade = fruit.grade();</div><div class="line">            String [] saleTo = fruit.saleTo();</div><div class="line"></div><div class="line">            Log.e(&quot;Test&quot;,&quot;name = &quot;+name+&quot;,country = &quot;+country+&quot;, grade = &quot;+grade+&quot;, saleTo = &quot;+Arrays.toString(saleTo));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="方法的注解处理"><a href="#方法的注解处理" class="headerlink" title="方法的注解处理"></a>方法的注解处理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public void methodAnnotationProcessor(Object object) &#123;</div><div class="line">    Class&lt;?&gt; cls = object.getClass();</div><div class="line"></div><div class="line">    Method[] methods = cls.getDeclaredMethods();</div><div class="line"></div><div class="line">    for (Method method : methods) &#123;</div><div class="line">        // 获取方法修饰符</div><div class="line">        int modifiers = method.getModifiers();</div><div class="line">        // 获取方法参数列表</div><div class="line">        Class&lt;?&gt;[] parameterTypes = method.getParameterTypes();</div><div class="line">        Log.e(&quot;Test&quot;,&quot;modifiers = &quot;+modifiers+&quot;, parameterTypes=&quot;+ Arrays.toString(parameterTypes));</div><div class="line">        // 获取方法的制定注解，如果没有被指定注解修饰，则返回 null</div><div class="line">        InternalAPI internalAPI = method.getAnnotation(InternalAPI.class);</div><div class="line"></div><div class="line">        if (internalAPI != null) &#123;</div><div class="line">            // 获取注解参数</div><div class="line">            String name = internalAPI.name();</div><div class="line">            boolean isHide = internalAPI.isHide();</div><div class="line">            String[] list = internalAPI.callerList();</div><div class="line">            Log.e(&quot;Test&quot;,&quot;name = &quot;+name+&quot;,isHide = &quot;+isHide+&quot;, caller = &quot;+Arrays.toString(list));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>注意：</strong></p>
+<ul>
+<li>子类重写的方法，注解无法被继承</li>
+</ul>
+<h2 id="annotationProcessor"><a href="#annotationProcessor" class="headerlink" title="annotationProcessor"></a>annotationProcessor</h2><p>annotationProcessor 是处理注解的工具，它用来在编译时扫描和处理注解。<br>在编译的时候就把注解信息给保存下来，这就省了我们在代码中寻找注解的开销，这也是注解类框架非常流行的原因。<br>后面会有专门写一篇博客园来介绍。</p>
+<h2 id="注解的运用"><a href="#注解的运用" class="headerlink" title="注解的运用"></a>注解的运用</h2><h3 id="使用注解改进代码检查"><a href="#使用注解改进代码检查" class="headerlink" title="使用注解改进代码检查"></a>使用注解改进代码检查</h3><p><a href="https://developer.android.com/studio/write/annotations" target="_blank" rel="external">Android 官方文档：使用注解改进代码检查</a></p>
+<h3 id="注解代替Enum"><a href="#注解代替Enum" class="headerlink" title="注解代替Enum"></a>注解代替Enum</h3><p><a href="http://www.heqiangfly.com/2013/06/26/java-basic-enum/" target="_blank" rel="external">我的博客：Java 基础 – enum</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍注解的用法
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
     
   </entry>
   
@@ -10502,7 +10639,7 @@ https://blog.csdn.net/u013384984/article/details/79496052
     <link href="http://yoursite.com/2013/06/26/java-basic-enum/"/>
     <id>http://yoursite.com/2013/06/26/java-basic-enum/</id>
     <published>2013-06-26T02:00:00.000Z</published>
-    <updated>2019-01-11T05:58:01.106Z</updated>
+    <updated>2019-01-18T07:53:55.592Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>枚举类型是指由一组固定的常量组成合法值的类型，它是在 Java 1.5 引入的一种类型，在此之前，我们只有两种声明常量的方式：类常量和接口常量。<br>枚举的引入改变了常量的声明方式，在枚举之前，我们表示枚举类型的常用模式是声明一组具名的 int 常量，每个类型成员一个常量：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">interface Fruit&#123;</div><div class="line">    int APPLE = 0;</div><div class="line">    int PEAR = 1;</div><div class="line">    int LEMON = 2;</div><div class="line">    int BANANA = 3;</div><div class="line">    int ORANGE = 4;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -10563,7 +10700,7 @@ https://blog.csdn.net/u013384984/article/details/79496052
 <h2 id="枚举无法继承"><a href="#枚举无法继承" class="headerlink" title="枚举无法继承"></a>枚举无法继承</h2><p>一个枚举常量定义完毕后，除非修改重构，否则无法扩展。而接口常量或者类常量则可通过继承进行扩展。但是可以通过上面的方法实现 abstract 方法。</p>
 <h2 id="枚举的缺点"><a href="#枚举的缺点" class="headerlink" title="枚举的缺点"></a>枚举的缺点</h2><p>枚举变量非常方便，但不幸的是它会牺牲执行的速度和并大幅增加文件体积。例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public class Foo &#123;</div><div class="line"> public enum Fruit &#123; APPLE, PEAR, LEMON &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>会产生一个900字节的 .class 文件(<code>Foo$Fruit.class</code>)。在它被首次调用时，这个类会调用初始化方法来准备每个枚举变量。每个枚举项都会被声明成一个静态变量，并被赋值。然后将这些静态变量放在一个名为 “$VALUES” 的静态数组变量中。而这么一大堆代码，仅仅是为了使用三个整数。<br>这样: <code>Fruit fruit = Fruit.APPLE;</code> 会引起一个对静态变量的引用，如果这个静态变量是final int，那么编译器会直接内联这个常数。<br>一方面说，使用枚举变量可以让你的 API 更出色，并能提供编译时的检查。所以在通常的时候你毫无疑问应该为公共 API 选择枚举变量。但是当性能方面有所限制的时候，你就应该避免这种做法了。<br>下面是一种在 Android 编程中使用 int 来实现 enum 的效果：</p>
+<p>会产生一个900字节的 .class 文件(<code>Foo$Fruit.class</code>)。在它被首次调用时，这个类会调用初始化方法来准备每个枚举变量。每个枚举项都会被声明成一个静态变量，并被赋值。然后将这些静态变量放在一个名为 “$VALUES” 的静态数组变量中。而这么一大堆代码，仅仅是为了使用三个整数。<br>这样: <code>Fruit fruit = Fruit.APPLE;</code> 会引起一个对静态变量的引用，如果这个静态变量是final int，那么编译器会直接内联这个常数。<br>一方面说，使用枚举变量可以让你的 API 更出色，并能提供编译时的检查。所以在通常的时候你毫无疑问应该为公共 API 选择枚举变量。但是当性能方面有所限制的时候，你就应该避免这种做法了。尤其是在移动端，对内存的要求比较严格。<br>鉴于 Enum 会比使用常量带来更大的内存开销，因此 Android 官方也建议，不是在必要的情况下应尽量避免过多使用 Enum，下面介绍使用注解来代替 Enum 的方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public static final int APPLE = 0;</div><div class="line">public static final int PEAR = 1;</div><div class="line">public static final int LEMON = 2;</div><div class="line">public static final int BANANA = 3;</div><div class="line">public static final int ORANGE = 4;</div><div class="line"></div><div class="line">@IntDef (&#123;APPLE, PEAR, LEMON, BANANA, ORANGE&#125;)</div><div class="line">@Retention(RetentionPolicy.SOURCE)</div><div class="line">public @interface Fruit&#123;&#125;</div><div class="line"></div><div class="line">private @Fruit int mFruit;</div><div class="line"></div><div class="line">……</div><div class="line">&#123;</div><div class="line">        mFruit = APPLE;</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void setFruit(@Fruit int fruit) &#123;</div><div class="line">    mFruit = fruit;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 ]]></content>
     
