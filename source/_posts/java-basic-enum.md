@@ -30,6 +30,7 @@ enum Fruit{APPLE, PEAR, LEMON, BANANA,ORANGE}
 ```
 
 使用枚举时，每个枚举项都是该枚举的实例对象。比如 APPLE 就是 Fruit 的一个实例对象。
+枚举无法被继承，但可以继承其他类或者实现其他接口。
 
 ## 枚举的优势
 

@@ -141,7 +141,7 @@ public enum ElementType {
 
 ### Inherited
 
-允许子类继承父类中的注解。如果不标记@Inherited，那么父类的注解子类将无法继承。
+允许子类继承父类中的该注解。如果不标记@Inherited，那么父类的该注解子类将无法继承。
 
 ## 自定义注解
 
