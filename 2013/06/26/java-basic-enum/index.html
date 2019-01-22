@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2013/06/26/java-basic-enum/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 enum 的用法">
-<meta property="og:updated_time" content="2019-01-18T07:53:55.592Z">
+<meta property="og:updated_time" content="2019-01-22T02:35:05.727Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基础 -- enum">
 <meta name="twitter:description" content="介绍 enum 的用法">
@@ -404,7 +404,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">interface Fruit&#123;</div><div class="line">    int APPLE = 0;</div><div class="line">    int PEAR = 1;</div><div class="line">    int LEMON = 2;</div><div class="line">    int BANANA = 3;</div><div class="line">    int ORANGE = 4;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这种方式称为 int 枚举模式，它存在着类型安全性和使用方便性等诸多不足。<br>我们可以用下面方式声明枚举：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">enum Fruit&#123;APPLE, PEAR, LEMON, BANANA,ORANGE&#125;</div></pre></td></tr></table></figure>
-<p>使用枚举时，每个枚举项都是该枚举的实例对象。比如 APPLE 就是 Fruit 的一个实例对象。</p>
+<p>使用枚举时，每个枚举项都是该枚举的实例对象。比如 APPLE 就是 Fruit 的一个实例对象。<br>枚举无法被继承，但可以继承其他类或者实现其他接口。</p>
 <h2 id="枚举的优势"><a href="#枚举的优势" class="headerlink" title="枚举的优势"></a>枚举的优势</h2><p>我们为什么要使用枚举呢？下面我们来说一下它和静态常量的优势。</p>
 <h3 id="枚举常量更简单"><a href="#枚举常量更简单" class="headerlink" title="枚举常量更简单"></a>枚举常量更简单</h3><p>枚举常量只需要定义每个枚举项，不需要定义枚举值，而接口常量或者类常量则必须定义值，否则编译不过，即使我们不需要关心其值是多少也必须定义。<br>其次，虽然两者被引用方式相同（都是类名.属性，比如 Fruit.APPLE），但是枚举表示的是一个枚举项，字面含义是苹果，而接口常量其字面含义也是苹果，但是在运算中我们势必要关注其 int 值。</p>
 <h3 id="枚举常量属于稳态型"><a href="#枚举常量属于稳态型" class="headerlink" title="枚举常量属于稳态型"></a>枚举常量属于稳态型</h3><p>如果我们用 switch 语句来使用接口常量，我们必须对输入值进行检查，确定其是否越界，而且容易造成一些在编译期通过，但是运行期产生不符合预期的后果。<br>使用枚举不用关心这些校验问题，它在编译器限定类型，不允许发生越界的情况。</p>
@@ -577,7 +577,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-count">139</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

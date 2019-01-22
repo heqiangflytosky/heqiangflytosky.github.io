@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android开源项目,RxJava," />
+  <meta name="keywords" content="EventBus," />
 
 
 
@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="本文介绍 RxJava 中 Single、Completable 和 Maybe 的用法">
+<meta name="description" content="介绍EventBus的源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RxJava 使用指南 -- Single、Completable 和 Maybe 的用法">
-<meta property="og:url" content="http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/index.html">
+<meta property="og:title" content="EventBus -- 源码分析">
+<meta property="og:url" content="http://yoursite.com/2017/12/12/open-source-eventbus-source-code/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="本文介绍 RxJava 中 Single、Completable 和 Maybe 的用法">
-<meta property="og:updated_time" content="2018-06-02T09:24:04.976Z">
+<meta property="og:description" content="介绍EventBus的源码">
+<meta property="og:updated_time" content="2019-01-22T02:34:09.628Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RxJava 使用指南 -- Single、Completable 和 Maybe 的用法">
-<meta name="twitter:description" content="本文介绍 RxJava 中 Single、Completable 和 Maybe 的用法">
+<meta name="twitter:title" content="EventBus -- 源码分析">
+<meta name="twitter:description" content="介绍EventBus的源码">
 
 
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/12/open-source-eventbus-source-code/"/>
 
 
 
 
 
-  <title> RxJava 使用指南 -- Single、Completable 和 Maybe 的用法 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> EventBus -- 源码分析 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/12/open-source-eventbus-source-code/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="寒江蓑笠">
@@ -302,7 +302,7 @@
             
             
               
-                RxJava 使用指南 -- Single、Completable 和 Maybe 的用法
+                EventBus -- 源码分析
               
             
           </h1>
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-18T10:00:00+08:00">
-                2017-10-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-12T10:00:00+08:00">
+                2017-12-12
               </time>
             
 
@@ -358,7 +358,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2017/10/18/open-source-rxjava-single-completable-maybe/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2017/12/12/open-source-eventbus-source-code/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2017/10/18/open-source-rxjava-single-completable-maybe/" class="leancloud_visitors" data-flag-title="RxJava 使用指南 -- Single、Completable 和 Maybe 的用法">
+             <span id="/2017/12/12/open-source-eventbus-source-code/" class="leancloud_visitors" data-flag-title="EventBus -- 源码分析">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -385,7 +385,7 @@
 
           
               <div class="post-description">
-                  本文介绍 RxJava 中 Single、Completable 和 Maybe 的用法
+                  介绍EventBus的源码
               </div>
           
 
@@ -400,42 +400,19 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>前面在 <a href="http://www.heqiangfly.com/2017/10/10/open-source-rxjava-guide-base/" target="_blank" rel="external">RxJava 使用指南（一）– 基本概念、数据流创建和线程调度 </a> 一文中简单介绍了几种观察者模式组合的组合。</p>
-<ul>
-<li>Observable/Observer</li>
-<li>Flowable/Subscriber</li>
-<li>Single/SingleObserver</li>
-<li>Completable/CompletableObserver</li>
-<li>Maybe/MaybeObserver</li>
-</ul>
-<p>其中 <code>Observable/Observer</code> 和 <code>Flowable/Subscriber</code> 比较常用，前面也用了大量篇幅来介绍，本文就来介绍一下 <code>Single/SingleObserver</code>、<code>Completable/CompletableObserver</code> 和 <code>Maybe/MaybeObserver</code> 这三个组合的用法。</p>
-<h2 id="Single-SingleObserver-的用法"><a href="#Single-SingleObserver-的用法" class="headerlink" title="Single/SingleObserver 的用法"></a>Single/SingleObserver 的用法</h2><p>先来看一下代码中如何实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">Single.create(new SingleOnSubscribe&lt;String&gt;() &#123;</div><div class="line">    @Override</div><div class="line">    public void subscribe(@NonNull SingleEmitter&lt;String&gt; e) throws Exception &#123;</div><div class="line">        e.onSuccess(&quot;Success&quot;);</div><div class="line">        //e.onError(new Throwable(&quot;Error&quot;));</div><div class="line">    &#125;</div><div class="line">&#125;).subscribeOn(Schedulers.io())</div><div class="line">        .observeOn(AndroidSchedulers.mainThread())</div><div class="line">        .subscribe(new SingleObserver&lt;String&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public void onSubscribe(@NonNull Disposable d) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onSuccess(@NonNull String s) &#123;</div><div class="line">                Log.e(&quot;Test&quot;,&quot;onSuccess &quot;+s);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onError(@NonNull Throwable e) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>我们先从代码上来分析 <code>Single/SingleObserver</code> 和 <code>Observable/Observer</code> 的区别。<br><code>SingleEmitter</code> 和 <code>ObservableEmitter</code> 的区别：<br><code>SingleEmitter</code> 发射数据的方法只有 <code>onSuccess()</code> 和 <code>onError()</code>，而 <code>ObservableEmitter</code> 多了个 <code>onNext()</code> 方法。<br>再来看一下 <code>SingleObserver</code> 和 <code>Observer</code> 的区别：<br><code>SingleObserver</code> 处理结果的方法有 <code>onSubscribe()</code>、<code>onSuccess()</code> 和 <code>onError()</code>。而 <code>Observer</code> 多了个 <code>onNext()</code> 和 <code>onComplete()</code> 方法，而没有 <code>onSuccess()</code> 方法。<br>结合 <code>Single</code> 本身的名字，我们可以联想到，这个组合是只能发射单个数据或者一条异常通知，不能发射完成通知，其中数据与通知只能发射一个。<br>那么 <code>Single/SingleObserver</code> 有什么使用场景呢？<br>我们在实际应用中，有时候需要发射的数据并不是数据流的形式，而只是一条单一的数据，比如发起一次网络请求。在这种情况下，如果我们使用 <code>Observable</code>，<code>onComplete</code> 会紧跟着 <code>onNext</code> 被调用，为什么不能将这连个方法合二为一呢。如果再这种情况下我们再使用 <code>Observable</code> 就显得有点大材小用，因为我们不需要处理 <code>onNext()</code> 的数据。于是，为了满足这种单一数据的使用场景，便出现了 <code>Single</code>。</p>
-<h3 id="转化为其他观察者模式"><a href="#转化为其他观察者模式" class="headerlink" title="转化为其他观察者模式"></a>转化为其他观察者模式</h3><p><code>Single</code> 基本上实现了 <code>Observable</code> 所有的操作符，如果你发现需要用到一个 <code>Observable</code> 的操作符而 <code>Single</code> 并不支持，你可以用 <code>toObservable</code> 操作符把 <code>Single&lt;T&gt;</code> 转换为 <code>Observable&lt;T&gt;</code>。<br>另外 <code>Single</code> 还提供了其他转换方法：</p>
-<ul>
-<li>toCompletable()</li>
-<li>toMaybe()</li>
-<li>toFlowable()</li>
-<li>toFuture()</li>
-</ul>
-<h2 id="Completable-CompletableObserver-的用法"><a href="#Completable-CompletableObserver-的用法" class="headerlink" title="Completable/CompletableObserver 的用法"></a>Completable/CompletableObserver 的用法</h2><p>先通过代码来看一下用法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">Completable.create(new CompletableOnSubscribe() &#123;</div><div class="line">    @Override</div><div class="line">    public void subscribe(@NonNull CompletableEmitter e) throws Exception &#123;</div><div class="line">        e.onComplete();</div><div class="line">        //e.onError(new Throwable(&quot;Error&quot;));</div><div class="line">    &#125;</div><div class="line">&#125;).subscribeOn(AndroidSchedulers.mainThread())</div><div class="line">        .observeOn(Schedulers.io())</div><div class="line">        .subscribe(new CompletableObserver() &#123;</div><div class="line">            @Override</div><div class="line">            public void onSubscribe(@NonNull Disposable d) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onComplete() &#123;</div><div class="line">                Log.e(&quot;Test&quot;, &quot;onComplete&quot;);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onError(@NonNull Throwable e) &#123;</div><div class="line">                Log.e(&quot;Test&quot;, &quot;onError&quot;+e.toString());</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
-<p>照例先来看一下 <code>CompletableEmitter</code>：<br>它提供的数据和通知的方法如下：</p>
-<ul>
-<li>onComplete()</li>
-<li>onError()</li>
-</ul>
-<p><code>CompletableObserver</code> 的相关的方法：</p>
-<ul>
-<li>onSubscribe()</li>
-<li>onComplete()</li>
-<li>onError()</li>
-</ul>
-<p>可以看到，这里面没有数据处理的方法，只有通知相关的方法。它只发射一条完成通知，或者一条异常通知，不能发射数据，其中完成通知与异常通知只能发射一个。<br>那么 <code>Completable/CompletableObserver</code> 有什么使用场景呢？<br>和前面 <code>Single/SingleObserver</code> 的用法比较类似，只是这里不对数据进行处理，只有个通知的结果。比如：我们向服务器发起一个更新数据的请求，服务器更新数据以后是返回的是更新的结果。这个时候我们或许只是关心的是服务器更新数据是否成功，而不需要对数据进行处理，那么这个时候用 <code>Completable/CompletableObserver</code>  就可以了。<br><code>Completable</code> 也提供了对 <code>Observable</code>、<code>Flowable</code>、<code>Single</code> 和 <code>Maybe</code> 的转换。</p>
-<h2 id="Maybe-MaybeObserver-的用法"><a href="#Maybe-MaybeObserver-的用法" class="headerlink" title="Maybe/MaybeObserver 的用法"></a>Maybe/MaybeObserver 的用法</h2><p>再来看一下 <code>Maybe</code> 的用法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">Maybe.create(new MaybeOnSubscribe&lt;String&gt;()&#123;</div><div class="line">    @Override</div><div class="line">    public void subscribe(@NonNull MaybeEmitter&lt;String&gt; e) throws Exception &#123;</div><div class="line">        e.onSuccess(&quot;onSuccess&quot;);</div><div class="line">        //e.onError(new Throwable(&quot;Error&quot;));</div><div class="line">        //e.onComplete();</div><div class="line">    &#125;</div><div class="line">&#125;).subscribeOn(AndroidSchedulers.mainThread())</div><div class="line">        .observeOn(Schedulers.io())</div><div class="line">        .subscribe(new MaybeObserver&lt;String&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public void onSubscribe(@NonNull Disposable d) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onSuccess(@NonNull String s) &#123;</div><div class="line">                Log.e(&quot;Test&quot;,&quot;onSuccess&quot;);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onError(@NonNull Throwable e) &#123;</div><div class="line">                Log.e(&quot;Test&quot;,&quot;onError&quot;);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onComplete() &#123;</div><div class="line">                Log.e(&quot;Test&quot;,&quot;onComplete&quot;);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
-<p><code>Maybe</code>可发射一条单一的数据，以及发射一条完成通知，或者一条异常通知，其中完成通知和异常通知只能发射一个，发射数据只能在发射完成通知或者异常通知之前，否则发射数据无效。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>介绍完了 EventBus 的基本用法之后，照例要进行一下源码分析。<br>本文基于 EventBus V3.0.0 进行分析，并尽量保持同步更新。</p>
+<p><a href="https://github.com/greenrobot/EventBus" target="_blank" rel="external">github 源码地址</a></p>
+<p>未完待续……</p>
+<h2 id="消息订阅"><a href="#消息订阅" class="headerlink" title="消息订阅"></a>消息订阅</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public void register(Object subscriber) &#123;</div><div class="line">    // 获取订阅对象的 class 对象</div><div class="line">    Class&lt;?&gt; subscriberClass = subscriber.getClass();</div><div class="line">    List&lt;SubscriberMethod&gt; subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);</div><div class="line">    synchronized (this) &#123;</div><div class="line">        for (SubscriberMethod subscriberMethod : subscriberMethods) &#123;</div><div class="line">            subscribe(subscriber, subscriberMethod);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="SubscriberMethodFinder"><a href="#SubscriberMethodFinder" class="headerlink" title="SubscriberMethodFinder"></a>SubscriberMethodFinder</h3><p>SubscriberMethodFinder 作用是解析并找出订阅对象中所有的订阅方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SubscriberMethodFinder(List&lt;SubscriberInfoIndex&gt; subscriberInfoIndexes, boolean strictMethodVerification,</div><div class="line">                       boolean ignoreGeneratedIndex) &#123;</div><div class="line">    this.subscriberInfoIndexes = subscriberInfoIndexes;</div><div class="line">    this.strictMethodVerification = strictMethodVerification;</div><div class="line">    this.ignoreGeneratedIndex = ignoreGeneratedIndex;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">List&lt;SubscriberMethod&gt; findSubscriberMethods(Class&lt;?&gt; subscriberClass) &#123;</div><div class="line">    // 先找出是否有缓存</div><div class="line">    List&lt;SubscriberMethod&gt; subscriberMethods = METHOD_CACHE.get(subscriberClass);</div><div class="line">    // 如果有缓存直接返回缓存的订阅方法</div><div class="line">    if (subscriberMethods != null) &#123;</div><div class="line">        return subscriberMethods;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if (ignoreGeneratedIndex) &#123;</div><div class="line">        // 如果设置了忽略生成的索引，关于索引，后面专门介绍</div><div class="line">        subscriberMethods = findUsingReflection(subscriberClass);</div><div class="line">    &#125; else &#123;</div><div class="line">        // 没有设置会走到这里，默认是没有设置的</div><div class="line">        subscriberMethods = findUsingInfo(subscriberClass);</div><div class="line">    &#125;</div><div class="line">    if (subscriberMethods.isEmpty()) &#123;</div><div class="line">        // 如果没有找到订阅方法，抛出异常</div><div class="line">        throw new EventBusException(&quot;Subscriber &quot; + subscriberClass</div><div class="line">                + &quot; and its super classes have no public methods with the @Subscribe annotation&quot;);</div><div class="line">    &#125; else &#123;</div><div class="line">        // 找到订阅方法，加入缓存</div><div class="line">        METHOD_CACHE.put(subscriberClass, subscriberMethods);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>获取订阅对象中的订阅方法列表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">private List&lt;SubscriberMethod&gt; findUsingInfo(Class&lt;?&gt; subscriberClass) &#123;</div><div class="line">    FindState findState = prepareFindState();</div><div class="line">    findState.initForSubscriber(subscriberClass);</div><div class="line">    while (findState.clazz != null) &#123;</div><div class="line">        findState.subscriberInfo = getSubscriberInfo(findState);</div><div class="line">        if (findState.subscriberInfo != null) &#123;</div><div class="line">            SubscriberMethod[] array = findState.subscriberInfo.getSubscriberMethods();</div><div class="line">            for (SubscriberMethod subscriberMethod : array) &#123;</div><div class="line">                if (findState.checkAdd(subscriberMethod.method, subscriberMethod.eventType)) &#123;</div><div class="line">                    findState.subscriberMethods.add(subscriberMethod);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125; else &#123;</div><div class="line">            findUsingReflectionInSingleClass(findState);</div><div class="line">        &#125;</div><div class="line">        findState.moveToSuperclass();</div><div class="line">    &#125;</div><div class="line">    return getMethodsAndRelease(findState);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>解析订阅对象的注解信息。<br>因为订阅方法以及它的一些属性都是通过注解来标识的，只有解析到了这些方法才能向它们发布消息事件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">private void findUsingReflectionInSingleClass(FindState findState) &#123;</div><div class="line">    Method[] methods;</div><div class="line">    try &#123;</div><div class="line">        // 获取订阅者对象的所有方法</div><div class="line">        methods = findState.clazz.getDeclaredMethods();</div><div class="line">    &#125; catch (Throwable th) &#123;</div><div class="line">        methods = findState.clazz.getMethods();</div><div class="line">        findState.skipSuperClasses = true;</div><div class="line">    &#125;</div><div class="line">    for (Method method : methods) &#123;</div><div class="line">        int modifiers = method.getModifiers();</div><div class="line">        // 方法的修饰符必须符合下面的类型</div><div class="line">        if ((modifiers &amp; Modifier.PUBLIC) != 0 &amp;&amp; (modifiers &amp; MODIFIERS_IGNORE) == 0) &#123;</div><div class="line">            // 获取方法的参数</div><div class="line">            Class&lt;?&gt;[] parameterTypes = method.getParameterTypes();</div><div class="line">            // 订阅方法必须接受一个参数，也就是表示消息事件的类</div><div class="line">            if (parameterTypes.length == 1) &#123;</div><div class="line">                // 获取该方法的 Subscribe 注解信息</div><div class="line">                Subscribe subscribeAnnotation = method.getAnnotation(Subscribe.class);</div><div class="line">                // 如果有这个注解</div><div class="line">                if (subscribeAnnotation != null) &#123;</div><div class="line">                    // 获取参数的 class 对象</div><div class="line">                    Class&lt;?&gt; eventType = parameterTypes[0];</div><div class="line">                    if (findState.checkAdd(method, eventType)) &#123;</div><div class="line">                        // 获取 ThreadMode 类型</div><div class="line">                        ThreadMode threadMode = subscribeAnnotation.threadMode();</div><div class="line">                        // 保存到subscriberMethods</div><div class="line">                        findState.subscriberMethods.add(new SubscriberMethod(method, eventType, threadMode,</div><div class="line">                                subscribeAnnotation.priority(), subscribeAnnotation.sticky()));</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125; else if (strictMethodVerification &amp;&amp; method.isAnnotationPresent(Subscribe.class)) &#123;</div><div class="line">                String methodName = method.getDeclaringClass().getName() + &quot;.&quot; + method.getName();</div><div class="line">                throw new EventBusException(&quot;@Subscribe method &quot; + methodName +</div><div class="line">                        &quot;must have exactly 1 parameter but has &quot; + parameterTypes.length);</div><div class="line">            &#125;</div><div class="line">        &#125; else if (strictMethodVerification &amp;&amp; method.isAnnotationPresent(Subscribe.class)) &#123;</div><div class="line">            String methodName = method.getDeclaringClass().getName() + &quot;.&quot; + method.getName();</div><div class="line">            throw new EventBusException(methodName +</div><div class="line">                    &quot; is a illegal @Subscribe method: must be public, non-static, and non-abstract&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="消息发布"><a href="#消息发布" class="headerlink" title="消息发布"></a>消息发布</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) &#123;</div><div class="line">    switch (subscription.subscriberMethod.threadMode) &#123;</div><div class="line">        case POSTING:</div><div class="line">            invokeSubscriber(subscription, event);</div><div class="line">            break;</div><div class="line">        case MAIN:</div><div class="line">            if (isMainThread) &#123;</div><div class="line">                invokeSubscriber(subscription, event);</div><div class="line">            &#125; else &#123;</div><div class="line">                mainThreadPoster.enqueue(subscription, event);</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case MAIN_ORDERED:</div><div class="line">            if (mainThreadPoster != null) &#123;</div><div class="line">                mainThreadPoster.enqueue(subscription, event);</div><div class="line">            &#125; else &#123;</div><div class="line">                // temporary: technically not correct as poster not decoupled from subscriber</div><div class="line">                invokeSubscriber(subscription, event);</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case BACKGROUND:</div><div class="line">            if (isMainThread) &#123;</div><div class="line">                backgroundPoster.enqueue(subscription, event);</div><div class="line">            &#125; else &#123;</div><div class="line">                invokeSubscriber(subscription, event);</div><div class="line">            &#125;</div><div class="line">            break;</div><div class="line">        case ASYNC:</div><div class="line">            asyncPoster.enqueue(subscription, event);</div><div class="line">            break;</div><div class="line">        default:</div><div class="line">            throw new IllegalStateException(&quot;Unknown thread mode: &quot; + subscription.subscriberMethod.threadMode);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>未完待续……</p>
 
       
     </div>
@@ -459,9 +436,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android开源项目/" rel="tag"># Android开源项目</a>
-          
-            <a href="/tags/RxJava/" rel="tag"># RxJava</a>
+            <a href="/tags/EventBus/" rel="tag"># EventBus</a>
           
         </div>
       
@@ -470,8 +445,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/14/open-source-rxjava-guide-flowable/" rel="next" title="RxJava 使用指南 -- Flowable 和 Subscriber">
-                <i class="fa fa-chevron-left"></i> RxJava 使用指南 -- Flowable 和 Subscriber
+              <a href="/2017/12/10/open-source-eventbus-guide-base/" rel="next" title="EventBus -- 基本用法">
+                <i class="fa fa-chevron-left"></i> EventBus -- 基本用法
               </a>
             
           </div>
@@ -480,8 +455,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/22/open-source-retrofit-guide/" rel="prev" title="Retrofit 2 使用指南">
-                Retrofit 2 使用指南 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/02/20/python-practice-web-crawler-iqiyi/" rel="prev" title="Python实战 -- 网络爬虫之解析爱奇艺视频">
+                Python实战 -- 网络爬虫之解析爱奇艺视频 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -634,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Single-SingleObserver-的用法"><span class="nav-number">2.</span> <span class="nav-text">Single/SingleObserver 的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#转化为其他观察者模式"><span class="nav-number">2.1.</span> <span class="nav-text">转化为其他观察者模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Completable-CompletableObserver-的用法"><span class="nav-number">3.</span> <span class="nav-text">Completable/CompletableObserver 的用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maybe-MaybeObserver-的用法"><span class="nav-number">4.</span> <span class="nav-text">Maybe/MaybeObserver 的用法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息订阅"><span class="nav-number">2.</span> <span class="nav-text">消息订阅</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscriberMethodFinder"><span class="nav-number">2.1.</span> <span class="nav-text">SubscriberMethodFinder</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息发布"><span class="nav-number">3.</span> <span class="nav-text">消息发布</span></a></li></ol></div>
             
 
           </div>

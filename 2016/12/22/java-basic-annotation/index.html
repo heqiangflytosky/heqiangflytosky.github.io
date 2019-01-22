@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/12/22/java-basic-annotation/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍注解的用法">
-<meta property="og:updated_time" content="2019-01-18T07:52:45.496Z">
+<meta property="og:updated_time" content="2019-01-22T02:35:05.726Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础 -- 注解">
 <meta name="twitter:description" content="介绍注解的用法">
@@ -465,7 +465,7 @@
 <li>ElemenetType.TYPE_USE：该注解能写在使用类型的任何语句中</li>
 </ul>
 <h3 id="Document"><a href="#Document" class="headerlink" title="Document"></a>Document</h3><p>将此注解包含在 javadoc 中 ，它代表着此注解会被javadoc工具提取成文档。在 doc 文档中的内容会因为此注解的信息内容不同而不同。相当与@see,@param 等。</p>
-<h3 id="Inherited"><a href="#Inherited" class="headerlink" title="Inherited"></a>Inherited</h3><p>允许子类继承父类中的注解。如果不标记@Inherited，那么父类的注解子类将无法继承。</p>
+<h3 id="Inherited"><a href="#Inherited" class="headerlink" title="Inherited"></a>Inherited</h3><p>允许子类继承父类中的该注解。如果不标记@Inherited，那么父类的该注解子类将无法继承。</p>
 <h2 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h2><p>使用@interface自定义注解时，自动继承了 <code>java.lang.annotation.Annotation</code> 接口，由编译程序自动完成其他细节。在定义注解时，不能继承其他的注解或接口。<code>@interface</code> 用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。可以通过default来声明参数的默认值。<br>自定义注解格式：<br>public @interface 注解名 {定义体}<br>注解参数的可支持数据类型：</p>
 <ul>
 <li>所有基本数据类型（int,float,boolean,byte,double,char,long,short)</li>
@@ -631,7 +631,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-count">139</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
