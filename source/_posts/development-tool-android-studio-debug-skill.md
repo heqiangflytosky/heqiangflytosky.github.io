@@ -5,7 +5,7 @@ comments: true
 keywords: Android Studio
 tags: [Android Studio, 开发工具]
 description: 介绍 Android Studio 的使用技巧：调试技巧，设置技巧，常用插件等
-date: 2016-2-8 10:00:00
+date: 2016-1-30 10:00:00
 ---
 
 作为一名 Android 开发者，使用 Android Studio 作为 IDE 进行开发已经成为标配，本文就把 AS 的一些使用技巧来做一下归纳和总结。随着 AS  的版本升级，本文会同步更新。
