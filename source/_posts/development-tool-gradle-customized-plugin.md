@@ -1,6 +1,6 @@
 
 ---
-title: Gradle 使用指南 -- 创建Plugin
+title: Gradle 使用指南 -- Plugin 的使用和创建
 categories: Gradle
 comments: true
 tags: [Android, Gradle, Android Studio]
@@ -8,7 +8,109 @@ description: 介绍如何在 Android Studio 中自定义 Gradle 插件
 date: 2016-4-15 10:00:00
 ---
 
-## 概述
+[官方文档：Using Gradle Plugins](https://docs.gradle.org/current/userguide/plugins.html)
+[官方文档：Writing Custom Plugins](https://docs.gradle.org/current/userguide/custom_plugins.html)
+
+## 插件的类型
+
+插件可以分为下两种：
+
+ - 脚本插件：脚本插件是额外的构建脚本，进一步配置构建，常常用于声明一些操作构建的方法，它们通常在构建内部使用。
+ - 二进制插件：二进制插件是实现了Plugin的类，并且通过编程方式来操作构建，二进制插件可以在构建脚本中，也可以在buildSrc中，也可以以jar的方式导入。
+
+## 插件的使用
+
+先来介绍一下插件的使用，可以分为两步骤：
+
+ - 解析插件：找到给定的包含插件的 jar 的正确版本，并把它添加到脚本的 classpath 中。一旦插件被解析，它的 API 就能在构建脚本中使用，脚本可以用文件路径或者 url 进行解析。脚本插件是可以自动解析的，它可以是相对于项目目录的本地路径，也可以是个http的远程路径。比如：`apply from: 'other.gradle'`。二进制插件是需要应用插件id或者jar包路径来自动解析。比如 `classpath 'com.android.hq.testplugin:testplugin:1.0.0'`,`classpath files("../../TestGradlePlugin/app/build/libs/app-1.0.0.jar")`
+ - 应用插件：应用插件其实就是在需要应用插件的项目上执行 `Plugin.apply()` 方法。比如：`apply plugin: 'com.android.application'`。
+
+### 引用插件的两种方式：
+
+第一种方式：
+
+```
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "org.hidetake:gradle-ssh-plugin:2.9.0"
+  }
+}
+
+apply plugin: "org.hidetake.ssh"
+
+```
+
+下面这个是 2.0及以前版本的用法。
+
+第二种方式：
+
+```
+plugins {
+  id 'org.hidetake.ssh' version '2.9.0'
+}
+```
+
+这是 gradle 2.1 及以上最新版本的语法。
+plugins{} 块提供了下面的语法约束：
+
+```
+plugins {
+    id «plugin id»                                            // (1)
+    id «plugin id» version «plugin version» [apply «false»]   // (2)
+}
+```
+
+«plugin version»和«plugin id»必须是常量，文字或字符串，apply则必须是bool类型（可以用于快速禁用插件）。
+plugins {}目前仅仅可以使用在构建脚本中，而不能使用在脚本插件，settings.gradle和初始化脚本。
+
+### 把插件应用到子工程中
+
+在多项目构建中，你可能想吧插件应用到一部分或者所有的子项目，而不是根项目，plugins {}默认的行为是快速解析和应用插件，但是你可以通过apply false来告诉Gradle不要应用插件，然后通过apply plugin: «plugin id»应用到子项目中。
+
+```
+plugins {
+    id 'org.gradle.sample.hello' version '1.0.0' apply false
+    id 'org.gradle.sample.goodbye' version '1.0.0' apply false
+}
+
+subprojects {
+    if (name.startsWith('hello')) {
+        apply plugin: 'org.gradle.sample.hello'
+    }
+}
+```
+
+## 自定义插件库
+
+默认情况下，plugins {}DSL将会从Gradle插件官网下载插件，但很多构建者想从自己的私有Maven仓库下载Gradle插件，因为可能需要私有的实现细节，而且可以更好的控制插件的可用性。
+
+为了指定自定义的插件资源库，需要在settings.gradle中使用pluginManagement {}下嵌套的repositories {}块
+
+```
+pluginManagement {
+    repositories {
+        maven {
+            // 本地
+            url '../maven-repo'
+            // 远程
+            // uri 'http://127.0.0.1:8081/maven-repo/'
+        }
+        gradlePluginPortal()
+        ivy {
+            url '../ivy-repo'
+        }
+    }
+}
+```
+
+这会告诉Gradle首先在 `../maven-repo` 资源库中查找，如果没有找到然后才会寻找官方的插件资源库，如果你不想寻找官方资源库，可以去掉gradlePluginPortal()。
+
+## 创建插件的方式
 
 Gradle 的插件可以有三种形式来提供：
 
@@ -17,6 +119,7 @@ Gradle 的插件可以有三种形式来提供：
  - 在一个项目中自定义插件，然后上传到远端maven库等，其他工程通过添加依赖，引用这个插件。
 
 本文只对后面两种方式来进行简单介绍。
+
 
 ## 在当前项目中创建插件
 
@@ -182,9 +285,10 @@ Total time: 4.925 secs
 
 可以看到，只有 `** This is my first gradle plugin` 输出。
 
-## 独立的插件项目
+## 独立的插件项目（发布的本地或者远程仓库）
 
 这种类型的插件可以在本地独立引用，也可以上传到远端 maven 库等，其他工程通过添加依赖，引用这个插件。
+实质是二进制插件被发布成外部的 jar 文件，然后通过将其增加到构建脚本的 classpath 中来进一步应用插件。
 创建步骤和前面的在当前项目中创建插件的步骤有些是类似的。
 
 ### 创建Plugin
@@ -284,7 +388,9 @@ testplugin-1.0.0.jar  testplugin-1.0.0.jar.md5  testplugin-1.0.0.jar.sha1  testp
 
 ### 使用
 
-首先我们需要在使用的 Module 的build.gradle文件中里面指定Maven地址、自定义插件的名称以及依赖包名。代码如下：
+首先我们需要在使用的 Module 的build.gradle文件中里面指定Maven地址、自定义插件的名称以及依赖包名。
+当然也可以直接引用 jar 包的方式，这种方式下面介绍。
+代码如下：
 
 ```
 //com.android.hq.testplugin.TestPlugin为resources/META-INF/gradle-plugins 下的properties文件名称
@@ -311,14 +417,14 @@ buildscript {
 和前面的方法一样，不再详述。
 
 
-## 独立的插件项目2
+## 独立的插件项目2（生成jar包直接引用）
 
-上面介绍的独立插件项目的做法有点繁琐，要建各种文件，还要上传本地仓库或者远程仓库，下面再介绍一个方法，直接生成 插件 jar 包后，直接在需要使用的工程中引用插件 jar 包。
+上面介绍的独立插件项目的做法有点繁琐，要建各种文件，还要上传本地仓库或者远程仓库，下面再介绍一个方法，直接生成插件 jar 包后，然后通过将其增加到需要使用的工程中的构建脚本的 classpath 中来直接引用插件。
 
 ### 创建Plugin 
 
  - 创建一个新的 Project。
- - 删除app模块（这个模块名可以随意定）下 src/main 下面的所有文件，创建 groovy 目录。
+ - 删除app模块（这个模块名可以随意定）的 src/main 下面的所有文件，创建 groovy 目录。
  - 在 groovy 目录下面创建 com/android/hq/testplugin 目录
  - 在 com/android/hq/testplugin 目录下面创建 TestPlugin.groovy 文件。
 
@@ -347,41 +453,50 @@ public class TestPlugin implements Plugin<Project>{
 打包前先实现 app 模块的 build.gradle 文件：
 
 ```
+// 引用插件
 plugins {
+    // 用来生成plugin的插件，gradlePlugin 方法
     id "java-gradle-plugin"
+    // 用来发布plugin的插件，publishing 方法
+    id 'maven-publish'
     id "groovy"
-}
-
-apply plugin: 'groovy'
-apply plugin: 'maven'
-dependencies {
-    //gradle sdk
-    compile gradleApi()
-    //groovy sdk
-    compile localGroovy()
-}
-repositories {
-    mavenCentral()
 }
 
 //group和version在后面使用自定义插件的时候会用到
 group='com.android.hq.testplugin'
 version='1.0.0'
-
 gradlePlugin {
     plugins {
-        generatorPlugin {
+        hello {
             id = 'com.android.hq.testplugin.test'
             implementationClass = 'com.android.hq.testplugin.TestPlugin'
         }
     }
 }
+
+publishing {
+    repositories {
+        maven {
+            url '../maven-repo'
+        }
+    }
+}
 ```
 
-然后在当前工程下运行 `./gradlew build`，会在 `app/build/libs/` 目录下面生成 app-1.0.0.jar 文件。这个文件就是插件包。
+然后运行命令发布，也可以只编译生成 jar 包。
+在当前工程下运行 `./gradlew publish`，会在 `app/build/libs/` 目录下面生成 app-1.0.0.jar 文件。还会在对应的 maven-repo 目录下面生成资源库。
+
+```
+# ls maven-repo/com/android/hq/testplugin/app/
+1.0.0                   maven-metadata.xml      maven-metadata.xml.md5  maven-metadata.xml.sha1
+# ls maven-repo/com/android/hq/testplugin/app/1.0.0/
+app-1.0.0.jar      app-1.0.0.jar.md5  app-1.0.0.jar.sha1 app-1.0.0.pom      app-1.0.0.pom.md5  app-1.0.0.pom.sha1
+```
+如果只运行 `./gradlew build`，只会在 `app/build/libs/` 目录下面生成 app-1.0.0.jar 文件。这个文件就是插件包。
 
 ### 使用
 
+这里只介绍引用jar包的方法，当然也可以通过上面的指定本地或者远程仓库地址然后通过应用插件id的方式引用。
 在其他工程的中使用该插件，需要在使用的模块的 build.gradle 文件中添加下面的代码：
 
 ```
@@ -391,7 +506,8 @@ apply plugin: 'com.android.hq.testplugin.test'
 // 添加插件的依赖路径
 buildscript {
     dependencies {
-        // 这里直接使用了上面插件工程中生成 jar 包的路径
+        // 这里直接使用了上面插件工程中生成 jar 包的路径，
+        // 当然可以把jar包copy到你喜欢的路径然后在此指定就可以了
         classpath files("../../TestGradlePlugin/app/build/libs/app-1.0.0.jar")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -425,8 +541,15 @@ The Task.leftShift(Closure) method has been deprecated and is scheduled to be re
 输出了我们的测试代码。
 
 
+## 说明
+
+上面介绍的两种独立的插件项目的使用，其中打包和使用两个步骤并不是严格的一一对照关系，它们是可以交叉使用的，任何一种打包出来的jar包都可以使用介绍的两种引用方法。
+
+
 ## 参考
 
+https://docs.gradle.org/current/userguide/plugins.html
+https://docs.gradle.org/current/userguide/custom_plugins.html
 http://www.jianshu.com/p/d53399cd507b
-
+https://blog.csdn.net/lastsweetop/article/details/79643576
 
