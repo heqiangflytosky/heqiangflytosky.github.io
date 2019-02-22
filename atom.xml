@@ -6431,9 +6431,9 @@ http://wiki.jikexueyuan.com/project/deep-android-gradle/four-four.html
     
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
-      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
-    
       <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
+    
+      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
     
   </entry>
   
@@ -6442,7 +6442,7 @@ http://wiki.jikexueyuan.com/project/deep-android-gradle/four-four.html
     <link href="http://yoursite.com/2016/04/15/development-tool-gradle-customized-plugin/"/>
     <id>http://yoursite.com/2016/04/15/development-tool-gradle-customized-plugin/</id>
     <published>2016-04-15T02:00:00.000Z</published>
-    <updated>2018-09-15T08:55:29.748Z</updated>
+    <updated>2019-02-22T13:00:33.794Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Gradle 的插件可以有三种形式来提供：</p>
 <ul>
@@ -6479,7 +6479,7 @@ http://wiki.jikexueyuan.com/project/deep-android-gradle/four-four.html
 <p>可以看到，<code>** This is my first gradle plugin</code>和<code>## This is my first gradle plugin in testPlugin task</code>都会打印出来。<br>执行 assembleDebug task，输出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">$ ./gradlew assembleDebug</div><div class="line"></div><div class="line">:buildSrc:compileJava UP-TO-DATE</div><div class="line">:buildSrc:compileGroovy UP-TO-DATE</div><div class="line">:buildSrc:processResources UP-TO-DATE</div><div class="line">:buildSrc:classes UP-TO-DATE</div><div class="line">:buildSrc:jar UP-TO-DATE</div><div class="line">:buildSrc:assemble UP-TO-DATE</div><div class="line">:buildSrc:compileTestJava UP-TO-DATE</div><div class="line">:buildSrc:compileTestGroovy UP-TO-DATE</div><div class="line">:buildSrc:processTestResources UP-TO-DATE</div><div class="line">:buildSrc:testClasses UP-TO-DATE</div><div class="line">:buildSrc:test UP-TO-DATE</div><div class="line">:buildSrc:check UP-TO-DATE</div><div class="line">:buildSrc:build UP-TO-DATE</div><div class="line">** This is my first gradle plugin</div><div class="line">** build versionName=2.1.0</div><div class="line">:app:preBuild UP-TO-DATE</div><div class="line">:app:preDebugBuild UP-TO-DATE</div><div class="line"></div><div class="line">......</div><div class="line"></div><div class="line">:app:assembleDebug UP-TO-DATE</div><div class="line"></div><div class="line">BUILD SUCCESSFUL</div><div class="line"></div><div class="line">Total time: 4.925 secs</div></pre></td></tr></table></figure>
 <p>可以看到，只有 <code>** This is my first gradle plugin</code> 输出。</p>
-<h2 id="独立的插件项目"><a href="#独立的插件项目" class="headerlink" title="独立的插件项目"></a>独立的插件项目</h2><p>这种类型的插件可以上传到远端 maven 库等，其他工程通过添加依赖，引用这个插件。<br>创建步骤和前面的在当前项目中创建插件的步骤有些是类似的。</p>
+<h2 id="独立的插件项目"><a href="#独立的插件项目" class="headerlink" title="独立的插件项目"></a>独立的插件项目</h2><p>这种类型的插件可以在本地独立引用，也可以上传到远端 maven 库等，其他工程通过添加依赖，引用这个插件。<br>创建步骤和前面的在当前项目中创建插件的步骤有些是类似的。</p>
 <h3 id="创建Plugin-1"><a href="#创建Plugin-1" class="headerlink" title="创建Plugin"></a>创建Plugin</h3><p>这里的步骤除了3,4,5和前的一样，其他的都是不一样的。 </p>
 <ol>
 <li>创建一个新的 Project。</li>
@@ -6510,6 +6510,25 @@ http://wiki.jikexueyuan.com/project/deep-android-gradle/four-four.html
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//com.android.hq.testplugin.TestPlugin为resources/META-INF/gradle-plugins 下的properties文件名称</div><div class="line">apply plugin: &apos;com.android.hq.testplugin&apos;</div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        maven &#123;</div><div class="line">            //本地Maven仓库地址</div><div class="line">            url uri(&apos;/mnt/TestRepos/&apos;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        //格式为--&gt;group:module:version</div><div class="line">        classpath &apos;com.android.hq.testplugin:testplugin:1.0.0&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后就可以测试使用情况了。</p>
 <h3 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h3><p>和前面的方法一样，不再详述。</p>
+<h2 id="独立的插件项目2"><a href="#独立的插件项目2" class="headerlink" title="独立的插件项目2"></a>独立的插件项目2</h2><p>上面介绍的独立插件项目的做法有点繁琐，要建各种文件，还要上传本地仓库或者远程仓库，下面再介绍一个方法，直接生成 插件 jar 包后，直接在需要使用的工程中引用插件 jar 包。</p>
+<h3 id="创建Plugin-2"><a href="#创建Plugin-2" class="headerlink" title="创建Plugin"></a>创建Plugin</h3><ul>
+<li>创建一个新的 Project。</li>
+<li>删除app模块（这个模块名可以随意定）下 src/main 下面的所有文件，创建 groovy 目录。</li>
+<li>在 groovy 目录下面创建 com/android/hq/testplugin 目录</li>
+<li>在 com/android/hq/testplugin 目录下面创建 TestPlugin.groovy 文件。</li>
+</ul>
+<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><p>实现 TestPlugin 类，这一步和前面的一样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">package com.android.hq.testplugin</div><div class="line">import org.gradle.api.Plugin</div><div class="line">import org.gradle.api.Project;</div><div class="line">public class TestPlugin implements Plugin&lt;Project&gt;&#123;</div><div class="line">    @Override</div><div class="line">    void apply(Project project) &#123;</div><div class="line">        // 实现一个名称为testPlugin的task，设置分组为 myPlugin，并设置描述信息</div><div class="line">        project.task(&apos;testPlugin&apos;, group: &quot;myPlugin&quot;, description: &quot;This is my test plugin&quot;) &lt;&lt; &#123;</div><div class="line">            println &quot;** Test This is my first gradle plugin in testPlugin task **&quot;</div><div class="line">        &#125;</div><div class="line">        println &quot;** Test This is my first gradle plugin **&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="打包-1"><a href="#打包-1" class="headerlink" title="打包"></a>打包</h3><p>打包前先实现 app 模块的 build.gradle 文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">plugins &#123;</div><div class="line">    id &quot;java-gradle-plugin&quot;</div><div class="line">    id &quot;groovy&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line">apply plugin: &apos;groovy&apos;</div><div class="line">apply plugin: &apos;maven&apos;</div><div class="line">dependencies &#123;</div><div class="line">    //gradle sdk</div><div class="line">    compile gradleApi()</div><div class="line">    //groovy sdk</div><div class="line">    compile localGroovy()</div><div class="line">&#125;</div><div class="line">repositories &#123;</div><div class="line">    mavenCentral()</div><div class="line">&#125;</div><div class="line"></div><div class="line">//group和version在后面使用自定义插件的时候会用到</div><div class="line">group=&apos;com.android.hq.testplugin&apos;</div><div class="line">version=&apos;1.0.0&apos;</div><div class="line"></div><div class="line">gradlePlugin &#123;</div><div class="line">    plugins &#123;</div><div class="line">        generatorPlugin &#123;</div><div class="line">            id = &apos;com.android.hq.testplugin.test&apos;</div><div class="line">            implementationClass = &apos;com.android.hq.testplugin.TestPlugin&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后在当前工程下运行 <code>./gradlew build</code>，会在 <code>app/build/libs/</code> 目录下面生成 app-1.0.0.jar 文件。这个文件就是插件包。</p>
+<h3 id="使用-2"><a href="#使用-2" class="headerlink" title="使用"></a>使用</h3><p>在其他工程的中使用该插件，需要在使用的模块的 build.gradle 文件中添加下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// 引用插件</div><div class="line">apply plugin: &apos;com.android.hq.testplugin.test&apos;</div><div class="line"></div><div class="line">// 添加插件的依赖路径</div><div class="line">buildscript &#123;</div><div class="line">    dependencies &#123;</div><div class="line">        // 这里直接使用了上面插件工程中生成 jar 包的路径</div><div class="line">        classpath files(&quot;../../TestGradlePlugin/app/build/libs/app-1.0.0.jar&quot;)</div><div class="line">        // NOTE: Do not place your application dependencies here; they belong</div><div class="line">        // in the individual module build.gradle files</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h3><p>在测试工程下面运行 <code>./gradlew tasks</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">MyPlugin tasks</div><div class="line">--------------</div><div class="line">testPlugin - This is my test plugin</div></pre></td></tr></table></figure>
+<p>已经多了 testPlugin 这个 task。<br>执行该 task，<code>./gradlew testPlugin</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt; Configure project :app</div><div class="line">The Task.leftShift(Closure) method has been deprecated and is scheduled to be removed in Gradle 5.0. Please use Task.doLast(Action) instead.</div><div class="line">        at build_f32z80bmob9ip5197i06gw0om.run(/home/heqiang/android-studio-workspace/TestPlugin/app/build.gradle:3)</div><div class="line">** Test This is my first gradle plugin **</div><div class="line"></div><div class="line">&gt; Task :app:testPlugin</div><div class="line">** Test This is my first gradle plugin in testPlugin task **</div></pre></td></tr></table></figure>
+<p>输出了我们的测试代码。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/d53399cd507b" target="_blank" rel="external">http://www.jianshu.com/p/d53399cd507b</a></p>
 ]]></content>
     
@@ -6524,9 +6543,9 @@ http://wiki.jikexueyuan.com/project/deep-android-gradle/four-four.html
     
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
-      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
-    
       <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
+    
+      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
     
   </entry>
   
@@ -9950,16 +9969,30 @@ REPLACE(5);
     <link href="http://yoursite.com/2015/01/10/android-knowledge-about-broadcast/"/>
     <id>http://yoursite.com/2015/01/10/android-knowledge-about-broadcast/</id>
     <published>2015-01-10T02:00:00.000Z</published>
-    <updated>2018-05-06T07:22:25.863Z</updated>
+    <updated>2019-02-22T13:00:33.793Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="广播的类型"><a href="#广播的类型" class="headerlink" title="广播的类型"></a>广播的类型</h2><ol>
+    <content type="html"><![CDATA[<h2 id="广播的类型"><a href="#广播的类型" class="headerlink" title="广播的类型"></a>广播的类型</h2><p>广播从发送方式上分可以分为下面三类：</p>
+<ol>
 <li>普通广播</li>
 <li>有序广播</li>
 <li>粘性广播</li>
 </ol>
+<p>另外，从注册的方式上分可以分为两类：</p>
+<ol>
+<li>静态广播：通过 AndroidManifest.xml 的标签来申明的 BroadcastReceiver。</li>
+<li>动态广播：通过 registerReceiver() 方式注册的 BroadcastReceiver，动态注册更为灵活，可在不需要时通过 unregisterReceiver() 取消注册。</li>
+</ol>
 <h3 id="普通广播"><a href="#普通广播" class="headerlink" title="普通广播"></a>普通广播</h3><p>这类广播我们经常使用，是一种无序的广播机制，理论上，所有的接受者几乎同时会获得该 intent 的消息，接受者之间不存在先后顺序，不能截断和修改 intent 的数据。<br>发送方式：<code>sendBroadcast(intent)</code></p>
 <h3 id="有序广播"><a href="#有序广播" class="headerlink" title="有序广播"></a>有序广播</h3><p>所有接受者都可以设置 priority ， 按照 priority 的先后顺序进行传递， 上一个优先级的接受者，可以截断（abortBroadcast()）和修改 intent 里面的数据。 同时，也可以设置一个最后接收者（总是在最后一个接收到这个 intent，用来做一些特定的功能）。<br>发送方式：<code>sendOrderedBroadcast(intent)</code><br>对于接收同一个广播，在相同优先级的情况下，动态注册优先级别高于静态注册。在动态注册中，最早动态注册优先级别最高；在静态注册中，最早安装的程序，静态注册优先级别最高（安装 APK 会解析 manifest.xml,把其加入队列）。</p>
 <h3 id="粘性广播"><a href="#粘性广播" class="headerlink" title="粘性广播"></a>粘性广播</h3><p>粘性广播没有周期限制， 一般的 intent 只能发送给当前已经注册了这个监听的 receiver，一旦发送完毕就会失去作用周期，而粘性广播没有这个限制，即便后来注册的 intent 也可以收到这个广播。 需要注意的一点是 这种发送方式不会导致 ANR， 因为它没有发送时间的限制。<br>发送方式：<code>sendStickyBroadcast(intent)</code></p>
+<h3 id="前台广播和后台广播"><a href="#前台广播和后台广播" class="headerlink" title="前台广播和后台广播"></a>前台广播和后台广播</h3><p>Android系统关于广播有两个广播队列——前台广播队列mFgBroadcastQueue和后台广播队列mBgBroadcastQueue。在发送方发送广播时，默认是放置在后台广播队列的。但是发送方在给intent设置FLAG_RECEIVER_FOREGROUND标记后，发送的广播就会被放置在前台广播队列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Intent intent = new Intent(); </div><div class="line">intent.setAction(&quot;xxxxxx&quot;); </div><div class="line">intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);//前台广播（默认是后台广播） </div><div class="line">sendBroadcast(intent);</div></pre></td></tr></table></figure>
+<p>前台广播和后台广播的区别在于它们的超时时间不同：</p>
+<ul>
+<li>前台广播超时时间为10秒</li>
+<li>后台广播超时时间为60秒</li>
+</ul>
+<p>一旦出现超时，就会出现我们熟知的 ANR。</p>
 <h2 id="应用内广播"><a href="#应用内广播" class="headerlink" title="应用内广播"></a>应用内广播</h2><p>App应用内广播可以理解成一种局部广播的形式，广播的发送者和接收者都同属于一个App。实际的业务需求中，App应用内广播确实可能需要用到。同时，之所以使用应用内广播时，而不是使用全局广播的形式，更多的考虑到的是Android广播机制中的安全性问题以及效率问题。<br>相比于全局广播，App应用内广播优势体现在：</p>
 <ol>
 <li>安全性更高；</li>
@@ -9981,6 +10014,7 @@ REPLACE(5);
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Intent intent = new Intent(&quot;android.hq.action.TEST&quot;);</div><div class="line">intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);</div><div class="line">intent.putExtra(&quot;test&quot;, &quot;TEST&quot;);</div><div class="line">sendBroadcast(intent);</div></pre></td></tr></table></figure>
 <p>值得注意的是，Android 3.1开始，系统向所有Intent的广播添加了 <code>FLAG_EXCLUDE_STOPPED_PACKAGES</code> 标志。这样做是为了防止广播无意或不必要地开启未启动App的后台服务。如果要强制调起未启动的App，后台服务或应用程序可以通过向广播Intent添加 <code>FLAG_INCLUDE_STOPPED_PACKAGES</code> 标志来唤醒。<br>还需要注意的是，在一些手机厂商的ROM中需要设置允许应用后台允许这个设置才能生效。</p>
+<h2 id="Android-O-上对广播的限制"><a href="#Android-O-上对广播的限制" class="headerlink" title="Android O 上对广播的限制"></a>Android O 上对广播的限制</h2><p>先来了解一下显式广播和隐式广播。<br>显式广播就是通过显式 Intent 发送的广播。<br>隐式广播是通过隐式 Intent 发送的广播。<br>在  Android O 以后，除了有限的例外之外，应用无法使用清单注册（静态注册）的方式来接收隐式广播。但对于这些隐式广播，可以通过运行时注册（动态注册）的方式注册。对于显式广播，则依然可以通过清单注册（静态注册）的方式监听。</p>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在《阿里巴巴Android开发手册》中对广播的使用提到：</p>
 <p>1.避免在 <code>BroadcastReceiver#onReceive()</code> 中执行耗时操作，如果有耗时工作， 应该创建 <code>IntentService</code> 完成，而不应该在 <code>BroadcastReceiver</code> 内创建子线程去做。<br>说明:<br>由于该方法是在主线程执行，如果执行耗时操作会导致 UI不流畅。可以使用 <code>IntentService</code> 、 创 建 <code>HandlerThread</code> 或 者 调 用 <code>Context#registerReceiver(BroadcastReceiver, IntentFilter, String, Handler)</code> 方法等方式，在其他 Wroker 线程执行 <code>onReceive</code> 方法。<code>BroadcastReceiver#onReceive()</code> 方法耗时超过 10 秒钟，可能会被系统杀死。</p>
 <p>2.避免使用隐式 <code>Intent</code> 广播敏感信息，信息可能被其他注册了对应 <code>BroadcastReceiver 的 App</code> 接收。<br>说明:<br>通过 <code>Context#sendBroadcast()</code> 发送的隐式广播会被所有感兴趣的 receiver 接收，恶 意应用注册监听该广播的 receiver 可能会获取到 Intent 中传递的敏感信息，并进行其他危险操作。如果发送的广播为使用<code>Context#sendOrderedBroadcast()</code> 方法发送的有序广播，优先级较高的恶意 receiver 可能直接丢弃该广播，造成服务不可用，或者向广播结果塞入恶意数据。<br>如果广播仅限于应用内，则可以使用<code>LocalBroadcastManager#sendBroadcast()</code> 实现，避免敏感信息外泄和 Intent 拦截的风险。</p>
