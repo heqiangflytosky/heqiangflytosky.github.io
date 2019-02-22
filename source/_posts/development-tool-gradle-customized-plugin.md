@@ -184,7 +184,7 @@ Total time: 4.925 secs
 
 ## 独立的插件项目
 
-这种类型的插件可以上传到远端 maven 库等，其他工程通过添加依赖，引用这个插件。
+这种类型的插件可以在本地独立引用，也可以上传到远端 maven 库等，其他工程通过添加依赖，引用这个插件。
 创建步骤和前面的在当前项目中创建插件的步骤有些是类似的。
 
 ### 创建Plugin
@@ -309,6 +309,121 @@ buildscript {
 ### 测试
 
 和前面的方法一样，不再详述。
+
+
+## 独立的插件项目2
+
+上面介绍的独立插件项目的做法有点繁琐，要建各种文件，还要上传本地仓库或者远程仓库，下面再介绍一个方法，直接生成 插件 jar 包后，直接在需要使用的工程中引用插件 jar 包。
+
+### 创建Plugin 
+
+ - 创建一个新的 Project。
+ - 删除app模块（这个模块名可以随意定）下 src/main 下面的所有文件，创建 groovy 目录。
+ - 在 groovy 目录下面创建 com/android/hq/testplugin 目录
+ - 在 com/android/hq/testplugin 目录下面创建 TestPlugin.groovy 文件。
+
+### 实现
+
+实现 TestPlugin 类，这一步和前面的一样：
+
+```
+package com.android.hq.testplugin
+import org.gradle.api.Plugin
+import org.gradle.api.Project;
+public class TestPlugin implements Plugin<Project>{
+    @Override
+    void apply(Project project) {
+        // 实现一个名称为testPlugin的task，设置分组为 myPlugin，并设置描述信息
+        project.task('testPlugin', group: "myPlugin", description: "This is my test plugin") << {
+            println "** Test This is my first gradle plugin in testPlugin task **"
+        }
+        println "** Test This is my first gradle plugin **"
+    }
+}
+```
+
+### 打包
+
+打包前先实现 app 模块的 build.gradle 文件：
+
+```
+plugins {
+    id "java-gradle-plugin"
+    id "groovy"
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+dependencies {
+    //gradle sdk
+    compile gradleApi()
+    //groovy sdk
+    compile localGroovy()
+}
+repositories {
+    mavenCentral()
+}
+
+//group和version在后面使用自定义插件的时候会用到
+group='com.android.hq.testplugin'
+version='1.0.0'
+
+gradlePlugin {
+    plugins {
+        generatorPlugin {
+            id = 'com.android.hq.testplugin.test'
+            implementationClass = 'com.android.hq.testplugin.TestPlugin'
+        }
+    }
+}
+```
+
+然后在当前工程下运行 `./gradlew build`，会在 `app/build/libs/` 目录下面生成 app-1.0.0.jar 文件。这个文件就是插件包。
+
+### 使用
+
+在其他工程的中使用该插件，需要在使用的模块的 build.gradle 文件中添加下面的代码：
+
+```
+// 引用插件
+apply plugin: 'com.android.hq.testplugin.test'
+
+// 添加插件的依赖路径
+buildscript {
+    dependencies {
+        // 这里直接使用了上面插件工程中生成 jar 包的路径
+        classpath files("../../TestGradlePlugin/app/build/libs/app-1.0.0.jar")
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+```
+
+### 测试
+
+在测试工程下面运行 `./gradlew tasks`：
+
+```
+MyPlugin tasks
+--------------
+testPlugin - This is my test plugin
+```
+
+已经多了 testPlugin 这个 task。
+执行该 task，`./gradlew testPlugin`：
+
+```
+> Configure project :app
+The Task.leftShift(Closure) method has been deprecated and is scheduled to be removed in Gradle 5.0. Please use Task.doLast(Action) instead.
+        at build_f32z80bmob9ip5197i06gw0om.run(/home/heqiang/android-studio-workspace/TestPlugin/app/build.gradle:3)
+** Test This is my first gradle plugin **
+
+> Task :app:testPlugin
+** Test This is my first gradle plugin in testPlugin task **
+```
+
+输出了我们的测试代码。
+
 
 ## 参考
 

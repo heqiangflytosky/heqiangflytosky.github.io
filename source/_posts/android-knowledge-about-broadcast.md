@@ -9,9 +9,18 @@ date: 2015-1-10 10:00:00
 
 ## 广播的类型
 
+广播从发送方式上分可以分为下面三类：
+
  1. 普通广播
  2. 有序广播
  3. 粘性广播
+
+另外，从注册的方式上分可以分为两类：
+
+ 1. 静态广播：通过 AndroidManifest.xml 的标签来申明的 BroadcastReceiver。
+ 2. 动态广播：通过 registerReceiver() 方式注册的 BroadcastReceiver，动态注册更为灵活，可在不需要时通过 unregisterReceiver() 取消注册。
+
+
 
 ### 普通广播
 
@@ -28,6 +37,24 @@ date: 2015-1-10 10:00:00
 
 粘性广播没有周期限制， 一般的 intent 只能发送给当前已经注册了这个监听的 receiver，一旦发送完毕就会失去作用周期，而粘性广播没有这个限制，即便后来注册的 intent 也可以收到这个广播。 需要注意的一点是 这种发送方式不会导致 ANR， 因为它没有发送时间的限制。
 发送方式：`sendStickyBroadcast(intent)`
+
+### 前台广播和后台广播
+
+Android系统关于广播有两个广播队列——前台广播队列mFgBroadcastQueue和后台广播队列mBgBroadcastQueue。在发送方发送广播时，默认是放置在后台广播队列的。但是发送方在给intent设置FLAG_RECEIVER_FOREGROUND标记后，发送的广播就会被放置在前台广播队列。
+
+```
+Intent intent = new Intent(); 
+intent.setAction("xxxxxx"); 
+intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);//前台广播（默认是后台广播） 
+sendBroadcast(intent);
+```
+
+前台广播和后台广播的区别在于它们的超时时间不同：
+
+ - 前台广播超时时间为10秒
+ - 后台广播超时时间为60秒
+
+一旦出现超时，就会出现我们熟知的 ANR。
 
 ## 应用内广播
 
@@ -76,6 +103,13 @@ android 4.2 之后加入了多用户:
 
 值得注意的是，Android 3.1开始，系统向所有Intent的广播添加了 `FLAG_EXCLUDE_STOPPED_PACKAGES` 标志。这样做是为了防止广播无意或不必要地开启未启动App的后台服务。如果要强制调起未启动的App，后台服务或应用程序可以通过向广播Intent添加 `FLAG_INCLUDE_STOPPED_PACKAGES` 标志来唤醒。
 还需要注意的是，在一些手机厂商的ROM中需要设置允许应用后台允许这个设置才能生效。
+
+## Android O 上对广播的限制
+
+先来了解一下显式广播和隐式广播。
+显式广播就是通过显式 Intent 发送的广播。
+隐式广播是通过隐式 Intent 发送的广播。
+在  Android O 以后，除了有限的例外之外，应用无法使用清单注册（静态注册）的方式来接收隐式广播。但对于这些隐式广播，可以通过运行时注册（动态注册）的方式注册。对于显式广播，则依然可以通过清单注册（静态注册）的方式监听。
 
 ## 注意事项
 
