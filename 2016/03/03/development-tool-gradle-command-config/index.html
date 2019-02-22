@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-gradle-command-config/gradle-dependencies.png">
-<meta property="og:updated_time" content="2018-12-12T01:56:07.193Z">
+<meta property="og:updated_time" content="2019-02-22T15:34:11.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 使用指南 -- 基础配置">
 <meta name="twitter:description" content="介绍在Android开发过程中Gradle的一些常见命令和配置">
@@ -402,7 +402,7 @@
       
 
       
-        <p>Gradle是一种构建工具，它抛弃了基于XML的构建脚本，取而代之的是采用一种基于Groovy的内部领域特定语言（DSL），建议可以先熟悉一下Groovy脚本。<br><a href="https://docs.gradle.org/current/dsl/" target="_blank" rel="external">Gradle API 文档</a><br><a href="https://developer.android.com/studio/build/index.html" target="_blank" rel="external">Android 配置构建</a><br><a href="http://google.github.io/android-gradle-dsl/current/" target="_blank" rel="external">Android 插件 DSL 扩展</a><br>本文只是简单的介绍一下 Gradle 的一些基本配置，如果想进行一些高级的操作或者是想深入的了解这些配置，请参考我的后面几篇博客。<br><a href="http://www.heqiangfly.com/2016/03/08/development-tool-gradle-android-dsl-extension/" target="_blank" rel="external">Gradle 使用指南 – Android DSL 扩展</a><br><a href="http://www.heqiangfly.com/2016/03/16/development-tool-gradle-customized-plugin-dsl-extension/" target="_blank" rel="external">Gradle 使用指南 – Plugin DSL 扩展</a></p>
+        <p>Gradle是一种构建工具，它抛弃了基于XML的构建脚本，取而代之的是采用一种基于Groovy的内部领域特定语言（DSL），建议可以先熟悉一下Groovy脚本。<br><a href="https://docs.gradle.org/current/userguide/userguide.html" target="_blank" rel="external">官方文档：Gradle 使用指南</a><br><a href="https://docs.gradle.org/current/dsl/" target="_blank" rel="external">官方文档：Gradle API</a><br><a href="https://developer.android.com/studio/build/index.html" target="_blank" rel="external">Android 配置构建</a><br><a href="http://google.github.io/android-gradle-dsl/current/" target="_blank" rel="external">Android 插件 DSL 扩展</a><br>本文只是简单的介绍一下 Gradle 的一些基本配置，如果想进行一些高级的操作或者是想深入的了解这些配置，请参考我的后面几篇博客。<br><a href="http://www.heqiangfly.com/2016/03/08/development-tool-gradle-android-dsl-extension/" target="_blank" rel="external">Gradle 使用指南 – Android DSL 扩展</a><br><a href="http://www.heqiangfly.com/2016/03/16/development-tool-gradle-customized-plugin-dsl-extension/" target="_blank" rel="external">Gradle 使用指南 – Plugin DSL 扩展</a></p>
 <h1 id="Gradle命令"><a href="#Gradle命令" class="headerlink" title="Gradle命令"></a>Gradle命令</h1><h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><p>gradle明明一般是<code>./gradlew +参数</code>， <code>gradlew</code>代表 <code>gradle wrapper</code>，意思是gradle的一层包装，大家可以理解为在这个项目本地就封装了gradle，即gradle wrapper， 在<code>gradle/wrapper/gralde-wrapper.properties</code>文件中声明了它指向的目录和版本。只要下载成功即可用<code>grdlew wrapper</code>的命令代替全局的<code>gradle</code>命令。</p>
 <ul>
 <li><code>./gradlew -v</code> 版本号</li>
