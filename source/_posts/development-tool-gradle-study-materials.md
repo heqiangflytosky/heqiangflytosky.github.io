@@ -1,7 +1,8 @@
 ---
-Gradle 使用指南 -- 一些学习资料
+title: Gradle 使用指南 -- 一些学习资料
 categories: Gradle
 comments: true
+keywords: Gradle
 tags: [Gradle]
 description: 介绍 Gradle 中学习过程中一些不错的资料和文章
 date: 2016-3-2 10:00:00
