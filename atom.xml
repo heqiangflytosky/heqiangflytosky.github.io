@@ -7341,6 +7341,30 @@ http://blog.csdn.net/wangbaochu/article/details/51177672
   </entry>
   
   <entry>
+    <title>Gradle 使用指南 -- 一些学习资料</title>
+    <link href="http://yoursite.com/2016/03/02/development-tool-gradle-study-materials/"/>
+    <id>http://yoursite.com/2016/03/02/development-tool-gradle-study-materials/</id>
+    <published>2016-03-02T02:00:00.000Z</published>
+    <updated>2019-02-25T01:35:54.957Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://docs.gradle.org/current/userguide/userguide.html" target="_blank" rel="external">Gradle 官方文档：Gradle User Manual</a><br><a href="https://gradle.org/guides/" target="_blank" rel="external">Gradle 官方文档：Gradle Tutorials and Guides</a><br><a href="https://dongchuan.gitbooks.io/gradle-user-guide-/" target="_blank" rel="external">Gradle User Guide 中文版</a></p>
+<p><a href="https://blog.csdn.net/lastsweetop/column/info/18566" target="_blank" rel="external">Gradle学习</a>：CSDN 上面的一个 Gralde 专栏，主要是翻译官方文档。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 Gradle 中学习过程中一些不错的资料和文章
+    
+    </summary>
+    
+      <category term="Gradle" scheme="http://yoursite.com/categories/Gradle/"/>
+    
+    
+      <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android 性能优化之TraceView的使用</title>
     <link href="http://yoursite.com/2016/02/25/development-tool-traceview/"/>
     <id>http://yoursite.com/2016/02/25/development-tool-traceview/</id>
