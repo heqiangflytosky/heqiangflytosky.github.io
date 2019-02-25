@@ -12,6 +12,8 @@ date: 2016-3-13 10:00:00
 [Gradle 官方文档](https://docs.gradle.org/current/userguide/userguide.html)
 [Gradle User Guide 中文版](http://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/)
 [Task的API文档](https://docs.gradle.org/current/dsl/org.gradle.api.Task.html)
+[官方文档：Authoring Tasks](https://docs.gradle.org/current/userguide/more_about_tasks.html#header)
+[官方文档：Writing Custom Gradle Tasks](https://guides.gradle.org/writing-gradle-tasks/)
 
 Gradle 中的每一个 Project 都是由一个或者多个 Task 来构成的，它是 gradle 构建脚本的最小运行单元，一个 Task 代表一些更加细化的构建，可能是编译一些 classes、创建一个 Jar、生成 javadoc、或者生成某个目录的压缩文件。
 
@@ -26,10 +28,9 @@ Gradle 中的每一个 Project 都是由一个或者多个 Task 来构成的，�
 
 可以通过下面几个方法来构造 Task：
 
- - task myTask
- - task myTask { configure closure }
- - task myTask(type: SomeType)
- - task myTask(type: SomeType) { configure closure }
+ - task myTask：用 task 关键字构造
+ - task()：用 project 的 task 方法构造
+ - tasks.create：用 TaskContainer 的 create 方法构造
 
 ### Task 示例
 
@@ -57,12 +58,21 @@ task hello3(group: "myTest", description:"This is test task paras", dependsOn: [
     println 'task hello3'
 }
 
-project.task("hello4", group: "myTest", description:"This is test task para name"){
+task("hello4", group: "myTest", description:"This is test task para name"){
     println 'task hello4'
+}
+
+tasks.create("hello5") {
+    group = 'Welcome'
+    description = 'Produces a greeting'
+
+    doLast {
+        println 'Hello, World'
+    }
 }
 ```
 
-执行 `./gradlew  tasks`，上面的 Task 就会在列表中显示出来。
+执行 `./gradlew  tasks --all`，上面的 Task 就会在列表中显示出来。
 
 ```
 MyTest tasks
@@ -76,6 +86,11 @@ Other tasks
 hello
 hello1
 hello2
+
+Welcome tasks
+-------------
+hello5 - Produces a greeting
+
 ```
 
 我们执行 `./gradlew -q hello`，会有下面的输出：
@@ -85,6 +100,124 @@ config task hello
 task hello doFirst
 task hello doLast
 ```
+
+Task 提供了下面几个构造方法：
+
+ - task myTask
+ - task myTask { configure closure }
+ - task myTask(type: SomeType)
+ - task myTask(type: SomeType) { configure closure }
+
+Project 提供了下面几个 task 方法来创建 task：
+
+ - task(name)
+ - task(name, configureClosure)
+ - task(name, configureAction)
+ - task(args, name)
+ - task(args, name, configureClosure)
+
+TaskContainer 提供了下面几个方法来创建 task，TaskContainer 可以通过 Project 的 tasks 属性或者 getTasks() 方法获取：
+
+ - create​(String name)
+ - create​(String name, Closure configureClosure)
+ - create​(String name, Class<T> type)
+ - create​(String name, Class<T> type, Object... constructorArgs)
+ - create​(String name, Class<T> type, Action<? super T> configuration)
+ - create​(Map<String,​?> options)
+ - create​(Map<String,​?> options, Closure configureClosure)
+
+来介绍一下 create 方法的用法：
+先来看一段代码：
+
+```
+tasks.create("hello") { 
+    doLast { 
+        println 'Hello, World!'
+    }
+}
+```
+
+上面代码做了两件事情：
+
+ - 创建了一个叫 hello 的 task
+ - 在 doLast action 中打印 Hello, World! 到终端
+
+运行 `./gradlew tasks --all` 命令后，会在 Other tasks 的组中发现 hello task。
+运行 `./gradlew hello` 输出：
+
+```
+> Task :hello
+Hello, World!
+```
+
+下面我们为 task 添加组信息和task描述信息：
+
+```
+tasks.create("hello") {
+    group = 'Welcome'
+    description = 'Produces a greeting'
+
+    doLast {
+        println 'Hello, World'
+    }
+}
+```
+
+为该 task 生成组和描述信息：
+
+```
+Welcome tasks
+-------------
+hello - Produces a greeting
+```
+
+下面我们来介绍如何进行灵活地进行定制 task 的一些属性，比如下面例子中的要输出的信息。
+这里我们通过实现一个 Task 类来实现创建 task。
+在 build.gradle 中添加代码：
+
+```
+class Greeting extends DefaultTask {
+    String message
+    String recipient
+
+    @TaskAction
+    void sayGreeting() {
+        println "${message}, ${recipient}!"
+    }
+}
+
+tasks.create("hello", Greeting) {
+    group = 'Welcome'
+    description = 'Produces a world greeting'
+    message = 'Hello'
+    recipient = 'World'
+}
+
+tasks.create("gutenTag", Greeting) {
+    group = 'Welcome'
+    description = 'Produces a German greeting'
+    message = 'Guten Tag'
+    recipient = 'Welt'
+}
+```
+
+运行 `./gradlew tasks` 命令：
+
+```
+Welcome tasks
+-------------
+gutenTag - Produces a German greeting
+hello - Produces a world greeting
+```
+
+下面几点说明：
+
+ - 虽然 Gradle API 的其他 Task 类我们也可以使用，但继承 DefaultTask 是常见的扩展 Task 的方法。
+ - 上面例子中添加了自定义的 message 和 recipient 实现任务类型的可配置，分别实现了不同输出的 hello 和 gutenTag 两个任务。
+ - 通过注解 TaskAction 标记了默认的 Action。@TaskAction表示该Task要执行的动作，即在调用该Task时，要执行的 方法。
+ - 通过引用 Greeting 实现了不同的任务类。
+
+### Task 的状态
 
 这里会有个奇怪的现象，我们在执行 `./gradlew -q hello` 时有上面三条输出是容易理解的，但是在执行 `./gradlew tasks` 或者是执行其他 Task 比如 `./gradlew -q hello1` 时，`config task hello` 这个打印也会输出，为什么呢？
 这是因为 Task 有两种状态，分别是：

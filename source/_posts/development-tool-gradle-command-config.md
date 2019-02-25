@@ -130,7 +130,13 @@ apply plugin: 'com.android.application'
 ```
 apply plugin: 'com.android.library'
 ```
- - `apply from`：表示引用其他的配置文件，比如 `apply from:"config.gradle"`
+ - `apply from`：表示引用其他的配置文件，比如 
+
+```
+apply from: "config.gradle"
+apply from: '../version.gradle', to: rootProject     // 导入到 root project
+apply from: '../buildscript.gradle', to:buildscript  // 导入到 buildscript 块
+```
 
 ### android
 
