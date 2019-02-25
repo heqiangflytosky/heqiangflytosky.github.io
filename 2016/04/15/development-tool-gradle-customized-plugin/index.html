@@ -94,7 +94,7 @@
 <meta property="og:description" content="介绍如何在 Android Studio 中自定义 Gradle 插件">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-customized-gradle-plugin/gradle-plugin-module.png">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-customized-gradle-plugin/gradle-plugin-upload-archives.png">
-<meta property="og:updated_time" content="2019-02-22T15:34:11.938Z">
+<meta property="og:updated_time" content="2019-02-25T01:31:43.449Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 使用指南 -- Plugin 的使用和创建">
 <meta name="twitter:description" content="介绍如何在 Android Studio 中自定义 Gradle 插件">
@@ -416,7 +416,7 @@
 </ul>
 <h3 id="引用插件的两种方式："><a href="#引用插件的两种方式：" class="headerlink" title="引用插件的两种方式："></a>引用插件的两种方式：</h3><p>第一种方式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">  repositories &#123;</div><div class="line">    maven &#123;</div><div class="line">      url &quot;https://plugins.gradle.org/m2/&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  dependencies &#123;</div><div class="line">    classpath &quot;org.hidetake:gradle-ssh-plugin:2.9.0&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">apply plugin: &quot;org.hidetake.ssh&quot;</div></pre></td></tr></table></figure>
-<p>下面这个是 2.0及以前版本的用法。</p>
+<p>上面这个是 2.0及以前版本的用法。</p>
 <p>第二种方式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">plugins &#123;</div><div class="line">  id &apos;org.hidetake.ssh&apos; version &apos;2.9.0&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这是 gradle 2.1 及以上最新版本的语法。<br>plugins{} 块提供了下面的语法约束：</p>
