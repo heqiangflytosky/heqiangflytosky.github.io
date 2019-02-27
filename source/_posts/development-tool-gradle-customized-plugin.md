@@ -68,9 +68,35 @@ plugins {
 «plugin version»和«plugin id»必须是常量，文字或字符串，apply则必须是bool类型（可以用于快速禁用插件）。
 plugins {}目前仅仅可以使用在构建脚本中，而不能使用在脚本插件，settings.gradle和初始化脚本。
 
+### 插件的配置
+
+插件引入到工程之后，我们就可以执行在插件中定义的各种 Task 了，我们可以通过 `./gradlew tasks --all` 来查看可以执行的所有 Task。另外，我们还可以在 build.gradle 中对插件进行配置，其实这一部分我们是经常使用到的，比如：
+
+```
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.example.hq.myapplication"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+```
+
+上面代码就是对 android 插件进行的各种配置。
+
 ### 把插件应用到子工程中
 
-在多项目构建中，你可能想吧插件应用到一部分或者所有的子项目，而不是根项目，plugins {}默认的行为是快速解析和应用插件，但是你可以通过apply false来告诉Gradle不要应用插件，然后通过apply plugin: «plugin id»应用到子项目中。
+在多项目构建中，你可能想吧插件应用到一部分或者所有的子项目，而不是根项目，plugins {}默认的行为是快速解析和应用插件，但是你可以通过 apply false来告诉Gradle不要应用插件，然后通过apply plugin: «plugin id»应用到子项目中。
 
 ```
 plugins {
@@ -110,15 +136,91 @@ pluginManagement {
 
 这会告诉Gradle首先在 `../maven-repo` 资源库中查找，如果没有找到然后才会寻找官方的插件资源库，如果你不想寻找官方资源库，可以去掉gradlePluginPortal()。
 
+## 插件的创建
+
+创建插件一般我们是通过实现 Plugin 接口来实现：
+
+```
+public interface Plugin<T> {
+    void apply(T var1);
+}
+```
+
+它有个apply方法，这个方法是在插件的配置阶段执行的方法，也即是说当我们引入插件时，这个方法就执行。
+比如当我们通过 `apply plugin: 'com.android.application'` 引入 android 插件时，对应的 apply 方法就会执行了。
+
+```
+class CustomExtension {
+    String msg
+}
+
+class CustomPlugin implements Plugin<Project>{
+
+    @Override
+    void apply(Project target) {
+        // 创建一个扩展属性 myExtension，使用 CustomExtension 进行管理外部属性配置
+        target.extensions.create("myExtension", CustomExtension)
+
+        // 实现一个名称为testPluginTask1的task，设置分组为 myPlugin，并设置描述信息
+        target.task('testPluginTask1', group: "myPlugin", description: "This is my test plugin") << {
+            println "## This is my first gradle plugin in testPlugin task. msg = "+target.myExtension.msg
+        }
+        // 实现一个名称为testPluginTask2的task，设置分组为 myPlugin，并设置描述信息
+        target.task('testPluginTask2', group: "myPlugin", description: "This is my test plugin") << {
+            println "## This is my first gradle plugin in testPlugin task. msg = "+target.myExtension.msg
+        }
+        println "** This is my first gradle plugin. msg = "+target.myExtension.msg
+    }
+}
+
+apply plugin: CustomPlugin
+
+myExtension {
+    msg "testMSG"
+}
+```
+
+测试 Task，运行 `./gradlew testPluginTask1`：
+
+```
+> Configure project :app
+** This is my first gradle plugin. msg = null
+
+> Task :app:testPluginTask1
+## This is my first gradle plugin in testPlugin task. msg = testMSG
+```
+
+上面的配置阶段 msg 输出为 null，是因为调用 `apply plugin: CustomPlugin` 时还没有给 msg 赋值。
+下面我们测试一下 apply 方法的执行时机：
+
+```println "before apply CustomPlugin"
+apply plugin: CustomPlugin
+println "after apply CustomPlugin"
+```
+
+运行 `./gradlew testPluginTask1`：
+
+```
+> Configure project :app
+before apply CustomPlugin
+** This is my first gradle plugin. msg = null
+after apply CustomPlugin
+
+> Task :app:testPluginTask1
+## This is my first gradle plugin in testPlugin task. msg = testMSG
+```
+
+可以看到 apply 方法确实是在 `apply plugin: CustomPlugin` 时调用的。
+
 ## 创建插件的方式
 
 Gradle 的插件可以有三种形式来提供：
 
- - 直接在build.gradle中编写Plugin，这种方式这种方法写的Plugin无法被其他 build.gradle 文件引用。
+ - 直接在build.gradle中编写 Plugin，这种方式这种方法写的Plugin无法被其他 build.gradle 文件引用。
  - 单独的一个Module，这个Module的名称必须为buildSrc，同一个工程中所有的构建文件够可以引用这个插件，但是不能被其他工程引用。
  - 在一个项目中自定义插件，然后上传到远端maven库等，其他工程通过添加依赖，引用这个插件。
 
-本文只对后面两种方式来进行简单介绍。
+第一种方式在上面的插件的创建这一节中已经介绍了，本文接下来再对后面两种方式来进行简单介绍。
 
 
 ## 在当前项目中创建插件
@@ -175,7 +277,8 @@ public class TestPlugin implements Plugin<Project>{
 }
 ```
 
-这里在简单实现了一个名称为testPlugin的task，当执行该task时，会打印 `## This is my first gradle plugin in testPlugin task`，而`** This is my first gradle plugin`在执行所有的task时都会打印。
+这里在简单实现了一个名称为testPlugin的 task，apply 方法会在配置阶段执行。
+当执行该插件的 testPlugin taks 时，会打印 `## This is my first gradle plugin in testPlugin task`，而`** This is my first gradle plugin`则在配置阶段打印出来。因为在执行所有的task时都会进行执行配置阶段，那么这个打印在执行任何一个 task 时都会打印。
 
 ### 使用
 

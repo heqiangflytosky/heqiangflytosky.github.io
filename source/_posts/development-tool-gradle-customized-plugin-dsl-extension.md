@@ -48,11 +48,12 @@ class MyExtension {
 public class MyFirstPlugin implements Plugin<Project>{
     @Override
     void apply(Project project) {
-        project.extensions.create('myplugin', MyExtension.class)
+        // 创建一个扩展属性 myExtension，使用 MyExtension 进行管理外部属性配置
+        project.extensions.create('myExtension', MyExtension.class)
         // 实现一个名称为myPlugin的task
         project.task('myPlugin') << {
-            println project.myplugin.message
-            println project.myplugin.isDebug
+            println project.myExtension.message
+            println project.myExtension.isDebug
         }
     }
 }
@@ -63,7 +64,7 @@ public class MyFirstPlugin implements Plugin<Project>{
 ```
 apply plugin: com.android.hq.myfirstplugin.MyFirstPlugin
 
-myplugin {
+myExtension {
     message "Hello Plugin"
     isDebug true
 }
@@ -86,7 +87,7 @@ myplugin {
 比如想把 `apply` 方法的 `project` 参数传递进来，就需要这样引用：
 
 ```
-project.extensions.create('myplugin', MyExtension.class, project)
+project.extensions.create('myExtension', MyExtension.class, project)
 ```
 
 那么对应 `MyExtension` 类要加一个带 `Project` 类的构造函数：
@@ -125,7 +126,7 @@ android {
 ```
 
 在 `android` 代码块中还可以进行 `defaultConfig` 代码块的配置，那么在自定义 Plugin 中这个配置方法也是可以实现的，也是要借助 `ExtensionContainer` 的 `create()` 方法来实现新的 DSL 域的创建。
-比如在上面的例子中我们想在 `myplugin` 域中创建一个 `defaultConfig` 配置方法，那么可以在 `MyExtension` 中通过下面的代码来实现：
+比如在上面的例子中我们想在 `myExtension` 域中创建一个 `defaultConfig` 配置方法，那么可以在 `MyExtension` 中通过下面的代码来实现：
 实现一个 `DefaultConfig` 类：
 ```
 public class DefaultConfig {
@@ -164,14 +165,14 @@ class MyExtension {
 public class MyFirstPlugin implements Plugin<Project>{
     @Override
     void apply(Project project) {
-        project.extensions.create('myplugin', MyExtension.class)
+        project.extensions.create('myExtension', MyExtension.class)
         // 实现一个名称为myPlugin的task
         project.task('myPlugin') << {
-            println project.myplugin.message
-            println project.myplugin.isDebug
-            println project.myplugin.defaultConfig.applicationId
-            println project.myplugin.defaultConfig.minSdkVersion
-            println project.myplugin.defaultConfig.targetSdkVersion
+            println project.myExtension.message
+            println project.myExtension.isDebug
+            println project.myExtension.defaultConfig.applicationId
+            println project.myExtension.defaultConfig.minSdkVersion
+            println project.myExtension.defaultConfig.targetSdkVersion
         }
     }
 }
@@ -180,7 +181,7 @@ public class MyFirstPlugin implements Plugin<Project>{
 配置代码：
 
 ```
-myplugin {
+myExtension {
     message "Hello Plugin"
     isDebug true
 
@@ -266,7 +267,7 @@ public class BuildConfig {
 配置：
 
 ```
-myplugin {
+myExtension {
     message "Hello Plugin"
     isDebug true
 
