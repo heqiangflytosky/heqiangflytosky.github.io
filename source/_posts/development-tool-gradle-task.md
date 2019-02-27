@@ -413,6 +413,15 @@ task A << {
 task C << {
     println 'Hello from C'
 }
+
+// 将自定义任务挂接到assemble任务的最后再执行
+afterEvaluate { Project project ->
+    def t = project.tasks.findByName("assemble")
+    t.doLast {
+        def testTask = project.tasks.findByName("C")
+        testTask.execute()
+    }
+}
 ```
 
 上面代码通过 `execute()` 方法来调用 Task C。

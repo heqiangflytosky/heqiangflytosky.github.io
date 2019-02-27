@@ -35,7 +35,9 @@ gradle明明一般是`./gradlew +参数`， `gradlew`代表 `gradle wrapper`，�
  
  - `./gradlew installRelease` Release模式打包并安装
  - `./gradlew uninstallRelease` 卸载Release模式包
+
 ## 加入自定义参数
+
 比如我们想根据不同的参数来进行不用的编译配置，可以在`./gradlew`中加入自定义参数。
 
  - `./gradlew assembleDebug -Pcustom=true`
@@ -47,7 +49,9 @@ if (project.hasProperty('custom')){
 
 }
 ```
+
 ## assemble结合Build Variants来创建task
+
 `assemble` 还能和 `Product Flavor` 结合创建新的任务，其实 `assemble` 是和 `Build Variants` 一起结合使用的，而 `Build Variants = Build Type + Product Flavor`，举个例子大家就明白了：
 如果我们想打包 wandoujia 渠道的`release`版本，执行如下命令就好了：
 
@@ -70,10 +74,13 @@ if (project.hasProperty('custom')){
  3. `assemble<Product Flavor Name>`： 允许构建指定flavor的所有APK，例如`assembleFlavor1`将会构建Flavor1Debug和Flavor1Release两个Variant版本。
  
 # Gradle配置
+
 Gradle构建脚本 build.gradle
 Gradle属性文件 gradle.properties
 Gradle设置文件 settings.gradle
+
 ## build.gradle
+
 先看整个项目的gradle配置文件：
 
 ```
@@ -97,9 +104,11 @@ allprojects {
 ```
 
 内容主要包含了两个方面：一个是声明仓库的源，这里可以看到是指明的`jcenter()`, 之前版本则是`mavenCentral()`, `jcenter`可以理解成是一个新的中央远程仓库，兼容`maven`中心仓库，而且性能更优。
-另一个是声明了android gradle plugin的版本，android studio 1.0正式版必须要求支持gradle plugin 1.0的版本
+另一个是声明了android gradle plugin的版本，android studio 1.0正式版必须要求支持gradle plugin 1.0的版本。
+上面的 buildscript 和 allprojects 其实是 Project 类的一个 Script blocks，Gradle 中每个 build.gradle 会转换成一个 Project 对象。
 
 某个Moudle的gradle配置文件：
+
 ### buildscript
 
 ```

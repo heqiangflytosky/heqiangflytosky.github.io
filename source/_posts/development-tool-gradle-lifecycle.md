@@ -16,9 +16,31 @@ date: 2016-3-18 10:00:00
  2. 配置阶段
  3. 执行阶段
 
-在**初始化阶段**，Gradle 为项目创建了 Project 实例。在给定的构建脚本中只定义了一个项目。在多项目构建中，这个构建阶段变得更加重要。根据你正在执行的项目，Gradle 找出哪些项目需要参与到构建中。实质为执行 settings.gradle 脚本。注意，在这个阶段当前已有的构建脚本代码都不会被执行。
-在**配置阶段**，Gradle 构造了一个模型来表示任务，并参与到构建中来。增量式构建特性决定来模型中的 task 是否需要运行。配置阶段完成后，整个 build 的 project 以及内部的 Task 关系就确定了。这个阶段非常适合于为项目或指定 task 设置所需的配置。实质为解析每个被加入构建项目的 build.gradle 脚本。注意，项目的每一次构建的任何配置代码都可以被执行--即使你只执行 gradle tasks。
+在**初始化阶段**，Gradle 根据 settings.gradle 文件的配置为项目创建了 Project 实例。在给定的构建脚本中只定义了一个项目。在多项目构建中，这个构建阶段变得更加重要。根据你正在执行的项目，Gradle 找出哪些项目需要参与到构建中。实质为执行 settings.gradle 脚本。注意，在这个阶段当前已有的构建脚本代码都不会被执行。
+用户可以在 settings.gradle 文件中调用 Settings 类的各种方法配置项目，最常用的就是 include 方法，它可以将用户新建的module加入项目中。
+[Gradle 官方文档：Settings 类](https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html#org.gradle.api.initialization.Settings)
+
+在**配置阶段**，Gradle 构造了一个模型来表示任务，并参与到构建中来。增量式构建特性决定来模型中的 task 是否需要运行。配置阶段完成后，整个 build 的 project 以及内部的 Task 关系就确定了。这个阶段非常适合于为项目或指定 task 设置所需的配置。配置阶段的实质为解析每个被加入构建项目的 build.gradle 脚本，比如通过 apply 方法引入插件，为插件扩展属性进行的配置等等。
+注意，项目的每一次构建的任何配置代码都可以被执行--即使你只执行 `gradle tasks`。
+
+```
+bogon:TestPlugin heqiang$ ./gradlew testPluginTask1
+
+> Configure project :app
+** Test This is my first gradle plugin **
+## hello
+before apply CustomPlugin
+** This is my first gradle plugin. msg = null
+after apply CustomPlugin
+
+> Task :app:testPluginTask1
+## This is my first gradle plugin in testPlugin task. msg = testMSG
+```
+
+比如这里是执行 task，但是仍然经历了配置阶段。
+
 在**执行阶段**，所有的 task 都应该以正确的顺序被执行。执行顺序时由它们的依赖决定的。如果任务被认为没有被修改过，将被跳过。
+
 Gradle 的增量式的构建特性紧紧地与生命周期相结合。
 作为一个开发人员，不能仅限于编写在不同构建阶段执行的 task 动作或者配置逻辑。有时候当一个特定的生命周期事件发生时你可能想要执行代码。一个声明周期事件可能发生在某个构建阶段之前、期间或者之后。在执行阶段之后发生的生命周期事件是构建的完成。
 我们有两种方式可以编写回调声明周期事件：在闭包中，或者是通过 Gradle API 所提供的监听器接口实现。Gradle 不会引导你采用哪种方式去监听生命周期事件，着完全取决于你的选择。
