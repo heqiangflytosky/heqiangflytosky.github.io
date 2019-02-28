@@ -203,6 +203,7 @@ myExtension {
 ### ObjectFactory 实现子  Script blocks 配置扩展
 
 从 Gradle 4.2 开始，提供了 ObjectFactory 类，使用它也可以实现嵌套 DSL 扩展。
+参考 [Gradle 官方文档：4.2 Writing Custom Plugins](https://docs.gradle.org/4.2/userguide/custom_plugins.html)
 
 插件代码：
 
@@ -381,5 +382,6 @@ Could not find method applicationId() for arguments [com.android.hq.test] on obj
 http://www.yiibai.com/gradle/gradle_plugins.html
 https://www.jianshu.com/p/3c59eded8155
 http://wiki.jikexueyuan.com/project/deep-android-gradle/four-four.html
+https://blog.csdn.net/CmdMac/article/details/80509994
 -->
 

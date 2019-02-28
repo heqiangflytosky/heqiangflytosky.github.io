@@ -10,3 +10,18 @@ comments: false
  - [个人主页](http://www.heqiangfly.com/)
  - [CSDN主页](http://blog.csdn.net/heqiangflytosky/)
  - [GitHub主页](https://github.com/heqiangflytosky/)
+
+## 关于本博客
+
+<!--
+
+ - 2016 年基于 Hexo+Github 创建本博客，采用 next 主题 Pisces 风格，域名为 www.heqiangfly.com
+ - 2016 年将CSDN部分博客迁移到本博客
+ - 2017.1.19 使用多说评论系统
+ - 2017.4.6 多说关闭，使用网易云跟帖评论系统
+ - 2017.5.17 将博客风格换成 Mist
+ - 2017.6.5 添加友情链接页面
+ - 2017.6.30 将博客风格切换回 Pisces
+ - 2018.3.20 添加404页面
+
+-->

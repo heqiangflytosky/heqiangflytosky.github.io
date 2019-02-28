@@ -148,7 +148,7 @@ transformResourcesWithMergeJavaResForReleaseUnitTest
 ```
 
 上面是运行 `gradle tasks` 的执行结果，可以发现，这里的 task 列表也有个分类：Android tasks、Build tasks 和 Help tasks 等，对与感兴趣的 task 你可以一一去尝试。
-显示可用 task 的附加信息，可以使用 --all 选项。
+显示所有可用 task 以及一些附加信息，可以使用 --all 选项。
 
 ### 获取依赖关系
 
@@ -200,6 +200,9 @@ transformResourcesWithMergeJavaResForReleaseUnitTest
 |:-------------:|:-------------:|:-------------:|
 | init | 初始化一个新的 build.gradle 文件 |  |
 | wrapper | 在 Gradle 项目目录下生成 Gradle Wrapper 文件，使用与 Gradle 运行时相同的版本 |  |
+
+`./gradlew wrapper -v` 查看当前 Gradle 的版本
+`./gradlew wrapper --gradle-version 4.2` 切换 Gradle 到 4.2 版本
 
 ## 配置输入
 
