@@ -92,10 +92,12 @@
 <meta property="og:url" content="http://yoursite.com/2015/09/02/java-thread-how-to-create-thread/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 Java 中线程的创建和使用">
-<meta property="og:updated_time" content="2018-08-12T09:06:02.903Z">
+<meta property="og:image" content="http://yoursite.com/images/java-thread-how-to-create-thread/thread-state.jpg">
+<meta property="og:updated_time" content="2019-02-28T09:52:12.943Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 线程 -- 创建和使用线程">
 <meta name="twitter:description" content="本文介绍 Java 中线程的创建和使用">
+<meta name="twitter:image" content="http://yoursite.com/images/java-thread-how-to-create-thread/thread-state.jpg">
 
 
 
@@ -401,6 +403,20 @@
 
       
         <h2 id="线程的概念"><a href="#线程的概念" class="headerlink" title="线程的概念"></a>线程的概念</h2><p>不论是在 Java 或者 Android 编程过程中，我们经常和线程打交道。线程可以理解为在进程中独立运行的子任务。一个进程中正在运行时至少会有一个线程运行，当然也可以同时运行多个子线程，即我们平时说的多线程的概念。<br>那么使用多线程有什么优点呢？使用多线程时这些线程可以同时运行，可以最大限度的利用CPU的空闲时间来处理其它任务，系统的运行效率大大提升。</p>
+<h2 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h2><p>线程有5种状态：</p>
+<ul>
+<li>新建状态(New)：线程对象被创建后，就进入了新建状态。例如，Thread thread = new Thread()。</li>
+<li>就绪状态(Runnable): 也被称为“可执行状态”。线程对象被创建后，其它线程调用了该对象的start()方法，从而来启动该线程。例如，thread.start()。处于就绪状态的线程，随时可能被CPU调度执行。</li>
+<li>运行状态(Running)：线程获取CPU权限进行执行。需要注意的是，线程只能从就绪状态进入到运行状态。</li>
+<li>阻塞状态(Blocked)：阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：<ul>
+<li>等待阻塞 – 通过调用线程的wait()方法，让线程等待某工作的完成。</li>
+<li>同步阻塞 – 线程在获取synchronized同步锁失败(因为锁被其它线程所占用)，它会进入同步阻塞状态。</li>
+<li>其他阻塞 – 通过调用线程的sleep()或join()或发出了I/O请求时，线程会进入到阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入就绪状态。</li>
+</ul>
+</li>
+<li>死亡状态(Dead)：线程执行完了或者因异常退出了run()方法，该线程结束生命周期。</li>
+</ul>
+<p><img src="/images/java-thread-how-to-create-thread/thread-state.jpg" alt="线程状态图"></p>
 <h2 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h2><p>创建线程的方法有多种，下面逐一来分析一下。</p>
 <h3 id="继承-Thread-类"><a href="#继承-Thread-类" class="headerlink" title="继承 Thread 类"></a>继承 Thread 类</h3><p>实现一个继承 <code>Thread</code> 的类，并实现其 <code>run</code> 方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    MyThread thread = new MyThread();</div><div class="line">    thread.start();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class MyThread extends Thread&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;run my thread&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -452,6 +468,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public void testFutureTask() &#123;</div><div class="line">    FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(new Callable&lt;Integer&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public Integer call() throws Exception &#123;</div><div class="line">            Log.e(&quot;Test&quot;,&quot;start thread1&quot;);</div><div class="line">            Thread.sleep(2000);</div><div class="line">            Log.e(&quot;Test&quot;,&quot;end thread1&quot;);</div><div class="line">            return 100;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    Log.e(&quot;Test&quot;,&quot;main thread&quot;);</div><div class="line">    new Thread(futureTask).start();</div><div class="line">    try &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;get result&quot;);</div><div class="line">        Log.e(&quot;Test&quot;,&quot;result = &quot;+futureTask.get());</div><div class="line">    &#125; catch (InterruptedException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125; catch (ExecutionException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>运行结果：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">22:35:12.488 E/Test: main thread</div><div class="line">22:35:12.488 E/Test: get result</div><div class="line">22:35:12.488 E/Test: start thread1</div><div class="line">22:35:14.489 E/Test: end thread1</div><div class="line">22:35:14.496 E/Test: result = 100</div></pre></td></tr></table></figure>
+<h2 id="Thread-类"><a href="#Thread-类" class="headerlink" title="Thread 类"></a>Thread 类</h2><h3 id="setPriority"><a href="#setPriority" class="headerlink" title="setPriority"></a>setPriority</h3><p>我们在使用 Thread 时，可以使用 <code>setPriority</code> 方法来设置线程的优先级，线程的优先级分为1-10这10个等级，数值越大，优先级越高。如果小于1或大于10，则抛出 <code>IllegalArgumentException</code> 异常，默认是5。<br>线程的优先级仍然无法保障线程的执行次序。只不过，优先级高的线程获取CPU资源的概率较大</p>
+<h3 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h3><p>yield() 可以使当前线程从“运行状态”变“就绪状态”，调用该方法后，该线程就会把CPU时间让掉，让其他或者自己的线程执行（也就是谁先抢到谁执行）。</p>
+<h3 id="join"><a href="#join" class="headerlink" title="join"></a>join</h3><p>join()方法可以使得一个线程在另一个线程（调用 join 方法的线程）结束后再执行。如果join()方法在一个线程实例上调用，当前运行着的线程将阻塞直到这个线程实例完成了执行。比如在线程t1运行过程中调用了线程t2的 join 方法，那么 t1 线程就会在此处进入阻塞状态，知道 t2 线程运行结束再继续执行。</p>
+<h3 id="sleep"><a href="#sleep" class="headerlink" title="sleep"></a>sleep</h3><p>sleep 方法的作用是让当前线程休眠，即当前线程会从“运行状态”进入到“休眠(阻塞)状态”。sleep()会指定休眠时间，线程休眠的时间会大于/等于该休眠时间；在线程重新被唤醒时，它会由“阻塞状态”变成“就绪状态”，从而等待cpu的调度执行。<br>sleep 和 Object 对象的 wait 方法区别：它们都可以使当前线程由“运行状态”进入到“休眠(阻塞)状态”。但是，wait()会释放对象的同步锁，而sleep()则不会释放锁。</p>
 
       
     </div>
@@ -648,7 +668,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的概念"><span class="nav-number">1.</span> <span class="nav-text">线程的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建线程"><span class="nav-number">2.</span> <span class="nav-text">创建线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承-Thread-类"><span class="nav-number">2.1.</span> <span class="nav-text">继承 Thread 类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现-Runnable-接口"><span class="nav-number">2.2.</span> <span class="nav-text">实现 Runnable 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Callable、Future-或者-FutureTask"><span class="nav-number">2.3.</span> <span class="nav-text">使用 Callable、Future 或者 FutureTask</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Callable-和-Future"><span class="nav-number">2.3.1.</span> <span class="nav-text">Callable 和 Future</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FutureTask"><span class="nav-number">2.3.2.</span> <span class="nav-text">FutureTask</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的概念"><span class="nav-number">1.</span> <span class="nav-text">线程的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的状态"><span class="nav-number">2.</span> <span class="nav-text">线程的状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建线程"><span class="nav-number">3.</span> <span class="nav-text">创建线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承-Thread-类"><span class="nav-number">3.1.</span> <span class="nav-text">继承 Thread 类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现-Runnable-接口"><span class="nav-number">3.2.</span> <span class="nav-text">实现 Runnable 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Callable、Future-或者-FutureTask"><span class="nav-number">3.3.</span> <span class="nav-text">使用 Callable、Future 或者 FutureTask</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Callable-和-Future"><span class="nav-number">3.3.1.</span> <span class="nav-text">Callable 和 Future</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FutureTask"><span class="nav-number">3.3.2.</span> <span class="nav-text">FutureTask</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread-类"><span class="nav-number">4.</span> <span class="nav-text">Thread 类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#setPriority"><span class="nav-number">4.1.</span> <span class="nav-text">setPriority</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yield"><span class="nav-number">4.2.</span> <span class="nav-text">yield</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join"><span class="nav-number">4.3.</span> <span class="nav-text">join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sleep"><span class="nav-number">4.4.</span> <span class="nav-text">sleep</span></a></li></ol></li></ol></div>
             
 
           </div>
