@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/04/26/development-tool-gradle-command-line/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Gradle 常用命令的使用">
-<meta property="og:updated_time" content="2018-05-06T07:29:11.382Z">
+<meta property="og:updated_time" content="2019-02-27T10:59:42.267Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 使用指南 -- 玩转命令行">
 <meta name="twitter:description" content="介绍 Gradle 常用命令的使用">
@@ -497,7 +497,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gradle tasks</div></pre></td></tr></table></figure>
 <p>就可以列出项目中所有可以运行的 task：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">Android tasks</div><div class="line">-------------</div><div class="line">androidDependencies - Displays the Android dependencies of the project.</div><div class="line">signingReport - Displays the signing info for each variant.</div><div class="line">sourceSets - Prints out all the source sets defined in this project.</div><div class="line"></div><div class="line">Build tasks</div><div class="line">-----------</div><div class="line">assemble - Assembles all variants of all applications and secondary packages.</div><div class="line">assembleAndroidTest - Assembles all the Test applications.</div><div class="line">assembleDdd - Assembles all Ddd builds.</div><div class="line">assembleDebug - Assembles all Debug builds.</div><div class="line">assembleRelease - Assembles all Release builds.</div><div class="line">build - Assembles and tests this project.</div><div class="line">......</div><div class="line">jar - Assembles a jar archive containing the main classes.</div><div class="line">mockableAndroidJar - Creates a version of android.jar that&apos;s suitable for unit tests.</div><div class="line">testClasses - Assembles test classes.</div><div class="line"></div><div class="line">Build Setup tasks</div><div class="line">-----------------</div><div class="line">init - Initializes a new Gradle build. [incubating]</div><div class="line">wrapper - Generates Gradle wrapper files. [incubating]</div><div class="line"></div><div class="line">Documentation tasks</div><div class="line">-------------------</div><div class="line">groovydoc - Generates Groovydoc API documentation for the main source code.</div><div class="line">javadoc - Generates Javadoc API documentation for the main source code.</div><div class="line"></div><div class="line">Help tasks</div><div class="line">----------</div><div class="line">buildEnvironment - Displays all buildscript dependencies declared in root project &apos;TestSomeThing&apos;.</div><div class="line">components - Displays the components produced by root project &apos;TestSomeThing&apos;. [incubating]</div><div class="line">......</div><div class="line">tasks - Displays the tasks runnable from root project &apos;TestSomeThing&apos; (some of the displayed tasks may belong to subprojects).</div><div class="line"></div><div class="line">Install tasks</div><div class="line">-------------</div><div class="line">installDebug - Installs the Debug build.</div><div class="line">installDebugAndroidTest - Installs the android (on device) tests for the Debug build.</div><div class="line">......</div><div class="line">uninstallRelease - Uninstalls the Release build.</div><div class="line"></div><div class="line">Verification tasks</div><div class="line">------------------</div><div class="line">check - Runs all checks.</div><div class="line">connectedAndroidTest - Installs and runs instrumentation tests for all flavors on connected devices.</div><div class="line">connectedCheck - Runs all device checks on currently connected devices.</div><div class="line">......</div><div class="line">testDebugUnitTest - Run unit tests for the debug build.</div><div class="line">testReleaseUnitTest - Run unit tests for the release build.</div><div class="line"></div><div class="line">Other tasks</div><div class="line">-----------</div><div class="line">assembleDefault</div><div class="line">......</div><div class="line">transformResourcesWithMergeJavaResForReleaseUnitTest</div></pre></td></tr></table></figure>
-<p>上面是运行 <code>gradle tasks</code> 的执行结果，可以发现，这里的 task 列表也有个分类：Android tasks、Build tasks 和 Help tasks 等，对与感兴趣的 task 你可以一一去尝试。<br>显示可用 task 的附加信息，可以使用 –all 选项。</p>
+<p>上面是运行 <code>gradle tasks</code> 的执行结果，可以发现，这里的 task 列表也有个分类：Android tasks、Build tasks 和 Help tasks 等，对与感兴趣的 task 你可以一一去尝试。<br>显示所有可用 task 以及一些附加信息，可以使用 –all 选项。</p>
 <h3 id="获取依赖关系"><a href="#获取依赖关系" class="headerlink" title="获取依赖关系"></a>获取依赖关系</h3><h4 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h4><p>使用 <code>gradle dependencies</code> 可以所有项目依赖。<br><code>gradle &lt;project&gt;:dependencies --configuration &lt;configuration&gt;</code> 可以列出指定项目指定 Configuration 的依赖关系，project 为 settings.gradle 里面配置的各个 project ，如果没有配置就不加。<br>比如：<code>gradle app:dependencies --configuration compile</code> 就只列出了 app 项目的 compile 任务的依赖关系，这个命令也是我们经常使用的。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">+--- com.android.support:support-annotations:22.0.0</div><div class="line">+--- com.squareup.retrofit2:retrofit:2.3.0</div><div class="line">|    \--- com.squareup.okhttp3:okhttp:3.8.0</div><div class="line">|         \--- com.squareup.okio:okio:1.13.0</div><div class="line">+--- com.squareup.retrofit2:converter-gson:2.3.0</div><div class="line">|    +--- com.squareup.retrofit2:retrofit:2.3.0 (*)</div><div class="line">|    \--- com.google.code.gson:gson:2.7</div><div class="line">+--- com.squareup.retrofit2:adapter-rxjava2:2.3.0</div><div class="line">|    +--- com.squareup.retrofit2:retrofit:2.3.0 (*)</div><div class="line">|    \--- io.reactivex.rxjava2:rxjava:2.0.0 -&gt; 2.1.5</div><div class="line">|         \--- org.reactivestreams:reactive-streams:1.0.1</div><div class="line">+--- org.jooq:joor:0.9.5</div><div class="line">+--- com.github.heqiangflytosky:FastScrollWebView:v1.0.0</div><div class="line">+--- com.eclipsesource.j2v8:j2v8:4.5.0</div><div class="line">+--- org.apache.bcel:bcel:6.0</div><div class="line">+--- org.javassist:javassist:3.20.0-GA</div><div class="line">+--- io.reactivex.rxjava2:rxjava:2.1.5 (*)</div><div class="line">+--- io.reactivex.rxjava2:rxandroid:2.0.1</div><div class="line">|    \--- io.reactivex.rxjava2:rxjava:2.0.1 -&gt; 2.1.5 (*)</div><div class="line">\--- com.squareup.okhttp3:okhttp:3.5.0 -&gt; 3.8.0 (*)</div></pre></td></tr></table></figure>
 <p>上面为一个依赖关系树，仔细观察你会发现有些传递依赖标注了 * 号，表示这个依赖被忽略了，这是因为其他顶级依赖中也依赖了这个传递的依赖，Gradle 会自动分析下载最合适的依赖。</p>
@@ -523,6 +523,7 @@
 </tr>
 </tbody>
 </table>
+<p><code>./gradlew wrapper -v</code> 查看当前 Gradle 的版本<br><code>./gradlew wrapper --gradle-version 4.2</code> 切换 Gradle 到 4.2 版本</p>
 <h2 id="配置输入"><a href="#配置输入" class="headerlink" title="配置输入"></a>配置输入</h2><h3 id="常用选项"><a href="#常用选项" class="headerlink" title="常用选项"></a>常用选项</h3><table>
 <thead>
 <tr>
@@ -873,7 +874,7 @@ http://blog.csdn.net/jjwwmlp456/article/details/41512289
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">142</span>
+                <span class="site-state-item-count">144</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -882,7 +883,7 @@ http://blog.csdn.net/jjwwmlp456/article/details/41512289
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -891,7 +892,7 @@ http://blog.csdn.net/jjwwmlp456/article/details/41512289
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-count">82</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
