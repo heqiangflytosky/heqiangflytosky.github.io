@@ -19,21 +19,13 @@ date: 2015-9-3 10:00:00
 下面通过一个例子来解释一下：
 
 ```
-    public void testLock() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                methodA();
-            }
-        });
-        thread.start();
+    public void testSynchronized() {
+        methodA();
     }
-
     private synchronized void methodA() {
         Log.e("Test","methodA");
         methodB();
     }
-
     private synchronized void methodB() {
         Log.e("Test","methodB");
     }

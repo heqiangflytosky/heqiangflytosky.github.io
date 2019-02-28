@@ -12,7 +12,7 @@ date: 2015-9-4 12:00:00
 
 `ReentrantLock`  顾名思义就是可重入锁，即当前持有该锁的线程能够多次获取该锁，无需等待。
 
-## 和 synchronized 的区别
+## ReentrantLock 和 synchronized 的区别
 
 ### 相同点
 
@@ -26,11 +26,17 @@ date: 2015-9-4 12:00:00
  - `ReenTrantLock` 提供了一个 `Condition`（条件）类，用来实现分组唤醒需要唤醒的线程们，而不是像 `synchronized` 要么随机唤醒一个线程要么唤醒全部线程。一个 `Condition` 对象的 `signal`（`signalAll`）方法和该对象的 `await` 方法是一一对应的，也就是一个 `Condition` 对象的 `signal`（`signalAll`）方法不能唤醒其他 `Condition` 对象的 `await` 方法。
  - `ReenTrantLock` 提供了一种能够中断等待锁的线程的机制，通过 `lock.lockInterruptibly()` 来实现这个机制。
 
+## Condition 和 Object的wait和notify/notifyAll 的区别
+
 ### 类似点
 
- - `Condition` 类的 `awiat` 方法和 `Object` 类的 `wait` 方法等效。调用时也必须获得锁。
- - `Condition` 类的 `signal` 方法和 `Object` 类的 `notify` 方法等效。调用时也必须获得锁。
- - `Condition` 类的 `signalAll` 方法和 `Object` 类的 `notifyAll` 方法等效。调用时也必须获得锁。
+ - `Condition` 对象的 `awiat` 方法和 `Object` 对象的 `wait` 方法等效。调用时也必须获得锁。
+ - `Condition` 对象的 `signal` 方法和 `Object` 对象的 `notify` 方法等效。调用时也必须获得锁。
+ - `Condition` 对象的 `signalAll` 方法和 `Object` 对象的 `notifyAll` 方法等效。调用时也必须获得锁。
+
+### 不同点
+
+ - Condition能够支持多个等待队列（new 多个Condition对象），而Object方式只能支持一个
 
 ## 使用方法
 
@@ -78,7 +84,7 @@ date: 2015-9-4 12:00:00
 17:16:03.156 E/Test: Thread2 end
 ```
 
-
+配合 Condition 使用：
 
 ```
     private ReentrantLock mLock = new ReentrantLock(true);
