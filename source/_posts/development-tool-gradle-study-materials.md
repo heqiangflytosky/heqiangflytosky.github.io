@@ -1,5 +1,5 @@
 ---
-title: Gradle 使用指南 -- 一些学习资料
+title: Gradle 使用指南 -- 资料汇总
 categories: Gradle
 comments: true
 keywords: Gradle

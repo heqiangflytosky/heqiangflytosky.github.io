@@ -331,5 +331,3 @@ wait 前面的流程和上面是一样的，Thread2 先执行获得锁，Thread1
 03-09 17:32:57.036 Thread1 after wait
 03-09 17:32:58.037 Thread1 end
 ```
-
-这里主要看一点，notifyAll 之后，其他正在wait的县城并没有立即开始执行，而是等到持有锁的线程 synchronized 代码块执行完毕，其他两个线程才会依次根据优先级执行。
