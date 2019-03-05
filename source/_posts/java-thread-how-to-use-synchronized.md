@@ -81,9 +81,10 @@ synchronized 关键字经过编译后，会在同步块的前后分别形成 mon
 
 ## wait、notify和notifyAll
 
+任意一个 Java 对象，都拥有一组监视器方法（定义在 java.lang.Object 上），主要包括 wait、notify和notifyAll 及其重载的方法，这些方法和 synchronized 同步关键字配合使用，可以用来在多线程间通信，实现等待/通知机制。
+
 ### 方法介绍
 
-这几个方法是 Object 类的方法，可以用来在多线程间通信的方法，可以来实现等待/通知机制。
 
  - wait()：释放当前对象锁，并进入阻塞队列
  - wait(long millis)：可以设置等待的超时时间
