@@ -68,7 +68,7 @@ date: 2014-10-10 10:00:00
 
 主要介绍 `adb logcat -v <format>` 选项的使用。
 
-##　指定缓冲区
+## 指定缓冲区
 
 `adb logcat -b <system, radio, events, main(default)>`，默认输出main buffer里面的日志
 `adb logcat -b events`：输出 event log。

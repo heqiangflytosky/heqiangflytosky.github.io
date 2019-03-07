@@ -76,7 +76,7 @@ synchronized 关键字经过编译后，会在同步块的前后分别形成 mon
 
 ```
 
-可以看到 Thread1 加锁代码块首先执行，首先获得类对象锁，后面 Thread2 和 Thread3 run 方法执行到加锁代码块时进入同步阻塞状态，Thread1 代码块执行完释放锁之后 Thread2 进入就绪状态并进入运行状态开始执行对应代码块，依次类推 Thead3。3个线程串行执行。
+可以看到 Thread1 加锁代码块首先执行，首先获得类对象锁，后面 Thread2 和 Thread3 run 方法执行到加锁代码块时进入阻塞状态，Thread1 代码块执行完释放锁之后 Thread2 进入就绪状态并进入运行状态开始执行对应代码块，依次类推 Thead3。3个线程串行执行。
 
 
 ## wait、notify和notifyAll
@@ -101,7 +101,7 @@ java.lang.IllegalMonitorStateException: object not locked by thread before wait(
 再来简单介绍一下这几个方法的特点：
 
  - wait、notify 和 notifyAll 方法是 Object 的方法，而且是 final 方法，无法被重写。
- - wait 会使当前的线程进入阻塞状态，而且它会释放当前的锁，然后让出CPU，进入等待状态。但前提是必须先获得锁。
+ - wait 会使当前的线程进入等待状态，而且它会释放当前的锁，然后让出CPU，进入等待状态。但前提是必须先获得锁。
  - wait、notify 和 notifyAll 一般是配合 synchronized 使用，用在 synchronized 方法或者代码块内，否则会抛出异常。
  - 当 notify/notifyAll() 被执行时候，才会唤醒一个或多个正处于等待状态的线程，然后继续往下执行，直到执行完 synchronized 代码块的代码或是中途遇到wait() ，再次释放锁。
  - notify/notifyAll() 的执行只是唤醒沉睡的线程，而不会立即释放锁，调用线程依旧持有锁。锁的释放要看代码块的具体执行情况。因此，线程虽被唤醒，但是仍无法获得锁。直到调用线程退出 synchronized 方法或者代码块，释放锁后，等待线程中的一个才有机会获得锁继续执行。所以在编程中，尽量在使用了notify/notifyAll() 后立即退出 synchronized 临界区，以便其他线程唤醒并获得锁以继续执行。
@@ -168,7 +168,7 @@ java.lang.IllegalMonitorStateException: object not locked by thread before wait(
 03-09 17:07:59.818 Thread1 end
 ```
 
-Thread2 先执行获得锁，Thread1进入同步阻塞状态等待锁释放，执行到 `mObject.wait()` 方法 Thread2 进入等待阻塞状态并释放锁，此时 Thread1 获得锁自动进入就绪状态并开始执行，Thread1 加锁代码块执行完后由于没有发送 notify 唤醒阻塞线程， Thread2 仍然保持在等待阻塞状态，因此，Thread2 wait 方法后的代码没有执行。
+Thread2 先执行获得锁，Thread1进入阻塞状态等待锁释放，执行到 `mObject.wait()` 方法 Thread2 进入等待状态并释放锁，此时 Thread1 获得锁自动进入就绪状态并开始执行，Thread1 加锁代码块执行完后由于没有发送 notify 唤醒等待线程， Thread2 仍然保持在等待状态，因此，Thread2 wait 方法后的代码没有执行。
 
 ### 代码测试 notify
 
@@ -238,7 +238,7 @@ Thread2 先执行获得锁，Thread1进入同步阻塞状态等待锁释放，�
 
 ```
 
-wait 前面的流程和上面是一样的，Thread2 先执行获得锁，Thread1进入同步阻塞状态等待锁释放，执行到 `mObject.wait()` 方法 Thread2 进入等待阻塞状态并释放锁，此时 Thread1 获得锁自动进入就绪状态并开始执行，中间执行 mObject.notify() 方法发出唤醒线程信号，此时 Thread2 被唤醒，注意还不能马上执行，因为 Thread1 还没有真正释放锁，Thread2 进入到等待阻塞状态，等待锁的释放。等 Thread1 执行完 notify 后面的代码，运行到 synchronized 代码块外面，此时才真正的释放锁，那么Thread2得到锁后进入就绪状态和运行状态，Thread2 wait 后面的代码才得以继续执行。
+wait 前面的流程和上面是一样的，Thread2 先执行获得锁，Thread1进入阻塞状态等待锁释放，执行到 `mObject.wait()` 方法 Thread2 进入等待状态并释放锁，此时 Thread1 获得锁自动进入就绪状态并开始执行，中间执行 mObject.notify() 方法发出唤醒线程信号，此时 Thread2 被唤醒，注意还不能马上执行，因为 Thread1 还没有真正释放锁，Thread2 进入到阻塞状态，等待锁的释放。等 Thread1 执行完 notify 后面的代码，运行到 synchronized 代码块外面，此时才真正的释放锁，那么Thread2得到锁后进入就绪状态和运行状态，Thread2 wait 后面的代码才得以继续执行。
 
 ### 代码测试 notifyAll
 
@@ -318,8 +318,8 @@ wait 前面的流程和上面是一样的，Thread2 先执行获得锁，Thread1
 ```
 
 上面代码 Thread2 首先获得锁开始执行，wait 释放锁后 Thread1 获得锁，开始执行，wait 释放锁后 Thread3 获得锁，开始执行到 notifyAll 后唤醒所有等待该锁的线程，等到 Thread3 执行完synchronized代码块后释放锁，Thread2 先获得锁，执行完释放锁后，由于 Thread1已经被唤醒，可以得到锁继续执行。
-上面的执行情况是 Thread1 和 Thread2 都在等待阻塞状态的状态下被 Thread3 唤醒，这样三个线程都可以执行完成。
-再看下面的执行情况，Thread1 先获得锁执行，wait 方法后进行等待阻塞状态，然后 Thread3 获得锁开始执行，notifyAll 后并释放锁后， Thread2 开始执行，wait 后进入等待阻塞状态释放锁，Thread1 开始执行，执行完毕后并没有唤醒 Thread1，虽然 Thread1 释放了锁，Thread2并没有继续执行。
+上面的执行情况是 Thread1 和 Thread2 都在等待状态的状态下被 Thread3 唤醒，这样三个线程都可以执行完成。
+再看下面的执行情况，Thread1 先获得锁执行，wait 方法后进行等待状态，然后 Thread3 获得锁开始执行，notifyAll 后并释放锁后， Thread2 开始执行，wait 后进入等待状态释放锁，Thread1 开始执行，执行完毕后并没有唤醒 Thread1，虽然 Thread1 释放了锁，Thread2并没有继续执行。
 
 ```
 03-09 17:32:49.031 Thread1 start
