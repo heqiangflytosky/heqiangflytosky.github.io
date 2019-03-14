@@ -1,0 +1,950 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java 并发," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本文介绍 synchronized 的使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 并发编程 -- synchronized、wait、notify和notifyAll的使用">
+<meta property="og:url" content="http://yoursite.com/2015/07/12/java-thread-how-to-use-synchronized/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="本文介绍 synchronized 的使用">
+<meta property="og:updated_time" content="2019-03-14T06:09:39.663Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 并发编程 -- synchronized、wait、notify和notifyAll的使用">
+<meta name="twitter:description" content="本文介绍 synchronized 的使用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/07/12/java-thread-how-to-use-synchronized/"/>
+
+
+
+
+
+  <title> Java 并发编程 -- synchronized、wait、notify和notifyAll的使用 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/12/java-thread-how-to-use-synchronized/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java 并发编程 -- synchronized、wait、notify和notifyAll的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-07-12T10:00:00+08:00">
+                2015-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java-并发/" itemprop="url" rel="index">
+                    <span itemprop="name">Java 并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/07/12/java-thread-how-to-use-synchronized/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/07/12/java-thread-how-to-use-synchronized/" class="leancloud_visitors" data-flag-title="Java 并发编程 -- synchronized、wait、notify和notifyAll的使用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  本文介绍 synchronized 的使用
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。它保证了线程对变量访问的<strong>可见性</strong>和<strong>互斥性</strong>。<br>采用 synchronized 修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有一个 monitor (锁标记)，当线程拥有这个锁标记时才能访问这个资源，没有锁标记便进入锁池。任何一个对象系统都会为其创建一个互斥锁，这个锁是为了分配给线程的，防止打断原子操作。每个对象的锁只能分配给一个线程，因此叫做互斥锁。<br>synchronized 是可重入锁。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">分类</th>
+<th style="text-align:center">被锁对象</th>
+<th style="text-align:center">代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">静态方法</td>
+<td style="text-align:center">类对象</td>
+<td style="text-align:center">public static synchronized void method() {}</td>
+</tr>
+<tr>
+<td style="text-align:center">实例方法</td>
+<td style="text-align:center">类的实例对象</td>
+<td style="text-align:center">public synchronized void method() {}</td>
+</tr>
+<tr>
+<td style="text-align:center">实例对象</td>
+<td style="text-align:center">类的实例对象</td>
+<td style="text-align:center">synchronized (this) {}</td>
+</tr>
+<tr>
+<td style="text-align:center">class对象</td>
+<td style="text-align:center">类对象</td>
+<td style="text-align:center">synchronized (Demo.class) {}</td>
+</tr>
+<tr>
+<td style="text-align:center">任意实例对象Object</td>
+<td style="text-align:center">实例对象Object</td>
+<td style="text-align:center">synchronized (mObject) {}</td>
+</tr>
+</tbody>
+</table>
+<p>前面两种是针对方法，后面三种是针对代码块。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>synchronized 关键字经过编译后，会在同步块的前后分别形成 monitorenter 和 monitorexit 这两个字节码指令。根据虚拟机规范的要求，在执行 monitorenter 指令时，首先要尝试获取对象的锁，如果获得了锁，把锁的计数器加 1，相应地，在执行 monitorexit 指令时会将锁计数器减 1，当计数器为 0 时，锁便被释放了。由于 synchronized 同步块对同一个线程是可重入的，因此一个线程可以多次获得同一个对象的互斥锁，同样，要释放相应次数的该互斥锁，才能最终释放掉该锁。</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><h3 id="代码测试"><a href="#代码测试" class="headerlink" title="代码测试"></a>代码测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public void testSynchronized() &#123;</div><div class="line">    Thread thread1 = new Thread(new MyRunnable());</div><div class="line">    thread1.setName(&quot;Thread1&quot;);</div><div class="line"></div><div class="line">    Thread thread2 = new Thread(new MyRunnable());</div><div class="line">    thread2.setName(&quot;Thread2&quot;);</div><div class="line"></div><div class="line">    Thread thread3 = new Thread(new MyRunnable());</div><div class="line">    thread3.setName(&quot;Thread3&quot;);</div><div class="line"></div><div class="line">    thread1.start();</div><div class="line">    thread2.start();</div><div class="line">    thread3.start();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable implements Runnable&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        synchronized (mObject) &#123;</div><div class="line">            try &#123;</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; start&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; end&quot;);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">03-09 16:54:07.328 Thread1 start</div><div class="line">03-09 16:54:08.329 Thread1 end</div><div class="line">03-09 16:54:08.329 Thread2 start</div><div class="line">03-09 16:54:09.329 Thread2 end</div><div class="line">03-09 16:54:09.330 Thread3 start</div><div class="line">03-09 16:54:10.330 Thread3 end</div></pre></td></tr></table></figure>
+<p>可以看到 Thread1 加锁代码块首先执行，首先获得类对象锁，后面 Thread2 和 Thread3 run 方法执行到加锁代码块时进入阻塞状态，Thread1 代码块执行完释放锁之后 Thread2 进入就绪状态并进入运行状态开始执行对应代码块，依次类推 Thead3。3个线程串行执行。</p>
+<h2 id="wait、notify和notifyAll"><a href="#wait、notify和notifyAll" class="headerlink" title="wait、notify和notifyAll"></a>wait、notify和notifyAll</h2><p>任意一个 Java 对象，都拥有一组监视器方法（定义在 java.lang.Object 上），主要包括 wait、notify和notifyAll 及其重载的方法，这些方法和 synchronized 同步关键字配合使用，可以用来在多线程间通信，实现等待/通知机制。</p>
+<h3 id="方法介绍"><a href="#方法介绍" class="headerlink" title="方法介绍"></a>方法介绍</h3><ul>
+<li>wait()：释放当前对象锁，并进入阻塞队列</li>
+<li>wait(long millis)：可以设置等待的超时时间</li>
+<li>wait(long millis, int nanos)：后面一个参数可以附件设置一个纳秒级别的时间，增加超时时间的精度</li>
+<li>notify()：唤醒当前对象阻塞队列里的任一线程（并不保证唤醒哪一个）</li>
+<li>notifyAll()：唤醒当前对象阻塞队列里的所有线程</li>
+</ul>
+<p>这几个方法必须要和 synchronized 一起使用，否则会报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java.lang.IllegalMonitorStateException: object not locked by thread before wait()</div></pre></td></tr></table></figure>
+<p>再来简单介绍一下这几个方法的特点：</p>
+<ul>
+<li>wait、notify 和 notifyAll 方法是 Object 的方法，而且是 final 方法，无法被重写。</li>
+<li>wait 会使当前的线程进入等待状态，而且它会释放当前的锁，然后让出CPU，进入等待状态。但前提是必须先获得锁。</li>
+<li>wait、notify 和 notifyAll 一般是配合 synchronized 使用，用在 synchronized 方法或者代码块内，否则会抛出异常。</li>
+<li>当 notify/notifyAll() 被执行时候，才会唤醒一个或多个正处于等待状态的线程，然后继续往下执行，直到执行完 synchronized 代码块的代码或是中途遇到wait() ，再次释放锁。</li>
+<li>notify/notifyAll() 的执行只是唤醒沉睡的线程，而不会立即释放锁，调用线程依旧持有锁。锁的释放要看代码块的具体执行情况。因此，线程虽被唤醒，但是仍无法获得锁。直到调用线程退出 synchronized 方法或者代码块，释放锁后，等待线程中的一个才有机会获得锁继续执行。所以在编程中，尽量在使用了notify/notifyAll() 后立即退出 synchronized 临界区，以便其他线程唤醒并获得锁以继续执行。</li>
+<li>notify方法只唤醒一个等待（对象的）线程并使该线程开始执行。如果有多个线程等待一个对象，这个方法只会唤醒其中一个线程，选择哪个线程取决于操作系统对多线程管理的实现。notifyAll 会唤醒所有等待(对象的)线程。如果当前情况下有多个线程需要被唤醒，推荐使用notifyAll 方法。</li>
+</ul>
+<h3 id="代码测试-wait"><a href="#代码测试-wait" class="headerlink" title="代码测试 wait"></a>代码测试 wait</h3><p>创建两个 Runnable 对象，在 Thread2 代码执行中间加入 <code>wait()</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">public void testSynchronized() &#123;</div><div class="line">    Thread thread1 = new Thread(new MyRunnable1());</div><div class="line">    thread1.setName(&quot;Thread1&quot;);</div><div class="line"></div><div class="line">    Thread thread2 = new Thread(new MyRunnable2());</div><div class="line">    thread2.setName(&quot;Thread2&quot;);</div><div class="line"></div><div class="line">    thread2.start();</div><div class="line">    thread1.start();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable1 implements Runnable&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        synchronized (mObject) &#123;</div><div class="line">            try &#123;</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; start&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; end&quot;);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable2 implements Runnable&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        synchronized (mObject) &#123;</div><div class="line">            try &#123;</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; start&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; wait&quot;);</div><div class="line">                mObject.wait();</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; after wait&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; end&quot;);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">03-09 17:07:57.816 Thread2 start</div><div class="line">03-09 17:07:58.816 Thread2 wait</div><div class="line">03-09 17:07:58.817 Thread1 start</div><div class="line">03-09 17:07:59.818 Thread1 end</div></pre></td></tr></table></figure>
+<p>Thread2 先执行获得锁，Thread1进入阻塞状态等待锁释放，执行到 <code>mObject.wait()</code> 方法 Thread2 进入等待状态并释放锁，此时 Thread1 获得锁自动进入就绪状态并开始执行，Thread1 加锁代码块执行完后由于没有发送 notify 唤醒等待线程， Thread2 仍然保持在等待状态，因此，Thread2 wait 方法后的代码没有执行。</p>
+<h3 id="代码测试-notify"><a href="#代码测试-notify" class="headerlink" title="代码测试 notify"></a>代码测试 notify</h3><p>改动一下 Thread1 代码，代码块中加入 <code>mObject.notify()</code>。<br><strong>注意：</strong><code>notify()</code> 方法必须放到 synchronized 代码块中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">public void testSynchronized() &#123;</div><div class="line">    Thread thread1 = new Thread(new MyRunnable1());</div><div class="line">    thread1.setName(&quot;Thread1&quot;);</div><div class="line"></div><div class="line">    Thread thread2 = new Thread(new MyRunnable2());</div><div class="line">    thread2.setName(&quot;Thread2&quot;);</div><div class="line"></div><div class="line">    thread2.start();</div><div class="line">    thread1.start();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable1 implements Runnable&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        synchronized (mObject) &#123;</div><div class="line">            try &#123;</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; start&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; notify&quot;);</div><div class="line">                mObject.notify();</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; end&quot;);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable2 implements Runnable&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        synchronized (mObject) &#123;</div><div class="line">            try &#123;</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; start&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; wait&quot;);</div><div class="line">                mObject.wait();</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; after wait&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; end&quot;);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">03-09 17:17:42.239 Thread2 start</div><div class="line">03-09 17:17:43.239 Thread2 wait</div><div class="line">03-09 17:17:43.240 Thread1 start</div><div class="line">03-09 17:17:44.240 Thread1 notify</div><div class="line">03-09 17:17:45.241 Thread1 end</div><div class="line">03-09 17:17:45.241 Thread2 after wait</div><div class="line">03-09 17:17:46.242 Thread2 end</div></pre></td></tr></table></figure>
+<p>wait 前面的流程和上面是一样的，Thread2 先执行获得锁，Thread1进入阻塞状态等待锁释放，执行到 <code>mObject.wait()</code> 方法 Thread2 进入等待状态并释放锁，此时 Thread1 获得锁自动进入就绪状态并开始执行，中间执行 mObject.notify() 方法发出唤醒线程信号，此时 Thread2 被唤醒，注意还不能马上执行，因为 Thread1 还没有真正释放锁，Thread2 进入到阻塞状态，等待锁的释放。等 Thread1 执行完 notify 后面的代码，运行到 synchronized 代码块外面，此时才真正的释放锁，那么Thread2得到锁后进入就绪状态和运行状态，Thread2 wait 后面的代码才得以继续执行。</p>
+<h3 id="代码测试-notifyAll"><a href="#代码测试-notifyAll" class="headerlink" title="代码测试 notifyAll"></a>代码测试 notifyAll</h3><p>下面来看一下 <code>notifyAll</code> 的使用情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">public void testSynchronized() &#123;</div><div class="line">    Thread thread1 = new Thread(new MyRunnable2());</div><div class="line">    thread1.setName(&quot;Thread1&quot;);</div><div class="line">    thread1.setPriority(10);</div><div class="line"></div><div class="line">    Thread thread2 = new Thread(new MyRunnable2());</div><div class="line">    thread2.setName(&quot;Thread2&quot;);</div><div class="line">    thread2.setPriority(10);</div><div class="line"></div><div class="line">    Thread thread3 = new Thread(new MyRunnable1());</div><div class="line">    thread3.setName(&quot;Thread3&quot;);</div><div class="line">    thread3.setPriority(1);</div><div class="line"></div><div class="line">    thread1.start();</div><div class="line">    thread2.start();</div><div class="line">    thread3.start();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable1 implements Runnable&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        synchronized (mObject) &#123;</div><div class="line">            try &#123;</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; start&quot;);</div><div class="line">                Thread.sleep(5000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; notifyAll&quot;);</div><div class="line">                mObject.notifyAll();</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; end&quot;);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyRunnable2 implements Runnable&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        synchronized (mObject) &#123;</div><div class="line">            try &#123;</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; start&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; wait&quot;);</div><div class="line">                mObject.wait();</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; after wait&quot;);</div><div class="line">                Thread.sleep(1000);</div><div class="line">                Log.e(&quot;Test&quot;, Thread.currentThread().getName() + &quot; end&quot;);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">03-09 17:34:10.688 Thread2 start</div><div class="line">03-09 17:34:11.688 Thread2 wait</div><div class="line">03-09 17:34:11.689 Thread1 start</div><div class="line">03-09 17:34:12.690 Thread1 wait</div><div class="line">03-09 17:34:12.691 Thread3 start</div><div class="line">03-09 17:34:17.691 Thread3 notifyAll</div><div class="line">03-09 17:34:18.692 Thread3 end</div><div class="line">03-09 17:34:18.692 Thread2 after wait</div><div class="line">03-09 17:34:19.693 Thread2 end</div><div class="line">03-09 17:34:19.693 Thread1 after wait</div><div class="line">03-09 17:34:20.694 Thread1 end</div></pre></td></tr></table></figure>
+<p>上面代码 Thread2 首先获得锁开始执行，wait 释放锁后 Thread1 获得锁，开始执行，wait 释放锁后 Thread3 获得锁，开始执行到 notifyAll 后唤醒所有等待该锁的线程，等到 Thread3 执行完synchronized代码块后释放锁，Thread2 先获得锁，执行完释放锁后，由于 Thread1已经被唤醒，可以得到锁继续执行。<br>上面的执行情况是 Thread1 和 Thread2 都在等待状态的状态下被 Thread3 唤醒，这样三个线程都可以执行完成。<br>再看下面的执行情况，Thread1 先获得锁执行，wait 方法后进行等待状态，然后 Thread3 获得锁开始执行，notifyAll 后并释放锁后， Thread2 开始执行，wait 后进入等待状态释放锁，Thread1 开始执行，执行完毕后并没有唤醒 Thread1，虽然 Thread1 释放了锁，Thread2并没有继续执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">03-09 17:32:49.031 Thread1 start</div><div class="line">03-09 17:32:50.032 Thread1 wait</div><div class="line">03-09 17:32:50.033 Thread3 start</div><div class="line">03-09 17:32:55.034 Thread3 notifyAll</div><div class="line">03-09 17:32:56.034 Thread3 end</div><div class="line">03-09 17:32:56.035 Thread2 start</div><div class="line">03-09 17:32:57.036 Thread2 wait</div><div class="line">03-09 17:32:57.036 Thread1 after wait</div><div class="line">03-09 17:32:58.037 Thread1 end</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java-并发/" rel="tag"># Java 并发</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/06/java-thread-kinds-of-lock/" rel="next" title="Java 并发编程 -- 锁">
+                <i class="fa fa-chevron-left"></i> Java 并发编程 -- 锁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/20/java-thread-how-to-use-reentrantlock/" rel="prev" title="Java 并发编程 -- ReentrantLock 与 Condition">
+                Java 并发编程 -- ReentrantLock 与 Condition <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">145</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">84</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景"><span class="nav-number">2.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现原理"><span class="nav-number">3.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">4.</span> <span class="nav-text">使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码测试"><span class="nav-number">4.1.</span> <span class="nav-text">代码测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wait、notify和notifyAll"><span class="nav-number">5.</span> <span class="nav-text">wait、notify和notifyAll</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法介绍"><span class="nav-number">5.1.</span> <span class="nav-text">方法介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码测试-wait"><span class="nav-number">5.2.</span> <span class="nav-text">代码测试 wait</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码测试-notify"><span class="nav-number">5.3.</span> <span class="nav-text">代码测试 notify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码测试-notifyAll"><span class="nav-number">5.4.</span> <span class="nav-text">代码测试 notifyAll</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
