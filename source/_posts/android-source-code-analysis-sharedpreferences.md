@@ -187,6 +187,7 @@ public class SecondActivity extends Activity {
         synchronized (this) {
             mLoaded = false;
         }
+        // 开启后台线程进行从磁盘加载数据到内存的操作
         new Thread("SharedPreferencesImpl-load") {
             public void run() {
                 loadFromDisk();
@@ -236,6 +237,7 @@ public class SecondActivity extends Activity {
             } else {
                 mMap = new HashMap<>();
             }
+            // 加载完毕，唤醒其他等待加载完毕的线程
             notifyAll();
         }
     }
@@ -251,7 +253,9 @@ public class SecondActivity extends Activity {
 ```
     @Nullable
     public String getString(String key, @Nullable String defValue) {
+        // 同步代码块，保证 mMap 的线程安全
         synchronized (this) {
+            // 等待加载操作时锁的释放
             awaitLoadedLocked();
             String v = (String)mMap.get(key);
             return v != null ? v : defValue;
@@ -471,6 +475,8 @@ get 方法使用了对象的同步锁，说明这个方法是线程安全的。
         synchronized (this) {
             if (mDiskWritesInFlight > 0) {
                 // 如果 mDiskWritesInFlight 说明是我们自己的修改，是预期的，直接返回，不用reload
+                // 这种情况也避免了同一个线程刚刚调用玩 apply 写数据，后面紧跟读数据时，
+                // 如果数据还没有完全写入xml文件，这时候reload会导致数据出错
                 return false;
             }
         }
