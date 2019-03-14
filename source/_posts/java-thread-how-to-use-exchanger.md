@@ -1,10 +1,10 @@
 ---
-title: Java 线程 -- Exchanger
-categories: Android 线程
+title: Java 并发编程 -- Exchanger
+categories: Java 并发
 comments: true
-tags: [Android 线程]
+tags: [Java 并发]
 description: 本文介绍 Exchanger 的使用
-date: 2015-9-10 10:00:00
+date: 2015-8-8 10:00:00
 ---
 
 

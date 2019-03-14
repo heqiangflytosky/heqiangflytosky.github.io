@@ -1,10 +1,10 @@
 ---
 title: Java 线程池 -- ThreadPoolExecutor 源码解析
-categories:  Android 线程
+categories:  Java 并发
 comments: true
 tags: [线程池]
 description: ThreadPoolExecutor 源码解析
-date: 2015-9-25 10:00:00
+date: 2015-9-6 10:00:00
 ---
 
 ## 构造方法以及参数解析

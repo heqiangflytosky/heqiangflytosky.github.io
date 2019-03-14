@@ -1,10 +1,10 @@
 ---
-title: Java 线程 -- CyclicBarrier
-categories: Android 线程
+title: Java 并发编程 -- CyclicBarrier
+categories: Java 并发
 comments: true
-tags: [Android 线程]
+tags: [Java 并发]
 description: 本文介绍 CyclicBarrier 的使用
-date: 2015-9-6 10:00:00
+date: 2015-7-28 10:00:00
 ---
 
 ## 概述

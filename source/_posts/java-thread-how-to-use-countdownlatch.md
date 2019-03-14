@@ -1,11 +1,11 @@
 
 ---
-title: Java 线程 -- CountDownLatch
-categories: Android 线程
+title: Java 并发编程 -- CountDownLatch
+categories: Java 并发
 comments: true
-tags: [Android 线程]
+tags: [Java 并发]
 description: 本文介绍 CountDownLatch 的使用
-date: 2015-9-5 10:00:00
+date: 2015-7-25 10:00:00
 ---
 
 ## 概述

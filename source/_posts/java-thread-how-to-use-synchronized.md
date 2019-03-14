@@ -1,10 +1,10 @@
 ---
-title: Java 线程 -- synchronized、wait、notify和notifyAll的使用
-categories: Android 线程
+title: Java 并发编程 -- synchronized、wait、notify和notifyAll的使用
+categories: Java 并发
 comments: true
-tags: [Android 线程]
+tags: [Java 并发]
 description: 本文介绍 synchronized 的使用
-date: 2015-9-4 10:00:00
+date: 2015-7-12 10:00:00
 ---
 
 ## 概述

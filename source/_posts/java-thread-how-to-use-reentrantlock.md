@@ -1,11 +1,11 @@
 
 ---
-title: Java 线程 -- ReentrantLock 与 Condition
-categories: Android 线程
+title: Java 并发编程 -- ReentrantLock 与 Condition
+categories: Java 并发
 comments: true
-tags: [Android 线程]
+tags: [Java 并发]
 description: 本文介绍 ReentrantLock 与 Condition 的使用
-date: 2015-9-4 12:00:00
+date: 2015-7-20 10:00:00
 ---
 
 ## 概述

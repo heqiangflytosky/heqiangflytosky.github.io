@@ -1,11 +1,11 @@
 
 ---
-title: Java 线程 -- 锁
-categories: Android 线程
+title: Java 并发编程 -- 锁
+categories: Java 并发
 comments: true
-tags: [Android 线程]
+tags: [Java 并发]
 description: 本文介绍 Java 多线程编程中常用的几种锁
-date: 2015-9-3 10:00:00
+date: 2015-7-6 10:00:00
 ---
 
 ## 概述

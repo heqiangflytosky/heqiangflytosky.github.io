@@ -1,10 +1,10 @@
 ---
-title: Java 线程 -- Semaphore
-categories: Android 线程
+title: Java 并发编程 -- Semaphore
+categories: Java 并发
 comments: true
-tags: [Android 线程]
+tags: [Java 并发]
 description: 本文介绍 Semaphore 的使用
-date: 2015-9-7 10:00:00
+date: 2015-8-2 10:00:00
 ---
 
 ## 概述

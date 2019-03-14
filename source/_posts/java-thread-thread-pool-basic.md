@@ -1,11 +1,11 @@
 
 ---
 title: Java 线程池 -- 线程池基础
-categories: Android 线程
+categories: Java 并发
 comments: true
-tags: [Android 线程]
+tags: [线程池]
 description: 本文介绍 Java 多线程编程中线程池的使用
-date: 2015-9-20 10:00:00
+date: 2015-9-1 10:00:00
 ---
 
 ## 概述
