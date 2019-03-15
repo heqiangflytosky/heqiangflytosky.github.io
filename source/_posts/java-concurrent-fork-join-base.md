@@ -1,6 +1,6 @@
 ---
-title: Java 基础 -- Fork/Join 框架
-categories:  Java
+title: Java 并发编程 -- Fork/Join 框架
+categories:  Java 并发
 comments: true
 tags: [Fork/Join]
 description: Fork/Join 框架的使用
