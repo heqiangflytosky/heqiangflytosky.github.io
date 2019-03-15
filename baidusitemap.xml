@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2015/09/12/java-concurrent-java-memory-model/</loc>
+    <lastmod>2019-03-15T04:39:53.519Z</lastmod>
+    <data>
+        <display>
+        <title>Java 并发编程 -- 内存模型</title>
+        <pubTime>2015-09-12T02:00:00.000Z</pubTime>
+        
+        <tag>Java 内存模型</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java 并发" url="http://yoursite.com/categories/Java-%E5%B9%B6%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
     <lastmod>2019-03-15T03:39:40.124Z</lastmod>
     <data>
@@ -23,26 +43,6 @@
     </url>
 
     
-    
-  <url>
-    <loc>http://yoursite.com/2015/09/12/java-concurrent-java-memory-model/</loc>
-    <lastmod>2019-03-15T03:38:51.797Z</lastmod>
-    <data>
-        <display>
-        <title>Java 并发编程 -- 内存模型</title>
-        <pubTime>2015-09-12T02:00:00.000Z</pubTime>
-        
-        <tag>Java 内存模型</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java 并发" url="http://yoursite.com/categories/Java-%E5%B9%B6%E5%8F%91/"/>
-          
-        </display>
-    </data>
-    </url>
-
     
   <url>
     <loc>http://yoursite.com/2016/12/06/java-concurrent-fork-join-base/</loc>
@@ -1165,26 +1165,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
-    <lastmod>2018-11-06T09:32:04.282Z</lastmod>
-    <data>
-        <display>
-        <title>Android JNI -- Android Studio JNI 开发基础</title>
-        <pubTime>2015-12-10T02:00:00.000Z</pubTime>
-        
-        <tag>JNI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/07/10/android-thread-conditionvariable/</loc>
     <lastmod>2018-11-06T09:32:04.282Z</lastmod>
     <data>
@@ -1198,6 +1178,26 @@
            
              
               <breadCrumb title="Android 线程" url="http://yoursite.com/categories/Android-%E7%BA%BF%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
+    <lastmod>2018-11-06T09:32:04.282Z</lastmod>
+    <data>
+        <display>
+        <title>Android JNI -- Android Studio JNI 开发基础</title>
+        <pubTime>2015-12-10T02:00:00.000Z</pubTime>
+        
+        <tag>JNI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -1353,12 +1353,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
+    <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
     <lastmod>2018-09-20T01:08:29.048Z</lastmod>
     <data>
         <display>
-        <title>Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程</title>
-        <pubTime>2017-05-12T02:00:00.000Z</pubTime>
+        <title>Android 插件化框架Small解析--初始化</title>
+        <pubTime>2017-05-10T02:00:00.000Z</pubTime>
         
         <tag>Android 插件化</tag>
          
@@ -1377,12 +1377,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
+    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
     <lastmod>2018-09-20T01:08:29.048Z</lastmod>
     <data>
         <display>
-        <title>Android 插件化框架Small解析--初始化</title>
-        <pubTime>2017-05-10T02:00:00.000Z</pubTime>
+        <title>Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程</title>
+        <pubTime>2017-05-12T02:00:00.000Z</pubTime>
         
         <tag>Android 插件化</tag>
          
@@ -2262,6 +2262,28 @@
     
     
   <url>
+    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android：使用LayoutInflater应该注意的问题</title>
+        <pubTime>2016-02-18T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>LayoutInflater</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/09/05/android-architecture-google-samples/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
@@ -2277,6 +2299,26 @@
            
              
               <breadCrumb title="Android 架构" url="http://yoursite.com/categories/Android-%E6%9E%B6%E6%9E%84/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/11/01/java-development-skills-get-stacktrace/</loc>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java 开发技巧 -- 获取 Java 的调用栈</title>
+        <pubTime>2016-11-01T02:00:00.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
           
         </display>
     </data>
@@ -2306,26 +2348,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/11/01/java-development-skills-get-stacktrace/</loc>
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>Java 开发技巧 -- 获取 Java 的调用栈</title>
-        <pubTime>2016-11-01T02:00:00.000Z</pubTime>
-        
-        <tag>Java</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2016/02/16/android-problem-multidex-verifyerror/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
@@ -2336,28 +2358,6 @@
         <tag>Android</tag>
          
         <tag>Multidex</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android：使用LayoutInflater应该注意的问题</title>
-        <pubTime>2016-02-18T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>LayoutInflater</tag>
          
          
            
@@ -2458,12 +2458,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -2480,12 +2480,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          

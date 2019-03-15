@@ -92,15 +92,15 @@
 <meta property="og:url" content="http://yoursite.com/2015/09/12/java-concurrent-java-memory-model/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍Java的内存模型">
-<meta property="og:image" content="http://yoursite.com/images/java-basic-memory-model/cpu.jpeg">
-<meta property="og:image" content="http://yoursite.com/images/java-basic-memory-model/jmm.jpeg">
-<meta property="og:image" content="http://yoursite.com/images/java-basic-memory-model/jmm3.jpeg">
-<meta property="og:image" content="http://yoursite.com/images/java-basic-memory-model/resort.jpeg">
-<meta property="og:updated_time" content="2019-03-15T03:38:51.797Z">
+<meta property="og:image" content="http://yoursite.com/images/java-concurrent-java-memory-model/cpu.jpeg">
+<meta property="og:image" content="http://yoursite.com/images/java-concurrent-java-memory-model/jmm.jpeg">
+<meta property="og:image" content="http://yoursite.com/images/java-concurrent-java-memory-model/jmm3.jpeg">
+<meta property="og:image" content="http://yoursite.com/images/java-concurrent-java-memory-model/resort.jpeg">
+<meta property="og:updated_time" content="2019-03-15T04:39:53.519Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 并发编程 -- 内存模型">
 <meta name="twitter:description" content="介绍Java的内存模型">
-<meta name="twitter:image" content="http://yoursite.com/images/java-basic-memory-model/cpu.jpeg">
+<meta name="twitter:image" content="http://yoursite.com/images/java-concurrent-java-memory-model/cpu.jpeg">
 
 
 
@@ -407,17 +407,17 @@
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java 内存模型（Java Memory Model，JMM）是Java虚拟机规范中定义的一种模型，用它来屏蔽掉各种硬件和操作系统的内存访问的差异，以实现让 Java 程序在各种平台下都能达到一致的内存访问效果。<br>定义这样一套内存模型必须要让 Java 的并发内存访问操作不会产生歧义，也必须定义得足够宽松，使得虚拟机的实现由足够的自由空间去利用硬件的各种特性来获取更好的执行速度。</p>
 <h2 id="硬件的效率与一致性"><a href="#硬件的效率与一致性" class="headerlink" title="硬件的效率与一致性"></a>硬件的效率与一致性</h2><p>在正式介绍 Java 内存模型之前，我们先来了解一下物理计算机的并发问题，它和Java 虚拟机有很多的相似之处，对于理解虚拟机的的实现也有很大的帮助。<br>我们知道，计算机的计算任务并不是由处理器单独来完成的，这中间还至少涉及到和内存的交互，比如读取运算数据、存储运算结果等，这些 I/O 操作是很难消除的，也就是是说，我们无法只靠寄存器来完成所有的运算任务。由于计算机的存储设备与处理器的运算速度有几个数量级的差距，所以现代计算机系统都不得不加入一层读写速度尽可能接近处理器运算速度的高级缓存（Cache）来作为内存与处理器之间的缓冲：将运算需要的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步到内存中，这样处理器就无须等待缓慢的内存读写了。<br>基于高速缓存的存储交互很好地解决了处理器和内存的速度矛盾，但是也带入了一个新的问题：缓存一致性（Cache Coherence）。在多处理器系统中，每个处理器都有自己的高速缓存，而每个处理器又都有自己的高速缓存，而它们又共享同一个主内存（Main Memory），如下图所示。</p>
-<p><img src="/images/java-basic-memory-model/cpu.jpeg" alt="效果图"></p>
+<p><img src="/images/java-concurrent-java-memory-model/cpu.jpeg" alt="效果图"></p>
 <p>当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致，这时无法决定同步回主内存的数据以哪个缓存数据为准。这种情况下就要各个处理器访问缓存时都遵循一些协议。<br>下面介绍的Java内存模型可以理解为在特定的操作协议下，对特定的内存或高速缓存进行读写访问的过程抽象，可以结合硬件的缓存访问来理解Java虚拟机的内存访问操作。</p>
 <h2 id="内存模型的抽象"><a href="#内存模型的抽象" class="headerlink" title="内存模型的抽象"></a>内存模型的抽象</h2><h3 id="主内存和工作内存"><a href="#主内存和工作内存" class="headerlink" title="主内存和工作内存"></a>主内存和工作内存</h3><p>JMM 的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节，这就决定了一个线程对共享变量的写入何时对另一个线程可见的问题。此处的变量与Java编程时所说的变量不一样，指包括了实例字段、静态字段和构成数组对象的元素，但是不包括局部变量与方法参数，后者是线程私有的，不会被共享，自然也就不存在竞争问题。<br>Java内存模型中规定了所有的变量都存储在主内存（Main Memory）中（此处的主内存与介绍物理硬件时的主内存名字一样，两者也可以互相类比，但此处仅是虚拟机内存的一部分）。每条线程还有自己的工作内存（Working Memory，可与前面讲的处理器高速缓存类比），线程的工作内存中保存了该线程使用到的变量到主内存副本拷贝，线程对变量的所有操作（读取、赋值等）都必须在工作内存中进行，而不能直接读写主内存中的变量。不同线程之间无法直接访问对方工作内存中的变量，线程间变量值的传递均需要在主内存来完成，类比上面处理器缓存和内存的关系，线程、主内存和工作内存的交互关系如下图所示：</p>
-<p><img src="/images/java-basic-memory-model/jmm.jpeg" alt="效果图"></p>
+<p><img src="/images/java-concurrent-java-memory-model/jmm.jpeg" alt="效果图"></p>
 <p>线程的工作内存是 JMM 的一个抽象概念，并不真实存在。它涵盖了缓存、写缓冲区、寄存器以及其他的硬件和编译器优化。<br>这里所讲的主内存、工作内存与Java内存区域的Java堆、栈、方法区不是同一层次内存划分，这两者基本上是没有关系的。<br>假设线程 A 与线程 B 之间要通信的话，就必须经历下面两个步骤：</p>
 <ol>
 <li>线程 A 把本地内存A中更新过的共享变量刷新到主内存中去。</li>
 <li>线程 B 到主内存中去读取线程A之前已经更新过的共享变量。</li>
 </ol>
 <p>可以通过示意图来说明上面两个步骤：</p>
-<p><img src="/images/java-basic-memory-model/jmm3.jpeg" alt="效果图"></p>
+<p><img src="/images/java-concurrent-java-memory-model/jmm3.jpeg" alt="效果图"></p>
 <p>从整体上看，这两个步骤实质上是线程A在向线程B发送消息，而且这个通信过程必须要经过主内存。JMM通过控制主内存与每个线程的本地内存之间的交互，来为 Java 程序员提供内存可见性保证。</p>
 <h3 id="内存间的交互"><a href="#内存间的交互" class="headerlink" title="内存间的交互"></a>内存间的交互</h3><p>关于主内存与工作内存之间的具体交互协议，即一个变量如何从主内存拷贝到工作内存、如何从工作内存同步到主内存之间的实现细节，Java内存模型定义了以下8种操作来完成，虚拟机实现时必须保证下面提及的每一种操作都是原子的、不可再分的：</p>
 <ul>
@@ -449,7 +449,7 @@
 <li>内存系统的重排序。由于处理器使用缓存和读/写缓冲区，这使得加载和存储操作看上去可能是在乱序执行。</li>
 </ul>
 <p>从源码到最终执行的指令序列如下图所示：</p>
-<p><img src="/images/java-basic-memory-model/resort.jpeg" alt="效果图"></p>
+<p><img src="/images/java-concurrent-java-memory-model/resort.jpeg" alt="效果图"></p>
 <p>上述的1属于编译器重排序，2和3属于处理器重排序。这些重排序可能会导致多线程程序出现内存可见性问题。对于编译器，JMM的编译器重排序规则会禁止特定类型的编译器重排序（不是所有的编译器重排序都要禁止）。对于处理器重排序，JMM的处理器重排序规则会要求Java编译器在生成指令序列时，插入特定类型的内存屏障（Memory Barriers）指令，通过内存屏障指令来禁止特定类型的处理器重排序。<br>JMM 属于语言级的内存模型，它确保在不同的编译器和不同的处理器平台之上，通过禁止特定类型的编译器重排序和处理器重排序，为程序员提供一致的内存可见性保证。</p>
 <h2 id="内存模型的特征"><a href="#内存模型的特征" class="headerlink" title="内存模型的特征"></a>内存模型的特征</h2><p>Java 内存模型是围绕着在并发过程中如何处理原子性、可见性和有序性这三个特征建立的，我们来看一下究竟哪些操作实现了这三个特性。</p>
 <h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>是指一个操作是不可中断的。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其它线程干扰。<br>Java 中的原子操作包括：</p>
