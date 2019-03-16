@@ -417,6 +417,65 @@ https://blog.csdn.net/ceabie/article/details/55271161
   </entry>
   
   <entry>
+    <title>JavaScript 基础 -- export 和 import</title>
+    <link href="http://yoursite.com/2018/05/10/javascript-basic-export-import/"/>
+    <id>http://yoursite.com/2018/05/10/javascript-basic-export-import/</id>
+    <published>2018-05-10T02:00:00.000Z</published>
+    <updated>2019-03-16T08:53:09.109Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/export" target="_blank" rel="external">MDN export 文档</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import" target="_blank" rel="external">MDN import 文档</a></p>
+<h2 id="export"><a href="#export" class="headerlink" title="export"></a>export</h2><p>export 语句用于从模块中导出函数、对象或原始值，以便其他程序可以通过 import 语句使用它们。</p>
+<h3 id="命名导出"><a href="#命名导出" class="headerlink" title="命名导出"></a>命名导出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// test.js</div><div class="line">function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var person = &#123;</div><div class="line">    name: &apos;James&apos;,</div><div class="line">    say: function() &#123;</div><div class="line">        console.log(&apos;I am James&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const URL = &quot;http://www.heqiangfly.com&quot;</div><div class="line"></div><div class="line">export &#123;print, person,URL&#125;</div></pre></td></tr></table></figure>
+<p>命名导出可以导出多个值：<br>或者：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// test.js</div><div class="line">export function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">export var person = &#123;</div><div class="line">    name: &apos;James&apos;,</div><div class="line">    say: function() &#123;</div><div class="line">        console.log(&apos;I am James&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export const URL = &quot;http://www.heqiangfly.com&quot;</div></pre></td></tr></table></figure>
+<p>导入方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// main.js</div><div class="line">import &#123;print, person,URL&#125; from &apos;./test&apos;</div><div class="line"></div><div class="line">      print()</div><div class="line">      person.say()</div><div class="line">      console.log(URL)</div></pre></td></tr></table></figure>
+<p>命名导出对导出多个值很有用。在导入期间，必须使用相应对象的相同名称。</p>
+<h3 id="默认导出"><a href="#默认导出" class="headerlink" title="默认导出"></a>默认导出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var person = &#123;</div><div class="line">    name: &apos;James&apos;,</div><div class="line">    say: function() &#123;</div><div class="line">        console.log(&apos;I am James&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const URL = &quot;http://www.heqiangfly.com&quot;</div><div class="line"></div><div class="line">export default &#123;print, person,URL&#125;</div></pre></td></tr></table></figure>
+<p>导出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import api from &apos;./test&apos;</div><div class="line"></div><div class="line">      api.print()</div><div class="line">      api.person.say()</div><div class="line">      console.log(api.URL)</div></pre></td></tr></table></figure>
+<p>可以使用任何名称导入默认导出，但是，只能有一个默认导出。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export default function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import api from &apos;./test&apos;</div><div class="line"></div><div class="line">api()</div></pre></td></tr></table></figure>
+<p>注意，不能使用 var、let 或 const 用于导出默认值 export default。</p>
+<h3 id="两种方式同时使用"><a href="#两种方式同时使用" class="headerlink" title="两种方式同时使用"></a>两种方式同时使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div><div class="line">const title = &quot;A&quot;</div><div class="line"></div><div class="line">const url = &quot;http://www.heqiangfly.com&quot;</div><div class="line">const name = &quot;James&quot;</div><div class="line"></div><div class="line">export &#123;url, name&#125;</div><div class="line">export default&#123;title,print&#125;</div></pre></td></tr></table></figure>
+<p>导出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import api, &#123;url, name&#125; from &apos;./test&apos;</div><div class="line"></div><div class="line">      console.log(api.title)</div><div class="line">      api.print()</div><div class="line"></div><div class="line">      console.log(url)</div><div class="line">      console.log(name)</div></pre></td></tr></table></figure>
+<h3 id="重命名"><a href="#重命名" class="headerlink" title="重命名"></a>重命名</h3><p>我们还可以在导出模块时进行重命名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">const url = &quot;http://www.heqiangfly.com&quot;</div><div class="line">const name = &quot;James&quot;</div><div class="line"></div><div class="line">export &#123;url as webSite, name&#125;</div></pre></td></tr></table></figure>
+<p>导入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import &#123;webSite, name&#125; from &apos;./test&apos;</div><div class="line"></div><div class="line">      console.log(webSite)</div><div class="line">      console.log(name)</div></pre></td></tr></table></figure>
+<h2 id="import"><a href="#import" class="headerlink" title="import"></a>import</h2><h3 id="导入默认值"><a href="#导入默认值" class="headerlink" title="导入默认值"></a>导入默认值</h3><p>导入由默认导出（export daulft）方式导出的值，具体例子可看前面的默认导出一节</p>
+<h3 id="导入单个导出"><a href="#导入单个导出" class="headerlink" title="导入单个导出"></a>导入单个导出</h3><p><code>import {myExport} from &#39;/modules/my-module.js&#39;;</code><br>下面通过命名导出三个值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// test.js</div><div class="line">function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var person = &#123;</div><div class="line">    name: &apos;James&apos;,</div><div class="line">    say: function() &#123;</div><div class="line">        console.log(&apos;I am James&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const URL = &quot;http://www.heqiangfly.com&quot;</div><div class="line"></div><div class="line">export default &#123;print, person,URL&#125;</div></pre></td></tr></table></figure>
+<p>如果我们不需要全部导入，可以这样做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import &#123;URL&#125; from &apos;./test&apos;</div><div class="line"></div><div class="line">  console.log(URL)</div></pre></td></tr></table></figure>
+<h3 id="导入整个模块的内容"><a href="#导入整个模块的内容" class="headerlink" title="导入整个模块的内容"></a>导入整个模块的内容</h3><p>使用 <code>import * as name from &quot;module-name&quot;</code> 可以将 module-name.js 文件中导出的所有模块插入当前作用域。<br>针对上面的test.js代码，可以使用下面的导入方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import * as api from &apos;./test&apos;</div><div class="line"></div><div class="line">    console.log(api.URL)</div><div class="line">    api.print()</div></pre></td></tr></table></figure>
+<h3 id="导入多个导出"><a href="#导入多个导出" class="headerlink" title="导入多个导出"></a>导入多个导出</h3><p><code>import {foo, bar} from &#39;/modules/my-module.js&#39;;</code><br>在 emport 章节的命名导出一节中已经有所介绍。</p>
+<h3 id="重命名导入"><a href="#重命名导入" class="headerlink" title="重命名导入"></a>重命名导入</h3><p><code>import {reallyReallyLongModuleExportName as shortName} from &#39;/modules/my-module.js&#39;;</code><br>导入时可以重命名导出，可以解决导出命名冲突的问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import &#123;person, URL as webSite&#125; from &apos;./test&apos;</div><div class="line"></div><div class="line">    console.log(webSite)</div></pre></td></tr></table></figure>
+<h3 id="导入代码"><a href="#导入代码" class="headerlink" title="导入代码"></a>导入代码</h3><p>这将运行模块中的全局代码, 但实际上不导入任何值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import &apos;/modules/my-module.js&apos;;</div></pre></td></tr></table></figure>
+<h3 id="动态导入"><a href="#动态导入" class="headerlink" title="动态导入"></a>动态导入</h3><p>可以将关键字 import 称作动态导入模块的函数，当使用它的时候，会返回一个 promise。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import(&apos;/modules/my-module.js&apos;)</div><div class="line">  .then((module) =&gt; &#123;</div><div class="line">    // Do something with the module.</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
+<p>这种使用方式也支持 await 关键字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let module = await import(&apos;/modules/my-module.js&apos;);</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      介绍import和export的使用
+    
+    </summary>
+    
+      <category term="JavaScript" scheme="http://yoursite.com/categories/JavaScript/"/>
+    
+    
+      <category term="JavaScript" scheme="http://yoursite.com/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
     <title>区块链 -- 区块链基础100问</title>
     <link href="http://yoursite.com/2018/05/02/block-chain-basic-questions/"/>
     <id>http://yoursite.com/2018/05/02/block-chain-basic-questions/</id>
@@ -7941,9 +8000,9 @@ https://www.jianshu.com/p/011eb88f4e0d/
     <link href="http://yoursite.com/2016/01/11/blog-hexo-optimize/"/>
     <id>http://yoursite.com/2016/01/11/blog-hexo-optimize/</id>
     <published>2016-01-11T02:00:00.000Z</published>
-    <updated>2018-10-04T08:25:45.187Z</updated>
+    <updated>2019-03-16T08:48:40.593Z</updated>
     
-    <content type="html"><![CDATA[<p><a href="https://hexo.io/docs/" target="_blank" rel="external">Hexo 文档</a></p>
+    <content type="html"><![CDATA[<p><a href="https://hexo.io/docs/" target="_blank" rel="external">Hexo 文档</a><br><a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="external">Hexo 中文文档</a></p>
 <h3 id="创建hexo分支"><a href="#创建hexo分支" class="headerlink" title="创建hexo分支"></a>创建hexo分支</h3><p>为了实现能在更换环境（比如更换电脑）的情况下我们仍然能发布博客，我们创建一个hexo分支用来存放hexo的文件。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git checkout --orphan hexo</div><div class="line">$ git rm -rf .</div></pre></td></tr></table></figure></p>
 <p>将hexo代码全部copy过来<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git add . -A</div><div class="line">$ git commit -m &quot;hexo init&quot;</div><div class="line">$ git push origin hexo</div></pre></td></tr></table></figure></p>
 <p>这样就用hexo分支来存放网站的原始文件，master分支用来存放生成的静态网页。<br><a id="more"></a></p>
@@ -8014,9 +8073,10 @@ https://www.jianshu.com/p/011eb88f4e0d/
     <link href="http://yoursite.com/2016/01/10/blog-use-hexo-to-build-blog/"/>
     <id>http://yoursite.com/2016/01/10/blog-use-hexo-to-build-blog/</id>
     <published>2016-01-10T02:00:00.000Z</published>
-    <updated>2017-12-01T15:59:47.000Z</updated>
+    <updated>2019-03-16T08:48:40.594Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="本地环境搭建"><a href="#本地环境搭建" class="headerlink" title="本地环境搭建"></a>本地环境搭建</h2><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>去<a href="https://nodejs.org/en/download/" target="_blank" rel="external">官网</a>下载node-v5.0.0-linux-x64解压即可<br><a id="more"></a></p>
+    <content type="html"><![CDATA[<p><a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="external">Hexo 中文文档</a></p>
+<h2 id="本地环境搭建"><a href="#本地环境搭建" class="headerlink" title="本地环境搭建"></a>本地环境搭建</h2><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>去<a href="https://nodejs.org/en/download/" target="_blank" rel="external">官网</a>下载node-v5.0.0-linux-x64解压即可<br><a id="more"></a></p>
 <h2 id="配置Github"><a href="#配置Github" class="headerlink" title="配置Github"></a>配置Github</h2><h3 id="建立Repository"><a href="#建立Repository" class="headerlink" title="建立Repository"></a>建立Repository</h3><p>首先在github上面建一个仓库username.github.io，username是你github的用户名。此时访问 <a href="http://heqiangflytosky.github.io/" target="_blank" rel="external">http://heqiangflytosky.github.io/</a> ，就会访问到你创建的git的内容。</p>
 <h3 id="域名配置"><a href="#域名配置" class="headerlink" title="域名配置"></a>域名配置</h3><p>首先要购买一个域名，然后进入域名解析页面，添加一个CNAME记录，指向username.github.io即可。配置好一般等待TTL缓存的时间过后，博客建好后，访问你的域名heqiangfly.com，你会发现已经跳转到你的博客页面了。</p>
 <h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><h3 id="安装Hexo-1"><a href="#安装Hexo-1" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install -g hexo</div></pre></td></tr></table></figure>
