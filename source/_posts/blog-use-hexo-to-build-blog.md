@@ -7,6 +7,9 @@ tags: [Hexo, Blog, GitHub]
 description: 使用Hexo在GitHub上搭建个人博客
 date: 2016-01-10 10:00:00
 ---
+
+[Hexo 中文文档](https://hexo.io/zh-cn/docs/index.html)
+
 ## 本地环境搭建
 ### 安装git
 ### 安装node.js
