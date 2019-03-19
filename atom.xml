@@ -107,6 +107,31 @@
   </entry>
   
   <entry>
+    <title>快应用开发 GankTouTiao</title>
+    <link href="http://yoursite.com/2018/10/01/quick-app-demo-ganktoutiao/"/>
+    <id>http://yoursite.com/2018/10/01/quick-app-demo-ganktoutiao/</id>
+    <published>2018-10-01T02:00:00.000Z</published>
+    <updated>2019-03-19T09:56:14.243Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>使用快应用技术开发的Gank App。<br>快应用介绍：<a href="https://www.quickapp.cn/" target="_blank" rel="external">https://www.quickapp.cn/</a><br>数据来源：<a href="http://gank.io/api" target="_blank" rel="external">http://gank.io/api</a><br>项目源码：<a href="https://github.com/heqiangflytosky/GankQuickApp" target="_blank" rel="external">https://github.com/heqiangflytosky/GankQuickApp</a></p>
+<h2 id="应用展示"><a href="#应用展示" class="headerlink" title="应用展示"></a>应用展示</h2><p>持续完善中……</p>
+<p><img src="http://poc98qeya.bkt.clouddn.com/images/main/quick-app-demo-ganktoutiao/gankQuickApp.gif" alt="效果图" title="GankTouTiao"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍用快应用开发一款分享技术干货、美女图片和休闲视频的App
+    
+    </summary>
+    
+      <category term="Android App" scheme="http://yoursite.com/categories/Android-App/"/>
+    
+    
+      <category term="快应用" scheme="http://yoursite.com/tags/%E5%BF%AB%E5%BA%94%E7%94%A8/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android Architecture Components -- ViewModel</title>
     <link href="http://yoursite.com/2018/09/20/android-architecture-components-viewmodel/"/>
     <id>http://yoursite.com/2018/09/20/android-architecture-components-viewmodel/</id>
