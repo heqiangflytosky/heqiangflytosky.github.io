@@ -3015,11 +3015,11 @@ http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
   </entry>
   
   <entry>
-    <title>Android 性能优化之旋转屏幕优化</title>
+    <title>Android 性能优化实战篇 -- 旋转屏幕优化</title>
     <link href="http://yoursite.com/2017/04/26/android-performance-optimization-rotate-screen/"/>
     <id>http://yoursite.com/2017/04/26/android-performance-optimization-rotate-screen/</id>
     <published>2017-04-26T02:00:00.000Z</published>
-    <updated>2017-12-01T15:59:47.000Z</updated>
+    <updated>2019-03-20T01:17:40.659Z</updated>
     
     <content type="html"><![CDATA[<h2 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h2><p>在桌面转屏发现响应不够迅速，对比其他产品有很大的提升空间，针对此问题进行了一些分析和优化。</p>
 <h2 id="问题分析和解决方法"><a href="#问题分析和解决方法" class="headerlink" title="问题分析和解决方法"></a>问题分析和解决方法</h2><p>首先简单介绍一下旋转屏幕的流程，首先各个界面要进行重绘，在重绘过程中要进行冻屏，只有所有<code>Window</code>都进行绘制完成了才进行转屏，因此这里面就有个木桶效应，转屏的时间取决于重绘最慢的那个。<br>首先分析Log，找出可以优化的点：</p>
@@ -7585,11 +7585,11 @@ http://blog.csdn.net/wangbaochu/article/details/51177672
   </entry>
   
   <entry>
-    <title>Android 性能优化之TraceView的使用</title>
-    <link href="http://yoursite.com/2016/02/25/development-tool-traceview/"/>
-    <id>http://yoursite.com/2016/02/25/development-tool-traceview/</id>
+    <title>Android 性能优化工具篇 -- TraceView的使用</title>
+    <link href="http://yoursite.com/2016/02/25/android-performance-optimization-traceview/"/>
+    <id>http://yoursite.com/2016/02/25/android-performance-optimization-traceview/</id>
     <published>2016-02-25T02:00:00.000Z</published>
-    <updated>2017-12-01T15:59:47.000Z</updated>
+    <updated>2019-03-20T01:15:52.527Z</updated>
     
     <content type="html"><![CDATA[<h2 id="TraceView简介"><a href="#TraceView简介" class="headerlink" title="TraceView简介"></a>TraceView简介</h2><p>工欲善其事，必先利其器。要想分析Android的性能问题，比如卡顿了之类的，那么就必需掌握TraceView工具的使用。<br>TraceView 是 Android SDK 中内置的一个工具，它可以加载 trace 文件，用图形的形式展示代码的执行时间、次数及调用栈，便于我们分析，以此来优化 App 运行效率。</p>
 <h2 id="生成trace文件"><a href="#生成trace文件" class="headerlink" title="生成trace文件"></a>生成trace文件</h2><p>在进行分析以前，必需要生成trace文件，可以用下面的三种方法生成trace文件：</p>
@@ -7644,23 +7644,21 @@ http://blog.csdn.net/wangbaochu/article/details/51177672
     
     </summary>
     
-      <category term="开发工具" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+      <category term="Android性能优化" scheme="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
-      <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
+      <category term="Android性能优化" scheme="http://yoursite.com/tags/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
       <category term="开发工具" scheme="http://yoursite.com/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    
-      <category term="性能优化" scheme="http://yoursite.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
   <entry>
-    <title>Android 性能优化之MAT分析内存泄漏</title>
-    <link href="http://yoursite.com/2016/02/20/development-tool-mat-to-analyse-leak/"/>
-    <id>http://yoursite.com/2016/02/20/development-tool-mat-to-analyse-leak/</id>
+    <title>Android 性能优化工具篇 -- MAT分析内存泄漏</title>
+    <link href="http://yoursite.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/"/>
+    <id>http://yoursite.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/</id>
     <published>2016-02-20T02:00:00.000Z</published>
-    <updated>2017-12-01T15:59:47.000Z</updated>
+    <updated>2019-03-20T01:16:05.555Z</updated>
     
     <content type="html"><![CDATA[<p>MAT 是 Memory Analyzer Tool 的简称，它是一款强大的内存分析工具，使用它能帮助开发者快速分析内存泄漏以及优化内存的使用。<br>内存泄漏也是我们开发过程中经常碰到的问题，掌握了MAT工具，那么你就不会惧怕内存泄漏，使用它可以让内存泄漏无所遁形。</p>
 <h2 id="MAT下载"><a href="#MAT下载" class="headerlink" title="MAT下载"></a>MAT下载</h2><p>进入<a href="https://www.eclipse.org/mat/" target="_blank" rel="external">网址</a>下载MAT工具，如果你使用 Eclipse 开发工具而且已经集成了插件，可以不用下载了。</p>
@@ -7718,14 +7716,12 @@ http://blog.csdn.net/wangbaochu/article/details/51177672
     
     </summary>
     
-      <category term="开发工具" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+      <category term="Android性能优化" scheme="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
-      <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
+      <category term="Android性能优化" scheme="http://yoursite.com/tags/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
       <category term="开发工具" scheme="http://yoursite.com/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    
-      <category term="性能优化" scheme="http://yoursite.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
