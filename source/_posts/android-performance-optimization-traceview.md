@@ -1,8 +1,8 @@
 ---
-title: Android 性能优化之TraceView的使用
-categories: 开发工具
+title: Android 性能优化工具篇 -- TraceView的使用
+categories: Android性能优化
 comments: true
-tags: [Android, 性能优化, 开发工具]
+tags: [Android性能优化, 开发工具]
 description: 简单介绍TraceView工具的使用
 date: 2016-2-25 10:00:00
 ---

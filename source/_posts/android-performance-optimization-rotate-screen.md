@@ -1,5 +1,5 @@
 ---
-title: Android 性能优化之旋转屏幕优化
+title: Android 性能优化实战篇 -- 旋转屏幕优化
 categories: Android性能优化
 comments: true
 tags: [Android, Android性能优化]

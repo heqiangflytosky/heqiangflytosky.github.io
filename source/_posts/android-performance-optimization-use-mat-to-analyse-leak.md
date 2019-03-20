@@ -1,8 +1,8 @@
 ---
-title: Android 性能优化之MAT分析内存泄漏
-categories: 开发工具
+title: Android 性能优化工具篇 -- MAT分析内存泄漏
+categories: Android性能优化
 comments: true
-tags: [Android, 性能优化, 开发工具]
+tags: [Android性能优化, 开发工具]
 description: 介绍Android分析内存泄漏工具的使用方法
 date: 2016-2-20 10:00:00
 ---
