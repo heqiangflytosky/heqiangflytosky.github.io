@@ -279,11 +279,11 @@ public class ServiceHelper {
 如果客户端和服务端在同一个进程，我们来看一下用来通信的 IBinder 的特点。
 我们先来观察 Service 的 onBind 方法返回的 IBinder 引用对象：
 
-![效果图](/images/react-native-image/image1.png)
+![效果图](/images/android-knowledge-about-service/binder-service.png)
 
 再来对比客户端的 onServiceConnected 方法回调的参数 IBinder 引用对象：
 
-![效果图](/images/react-native-image/image1.png)
+![效果图](/images/android-knowledge-about-service/binder-client.png)
 
 它们居然是同一个指向同一个对象。
 这就为我们进行服务端和客户端的通信添加了另外一个思路：扩展 IBinder。
