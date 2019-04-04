@@ -111,6 +111,10 @@ $ git rebase origin
 ## git pull
  - `git pull --rebase`：表示把你的本地当前分支里的每个提交(commit)取消掉，并且把它们临时 保存为补丁(patch)(这些补丁放到`.git/rebase`目录中),然后把本地当前分支更新 为最新的`origin`分支，最后把保存的这些补丁应用到本地当前分支上。
 
+## git push
+
+ - `git push origin --delete <branch_name>`：删除远程分支
+
 ## patch
 `git format-patch -n`：为前面的n次提交生成一个patch
 应用patch：

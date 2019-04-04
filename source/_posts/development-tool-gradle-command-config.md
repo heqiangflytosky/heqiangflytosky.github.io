@@ -178,6 +178,8 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        // 只打包后面配置的几种资源
+        resConfigs "zh-rCN","zh-rHK","zh-rTW"
     }
 
     //编译配置
