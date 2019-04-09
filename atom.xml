@@ -2255,6 +2255,65 @@ http://blog.csdn.net/edu_enth/article/details/56007422
   </entry>
   
   <entry>
+    <title>Android 性能优化工具篇 -- APK Analyzer</title>
+    <link href="http://yoursite.com/2017/07/26/android-performance-optimization-apk-analyzer/"/>
+    <id>http://yoursite.com/2017/07/26/android-performance-optimization-apk-analyzer/</id>
+    <published>2017-07-26T02:00:00.000Z</published>
+    <updated>2019-04-09T07:55:53.661Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>APK Analyzer 顾名思义就是 APK 分析器，它是 Android Studio 2.2 版本开始提供的工具。通过它我们可以很方便的了解 APK 包的结构，因此它也是我们开发过程中进行 APK 瘦身 的一大利器。<br>这里将它的用法做一下归纳和总结。</p>
+<p><a href="https://developer.android.com/studio/build/apk-analyzer.html" target="_blank" rel="external">官方文档</a></p>
+<p>先来概述一下 APK Analyzer 可以实现的一些功能：</p>
+<ul>
+<li>查看 APK 压缩包的信息：包含的文件及其大小；原文件以及压缩后的大小；</li>
+<li>查看 APK 的文件：比如 AndroidManifest.xml 文件；资源文件(resources.arsc、layout文件、res、assets等)等；</li>
+<li>查看 DEX 文件：类信息、包信息等；</li>
+<li>比较两个 APK 文件；</li>
+</ul>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>使用 APK Analyzer 打开 APK 的方式：</p>
+<ul>
+<li>直接拖拽 APK 到 Android Studio 的编辑窗口</li>
+<li>切换到 Project 视图，双击 APK 文件</li>
+<li>在菜单栏中选择 Build -&gt; Analyzer APK，然后选择 APK 文件</li>
+</ul>
+<p>下图为打开 APK 后的视图：</p>
+<p><img src="/images/android-performance-optimization-apk-analyzer/open.png" alt="效果图"></p>
+<p>从这个视图上面我们可以得到下面的信息：</p>
+<ul>
+<li>APK 的包名和版本信息</li>
+<li>APK 包大小，包括 APK 解压后的大小和压缩后的大小</li>
+<li>APK 包的结构信息，包含各个目录的大小（包括解压后的大小和压缩后的大小）</li>
+</ul>
+<h2 id="查看文件"><a href="#查看文件" class="headerlink" title="查看文件"></a>查看文件</h2><h3 id="查看资源文件"><a href="#查看资源文件" class="headerlink" title="查看资源文件"></a>查看资源文件</h3><p>包含 resources.arsc、layout文件、res、assets等。<br>点击 resources.arsc，在视图的下方区域就是显示 resources.arsc 的各种资源列表：attr，drawable、dimen、string等，点击列表的项便会展示该项的所有资源信息，包含资源的个数和配置维度的个数：</p>
+<p><img src="/images/android-performance-optimization-apk-analyzer/resources.png" alt="效果图"></p>
+<p>其他资源的打开方式也是一样，点击既可在视图中展示。</p>
+<h3 id="查看-AndroidManifest-xml-文件"><a href="#查看-AndroidManifest-xml-文件" class="headerlink" title="查看 AndroidManifest.xml 文件"></a>查看 AndroidManifest.xml 文件</h3><p>点击既可展示 AndroidManifest.xml 文件的详细信息。</p>
+<h3 id="查看-DEX-文件"><a href="#查看-DEX-文件" class="headerlink" title="查看 DEX 文件"></a>查看 DEX 文件</h3><p>APK Analyzer 的浏览 DEX 文件的功能可以使我们快速了解 DEX 文件的信息，我们能看到类、包、总的引用和声明个数，这些信息能够帮助我们决定是否使用multi-dex或者移除依赖使得满足64K方法数限制。</p>
+<p><img src="/images/android-performance-optimization-apk-analyzer/dex1.png" alt="效果图"></p>
+<p>上图展示了一个 APK 中的一个 DEX 文件。每个包、类、方法都列有 Defined Method、Referenced Method 和 Size。Referenced Method列是DEX文件中引用的全部方法，它包含了你定义的方法、依赖的library、定义在标准Java和Android包中的方法。Defined Method列只包含了定义在DEX文件中方法，因此它是Referenced Method方法的子集。注意当你引入一个依赖，在依赖中定义的方法会包含在Defined Method和Referenced Method中。还要注意，混淆压缩也会改变DEX文件的内容。<br>Size 是指选中的包、类、方法的大小。<br>下面来介绍一个工具栏的用法。工具栏是 Android Studio 3.0 才加入的功能。</p>
+<ul>
+<li>点击 Show fields （f按钮）可以切换展示或者隐藏类的变量。</li>
+<li>点击 Show methods （m按钮）可以切换展示或者隐藏类的方法。</li>
+<li>点击 Show all referenced methods or fields（mf按钮）可以切换展示所有引用的类、方法和变量或者只展示定义在DEX文件中类、方法和变量。</li>
+<li>Load Proguard mappings：如果我们用 APK Analyzer 浏览混淆过的 APK，包名和类名都是混淆过的，影响我们查看，这是我们可以用这个功能导入 mapping.txt 文件。这样就相当于还原了混淆文件。如下图。</li>
+</ul>
+<p><img src="/images/android-performance-optimization-apk-analyzer/dex2.png" alt="效果图"></p>
+<h2 id="对比-两个-APK"><a href="#对比-两个-APK" class="headerlink" title="对比 两个 APK"></a>对比 两个 APK</h2>]]></content>
+    
+    <summary type="html">
+    
+      介绍 APK Analyzer 工具的使用
+    
+    </summary>
+    
+      <category term="Android性能优化" scheme="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+    
+      <category term="APK Analyzer" scheme="http://yoursite.com/tags/APK-Analyzer/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android：使用JitPack发布Github开源库</title>
     <link href="http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/"/>
     <id>http://yoursite.com/2017/07/21/android-use-jitpack-to-publish-github-project/</id>
@@ -11836,7 +11895,7 @@ https://blog.csdn.net/u013384984/article/details/79496052
     <link href="http://yoursite.com/2013/06/06/java-basic-map-collection/"/>
     <id>http://yoursite.com/2013/06/06/java-basic-map-collection/</id>
     <published>2013-06-06T02:00:00.000Z</published>
-    <updated>2019-03-14T07:27:52.849Z</updated>
+    <updated>2019-04-09T08:00:00.955Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java 开发过程中，集合类是我们经常要接触和使用的类，从本文开始，将用一系列的文章来对这个知识点进行梳理和总结。<br>本文先对 Java 集合相关知识做一个概括性的描述，后面会有一系列的文章再细分介绍集合框架。<br>下面先来看一下 Java 集合框架的类图。</p>
 <p><img src="http://www.plantuml.com/plantuml/svg/XLCnRzHW3DtpAwBkxIzWAA83e8A4heBPpHc8BfTSly-fT89EI1KZ0mYXIaXiJ30WCVRVt07_WZh-Wcrz3JUqb_VivpnRBuUH852_R8gJcXeiznx2EPH_hYutxzvklrnkF__SN5tl5KKBIumhgB3yzUtZziU7ybLHDH1ZUJS4MCS4xdLDWnNLNHkB2olQVd__-_hDvjFNfEFMvGe2d3Re2Ug2bpw2rOseRWd3yuGDcdM1SEwvnt1Ul-39JCDff00LbSbkWhUKZkh1EOHrSdGVualk4_GCOU6PuxfTuDnpZCXizM2EBTMq7hiIVH8G1yZRtNbzSE2CwJCNz_UJaxpWJCcl5BmtVOlQqsrBKMY9kuNJwygJLkoDSrlZUhPB34WbbsI7SXdGN6aK76t8upgI3GXQzAJ77Wq-mZE7PKsdqLMPdeYJEfdgO5jJjVyC5iEJkhEUhmRDCDr4a2TgqXHfB9HxYXLr8O4PGRMmdpPFTc9vLQ4RZu6Bb95y_PoKdPJs7u3oHKv9-lnH-L_fPWXlWShok-r-3MznyoVliEImYVHAadQE6XIYqt5Qc66oQfBuxocDye4qTlGxlhKm9i7AnSDOOQawy5d9hpa69w-OvEGdrpQJ9nabj4JmeZZ4Tjulcxy0" alt="效果图"></p>
