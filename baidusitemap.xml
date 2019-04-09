@@ -3,6 +3,28 @@
 
 
     
+  <url>
+    <loc>http://yoursite.com/2017/10/12/open-source-rxjava-guide-operator/</loc>
+    <lastmod>2019-04-09T05:51:13.383Z</lastmod>
+    <data>
+        <display>
+        <title>RxJava 使用指南 -- 操作符介绍</title>
+        <pubTime>2017-10-12T02:00:00.000Z</pubTime>
+        
+        <tag>Android开源项目</tag>
+         
+        <tag>RxJava</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
@@ -258,7 +280,6 @@
     </url>
 
     
-    
   <url>
     <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
     <lastmod>2019-03-15T03:39:40.124Z</lastmod>
@@ -278,6 +299,7 @@
     </data>
     </url>
 
+    
     
   <url>
     <loc>http://yoursite.com/2016/12/06/java-concurrent-fork-join-base/</loc>
@@ -693,9 +715,9 @@
         
         <tag>Android</tag>
          
-        <tag>Gradle</tag>
-         
         <tag>Android Studio</tag>
+         
+        <tag>Gradle</tag>
          
          
            
@@ -761,9 +783,9 @@
         
         <tag>Android</tag>
          
-        <tag>Gradle</tag>
-         
         <tag>Android Studio</tag>
+         
+        <tag>Gradle</tag>
          
          
            
@@ -1356,26 +1378,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
-    <lastmod>2018-11-06T09:32:04.282Z</lastmod>
-    <data>
-        <display>
-        <title>Android JNI -- Android Studio JNI 开发基础</title>
-        <pubTime>2015-12-10T02:00:00.000Z</pubTime>
-        
-        <tag>JNI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/07/10/android-thread-conditionvariable/</loc>
     <lastmod>2018-11-06T09:32:04.282Z</lastmod>
     <data>
@@ -1389,6 +1391,26 @@
            
              
               <breadCrumb title="Android 线程" url="http://yoursite.com/categories/Android-%E7%BA%BF%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
+    <lastmod>2018-11-06T09:32:04.282Z</lastmod>
+    <data>
+        <display>
+        <title>Android JNI -- Android Studio JNI 开发基础</title>
+        <pubTime>2015-12-10T02:00:00.000Z</pubTime>
+        
+        <tag>JNI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -2050,28 +2072,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/10/12/open-source-rxjava-guide-operator/</loc>
-    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
-    <data>
-        <display>
-        <title>RxJava 使用指南 -- 操作符介绍</title>
-        <pubTime>2017-10-12T02:00:00.000Z</pubTime>
-        
-        <tag>Android开源项目</tag>
-         
-        <tag>RxJava</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2018/03/20/open-source-weex-android-component-module-register/</loc>
     <lastmod>2018-06-02T09:24:04.976Z</lastmod>
     <data>
@@ -2092,12 +2092,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/</loc>
+    <loc>http://yoursite.com/2017/10/14/open-source-rxjava-guide-flowable/</loc>
     <lastmod>2018-06-02T09:24:04.976Z</lastmod>
     <data>
         <display>
-        <title>RxJava 使用指南 -- Single、Completable 和 Maybe 的用法</title>
-        <pubTime>2017-10-18T02:00:00.000Z</pubTime>
+        <title>RxJava 使用指南 -- Flowable 和 Subscriber</title>
+        <pubTime>2017-10-14T02:00:00.000Z</pubTime>
         
         <tag>Android开源项目</tag>
          
@@ -2114,12 +2114,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/10/14/open-source-rxjava-guide-flowable/</loc>
+    <loc>http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/</loc>
     <lastmod>2018-06-02T09:24:04.976Z</lastmod>
     <data>
         <display>
-        <title>RxJava 使用指南 -- Flowable 和 Subscriber</title>
-        <pubTime>2017-10-14T02:00:00.000Z</pubTime>
+        <title>RxJava 使用指南 -- Single、Completable 和 Maybe 的用法</title>
+        <pubTime>2017-10-18T02:00:00.000Z</pubTime>
         
         <tag>Android开源项目</tag>
          
@@ -2200,12 +2200,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/26/open-source-weex-android-component-render/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 渲染过程</title>
+        <pubTime>2018-03-26T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -2220,12 +2220,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/26/open-source-weex-android-component-render/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 渲染过程</title>
-        <pubTime>2018-03-26T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -2366,12 +2366,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/</loc>
+    <loc>http://yoursite.com/2017/11/06/open-source-retrofit-source-code-analysis-start/</loc>
     <lastmod>2018-05-06T07:22:25.867Z</lastmod>
     <data>
         <display>
-        <title>Retrofit 2 源码分析二 -- RxJava2</title>
-        <pubTime>2017-11-10T02:00:00.000Z</pubTime>
+        <title>Retrofit 2 源码分析 -- 启动篇</title>
+        <pubTime>2017-11-06T02:00:00.000Z</pubTime>
         
         <tag>Android开源项目</tag>
          
@@ -2388,12 +2388,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/11/06/open-source-retrofit-source-code-analysis-start/</loc>
+    <loc>http://yoursite.com/2017/11/10/open-source-retrofit-source-code-analysis-rxjava/</loc>
     <lastmod>2018-05-06T07:22:25.867Z</lastmod>
     <data>
         <display>
-        <title>Retrofit 2 源码分析 -- 启动篇</title>
-        <pubTime>2017-11-06T02:00:00.000Z</pubTime>
+        <title>Retrofit 2 源码分析二 -- RxJava2</title>
+        <pubTime>2017-11-10T02:00:00.000Z</pubTime>
         
         <tag>Android开源项目</tag>
          
@@ -2431,6 +2431,50 @@
     </url>
 
     
+    
+  <url>
+    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android：使用LayoutInflater应该注意的问题</title>
+        <pubTime>2016-02-18T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>LayoutInflater</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/03/08/development-tool-gradle-android-dsl-extension/</loc>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Gradle 使用指南 -- Android DSL 扩展</title>
+        <pubTime>2016-03-08T02:00:00.000Z</pubTime>
+        
+        <tag>开发工具</tag>
+         
+        <tag>Gradle</tag>
+         
+         
+           
+             
+              <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
+          
+        </display>
+    </data>
+    </url>
+
     
   <url>
     <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
@@ -2477,28 +2521,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/</loc>
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android：使用LayoutInflater应该注意的问题</title>
-        <pubTime>2016-02-18T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>LayoutInflater</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
@@ -2509,28 +2531,6 @@
         <tag>Android</tag>
          
         <tag>buildType</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/02/16/android-problem-multidex-verifyerror/</loc>
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android：一个Multidex引发的VerifyError和Class Not Found问题</title>
-        <pubTime>2016-02-16T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>Multidex</tag>
          
          
            
@@ -2563,21 +2563,21 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/03/08/development-tool-gradle-android-dsl-extension/</loc>
+    <loc>http://yoursite.com/2016/02/16/android-problem-multidex-verifyerror/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Gradle 使用指南 -- Android DSL 扩展</title>
-        <pubTime>2016-03-08T02:00:00.000Z</pubTime>
+        <title>Android：一个Multidex引发的VerifyError和Class Not Found问题</title>
+        <pubTime>2016-02-16T02:00:00.000Z</pubTime>
         
-        <tag>开发工具</tag>
+        <tag>Android</tag>
          
-        <tag>Gradle</tag>
+        <tag>Multidex</tag>
          
          
            
              
-              <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -2585,19 +2585,65 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/03/10/android-demo-live-wallpaper-snow/</loc>
+    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android 动态壁纸</title>
-        <pubTime>2017-03-10T02:00:00.000Z</pubTime>
+        <title>Android 深入理解 dumpsys</title>
+        <pubTime>2017-06-13T02:00:00.000Z</pubTime>
         
-        <tag>Android Demo</tag>
+        <tag>dumpsys</tag>
+         
+        <tag>Android源码分析</tag>
          
          
            
              
-              <breadCrumb title="Android Demo" url="http://yoursite.com/categories/Android-Demo/"/>
+              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/01/12/blog-optimize-next-theme/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo--Next主题优化</title>
+        <pubTime>2016-01-12T02:00:00.000Z</pubTime>
+        
+        <tag>Hexo</tag>
+         
+        <tag>Next Theme</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://yoursite.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>WebApp 和 NativeApp 的世纪之战</title>
+        <pubTime>2017-08-05T02:00:00.000Z</pubTime>
+        
+        <tag>WebApp</tag>
+         
+        <tag>NativeApp</tag>
+         
+         
+           
+             
+              <breadCrumb title="移动互联网" url="http://yoursite.com/categories/%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91/"/>
           
         </display>
     </data>
@@ -2653,28 +2699,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>WebApp 和 NativeApp 的世纪之战</title>
-        <pubTime>2017-08-05T02:00:00.000Z</pubTime>
-        
-        <tag>WebApp</tag>
-         
-        <tag>NativeApp</tag>
-         
-         
-           
-             
-              <breadCrumb title="移动互联网" url="http://yoursite.com/categories/%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2015/04/10/java-dynamic-proxy-invocationhandler-demo/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -2697,65 +2721,45 @@
 
     
   <url>
-    <loc>http://yoursite.com/2015/01/08/android-compnent-activitygroup/</loc>
+    <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android ActivityGroup简介</title>
-        <pubTime>2015-01-08T02:00:00.000Z</pubTime>
+        <title>Android实用技巧之adb命令：getprop，setprop，watchprops命令的使用</title>
+        <pubTime>2014-10-18T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>ActivityGroup</tag>
+        <tag>getprop</tag>
+         
+        <tag>setprop</tag>
+         
+        <tag>watchprops</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android实用技巧" url="http://yoursite.com/categories/Android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/06/15/android-knowledge-point-drawable-cache/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android：关于Drawable的缓存机制应该了解的知识</title>
+        <pubTime>2017-06-15T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
          
          
            
              
               <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/01/12/blog-optimize-next-theme/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Hexo--Next主题优化</title>
-        <pubTime>2016-01-12T02:00:00.000Z</pubTime>
-        
-        <tag>Hexo</tag>
-         
-        <tag>Next Theme</tag>
-         
-         
-           
-             
-              <breadCrumb title="Hexo" url="http://yoursite.com/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/11/08/android-app-ganktoutiao/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>GankTouTiao —— 一个技术干货分享的APP</title>
-        <pubTime>2016-11-08T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>Android App</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android App" url="http://yoursite.com/categories/Android-App/"/>
           
         </display>
     </data>
@@ -2785,12 +2789,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
+    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android PackageManager相关源码分析之PMS初始化</title>
-        <pubTime>2016-05-06T02:00:00.000Z</pubTime>
+        <title>Android PackageManager相关源码分析之安装应用</title>
+        <pubTime>2016-05-12T02:00:00.000Z</pubTime>
         
         <tag>Android源码分析</tag>
          
@@ -2829,16 +2833,16 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
+    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android 深入理解 dumpsys</title>
-        <pubTime>2017-06-13T02:00:00.000Z</pubTime>
+        <title>Android PackageManager相关源码分析之卸载应用</title>
+        <pubTime>2016-05-16T02:00:00.000Z</pubTime>
         
-        <tag>dumpsys</tag>
-         
         <tag>Android源码分析</tag>
+         
+        <tag>PackageManager</tag>
          
          
            
@@ -2866,6 +2870,28 @@
            
              
               <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>开源项目- Lottie 简介</title>
+        <pubTime>2017-02-07T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Lottie</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
           
         </display>
     </data>
@@ -2913,34 +2939,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android PackageManager相关源码分析之安装应用</title>
-        <pubTime>2016-05-12T02:00:00.000Z</pubTime>
-        
-        <tag>Android源码分析</tag>
-         
-        <tag>PackageManager</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>React Native-组件Component</title>
-        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -2955,12 +2959,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/11/react-native-first-step/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native 入门</title>
-        <pubTime>2017-01-11T02:00:00.000Z</pubTime>
+        <title>React Native-组件Component</title>
+        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -2995,12 +2999,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/11/react-native-first-step/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native 入门</title>
+        <pubTime>2017-01-11T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -3075,28 +3079,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>开源项目- Lottie 简介</title>
-        <pubTime>2017-02-07T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>Lottie</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-source-code-analysis/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -3119,19 +3101,65 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/06/15/android-knowledge-point-drawable-cache/</loc>
+    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android：关于Drawable的缓存机制应该了解的知识</title>
-        <pubTime>2017-06-15T02:00:00.000Z</pubTime>
+        <title>Android PackageManager相关源码分析之PMS初始化</title>
+        <pubTime>2016-05-06T02:00:00.000Z</pubTime>
+        
+        <tag>Android源码分析</tag>
+         
+        <tag>PackageManager</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/01/08/android-compnent-activitygroup/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android ActivityGroup简介</title>
+        <pubTime>2015-01-08T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
+         
+        <tag>ActivityGroup</tag>
          
          
            
              
               <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/11/08/android-app-ganktoutiao/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>GankTouTiao —— 一个技术干货分享的APP</title>
+        <pubTime>2016-11-08T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Android App</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android App" url="http://yoursite.com/categories/Android-App/"/>
           
         </display>
     </data>
@@ -3160,49 +3188,21 @@
     </url>
 
     
+    
   <url>
-    <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
+    <loc>http://yoursite.com/2017/03/10/android-demo-live-wallpaper-snow/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android实用技巧之adb命令：getprop，setprop，watchprops命令的使用</title>
-        <pubTime>2014-10-18T02:00:00.000Z</pubTime>
+        <title>Android 动态壁纸</title>
+        <pubTime>2017-03-10T02:00:00.000Z</pubTime>
         
-        <tag>Android</tag>
-         
-        <tag>getprop</tag>
-         
-        <tag>setprop</tag>
-         
-        <tag>watchprops</tag>
+        <tag>Android Demo</tag>
          
          
            
              
-              <breadCrumb title="Android实用技巧" url="http://yoursite.com/categories/Android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
-  <url>
-    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android PackageManager相关源码分析之卸载应用</title>
-        <pubTime>2016-05-16T02:00:00.000Z</pubTime>
-        
-        <tag>Android源码分析</tag>
-         
-        <tag>PackageManager</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+              <breadCrumb title="Android Demo" url="http://yoursite.com/categories/Android-Demo/"/>
           
         </display>
     </data>
