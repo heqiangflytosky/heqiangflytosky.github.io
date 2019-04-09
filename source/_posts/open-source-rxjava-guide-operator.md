@@ -320,6 +320,7 @@ I/RxJava: onComplete
 ```
 
 上面的示例会过滤掉奇数，把偶数打印出来。
+如果需要报告错误的状态，可以在 test 方法里抛出 Exception 异常。
 
 ### distinct
 
@@ -399,6 +400,135 @@ I/RxJava: accept : 3three
 I/RxJava: accept : 4four
 I/RxJava: accept : 5five
 ```
+
+## amb、ambArray 和 ambWith
+
+传递两个或多个 Observable 给 amb 或者 ambArray 时，它只发射其中首先发射数据（onNext）或通知（onError或onCompleted）的那个 Observable 的所有数据，而其他所有的 Observable 的将不会被执行直接丢弃。
+ambWith的用法：Observable.ambArray(o1,o2)和o1.ambWith(o2)是等价的。
+
+```
+        Observable.ambArray(Observable.create(new ObservableOnSubscribe<String>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.e("Test","111");
+                //emitter.onNext("11");
+                //emitter.onComplete();
+                //emitter.onError(new Exception("1"));
+
+            }
+        }),Observable.create(new ObservableOnSubscribe<String>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.e("Test","222");
+                emitter.onNext("22");
+
+            }
+        }),Observable.create(new ObservableOnSubscribe<String>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.e("Test","333");
+                emitter.onNext("33");
+
+            }
+        })).subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.e("Test","onSubscribe");
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.e("Test","onNext "+s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("Test","onError");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("Test","onComplete");
+            }
+        });
+
+```
+
+输出：
+
+```
+E/Test: onSubscribe
+E/Test: 111
+E/Test: 222
+E/Test: onNext 22
+```
+
+另外，Observable.ambArray 的参数也可以是 Observable.ambArray：
+
+```
+        Observable.ambArray(Observable.create(new ObservableOnSubscribe<String>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.e("Test","111");
+                //emitter.onNext("11");
+                //emitter.onComplete();
+                //emitter.onError(new Exception("1"));
+
+            }
+        }),Observable.create(new ObservableOnSubscribe<String>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.e("Test","222");
+                //emitter.onNext("22");
+
+            }
+        }),Observable.ambArray(Observable.create(new ObservableOnSubscribe<String>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.e("Test","333");
+                emitter.onNext("33");
+                //emitter.onComplete();
+                //emitter.onError(new Exception("1"));
+
+            }
+        }),Observable.create(new ObservableOnSubscribe<String>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.e("Test","444");
+                emitter.onNext("44");
+
+            }
+        }))).subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.e("Test","onSubscribe");
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.e("Test","onNext "+s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("Test","onError");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("Test","onComplete");
+            }
+        });
+```
+
+应用场景，可以用在数据结果的输出是多个不确定场景时，比如：我们需要获取一个图片，它的获取场景有三个：1.参数直接给，2.本地缓存，3.网络获取。这种情况就可以按照这个顺序依次获取，知道某个场景获取到图片。
 
 ## take、 takeLast、takeUntil 和 takeWhile
 
