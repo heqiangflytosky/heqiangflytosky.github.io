@@ -13,6 +13,10 @@ date: 2017-10-12 10:00:00
 
 前面的例子介绍了使用 `Observable.create()` 操作符来创建 `Observable`，下面再介绍一下 RxJava 提供的其他方法。
 
+### create()
+
+前面已有介绍
+
 ### just()
 
 `just(T item1, ...)`创建 `Observable` 并自动调用 `onNext()`发射数据，可以接受一个或者多个参数， `just()` 中传递的参数将在 `Observer` 的 `onNext()` 方法中接收到。
@@ -222,9 +226,7 @@ I/RxJava: onComplete
 
 这个操作符做网络缓存的时候很有用。举个例子：依次检查 Disk 与 Network，如果 Disk 存在缓存，则不做网络请求，否则进行网络请求。
 
-### concatMap()
-
-## map 和 flatmap （变换）
+## map、flatmap 和 concatMap （变换）
 
 这一组操作符提供数据的变换工作，就是把数据对象变换成其他类型的数据对象，它们都接受一个 `Function` 类型的参数。但是它们的用法上还是有区别的。
 
@@ -294,6 +296,77 @@ I/RxJava: onComplete
                         mImageView.setImageBitmap(bitmap);
                     }
                 });
+```
+
+### concatMap
+
+concatMap 和 flatmap 的功能是一样的，都提供了转换功能，只不过在转换后进行合并时 flatmap 用的是 merge，而 concatMap 用的是 concat，因此，concatMap 是有序的，可以保证最终的输出顺序和原序列保持一致。而 flatmap 则不一定，有可能出现交错。
+下面通过例子来看一下：
+先来看一下 flatmap 的输出顺序，为了模拟真实场景，我们在发送第二个数据是延迟了 100ms：
+
+```
+        Observable.fromArray(1,2,3,4,5)
+                .flatMap(new Function<Integer, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(Integer integer) throws Exception {
+                        int delay = 0;
+                        if (integer == 2) {
+                            delay = 100;
+                        }
+                        return Observable.just(integer.toString()+" string")
+                                .delay(delay, TimeUnit.MILLISECONDS);
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.e(TAG,s);
+                    }
+                });
+
+```
+
+输出如下，可以看到第二个数据由于有延迟，在最后发送：
+
+```
+09:55:51.114 E/RxJava: 1 string
+09:55:51.117 E/RxJava: 3 string
+09:55:51.117 E/RxJava: 4 string
+09:55:51.117 E/RxJava: 5 string
+09:55:51.213 E/RxJava: 2 string
+```
+
+下面来换做下测试：
+
+```
+        Observable.fromArray(1,2,3,4,5)
+                .concatMap(new Function<Integer, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(Integer integer) throws Exception {
+                        int delay = 0;
+                        if (integer == 2) {
+                            delay = 100;
+                        }
+                        return Observable.just(integer.toString()+" string")
+                                .delay(delay, TimeUnit.MILLISECONDS);
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.e(TAG,s);
+                    }
+                });
+```
+
+输出，保持了输入序列输出数据：
+
+```
+04-17 09:59:07.844 E/RxJava: 1 string
+04-17 09:59:07.944 E/RxJava: 2 string
+04-17 09:59:07.946 E/RxJava: 3 string
+04-17 09:59:07.947 E/RxJava: 4 string
+04-17 09:59:07.947 E/RxJava: 5 string
 ```
 
 ## filter 和 distinct （过滤）
@@ -528,7 +601,8 @@ E/Test: onNext 22
         });
 ```
 
-应用场景，可以用在数据结果的输出是多个不确定场景时，比如：我们需要获取一个图片，它的获取场景有三个：1.参数直接给，2.本地缓存，3.网络获取。这种情况就可以按照这个顺序依次获取，知道某个场景获取到图片。
+应用场景，可以用在数据结果的输出是多个不确定场景时，比如：我们需要获取一个图片，它的获取场景有三个：1.参数直接给，2.本地缓存，3.网络获取。这种情况就可以按照这个顺序依次获取，直到某个场景获取到图片。
+是不是和 first() 操作符有点类似呢？
 
 ## take、 takeLast、takeUntil 和 takeWhile
 

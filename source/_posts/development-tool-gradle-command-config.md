@@ -252,6 +252,22 @@ android {
       //禁止掉某些lint检查
       disable 'NewApi'
     }
+    // 生成多 apk 配置
+    splits {
+        //基于density生成多apk
+        density {
+            enable true
+            exclude "ldpi", "tvdpi", "xxxhdpi", "xhdpi"
+            compatibleScreens 'small', 'normal', 'large', 'xlarge'
+        }
+        // 基于abi生成多apk
+        abi {
+            enable true
+            reset()
+            include "armeabi-v7a"
+            universalApk false
+        }
+    }
 }
 ```
 `android{}`设置编译android项目的参数，构建android项目的所有配置都写在这里。
