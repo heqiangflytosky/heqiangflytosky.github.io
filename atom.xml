@@ -2264,6 +2264,82 @@ http://blog.csdn.net/edu_enth/article/details/56007422
   </entry>
   
   <entry>
+    <title>Android 性能优化实战篇 -- APK 瘦身</title>
+    <link href="http://yoursite.com/2017/07/28/android-performance-optimization-reduce-apk-size/"/>
+    <id>http://yoursite.com/2017/07/28/android-performance-optimization-reduce-apk-size/</id>
+    <published>2017-07-28T02:00:00.000Z</published>
+    <updated>2019-04-10T11:19:32.635Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>随着业务的发展和需求的增加，APK包的体积会越来越大，这样会导致固件体积的增大，也会影响应用运行效率，过大的 APK 包也影响了下载安装体验。因此，APK 瘦身也成为我们对应用性能优化的一项重要工作。<br><a href="https://developer.android.com/topic/performance/reduce-apk-size" target="_blank" rel="external">Android 官方瘦身文档</a><br>Android Studio 2.2 版本以后提供了一个帮助我们分析 APK 包的工具 – APK Analyzer，具体用法可以参考这篇文章 <a href="http://www.heqiangfly.com/2017/07/26/android-performance-optimization-apk-analyzer/" target="_blank" rel="external">Android 性能优化工具篇 – APK Analyzer</a>。</p>
+<h2 id="APK-包结构"><a href="#APK-包结构" class="headerlink" title="APK 包结构"></a>APK 包结构</h2><p>在探讨如何精简 APK 之前，先来了解一下 APK 的结构，这样会使我们的工作有方向性。<br>APK 文件由 Zip 压缩文件组成。这些文件包括 Java 类文件、资源文件和包含已编译资源的文件。 </p>
+<ul>
+<li>META-INF/：包含 CERT.SF 和 CERT.RSA 签名文件，以及 MANIFEST.MF 清单文件。</li>
+<li>assets/：包含应用的资源；应用可以使用 AssetManager 对象检索这些资源。</li>
+<li>res/：包含未编译到 resources.arsc 中的资源。</li>
+<li>lib/：包含特定于处理器软件层的编译代码。此目录包含每种平台类型的子目录，如 armeabi、armeabi-v7a、arm64-v8a、x86、x86_64 和 mips。</li>
+<li>resources.arsc：包含已编译的资源。此文件包含 res/values/ 文件夹的所有配置中的 XML 内容。打包工具会提取此 XML 内容，将其编译为二进制文件形式，并将相应内容进行归档。此内容包括语言字符串和样式，以及未直接包含在 resources.arsc 文件中的内容（例如布局文件和图片）的路径。</li>
+<li>classes.dex：包含以 Dalvik/ART 虚拟机可理解的 DEX 文件格式编译的类。</li>
+<li>AndroidManifest.xml：包含核心 Android 清单文件。此文件列出了应用的名称、版本、访问权限和引用的库文件。该文件使用 Android 的二进制 XML 格式。</li>
+</ul>
+<h2 id="导致-APK-体积增大的问题"><a href="#导致-APK-体积增大的问题" class="headerlink" title="导致 APK 体积增大的问题"></a>导致 APK 体积增大的问题</h2><ul>
+<li>应用自身资源问题<ul>
+<li>资源冗余问题：包括一些无用图片资源、string资源和so文件等。</li>
+<li>不合理的使用资源：可以使用代码使用的效果尽量不要用图片，比如一些纯色、渐变图片和背景图片等。</li>
+<li>引入第三方 aar 时带入的一些冗余资源：可能会引入业务完全没有使用的一些资源，比如asset, so, res等。</li>
+</ul>
+</li>
+<li>应用自身代码问题<ul>
+<li>代码冗余问题：包括一些无用的 java 类、方法和变量。</li>
+<li>代码质量不高，重用性不高，有很多相同逻辑代码。</li>
+<li>代码问题，一些编程习惯导致编译后的dex文件增大。</li>
+<li>proguard文件keep了过多的类，影响压缩效果</li>
+</ul>
+</li>
+<li>打包集成问题<ul>
+<li>可以去掉一些没用的语言资源、不同分辨率图片资源</li>
+<li>可以去掉一些cpu架构的so</li>
+<li>引入的多个sdk包中有相同的资源</li>
+</ul>
+</li>
+</ul>
+<h2 id="瘦身方案"><a href="#瘦身方案" class="headerlink" title="瘦身方案"></a>瘦身方案</h2><h3 id="应用自身冗余资源问题优化"><a href="#应用自身冗余资源问题优化" class="headerlink" title="应用自身冗余资源问题优化"></a>应用自身冗余资源问题优化</h3><h4 id="去除无用的资源"><a href="#去除无用的资源" class="headerlink" title="去除无用的资源"></a>去除无用的资源</h4><p>可以使用  Android Studio 中提供的静态代码分析器 lint 工具来检测 res/ 文件夹中未被代码引用的资源。当 lint 工具发现项目中有可能未使用的资源时，会显示一条消息，如下例所示。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">res/layout/preferences.xml: Warning: The resource R.layout.preferences appears</div><div class="line">    to be unused [UnusedResources]</div></pre></td></tr></table></figure>
+<p><strong>注意</strong>：lint 工具不会扫描 assets/ 文件夹、通过反射引用的资源或已链接到应用的库文件。此外，它也不会移除资源，只会提醒您它们的存在。<br>lint 具体的使用会有一篇文章来专门介绍。</p>
+<p>我们还可以在 build.gradle 中启用 shrinkResources 来自动移除添加到代码的库中包含未使用的资源。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    // Other settings</div><div class="line"></div><div class="line">    buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            minifyEnabled true</div><div class="line">            shrinkResources true</div><div class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其实这里并不是彻底删除，而是保留文件名，但是没有内容。比如图片可能就一个占位图片（67B）。layout是一个空的xml文件（47B）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;x /&gt;</div></pre></td></tr></table></figure>
+<p>要启用 shrinkResources，您必须启用代码压缩功能，即设置 minifyEnabled true。<br><strong>注意</strong>：string.xml中没有被引用的字符串资源不会被删除。</p>
+<h4 id="使用可绘制对象"><a href="#使用可绘制对象" class="headerlink" title="使用可绘制对象"></a>使用可绘制对象</h4><p>某些图片不需要静态图片资源，可以在运行时通过代码动态绘制图片。Drawable 对象（XML 中为 <code>&lt;shape&gt;</code>）会占用 APK 中的少量空间。此外，XML Drawable 对象会生成符合 Material Design 准则的单色图片。<br>一些简单的动画效果也可以通过代码绘制对象来实现。</p>
+<h4 id="重复使用资源"><a href="#重复使用资源" class="headerlink" title="重复使用资源"></a>重复使用资源</h4><p>通过代码重用一些资源，比如通过旋转等特效来使用已有图片生成所需要的图片。</p>
+<h4 id="压缩图片"><a href="#压缩图片" class="headerlink" title="压缩图片"></a>压缩图片</h4><p>使用一些压缩技术来压缩图片</p>
+<h4 id="使用-WebP-文件格式"><a href="#使用-WebP-文件格式" class="headerlink" title="使用 WebP 文件格式"></a>使用 WebP 文件格式</h4><h4 id="使用矢量图形"><a href="#使用矢量图形" class="headerlink" title="使用矢量图形"></a>使用矢量图形</h4><h4 id="将矢量图形用于动画图片"><a href="#将矢量图形用于动画图片" class="headerlink" title="将矢量图形用于动画图片"></a>将矢量图形用于动画图片</h4><h3 id="应用自身编码问题优化"><a href="#应用自身编码问题优化" class="headerlink" title="应用自身编码问题优化"></a>应用自身编码问题优化</h3><h4 id="压缩代码"><a href="#压缩代码" class="headerlink" title="压缩代码"></a>压缩代码</h4><p>要通过 ProGuard 启用代码压缩，可以在 build.gradle 文件内相应的构建类型中配置 minifyEnabled true。</p>
+<h4 id="移除无用的代码"><a href="#移除无用的代码" class="headerlink" title="移除无用的代码"></a>移除无用的代码</h4><h4 id="资源引用优化"><a href="#资源引用优化" class="headerlink" title="资源引用优化"></a>资源引用优化</h4><p>复用系统自带的资源。Android系统本身内置了很多的资源，例如字符串/颜色/图片/动画/样式以及简单布局等等，这些资源都可以在应用程序中直接引用。这样做不仅仅可以减少应用程序的自身负重，减小APK的大小，另外还可以一定程度上减少内存的开销，复用性更好。但是也有必要留意Android系统的版本差异性，对那些不同系统版本上表现存在很大差异，不符合需求的情况，还是需要应用程序自身内置进去。</p>
+<h4 id="避免使用枚举"><a href="#避免使用枚举" class="headerlink" title="避免使用枚举"></a>避免使用枚举</h4><p>以前博客也有介绍，单个枚举会使应用的 classes.dex 文件增加大约 1.0 到 1.4 KB 的大小。这些增加的大小会快速累积，产生复杂的系统或共享库。如果可能，请考虑使用 @IntDef 注释和 ProGuard 移除枚举并将它们转换为整数。此类型转换可保留枚举的各种安全优势。</p>
+<h3 id="打包集成问题优化"><a href="#打包集成问题优化" class="headerlink" title="打包集成问题优化"></a>打包集成问题优化</h3><h4 id="语言资源优化"><a href="#语言资源优化" class="headerlink" title="语言资源优化"></a>语言资源优化</h4><p>我们可以再 build.gradle 文件中选择性配置我们要打包的语言资源，对于一些不常用的语言可以选择性的不打包，这样可以节省一些体积。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    defaultConfig &#123;</div><div class="line">        resConfigs &quot;zh-rCN&quot;,&quot;zh-rHK&quot;,&quot;zh-rTW&quot;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>加入这样的配置就只把默认 default、zh-rCN、zh-rHK 和 zh-rTW 四种语言资源打包进 APK。</p>
+<h4 id="图片资源优化"><a href="#图片资源优化" class="headerlink" title="图片资源优化"></a>图片资源优化</h4><p>同样也可以在 build.gradle 文件中选择性配置我们要打包的图片资源。</p>
+<p>在老版本的 gradle 中可以使用下面的方式选择性的打包图片：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">resConfigs &quot;xxhdpi&quot;, &quot;xxxhdpi&quot;</div></pre></td></tr></table></figure>
+<p>但是在新版本中该方式已经被废弃，替代方案是在 gradle 中使用 splits 根据不同的 ABI 以及不同的屏幕密度分别打包。<br><a href="https://developer.android.com/studio/build/configure-apk-splits.html" target="_blank" rel="external">Android 官方文档</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">  ...</div><div class="line">  splits &#123;</div><div class="line"></div><div class="line">    // Configures multiple APKs based on screen density.</div><div class="line">    density &#123;</div><div class="line"></div><div class="line">      // Configures multiple APKs based on screen density.</div><div class="line">      enable true</div><div class="line"></div><div class="line">      // Specifies a list of screen densities Gradle should not create multiple APKs for.</div><div class="line">      exclude &quot;ldpi&quot;, &quot;xxhdpi&quot;, &quot;xxxhdpi&quot;</div><div class="line"></div><div class="line">      // Specifies a list of compatible screen size settings for the manifest.</div><div class="line">      compatibleScreens &apos;small&apos;, &apos;normal&apos;, &apos;large&apos;, &apos;xlarge&apos;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="瘦身方法成本收益对比"><a href="#瘦身方法成本收益对比" class="headerlink" title="瘦身方法成本收益对比"></a>瘦身方法成本收益对比</h2>]]></content>
+    
+    <summary type="html">
+    
+      介绍 APK 瘦身的一些方法
+    
+    </summary>
+    
+      <category term="Android性能优化" scheme="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+    
+      <category term="APK 瘦身" scheme="http://yoursite.com/tags/APK-%E7%98%A6%E8%BA%AB/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android 性能优化工具篇 -- APK Analyzer</title>
     <link href="http://yoursite.com/2017/07/26/android-performance-optimization-apk-analyzer/"/>
     <id>http://yoursite.com/2017/07/26/android-performance-optimization-apk-analyzer/</id>
