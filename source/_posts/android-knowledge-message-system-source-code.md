@@ -16,6 +16,7 @@ date: 2016-10-10 10:00:00
  - MessageQueue：消息队列，主要用来存放消息 `MessageQueue.enqueueMessage` 和发出消息 `MessageQueue.next()` 。`MessageQueue` 是一个单向链表，`Message` 对象有个 `next` 变量保存列表中的下一个，`MessageQueue` 中的 `mMessages` 保存链表的第一个元素。
  - Looper：不断循环执行 `Looper.loop`，按分发机制将消息分发给目标处理者。
 
+Handler 是我们在 Android 线程间通信的主要手段。
 看一下它们之间的关系图：
 
 ![效果图](http://www.plantuml.com/plantuml/svg/VP2zIWD1483xUOeXLKJo1XQnKr1GIISMUtV3ShW_nyvk8OS1kxo3leFOf53mRNA-XcFSFQEYrGpVV3i_E-UeGapMmAADXd1ow9hWsmQ7zMguUnmUdZUhzTlJo-R-TG9G6yMCHyerXWBsiCGJxpj9xMSKS4hCIjDveaHejm7sqLTHjIxNfdj2EiznUf6SKvMC3H-8oJL5oH4jwtzBjsMfGdkn9PS7cW86wipDmiDoN5hErHG5ZBDhPKobwkiVlSeDFSpmM9xc1fTNQCzaczRf7SfVbwFD2SFOiNnJ_yS7YGTPEPZDogwmgtuhvBXbMVebvvc5ZsvnO2vN96lU0G00)

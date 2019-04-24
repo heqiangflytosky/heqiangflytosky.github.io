@@ -291,6 +291,15 @@ I/RxJava: accept : 1
 
 可以看到，`subscribeOn` 是可以重新指定 `doOnSubscribe` 的执行线程的。
 
+## 关于内存泄漏
+
+RxJava的使用不当极有可能会导致内存泄漏。比如，使用RxJava发布一个订阅后，当Activity被finish，此时订阅逻辑还未完成，如果没有及时取消订阅，就会导致Activity无法被回收，从而引发内存泄漏。
+解决办法：
+
+ - 手动为 RxJava 的每一次订阅进行控制，在指定的时机进行取消订阅。
+ - 使用开源框架 RxLifecycle。
+
+
 ## 推荐阅读
 
 http://gank.io/post/560e15be2dca930e00da1083
