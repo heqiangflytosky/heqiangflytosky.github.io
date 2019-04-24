@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-02-28T03:39:09.771Z</updated>
+  <updated>2019-04-23T11:07:24.081Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,10 +17,10 @@
   
   <entry>
     <title>读书 2019</title>
-    <link href="http://yoursite.com/2019/02/28/personal-reading-2019/"/>
-    <id>http://yoursite.com/2019/02/28/personal-reading-2019/</id>
-    <published>2019-02-28T02:00:00.000Z</published>
-    <updated>2019-02-28T03:39:09.771Z</updated>
+    <link href="http://yoursite.com/2019/04/13/personal-reading-2019/"/>
+    <id>http://yoursite.com/2019/04/13/personal-reading-2019/</id>
+    <published>2019-04-13T02:00:00.000Z</published>
+    <updated>2019-04-23T11:07:24.081Z</updated>
     
     <content type="html"><![CDATA[<h3 id="《乖，摸摸头》"><a href="#《乖，摸摸头》" class="headerlink" title="《乖，摸摸头》"></a>《乖，摸摸头》</h3><p>2019.1</p>
 <h3 id="《一本书读懂24中互联网思维》"><a href="#《一本书读懂24中互联网思维》" class="headerlink" title="《一本书读懂24中互联网思维》"></a>《一本书读懂24中互联网思维》</h3><p>2019.1</p>
@@ -50,7 +50,7 @@
 <li>23.大数据思维</li>
 <li>24.物联网思维</li>
 </ul>
-<h3 id="《独角兽之路》"><a href="#《独角兽之路》" class="headerlink" title="《独角兽之路》"></a>《独角兽之路》</h3><h3 id="《厚黑学》"><a href="#《厚黑学》" class="headerlink" title="《厚黑学》"></a>《厚黑学》</h3>]]></content>
+<h3 id="《独角兽之路》"><a href="#《独角兽之路》" class="headerlink" title="《独角兽之路》"></a>《独角兽之路》</h3><h3 id="《厚黑学》"><a href="#《厚黑学》" class="headerlink" title="《厚黑学》"></a>《厚黑学》</h3><h3 id="《半小时漫画世界史》"><a href="#《半小时漫画世界史》" class="headerlink" title="《半小时漫画世界史》"></a>《半小时漫画世界史》</h3>]]></content>
     
     <summary type="html">
     
@@ -1731,7 +1731,7 @@ http://www.jianshu.com/p/308f3c54abdd
     <link href="http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/"/>
     <id>http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/</id>
     <published>2017-10-10T02:00:00.000Z</published>
-    <updated>2018-06-02T09:24:04.975Z</updated>
+    <updated>2019-04-23T11:10:13.880Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>RxJava 很早就开始接触和使用了，但只是仅仅会一些简单的使用而已，于是打算通过一系列的博客来加深对RxJava的理解。<br><a href="https://github.com/ReactiveX/RxJava/" target="_blank" rel="external">RxJava Github地址</a><br>写这篇文章的时候，RxJava最新版本已经是 <code>2.1.5</code> 了，那么我们就以最新版本为基础来介绍 RxJava 的使用。<br>使用之前要加入一下依赖：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile &apos;io.reactivex.rxjava2:rxjava:2.1.5&apos;</div><div class="line">    compile &apos;io.reactivex.rxjava2:rxandroid:2.0.1&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -1839,6 +1839,11 @@ http://www.jianshu.com/p/308f3c54abdd
 <p>结果：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">I/RxJava: doOnSubscribe current thread : main</div><div class="line">I/RxJava: subscribe current thread : RxCachedThreadScheduler-1</div><div class="line">I/RxJava: accept current thread : RxCachedThreadScheduler-1</div><div class="line">I/RxJava: accept : 1</div></pre></td></tr></table></figure>
 <p>可以看到，<code>subscribeOn</code> 是可以重新指定 <code>doOnSubscribe</code> 的执行线程的。</p>
+<h2 id="关于内存泄漏"><a href="#关于内存泄漏" class="headerlink" title="关于内存泄漏"></a>关于内存泄漏</h2><p>RxJava的使用不当极有可能会导致内存泄漏。比如，使用RxJava发布一个订阅后，当Activity被finish，此时订阅逻辑还未完成，如果没有及时取消订阅，就会导致Activity无法被回收，从而引发内存泄漏。<br>解决办法：</p>
+<ul>
+<li>手动为 RxJava 的每一次订阅进行控制，在指定的时机进行取消订阅。</li>
+<li>使用开源框架 RxLifecycle。</li>
+</ul>
 <h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><p><a href="http://gank.io/post/560e15be2dca930e00da1083" target="_blank" rel="external">http://gank.io/post/560e15be2dca930e00da1083</a></p>
 ]]></content>
     
@@ -2268,7 +2273,7 @@ http://blog.csdn.net/edu_enth/article/details/56007422
     <link href="http://yoursite.com/2017/07/28/android-performance-optimization-reduce-apk-size/"/>
     <id>http://yoursite.com/2017/07/28/android-performance-optimization-reduce-apk-size/</id>
     <published>2017-07-28T02:00:00.000Z</published>
-    <updated>2019-04-10T11:19:32.635Z</updated>
+    <updated>2019-04-23T11:07:24.080Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>随着业务的发展和需求的增加，APK包的体积会越来越大，这样会导致固件体积的增大，也会影响应用运行效率，过大的 APK 包也影响了下载安装体验。因此，APK 瘦身也成为我们对应用性能优化的一项重要工作。<br><a href="https://developer.android.com/topic/performance/reduce-apk-size" target="_blank" rel="external">Android 官方瘦身文档</a><br>Android Studio 2.2 版本以后提供了一个帮助我们分析 APK 包的工具 – APK Analyzer，具体用法可以参考这篇文章 <a href="http://www.heqiangfly.com/2017/07/26/android-performance-optimization-apk-analyzer/" target="_blank" rel="external">Android 性能优化工具篇 – APK Analyzer</a>。</p>
 <h2 id="APK-包结构"><a href="#APK-包结构" class="headerlink" title="APK 包结构"></a>APK 包结构</h2><p>在探讨如何精简 APK 之前，先来了解一下 APK 的结构，这样会使我们的工作有方向性。<br>APK 文件由 Zip 压缩文件组成。这些文件包括 Java 类文件、资源文件和包含已编译资源的文件。 </p>
@@ -2304,7 +2309,7 @@ http://blog.csdn.net/edu_enth/article/details/56007422
 </ul>
 <h2 id="瘦身方案"><a href="#瘦身方案" class="headerlink" title="瘦身方案"></a>瘦身方案</h2><h3 id="应用自身冗余资源问题优化"><a href="#应用自身冗余资源问题优化" class="headerlink" title="应用自身冗余资源问题优化"></a>应用自身冗余资源问题优化</h3><h4 id="去除无用的资源"><a href="#去除无用的资源" class="headerlink" title="去除无用的资源"></a>去除无用的资源</h4><p>可以使用  Android Studio 中提供的静态代码分析器 lint 工具来检测 res/ 文件夹中未被代码引用的资源。当 lint 工具发现项目中有可能未使用的资源时，会显示一条消息，如下例所示。 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">res/layout/preferences.xml: Warning: The resource R.layout.preferences appears</div><div class="line">    to be unused [UnusedResources]</div></pre></td></tr></table></figure>
-<p><strong>注意</strong>：lint 工具不会扫描 assets/ 文件夹、通过反射引用的资源或已链接到应用的库文件。此外，它也不会移除资源，只会提醒您它们的存在。<br>lint 具体的使用会有一篇文章来专门介绍。</p>
+<p><strong>注意</strong>：lint 工具不会扫描 assets/ 文件夹、通过反射引用的资源或已链接到应用的库文件。此外，它也不会移除资源，只会提醒您它们的存在。<br>可以两种方式来运行，可以通过 Android Studio菜单栏的 Analyze -&gt; Inspect Code 来运行；还可以通过 lint 命令行来运行。<br>lint 具体的使用会有一篇文章来专门介绍。</p>
 <p>我们还可以在 build.gradle 中启用 shrinkResources 来自动移除添加到代码的库中包含未使用的资源。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    // Other settings</div><div class="line"></div><div class="line">    buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            minifyEnabled true</div><div class="line">            shrinkResources true</div><div class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>其实这里并不是彻底删除，而是保留文件名，但是没有内容。比如图片可能就一个占位图片（67B）。layout是一个空的xml文件（47B）：</p>
@@ -2313,7 +2318,8 @@ http://blog.csdn.net/edu_enth/article/details/56007422
 <h4 id="使用可绘制对象"><a href="#使用可绘制对象" class="headerlink" title="使用可绘制对象"></a>使用可绘制对象</h4><p>某些图片不需要静态图片资源，可以在运行时通过代码动态绘制图片。Drawable 对象（XML 中为 <code>&lt;shape&gt;</code>）会占用 APK 中的少量空间。此外，XML Drawable 对象会生成符合 Material Design 准则的单色图片。<br>一些简单的动画效果也可以通过代码绘制对象来实现。</p>
 <h4 id="重复使用资源"><a href="#重复使用资源" class="headerlink" title="重复使用资源"></a>重复使用资源</h4><p>通过代码重用一些资源，比如通过旋转等特效来使用已有图片生成所需要的图片。</p>
 <h4 id="压缩图片"><a href="#压缩图片" class="headerlink" title="压缩图片"></a>压缩图片</h4><p>使用一些压缩技术来压缩图片</p>
-<h4 id="使用-WebP-文件格式"><a href="#使用-WebP-文件格式" class="headerlink" title="使用 WebP 文件格式"></a>使用 WebP 文件格式</h4><h4 id="使用矢量图形"><a href="#使用矢量图形" class="headerlink" title="使用矢量图形"></a>使用矢量图形</h4><h4 id="将矢量图形用于动画图片"><a href="#将矢量图形用于动画图片" class="headerlink" title="将矢量图形用于动画图片"></a>将矢量图形用于动画图片</h4><h3 id="应用自身编码问题优化"><a href="#应用自身编码问题优化" class="headerlink" title="应用自身编码问题优化"></a>应用自身编码问题优化</h3><h4 id="压缩代码"><a href="#压缩代码" class="headerlink" title="压缩代码"></a>压缩代码</h4><p>要通过 ProGuard 启用代码压缩，可以在 build.gradle 文件内相应的构建类型中配置 minifyEnabled true。</p>
+<h4 id="使用-WebP-文件格式"><a href="#使用-WebP-文件格式" class="headerlink" title="使用 WebP 文件格式"></a>使用 WebP 文件格式</h4><h4 id="使用矢量图形"><a href="#使用矢量图形" class="headerlink" title="使用矢量图形"></a>使用矢量图形</h4><h4 id="将矢量图形用于动画图片"><a href="#将矢量图形用于动画图片" class="headerlink" title="将矢量图形用于动画图片"></a>将矢量图形用于动画图片</h4><h4 id="资源混淆压缩"><a href="#资源混淆压缩" class="headerlink" title="资源混淆压缩"></a>资源混淆压缩</h4><p>可以使用微信的开源工具 AndResGuard 进行资源文件混淆以及7z压缩。<br><a href="https://github.com/shwenzhang/AndResGuard" target="_blank" rel="external">AndResGuard Giyhub 地址</a></p>
+<h3 id="应用自身编码问题优化"><a href="#应用自身编码问题优化" class="headerlink" title="应用自身编码问题优化"></a>应用自身编码问题优化</h3><h4 id="压缩代码"><a href="#压缩代码" class="headerlink" title="压缩代码"></a>压缩代码</h4><p>要通过 ProGuard 启用代码压缩，可以在 build.gradle 文件内相应的构建类型中配置 minifyEnabled true。</p>
 <h4 id="移除无用的代码"><a href="#移除无用的代码" class="headerlink" title="移除无用的代码"></a>移除无用的代码</h4><h4 id="资源引用优化"><a href="#资源引用优化" class="headerlink" title="资源引用优化"></a>资源引用优化</h4><p>复用系统自带的资源。Android系统本身内置了很多的资源，例如字符串/颜色/图片/动画/样式以及简单布局等等，这些资源都可以在应用程序中直接引用。这样做不仅仅可以减少应用程序的自身负重，减小APK的大小，另外还可以一定程度上减少内存的开销，复用性更好。但是也有必要留意Android系统的版本差异性，对那些不同系统版本上表现存在很大差异，不符合需求的情况，还是需要应用程序自身内置进去。</p>
 <h4 id="避免使用枚举"><a href="#避免使用枚举" class="headerlink" title="避免使用枚举"></a>避免使用枚举</h4><p>以前博客也有介绍，单个枚举会使应用的 classes.dex 文件增加大约 1.0 到 1.4 KB 的大小。这些增加的大小会快速累积，产生复杂的系统或共享库。如果可能，请考虑使用 @IntDef 注释和 ProGuard 移除枚举并将它们转换为整数。此类型转换可保留枚举的各种安全优势。</p>
 <h3 id="打包集成问题优化"><a href="#打包集成问题优化" class="headerlink" title="打包集成问题优化"></a>打包集成问题优化</h3><h4 id="语言资源优化"><a href="#语言资源优化" class="headerlink" title="语言资源优化"></a>语言资源优化</h4><p>我们可以再 build.gradle 文件中选择性配置我们要打包的语言资源，对于一些不常用的语言可以选择性的不打包，这样可以节省一些体积。</p>
@@ -2324,6 +2330,7 @@ http://blog.csdn.net/edu_enth/article/details/56007422
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">resConfigs &quot;xxhdpi&quot;, &quot;xxxhdpi&quot;</div></pre></td></tr></table></figure>
 <p>但是在新版本中该方式已经被废弃，替代方案是在 gradle 中使用 splits 根据不同的 ABI 以及不同的屏幕密度分别打包。<br><a href="https://developer.android.com/studio/build/configure-apk-splits.html" target="_blank" rel="external">Android 官方文档</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">  ...</div><div class="line">  splits &#123;</div><div class="line"></div><div class="line">    // Configures multiple APKs based on screen density.</div><div class="line">    density &#123;</div><div class="line"></div><div class="line">      // Configures multiple APKs based on screen density.</div><div class="line">      enable true</div><div class="line"></div><div class="line">      // Specifies a list of screen densities Gradle should not create multiple APKs for.</div><div class="line">      exclude &quot;ldpi&quot;, &quot;xxhdpi&quot;, &quot;xxxhdpi&quot;</div><div class="line"></div><div class="line">      // Specifies a list of compatible screen size settings for the manifest.</div><div class="line">      compatibleScreens &apos;small&apos;, &apos;normal&apos;, &apos;large&apos;, &apos;xlarge&apos;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="插件化"><a href="#插件化" class="headerlink" title="插件化"></a>插件化</h3><p>插件化除了可以解决方法数超标的问题，同时如果插件放到服务器，在需要时再下载下来，可以减少安装包大小。但是需要注意的是，因为使用时需要临时下载，所以建议在用户使用率不高的功能模块上使用，或者使用预加载。</p>
 <h2 id="瘦身方法成本收益对比"><a href="#瘦身方法成本收益对比" class="headerlink" title="瘦身方法成本收益对比"></a>瘦身方法成本收益对比</h2>]]></content>
     
     <summary type="html">
@@ -5217,7 +5224,7 @@ http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
     <link href="http://yoursite.com/2016/10/10/android-knowledge-message-system-source-code/"/>
     <id>http://yoursite.com/2016/10/10/android-knowledge-message-system-source-code/</id>
     <published>2016-10-10T02:00:00.000Z</published>
-    <updated>2018-10-17T01:38:32.163Z</updated>
+    <updated>2019-04-24T02:48:50.583Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍的消息机制主要指消息在进程内的传递机制，Android 内的消息传递无处不在，主要涉及到下面的四个类：</p>
 <ul>
@@ -5226,7 +5233,7 @@ http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/
 <li>MessageQueue：消息队列，主要用来存放消息 <code>MessageQueue.enqueueMessage</code> 和发出消息 <code>MessageQueue.next()</code> 。<code>MessageQueue</code> 是一个单向链表，<code>Message</code> 对象有个 <code>next</code> 变量保存列表中的下一个，<code>MessageQueue</code> 中的 <code>mMessages</code> 保存链表的第一个元素。</li>
 <li>Looper：不断循环执行 <code>Looper.loop</code>，按分发机制将消息分发给目标处理者。</li>
 </ul>
-<p>看一下它们之间的关系图：</p>
+<p>Handler 是我们在 Android 线程间通信的主要手段。<br>看一下它们之间的关系图：</p>
 <p><img src="http://www.plantuml.com/plantuml/svg/VP2zIWD1483xUOeXLKJo1XQnKr1GIISMUtV3ShW_nyvk8OS1kxo3leFOf53mRNA-XcFSFQEYrGpVV3i_E-UeGapMmAADXd1ow9hWsmQ7zMguUnmUdZUhzTlJo-R-TG9G6yMCHyerXWBsiCGJxpj9xMSKS4hCIjDveaHejm7sqLTHjIxNfdj2EiznUf6SKvMC3H-8oJL5oH4jwtzBjsMfGdkn9PS7cW86wipDmiDoN5hErHG5ZBDhPKobwkiVlSeDFSpmM9xc1fTNQCzaczRf7SfVbwFD2SFOiNnJ_yS7YGTPEPZDogwmgtuhvBXbMVebvvc5ZsvnO2vN96lU0G00" alt="效果图"></p>
 <!-- 
 @startuml

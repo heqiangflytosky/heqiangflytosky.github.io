@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 Android 消息机制">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/VP2zIWD1483xUOeXLKJo1XQnKr1GIISMUtV3ShW_nyvk8OS1kxo3leFOf53mRNA-XcFSFQEYrGpVV3i_E-UeGapMmAADXd1ow9hWsmQ7zMguUnmUdZUhzTlJo-R-TG9G6yMCHyerXWBsiCGJxpj9xMSKS4hCIjDveaHejm7sqLTHjIxNfdj2EiznUf6SKvMC3H-8oJL5oH4jwtzBjsMfGdkn9PS7cW86wipDmiDoN5hErHG5ZBDhPKobwkiVlSeDFSpmM9xc1fTNQCzaczRf7SfVbwFD2SFOiNnJ_yS7YGTPEPZDogwmgtuhvBXbMVebvvc5ZsvnO2vN96lU0G00">
-<meta property="og:updated_time" content="2018-10-17T01:38:32.163Z">
+<meta property="og:updated_time" content="2019-04-24T02:48:50.583Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 消息机制 -- 源码分析">
 <meta name="twitter:description" content="本文介绍 Android 消息机制">
@@ -409,7 +409,7 @@
 <li>MessageQueue：消息队列，主要用来存放消息 <code>MessageQueue.enqueueMessage</code> 和发出消息 <code>MessageQueue.next()</code> 。<code>MessageQueue</code> 是一个单向链表，<code>Message</code> 对象有个 <code>next</code> 变量保存列表中的下一个，<code>MessageQueue</code> 中的 <code>mMessages</code> 保存链表的第一个元素。</li>
 <li>Looper：不断循环执行 <code>Looper.loop</code>，按分发机制将消息分发给目标处理者。</li>
 </ul>
-<p>看一下它们之间的关系图：</p>
+<p>Handler 是我们在 Android 线程间通信的主要手段。<br>看一下它们之间的关系图：</p>
 <p><img src="http://www.plantuml.com/plantuml/svg/VP2zIWD1483xUOeXLKJo1XQnKr1GIISMUtV3ShW_nyvk8OS1kxo3leFOf53mRNA-XcFSFQEYrGpVV3i_E-UeGapMmAADXd1ow9hWsmQ7zMguUnmUdZUhzTlJo-R-TG9G6yMCHyerXWBsiCGJxpj9xMSKS4hCIjDveaHejm7sqLTHjIxNfdj2EiznUf6SKvMC3H-8oJL5oH4jwtzBjsMfGdkn9PS7cW86wipDmiDoN5hErHG5ZBDhPKobwkiVlSeDFSpmM9xc1fTNQCzaczRf7SfVbwFD2SFOiNnJ_yS7YGTPEPZDogwmgtuhvBXbMVebvvc5ZsvnO2vN96lU0G00" alt="效果图"></p>
 <!-- 
 @startuml
