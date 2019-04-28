@@ -471,6 +471,7 @@ mRemote.transact(Stub.TRANSACTION_addStudent, _data, _reply, 0);
         throws RemoteException;
 ```
 `flags` 为0时是普通的RPC调用，为 `FLAG_ONEWAY` 时是 one-way RPC，是单向调用，执行后立即返回，无需等待Server端 `transact()` 返回。这个时候就是异步执行了。
+具体如何实现异步调用请参考我的下一篇博客。
 
 ## 注意事项
 
