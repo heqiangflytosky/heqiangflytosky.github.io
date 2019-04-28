@@ -75,7 +75,7 @@ Activity onTouchEvent ACTION_UP
  - 调用 `setOnTouchListener` 设置监听，并且 `onTouch` 方法返回true。
  - 设置 `setClickable(true)`。
 
-先来看一下事件传递流程：
+先来看一下通过 C 的 `onTouchEvent` 方法处理 DOWN 事件来看整个事件传递流程：
 
 ```
 Activity dispatchTouchEvent ACTION_DOWN
@@ -125,6 +125,229 @@ B dispatchTouchEvent ACTION_UP
 B onTouchEvent ACTION_UP
 ```
 
+再来看一下通过设置 C setOnTouchListener 回调来处理事件：
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouch ACTION_DOWN
+
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+A onInterceptTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+B onInterceptTouchEvent ACTION_MOVE
+C dispatchTouchEvent ACTION_MOVE
+onTouch ACTION_MOVE
+
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+B onInterceptTouchEvent ACTION_UP
+C dispatchTouchEvent ACTION_UP
+onTouch ACTION_UP
+```
+
+可以看到，C 设置了 setOnTouchListener 后，就不会在调用 onTouchEvent 了，在 dispatchTouchEvent 中，会先去判断是否设置 OnTouchListener，如果设置就不会调用 onTouchEvent。 具体原因在下一篇博客中会分析。
+
+下面再来看一下设置 setOnClickListener：
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouchEvent ACTION_DOWN
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+A onInterceptTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+B onInterceptTouchEvent ACTION_MOVE
+C dispatchTouchEvent ACTION_MOVE
+C onTouchEvent ACTION_MOVE
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+B onInterceptTouchEvent ACTION_UP
+C dispatchTouchEvent ACTION_UP
+C onTouchEvent ACTION_UP
+onClick
+```
+
+可以到是在 C 的 onTouchEvent 后面调用了 onClick，其实 onClick 的调用时在 onTouchEvent 中对 ACTION_UP 时调用的，具体在下一篇文章中详细介绍。
+那么如果 onTouchEvent 中处理了 ACTION_DOWN 事件呢？onClick 还会不会调用呢？
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouchEvent ACTION_DOWN
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+B onInterceptTouchEvent ACTION_UP
+C dispatchTouchEvent ACTION_UP
+C onTouchEvent ACTION_UP
+```
+
+不会再调用 onClick 了。
+
+综上所述：onTouchEvent、setOnTouchListener 和 setOnClickListener 处理事件的优先级为：setTouchListener > onTouchEvent > setClickListener 
+
+下面再来看一下 C 只设置 `setClickable(true)` 后的传递流程：
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouchEvent ACTION_DOWN
+
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+A onInterceptTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+B onInterceptTouchEvent ACTION_MOVE
+C dispatchTouchEvent ACTION_MOVE
+C onTouchEvent ACTION_MOVE
+
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+B onInterceptTouchEvent ACTION_UP
+C dispatchTouchEvent ACTION_UP
+C onTouchEvent ACTION_UP
+```
+
+由此可见 `setClickable(true)` 只是说 C 可以消费事件，阻止了事件的继续传递。
+
+上面都是介绍 C 消费事件，下面再来介绍一下通过 B 消费事件：
+
+onTouchEvent
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouchEvent ACTION_DOWN
+B onTouchEvent ACTION_DOWN
+
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+A onInterceptTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+B onTouchEvent ACTION_MOVE
+
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+B onTouchEvent ACTION_UP
+
+```
+
+setOnTouchListener
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouchEvent ACTION_DOWN
+onTouch ACTION_DOWN
+
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+A onInterceptTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+onTouch ACTION_MOVE
+
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+onTouch ACTION_UP
+
+```
+
+setOnClickListener
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouchEvent ACTION_DOWN
+B onTouchEvent ACTION_DOWN
+
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+A onInterceptTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+B onTouchEvent ACTION_MOVE
+
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+B onTouchEvent ACTION_UP
+onClick
+
+```
+
+
+setClickable
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+B onInterceptTouchEvent ACTION_DOWN
+C dispatchTouchEvent ACTION_DOWN
+C onTouchEvent ACTION_DOWN
+B onTouchEvent ACTION_DOWN
+
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+A onInterceptTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+B onTouchEvent ACTION_MOVE
+
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+B onTouchEvent ACTION_UP
+
+```
+
+很有意思的事情：设置 B 的onTouchEvent、 setOnTouchListener 、 setOnClickListener 和 setClickable 并没有阻止 ACTION_DOWN 事件向 C 传递。因为 setOnTouchListener 、 setOnClickListener 和 setClickable 都是在 onTouchEvent 中处理的。只是处理的优先级不一样。
+
+如何才能实现不把事件传递到 C 呢？只能使用 onInterceptTouchEvent 了，在下面一节中会介绍。
+
 ## 拦截事件
 
 上面的事件处理的例子中，DOWN 事件被 C 消费了，那么后面的 MOVE 和 UP 事件默认都会给 C 来处理。但是如果后面的 MOVE 事件 B 又想处理了怎么办呢？这个时候就需要 `onInterceptTouchEvent` 上场了。
@@ -156,14 +379,14 @@ A dispatchTouchEvent ACTION_MOVE
 A onInterceptTouchEvent ACTION_MOVE
 B dispatchTouchEvent ACTION_MOVE
 B onTouchEvent ACTION_MOVE
-（Activity onTouchEvent ACTION_MOVE）如果 B onTouchEvent返回false
+（Activity onTouchEvent ACTION_MOVE）（如果 B onTouchEvent返回false，表示只拦截，不消费，那么还会传递给 A 和 Activity）
 
 Activity dispatchTouchEvent ACTION_UP
 A dispatchTouchEvent ACTION_UP
 A onInterceptTouchEvent ACTION_UP
 B dispatchTouchEvent ACTION_UP
 B onTouchEvent ACTION_UP
-（Activity onTouchEvent ACTION_UP）如果 B onTouchEvent返回false
+（Activity onTouchEvent ACTION_UP）（如果 B onTouchEvent返回false，表示只拦截，不消费，那么还会传递给 A 和 Activity）
 ```
  - 前面几步的流程和前面一样。C 处理了 DOWN 事件。
  - MOVE 事件传递到 B 的 `onInterceptTouchEvent` 方法时，B 想对这个事件做处理，那么就返回了 true。
@@ -178,7 +401,7 @@ B onTouchEvent ACTION_UP
  - 如果 ViewGroup 拦截了一个半路的事件（比如 MOVE），这个事件将会被系统变成一个 CANCEL 事件，并传递给之前处理该手势（gesture）的子 View，而且不会再传递（无论是被拦截的 MOVE 还是系统生成的 CANCEL）给 `ViewGroup` 的 `onTouchEvent` 方法。只有再到来的事件才会传递到 `ViewGroup` 的 `onTouchEvent` 方法中。
  - 事件被拦截后，如果本身的 `onTouchEvent` 也不做处理，那么直接返回给 `Activity` 处理。
 
-下面我们再来做一个实验：B 在 `onInterceptTouchEvent` 中拦截了最初的 DOWN 事件。
+下面我们再来做一个实验，来回答上一节的问题：B 在 `onInterceptTouchEvent` 中拦截了最初的 DOWN 事件。
 先看第一种情况：DOWN 事件只在 `onInterceptTouchEvent` 中拦截，`onTouchEvent` 不做处理。
 
 ```
@@ -198,6 +421,8 @@ Activity dispatchTouchEvent ACTION_UP
 Activity onTouchEvent ACTION_UP
 ```
 
+可以看到，只是拦截了事件的传输，没有消费的话还是最终由 Activity 来处理。
+
 第二种情况：DOWN 事件在 `onInterceptTouchEvent` 中拦截，`onTouchEvent` 中处理并返回true。
 
 ```
@@ -213,14 +438,12 @@ A dispatchTouchEvent ACTION_MOVE
 A onInterceptTouchEvent ACTION_MOVE
 B dispatchTouchEvent ACTION_MOVE
 B onTouchEvent ACTION_MOVE
-（Activity onTouchEvent ACTION_MOVE）如果B的`onTouchEvent`不处理MOVE事件
 
 Activity dispatchTouchEvent ACTION_UP
 A dispatchTouchEvent ACTION_UP
 A onInterceptTouchEvent ACTION_UP
 B dispatchTouchEvent ACTION_UP
 B onTouchEvent ACTION_UP
-（Activity onTouchEvent ACTION_UP）如果B的`onTouchEvent`不处理UP事件
 ```
 
  - 如果一个 `ViewGroup` 拦截了最初的 DOWN 事件，该事件仍然会传递到该 `ViewGroup` 的 `onTouchEvent` 方法中。
@@ -228,6 +451,34 @@ B onTouchEvent ACTION_UP
  - 如果只拦截 DOWM 事件而不做处理，那么认为没有 View 对这组手势事件感兴趣，那么后面直接交由 Activity 处理。
  - 如果对 DOWN 事件处理，那么后续事件都会分发给 ViewGroup 的 `onTouchEvent` ，如果不处理再直接传递给 Activity 处理。
 
+## 分发事件
+
+如果你仔细看了上面几节，你会发现这样的情况，onInterceptTouchEvent 只管事件拦截，具体是否消费事件由 onTouchEvent 来决定，如果只拦截不消费，那么事件还是会回传到父 View 或者 Activity 的。
+那么如果我们阻止了事件的分发呢？
+我们在 B 的 dispatchTouchEvent 方法中针对 ACTION_DOWN 事件返回true：
+
+```
+Activity dispatchTouchEvent ACTION_DOWN
+A dispatchTouchEvent ACTION_DOWN
+A onInterceptTouchEvent ACTION_DOWN
+B dispatchTouchEvent ACTION_DOWN
+
+Activity dispatchTouchEvent ACTION_MOVE
+A dispatchTouchEvent ACTION_MOVE
+A onInterceptTouchEvent ACTION_MOVE
+B dispatchTouchEvent ACTION_MOVE
+B onTouchEvent ACTION_MOVE
+Activity onTouchEvent ACTION_MOVE
+
+Activity dispatchTouchEvent ACTION_UP
+A dispatchTouchEvent ACTION_UP
+A onInterceptTouchEvent ACTION_UP
+B dispatchTouchEvent ACTION_UP
+B onTouchEvent ACTION_UP
+Activity onTouchEvent ACTION_UP
+```
+
+dispatchTouchEvent 只管当前事件的分发，阻止了 onTouchEvent 事件的分发并不能阻止随后事件的分发。
 
 ## 阻止拦截事件
 

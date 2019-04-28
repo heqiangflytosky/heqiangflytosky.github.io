@@ -76,6 +76,8 @@ https://blog.csdn.net/qq_41117236/article/details/81029618
 
 ![效果图](/images/data-structure-basic-tree/binary-sort-tree.png)
 
+对一棵排序二叉树进行中序遍历时，可以得到有序序列。
+
 ### 平衡二叉树
 
 平衡二叉树是二叉排序树的一种，又叫平衡二叉排序树，或AVL树，它具有下面特点：
@@ -148,7 +150,7 @@ https://mp.weixin.qq.com/s/4sCnvWmW7-fOIlpNeIIjIw
 
     //建立一个完全二叉树
     public TreeNode createTree(){
-        int data[] = {1,2,0,0,3,4,5,0,6,7,8,0,0,9};
+        int data[] = {0,1,2,3,4,5,6,7};
         ArrayList<TreeNode> list = new ArrayList();
         for(int i = 0; i < data.length; i++) {
             list.add(new TreeNode(data[i]));
@@ -195,6 +197,25 @@ https://mp.weixin.qq.com/s/4sCnvWmW7-fOIlpNeIIjIw
         postOrderTraverse(node.leftNode);
         postOrderTraverse(node.rightNode);
         Log.e("Test", ""+node.data);
+    }
+
+    // 广度优先遍历
+    public void levelOrderTraverse(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        TreeNode currentNode = null;
+        queue.offer(node);
+        while (!queue.isEmpty()) {
+            currentNode = queue.poll();
+            Log.e("Test"," "+currentNode.data);
+            if (currentNode.leftNode != null)
+                queue.offer(currentNode.leftNode);
+            if (currentNode.rightNode != null)
+                queue.offer(currentNode.rightNode);
+        }
     }
 ```
 

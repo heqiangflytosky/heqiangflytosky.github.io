@@ -286,6 +286,7 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
 
 我们可以看到 `ViewGroup` 是没有覆盖父类的 `onTouchEvent ` 方法的。也没有发现调用 `onTouchEvent`。
 对 `ViewGroup` 的 `onTouchEvent` 调用，都是通过其父类 `View` 的 `dispatchTouchEvent` 来调用的。
+流程是什么呢？其实上面也介绍了：ViewGroup.dispatchTouchEvent->ViewGroup.dispatchTransformedTouchEvent->View.dispatchTouchEvent->B.onTouchEvent。
 
 ## View 的事件分发
 
