@@ -199,7 +199,7 @@ LinkedHashMap 重写了 HashMap 的 get 方法：
                 lm.modCount++;
                 // 移除这个节点
                 remove();
-                // 添加到头结点的前面变为头结点
+                // 添加到头结点的前面也就是链表的尾部
                 addBefore(lm.header);
             }
         }
