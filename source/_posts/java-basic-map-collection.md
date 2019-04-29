@@ -44,6 +44,8 @@ HashTable 是线程安全的，它是 HashMap 的多线程版本。`HashTable` �
 HashTable 即不支持 null key也不支持null value。HashMap 中null可以作为key，这样的key只有一个，可以有一个或者多个value所对应的key为null。
 HashMap 非线程安全，底层主要是基于数组和链表来实现的，它之所以有相当快的查询速度主要是因为它是通过计算散列码来决定存储的位置。适用于在Map中插入、删除和定位元素。
 
+LinkedHashMap 非线程安全，数据元素有有序的，可以按照插入排序和访问排序，是 LruCache 是基于 LinkedHashMap 来实现的。
+
 Colleciton 用于存放多个单对象，Map 用于存放 Key-Value 形式的键值对。
 
 Set 和 List 都继承自 Collection 接口。它们最大的最大区别就是 Set 中的元素不可以重复，List 中允许重复元素。
