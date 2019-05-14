@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/12/22/java-basic-annotation/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍注解的用法">
-<meta property="og:updated_time" content="2019-01-22T02:35:05.726Z">
+<meta property="og:updated_time" content="2019-05-14T02:59:45.340Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础 -- 注解">
 <meta name="twitter:description" content="介绍注解的用法">
@@ -446,8 +446,8 @@
 <p><code>Retention</code> 表示该注解信息保存在什么级别，可选的参数值在枚举类型 RetentionPolicy 中，包括：</p>
 <ul>
 <li>RetentionPolicy.SOURCE：在编译阶段丢弃。这些注解在编译结束之后就不再有任何意义，所以它们不会写入字节码。<code>@Override</code>, <code>@SuppressWarnings</code> 都属于这类注解。 </li>
-<li>RetentionPolicy.CLASS：默认值，编译器仅把注解保存在 class 文件中，在运行 Java 程序时，JVM 不会保留注释，即不能用反射（在运行期）来获取注释。</li>
-<li>RetentionPolicy.RUNTIME：编译器不仅把注解保存在 class 文件中，同时在运行 Java 程序时，JVM 也会保留注释，即可以通过反射来获取注释。</li>
+<li>RetentionPolicy.CLASS：默认值，编译器仅把注解保存在 class 文件中，在运行 Java 程序时，JVM 不会保留注释，即不能用反射（在运行期）来获取注释。<code>@StringRes</code>，<code>@DrawableRes</code>，<code>@MainThread</code> 都属于这类注解。 </li>
+<li>RetentionPolicy.RUNTIME：编译器不仅把注解保存在 class 文件中，同时在运行 Java 程序时，JVM 也会保留注释，即可以通过反射来获取注释。<code>@Nullable</code>，<code>@NonNull</code> 都属于这类注解。 </li>
 </ul>
 <h3 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(&#123;ElementType.ANNOTATION_TYPE&#125;)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</div><div class="line">    ElementType[] value();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ElementType &#123;</div><div class="line">    TYPE,</div><div class="line">    FIELD,</div><div class="line">    METHOD,</div><div class="line">    PARAMETER,</div><div class="line">    CONSTRUCTOR,</div><div class="line">    LOCAL_VARIABLE,</div><div class="line">    ANNOTATION_TYPE,</div><div class="line">    PACKAGE,</div><div class="line">    TYPE_PARAMETER,</div><div class="line">    TYPE_USE;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">ElementType</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
