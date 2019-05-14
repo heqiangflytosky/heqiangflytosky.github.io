@@ -474,6 +474,150 @@ I/RxJava: accept : 4four
 I/RxJava: accept : 5five
 ```
 
+## reduce、scan、reduceWith 和 scanWith
+
+reduce 和 scan 操作符都可以把观察序列的本次操作结果作为参数传递给下一个Observable使用，可以用来实现累加操作。
+但他们还是有区别的。
+
+ - reduce 是把所有的操作都操作完成之后最后只调用一次观察者，把数据一次性输出。
+ - scan 是每次操作之后都先把数据输出给观察者，然后再调用scan的回调方法进行第二次操作。
+
+至于 reduceWith 和 scanWith 只是多了一个 Callbale 参数来指定为第一个数据源来使用。
+
+下面通过例子来了解一下它们的用法：
+
+### reduce
+
+```
+        Observable.just(1, 3, 5)
+                .reduce(new BiFunction<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer apply(Integer integer, Integer integer2) throws Exception {
+                        Log.e("Test","para1 = "+integer +", para2 = "+integer2);
+                        return integer + integer2;
+                    }
+                })
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+
+                        Log.e("Test","result = "+integer);
+                    }
+                });
+```
+
+输出：
+
+```
+E/Test: para1 = 1, para2 = 3
+E/Test: para1 = 4, para2 = 5
+E/Test: result = 9
+```
+
+可见，调用了两次reduce的回调方法后，得到最后的总结果，最后调用观察者方法。reduce用来实现多个操作式的与（&&）和或（||）操作非常方便。
+
+### scan
+
+```
+        Observable.just(1, 3, 5)
+                .scan(new BiFunction<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer apply(Integer integer, Integer integer2) throws Exception {
+                        Log.e("Test","para1 = "+integer +", para2 = "+integer2);
+                        return integer + integer2;
+                    }
+                })
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+
+                        Log.e("Test","result = "+integer);
+                    }
+                });
+```
+
+
+```
+E/Test: result = 1
+E/Test: para1 = 1, para2 = 3
+E/Test: result = 4
+E/Test: para1 = 4, para2 = 5
+E/Test: result = 9
+```
+
+使用scan和reduce的最后输出结果是一样的，但是却调用了三次观察者方法。
+
+### reduceWith 和 scanWith
+
+```
+        Observable.just(1, 3, 5)
+                .reduceWith(new Callable<String>() {
+                    @Override
+                    public String call() throws Exception {
+                        Log.e("Test","call");
+                        return "Hello";
+                    }
+                }, new BiFunction<String, Integer, String>() {
+                    @Override
+                    public String apply(String string, Integer integer) throws Exception {
+                        Log.e("Test","apply  string = "+string + ", integer = "+integer);
+                        return string + " "+integer;
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.e("Test","result = "+s);
+                    }
+                });
+```
+
+输出结果：
+
+```
+E/Test: call
+E/Test: apply  string = Hello, integer = 1
+E/Test: apply  string = Hello 1, integer = 3
+E/Test: apply  string = Hello 1 3, integer = 5
+E/Test: result = Hello 1 3 5
+```
+
+```
+        Observable.just(1, 3, 5)
+                .scanWith(new Callable<String>() {
+                    @Override
+                    public String call() throws Exception {
+                        Log.e("Test","call");
+                        return "Hello";
+                    }
+                }, new BiFunction<String, Integer, String>() {
+                    @Override
+                    public String apply(String string, Integer integer) throws Exception {
+                        Log.e("Test","apply  string = "+string + ", integer = "+integer);
+                        return string + " "+integer;
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.e("Test","result = "+s);
+                    }
+                });
+```
+
+输出结果：
+
+```
+E/Test: call
+E/Test: result = Hello
+E/Test: apply  string = Hello, integer = 1
+E/Test: result = Hello 1
+E/Test: apply  string = Hello 1, integer = 3
+E/Test: result = Hello 1 3
+E/Test: apply  string = Hello 1 3, integer = 5
+E/Test: result = Hello 1 3 5
+```
+
 ## amb、ambArray 和 ambWith
 
 传递两个或多个 Observable 给 amb 或者 ambArray 时，它只发射其中首先发射数据（onNext）或通知（onError或onCompleted）的那个 Observable 的所有数据，而其他所有的 Observable 的将不会被执行直接丢弃。

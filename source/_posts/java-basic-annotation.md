@@ -90,8 +90,8 @@ public enum RetentionPolicy {
 `Retention` 表示该注解信息保存在什么级别，可选的参数值在枚举类型 RetentionPolicy 中，包括：
 
  - RetentionPolicy.SOURCE：在编译阶段丢弃。这些注解在编译结束之后就不再有任何意义，所以它们不会写入字节码。`@Override`, `@SuppressWarnings` 都属于这类注解。 
- - RetentionPolicy.CLASS：默认值，编译器仅把注解保存在 class 文件中，在运行 Java 程序时，JVM 不会保留注释，即不能用反射（在运行期）来获取注释。
- - RetentionPolicy.RUNTIME：编译器不仅把注解保存在 class 文件中，同时在运行 Java 程序时，JVM 也会保留注释，即可以通过反射来获取注释。
+ - RetentionPolicy.CLASS：默认值，编译器仅把注解保存在 class 文件中，在运行 Java 程序时，JVM 不会保留注释，即不能用反射（在运行期）来获取注释。`@StringRes`，`@DrawableRes`，`@MainThread` 都属于这类注解。 
+ - RetentionPolicy.RUNTIME：编译器不仅把注解保存在 class 文件中，同时在运行 Java 程序时，JVM 也会保留注释，即可以通过反射来获取注释。`@Nullable`，`@NonNull` 都属于这类注解。 
 
 ### Target
 
