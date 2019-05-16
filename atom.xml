@@ -7867,7 +7867,7 @@ http://blog.csdn.net/wangbaochu/article/details/51177672
     <link href="http://yoursite.com/2016/02/25/android-performance-optimization-traceview/"/>
     <id>http://yoursite.com/2016/02/25/android-performance-optimization-traceview/</id>
     <published>2016-02-25T02:00:00.000Z</published>
-    <updated>2019-03-20T01:15:52.527Z</updated>
+    <updated>2019-05-16T05:54:58.522Z</updated>
     
     <content type="html"><![CDATA[<h2 id="TraceView简介"><a href="#TraceView简介" class="headerlink" title="TraceView简介"></a>TraceView简介</h2><p>工欲善其事，必先利其器。要想分析Android的性能问题，比如卡顿了之类的，那么就必需掌握TraceView工具的使用。<br>TraceView 是 Android SDK 中内置的一个工具，它可以加载 trace 文件，用图形的形式展示代码的执行时间、次数及调用栈，便于我们分析，以此来优化 App 运行效率。</p>
 <h2 id="生成trace文件"><a href="#生成trace文件" class="headerlink" title="生成trace文件"></a>生成trace文件</h2><p>在进行分析以前，必需要生成trace文件，可以用下面的三种方法生成trace文件：</p>
@@ -7877,6 +7877,7 @@ http://blog.csdn.net/wangbaochu/article/details/51177672
 <p><img src="/images/development-tool-traceview/android_monitor_start.png" alt="图片"></p>
 <h3 id="使用DDMS"><a href="#使用DDMS" class="headerlink" title="使用DDMS"></a>使用DDMS</h3><p>DDMS 是 Android 调试监控工具，用来分析 trace 文件更为直观，菜单栏点击<code>Tools</code>-&gt;<code>Android</code>-&gt;<code>Android Device Monitor</code>，便可以打开DDMS，如图：</p>
 <p><img src="/images/development-tool-traceview/ddms_start.png" alt="图片"></p>
+<p>Android Studio 3.0之后把 DDMS 从 Tools 里面去掉了，但是我们可以通过命令行打开：android-sdk/tools/monitor。</p>
 <p>我们可以用 DDMS 打开前面方法生成的 trace 文件，<code>File</code> -&gt; <code>Open File</code>，然后选择文件即可。<br>或者也可以生成 trace 文件。<br>选择需要调试的进程，在上面点击<code>Start Mothod Profiling</code>按钮：</p>
 <p><img src="/images/development-tool-traceview/trace_start.png" alt="图片"></p>
 <p>此时会弹出一个选项框：</p>
@@ -11141,7 +11142,7 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
     <link href="http://yoursite.com/2014/11/02/java-basic-reflect/"/>
     <id>http://yoursite.com/2014/11/02/java-basic-reflect/</id>
     <published>2014-11-02T02:00:00.000Z</published>
-    <updated>2019-02-16T09:16:30.663Z</updated>
+    <updated>2019-05-16T05:54:58.523Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>什么叫反射？<br>在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意方法和属性；这种运行时动态获取信息以及动态调用对象方法的功能称为 Java 语言的反射机制。<br>反射可以“看透”程序的运行情况，可以让我们在运行期知晓一个类或者实例的运行状况，可以动态地加载和调用，虽然有一定的性能忧患，但它带给我们的便利远远大于其性能缺陷。</p>
 <p>实现反射的几个步骤：</p>
@@ -11214,6 +11215,8 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">    public Object invoke(Object obj, Object... args)</div><div class="line">        throws IllegalAccessException, IllegalArgumentException,</div><div class="line">           InvocationTargetException</div><div class="line">    &#123;</div><div class="line">        if (!override) &#123;</div><div class="line">            if (!Reflection.quickCheckMemberAccess(clazz, modifiers)) &#123;</div><div class="line">                Class&lt;?&gt; caller = Reflection.getCallerClass(1);</div><div class="line"></div><div class="line">                checkAccess(caller, clazz, obj, modifiers);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        MethodAccessor ma = methodAccessor;             // read volatile</div><div class="line">        if (ma == null) &#123;</div><div class="line">            ma = acquireMethodAccessor();</div><div class="line">        &#125;</div><div class="line">        return ma.invoke(obj, args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如果 override 为 true，那么就不需要执行安全检查，这就可以大幅度地提升了系统性能（当然，由于取消了安全检查，也就可以允许private方法，访问private私有属性了）。经过有人测试，在大量的反射情况下，设置 Accessible 为true可以提升性能 20 倍以上。<br>因此，我们在进行反射编程时，设置 Accessible 为true，不仅仅是因为操作习惯的问题，这是在为我们的系统性能考虑。</p>
 <h2 id="是否需要太关注反射效率"><a href="#是否需要太关注反射效率" class="headerlink" title="是否需要太关注反射效率"></a>是否需要太关注反射效率</h2><p>我们平时编程，总会有人经常说：反射的效率是非常低的，不到万不得已就不要使用。事实上，这句话的前半句是对的，后半句是错的。<br>反射的效率相对于正常的代码执行确实效率低很多（有人经过测试，相差15倍左右），但它是一个非常有效的运行期工具类，只要代码结构清晰、可读性好那就先开发起来，等到性能测试时证明此处性能确实有问题再修改也不迟（一般情况下反射并不是性能的终极杀手，而代码结构混乱、可读性差则很可能埋下性能隐患）。很少有项目是因为反射问题引起系统效率故障的。而根据二八原则，80%的性能消耗在20%的代码上，这20%的代码才是我们关注的重点，不要单单把反射作为重点关注对象。</p>
+<h2 id="反射和private属性"><a href="#反射和private属性" class="headerlink" title="反射和private属性"></a>反射和private属性</h2><p>我们经常会被问到这样的问题：我们通过反射恶意访问private成员和方法，既然能访问为什么要private，它的使用意义是什么？<br>首先，private的属性和方法是可以通过反射来访问的。private 并不是来解决安全问题的，它只是OOP（面向对象编程）的封装概念，想做到的是不暴露内部的实现。如果你想解决安全的问题，就要想想别的办法了。<br>如果在特殊的情况下，你需要关注甚至修改内部实现（反射），这种例外的存在并不影响封装的理念。这更多的是一种“知道这么多就够了”，而不是“这是机密，坚决不能让外人知道”。<br>setAccessible也是一种hack，它可以取消安全检查，它的意义是：你清楚内部实现，你知道你在做什么，相信你不会搞砸。</p>
+<h2 id="反射和final属性"><a href="#反射和final属性" class="headerlink" title="反射和final属性"></a>反射和final属性</h2><p>关于反射修改final变量的问题，网上有文章说不能按照修改普通变量的方式来修改，要修改 Filed 的 modifiers 属性，把final属性去掉后才能修改，对此我做过测试，不修改 modifiers 属性也是可以对final变量进行修改的，但是和普通的变量修改也有区别：就是不管final是不是public的都要调用 <code>setAccessible(true)</code>，否则还是报错。<br>我是在 Android 平台上测试的，可能是底层虚拟机的差异导致的，先记录于此，后面有时间再详细了解。</p>
 <h2 id="反射实现代码"><a href="#反射实现代码" class="headerlink" title="反射实现代码"></a>反射实现代码</h2><h3 id="测试类"><a href="#测试类" class="headerlink" title="测试类"></a>测试类</h3><p>TestA</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class TestA &#123;</div><div class="line">    private TestB mTestB;</div><div class="line">    private boolean mTestBoolean = false;</div><div class="line">    public TestA()&#123;</div><div class="line">        mTestB = new TestB();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void getTestBoolean()&#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;mTestBoolean = &quot;+mTestBoolean);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void testPrivateMethod()&#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;testPrivateMethod!&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private String testPrivateMethodWithArgs(String arg1,int arg2)&#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;testPrivateMethodWithArgs! arg1 = &quot;+arg1+&quot;,arg2 = &quot;+arg2);</div><div class="line">        return &quot;return &quot;+arg1;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>TestB</p>
@@ -11959,6 +11962,84 @@ https://blog.csdn.net/u013384984/article/details/79496052
   </entry>
   
   <entry>
+    <title>Java 基础 -- StringBuilder 和 StringBuffer</title>
+    <link href="http://yoursite.com/2014/01/22/java-basic-stringbuilder-stringbuffer/"/>
+    <id>http://yoursite.com/2014/01/22/java-basic-stringbuilder-stringbuffer/</id>
+    <published>2014-01-22T02:00:00.000Z</published>
+    <updated>2019-05-16T05:54:30.660Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>StringBuilder 和 StringBuffer 这两个类是我们经常使用的类，在<a href="http://www.heqiangfly.com/2014/01/20/java-basic-knowledge-about-string/" target="_blank" rel="external">Java 基础 – 深入理解 String </a> 简单介绍过这两个类。与 String 类不同，StringBuffer 和 StringBuilder 类的对象能够被多次的修改，并且不产生新的未使用对象。因此，在某些场景下使用StringBuilder 和 StringBuffer能够优化我们程序的内存和性能。<br>StringBuilder 和 StringBuffer 这两个类都是被 final 修饰的，它们是不能被继承的。<br>首先来看一下他们的类关系图：</p>
+<p><img src="/images/java-basic-stringbuilder-stringbuffer/class.png" alt="效果图"></p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ul>
+<li>append()：将指定的字符串追加到此字符序列。</li>
+<li>appendCodePoint()：将 codePoint参数的字符串表示法附加到此序列。比如追加一些ascii码表示的字符或者表情符号emoji等。</li>
+<li>capacity()：返回当前容量。</li>
+<li>charAt(int index)：返回此序列中指定索引处的 char 值。</li>
+<li>codePointAt(int index)：返回指定位置字符的Unicode code point。和String类似。</li>
+<li>codePointBefore(int index)：返回指定位置之前字符的Unicode code point。和String类似。</li>
+<li>codePointCount(int index)：返回指定位置之后字符的Unicode code point。和String类似。</li>
+<li>delete()：移除此序列的子字符串中的字符。</li>
+<li>deleteCharAt()：移除此序列某个指定位置的字符。</li>
+<li>ensureCapacity(int minimumCapacity)：确保容量至少等于指定的最小值。</li>
+<li>getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)：将字符从此序列复制到目标字符数组 dst。</li>
+<li>indexOf()：返回第一次出现的指定子字符串在该字符串中的索引。如果不存在就返回 -1。</li>
+<li>insert()：将指定数据的字符串表示形式插入此序列中。</li>
+<li>lastIndexOf()：返回最右边出现的指定子字符串在此字符串中的索引。如果不存在就返回 -1。</li>
+<li>length()：返回长度（字符数）。</li>
+<li>offsetByCodePoints(int index, int codePointOffset)：返回指定index位置偏移 codePointOffset 处字符的Unicode code point。和String类似。</li>
+<li>readObject(ObjectInputStream s)：将StringBuffer 或 StringBuffer对象 从ObjectInputStream 对象中恢复，反序列化。</li>
+<li>writeObject(ObjectOutputStream s)：将当前StringBuffer 或 StringBuffer对象保存到 ObjectOutputStream 对象，序列化。</li>
+<li>replace()：使用给定 String 中的字符替换此序列的子字符串中的字符。</li>
+<li>reverse()：将此字符序列用其反转形式取代。</li>
+<li>setCharAt(int index, char ch)：将给定索引处的字符设置为 ch。</li>
+<li>setLength(int newLength)：设置字符序列的长度。</li>
+<li>subSequence(int start, int end)：返回一个新的字符序列，该字符序列是此序列的子序列。</li>
+<li>substring()：返回一个新的 String，它包含此字符序列当前所包含的字符子序列。</li>
+<li>toString()：转换成 Sting 对象。</li>
+<li>trimToSize()：将StringBuffer 或 StringBuffer 对象的中存储空间缩小到和字符串长度一样的长度，减少空间的浪费。</li>
+</ul>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>两者的方法基本相同。区别就是 StringBulider 是非线程安全的，StringBuffer 是线程安全的。通过看源码发现 StringBuffer 的方法基本都使用了 synchronized 关键字来保证线程安全。<br>在单线程环境下，StringBulider 比 StringBuffer 效率更高，因为省去了加锁的开销。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>StringBulider 比 StringBuffer 都是继承自 AbstractStringBuilder 类，下面我们就分析一下 AbstractStringBuilder 的实现来看一下它们的原理。<br>AbstractStringBuilder 内部用 <code>char[] value</code> 变量类存储字符序列，<code>int count</code> 变量来标识实际字符串的长度。<br>在初始化 StringBulider 比 StringBuffer 时如果不指定容量值，那么 <code>char[]</code> 数组默认大小是16。那么在我们不断的 append 过程中，数组的容量肯定会有不够用的时候，这个时候就会进行扩容。</p>
+<h3 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h3><p>在 append 方法中，在进行字符串拼接之前都会调用 <code>ensureCapacityInternal</code> 方法检查当前数组是否需要扩容，如果需要扩容的就要调用 <code>expandCapacity</code> 方法进行扩容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">void expandCapacity(int minimumCapacity) &#123;</div><div class="line">    int newCapacity = value.length * 2 + 2;</div><div class="line">    if (newCapacity - minimumCapacity &lt; 0)</div><div class="line">        newCapacity = minimumCapacity;</div><div class="line">    if (newCapacity &lt; 0) &#123;</div><div class="line">        if (minimumCapacity &lt; 0) // overflow</div><div class="line">            throw new OutOfMemoryError();</div><div class="line">        newCapacity = Integer.MAX_VALUE;</div><div class="line">    &#125;</div><div class="line">    value = Arrays.copyOf(value, newCapacity);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>每次的扩容会调用Arrays.copyOf重新生成一个原来2倍+2大小的数组，然后把字符串赋值到原来的数组。这期间伴随着内存的申请和回收，如果字符串的长度较大，对性能会造成很大的应用，因此，我们在构造 StringBulider 比 StringBuffer 时要合理预估使用的大小，合理设置初始容量大小。</p>
+<!--
+
+@startuml
+Title "StringBuilder 和 StringBuffer类图" 
+interface CharSequence
+interface Serializable
+interface Appendable
+abstract class AbstractStringBuilder
+class StringBuilder
+
+
+CharSequence <|.. AbstractStringBuilder
+CharSequence <|.. StringBuilder
+Serializable <|.. StringBuilder
+Appendable <|.. StringBuilder
+AbstractStringBuilder <|-- StringBuilder
+CharSequence <|.. StringBuffer
+Serializable <|.. StringBuffer
+Appendable <|.. StringBuffer
+AbstractStringBuilder <|-- StringBuffer
+@enduml
+-->]]></content>
+    
+    <summary type="html">
+    
+      介绍 StringBuilder 和 StringBuffer 的用法
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java 基础 -- 深入理解 String</title>
     <link href="http://yoursite.com/2014/01/20/java-basic-knowledge-about-string/"/>
     <id>http://yoursite.com/2014/01/20/java-basic-knowledge-about-string/</id>
@@ -12141,7 +12222,7 @@ https://blog.csdn.net/u013384984/article/details/79496052
     <link href="http://yoursite.com/2013/06/26/java-basic-enum/"/>
     <id>http://yoursite.com/2013/06/26/java-basic-enum/</id>
     <published>2013-06-26T02:00:00.000Z</published>
-    <updated>2019-01-22T02:35:05.727Z</updated>
+    <updated>2019-05-16T05:54:58.523Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>枚举类型是指由一组固定的常量组成合法值的类型，它是在 Java 1.5 引入的一种类型，在此之前，我们只有两种声明常量的方式：类常量和接口常量。<br>枚举的引入改变了常量的声明方式，在枚举之前，我们表示枚举类型的常用模式是声明一组具名的 int 常量，每个类型成员一个常量：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">interface Fruit&#123;</div><div class="line">    int APPLE = 0;</div><div class="line">    int PEAR = 1;</div><div class="line">    int LEMON = 2;</div><div class="line">    int BANANA = 3;</div><div class="line">    int ORANGE = 4;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -12180,6 +12261,10 @@ https://blog.csdn.net/u013384984/article/details/79496052
 <h3 id="为什么使用枚举类型的工厂方法"><a href="#为什么使用枚举类型的工厂方法" class="headerlink" title="为什么使用枚举类型的工厂方法"></a>为什么使用枚举类型的工厂方法</h3><p>看了上面的实现，大家可能会问：为什么要使用枚举类型的工厂方法模式呢？<br>那是因为它有下面三个有点：</p>
 <h4 id="避免错误调用发生"><a href="#避免错误调用发生" class="headerlink" title="避免错误调用发生"></a>避免错误调用发生</h4><p>一般工厂方法模式中的生产方法可以接收三种类型的参数：类型参数（我们的例子）、String 参数（生产方法根据String参数判断需要生产什么产品）、int 参数（生产方法根据int值判断需要生产什么产品），这三种参数都是宽泛的数据类型，很容易产生错误，而且这种错误编译器不会报警，只有到运行期间才能发现。<br>而使用枚举类型的工厂模式就不存在该问题了，不需要传递任何参数，只需要选择好生产什么类型的产品即可。</p>
 <h4 id="使用便捷"><a href="#使用便捷" class="headerlink" title="使用便捷"></a>使用便捷</h4><h4 id="降低类间耦合"><a href="#降低类间耦合" class="headerlink" title="降低类间耦合"></a>降低类间耦合</h4><p>不管生产方法接收的是Class、String还是int，都会成为客户端的负担，这些类并不是客户端需要的，而是因为工厂方法的限制必须输入的，这个违背了最少知识原则：一个对象应该对其他对象有最少的了解。<br>二枚举类型的工厂方法就没有这种问题了，它只需要依赖工厂类就行了，完全可以无视具体汽车类的存在。</p>
+<h2 id="使用枚举实现单例模式"><a href="#使用枚举实现单例模式" class="headerlink" title="使用枚举实现单例模式"></a>使用枚举实现单例模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public enum Singleton &#123;</div><div class="line">    INSTANCE;</div><div class="line">    Singleton() &#123;</div><div class="line">    &#125;</div><div class="line">    public void testMethod() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;enum Singleton test mothod&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Singleton.INSTANCE.testMethod();</div></pre></td></tr></table></figure>
+<p>关于枚举实现单例的优点会有专门文章来介绍。</p>
 <h2 id="使用枚举时需要注意的问题"><a href="#使用枚举时需要注意的问题" class="headerlink" title="使用枚举时需要注意的问题"></a>使用枚举时需要注意的问题</h2><h3 id="小心-switch-带来的空指针异常"><a href="#小心-switch-带来的空指针异常" class="headerlink" title="小心 switch 带来的空指针异常"></a>小心 switch 带来的空指针异常</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    setFruit(null);</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void setFruit(Fruit fruit) &#123;</div><div class="line">    switch (fruit) &#123;</div><div class="line">        case APPLE:</div><div class="line"></div><div class="line">            break;</div><div class="line">        case PEAR:</div><div class="line"></div><div class="line">            break;</div><div class="line">        default:</div><div class="line">            break;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面的代码执行起来会报下面异常：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Caused by: java.lang.NullPointerException: Attempt to invoke virtual method &apos;int java.lang.Enum.ordinal()&apos; on a null object reference</div></pre></td></tr></table></figure>
