@@ -11138,6 +11138,47 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
   </entry>
   
   <entry>
+    <title>Java 基础 -- 单例模式的几种实现</title>
+    <link href="http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/"/>
+    <id>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</id>
+    <published>2014-11-05T02:00:00.000Z</published>
+    <updated>2019-05-16T09:38:23.111Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>单例模式我们平时经常用到，本文总结一下单例模式几种常见的实现。</p>
+<ul>
+<li>饿汉模式</li>
+<li>懒汉模式</li>
+<li>双重锁懒汉模式</li>
+<li>静态内部类模式</li>
+<li>枚举模式</li>
+</ul>
+<h2 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a>饿汉模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;</div><div class="line">    private static Singleton INSTANCE = new Singleton();</div><div class="line">    private Singleton()&#123;&#125;</div><div class="line">    public static Singleton getInstance()&#123;</div><div class="line">        return INSTANCE;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们都知道，静态代码是在类初始化时就被初始化的，饿汉模式在类被初始化时在内存中创建了对象，因此是线程安全的。<br>为什么呢？在《深入理解Java虚拟机》一文中有这样的介绍：<br>类的初始化过程就是执行类构造器<code>&lt;clinit&gt;()</code>的过程。<br>虚拟机会保证一个类的<code>&lt;clinit&gt;()</code>方法在多线程环境中被正确地加锁、同步，如果多个线程同时去初始化一个类，那么只有一个线程去执行这个类的<code>&lt;clinit&gt;()</code>方法，其他线程都需要阻塞等待，直到活动线程执行<code>&lt;clinit&gt;()</code>方法完毕。<br>饿汉模式无法向构造函数传递参数。<br>如果要传递非构造函数的参数，参考 静态内部类模式 这一节的方式。</p>
+<h2 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a>懒汉模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;</div><div class="line">    private static Singleton INSTANCE = null;</div><div class="line">    private Singleton()&#123;&#125;</div><div class="line">    public static Singleton getInstance()&#123;</div><div class="line">        if (INSTANCE == null) &#123;</div><div class="line">            INSTANCE = new Singleton();</div><div class="line">        &#125;</div><div class="line">        return INSTANCE;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>懒汉模式在方法第一次调用时创建单例对象，多线程环境下存在线程安全问题。</p>
+<h2 id="双重锁懒汉模式"><a href="#双重锁懒汉模式" class="headerlink" title="双重锁懒汉模式"></a>双重锁懒汉模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;</div><div class="line">    private static volatile Singleton INSTANCE = null;</div><div class="line">    private Singleton()&#123;&#125;</div><div class="line">    public static Singleton getInstance()&#123;</div><div class="line">        if (INSTANCE == null) &#123;</div><div class="line">            synchronized(Singleton.class)&#123;</div><div class="line">                if (INSTANCE == null) &#123;</div><div class="line">                    INSTANCE = new Singleton();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        return INSTANCE;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>双重锁懒汉模式在方法第一次调用时创建单例对象，上面的写法是线程安全的，但是一定要记得 INSTANCE 要加 volatile 禁止指令重排序，否则会有线程安全的问题。<br>第一次判断 INSTANCE == null为了避免非必要加锁，在实例化时 Singleton 时采取加锁，优化性能。</p>
+<h2 id="静态内部类模式"><a href="#静态内部类模式" class="headerlink" title="静态内部类模式"></a>静态内部类模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;</div><div class="line">    private Singleton()&#123;&#125;</div><div class="line">    private static class SingletonHolder&#123;</div><div class="line">        private static Singleton INSTANCE = new Singleton();</div><div class="line">    &#125;</div><div class="line">    public static Singleton getInstance()&#123;</div><div class="line">        return SingletonHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>静态内部类的优点是：外部类加载时并不需要立即加载内部类，内部类不被加载则不去初始化INSTANCE，故而不占内存。<br>但我们第一次调用 getInstance 方法时，虚拟机才会去初始化 SingletonHolder 类，另外，我们在饿汉模式里面介绍的 <code>&lt;clinit&gt;()</code>方法的执行时线程安全的。<br>因此，单例对象也是在第一次调用的时候去初始化的，而且是线程安全的。<br>静态内部类有一个问题就是传参问题：由于是静态内部类的形式去创建单例的，故外部无法传递参数到构造函数。<br>如果需要向构造函数传递参数，可以选择双重锁懒汉模式。<br>如果不是向构造函数传递参数，可以参考下面这款：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;</div><div class="line">    private static String mStr;</div><div class="line">    private Singleton()&#123;&#125;</div><div class="line">    private static class SingletonHolder&#123;</div><div class="line">        private static Singleton INSTANCE = new Singleton();</div><div class="line">    &#125;</div><div class="line">    public static Singleton getInstance(String s)&#123;</div><div class="line">        mStr = s;</div><div class="line">        return SingletonHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="枚举模式"><a href="#枚举模式" class="headerlink" title="枚举模式"></a>枚举模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public enum Singleton &#123;</div><div class="line">    INSTANCE;</div><div class="line">    Singleton() &#123;</div><div class="line">    &#125;</div><div class="line">    public void testMethod() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;enum Singleton test mothod&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>枚举模式也是线程安全的。<br>枚举类型还可以防止反序列化创建新对象对单例模式的破坏。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍单例模式的几种实现
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java 基础 -- 反射</title>
     <link href="http://yoursite.com/2014/11/02/java-basic-reflect/"/>
     <id>http://yoursite.com/2014/11/02/java-basic-reflect/</id>
