@@ -230,6 +230,27 @@ Car car = CarFactory.FordCar.create();
 不管生产方法接收的是Class、String还是int，都会成为客户端的负担，这些类并不是客户端需要的，而是因为工厂方法的限制必须输入的，这个违背了最少知识原则：一个对象应该对其他对象有最少的了解。
 二枚举类型的工厂方法就没有这种问题了，它只需要依赖工厂类就行了，完全可以无视具体汽车类的存在。
 
+## 使用枚举实现单例模式
+
+```
+public enum Singleton {
+    INSTANCE;
+    Singleton() {
+    }
+    public void testMethod() {
+        Log.e("Test","enum Singleton test mothod");
+    }
+}
+```
+
+使用方法：
+
+```
+        Singleton.INSTANCE.testMethod();
+```
+
+关于枚举实现单例的优点会有专门文章来介绍。
+
 ## 使用枚举时需要注意的问题
 
 ### 小心 switch 带来的空指针异常

@@ -39,6 +39,8 @@ DDMS 是 Android 调试监控工具，用来分析 trace 文件更为直观，�
 
 ![图片](/images/development-tool-traceview/ddms_start.png)
 
+Android Studio 3.0之后把 DDMS 从 Tools 里面去掉了，但是我们可以通过命令行打开：android-sdk/tools/monitor。
+
 我们可以用 DDMS 打开前面方法生成的 trace 文件，`File` -> `Open File`，然后选择文件即可。
 或者也可以生成 trace 文件。
 选择需要调试的进程，在上面点击`Start Mothod Profiling`按钮：
