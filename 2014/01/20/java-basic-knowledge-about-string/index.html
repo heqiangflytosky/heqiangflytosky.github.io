@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/01/20/java-basic-knowledge-about-string/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="深入理解 String">
-<meta property="og:updated_time" content="2018-09-24T11:54:13.535Z">
+<meta property="og:updated_time" content="2019-05-17T07:21:26.019Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基础 -- 深入理解 String">
 <meta name="twitter:description" content="深入理解 String">
@@ -416,11 +416,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">String str1 = new String(&quot;abc&quot;);</div><div class="line">String str2 = new String(&quot;abc&quot;);</div><div class="line">System.out.println(str1 == str2);</div></pre></td></tr></table></figure>
 <p>上面的结果时打印了 false。<br>当使用 new 操作符时，总是会创建新的字符串对象。</p>
 <h2 id="号操作符"><a href="#号操作符" class="headerlink" title="+ 号操作符"></a>+ 号操作符</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">String str1 = &quot;abcdef&quot;;</div><div class="line">String str2 = &quot;abc&quot; + &quot;def&quot;;</div><div class="line">System.out.println(str1 == str2);</div></pre></td></tr></table></figure>
-<p>结果是打印了 true。<br>为什么是这个结果呢？<br>我们先来看一下字节码信息：</p>
+<p>结果是打印了 true。<br>为什么是这个结果呢？<br>我们先通过 <code>javap -c Test.class</code> 来看一下字节码信息：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Code:</div><div class="line">   0: ldc           #2                  // String abcdef</div><div class="line">   2: astore_1</div><div class="line">   3: ldc           #2                  // String abcdef</div><div class="line">   5: astore_2</div><div class="line">   6: getstatic     #3                  // Field java/lang/System.out:Ljava/io/PrintStream;</div><div class="line">   9: aload_1</div><div class="line">  10: aload_2</div></pre></td></tr></table></figure>
 <p>可以看到 str2 在编译期优化成了 <code>str2 = &quot;abcdef&quot;</code>。因此和 str1 是字符串常量池中的同一对象。<br>再来看下面一段代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">String str1 = &quot;abcdef&quot;;</div><div class="line">String abc = &quot;abc&quot;;</div><div class="line">String def = &quot;def&quot;;</div><div class="line">String str2 = abc + def;</div><div class="line">System.out.println(str1 == str2);</div></pre></td></tr></table></figure>
-<p>结果是打印了 false。<br>可见，字符串对象的相加和字符串常量的相加是不一样的。<br>先来看一下字节码：</p>
+<p>结果是打印了 false。<br>可见，字符串对象的相加和字符串常量的相加是不一样的。<br>如果想输出true，把abc和def变量用final修饰就行了，编译器编译时会执行宏替换。<br>先来看一下字节码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Code:</div><div class="line">   0: ldc           #2                  // String abcdef</div><div class="line">   2: astore_1</div><div class="line">   3: ldc           #3                  // String abc</div><div class="line">   5: astore_2</div><div class="line">   6: ldc           #4                  // String def</div><div class="line">   8: astore_3</div><div class="line">   9: new           #5                  // class java/lang/StringBuilder</div><div class="line">  12: dup</div><div class="line">  13: invokespecial #6                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</div><div class="line">  16: aload_2</div><div class="line">  17: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</div><div class="line">  20: aload_3</div><div class="line">  21: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</div><div class="line">  24: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</div></pre></td></tr></table></figure>
 <p>可见，字符串对象的相加实际上也是通过 <code>StringBuilder</code> 对象来完成的，首先以最左边的字符串为参数创建 <code>StringBuilder</code> 对象，然后依次对右边进行 <code>append</code> 操作，最后将 <code>StringBuilder</code> 对象通过 <code>toString()</code> 方法转换成 <code>String</code> 对象。<br><code>String str2 = abc + def</code> 其实等价于 <code>String str2 = new StringBuilder().append(abc).append(def).toString()</code>。<br>再来看下面的例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String e = &quot;e&quot;;</div><div class="line">String str2 = &quot;abc&quot;+&quot;def&quot;+e+&quot;h&quot;+&quot;g&quot;;</div></pre></td></tr></table></figure>
@@ -551,7 +551,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">161</span>
+                <span class="site-state-item-count">162</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

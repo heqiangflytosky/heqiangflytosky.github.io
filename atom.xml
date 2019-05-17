@@ -6896,9 +6896,9 @@ https://blog.csdn.net/CmdMac/article/details/80509994
     
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
-      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
-    
       <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
+    
+      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
     
   </entry>
   
@@ -7050,9 +7050,9 @@ https://blog.csdn.net/CmdMac/article/details/80509994
     
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
-      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
-    
       <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
+    
+      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
     
   </entry>
   
@@ -11794,6 +11794,84 @@ https://blog.csdn.net/u013384984/article/details/79496052
   </entry>
   
   <entry>
+    <title>Java 基础 -- 深入理解 final 修饰符</title>
+    <link href="http://yoursite.com/2014/02/18/java-basic-final/"/>
+    <id>http://yoursite.com/2014/02/18/java-basic-final/</id>
+    <published>2014-02-18T02:00:00.000Z</published>
+    <updated>2019-05-17T07:47:09.409Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>final 修饰符也是我们经常用到的一个简单修饰符，final修饰符的基本作用如下：</p>
+<ul>
+<li>final 可以修饰变量，被final修饰的变量被赋值后，不能对它重新赋值</li>
+<li>final 可以修饰方法，被final修饰的方法不能被重写</li>
+<li>final 可以修饰类，被final修饰的类不能派生子类</li>
+</ul>
+<p>但是，仅仅了解这些对于真正掌握final修饰符的用法是远远不够的，本文将尝试深入地了解final修饰符。</p>
+<h2 id="final-修饰变量的初始化"><a href="#final-修饰变量的初始化" class="headerlink" title="final 修饰变量的初始化"></a>final 修饰变量的初始化</h2><h3 id="final-实例变量"><a href="#final-实例变量" class="headerlink" title="final 实例变量"></a>final 实例变量</h3><p>被 final 修饰的实例变量必须显示指定初始值，而且只能在如下3个位置指定初始值。</p>
+<ul>
+<li>定义final实例变量时指定初始值</li>
+<li>在非静态初始化块中为final实例变量指定初始值</li>
+<li>在构造器中为final实例变量指定初始值</li>
+</ul>
+<p>对于普通的实例变量，Java程序可以对它执行默认的初始化，也就是在初始类时JVM会将实例变量的值指定为默认的初始值。但对于final实例变量，则必须有程序员显示地指定初始值。</p>
+<p><strong>温馨提示：</strong>局部变量也必须显示地初始化。</p>
+<p>看代码实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    // 定义final实例变量时赋初始值</div><div class="line">    public final String str1 = &quot;str1&quot;;</div><div class="line">    public final String str2;</div><div class="line">    public final String str3;</div><div class="line"></div><div class="line">    &#123;</div><div class="line">        // 在初始化块中赋初始值</div><div class="line">        str2 = &quot;str2&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Test()&#123;</div><div class="line">        // 在构造方法中赋初始值</div><div class="line">        str3 = &quot;str3&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里需要指出的是，其他经过编译器的处理，这3中方式都会被抽取到构造方法中进行赋初始值操作。<br>我们可以使用 javap 命令工具类分析一下该代码：<br><code>javap -c Test.calss</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">Compiled from &quot;Test.java&quot;</div><div class="line">public class com.example.heqiang.testsomething.commontest.Test &#123;</div><div class="line">  public final java.lang.String str1;</div><div class="line"></div><div class="line">  public final java.lang.String str2;</div><div class="line"></div><div class="line">  public final java.lang.String str3;</div><div class="line">  // 构造方法代码</div><div class="line">  public com.example.heqiang.testsomething.commontest.Test();</div><div class="line">    Code:</div><div class="line">       0: aload_0</div><div class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</div><div class="line">       4: aload_0</div><div class="line">       5: ldc           #2                  // String str1</div><div class="line">       7: putfield      #3                  // Field str1:Ljava/lang/String;</div><div class="line">      10: aload_0</div><div class="line">      11: ldc           #4                  // String str2</div><div class="line">      13: putfield      #5                  // Field str2:Ljava/lang/String;</div><div class="line">      16: aload_0</div><div class="line">      17: ldc           #6                  // String str3</div><div class="line">      19: putfield      #7                  // Field str3:Ljava/lang/String;</div><div class="line">      22: return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="final-类变量（静态变量）"><a href="#final-类变量（静态变量）" class="headerlink" title="final 类变量（静态变量）"></a>final 类变量（静态变量）</h3><p>对于类变量也就是静态变量而言，同样也必须显式指定初始值，不同的是final静态变量只能在两个地方指定初始值：</p>
+<ul>
+<li>定义final静态变量时指定初始值</li>
+<li>在静态初始化代码块中为final类变量指定初始值</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    // 定义final静态变量时赋初始值</div><div class="line">    public final static String str1 = &quot;str1&quot;;</div><div class="line">    public final static String str2;</div><div class="line"></div><div class="line">    static &#123;</div><div class="line">        // 在静态初始化块中赋初始值</div><div class="line">        str2 = &quot;str2&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Test()&#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="final-局部变量"><a href="#final-局部变量" class="headerlink" title="final 局部变量"></a>final 局部变量</h3><p>Java 本来就要求普通的局部变量必须显式地赋初始值，final 局部变量一样也需要显式地赋初始值。与普通变量不同的是：final 被赋初始值后，再也不能对final局部变量进行赋值。</p>
+<h2 id="执行-“宏替换”"><a href="#执行-“宏替换”" class="headerlink" title="执行 “宏替换”"></a>执行 “宏替换”</h2><p>对于一个final变量而言，如果在定义final变量时指定了初始值，而且该初始值可以在编译时被确定下来，那么这个final变量本质已经不再是一个变量，而是一个直接量，编译器会在编译时做优化处理，在变量出现的地方直接用该初始值替换变量。类似宏的效果。<br>final 修饰符的一个重要用途就是定义“宏变量”。但是需要有两个条件：</p>
+<ul>
+<li>在定义final变量时指定了初始值</li>
+<li>该初始值可在编译时被确定下来</li>
+</ul>
+<p>举例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    final String str1 = &quot;str1&quot;;</div><div class="line"></div><div class="line">    public String getString()&#123;</div><div class="line">        return str1;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码其实已经被编译器优化成了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    public String getString()&#123;</div><div class="line">        return &quot;str1&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们写两个例子验证一下这个结论：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Price &#123;</div><div class="line">    final static Price INSTANCE = new Price(2.8);</div><div class="line">    static double initPrice = 20;</div><div class="line"></div><div class="line">    double currentPrice;</div><div class="line">    public Price(double discount) &#123;</div><div class="line">        currentPrice = initPrice - discount;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Log.e(&quot;Test&quot;,&quot;&quot; + Price.INSTANCE.currentPrice);</div></pre></td></tr></table></figure>
+<p>这里输出：-2.8<br>原理在前面文章已经讲过。<br>如果这里把 initPrice 换成 final 修饰的，会输出什么结果呢？<br>答案是 17.2 。<br>原因就是这里执行了替换。把 initPrice 直接替换成了 20，就不会有初始化顺序引起的问题了。<br>下面通过反射来验证一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class TestA &#123;</div><div class="line">    private final String mTestFinal = &quot;testFinal&quot;;</div><div class="line"></div><div class="line">    public String getFinalString() &#123;</div><div class="line">        return mTestFinal;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面是测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">TestA a = new TestA();</div><div class="line">try &#123;</div><div class="line">    Field field = TestA.class.getDeclaredField(&quot;mTestFinal&quot;);</div><div class="line">    field.setAccessible(true);</div><div class="line">    Object str = field.get(a);</div><div class="line">    Log.e(&quot;Test&quot;,&quot;mTestFinal = &quot;+str);</div><div class="line">    Method method = TestA.class.getDeclaredMethod(&quot;getFinalString&quot;);</div><div class="line">    Object ret = method.invoke(a);</div><div class="line">    Log.e(&quot;Test&quot;,&quot;ret = &quot;+ret);</div><div class="line">    field.set(a, &quot;test&quot;);</div><div class="line">    str = field.get(a);</div><div class="line">    Log.e(&quot;Test&quot;,&quot;mTestFinal = &quot;+str);</div><div class="line">    ret = method.invoke(a);</div><div class="line">    Log.e(&quot;Test&quot;,&quot;ret = &quot;+ret);</div><div class="line">&#125; catch (Exception e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Test    : mTestFinal = testFinal</div><div class="line">Test    : ret = testFinal</div><div class="line">Test    : mTestFinal = test</div><div class="line">Test    : ret = testFinal</div></pre></td></tr></table></figure>
+<p>可见修改 mTestFinal 变量的值，并没有改变 getFinalString 方法的返回值。<br>原因就是由于 mTestFinal 是final变量，getFinalString 已经被优化成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public String getFinalString() &#123;</div><div class="line">    return &quot;testFinal&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果把 final 修饰符去掉，结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Test    : mTestFinal = testFinal</div><div class="line">Test    : ret = testFinal</div><div class="line">Test    : mTestFinal = test</div><div class="line">Test    : ret = test</div></pre></td></tr></table></figure>
+<p>下面再介绍一下其他情形的宏替换情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">// 会替换，编译器会优化成 &quot;testFinalt&quot;</div><div class="line">private final String mTestFinal = &quot;testFinal&quot;+&quot;t&quot;;</div><div class="line"></div><div class="line">// 会替换，基本的算术运算</div><div class="line">private final int mTestFinal = 8+1;</div><div class="line"></div><div class="line">// 不会替换</div><div class="line">private final String mTestFinal = new String(&quot;testFinal&quot;);</div><div class="line"></div><div class="line">// 不会替换，调用了valueOf方法，无法在编译时确定</div><div class="line">private final String mTestFinal = String.valueOf(&quot;testFinal&quot;);</div><div class="line"></div><div class="line">// 不会替换，因为没有在定义时初始化，</div><div class="line">// 同样在构造方法中初始化也是不会替换的</div><div class="line">private final int mTestFinal;</div><div class="line">&#123;</div><div class="line">    mTestFinal = 9;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们在<a href="http://www.heqiangfly.com/2014/01/20/java-basic-knowledge-about-string/" target="_blank" rel="external">Java 基础 – 深入理解 String </a>一文中介绍过下面的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">String str1 = &quot;abcdef&quot;;</div><div class="line">String abc = &quot;abc&quot;;</div><div class="line">String def = &quot;def&quot;;</div><div class="line">String str2 = abc + def;</div><div class="line">System.out.println(str1 == str2);</div></pre></td></tr></table></figure>
+<p>这个打印输出为false，如何才能输出true呢？</p>
+<p>把abc和def改成final类型就行了，会执行宏替换，str2 仍然相当于执行 <code>&quot;abc&quot;+&quot;def&quot;</code>。</p>
+<h2 id="内部类中的局部变量"><a href="#内部类中的局部变量" class="headerlink" title="内部类中的局部变量"></a>内部类中的局部变量</h2><p>我们知道，如果程序需要在匿名内部类和局部内部类中使用局部变量，那么这个局部变量必须使用final修饰。<br>那么原因是什么呢？<br>对于普通局部变量而言，它的作用域就是停留在该方法内，当方法执行结束，该局部变量也随之消失；但是内部类则可能产生隐式的闭包，闭包使得局部变量脱离它所在的方法继续存在。比如创建一个局部 Thread 变量里面使用局部变量。也就是内部类会扩大局部变量的作用域，如果不被final修饰的话，该变量的值可能会被随意的改变，那么就会引起混乱，因此Java编译器要求被内部类访问的局部变量必须使用final修饰。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 final 修饰符
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java 基础 -- 范型</title>
     <link href="http://yoursite.com/2014/02/14/java-basic-knowledge-generic/"/>
     <id>http://yoursite.com/2014/02/14/java-basic-knowledge-generic/</id>
@@ -12085,7 +12163,7 @@ AbstractStringBuilder <|-- StringBuffer
     <link href="http://yoursite.com/2014/01/20/java-basic-knowledge-about-string/"/>
     <id>http://yoursite.com/2014/01/20/java-basic-knowledge-about-string/</id>
     <published>2014-01-20T02:00:00.000Z</published>
-    <updated>2018-09-24T11:54:13.535Z</updated>
+    <updated>2019-05-17T07:21:26.019Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>String</code> 类是我们在编程过程中经常用到的类，也是面试过程中经常涉及到的类。本文就我们平时遇到的关于 <code>String</code> 类的知识点做个归纳整理。<br><a href="https://code.csdn.net/hty1053240123/jdk-source/tree/master/java/lang/String.java" target="_blank" rel="external">String 源码</a></p>
 <h2 id="final-类型"><a href="#final-类型" class="headerlink" title="final 类型"></a>final 类型</h2><p>通过查看 <code>String</code> 源码我们可以看到，该类是 final 类型的，也即意味着 <code>String</code> 类不能被继承。</p>
@@ -12103,11 +12181,11 @@ AbstractStringBuilder <|-- StringBuffer
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">String str1 = new String(&quot;abc&quot;);</div><div class="line">String str2 = new String(&quot;abc&quot;);</div><div class="line">System.out.println(str1 == str2);</div></pre></td></tr></table></figure>
 <p>上面的结果时打印了 false。<br>当使用 new 操作符时，总是会创建新的字符串对象。</p>
 <h2 id="号操作符"><a href="#号操作符" class="headerlink" title="+ 号操作符"></a>+ 号操作符</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">String str1 = &quot;abcdef&quot;;</div><div class="line">String str2 = &quot;abc&quot; + &quot;def&quot;;</div><div class="line">System.out.println(str1 == str2);</div></pre></td></tr></table></figure>
-<p>结果是打印了 true。<br>为什么是这个结果呢？<br>我们先来看一下字节码信息：</p>
+<p>结果是打印了 true。<br>为什么是这个结果呢？<br>我们先通过 <code>javap -c Test.class</code> 来看一下字节码信息：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Code:</div><div class="line">   0: ldc           #2                  // String abcdef</div><div class="line">   2: astore_1</div><div class="line">   3: ldc           #2                  // String abcdef</div><div class="line">   5: astore_2</div><div class="line">   6: getstatic     #3                  // Field java/lang/System.out:Ljava/io/PrintStream;</div><div class="line">   9: aload_1</div><div class="line">  10: aload_2</div></pre></td></tr></table></figure>
 <p>可以看到 str2 在编译期优化成了 <code>str2 = &quot;abcdef&quot;</code>。因此和 str1 是字符串常量池中的同一对象。<br>再来看下面一段代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">String str1 = &quot;abcdef&quot;;</div><div class="line">String abc = &quot;abc&quot;;</div><div class="line">String def = &quot;def&quot;;</div><div class="line">String str2 = abc + def;</div><div class="line">System.out.println(str1 == str2);</div></pre></td></tr></table></figure>
-<p>结果是打印了 false。<br>可见，字符串对象的相加和字符串常量的相加是不一样的。<br>先来看一下字节码：</p>
+<p>结果是打印了 false。<br>可见，字符串对象的相加和字符串常量的相加是不一样的。<br>如果想输出true，把abc和def变量用final修饰就行了，编译器编译时会执行宏替换。<br>先来看一下字节码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Code:</div><div class="line">   0: ldc           #2                  // String abcdef</div><div class="line">   2: astore_1</div><div class="line">   3: ldc           #3                  // String abc</div><div class="line">   5: astore_2</div><div class="line">   6: ldc           #4                  // String def</div><div class="line">   8: astore_3</div><div class="line">   9: new           #5                  // class java/lang/StringBuilder</div><div class="line">  12: dup</div><div class="line">  13: invokespecial #6                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</div><div class="line">  16: aload_2</div><div class="line">  17: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</div><div class="line">  20: aload_3</div><div class="line">  21: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</div><div class="line">  24: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</div></pre></td></tr></table></figure>
 <p>可见，字符串对象的相加实际上也是通过 <code>StringBuilder</code> 对象来完成的，首先以最左边的字符串为参数创建 <code>StringBuilder</code> 对象，然后依次对右边进行 <code>append</code> 操作，最后将 <code>StringBuilder</code> 对象通过 <code>toString()</code> 方法转换成 <code>String</code> 对象。<br><code>String str2 = abc + def</code> 其实等价于 <code>String str2 = new StringBuilder().append(abc).append(def).toString()</code>。<br>再来看下面的例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String e = &quot;e&quot;;</div><div class="line">String str2 = &quot;abc&quot;+&quot;def&quot;+e+&quot;h&quot;+&quot;g&quot;;</div></pre></td></tr></table></figure>
