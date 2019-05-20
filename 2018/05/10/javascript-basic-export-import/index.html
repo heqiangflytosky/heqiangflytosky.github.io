@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/05/10/javascript-basic-export-import/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍import和export的使用">
-<meta property="og:updated_time" content="2019-03-16T08:53:09.109Z">
+<meta property="og:updated_time" content="2019-05-20T08:10:44.128Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript 基础 -- export 和 import">
 <meta name="twitter:description" content="介绍import和export的使用">
@@ -424,7 +424,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import &#123;webSite, name&#125; from &apos;./test&apos;</div><div class="line"></div><div class="line">      console.log(webSite)</div><div class="line">      console.log(name)</div></pre></td></tr></table></figure>
 <h2 id="import"><a href="#import" class="headerlink" title="import"></a>import</h2><h3 id="导入默认值"><a href="#导入默认值" class="headerlink" title="导入默认值"></a>导入默认值</h3><p>导入由默认导出（export daulft）方式导出的值，具体例子可看前面的默认导出一节</p>
 <h3 id="导入单个导出"><a href="#导入单个导出" class="headerlink" title="导入单个导出"></a>导入单个导出</h3><p><code>import {myExport} from &#39;/modules/my-module.js&#39;;</code><br>下面通过命名导出三个值：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// test.js</div><div class="line">function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var person = &#123;</div><div class="line">    name: &apos;James&apos;,</div><div class="line">    say: function() &#123;</div><div class="line">        console.log(&apos;I am James&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const URL = &quot;http://www.heqiangfly.com&quot;</div><div class="line"></div><div class="line">export default &#123;print, person,URL&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// test.js</div><div class="line">function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var person = &#123;</div><div class="line">    name: &apos;James&apos;,</div><div class="line">    say: function() &#123;</div><div class="line">        console.log(&apos;I am James&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const URL = &quot;http://www.heqiangfly.com&quot;</div><div class="line"></div><div class="line">export &#123;print, person,URL&#125;</div></pre></td></tr></table></figure>
 <p>如果我们不需要全部导入，可以这样做：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import &#123;URL&#125; from &apos;./test&apos;</div><div class="line"></div><div class="line">  console.log(URL)</div></pre></td></tr></table></figure>
 <h3 id="导入整个模块的内容"><a href="#导入整个模块的内容" class="headerlink" title="导入整个模块的内容"></a>导入整个模块的内容</h3><p>使用 <code>import * as name from &quot;module-name&quot;</code> 可以将 module-name.js 文件中导出的所有模块插入当前作用域。<br>针对上面的test.js代码，可以使用下面的导入方法：</p>
@@ -438,6 +438,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import(&apos;/modules/my-module.js&apos;)</div><div class="line">  .then((module) =&gt; &#123;</div><div class="line">    // Do something with the module.</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
 <p>这种使用方式也支持 await 关键字。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let module = await import(&apos;/modules/my-module.js&apos;);</div></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -553,7 +554,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">162</span>
+                <span class="site-state-item-count">163</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
