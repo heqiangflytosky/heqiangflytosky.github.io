@@ -65,7 +65,7 @@ Client 端调用：
 19:17:06.580 Client  : client testOneway end
 19:17:06.581 AIDLService: call testOneWay() para = TestOneway
 19:17:06.581 AIDLService: start sleep
-19:17:08.582 sleep end !
+19:17:08.582 AIDLService: sleep end !
 ```
 
 可见，已经实现了异步调用。

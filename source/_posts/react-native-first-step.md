@@ -70,6 +70,7 @@ AppRegistry.registerComponent('AwesomeProject', () => HelloWorldAppp);
 ## JSX
 React的核心机制之一就是可以在内存中创建虚拟的DOM元素。React利用虚拟DOM来减少对实际DOM的操作从而提升性能。
 JSX就是Javascript和HTML结合的一种格式。可以看作JavaScript的拓展，看起来有点像HTML。React发明了JSX，利用HTML语法来创建虚拟DOM。HTML语言直接写在JavaScript语言之中，不加任何引号，这就是JSX的语法，它允许 HTML 与 JavaScript 的混写。遇到HTML标签（以 < 开头），JSX就当HTML解析，遇到代码块（以 { 开头），就当JavaScript解析。最后，每个HTML标签都会转化为JavaScript代码来运行。
+其实 JSX 并不是一门新的语言，仅仅是语法糖，它允许开发者在 JavaScript 中书写 HTML 语法。最后，每个 HTML 标签都转化为 JavaScript 代码来运行。这样对于使用 JavaScript 来构建组件以及组件之间关系的应用，在代码层面显得更加清晰，而不是用 JavaScript 操作 DOM 来创建组件以及组件之间的嵌套关系。
 使用React，不一定非要使用JSX语法，可以使用原生的JS进行开发。但是React作者强烈建议我们使用JSX，因为JSX在定义类似HTML这种树形结构时，十分的简单明了。简明的代码结构更利于开发和维护。 XML有着开闭标签，在构建复杂的树形结构时，比函数调用和对象字面量更易读。
 看个直接的对比，如下面两段代码是等价的：
 JS：

@@ -185,7 +185,7 @@ var person = {
 
 const URL = "http://www.heqiangfly.com"
 
-export default {print, person,URL}
+export {print, person,URL}
 ```
 
 如果我们不需要全部导入，可以这样做：
