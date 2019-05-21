@@ -35,6 +35,7 @@ ContentProvider 内容提供者，作为 Android 的四大组件之一，我们�
  - android:name： ContentProvider 的类名
  - android:exported：是否允许其他应用访问该 ContentProvider，true为允许，false为禁止。
  - android:multiProcess：是否允许在调用者进程启动 ContentProvider。一般情况下，ContentProvider 都是在创建者的进程启动的，如果该进程没有启动，那么会把该进程启动。如果设置了这个属性，就可以在调用者进程启动。但前提是调用者和创建者的 android:sharedUserId 相同才行，否则还是不能在调用者进程启动 ContentProvider。
+ - android:initOrder：当前 ContentProvider 相对于其他 ContentProvider 的初始化顺序，数值越大，优先级越高。
 
 ### 封装数据库或者 Shared Preferences
 
