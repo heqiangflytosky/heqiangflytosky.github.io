@@ -6924,9 +6924,9 @@ https://blog.csdn.net/CmdMac/article/details/80509994
     
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
-      <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
-    
       <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
+    
+      <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
     
   </entry>
   
@@ -7078,9 +7078,9 @@ https://blog.csdn.net/CmdMac/article/details/80509994
     
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
-      <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
-    
       <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
+    
+      <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
     
   </entry>
   
@@ -10171,6 +10171,45 @@ https://blog.csdn.net/daweibalang717/article/details/40738073
   </entry>
   
   <entry>
+    <title>Android实用技巧之adb命令：wm 命令的使用</title>
+    <link href="http://yoursite.com/2015/03/28/android-development-skills-adb-wm/"/>
+    <id>http://yoursite.com/2015/03/28/android-development-skills-adb-wm/</id>
+    <published>2015-03-28T02:00:00.000Z</published>
+    <updated>2019-05-22T11:50:09.937Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>wm 命令是和 Android WindowManagerService 相关联的，可以获取设备屏幕相关信息，比如：分辨率、像素密度等。甚至还可以修改这些参数，可以很方便地查看 APP 在不同像分辨率和素密度设备上的显示效果。</p>
+<h2 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h2><p>使用 <code>adb shell wm</code> 可以查看wm支持的一些参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">usage: wm [subcommand] [options]</div><div class="line">       wm size [reset|WxH|WdpxHdp]</div><div class="line">       wm density [reset|DENSITY]</div><div class="line">       wm overscan [reset|LEFT,TOP,RIGHT,BOTTOM]</div><div class="line">       wm scaling [off|auto]</div><div class="line">       wm screen-capture [userId] [true|false]</div><div class="line"></div><div class="line">wm size: return or override display size.</div><div class="line">         width and height in pixels unless suffixed with &apos;dp&apos;.</div><div class="line"></div><div class="line">wm density: override display density.</div><div class="line"></div><div class="line">wm overscan: set overscan area for display.</div><div class="line"></div><div class="line">wm scaling: set display scaling mode.</div><div class="line"></div><div class="line">wm screen-capture: enable/disable screen capture.</div><div class="line"></div><div class="line">wm dismiss-keyguard: dismiss the keyguard, prompting the user for auth if necessary.</div></pre></td></tr></table></figure>
+<ul>
+<li><code>wm size</code>：查看屏幕的分辨率, 单位: px。</li>
+<li><code>wm size &lt;WxH|WdpxHdp&gt;</code>：修改置屏幕的分辨率：wm size 720x1280（单位px），wm size 360dpx640dp（单位dp）。</li>
+<li><code>wm size reset</code>：重置屏幕的分辨率，撤销对屏幕分辨率的修改（改回真实的物理分辨率）。</li>
+<li><code>wm density</code>：查看屏幕的像素密度, 单位: dpi（dots per inch）。</li>
+<li><code>wm density &lt;DENSITY&gt;</code>：修改屏幕的像素密度：wm density 360。</li>
+<li><code>wm density reset</code>：重置屏幕的像素密度，撤销对屏幕像素密度的修改（改回真实的像素密度）</li>
+<li><code>wm overscan</code>：该命令用来设置、重置LCD的显示区域。四个参数分别是显示边缘距离LCD左、上、右、下的像素数。例如，对于分辨率为540x960的屏幕，通过执行 命令wm overscan 0,0,0,420可将显示区域限定在一个540x540的矩形框里。</li>
+<li><code>wm scaling</code>：设置缩放模式</li>
+<li><code>wm screen-capture</code>：屏幕截图</li>
+<li><code>wm dismiss-keyguard</code>：取消锁屏</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 wm 的使用
+    
+    </summary>
+    
+      <category term="Android实用技巧" scheme="http://yoursite.com/categories/Android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"/>
+    
+    
+      <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
+    
+      <category term="wm" scheme="http://yoursite.com/tags/wm/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android实用技巧之adb命令：am 命令的使用</title>
     <link href="http://yoursite.com/2015/03/26/android-development-skills-adb-am/"/>
     <id>http://yoursite.com/2015/03/26/android-development-skills-adb-am/</id>
@@ -10863,7 +10902,7 @@ https://blog.csdn.net/daweibalang717/article/details/40738073
     <link href="http://yoursite.com/2015/01/26/android-knowledge-about-contentprovider/"/>
     <id>http://yoursite.com/2015/01/26/android-knowledge-about-contentprovider/</id>
     <published>2015-01-26T02:00:00.000Z</published>
-    <updated>2019-01-09T08:57:31.438Z</updated>
+    <updated>2019-05-22T11:50:09.939Z</updated>
     
     <content type="html"><![CDATA[<p><a href="https://github.com/heqiangflytosky/AndroidDBDemo" target="_blank" rel="external">ContentProvider + SQLite 使用Demo GitHub 源码</a></p>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ContentProvider 内容提供者，作为 Android 的四大组件之一，我们会经常使用到。它是 Android 中提供的用于数据共享的组件，你可以跨进城、跨应用来访问这些数据。除了跨进城访问数据，ContentProvider 还可以进行跨进程方法调用。<br>对于数据的存储，Android 提供了多种方式供我们选择：SQLite 数据库、Shared Preferences、文件存储等。如果在同一个应用中我们可以直接共享使用这些数据，但是如果时不同的应用需要共享这些数据，那么就需要借助于 ContentProvider。我们平时最常见的是 ContentProvider + SQLite 数据库的组合，当然 ContentProvider 也可以和其他的数据存储方式相结合。<br>当外部应用需要对 ContentProvider 里面的数据进行增删改查操作时就需要用到 ContentResolver，Andriod 的 Context 提供了 getContentResolver() 方法来获取 ContentResolver 对象。<br>如果我们使用比如 ContentProvider + Shared Preferences 的组合时，你可能需要将数据转换为 Cursor 返回给 ContentProvider 提供给其他应用查询，那么本文也将介绍如果创建一个 Cursor，通常我们使用 MatrixCursor。<br>我们也可以使用 ContentProvider + File 的方式来直接操作文件，其他的应用可以通过该方式读写当前应用的私有文件。 这时我们要重写 openFile 等方法来实现。<br>另外，我们也可以使用 ContentProvider 进行跨进程方法调用。这时我们需要重写 call 方法。根据该方法的参数来调用相对应地方法。</p>
@@ -10874,6 +10913,7 @@ https://blog.csdn.net/daweibalang717/article/details/40738073
 <li>android:name： ContentProvider 的类名</li>
 <li>android:exported：是否允许其他应用访问该 ContentProvider，true为允许，false为禁止。</li>
 <li>android:multiProcess：是否允许在调用者进程启动 ContentProvider。一般情况下，ContentProvider 都是在创建者的进程启动的，如果该进程没有启动，那么会把该进程启动。如果设置了这个属性，就可以在调用者进程启动。但前提是调用者和创建者的 android:sharedUserId 相同才行，否则还是不能在调用者进程启动 ContentProvider。</li>
+<li>android:initOrder：当前 ContentProvider 相对于其他 ContentProvider 的初始化顺序，数值越大，优先级越高。</li>
 </ul>
 <h3 id="封装数据库或者-Shared-Preferences"><a href="#封装数据库或者-Shared-Preferences" class="headerlink" title="封装数据库或者 Shared Preferences"></a>封装数据库或者 Shared Preferences</h3><p>创建我们自己的 ContentProvider 通常需要继承 ContentProvider 类并实现它的六个抽象方法。<br>ContentProvider 提供了下面的四个抽象方法进行增删改查操作，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public abstract @Nullable Uri insert(@NonNull Uri uri, @Nullable ContentValues values);</div><div class="line">public abstract int delete(@NonNull Uri uri, @Nullable String selection,</div><div class="line">            @Nullable String[] selectionArgs);</div><div class="line">public abstract int update(@NonNull Uri uri, @Nullable ContentValues values,</div><div class="line">            @Nullable String selection, @Nullable String[] selectionArgs);</div><div class="line">public abstract @Nullable Cursor query(@NonNull Uri uri, @Nullable String[] projection,</div><div class="line">            @Nullable String selection, @Nullable String[] selectionArgs,</div><div class="line">            @Nullable String sortOrder);</div></pre></td></tr></table></figure>
@@ -11162,6 +11202,53 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
       <category term="ActivityGroup" scheme="http://yoursite.com/tags/ActivityGroup/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 基础 -- 深入理解 try catch finally</title>
+    <link href="http://yoursite.com/2014/11/08/java-basic-try-catch-finally/"/>
+    <id>http://yoursite.com/2014/11/08/java-basic-try-catch-finally/</id>
+    <published>2014-11-08T02:00:00.000Z</published>
+    <updated>2019-05-22T11:51:57.812Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>try catch块是我们编程过程中经常用到的，也是面试时经常遇到的，会问到一些执行顺序方面的问题，本文就将这些问题汇总并用实例验证解答。</p>
+<h2 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h2><ol>
+<li>当try中没有出现异常时，finally块中代码是否会执行？</li>
+<li>当try或者catch中有return时，finally是否会执行、以及执行顺序如何？</li>
+<li>如果try或者catch中有return时，finally也有return时，会执行哪个return。</li>
+</ol>
+<h2 id="问题解答"><a href="#问题解答" class="headerlink" title="问题解答"></a>问题解答</h2><h3 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h3><p>这个问题比较容易解答，无论 try 中是否出现异常，finally 块中的代码都会执行。<br>finally中常用来用清尾工作。</p>
+<h3 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h3><p>现在来讨论一下当当try或者catch中有return时，finally是否会执行、以及执行顺序的问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">private int testTry() &#123;</div><div class="line">    try&#123;</div><div class="line">        return 1;</div><div class="line">    &#125; catch (Exception e) &#123;</div><div class="line"></div><div class="line">    &#125; finally &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;finally&quot;);</div><div class="line">    &#125;</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过代码测试，finally 中的打印是可以出现的。</p>
+<p>下面来讨论一下finally是否对return值有影响的问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">private int testTry() &#123;</div><div class="line">    int a = 20;</div><div class="line">    try&#123;</div><div class="line">        return a;</div><div class="line">    &#125; catch (Exception e) &#123;</div><div class="line"></div><div class="line">    &#125; finally &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;finally&quot;);</div><div class="line">        a = 30;</div><div class="line">    &#125;</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回结果 20；</p>
+<h3 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h3><p>再来看一下当try或者catch中有return时，finally也有return时，会执行哪个return的问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">private int testTry() &#123;</div><div class="line">    int a = 20;</div><div class="line">    try&#123;</div><div class="line">        return a;</div><div class="line">    &#125; catch (Exception e) &#123;</div><div class="line"></div><div class="line">    &#125; finally &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;finally&quot;);</div><div class="line">        a = 30;</div><div class="line">        return a;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回30；</p>
+<p>上面介绍的是在finally中改变返回结果的情况，那如果改变返回结果的属性呢？会不会生效呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">private ArrayList testTry2() &#123;</div><div class="line">    ArrayList list = new ArrayList();</div><div class="line">    try&#123;</div><div class="line">        return list;</div><div class="line">    &#125; catch (Exception e) &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Exception&quot;);</div><div class="line">        return null;</div><div class="line">    &#125; finally &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;finally&quot;);</div><div class="line">        list.add(&quot;a&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种情况下，finally里面对list的改变是起作用的，这时候打印返回值的size()，结果是1。<br>如果是返回引用类型的情况下修改返回结果同样也是不生效的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">private ArrayList testTry2() &#123;</div><div class="line">    ArrayList list = new ArrayList();</div><div class="line">    try&#123;</div><div class="line">        list.add(&quot;a&quot;);</div><div class="line">        return list;</div><div class="line">    &#125; catch (Exception e) &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Exception&quot;);</div><div class="line">        return null;</div><div class="line">    &#125; finally &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;finally&quot;);</div><div class="line">        list = new ArrayList();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这时候打印返回值的size()，结果是1。</p>
+<p>当 catch 和 finally 都有返回时，看看执行情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">private int testTry() &#123;</div><div class="line">    int a = 20;</div><div class="line">    try&#123;</div><div class="line">        a = a/0;</div><div class="line">        return a;</div><div class="line">    &#125; catch (Exception e) &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Exception&quot;);</div><div class="line">        return 0;</div><div class="line">    &#125; finally &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;finally&quot;);</div><div class="line">        a = 30;</div><div class="line">        return a;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">E/Test: Exception</div><div class="line">E/Test: finally</div><div class="line">E/Test: result = 30</div></pre></td></tr></table></figure>
+<p>返回30；</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 try catch finally 在一些特殊情况下的执行顺序
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
     
   </entry>
   

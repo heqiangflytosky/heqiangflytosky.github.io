@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/01/26/android-knowledge-about-contentprovider/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 ContentProvider 的基本使用">
-<meta property="og:updated_time" content="2019-01-09T08:57:31.438Z">
+<meta property="og:updated_time" content="2019-05-22T11:50:09.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android ContentProvider 使用以及源码分析">
 <meta name="twitter:description" content="本文介绍 ContentProvider 的基本使用">
@@ -409,6 +409,7 @@
 <li>android:name： ContentProvider 的类名</li>
 <li>android:exported：是否允许其他应用访问该 ContentProvider，true为允许，false为禁止。</li>
 <li>android:multiProcess：是否允许在调用者进程启动 ContentProvider。一般情况下，ContentProvider 都是在创建者的进程启动的，如果该进程没有启动，那么会把该进程启动。如果设置了这个属性，就可以在调用者进程启动。但前提是调用者和创建者的 android:sharedUserId 相同才行，否则还是不能在调用者进程启动 ContentProvider。</li>
+<li>android:initOrder：当前 ContentProvider 相对于其他 ContentProvider 的初始化顺序，数值越大，优先级越高。</li>
 </ul>
 <h3 id="封装数据库或者-Shared-Preferences"><a href="#封装数据库或者-Shared-Preferences" class="headerlink" title="封装数据库或者 Shared Preferences"></a>封装数据库或者 Shared Preferences</h3><p>创建我们自己的 ContentProvider 通常需要继承 ContentProvider 类并实现它的六个抽象方法。<br>ContentProvider 提供了下面的四个抽象方法进行增删改查操作，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public abstract @Nullable Uri insert(@NonNull Uri uri, @Nullable ContentValues values);</div><div class="line">public abstract int delete(@NonNull Uri uri, @Nullable String selection,</div><div class="line">            @Nullable String[] selectionArgs);</div><div class="line">public abstract int update(@NonNull Uri uri, @Nullable ContentValues values,</div><div class="line">            @Nullable String selection, @Nullable String[] selectionArgs);</div><div class="line">public abstract @Nullable Cursor query(@NonNull Uri uri, @Nullable String[] projection,</div><div class="line">            @Nullable String selection, @Nullable String[] selectionArgs,</div><div class="line">            @Nullable String sortOrder);</div></pre></td></tr></table></figure>
@@ -639,7 +640,7 @@ https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&mid=2653579366&idx=1&sn=49361b
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">163</span>
+                <span class="site-state-item-count">165</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -657,7 +658,7 @@ https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&mid=2653579366&idx=1&sn=49361b
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">88</span>
+                <span class="site-state-item-count">89</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
