@@ -237,6 +237,58 @@ int match = URI_MATCHER.match(uri);
                 }
 ```
 
+## 关于Exception
+
+我们在操作数据库时有必要关系当URI不存在时的一些异常处理，如何处理我们就从源码看一下：
+
+```
+    public final @Nullable Uri insert(@RequiresPermission.Write @NonNull Uri url,
+                @Nullable ContentValues values) {
+        Preconditions.checkNotNull(url, "url");
+        IContentProvider provider = acquireProvider(url);
+        if (provider == null) {
+            throw new IllegalArgumentException("Unknown URL " + url);
+        }
+	...
+    }
+
+
+    public final int delete(@RequiresPermission.Write @NonNull Uri url, @Nullable String where,
+            @Nullable String[] selectionArgs) {
+        Preconditions.checkNotNull(url, "url");
+        IContentProvider provider = acquireProvider(url);
+        if (provider == null) {
+            throw new IllegalArgumentException("Unknown URL " + url);
+        }
+	...
+    }
+
+    public final int update(@RequiresPermission.Write @NonNull Uri uri,
+            @Nullable ContentValues values, @Nullable String where,
+            @Nullable String[] selectionArgs) {
+        Preconditions.checkNotNull(uri, "uri");
+        IContentProvider provider = acquireProvider(uri);
+        if (provider == null) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+	...
+    }
+
+    public final @Nullable Cursor query(final @RequiresPermission.Read @NonNull Uri uri,
+            @Nullable String[] projection, @Nullable String selection,
+            @Nullable String[] selectionArgs, @Nullable String sortOrder,
+            @Nullable CancellationSignal cancellationSignal) {
+        Preconditions.checkNotNull(uri, "uri");
+        IContentProvider unstableProvider = acquireUnstableProvider(uri);
+        if (unstableProvider == null) {
+            return null;
+        }
+	...
+    }
+```
+
+上面列出了增删改查的接口，发现增删改如果在Uri不存在的情况下都会报 `IllegalArgumentException ` 异常，查询接口在Uri不存在情况下会返回null。因此，我们只需要做相应的异常处理就行了。
+
 ## ContentProvider 源码分析
 
 <!--  
