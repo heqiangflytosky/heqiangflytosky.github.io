@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-04-23T11:07:24.081Z</updated>
+  <updated>2019-05-29T06:47:35.152Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,10 +17,10 @@
   
   <entry>
     <title>读书 2019</title>
-    <link href="http://yoursite.com/2019/04/13/personal-reading-2019/"/>
-    <id>http://yoursite.com/2019/04/13/personal-reading-2019/</id>
-    <published>2019-04-13T02:00:00.000Z</published>
-    <updated>2019-04-23T11:07:24.081Z</updated>
+    <link href="http://yoursite.com/2019/05/29/personal-reading-2019/"/>
+    <id>http://yoursite.com/2019/05/29/personal-reading-2019/</id>
+    <published>2019-05-29T02:00:00.000Z</published>
+    <updated>2019-05-29T06:47:35.152Z</updated>
     
     <content type="html"><![CDATA[<h3 id="《乖，摸摸头》"><a href="#《乖，摸摸头》" class="headerlink" title="《乖，摸摸头》"></a>《乖，摸摸头》</h3><p>2019.1</p>
 <h3 id="《一本书读懂24中互联网思维》"><a href="#《一本书读懂24中互联网思维》" class="headerlink" title="《一本书读懂24中互联网思维》"></a>《一本书读懂24中互联网思维》</h3><p>2019.1</p>
@@ -50,7 +50,7 @@
 <li>23.大数据思维</li>
 <li>24.物联网思维</li>
 </ul>
-<h3 id="《独角兽之路》"><a href="#《独角兽之路》" class="headerlink" title="《独角兽之路》"></a>《独角兽之路》</h3><h3 id="《厚黑学》"><a href="#《厚黑学》" class="headerlink" title="《厚黑学》"></a>《厚黑学》</h3><h3 id="《半小时漫画世界史》"><a href="#《半小时漫画世界史》" class="headerlink" title="《半小时漫画世界史》"></a>《半小时漫画世界史》</h3>]]></content>
+<h3 id="《独角兽之路》"><a href="#《独角兽之路》" class="headerlink" title="《独角兽之路》"></a>《独角兽之路》</h3><h3 id="《厚黑学》"><a href="#《厚黑学》" class="headerlink" title="《厚黑学》"></a>《厚黑学》</h3><h3 id="《半小时漫画世界史》"><a href="#《半小时漫画世界史》" class="headerlink" title="《半小时漫画世界史》"></a>《半小时漫画世界史》</h3><h3 id="《生命不息，折腾不止-–-罗永浩》"><a href="#《生命不息，折腾不止-–-罗永浩》" class="headerlink" title="《生命不息，折腾不止 – 罗永浩》"></a>《生命不息，折腾不止 – 罗永浩》</h3>]]></content>
     
     <summary type="html">
     
@@ -6924,9 +6924,9 @@ https://blog.csdn.net/CmdMac/article/details/80509994
     
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
-      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
-    
       <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
+    
+      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
     
   </entry>
   
@@ -7078,9 +7078,9 @@ https://blog.csdn.net/CmdMac/article/details/80509994
     
       <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
-      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
-    
       <category term="Gradle" scheme="http://yoursite.com/tags/Gradle/"/>
+    
+      <category term="Android Studio" scheme="http://yoursite.com/tags/Android-Studio/"/>
     
   </entry>
   
@@ -11913,10 +11913,10 @@ https://blog.csdn.net/u013384984/article/details/79496052
   
   <entry>
     <title>Java 基础 -- 深入理解 final 修饰符</title>
-    <link href="http://yoursite.com/2014/02/18/java-basic-final/"/>
-    <id>http://yoursite.com/2014/02/18/java-basic-final/</id>
-    <published>2014-02-18T02:00:00.000Z</published>
-    <updated>2019-05-17T07:47:09.409Z</updated>
+    <link href="http://yoursite.com/2014/02/24/java-basic-final/"/>
+    <id>http://yoursite.com/2014/02/24/java-basic-final/</id>
+    <published>2014-02-24T02:00:00.000Z</published>
+    <updated>2019-05-29T06:47:54.149Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>final 修饰符也是我们经常用到的一个简单修饰符，final修饰符的基本作用如下：</p>
 <ul>
@@ -11990,13 +11990,177 @@ https://blog.csdn.net/u013384984/article/details/79496052
   </entry>
   
   <entry>
-    <title>Java 基础 -- 内存管理</title>
-    <link href="http://yoursite.com/2014/02/16/java-basic-memory-manage/"/>
-    <id>http://yoursite.com/2014/02/16/java-basic-memory-manage/</id>
-    <published>2014-02-16T02:00:00.000Z</published>
-    <updated>2019-05-28T03:33:49.969Z</updated>
+    <title>Java 内存管理 -- 父子实例的内存控制</title>
+    <link href="http://yoursite.com/2014/02/22/java-basic-memory-manage-inherit-object/"/>
+    <id>http://yoursite.com/2014/02/22/java-basic-memory-manage-inherit-object/</id>
+    <published>2014-02-22T02:00:00.000Z</published>
+    <updated>2019-05-29T06:45:38.256Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>说起 Java 内存管理，首先我们想起的可能就是虚拟机自动内存管理机制。Java 的程序员把内存控制权利交给了 Java 虚拟机，实现了 JVM 内存动态分配和垃圾回收机制。<br>那是不是说我们就可以毫无节制的进行对象创建呢？答案肯定是否定的，虽然是自动分配内存，但是我们也要考虑对象创建以及GC的系统开销等等。这些 Java 内存管理知识使我们进阶必须要掌握的知识。</p>
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>继承是面向对象的3大特征之一，也是Java语言的重要特性。接下来我们分析一下父子实例的内存控制。</p>
+<h2 id="继承成员变量和继承方法的区别"><a href="#继承成员变量和继承方法的区别" class="headerlink" title="继承成员变量和继承方法的区别"></a>继承成员变量和继承方法的区别</h2><p>当子类继承父类时，子类会获得父类中定义的成员变量和方法。当访问权限允许的情况下，子类可以直接访问父类中定义的成员变量和方法。其实这种说法比较笼统，Java 继承中对成员变量和方法的处理是不同的。<br>下面通过一些特殊情况下的例子来介绍一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class Base &#123;</div><div class="line">    int i = 2;</div><div class="line">    public void display() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Base i = &quot;+i);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Derived extends Base &#123;</div><div class="line">    int i = 22;</div><div class="line">    @Override</div><div class="line">    public void display() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Derived i = &quot;+i);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">//1.声明并创建一个Base对象，并调用i变量和display方法</div><div class="line">Base b = new Base();</div><div class="line">Log.e(&quot;Test&quot;,&quot;i = &quot;+b.i);</div><div class="line">b.display();</div><div class="line"></div><div class="line">//2.声明并创建一个Derived对象，并调用i变量和display方法</div><div class="line">Derived d = new Derived();</div><div class="line">Log.e(&quot;Test&quot;,&quot;i = &quot;+d.i);</div><div class="line">d.display();</div><div class="line"></div><div class="line">//3.声明Base变量，创建一个Derived对象赋值给bd，并调用i变量和display方法</div><div class="line">Base bd = new Derived();</div><div class="line">Log.e(&quot;Test&quot;,&quot;i = &quot;+bd.i);</div><div class="line">bd.display();</div><div class="line"></div><div class="line">//4.声明Base变量，并指向前面创建的Derived对象</div><div class="line">Base b2d = d;</div><div class="line">Log.e(&quot;Test&quot;,&quot;i = &quot;+b2d.i);</div><div class="line">b2d.display();</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">E Test    : i = 2</div><div class="line">E Test    : Base i = 2</div><div class="line"></div><div class="line">E Test    : i = 22</div><div class="line">E Test    : Derived i = 22</div><div class="line"></div><div class="line">E Test    : i = 2</div><div class="line">E Test    : Derived i = 22</div><div class="line"></div><div class="line">E Test    : i = 2</div><div class="line">E Test    : Derived i = 22</div></pre></td></tr></table></figure>
+<p>程序1和2中情况分别声明和创建了Base和Derived变量和对象，它们的输出结果我们是没有疑问的。<br>程序3声明了一个Base变量bd，却将一个Derived对象赋给该变量。此时系统将自动进行向上转型来保证程序正确性。问题是直接通过bd访问i变量，输出的是Base（声明时的类型）对象的i实例变量的值；如果通过db来调用display方法，该方法却是Derived（运行时类型）对象的行为方式。<br>程序4是直接将d变量赋值给d2b变量，只是d2b变量的类型是Base。这意味着d和d2b两个变量指向同一个Java对象，因此，如果在程序中判断d2b == d，将返回true。但是，访问d.i输出22，访问d2b.i时却输出2。这一点看上去有点奇怪：两个指向同一个对象的变量，分别访问它们的实例变量时却输出不同的值。这表明在d2b、d变量所指向的Java对象中包含了两块内存，分别存放值为2的i实例变量和值为22的i实例变量。<br>但是不管是d变量，还是bd变量、b2d变量，只要它们实际指向一个Derived变量，不管声明它们时用什么类型，当通过这些变量调用方法时，方法的行为总是表现出它们实际类型的行为。但是如果通过这些变量来访问它们所指对象的实例变量，这些实例变量的值总是表现出声明这些变量所用类型的行为。由此可见，Java继承在处理成员变量和方法是有区别的。<br>看下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class Fruit&#123;</div><div class="line">    public String name;</div><div class="line">    public void info()&#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Apple extends Fruit &#123;</div><div class="line">    private double weight;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面代码中，Apple类继承了Fruit类，因此它会获得Apple类中声明的成员变量和方法，下面使用javap工具分析一下Apple类。<br>$ javap -c -private Apple.class</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">Compiled from &quot;Apple.java&quot;</div><div class="line">public class com.example.heqiang.testsomething.commontest.Apple extends com.example.heqiang.testsomething.commontest.Fruit &#123;</div><div class="line">  private double weight;</div><div class="line"></div><div class="line">  public com.example.heqiang.testsomething.commontest.Apple();</div><div class="line">    Code:</div><div class="line">       0: aload_0</div><div class="line">       1: invokespecial #1                  // Method com/example/heqiang/testsomething/commontest/Fruit.&quot;&lt;init&gt;&quot;:()V</div><div class="line">       4: return</div><div class="line"></div><div class="line">  public void info();</div><div class="line">    Code:</div><div class="line">       0: aload_0</div><div class="line">       1: invokespecial #2                  // Method com/example/heqiang/testsomething/commontest/Fruit.info:()V</div><div class="line">       4: return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出，当Apple继承Fruit类时，编译器会直接将Fruit里的info方法转移到Apple类中。这意味着，如果Apple也有info方法，那么编译器就无法将Fruit的info方法转移到Apple类中。<br><strong>注意</strong>：只有当父类不适用pulic修饰符修饰，子类使用public修饰符修饰时，才可以通过javap看到编译器将父类的public方法直接转移到子类。<br>如果子类重写了父类的方法，那么子类定义的方法彻底覆盖了父类里面的同名方法，系统将不可能把父类的方法转移到子类了。<br>但是对于成员变量而言，我们并没有在Apple的字节码中看到Fruit的name成员变量，因此，成员变量不会直接转移到子类，那么使得父类和子类可以拥有同名的实例变量，子类的实例变量不能覆盖父类的同名实例变量，这就是我们所说的隐藏的概念。<br>因为继承成员变量和继承父类方法之间存在这一的差别，所以对于一个引用类型的变量而言，当通过该变量访问它所引用的对象的实例变量时，该实例变量的值取决于声明该变量时的类型；当通过该变量来调用它所引用的对象的方法时，该方法行为取决于它所实际引用的对象的类型。</p>
+<h2 id="内存中的子类实例以及对super的理解"><a href="#内存中的子类实例以及对super的理解" class="headerlink" title="内存中的子类实例以及对super的理解"></a>内存中的子类实例以及对super的理解</h2><p>上一节我们分析了继承时对于成员变量和方法的不同处理，现在我们引申出来一个问题是：Derived对象在内存中到底是如何存储的，很明显它有两个不同的i实例变量，这意味着必须用两块内存保存它们。<br>Derived对象不仅存储了它自身i实例变量，还需要存储从Base那里继承到的i实例变量，但是这两个i实例变量在底层是有区别的，程序通过Base型变量来访问该对象的i实例变量时，将输出2，通过Derived型的变量访问对象的i变量时，将输出22。<br>下面我们在Derived中添加下面的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void displaySuper() &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Derived i = &quot;+super.i);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果我们访问 displaySuper 方法，输出的是父类Base的成员变量i的值2。<br>那么此处的super代表什么？绝大部分可能会说：super代表父类的默认实例。这个说法比较笼统，如果super代表父类的默认实例，那么这个默认实例在哪里？<br>事实上，系统中只有一个Base对象，而这个对象持有两个i实例变量。当创建一个Derived对象之后，它不仅保存了自己定义的所有实例变量，还保存了它的所有父类所定义的全部实例变量。（private类型的也包含吗？）<br>通过下面的代码来深入了解一下super。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public class Fruit&#123;</div><div class="line">    String colr = &quot;not defined&quot;;</div><div class="line">    //返回调用该方法的对象</div><div class="line">    public Fruit getThis() &#123;</div><div class="line">        return this;</div><div class="line">    &#125;</div><div class="line">    public void info()&#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Fruit info&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Apple extends Fruit &#123;</div><div class="line">    String color = &quot;red&quot;;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void info() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Apple info&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 通过super调用父类的info方法</div><div class="line">    public void accessSuperinfo() &#123;</div><div class="line">        super.info();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 返回super关键字代表的内容</div><div class="line">    public Fruit getSuper() &#123;</div><div class="line">        // 这里不能直接return super；否则编译器报错</div><div class="line">        return super.getThis();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//创建一个Apple对象</div><div class="line">Apple apple = new Apple();</div><div class="line">//调用getSuper方法获取Apple对象关联的super引用</div><div class="line">Fruit fruit = apple.getSuper();</div><div class="line">// 1.判断apple和fruit的关系</div><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+(apple == fruit));</div><div class="line">// 2.判断apple和fruit所引用的color实例变量</div><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+apple.color);</div><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+fruit.colr);</div><div class="line">// 3.分别通过apple和fruit两个变量调用info方法</div><div class="line">apple.info();</div><div class="line">fruit.info();</div><div class="line">// 4.通过accessSuperinfo调用父类的info方法</div><div class="line">apple.accessSuperinfo();</div></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">E Test    : true</div><div class="line">E Test    : red</div><div class="line">E Test    : not defined</div><div class="line">E Test    : Apple info</div><div class="line">E Test    : Apple info</div><div class="line">E Test    : Fruit info</div></pre></td></tr></table></figure>
+<p>通过1处的结果，我们可以断定，Apple对象的getSuper方法中的super.getThis()实际上返回的是该Apple对象本身。<br>2处的结果，虽然Apple对象的getSuper方法返回的是Apple对象本身，但是它的声明类型是Fruit，因此通过fruit变量访问color实例变量时，该实例变量的值由Fruit类决定。<br>3处的结果，调用info方法由变量实际所引用的Java对象决定。<br>4处的结果，当程序在Apple类的accessSuperinfo使用super作为限定调用info方法，该info才真正变现出Fruit类的行为。<br>另外关于super，如果我们对比getClass().getName() 和super.getClass().getName()的结果，发现它们的输出是一样的。<br>super.getClass()只是表示调用父类的方法而已。getClass方法来自Object类，它返回对象在运行时的类型。<br>如果想获得父类的Class，请用getClass().getSuperclass().getName()。</p>
+<p>关于super：</p>
+<ul>
+<li>子类方法不能直接使用reture super，但使用return this返回调用该方法的对象时允许的。</li>
+<li>程序不允许直接把super当成变量使用，如果判断super和a变量是否引用同一个对象（super == a），这条代码会引起编译器错误。</li>
+</ul>
+<p>通过上面的分析可以看出：super关键字本身并没有引用任何对象，它并没有代表超类的一个引用的能力，只是代表调用父类的方法而已。它甚至不能被当做一个真正的引用变量引用。</p>
+<p>现在我们给出关于父、子对象在内存中存储的结论：当程序创建一个子类对象时，系统不仅会为该类定义的实例变量分配内存，也会为其所有父类中定义的所有实例变量分配内存，即使子类定义了与父类中同名实例变量。也就是说，当系统创建一个Java对象时，如果该Java类有两个父类（直接父类A，间接父类B），假设A类中定义了2个实例变量，B类中定义了3个实例变量，当前类定义了2个实例变量，那么这个Java对象将会保存2+3+2=7个实例变量。<br>如果在子类中定义了与父类中已有变量同名的变量，那么子类中定义的变量会隐藏父类中定义的变量。注意，不是完全覆盖，因此系统创建子类时，依然会为父类中定义的、被隐藏的变量分配内存空间。<br>为了在子类方法中访问父类中定义的、被隐藏的变量，或者为了在子类方法中调用父类中定义的、被覆盖（override）的方法，可以通过super作为限定来调用父类的变量或者方法。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《疯狂Java-突破程序员基本功的16课》</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 java 的父子实例的内存控制
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 内存管理 -- 构造方法</title>
+    <link href="http://yoursite.com/2014/02/20/java-basic-memory-manage-constructor/"/>
+    <id>http://yoursite.com/2014/02/20/java-basic-memory-manage-constructor/</id>
+    <published>2014-02-20T02:00:00.000Z</published>
+    <updated>2019-05-29T06:44:26.979Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本节将介绍一下构造方法在对象初始化时的执行顺序</p>
+<h2 id="构造方法调用"><a href="#构造方法调用" class="headerlink" title="构造方法调用"></a>构造方法调用</h2><p>当创建任何Java对象时，程序总是先依次调用每个父类的非静态初始化块、父类构造器（总是从Object开始）执行初始化，最后才调用本类的非静态初始化块、构造方法执行初始化。<br>对非静态初始化块的调用，接着会调用父类的一个或多个构造方法执行初始化，这个调用即可以是通过super进行显示调用，也可以是隐式调用。<br>当所有的父类的非静态初始化块、构造器依次调用完成后，系统调用本类的非静态初始化块、构造器执行初始化，最后返回本类的实例。<br>看下一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class Food &#123;</div><div class="line">    &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Food code block&quot;);</div><div class="line">    &#125;</div><div class="line">    public Food() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Food constructor&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Fruit extends Food&#123;</div><div class="line">    &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Fruit code block&quot;);</div><div class="line">    &#125;</div><div class="line">    public Fruit() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Fruit constructor&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Apple extends Fruit &#123;</div><div class="line">    &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Apple code block&quot;);</div><div class="line">    &#125;</div><div class="line">    public Apple() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Apple constructor&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Apple apple = new Apple();</div></pre></td></tr></table></figure>
+<p>这里对父类构造器的调用为隐式调用。<br>执行步骤：</p>
+<p> 1.执行Object类非静态初始化块（如果有的话）。<br> 2.隐式或显示调用Object类的一个或多个构造器执行初始化<br> 3.执行Food类非静态初始化块（如果有的话）。<br> 4.隐式或显示调用Food类的一个或多个构造器执行初始化<br> 5.执行Fruit类非静态初始化块（如果有的话）。<br> 6.隐式或显示调用Fruit类的一个或多个构造器执行初始化<br> 7.执行Apple类非静态初始化块（如果有的话）。<br> 8.隐式或显示调用Apple类的一个或多个构造器执行初始化</p>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">E Test    : Food code block</div><div class="line">E Test    : Food constructor</div><div class="line">E Test    : Fruit code block</div><div class="line">E Test    : Fruit constructor</div><div class="line">E Test    : Apple code block</div><div class="line">E Test    : Apple constructor</div></pre></td></tr></table></figure>
+<p>只要在程序中创建Java对象，系统总是先调用最顶层父类的初始化操作，包括初始化块和构造器，然后依次向下调用所有父类的初始化操作，最终执行本类的初始化操作返回本类的实例。<br>至于调用父类的那个构造器执行初始化，分为下面几中情况：</p>
+<ul>
+<li>子类构造器执行体的第一行代码使用super显示调用父类构造器，系统将根据super调用里传入的实参列表来确定调用父类的哪个构造器。</li>
+<li>子类构造器执行体的第一行代码使用this显示调用本类中重载的构造器，系统将根据this调用里传入的实参列表来确定本类的另一个构造器（执行本类中另一个构造器时即进入第一种情况）。</li>
+<li>子类构造器执行体中既没有super调用，也没有this调用，系统将会在执行子类构造器之前，隐式调用父类无参数的构造器。</li>
+</ul>
+<p><strong>注意</strong>：super调用用于显示调用父类的构造器，this调用用于显式调用本类中另一个重载的构造器。super和this都只能在构造器中使用，而且super和this都必须作为构造器的第一行代码，否则编译器会报错，通过super调用父类的普通方法则没有限制。因此，构造器中的super和this调用最多只能使用其中之一，而且最多只能调用一次。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《深入理解 Java 虚拟机》<br>《疯狂Java-突破程序员基本功的16课》</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 java 构造方法的初始化顺序
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 内存管理 -- 变量的内存管理</title>
+    <link href="http://yoursite.com/2014/02/18/java-basic-memory-manage-variable/"/>
+    <id>http://yoursite.com/2014/02/18/java-basic-memory-manage-variable/</id>
+    <published>2014-02-18T02:00:00.000Z</published>
+    <updated>2019-05-29T06:42:17.811Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本节将主要介绍Java中的内存分配机制中对变量内存分配的控制。</p>
+<h2 id="变量分类"><a href="#变量分类" class="headerlink" title="变量分类"></a>变量分类</h2><p>Java 程序的变量大体可以分为局部变量和成员变量。<br>局部变量可以分为下面3类：</p>
+<ul>
+<li>形参：在方法定义时的参数，由方法调用者负责为其赋值，随方法的结束而消亡</li>
+<li>方法内局部变量：在方法内定义的局部变量，必须在方法内对其进行显示初始化。这种类型的局部变量从初始化完成后开始生效，Java随方法的结束而消亡。</li>
+<li>代码块内局部变量：在代码块内定义的局部变量，必须在代码块内对其进行显式初始化。这种类型的局部变量从初始化完成后开始生效，随代码块的结束而消失。</li>
+</ul>
+<p>局部变量的作用时间很短暂，它们都被存储在方法的栈内存中。</p>
+<p>类体内定义的变量被称为成员变量。如果该变量被static修饰，该成员变量被称为静态变量或者类变量。如果没有被static修饰，该成员变量被称为非静态变量或者实例变量。<br>static只能修饰类里的成员，不能修饰外部类，不能修饰局部变量，局部内部类。</p>
+<h2 id="变量定义的顺序"><a href="#变量定义的顺序" class="headerlink" title="变量定义的顺序"></a>变量定义的顺序</h2><p>Java 类里定义成员变量时没有先后顺序，但是实际上Java要求定义成员变量时采用合法的前向引用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    int num1 = num2 + 1;</div><div class="line">    int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码定义num1成员变量的初始值时，需要根据num2变量的值进行计算。上面的写法编译器将会提示“非法的前向引用”错误。<br>另外两个静态变量也不允许采用这种非法的前向引用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    static int num1 = num2 + 1;</div><div class="line">    static int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面写法也是不合法的。<br>但是，如果一个是实例变量，一个是静态变量，实例变量总是可以引用静态变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    int num1 = num2 + 1;</div><div class="line">    static int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面这种写法是合法的。因为静态变量num2的初始化时间总是处于实例变量的初始化时机之前。所以虽然先定义num1，再定义num2，但是num2的初始化时间总是在num1之前的，因此num1变量的初始化可根据num2的值计算得到。</p>
+<h2 id="变量的属性"><a href="#变量的属性" class="headerlink" title="变量的属性"></a>变量的属性</h2><p>使用static修饰的成员变量是类变量，属于该类本身；没有使用static修饰的成员变量是实例变量，属于该类的实例。<br>在同一个JVM内，每个类只对应一个Class对象，但每个类可以创建多个Java对象。<br>由于同一个JVM内每个类只对应一个Class对象，因此同一个JVM内的一个类的静态变量只需一块内存空间；但对于实例变量而言，该类每创建一次实例，就需要为实例变量分配一块内存空间。<br>Java 还允许通过类的实例变量来访问类的静态变量。其实底层依然会转换为通过类来访问静态变量。操作效果和通过类访问静态变量是一样的。<br>大部分时候我们会把类和对象严格地区分开，但从另一个角度来看，类也是对象，所有的类都是Class的实例。每个类初始化完成之后，系统都会为该类创建一个对应的Class实例，程序可以通过反射来获取某个类对应的Class实例。</p>
+<h2 id="实例变量的初始化时机"><a href="#实例变量的初始化时机" class="headerlink" title="实例变量的初始化时机"></a>实例变量的初始化时机</h2><p>对于实例变量而言，它属于Java对象本身，每次程序创建Java对象时都需要为实例变量分配内存空间，并执行初始化。<br>我们可以通过下面的方法对实例变量进行初始化：</p>
+<ul>
+<li>定义实例变量时指定初始值</li>
+<li>非静态初始化块中对实例变量指定初始值</li>
+<li>构造器中对实例变量指定初始值</li>
+</ul>
+<p>第1，2种方式比第3种方式更早执行，但是第1，2种方式的执行顺序与它们在源程序中的排列顺序相同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Price &#123;</div><div class="line">    &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;non static block&quot;);</div><div class="line">        initPrice = 22;</div><div class="line">    &#125;</div><div class="line">    double initPrice = 20;</div><div class="line"></div><div class="line">    public Price() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Price Construct&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">E/Test: non static block</div><div class="line">E/Test: Price Construct</div><div class="line">E/Test: 20.0</div></pre></td></tr></table></figure>
+<p>定义实例变量时指定的初始值、初始化块中为实例变量指定初始值的语句的地位是平等的，当经过编译器处理后，它们都将被提取到构造器中。<br>对于类定义中的语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">double initPrice = 20;</div></pre></td></tr></table></figure>
+<p>实际上被分为如下2次执行。</p>
+<p> 1.double initPrice；：创建Java对象时系统根据该语句为该对象分配内存。<br> 2.initPrice = 20;：这条语句将会被提取到Java类的构造器中执行。</p>
+<h2 id="静态变量的初始化时机"><a href="#静态变量的初始化时机" class="headerlink" title="静态变量的初始化时机"></a>静态变量的初始化时机</h2><p>静态变量属于Java类本身，只有当程序初始化该Java类时才会为该类的静态变量分配内存空间，并执行初始化。<br>程序可以在2个地方对静态变量执行初始化：</p>
+<ul>
+<li>定义静态变量时指定初始值</li>
+<li>静态初始化块中对静态变量指定初始值</li>
+</ul>
+<p>这两种方式的执行顺序与它们在源程序中的排列顺序相同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Price &#123;</div><div class="line">    static &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;non static block&quot;);</div><div class="line">        initPrice = 22;</div><div class="line">    &#125;</div><div class="line">    static double initPrice = 20;</div><div class="line"></div><div class="line">    public Price() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Price Construct&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码如果调用 <code>Price.initPrice</code>，结果会是 20；<br>每次运行程序时，系统会将对 Price 类执行初始化：先为所有静态变量分配内存空间，再按源代码中的排列顺序执行静态初始化块所指定的初始值和定义静态变量时所指定的初始值。</p>
+<p>再看下面一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Price &#123;</div><div class="line">    final static Price INSTANCE = new Price(2.8);</div><div class="line">    static double initPrice = 20;</div><div class="line">    double currentPrice;</div><div class="line"></div><div class="line">    public Price(double discount) &#123;</div><div class="line">        currentPrice = initPrice - discount;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面是测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+Price.INSTANCE.currentPrice);</div><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+new Price(2.8).currentPrice);</div></pre></td></tr></table></figure>
+<p>结果会输出：-2.8和17.2。<br>下面我们从内存角度来分析一下为什么会有这个结果：第一次使用到 Price 这个类时，程序开始对 Price 进行初始化，初始化有下面两个阶段：</p>
+<p> 1.系统为Price的两个静态变量分配内存空间<br> 2.按初始化代码的排列顺序对静态变量进行初始化</p>
+<p>初始化的第一阶段，系统先为INSTANCE、initPrice 两个静态变量分配内存空间，此时 INSTANCE、initPrice 的值默认为 null和0.0。<br>接着进行第二阶段，程序按照顺序依次为 INSTANCE、initPrice 进行赋值。对INSTANCE赋值时要调用Price(2.8)，创建Price实例，此时立即对currentPrice 进行赋值，此时 initPrice 静态变量为0.0，因此赋值的结果是 currentPrice 等于 -2.8。接着，程序再次将initPrice赋值为20，但此时对 INSTANCE 的currentPrice实例变量已经不起作用了。<br>当 Price 类初始化完成后，INSTANCE 静态变量应用到一个currentPrice为-2.8 的Price实例，而initPrice静态变量为20，当再次创建Price实例时，该Price实例的currentPrice实例变量的值才等于20.0-discount。<br>如果想当前写法都输出17.2，可以把initPrice静态变量用final修饰。具体原因参考<a href="http://www.heqiangfly.com/2014/02/18/java-basic-final/" target="_blank" rel="external">Java 基础 – 深入理解 final 修饰符 </a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《深入理解 Java 虚拟机》<br>《疯狂Java-突破程序员基本功的16课》</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍 java 的实例变量和静态变量的内存管理
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 内存管理 -- 内存区域的划分</title>
+    <link href="http://yoursite.com/2014/02/16/java-basic-memory-manage-memory-area/"/>
+    <id>http://yoursite.com/2014/02/16/java-basic-memory-manage-memory-area/</id>
+    <published>2014-02-16T02:00:00.000Z</published>
+    <updated>2019-05-29T06:30:44.446Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>说起 Java 内存管理，首先我们想起的可能就是虚拟机自动内存管理机制。Java 的程序员把内存控制权利交给了 Java 虚拟机，实现了 JVM 内存动态分配和垃圾回收机制。<br>那是不是说我们就可以毫无节制的进行对象创建呢？答案肯定是否定的，虽然是自动分配内存，但是我们也要考虑对象创建以及GC的系统开销等等。这些 Java 内存管理知识使我们进阶必须要掌握的知识。<br>Java内存管理分为两个方面：内存分配和内存回收。这里的内存分配特指创建Java对象时JVM为该对象在堆内存中所分配的内存空间。内存回收指的是当该Java对象失去引用，变成垃圾时，JVM的垃圾回收机制自动清理该对象，并回收该对象所占用的内存。由于JVM内置了垃圾回收机制回收失去引用的Java对象所占用的内存，所以很多Java开发者认为Java不存在内存泄漏、资源泄漏的问题。这实际上是一种错觉，Java程序依然会有内存泄漏。<br>JVM的垃圾回收机制由一条后台线程完成，本身也是非常消耗性能的，因此如果肆无忌惮地创建对象，让系统分配内存，那么这些分配的内存都将由垃圾回收机制进行回收。这样就会造成两个问题：</p>
+<ul>
+<li>不断分配内存使得系统中可用内存减少，从而降低程序运行性能</li>
+<li>大量已经分配内存的回收使得垃圾回收的负担加重，降低程序的运行性能</li>
+</ul>
+<p>从本节开始，将从内存区域划分、变量、构造函数和父子实例等方面介绍Java的内存控制。</p>
 <h2 id="Java-虚拟机的内存区域"><a href="#Java-虚拟机的内存区域" class="headerlink" title="Java 虚拟机的内存区域"></a>Java 虚拟机的内存区域</h2><p>本章将着重讲解 Java 虚拟机的内存区域的划分、作用、服务对象等。<br>Java 虚拟机在执行Java程序的过程中会把它管理的内存划分为几个不同的区域，这些区域都有各自的用途，以及创建和销毁的时机。有的区域随着虚拟机进程的启动而存在，有的则依赖用户线程的启动和结束而建立和销毁。<br>根据 Java 虚拟机规范，一般会划分为一下几个运行时数据区域：</p>
 <ul>
 <li>程序计数器</li>
@@ -12013,57 +12177,6 @@ https://blog.csdn.net/u013384984/article/details/79496052
 <h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>方法区（Method Area）与Java堆一样，也是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。虽然Java虚拟机规范把方法区描述为堆的一个逻辑部分，但是它却有一个别名叫做 Non-Heap ，目的应用是和Java堆区分开来。<br>Java 虚拟机规范对方法区的限制非常宽松，除了和Java堆一样不需要连续的内存和可以选择固定大小或者可扩展外，还可以选择不实现垃圾收集。相对而言，垃圾收集在这个区域是比较少出现的，但并非数据进入了方法区就如永久代的名字一样“永久”存在了。这区域的内存回收目标主要是针对常量池的内存和对类型的卸载，一般来说，这个区域的回收成绩比较难以令人满意，尤其是类型的卸载，条件相对的苛刻，但是这部分区域的回收确实是必要的。<br>根据Java虚拟机规范的规定，当方法区无法满足内存分配需求时，将会抛出OutOfMemoryError异常。</p>
 <h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>运行时常量池（Runtime Constant Pool）是方法区的一部分。<br>Class 文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是常量池（Constant Pool Table），用于存放编译器生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放。<br>运行时常量池相对于 Class 文件常量池的另外一个重要特性是具备动态性，Java语言并不要求常量一定只有编译器才能产生，也就是并非预置入Class文件中常量池的内容才能进入方法区运行时常量池，运行期也可能将新的常量放入池中，这种特性被开发人员用的比较多的就是String类的intern()方法。<br>既然运行时常量池是方法区的一部分，自然受到方法区内存的限制，当常量池无法再申请到内存时会抛出OutOfMemoryError异常。</p>
 <h3 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h3><p>直接内存（Direct Memory）并不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域。但是这部分内存也被频繁地使用，而且也可能导致OutOfMemoryError异常出现。<br>在JDK1.4中新加入了NIO（New Input/Output）类，引入了一种基于通道（Channel）与缓冲区（Buffer）的I/O方式，它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java对中的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能，因为避免了在Java对和Native堆中来回复制数据。<br>直接内存的分配不会受到Java堆大小的限制，但是，既然是内存，还是会受到本机总内存大小以及处理器寻址空间的限制。在配置虚拟机参数时，可以根据实际设置-Xmx等参数信息。如果经常忽略直接内存，使得各个内存区域总和大于物理内存限制，从而导致动态扩展时出现OutOfMemoryError异常。</p>
-<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><p>Java内存管理分为两个方面：内存分配和内存回收。这里的内存分配特指创建Java对象时JVM为该对象在堆内存中所分配的内存空间。内存回收指的是当该Java对象失去引用，变成垃圾时，JVM的垃圾回收机制自动清理该对象，并回收该对象所占用的内存。由于JVM内置了垃圾回收机制回收失去引用的Java对象所占用的内存，所以很多Java开发者认为Java不存在内存泄漏、资源泄漏的问题。这实际上是一种错觉，Java程序依然会有内存泄漏。<br>JVM的垃圾回收机制由一条后台线程完成，本身也是非常消耗性能的，因此如果肆无忌惮地创建对象，让系统分配内存，那么这些分配的内存都将由垃圾回收机制进行回收。这样就会造成两个问题：</p>
-<ul>
-<li>不断分配内存使得系统中可用内存减少，从而降低程序运行性能</li>
-<li>大量已经分配内存的回收使得垃圾回收的负担加重，降低程序的运行性能</li>
-</ul>
-<p>本节将介绍一下Java中的内存分配机制。</p>
-<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><h4 id="变量分类"><a href="#变量分类" class="headerlink" title="变量分类"></a>变量分类</h4><p>Java 程序的变量大体可以分为局部变量和成员变量。<br>局部变量可以分为下面3类：</p>
-<ul>
-<li>形参：在方法定义时的参数，由方法调用者负责为其赋值，随方法的结束而消亡</li>
-<li>方法内局部变量：在方法内定义的局部变量，必须在方法内对其进行显示初始化。这种类型的局部变量从初始化完成后开始生效，Java随方法的结束而消亡。</li>
-<li>代码块内局部变量：在代码块内定义的局部变量，必须在代码块内对其进行显式初始化。这种类型的局部变量从初始化完成后开始生效，随代码块的结束而消失。</li>
-</ul>
-<p>局部变量的作用时间很短暂，它们都被存储在方法的栈内存中。</p>
-<p>类体内定义的变量被称为成员变量。如果该变量被static修饰，该成员变量被称为静态变量或者类变量。如果没有被static修饰，该成员变量被称为非静态变量或者实例变量。<br>static只能修饰类里的成员，不能修饰外部类，不能修饰局部变量，局部内部类。</p>
-<h4 id="变量定义的顺序"><a href="#变量定义的顺序" class="headerlink" title="变量定义的顺序"></a>变量定义的顺序</h4><p>Java 类里定义成员变量时没有先后顺序，但是实际上Java要求定义成员变量时采用合法的前向引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    int num1 = num2 + 1;</div><div class="line">    int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面的代码定义num1成员变量的初始值时，需要根据num2变量的值进行计算。上面的写法编译器将会提示“非法的前向引用”错误。<br>另外两个静态变量也不允许采用这种非法的前向引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    static int num1 = num2 + 1;</div><div class="line">    static int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面写法也是不合法的。<br>但是，如果一个是实例变量，一个是静态变量，实例变量总是可以引用静态变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    int num1 = num2 + 1;</div><div class="line">    static int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面这种写法是合法的。因为静态变量num2的初始化时间总是处于实例变量的初始化时机之前。所以虽然先定义num1，再定义num2，但是num2的初始化时间总是在num1之前的，因此num1变量的初始化可根据num2的值计算得到。</p>
-<h4 id="变量的属性"><a href="#变量的属性" class="headerlink" title="变量的属性"></a>变量的属性</h4><p>使用static修饰的成员变量是类变量，属于该类本身；没有使用static修饰的成员变量是实例变量，属于该类的实例。<br>在同一个JVM内，每个类只对应一个Class对象，但每个类可以创建多个Java对象。<br>由于同一个JVM内每个类只对应一个Class对象，因此同一个JVM内的一个类的静态变量只需一块内存空间；但对于实例变量而言，该类每创建一次实例，就需要为实例变量分配一块内存空间。<br>Java 还允许通过类的实例变量来访问类的静态变量。其实底层依然会转换为通过类来访问静态变量。操作效果和通过类访问静态变量是一样的。<br>大部分时候我们会把类和对象严格地区分开，但从另一个角度来看，类也是对象，所有的类都是Class的实例。每个类初始化完成之后，系统都会为该类创建一个对应的Class实例，程序可以通过反射来获取某个类对应的Class实例。</p>
-<h4 id="实例变量的初始化时机"><a href="#实例变量的初始化时机" class="headerlink" title="实例变量的初始化时机"></a>实例变量的初始化时机</h4><p>对于实例变量而言，它属于Java对象本身，每次程序创建Java对象时都需要为实例变量分配内存空间，并执行初始化。<br>我们可以通过下面的方法对实例变量进行初始化：</p>
-<ul>
-<li>定义实例变量时指定初始值</li>
-<li>非静态初始化块中对实例变量指定初始值</li>
-<li>构造器中对实例变量指定初始值</li>
-</ul>
-<p>第1，2种方式比第3种方式更早执行，但是第1，2种方式的执行顺序与它们在源程序中的排列顺序相同。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Price &#123;</div><div class="line">    &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;non static block&quot;);</div><div class="line">        initPrice = 22;</div><div class="line">    &#125;</div><div class="line">    double initPrice = 20;</div><div class="line"></div><div class="line">    public Price() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Price Construct&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>输出结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">E/Test: non static block</div><div class="line">E/Test: Price Construct</div><div class="line">E/Test: 20.0</div></pre></td></tr></table></figure>
-<p>定义实例变量时指定的初始值、初始化块中为实例变量指定初始值的语句的地位是平等的，当经过编译器处理后，它们都将被提取到构造器中。<br>对于类定义中的语句：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">double initPrice = 20;</div></pre></td></tr></table></figure>
-<p>实际上被分为如下2次执行。</p>
-<p> 1.double initPrice；：创建Java对象时系统根据该语句为该对象分配内存。<br> 2.initPrice = 20;：这条语句将会被提取到Java类的构造器中执行。</p>
-<h4 id="静态变量的初始化时机"><a href="#静态变量的初始化时机" class="headerlink" title="静态变量的初始化时机"></a>静态变量的初始化时机</h4><p>静态变量属于Java类本身，只有当程序初始化该Java类时才会为该类的静态变量分配内存空间，并执行初始化。<br>程序可以在2个地方对静态变量执行初始化：</p>
-<ul>
-<li>定义静态变量时指定初始值</li>
-<li>静态初始化块中对静态变量指定初始值</li>
-</ul>
-<p>这两种方式的执行顺序与它们在源程序中的排列顺序相同。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Price &#123;</div><div class="line">    static &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;non static block&quot;);</div><div class="line">        initPrice = 22;</div><div class="line">    &#125;</div><div class="line">    static double initPrice = 20;</div><div class="line"></div><div class="line">    public Price() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Price Construct&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面的代码如果调用 <code>Price.initPrice</code>，结果会是 20；<br>每次运行程序时，系统会将对 Price 类执行初始化：先为所有静态变量分配内存空间，再按源代码中的排列顺序执行静态初始化块所指定的初始值和定义静态变量时所指定的初始值。</p>
-<p>再看下面一个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Price &#123;</div><div class="line">    final static Price INSTANCE = new Price(2.8);</div><div class="line">    static double initPrice = 20;</div><div class="line">    double currentPrice;</div><div class="line"></div><div class="line">    public Price(double discount) &#123;</div><div class="line">        currentPrice = initPrice - discount;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>下面是测试代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+Price.INSTANCE.currentPrice);</div><div class="line">Log.e(&quot;Test&quot;,&quot;&quot;+new Price(2.8).currentPrice);</div></pre></td></tr></table></figure>
-<p>结果会输出：-2.8和17.2。<br>下面我们从内存角度来分析一下为什么会有这个结果：第一次使用到 Price 这个类时，程序开始对 Price 进行初始化，初始化有下面两个阶段：</p>
-<p> 1.系统为Price的两个静态变量分配内存空间<br> 2.按初始化代码的排列顺序对静态变量进行初始化</p>
-<p>初始化的第一阶段，系统先为INSTANCE、initPrice 两个静态变量分配内存空间，此时 INSTANCE、initPrice 的值默认为 null和0.0。<br>接着进行第二阶段，程序按照顺序依次为 INSTANCE、initPrice 进行赋值。对INSTANCE赋值时要调用Price(2.8)，创建Price实例，此时立即对currentPrice 进行赋值，此时 initPrice 静态变量为0.0，因此赋值的结果是 currentPrice 等于 -2.8。接着，程序再次将initPrice赋值为20，但此时对 INSTANCE 的currentPrice实例变量已经不起作用了。<br>当 Price 类初始化完成后，INSTANCE 静态变量应用到一个currentPrice为-2.8 的Price实例，而initPrice静态变量为20，当再次创建Price实例时，该Price实例的currentPrice实例变量的值才等于20.0-discount。<br>如果想当前写法都输出17.2，可以把initPrice静态变量用final修饰。具体原因参考<a href="http://www.heqiangfly.com/2014/02/18/java-basic-final/" target="_blank" rel="external">Java 基础 – 深入理解 final 修饰符 </a>。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《深入理解 Java 虚拟机》<br>《疯狂Java-突破程序员基本功的16课》</p>
 ]]></content>
     

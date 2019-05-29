@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="介绍 java 的内存管理机制，包括内存区域划分和内存管理等">
+<meta name="description" content="介绍 java 的实例变量和静态变量的内存管理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java 基础 -- 内存管理">
-<meta property="og:url" content="http://yoursite.com/2014/02/16/java-basic-memory-manage/index.html">
+<meta property="og:title" content="Java 内存管理 -- 变量的内存管理">
+<meta property="og:url" content="http://yoursite.com/2014/02/18/java-basic-memory-manage-variable/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="介绍 java 的内存管理机制，包括内存区域划分和内存管理等">
-<meta property="og:updated_time" content="2019-05-28T03:33:49.969Z">
+<meta property="og:description" content="介绍 java 的实例变量和静态变量的内存管理">
+<meta property="og:updated_time" content="2019-05-29T06:42:17.811Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 基础 -- 内存管理">
-<meta name="twitter:description" content="介绍 java 的内存管理机制，包括内存区域划分和内存管理等">
+<meta name="twitter:title" content="Java 内存管理 -- 变量的内存管理">
+<meta name="twitter:description" content="介绍 java 的实例变量和静态变量的内存管理">
 
 
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2014/02/16/java-basic-memory-manage/"/>
+  <link rel="canonical" href="http://yoursite.com/2014/02/18/java-basic-memory-manage-variable/"/>
 
 
 
 
 
-  <title> Java 基础 -- 内存管理 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Java 内存管理 -- 变量的内存管理 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/02/16/java-basic-memory-manage/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/02/18/java-basic-memory-manage-variable/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="寒江蓑笠">
@@ -302,7 +302,7 @@
             
             
               
-                Java 基础 -- 内存管理
+                Java 内存管理 -- 变量的内存管理
               
             
           </h1>
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-02-16T10:00:00+08:00">
-                2014-02-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-02-18T10:00:00+08:00">
+                2014-02-18
               </time>
             
 
@@ -358,7 +358,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2014/02/16/java-basic-memory-manage/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2014/02/18/java-basic-memory-manage-variable/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2014/02/16/java-basic-memory-manage/" class="leancloud_visitors" data-flag-title="Java 基础 -- 内存管理">
+             <span id="/2014/02/18/java-basic-memory-manage-variable/" class="leancloud_visitors" data-flag-title="Java 内存管理 -- 变量的内存管理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -385,7 +385,7 @@
 
           
               <div class="post-description">
-                  介绍 java 的内存管理机制，包括内存区域划分和内存管理等
+                  介绍 java 的实例变量和静态变量的内存管理
               </div>
           
 
@@ -400,30 +400,8 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>说起 Java 内存管理，首先我们想起的可能就是虚拟机自动内存管理机制。Java 的程序员把内存控制权利交给了 Java 虚拟机，实现了 JVM 内存动态分配和垃圾回收机制。<br>那是不是说我们就可以毫无节制的进行对象创建呢？答案肯定是否定的，虽然是自动分配内存，但是我们也要考虑对象创建以及GC的系统开销等等。这些 Java 内存管理知识使我们进阶必须要掌握的知识。</p>
-<h2 id="Java-虚拟机的内存区域"><a href="#Java-虚拟机的内存区域" class="headerlink" title="Java 虚拟机的内存区域"></a>Java 虚拟机的内存区域</h2><p>本章将着重讲解 Java 虚拟机的内存区域的划分、作用、服务对象等。<br>Java 虚拟机在执行Java程序的过程中会把它管理的内存划分为几个不同的区域，这些区域都有各自的用途，以及创建和销毁的时机。有的区域随着虚拟机进程的启动而存在，有的则依赖用户线程的启动和结束而建立和销毁。<br>根据 Java 虚拟机规范，一般会划分为一下几个运行时数据区域：</p>
-<ul>
-<li>程序计数器</li>
-<li>虚拟机栈</li>
-<li>本地方法栈</li>
-<li>堆</li>
-<li>方法区</li>
-</ul>
-<p>其中程序计数器、虚拟机栈和本地方法栈是线程隔离的数据区，堆和方法区是由所有线程共享的数据区。</p>
-<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>程序计数器（Program Counter Register）是一块较小的内存空间，它可以看作是当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里（仅是概念模型，各种虚拟机可能会通过一些更高效的方式去实现），字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。<br>由于Java虚拟机的多线程是通过线程轮流切换并分配处理器执行时间的方式来实现的，在任何一个确定的时刻，一个处理器（对于多核处理器来说是一个内核）都只会执行一条线程中的指令。因此，为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间计数器互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。<br>如果线程正在执行一个Java方法，这个计数器记录的是正在执行的虚拟机字节码指令的地址；如果正在执行的是Native方法，这个计数器值则为空（Undefined）。<br>此内存区域是唯一一个在Java虚拟机规范中没有规定任何 OutOfMemoryError情况的区域。</p>
-<h3 id="Java-虚拟机栈"><a href="#Java-虚拟机栈" class="headerlink" title="Java 虚拟机栈"></a>Java 虚拟机栈</h3><p>Java 虚拟机栈（Java Virtual Machine Stacks）也是线程私有的，它的生命周期和线程相同。<br>虚拟机栈描述的是 Java 方法执行的内存模型：每个方法在执行的同时都会创建一个栈帧（Stack Frame）用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机中入栈到出栈的过程。<br>在有些对Java内存的划分中会内存区划分为堆内存和栈内存，其实这种划分是比较笼统的，Java内存区域的划分实际上远比这个复杂。这种划分方式也只能说明大多数的程序员对这两块区域比较关心。堆内存我们后面会介绍，上面说指的栈内存就是现在讲的虚拟机栈，或者说虚拟机栈中局部变量表部分。<br>局部变量表存放了编译器可知的各种基本数据类型（boolean、byte、char、short、int、float、long、double）、对象引用和return address类型（指向了一条字节码指令的地址）。<br>64位长度的long和double类型的数据会占用2个局部变量空间，其余的数据类型只占用1个。<br>局部变量表所需的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在帧中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。<br>在Java虚拟机规范中，对这个区域做了两种异常状况：如果线程请求的栈深度大于虚拟机所允许的深度，将抛出StackOverflowError异常；如果虚拟机栈可以动态扩展（当前大部分虚拟机都可以动态扩展，Java虚拟机也允许固定长度的虚拟机栈），如果扩展式无法申请到足够的内存，就会抛出OutOfMemoryError异常。</p>
-<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>本地方法栈（Native Method Stack）与虚拟机栈所发挥的作用是非常相似的，它们的区别是虚拟机栈为虚拟机执行Java方法服务，而本地方法栈则为虚拟机使用到的Native方法服务。有的虚拟机也将本地方法栈和虚拟机栈合二为一。<br>与虚拟机栈一样，本地方法栈区域也会抛出StackOverflowError和OutOfMemoryError异常。</p>
-<h3 id="Java-堆"><a href="#Java-堆" class="headerlink" title="Java 堆"></a>Java 堆</h3><p>Java 堆（Java Heap）是 Java 虚拟机所管理的内存中最大的一块。Java 堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。<br>此内存区域的唯一目的就是存放对象实例，几乎所有的对象实例都在这里分配内存。这一点在Java虚拟机规范中描述的是：所有的对象实例以及数组都要在堆上分配，但是随着JIT编译器的发展与逃逸技术逐渐成熟，这一点也渐渐变得不是那么绝对了。<br>Java堆是垃圾收集器管理的主要区域，因此很多时候也被称作“GC堆”。<br>根据Java虚拟机规范规定，Java堆可以处于物理上不连续的内存空间中，只要逻辑上是连续的即可，就像我们的磁盘空间一样。在实现时，既可以实现成固定大小的，也可以使可扩展的，当前主流虚拟机都是按照可扩展来实现的（通过-Xmx和-Xms控制）。<br>如果在堆中没有内存完成实例分配，并且堆也无法再扩展时，将会抛出OutOfMemoryError异常。</p>
-<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>方法区（Method Area）与Java堆一样，也是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。虽然Java虚拟机规范把方法区描述为堆的一个逻辑部分，但是它却有一个别名叫做 Non-Heap ，目的应用是和Java堆区分开来。<br>Java 虚拟机规范对方法区的限制非常宽松，除了和Java堆一样不需要连续的内存和可以选择固定大小或者可扩展外，还可以选择不实现垃圾收集。相对而言，垃圾收集在这个区域是比较少出现的，但并非数据进入了方法区就如永久代的名字一样“永久”存在了。这区域的内存回收目标主要是针对常量池的内存和对类型的卸载，一般来说，这个区域的回收成绩比较难以令人满意，尤其是类型的卸载，条件相对的苛刻，但是这部分区域的回收确实是必要的。<br>根据Java虚拟机规范的规定，当方法区无法满足内存分配需求时，将会抛出OutOfMemoryError异常。</p>
-<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>运行时常量池（Runtime Constant Pool）是方法区的一部分。<br>Class 文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是常量池（Constant Pool Table），用于存放编译器生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放。<br>运行时常量池相对于 Class 文件常量池的另外一个重要特性是具备动态性，Java语言并不要求常量一定只有编译器才能产生，也就是并非预置入Class文件中常量池的内容才能进入方法区运行时常量池，运行期也可能将新的常量放入池中，这种特性被开发人员用的比较多的就是String类的intern()方法。<br>既然运行时常量池是方法区的一部分，自然受到方法区内存的限制，当常量池无法再申请到内存时会抛出OutOfMemoryError异常。</p>
-<h3 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h3><p>直接内存（Direct Memory）并不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域。但是这部分内存也被频繁地使用，而且也可能导致OutOfMemoryError异常出现。<br>在JDK1.4中新加入了NIO（New Input/Output）类，引入了一种基于通道（Channel）与缓冲区（Buffer）的I/O方式，它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java对中的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能，因为避免了在Java对和Native堆中来回复制数据。<br>直接内存的分配不会受到Java堆大小的限制，但是，既然是内存，还是会受到本机总内存大小以及处理器寻址空间的限制。在配置虚拟机参数时，可以根据实际设置-Xmx等参数信息。如果经常忽略直接内存，使得各个内存区域总和大于物理内存限制，从而导致动态扩展时出现OutOfMemoryError异常。</p>
-<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><p>Java内存管理分为两个方面：内存分配和内存回收。这里的内存分配特指创建Java对象时JVM为该对象在堆内存中所分配的内存空间。内存回收指的是当该Java对象失去引用，变成垃圾时，JVM的垃圾回收机制自动清理该对象，并回收该对象所占用的内存。由于JVM内置了垃圾回收机制回收失去引用的Java对象所占用的内存，所以很多Java开发者认为Java不存在内存泄漏、资源泄漏的问题。这实际上是一种错觉，Java程序依然会有内存泄漏。<br>JVM的垃圾回收机制由一条后台线程完成，本身也是非常消耗性能的，因此如果肆无忌惮地创建对象，让系统分配内存，那么这些分配的内存都将由垃圾回收机制进行回收。这样就会造成两个问题：</p>
-<ul>
-<li>不断分配内存使得系统中可用内存减少，从而降低程序运行性能</li>
-<li>大量已经分配内存的回收使得垃圾回收的负担加重，降低程序的运行性能</li>
-</ul>
-<p>本节将介绍一下Java中的内存分配机制。</p>
-<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><h4 id="变量分类"><a href="#变量分类" class="headerlink" title="变量分类"></a>变量分类</h4><p>Java 程序的变量大体可以分为局部变量和成员变量。<br>局部变量可以分为下面3类：</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本节将主要介绍Java中的内存分配机制中对变量内存分配的控制。</p>
+<h2 id="变量分类"><a href="#变量分类" class="headerlink" title="变量分类"></a>变量分类</h2><p>Java 程序的变量大体可以分为局部变量和成员变量。<br>局部变量可以分为下面3类：</p>
 <ul>
 <li>形参：在方法定义时的参数，由方法调用者负责为其赋值，随方法的结束而消亡</li>
 <li>方法内局部变量：在方法内定义的局部变量，必须在方法内对其进行显示初始化。这种类型的局部变量从初始化完成后开始生效，Java随方法的结束而消亡。</li>
@@ -431,15 +409,15 @@
 </ul>
 <p>局部变量的作用时间很短暂，它们都被存储在方法的栈内存中。</p>
 <p>类体内定义的变量被称为成员变量。如果该变量被static修饰，该成员变量被称为静态变量或者类变量。如果没有被static修饰，该成员变量被称为非静态变量或者实例变量。<br>static只能修饰类里的成员，不能修饰外部类，不能修饰局部变量，局部内部类。</p>
-<h4 id="变量定义的顺序"><a href="#变量定义的顺序" class="headerlink" title="变量定义的顺序"></a>变量定义的顺序</h4><p>Java 类里定义成员变量时没有先后顺序，但是实际上Java要求定义成员变量时采用合法的前向引用。</p>
+<h2 id="变量定义的顺序"><a href="#变量定义的顺序" class="headerlink" title="变量定义的顺序"></a>变量定义的顺序</h2><p>Java 类里定义成员变量时没有先后顺序，但是实际上Java要求定义成员变量时采用合法的前向引用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    int num1 = num2 + 1;</div><div class="line">    int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面的代码定义num1成员变量的初始值时，需要根据num2变量的值进行计算。上面的写法编译器将会提示“非法的前向引用”错误。<br>另外两个静态变量也不允许采用这种非法的前向引用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    static int num1 = num2 + 1;</div><div class="line">    static int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面写法也是不合法的。<br>但是，如果一个是实例变量，一个是静态变量，实例变量总是可以引用静态变量</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    int num1 = num2 + 1;</div><div class="line">    static int num2 = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面这种写法是合法的。因为静态变量num2的初始化时间总是处于实例变量的初始化时机之前。所以虽然先定义num1，再定义num2，但是num2的初始化时间总是在num1之前的，因此num1变量的初始化可根据num2的值计算得到。</p>
-<h4 id="变量的属性"><a href="#变量的属性" class="headerlink" title="变量的属性"></a>变量的属性</h4><p>使用static修饰的成员变量是类变量，属于该类本身；没有使用static修饰的成员变量是实例变量，属于该类的实例。<br>在同一个JVM内，每个类只对应一个Class对象，但每个类可以创建多个Java对象。<br>由于同一个JVM内每个类只对应一个Class对象，因此同一个JVM内的一个类的静态变量只需一块内存空间；但对于实例变量而言，该类每创建一次实例，就需要为实例变量分配一块内存空间。<br>Java 还允许通过类的实例变量来访问类的静态变量。其实底层依然会转换为通过类来访问静态变量。操作效果和通过类访问静态变量是一样的。<br>大部分时候我们会把类和对象严格地区分开，但从另一个角度来看，类也是对象，所有的类都是Class的实例。每个类初始化完成之后，系统都会为该类创建一个对应的Class实例，程序可以通过反射来获取某个类对应的Class实例。</p>
-<h4 id="实例变量的初始化时机"><a href="#实例变量的初始化时机" class="headerlink" title="实例变量的初始化时机"></a>实例变量的初始化时机</h4><p>对于实例变量而言，它属于Java对象本身，每次程序创建Java对象时都需要为实例变量分配内存空间，并执行初始化。<br>我们可以通过下面的方法对实例变量进行初始化：</p>
+<h2 id="变量的属性"><a href="#变量的属性" class="headerlink" title="变量的属性"></a>变量的属性</h2><p>使用static修饰的成员变量是类变量，属于该类本身；没有使用static修饰的成员变量是实例变量，属于该类的实例。<br>在同一个JVM内，每个类只对应一个Class对象，但每个类可以创建多个Java对象。<br>由于同一个JVM内每个类只对应一个Class对象，因此同一个JVM内的一个类的静态变量只需一块内存空间；但对于实例变量而言，该类每创建一次实例，就需要为实例变量分配一块内存空间。<br>Java 还允许通过类的实例变量来访问类的静态变量。其实底层依然会转换为通过类来访问静态变量。操作效果和通过类访问静态变量是一样的。<br>大部分时候我们会把类和对象严格地区分开，但从另一个角度来看，类也是对象，所有的类都是Class的实例。每个类初始化完成之后，系统都会为该类创建一个对应的Class实例，程序可以通过反射来获取某个类对应的Class实例。</p>
+<h2 id="实例变量的初始化时机"><a href="#实例变量的初始化时机" class="headerlink" title="实例变量的初始化时机"></a>实例变量的初始化时机</h2><p>对于实例变量而言，它属于Java对象本身，每次程序创建Java对象时都需要为实例变量分配内存空间，并执行初始化。<br>我们可以通过下面的方法对实例变量进行初始化：</p>
 <ul>
 <li>定义实例变量时指定初始值</li>
 <li>非静态初始化块中对实例变量指定初始值</li>
@@ -453,7 +431,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">double initPrice = 20;</div></pre></td></tr></table></figure>
 <p>实际上被分为如下2次执行。</p>
 <p> 1.double initPrice；：创建Java对象时系统根据该语句为该对象分配内存。<br> 2.initPrice = 20;：这条语句将会被提取到Java类的构造器中执行。</p>
-<h4 id="静态变量的初始化时机"><a href="#静态变量的初始化时机" class="headerlink" title="静态变量的初始化时机"></a>静态变量的初始化时机</h4><p>静态变量属于Java类本身，只有当程序初始化该Java类时才会为该类的静态变量分配内存空间，并执行初始化。<br>程序可以在2个地方对静态变量执行初始化：</p>
+<h2 id="静态变量的初始化时机"><a href="#静态变量的初始化时机" class="headerlink" title="静态变量的初始化时机"></a>静态变量的初始化时机</h2><p>静态变量属于Java类本身，只有当程序初始化该Java类时才会为该类的静态变量分配内存空间，并执行初始化。<br>程序可以在2个地方对静态变量执行初始化：</p>
 <ul>
 <li>定义静态变量时指定初始值</li>
 <li>静态初始化块中对静态变量指定初始值</li>
@@ -501,8 +479,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/02/14/java-basic-knowledge-generic/" rel="next" title="Java 基础 -- 范型">
-                <i class="fa fa-chevron-left"></i> Java 基础 -- 范型
+              <a href="/2014/02/16/java-basic-memory-manage-memory-area/" rel="next" title="Java 内存管理 -- 内存区域的划分">
+                <i class="fa fa-chevron-left"></i> Java 内存管理 -- 内存区域的划分
               </a>
             
           </div>
@@ -511,8 +489,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2014/02/18/java-basic-final/" rel="prev" title="Java 基础 -- 深入理解 final 修饰符">
-                Java 基础 -- 深入理解 final 修饰符 <i class="fa fa-chevron-right"></i>
+              <a href="/2014/02/20/java-basic-memory-manage-constructor/" rel="prev" title="Java 内存管理 -- 构造方法">
+                Java 内存管理 -- 构造方法 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -585,7 +563,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">169</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -665,7 +643,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-虚拟机的内存区域"><span class="nav-number">2.</span> <span class="nav-text">Java 虚拟机的内存区域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序计数器"><span class="nav-number">2.1.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-虚拟机栈"><span class="nav-number">2.2.</span> <span class="nav-text">Java 虚拟机栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地方法栈"><span class="nav-number">2.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-堆"><span class="nav-number">2.4.</span> <span class="nav-text">Java 堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法区"><span class="nav-number">2.5.</span> <span class="nav-text">方法区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#运行时常量池"><span class="nav-number">2.5.1.</span> <span class="nav-text">运行时常量池</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直接内存"><span class="nav-number">2.6.</span> <span class="nav-text">直接内存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存分配"><span class="nav-number">3.</span> <span class="nav-text">内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">3.1.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#变量分类"><span class="nav-number">3.1.1.</span> <span class="nav-text">变量分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变量定义的顺序"><span class="nav-number">3.1.2.</span> <span class="nav-text">变量定义的顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变量的属性"><span class="nav-number">3.1.3.</span> <span class="nav-text">变量的属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例变量的初始化时机"><span class="nav-number">3.1.4.</span> <span class="nav-text">实例变量的初始化时机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态变量的初始化时机"><span class="nav-number">3.1.5.</span> <span class="nav-text">静态变量的初始化时机</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量分类"><span class="nav-number">2.</span> <span class="nav-text">变量分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量定义的顺序"><span class="nav-number">3.</span> <span class="nav-text">变量定义的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量的属性"><span class="nav-number">4.</span> <span class="nav-text">变量的属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例变量的初始化时机"><span class="nav-number">5.</span> <span class="nav-text">实例变量的初始化时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态变量的初始化时机"><span class="nav-number">6.</span> <span class="nav-text">静态变量的初始化时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
