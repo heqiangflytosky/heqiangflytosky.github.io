@@ -11209,6 +11209,49 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
   </entry>
   
   <entry>
+    <title>Java 设计模式 -- 工厂方法模式</title>
+    <link href="http://yoursite.com/2014/11/10/java-basic-design-pattern-factory-method/"/>
+    <id>http://yoursite.com/2014/11/10/java-basic-design-pattern-factory-method/</id>
+    <published>2014-11-10T02:00:00.000Z</published>
+    <updated>2019-05-30T02:55:27.817Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文主要介绍一下设计模式中的工厂方法模式，在介绍工厂方法模式之前，先介绍一下简单工厂模式，简单工厂模式并不在我们常说的23种设计模式之列。但它可以帮助我们更好地理解工厂方法模式。<br>它们和抽象工厂模式的关系可以理解为：简单工厂进阶为工厂方法，工厂方法进阶为抽象工厂。</p>
+<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><p>简单工厂模式是属于创建型模式，又叫做静态工厂方法模式。简单工厂模式是由一个工厂对象决定创建出哪一种产品类的实例。<br>通常的做法是把要创建的产品特征通过参数传递给工厂类，由工厂类动态决定创建那个产品。<br>主要角色：</p>
+<ul>
+<li>工厂</li>
+<li>抽象产品</li>
+<li>具体产品</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 抽象产品类</div><div class="line"> * 手机类</div><div class="line"> * 描述手机名称的公共接口</div><div class="line"> */</div><div class="line">public abstract class Phone&#123;</div><div class="line">    public abstract void introduce();</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 具体产品类</div><div class="line"> * 魅族手机</div><div class="line"> */</div><div class="line">public class Meizu extends Phone &#123;</div><div class="line">    @Override</div><div class="line">    public void introduce() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Meizu&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 具体产品类</div><div class="line"> * 小米手机</div><div class="line"> */</div><div class="line">public class XiaoMi extends Phone &#123;</div><div class="line">    @Override</div><div class="line">    public void introduce() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;XiaoMi&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 手机工厂类</div><div class="line"> * 负责生产具体的手机</div><div class="line"> * 提供一个方法，根据手机品牌名称生产不同品牌手机</div><div class="line"> */</div><div class="line">public class SimplePhoneFactory &#123;</div><div class="line">    public static Phone getPhone(String name) &#123;</div><div class="line">        switch (name) &#123;</div><div class="line">            case &quot;Meizu&quot;:</div><div class="line">                return new Meizu();</div><div class="line">            case &quot;XiaoMi&quot;:</div><div class="line">                return new XiaoMi();</div><div class="line">        &#125;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Phone meizu = SimplePhoneFactory.getPhone(&quot;Meizu&quot;);</div><div class="line">meizu.introduce();</div><div class="line">Phone xiaomi = SimplePhoneFactory.getPhone(&quot;XiaoMi&quot;);</div><div class="line">xiaomi.introduce();</div></pre></td></tr></table></figure>
+<p>优点：工厂类中包含了必要的逻辑判断，根据客户端的选择条件来动态实例化相关产品类。对于客户端来说，去除了与具体产品的依赖，将创建和使用分开，客户端不必关系产品如何创建，实现了解耦。<br>缺点：简单工厂的缺点也很明显，违背“开放-关闭原则”，一旦添加新产品就不得不修改工厂类的逻辑，这样就会造成工厂逻辑过于复杂。</p>
+<h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><p>工厂方法模式（Factory Method）定义一个工厂的父类，它负责定义一个创建具体产品的公共接口，而工厂子类负责生成具体的产品对象。这样就把产品类的实例化延迟到了工厂类的子类（具体工厂），有具体工厂决定实例化哪一个具体产品类。<br>比如我们要生成魅族手机，这样就需要一个专门生成魅族手机的工厂类与之对应。</p>
+<p>主要角色：</p>
+<ul>
+<li>抽象工厂</li>
+<li>具体工厂</li>
+<li>抽象产品</li>
+<li>具体产品</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 抽象产品类</div><div class="line"> * 手机类</div><div class="line"> * 描述手机名称的公共接口</div><div class="line"> */</div><div class="line">public abstract class Phone&#123;</div><div class="line">    public abstract void introduce();</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 具体产品类</div><div class="line"> * 魅族手机</div><div class="line"> */</div><div class="line">public class Meizu extends Phone &#123;</div><div class="line">    @Override</div><div class="line">    public void introduce() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Meizu&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 具体产品类</div><div class="line"> * 小米手机</div><div class="line"> */</div><div class="line">public class XiaoMi extends Phone &#123;</div><div class="line">    @Override</div><div class="line">    public void introduce() &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;XiaoMi&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 抽象工厂类</div><div class="line"> * 提供一个抽象方法，生产某个品牌手机</div><div class="line"> */</div><div class="line">public abstract class PhoneFactory &#123;</div><div class="line">    public abstract Phone getPhone();</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 具体工厂类</div><div class="line"> * 生产魅族手机</div><div class="line"> */</div><div class="line">public class MeizuFactory extends PhoneFactory &#123;</div><div class="line">    @Override</div><div class="line">    public Phone getPhone() &#123;</div><div class="line">        return new Meizu();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 具体工厂类</div><div class="line"> * 生产小米手机</div><div class="line"> */</div><div class="line">public class XiaoMiFactory extends PhoneFactory &#123;</div><div class="line">    @Override</div><div class="line">    public Phone getPhone() &#123;</div><div class="line">        return new XiaoMi();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">MeizuFactory meizuFactory = new MeizuFactory();</div><div class="line">Phone meizu = meizuFactory.getPhone();</div><div class="line">meizu.introduce();</div><div class="line"></div><div class="line">XiaoMiFactory xiaoMiFactory = new XiaoMiFactory();</div><div class="line">Phone xiaomi = xiaoMiFactory.getPhone();</div><div class="line">xiaomi.introduce();</div></pre></td></tr></table></figure>
+<p>优点：解决了简单工厂的问题，符合“开放-关闭原则”，新增一种产品时，只需要增加相应的具体产品类和相应的工厂子类即可。符合“单一职责原则”，每个具体工厂类只负责创建对应的产品<br>缺点：一个具体工厂只能创建一种具体产品，如果需要很多的产品，类的数量需要成对的增加。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      介绍单例模式的几种实现
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Java 基础 -- 深入理解 try catch finally</title>
     <link href="http://yoursite.com/2014/11/08/java-basic-try-catch-finally/"/>
     <id>http://yoursite.com/2014/11/08/java-basic-try-catch-finally/</id>
@@ -11256,13 +11299,13 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
   </entry>
   
   <entry>
-    <title>Java 基础 -- 单例模式的几种实现</title>
+    <title>Java 设计模式 -- 单例模式的几种实现</title>
     <link href="http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/"/>
     <id>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</id>
     <published>2014-11-05T02:00:00.000Z</published>
-    <updated>2019-05-16T09:38:23.111Z</updated>
+    <updated>2019-05-29T11:00:08.206Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>单例模式我们平时经常用到，本文总结一下单例模式几种常见的实现。</p>
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>单例模式（Singleton）我们平时经常用到，本文总结一下单例模式几种常见的实现。</p>
 <ul>
 <li>饿汉模式</li>
 <li>懒汉模式</li>
