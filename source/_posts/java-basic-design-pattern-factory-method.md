@@ -30,6 +30,10 @@ date: 2014-11-10 10:00:00
  * 描述手机名称的公共接口
  */
 public abstract class Phone{
+    protected String mConfig;
+    public Phone(String config) {
+        mConfig = config;
+    }
     public abstract void introduce();
 }
 
@@ -37,10 +41,14 @@ public abstract class Phone{
  * 具体产品类
  * 魅族手机
  */
-public class Meizu extends Phone {
+public class MeizuPhone extends Phone {
+    public MeizuPhone(String config) {
+        super(config);
+    }
+
     @Override
     public void introduce() {
-        Log.e("Test","Meizu");
+        Log.e("Test","MeizuPhone "+mConfig);
     }
 }
 
@@ -48,10 +56,14 @@ public class Meizu extends Phone {
  * 具体产品类
  * 小米手机
  */
-public class XiaoMi extends Phone {
+public class XiaoMiPhone extends Phone {
+    public XiaoMiPhone(String config) {
+        super(config);
+    }
+
     @Override
     public void introduce() {
-        Log.e("Test","XiaoMi");
+        Log.e("Test","XiaoMiPhone "+mConfig);
     }
 }
 
@@ -61,12 +73,12 @@ public class XiaoMi extends Phone {
  * 提供一个方法，根据手机品牌名称生产不同品牌手机
  */
 public class SimplePhoneFactory {
-    public static Phone getPhone(String name) {
+    public static Phone getPhone(String name,String config) {
         switch (name) {
-            case "Meizu":
-                return new Meizu();
-            case "XiaoMi":
-                return new XiaoMi();
+            case "MeizuPhone":
+                return new MeizuPhone(config);
+            case "XiaoMiPhone":
+                return new XiaoMiPhone(config);
         }
         return null;
     }
@@ -74,9 +86,10 @@ public class SimplePhoneFactory {
 ```
 
 ```
-        Phone meizu = SimplePhoneFactory.getPhone("Meizu");
+        String config = "ram = 8G;sdcard = 128G";
+        Phone meizu = SimplePhoneFactory.getPhone("MeizuPhone",config);
         meizu.introduce();
-        Phone xiaomi = SimplePhoneFactory.getPhone("XiaoMi");
+        Phone xiaomi = SimplePhoneFactory.getPhone("XiaoMiPhone",config);
         xiaomi.introduce();
 ```
 
@@ -102,6 +115,10 @@ public class SimplePhoneFactory {
  * 描述手机名称的公共接口
  */
 public abstract class Phone{
+    protected String mConfig;
+    public Phone(String config) {
+        mConfig = config;
+    }
     public abstract void introduce();
 }
 
@@ -109,10 +126,14 @@ public abstract class Phone{
  * 具体产品类
  * 魅族手机
  */
-public class Meizu extends Phone {
+public class MeizuPhone extends Phone {
+    public MeizuPhone(String config) {
+        super(config);
+    }
+
     @Override
     public void introduce() {
-        Log.e("Test","Meizu");
+        Log.e("Test","MeizuPhone "+mConfig);
     }
 }
 
@@ -120,10 +141,14 @@ public class Meizu extends Phone {
  * 具体产品类
  * 小米手机
  */
-public class XiaoMi extends Phone {
+public class XiaoMiPhone extends Phone {
+    public XiaoMiPhone(String config) {
+        super(config);
+    }
+
     @Override
     public void introduce() {
-        Log.e("Test","XiaoMi");
+        Log.e("Test","XiaoMiPhone "+mConfig);
     }
 }
 
@@ -131,18 +156,18 @@ public class XiaoMi extends Phone {
  * 抽象工厂类
  * 提供一个抽象方法，生产某个品牌手机
  */
-public abstract class PhoneFactory {
-    public abstract Phone getPhone();
+public abstract class Factory {
+    public abstract Phone getPhone(String config);
 }
 
 /**
  * 具体工厂类
  * 生产魅族手机
  */
-public class MeizuFactory extends PhoneFactory {
+public class MeizuFactory extends Factory {
     @Override
-    public Phone getPhone() {
-        return new Meizu();
+    public Phone getPhone(String config) {
+        return new MeizuPhone(config);
     }
 }
 
@@ -150,22 +175,22 @@ public class MeizuFactory extends PhoneFactory {
  * 具体工厂类
  * 生产小米手机
  */
-public class XiaoMiFactory extends PhoneFactory {
+public class XiaoMiFactory extends Factory {
     @Override
-    public Phone getPhone() {
-        return new XiaoMi();
+    public Phone getPhone(String config) {
+        return new XiaoMiPhone(config);
     }
 }
-
 ```
 
 ```
+        String config = "ram = 8G;sdcard = 128G";
         MeizuFactory meizuFactory = new MeizuFactory();
-        Phone meizu = meizuFactory.getPhone();
+        Phone meizu = meizuFactory.getPhone(config);
         meizu.introduce();
 
         XiaoMiFactory xiaoMiFactory = new XiaoMiFactory();
-        Phone xiaomi = xiaoMiFactory.getPhone();
+        Phone xiaomi = xiaoMiFactory.getPhone(config);
         xiaomi.introduce();
 ```
 
