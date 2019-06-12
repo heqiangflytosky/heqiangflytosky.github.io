@@ -95,9 +95,9 @@ ContentProvider 提供了下面的方法来实现文件共享功能：
  - `openAssetFile(@NonNull Uri uri, @NonNull String mode)`
  - `openFile(@NonNull Uri uri, @NonNull String mode) `
 
-### 跨进程方法调用
+### 方法调用
 
-ContentProvider 提供了下面的方法来跨进程方法调用：
+ContentProvider 提供了下面的方法来跨进程方法调用，当然，不是快进程也是可以的：
 
  - `call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras)`
 
@@ -107,6 +107,144 @@ ContentProvider 提供了下面的方法来跨进程方法调用：
 ContentResolver 对象可以通过 `Context.getContentResolver()` 来获取，它提供了一系列针对 ContentProvider 操作的方法，和 ContentProvider 里面的方法一一对应。
 ContentResolver 提供了 openOutputStream 和 openInputStream 等方法来实现对共享文件的读写。
 ContentResolver 提供了 call 方法来对 ContentProvider 提供的方法进行跨进程调用。
+
+### openInputStream
+
+Android系统中所有资源都可以用Uri来表示。在获取到资源的Uri后可以通过ContentResolver将其解析成InputStream对象。
+这里先对 openInputStream 的源码做简要分析，看看它是如何获取数据的：
+
+```
+    public static final String SCHEME_CONTENT = "content";
+    public static final String SCHEME_ANDROID_RESOURCE = "android.resource";
+    public static final String SCHEME_FILE = "file";
+
+    public final @Nullable InputStream openInputStream(@NonNull Uri uri)
+            throws FileNotFoundException {
+        Preconditions.checkNotNull(uri, "uri");
+        String scheme = uri.getScheme();
+        if (SCHEME_ANDROID_RESOURCE.equals(scheme)) {
+            // Note: left here to avoid breaking compatibility.  May be removed
+            // with sufficient testing.
+            OpenResourceIdResult r = getResourceId(uri);
+            try {
+                InputStream stream = r.r.openRawResource(r.id);
+                return stream;
+            } catch (Resources.NotFoundException ex) {
+                throw new FileNotFoundException("Resource does not exist: " + uri);
+            }
+        } else if (SCHEME_FILE.equals(scheme)) {
+            // Note: left here to avoid breaking compatibility.  May be removed
+            // with sufficient testing.
+            return new FileInputStream(uri.getPath());
+        } else {
+            AssetFileDescriptor fd = openAssetFileDescriptor(uri, "r", null);
+            try {
+                return fd != null ? fd.createInputStream() : null;
+            } catch (IOException e) {
+                throw new FileNotFoundException("Unable to create stream");
+            }
+        }
+    }
+```
+
+这里会先判断Uri的scheme类型，如果是SCHEME_ANDROID_RESOURCE类型，就先调用getResourceId得到该Uri对应的资源id，然后调用 openRawResource 读取文件到InputStream对象。
+如果是SCHEME_FILE类型，就调用uri.getPath()获得文件路径，然后读取文件到FileInputStream对象。
+如果是其他类型（比如 assets类型或其他自定义的类型），就调用openAssetFileDescriptor得到一个AssetFileDescriptor对象，然后再得到一个 InputStream对象。
+
+下面举例来介绍一下跨进程实现图片共享的方法：
+
+```
+                InputStream inputStream = null;
+                try {
+                    inputStream = getContentResolver().openInputStream(Uri.parse("content://hq.testprovider/getIcon/testPng.png/"));
+                    final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (inputStream != null) {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+```
+getIcon 用来标识这是一个获取图片的方法，testPng.png用来标识名称。
+
+在ContentProvider需要重写openTypedAssetFile、openAssetFile或者openFile方法。
+
+```
+    @Nullable
+    @Override
+    public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
+        if (uri != null) {
+            if ("content".equals(uri.getScheme())) {
+                List<String> list = uri.getPathSegments();
+                if (list != null && list.size() ==2) {
+                    String method = list.get(0);
+                    if ("getQuickAppIcon".equals(method)){
+                        String name = list.get(1);
+                        return ParcelFileDescriptor.open(new File(getFilePath(name)), ParcelFileDescriptor.parseMode(mode));
+                    }
+                }
+            }
+        }
+        return super.openFile(uri, mode);
+    }
+```
+
+ParcelFileDescriptor是android提供的一个数据结构。是可以用于进程间Binder通信的FileDescriptor。支持stream 写入和stream 读出.
+我们可以使用
+
+
+```
+public static ParcelFileDescriptor open(File file, int mode)
+```
+
+方法实现将PacecelFileDescriptor 与File对应起来，以实现进程间的文件共享。
+
+### call 
+
+call方法实现通过ContentProvider实现方法调用：
+
+
+```
+                Uri uri = Uri.parse("content://hq.testprovider/");
+                Bundle b = new Bundle();
+                ArrayList<String> list = new ArrayList<>();
+                list.add("test1.png");
+                list.add("test2.png");
+                b.putStringArrayList("iconList",list);
+                Bundle bundle = getContentResolver().call(uri, "getIconsInfo",null, b);
+                String result = bundle.getString("iconInfoList");
+                Log.e("Test","list = "+result);
+```
+
+ContentProvider 重写 call 方法：
+
+```
+    @Nullable
+    @Override
+    public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
+        if ("getIconsInfo".equals(method)) {
+            ArrayList<String> list = extras.getStringArrayList("iconList");
+            ArrayMap<String, IconBean> map = new ArrayMap<>();
+                for (String name : list) {
+                    IconBean bean = new IconBean();
+                    IconBean info = getIconInfo(name);
+                    map.put(name,bean);
+                }
+            Bundle bundle = new Bundle();
+            bundle.putString("iconInfoList", JSON.toJSONString(map));
+            return bundle;
+        }
+        return super.call(method, arg, extras);
+    }
+```
+
+
 
 ### SQLite 语法
 

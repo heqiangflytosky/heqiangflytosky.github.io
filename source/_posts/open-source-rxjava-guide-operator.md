@@ -621,6 +621,7 @@ E/Test: result = Hello 1 3 5
 ## amb、ambArray 和 ambWith
 
 传递两个或多个 Observable 给 amb 或者 ambArray 时，它只发射其中首先发射数据（onNext）或通知（onError或onCompleted）的那个 Observable 的所有数据，而其他所有的 Observable 的将不会被执行直接丢弃。
+多个 Observable 是按照顺序执行的。
 ambWith的用法：Observable.ambArray(o1,o2)和o1.ambWith(o2)是等价的。
 
 ```
