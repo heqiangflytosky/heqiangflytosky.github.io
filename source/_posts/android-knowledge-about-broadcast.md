@@ -25,7 +25,7 @@ date: 2015-1-10 10:00:00
 ### 普通广播
 
 这类广播我们经常使用，是一种无序的广播机制，理论上，所有的接受者几乎同时会获得该 intent 的消息，接受者之间不存在先后顺序，不能截断和修改 intent 的数据。
-发送方式：`sendBroadcast(intent)`
+发送方式：`sendBroadcast(Intent intent)`、`sendBroadcast(Intent intent, String receiverPermission)`、`sendBroadcastMultiplePermissions(Intent intent,String[] receiverPermissions)` 等。
 
 ### 有序广播
 
@@ -59,6 +59,7 @@ sendBroadcast(intent);
 ## 应用内广播
 
 App应用内广播可以理解成一种局部广播的形式，广播的发送者和接收者都同属于一个App。实际的业务需求中，App应用内广播确实可能需要用到。同时，之所以使用应用内广播时，而不是使用全局广播的形式，更多的考虑到的是Android广播机制中的安全性问题以及效率问题。
+确切地说，应该叫进程内广播，它的发送和接收只能在同一个进程内进行。如果一个应用是多进程的应用，那么进程间也是无法使用的。
 相比于全局广播，App应用内广播优势体现在：
 
  1. 安全性更高；
@@ -103,6 +104,68 @@ android 4.2 之后加入了多用户:
 
 值得注意的是，Android 3.1开始，系统向所有Intent的广播添加了 `FLAG_EXCLUDE_STOPPED_PACKAGES` 标志。这样做是为了防止广播无意或不必要地开启未启动App的后台服务。如果要强制调起未启动的App，后台服务或应用程序可以通过向广播Intent添加 `FLAG_INCLUDE_STOPPED_PACKAGES` 标志来唤醒。
 还需要注意的是，在一些手机厂商的ROM中需要设置允许应用后台允许这个设置才能生效。
+
+## 广播安全和限制
+
+在不加限制的情况下，只要BroadcaseReceiver指定的action和sendBroadcast action 一致就可以接收广播。但是在有些场景情况下，我们不允许所有的应用都可以接收广播。那么我们可以采用下的方法。
+
+### 局部广播
+
+上面已经介绍。
+优点：
+
+ - 数据在进程内传播，不用担心数据泄漏
+ - 相比全局广播，更加高效
+
+缺点：
+
+ - 只能动态注册和取消
+ - 无法满足跨进程传播的场景
+
+### 指定某个应用允许接收
+
+可以通过 intent 指定包名 Intent.setPackage 设置广播仅对相同包名的有效。
+
+优点：
+
+ - 支持跨进程
+ - 接收器可以静态注册也可以动态注册
+ - 指定包名的应用才能接收到数据，安全性高
+
+缺点：
+
+ - 只能满足一个应用接收场景，不能够同时指定多个
+
+
+```
+        Intent intent = new Intent();
+        intent.setPackage("包名");
+        intent.setAction("Action");
+        sendBroadcast(intent);
+```
+
+### 指定某个接收器
+
+优点：
+
+ - 可以指定到具体某个接收器，安全性更高
+ - 接收器可以动态注册，也可以静态注册
+
+缺点：
+
+ - 只能指定一个接收器，局限性较大
+
+
+```
+        Intent intent = new Intent();
+        intent. setComponent(new ComponentName("包名", "Receiver类名"));
+        intent.setAction("Action");
+        sendBroadcast(intent);
+```
+
+### 指定接收权限
+
+通过 `sendBroadcast(Intent intent, String receiverPermission)`、`sendBroadcastMultiplePermissions(Intent intent,String[] receiverPermissions)` 发送的广播，它的接收者必须具备指定的权限才可以接收。
 
 ## Android O 上对广播的限制
 
