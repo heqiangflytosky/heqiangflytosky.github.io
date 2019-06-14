@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/01/10/android-knowledge-about-broadcast/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍广播的一些基础知识">
-<meta property="og:updated_time" content="2019-02-22T13:00:33.793Z">
+<meta property="og:updated_time" content="2019-06-14T03:24:12.230Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android  应该了解的知识系列 - 关于广播">
 <meta name="twitter:description" content="介绍广播的一些基础知识">
@@ -411,7 +411,7 @@
 <li>静态广播：通过 AndroidManifest.xml 的标签来申明的 BroadcastReceiver。</li>
 <li>动态广播：通过 registerReceiver() 方式注册的 BroadcastReceiver，动态注册更为灵活，可在不需要时通过 unregisterReceiver() 取消注册。</li>
 </ol>
-<h3 id="普通广播"><a href="#普通广播" class="headerlink" title="普通广播"></a>普通广播</h3><p>这类广播我们经常使用，是一种无序的广播机制，理论上，所有的接受者几乎同时会获得该 intent 的消息，接受者之间不存在先后顺序，不能截断和修改 intent 的数据。<br>发送方式：<code>sendBroadcast(intent)</code></p>
+<h3 id="普通广播"><a href="#普通广播" class="headerlink" title="普通广播"></a>普通广播</h3><p>这类广播我们经常使用，是一种无序的广播机制，理论上，所有的接受者几乎同时会获得该 intent 的消息，接受者之间不存在先后顺序，不能截断和修改 intent 的数据。<br>发送方式：<code>sendBroadcast(Intent intent)</code>、<code>sendBroadcast(Intent intent, String receiverPermission)</code>、<code>sendBroadcastMultiplePermissions(Intent intent,String[] receiverPermissions)</code> 等。</p>
 <h3 id="有序广播"><a href="#有序广播" class="headerlink" title="有序广播"></a>有序广播</h3><p>所有接受者都可以设置 priority ， 按照 priority 的先后顺序进行传递， 上一个优先级的接受者，可以截断（abortBroadcast()）和修改 intent 里面的数据。 同时，也可以设置一个最后接收者（总是在最后一个接收到这个 intent，用来做一些特定的功能）。<br>发送方式：<code>sendOrderedBroadcast(intent)</code><br>对于接收同一个广播，在相同优先级的情况下，动态注册优先级别高于静态注册。在动态注册中，最早动态注册优先级别最高；在静态注册中，最早安装的程序，静态注册优先级别最高（安装 APK 会解析 manifest.xml,把其加入队列）。</p>
 <h3 id="粘性广播"><a href="#粘性广播" class="headerlink" title="粘性广播"></a>粘性广播</h3><p>粘性广播没有周期限制， 一般的 intent 只能发送给当前已经注册了这个监听的 receiver，一旦发送完毕就会失去作用周期，而粘性广播没有这个限制，即便后来注册的 intent 也可以收到这个广播。 需要注意的一点是 这种发送方式不会导致 ANR， 因为它没有发送时间的限制。<br>发送方式：<code>sendStickyBroadcast(intent)</code></p>
 <h3 id="前台广播和后台广播"><a href="#前台广播和后台广播" class="headerlink" title="前台广播和后台广播"></a>前台广播和后台广播</h3><p>Android系统关于广播有两个广播队列——前台广播队列mFgBroadcastQueue和后台广播队列mBgBroadcastQueue。在发送方发送广播时，默认是放置在后台广播队列的。但是发送方在给intent设置FLAG_RECEIVER_FOREGROUND标记后，发送的广播就会被放置在前台广播队列。</p>
@@ -422,7 +422,7 @@
 <li>后台广播超时时间为60秒</li>
 </ul>
 <p>一旦出现超时，就会出现我们熟知的 ANR。</p>
-<h2 id="应用内广播"><a href="#应用内广播" class="headerlink" title="应用内广播"></a>应用内广播</h2><p>App应用内广播可以理解成一种局部广播的形式，广播的发送者和接收者都同属于一个App。实际的业务需求中，App应用内广播确实可能需要用到。同时，之所以使用应用内广播时，而不是使用全局广播的形式，更多的考虑到的是Android广播机制中的安全性问题以及效率问题。<br>相比于全局广播，App应用内广播优势体现在：</p>
+<h2 id="应用内广播"><a href="#应用内广播" class="headerlink" title="应用内广播"></a>应用内广播</h2><p>App应用内广播可以理解成一种局部广播的形式，广播的发送者和接收者都同属于一个App。实际的业务需求中，App应用内广播确实可能需要用到。同时，之所以使用应用内广播时，而不是使用全局广播的形式，更多的考虑到的是Android广播机制中的安全性问题以及效率问题。<br>确切地说，应该叫进程内广播，它的发送和接收只能在同一个进程内进行。如果一个应用是多进程的应用，那么进程间也是无法使用的。<br>相比于全局广播，App应用内广播优势体现在：</p>
 <ol>
 <li>安全性更高；</li>
 <li>更加高效。</li>
@@ -443,6 +443,40 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Intent intent = new Intent(&quot;android.hq.action.TEST&quot;);</div><div class="line">intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);</div><div class="line">intent.putExtra(&quot;test&quot;, &quot;TEST&quot;);</div><div class="line">sendBroadcast(intent);</div></pre></td></tr></table></figure>
 <p>值得注意的是，Android 3.1开始，系统向所有Intent的广播添加了 <code>FLAG_EXCLUDE_STOPPED_PACKAGES</code> 标志。这样做是为了防止广播无意或不必要地开启未启动App的后台服务。如果要强制调起未启动的App，后台服务或应用程序可以通过向广播Intent添加 <code>FLAG_INCLUDE_STOPPED_PACKAGES</code> 标志来唤醒。<br>还需要注意的是，在一些手机厂商的ROM中需要设置允许应用后台允许这个设置才能生效。</p>
+<h2 id="广播安全和限制"><a href="#广播安全和限制" class="headerlink" title="广播安全和限制"></a>广播安全和限制</h2><p>在不加限制的情况下，只要BroadcaseReceiver指定的action和sendBroadcast action 一致就可以接收广播。但是在有些场景情况下，我们不允许所有的应用都可以接收广播。那么我们可以采用下的方法。</p>
+<h3 id="局部广播"><a href="#局部广播" class="headerlink" title="局部广播"></a>局部广播</h3><p>上面已经介绍。<br>优点：</p>
+<ul>
+<li>数据在进程内传播，不用担心数据泄漏</li>
+<li>相比全局广播，更加高效</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>只能动态注册和取消</li>
+<li>无法满足跨进程传播的场景</li>
+</ul>
+<h3 id="指定某个应用允许接收"><a href="#指定某个应用允许接收" class="headerlink" title="指定某个应用允许接收"></a>指定某个应用允许接收</h3><p>可以通过 intent 指定包名 Intent.setPackage 设置广播仅对相同包名的有效。</p>
+<p>优点：</p>
+<ul>
+<li>支持跨进程</li>
+<li>接收器可以静态注册也可以动态注册</li>
+<li>指定包名的应用才能接收到数据，安全性高</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>只能满足一个应用接收场景，不能够同时指定多个</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Intent intent = new Intent();</div><div class="line">intent.setPackage(&quot;包名&quot;);</div><div class="line">intent.setAction(&quot;Action&quot;);</div><div class="line">sendBroadcast(intent);</div></pre></td></tr></table></figure>
+<h3 id="指定某个接收器"><a href="#指定某个接收器" class="headerlink" title="指定某个接收器"></a>指定某个接收器</h3><p>优点：</p>
+<ul>
+<li>可以指定到具体某个接收器，安全性更高</li>
+<li>接收器可以动态注册，也可以静态注册</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>只能指定一个接收器，局限性较大</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Intent intent = new Intent();</div><div class="line">intent. setComponent(new ComponentName(&quot;包名&quot;, &quot;Receiver类名&quot;));</div><div class="line">intent.setAction(&quot;Action&quot;);</div><div class="line">sendBroadcast(intent);</div></pre></td></tr></table></figure>
+<h3 id="指定接收权限"><a href="#指定接收权限" class="headerlink" title="指定接收权限"></a>指定接收权限</h3><p>通过 <code>sendBroadcast(Intent intent, String receiverPermission)</code>、<code>sendBroadcastMultiplePermissions(Intent intent,String[] receiverPermissions)</code> 发送的广播，它的接收者必须具备指定的权限才可以接收。</p>
 <h2 id="Android-O-上对广播的限制"><a href="#Android-O-上对广播的限制" class="headerlink" title="Android O 上对广播的限制"></a>Android O 上对广播的限制</h2><p>先来了解一下显式广播和隐式广播。<br>显式广播就是通过显式 Intent 发送的广播。<br>隐式广播是通过隐式 Intent 发送的广播。<br>在  Android O 以后，除了有限的例外之外，应用无法使用清单注册（静态注册）的方式来接收隐式广播。但对于这些隐式广播，可以通过运行时注册（动态注册）的方式注册。对于显式广播，则依然可以通过清单注册（静态注册）的方式监听。</p>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在《阿里巴巴Android开发手册》中对广播的使用提到：</p>
 <p>1.避免在 <code>BroadcastReceiver#onReceive()</code> 中执行耗时操作，如果有耗时工作， 应该创建 <code>IntentService</code> 完成，而不应该在 <code>BroadcastReceiver</code> 内创建子线程去做。<br>说明:<br>由于该方法是在主线程执行，如果执行耗时操作会导致 UI不流畅。可以使用 <code>IntentService</code> 、 创 建 <code>HandlerThread</code> 或 者 调 用 <code>Context#registerReceiver(BroadcastReceiver, IntentFilter, String, Handler)</code> 方法等方式，在其他 Wroker 线程执行 <code>onReceive</code> 方法。<code>BroadcastReceiver#onReceive()</code> 方法耗时超过 10 秒钟，可能会被系统杀死。</p>
@@ -566,7 +600,7 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">172</span>
+                <span class="site-state-item-count">173</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -584,7 +618,7 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">89</span>
+                <span class="site-state-item-count">90</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -646,7 +680,7 @@ https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#广播的类型"><span class="nav-number">1.</span> <span class="nav-text">广播的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通广播"><span class="nav-number">1.1.</span> <span class="nav-text">普通广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序广播"><span class="nav-number">1.2.</span> <span class="nav-text">有序广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#粘性广播"><span class="nav-number">1.3.</span> <span class="nav-text">粘性广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前台广播和后台广播"><span class="nav-number">1.4.</span> <span class="nav-text">前台广播和后台广播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用内广播"><span class="nav-number">2.</span> <span class="nav-text">应用内广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sendBroadcastAsUser"><span class="nav-number">3.</span> <span class="nav-text">sendBroadcastAsUser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FLAG-INCLUDE-STOPPED-PACKAGES-和-FLAG-EXCLUDE-STOPPED-PACKAGES"><span class="nav-number">4.</span> <span class="nav-text">FLAG_INCLUDE_STOPPED_PACKAGES 和 FLAG_EXCLUDE_STOPPED_PACKAGES</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-O-上对广播的限制"><span class="nav-number">5.</span> <span class="nav-text">Android O 上对广播的限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">6.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#广播的类型"><span class="nav-number">1.</span> <span class="nav-text">广播的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通广播"><span class="nav-number">1.1.</span> <span class="nav-text">普通广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序广播"><span class="nav-number">1.2.</span> <span class="nav-text">有序广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#粘性广播"><span class="nav-number">1.3.</span> <span class="nav-text">粘性广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前台广播和后台广播"><span class="nav-number">1.4.</span> <span class="nav-text">前台广播和后台广播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用内广播"><span class="nav-number">2.</span> <span class="nav-text">应用内广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sendBroadcastAsUser"><span class="nav-number">3.</span> <span class="nav-text">sendBroadcastAsUser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FLAG-INCLUDE-STOPPED-PACKAGES-和-FLAG-EXCLUDE-STOPPED-PACKAGES"><span class="nav-number">4.</span> <span class="nav-text">FLAG_INCLUDE_STOPPED_PACKAGES 和 FLAG_EXCLUDE_STOPPED_PACKAGES</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播安全和限制"><span class="nav-number">5.</span> <span class="nav-text">广播安全和限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局部广播"><span class="nav-number">5.1.</span> <span class="nav-text">局部广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定某个应用允许接收"><span class="nav-number">5.2.</span> <span class="nav-text">指定某个应用允许接收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定某个接收器"><span class="nav-number">5.3.</span> <span class="nav-text">指定某个接收器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定接收权限"><span class="nav-number">5.4.</span> <span class="nav-text">指定接收权限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-O-上对广播的限制"><span class="nav-number">6.</span> <span class="nav-text">Android O 上对广播的限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">7.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
             
 
           </div>
