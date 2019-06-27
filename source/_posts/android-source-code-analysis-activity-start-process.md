@@ -2916,6 +2916,7 @@ Instrumentation.execStartActivity
 
                 activity.mCalled = false;
                 // 调用Activity.onCreate方法
+                // 根据 manifest 中activity的persistableMode配置来执行不同的onCreate方法
                 if (r.isPersistable()) {
                     mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);
                 } else {
