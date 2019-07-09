@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/08/12/android-knowledge-about-activity-save-state/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="基于Android6.0来分析 onSaveInstanceState 数据保存源码">
-<meta property="og:updated_time" content="2019-07-05T01:29:54.006Z">
+<meta property="og:updated_time" content="2019-07-09T02:37:08.006Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- Activity 之 onSaveInstanceState 深入理解">
 <meta name="twitter:description" content="基于Android6.0来分析 onSaveInstanceState 数据保存源码">
@@ -400,7 +400,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>我们在 Android 开发过程中应该都用过 onSaveInstanceState() 方法和 onRestoreInstanceState()，它们是 Android 系统为我们提供的保存和恢复 Activity 数据的方法。当 Activity 被意外杀掉后，我们可以使用上面的方法来进行数据的保存和恢复工作，这样重新打开 Activity 时，可以恢复成原来的状态。<br>onSaveInstanceState() 只应该被用来保存 Activity 暂时的状态（例如，类成员变量的值关联着UI），而不应该用来保存持久化数据。持久化数据应该当用户离开当前的 Activity 时，在 onPause() 或者 onResume 中保存（比如，保存到数据库）。<br>一般情况下，通过 onSaveInstanceState 保存的数据是保存在 system 进程中，当 Activity 意外杀掉后可以做数据恢复，但是如果手机重启的话，这些数据是会丢失的。那么这个时候可以用 PersistableBundle 来做数据恢复，为此 Android 也重载的 onCreate、onSaveInstanceState 和 onRestoreInstanceState 来做相关操作。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>我们在 Android 开发过程中应该都用过 onSaveInstanceState() 方法和 onRestoreInstanceState()，它们是 Android 系统为我们提供的保存和恢复 Activity 数据的方法。当 Activity 屏幕旋转导致重建或者被意外杀掉后，我们可以使用上面的方法来进行数据的保存和恢复工作，这样重新打开 Activity 时，可以恢复成原来的状态。<br>onSaveInstanceState() 只应该被用来保存 Activity 暂时的状态（例如，类成员变量的值关联着UI），而不应该用来保存持久化数据。持久化数据应该当用户离开当前的 Activity 时，在 onPause() 或者 onResume 中保存（比如，保存到数据库）。<br>一般情况下，通过 onSaveInstanceState 保存的数据是保存在 system 进程中，当 Activity 意外杀掉后可以做数据恢复，但是如果手机重启的话，这些数据是会丢失的。那么这个时候可以用 PersistableBundle 来做数据恢复，为此 Android 也重载的 onCreate、onSaveInstanceState 和 onRestoreInstanceState 来做相关操作。</p>
 <h2 id="相关方法介绍"><a href="#相关方法介绍" class="headerlink" title="相关方法介绍"></a>相关方法介绍</h2><ul>
 <li>onCreate(@Nullable Bundle savedInstanceState)</li>
 <li>onCreate(@Nullable Bundle savedInstanceState,@Nullable PersistableBundle persistentState)</li>
@@ -433,6 +433,8 @@
 <p>APP 进程调用栈如下所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">├── ActivityThread.H.handleMessage:STOP_ACTIVITY_HIDE</div><div class="line">    ├── ActivityThread.handleStopActivity</div><div class="line">        ├── ActivityThread.performStopActivityInner</div><div class="line">            ├── ActivityThread.callCallActivityOnSaveInstanceState</div><div class="line">                ├── Instrumentation.callActivityOnSaveInstanceState</div><div class="line">                    ├── Activity.performSaveInstanceState</div><div class="line">                        ├── MyActivity.onSaveInstanceState</div></pre></td></tr></table></figure>
 <p>当我们按返回键退出当前 Activity 时，是不会调用 onSaveInstanceState 的。</p>
+<p>我们来看一下 Activity 的 onSaveInstanceState 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">   protected void onSaveInstanceState(Bundle outState) &#123;</div><div class="line">// 保存 View 的状态</div><div class="line">       outState.putBundle(WINDOW_HIERARCHY_TAG, mWindow.saveHierarchyState());</div><div class="line"></div><div class="line">       outState.putInt(LAST_AUTOFILL_ID, mLastAutofillId);</div><div class="line">// 保存 Fragment 的状态</div><div class="line">       Parcelable p = mFragments.saveAllState();</div><div class="line">       if (p != null) &#123;</div><div class="line">           outState.putParcelable(FRAGMENTS_TAG, p);</div><div class="line">       &#125;</div><div class="line">       if (mAutoFillResetNeeded) &#123;</div><div class="line">           outState.putBoolean(AUTOFILL_RESET_NEEDED, true);</div><div class="line">           getAutofillManager().onSaveInstanceState(outState);</div><div class="line">       &#125;</div><div class="line">// 通知一些声明周期的监听器来执行状态保存</div><div class="line">       getApplication().dispatchActivitySaveInstanceState(this, outState);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
 <h2 id="数据保存"><a href="#数据保存" class="headerlink" title="数据保存"></a>数据保存</h2><p>那么是如何把我们需要保存的数据保存到 system 进程中的呢？</p>
 <p>先来看 <strong>App 进程</strong>部分：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">├── ApplicationThreadNative.onTransact:SCHEDULE_STOP_ACTIVITY_TRANSACTION</div><div class="line">    ├── ActivityThread.ApplicationThread.scheduleStopActivity</div><div class="line">        ├── ActivityThread.handleStopActivity</div><div class="line">            ├── StopInfo.run</div><div class="line">                ├── ActivityManagerProxy.activityStopped</div><div class="line">                    ├── mRemote.transact(ACTIVITY_STOPPED_TRANSACTION, data, reply, IBinder.FLAG_ONEWAY)</div></pre></td></tr></table></figure>
@@ -509,8 +511,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/09/02/android-architecture-components-jetpack/" rel="prev" title="Android JetPack">
-                Android JetPack <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/15/android-knowledge-about-view-save-state/" rel="prev" title="Android -- View 之 onSaveInstanceState 深入理解">
+                Android -- View 之 onSaveInstanceState 深入理解 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -583,7 +585,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">174</span>
+                <span class="site-state-item-count">175</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
