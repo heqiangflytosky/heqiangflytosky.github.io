@@ -9,7 +9,7 @@ date: 2018-8-12 10:00:00
 
 ## 概述
 
-我们在 Android 开发过程中应该都用过 onSaveInstanceState() 方法和 onRestoreInstanceState()，它们是 Android 系统为我们提供的保存和恢复 Activity 数据的方法。当 Activity 被意外杀掉后，我们可以使用上面的方法来进行数据的保存和恢复工作，这样重新打开 Activity 时，可以恢复成原来的状态。
+我们在 Android 开发过程中应该都用过 onSaveInstanceState() 方法和 onRestoreInstanceState()，它们是 Android 系统为我们提供的保存和恢复 Activity 数据的方法。当 Activity 屏幕旋转导致重建或者被意外杀掉后，我们可以使用上面的方法来进行数据的保存和恢复工作，这样重新打开 Activity 时，可以恢复成原来的状态。
 onSaveInstanceState() 只应该被用来保存 Activity 暂时的状态（例如，类成员变量的值关联着UI），而不应该用来保存持久化数据。持久化数据应该当用户离开当前的 Activity 时，在 onPause() 或者 onResume 中保存（比如，保存到数据库）。
 一般情况下，通过 onSaveInstanceState 保存的数据是保存在 system 进程中，当 Activity 意外杀掉后可以做数据恢复，但是如果手机重启的话，这些数据是会丢失的。那么这个时候可以用 PersistableBundle 来做数据恢复，为此 Android 也重载的 onCreate、onSaveInstanceState 和 onRestoreInstanceState 来做相关操作。
 
@@ -113,6 +113,28 @@ APP 进程调用栈如下所示：
 ```
 
 当我们按返回键退出当前 Activity 时，是不会调用 onSaveInstanceState 的。
+
+我们来看一下 Activity 的 onSaveInstanceState 方法：
+
+```
+    protected void onSaveInstanceState(Bundle outState) {
+	// 保存 View 的状态
+        outState.putBundle(WINDOW_HIERARCHY_TAG, mWindow.saveHierarchyState());
+
+        outState.putInt(LAST_AUTOFILL_ID, mLastAutofillId);
+	// 保存 Fragment 的状态
+        Parcelable p = mFragments.saveAllState();
+        if (p != null) {
+            outState.putParcelable(FRAGMENTS_TAG, p);
+        }
+        if (mAutoFillResetNeeded) {
+            outState.putBoolean(AUTOFILL_RESET_NEEDED, true);
+            getAutofillManager().onSaveInstanceState(outState);
+        }
+	// 通知一些声明周期的监听器来执行状态保存
+        getApplication().dispatchActivitySaveInstanceState(this, outState);
+    }
+```
 
 ## 数据保存
 
