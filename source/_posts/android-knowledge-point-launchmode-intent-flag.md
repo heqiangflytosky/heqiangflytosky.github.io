@@ -333,6 +333,10 @@ standard 模式：系统收到新的 Intent 时，如果 Task 中存在该 Activ
 
 通过这个 Flag 启动的 Activity 一旦退出后，就不会存在栈中。比如 A 添加这个 Flag 启动 B，B启动 C，这是栈中就只有 A、C。
 
+### FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
+
+当从手机任务管理器启动的Activity Intent 的 Flag 会带有这个属性，我们可以用它来区分是否从任务管理器里面启动的。
+
 ## LaunchMode 与 StartActivityForResult 的关系
 
 <!--   

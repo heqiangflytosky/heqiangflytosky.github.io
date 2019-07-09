@@ -423,9 +423,20 @@ int match = URI_MATCHER.match(uri);
         }
 	...
     }
+
+    public final @Nullable Bundle call(@NonNull Uri uri, @NonNull String method,
+            @Nullable String arg, @Nullable Bundle extras) {
+        Preconditions.checkNotNull(uri, "uri");
+        Preconditions.checkNotNull(method, "method");
+        IContentProvider provider = acquireProvider(uri);
+        if (provider == null) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+	...
+    }
 ```
 
-上面列出了增删改查的接口，发现增删改如果在Uri不存在的情况下都会报 `IllegalArgumentException ` 异常，查询接口在Uri不存在情况下会返回null。因此，我们只需要做相应的异常处理就行了。
+上面列出了增删改查以及 call 方法，发现增删改如果在Uri不存在的情况下都会报 `IllegalArgumentException ` 异常，查询接口在Uri不存在情况下会返回null。因此，我们只需要做相应的异常处理就行了。
 
 ## ContentProvider 源码分析
 
