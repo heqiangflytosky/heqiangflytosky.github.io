@@ -43,6 +43,7 @@ date: 2016-12-1 10:00:00
  - [Android Developers](https://developer.android.com/index.html)：Android官方开发者网站，有各种开发文档可以阅读，以及下载开发工具，英语不太好的可以选择“简体中文”哦！
  - [Android Open Source Project](https://source.android.com/)
  - [Android 常用自定义效果和控件](http://a.code4app.com/)：
+ - [Android官方文档中文版](http://hukai.me/android-training-course-in-chinese/index.html)：开发者翻译的Android开发文档
 
 #### 网站开发
 

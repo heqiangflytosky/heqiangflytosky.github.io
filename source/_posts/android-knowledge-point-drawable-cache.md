@@ -48,7 +48,7 @@ date: 2017-6-15 10:00:00
 
         mFirstImage.setImageDrawable(firstDrawable);
 ```
-看下面的效果，因为第二个我们没有设置前景图片，因此会现实背景图片。这个很正常，我们不会有什么疑问。
+看下面的效果，因为第二个我们没有设置前景图片，因此会显示背景图片。这个很正常，我们不会有什么疑问。
 
 ![效果图](/images/android-knowledge-point-drawable-cache/drawable-1.png)
 
