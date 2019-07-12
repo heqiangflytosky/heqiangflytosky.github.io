@@ -1,0 +1,994 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="内存优化," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="内存查看和分析工具汇总，并简单介绍一下procrank和dumpsys meminfo的用法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 性能优化工具篇 -- 内存查看和分析工具">
+<meta property="og:url" content="http://yoursite.com/2018/10/10/android-performance-optimization-tools-ram-analysis/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="内存查看和分析工具汇总，并简单介绍一下procrank和dumpsys meminfo的用法">
+<meta property="og:updated_time" content="2019-07-12T09:08:18.900Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 性能优化工具篇 -- 内存查看和分析工具">
+<meta name="twitter:description" content="内存查看和分析工具汇总，并简单介绍一下procrank和dumpsys meminfo的用法">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/10/android-performance-optimization-tools-ram-analysis/"/>
+
+
+
+
+
+  <title> Android 性能优化工具篇 -- 内存查看和分析工具 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/10/android-performance-optimization-tools-ram-analysis/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 性能优化工具篇 -- 内存查看和分析工具
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-10T10:00:00+08:00">
+                2018-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
+                    <span itemprop="name">Android性能优化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2018/10/10/android-performance-optimization-tools-ram-analysis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/10/10/android-performance-optimization-tools-ram-analysis/" class="leancloud_visitors" data-flag-title="Android 性能优化工具篇 -- 内存查看和分析工具">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  内存查看和分析工具汇总，并简单介绍一下procrank和dumpsys meminfo的用法
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在内存优化前我们有必要借助一些工具来查看我们的 APP 目前使用内存的状况，为我们内存优化指明方向。<br>Android 中关于的工具很多，参考下表。所以我们要灵活地选用我们需要的工具。在定位内存问题的过程中，推荐使用涵盖一定初步定位和定位能力的工具，可以让我们一步到位地剖析问题、提升效率。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">工具</th>
+<th style="text-align:center">分析问题</th>
+<th style="text-align:center">能力</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">top/procrank</td>
+<td style="text-align:center">内存占用过大，内存泄漏</td>
+<td style="text-align:center">发现</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">meminfo</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">StrickMode</td>
+<td style="text-align:center">Activity 内存泄漏</td>
+<td style="text-align:center">自动发现+初步定位</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">LeakCanary</td>
+<td style="text-align:center">Activity 内存泄漏</td>
+<td style="text-align:center">自动发现+定位</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Systrace</td>
+<td style="text-align:center">GC导致的卡顿</td>
+<td style="text-align:center">发现</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Memory Monitor/Memory Profiler</td>
+<td style="text-align:center">申请内存大小和时间</td>
+<td style="text-align:center">发现</td>
+<td style="text-align:center">Android Studio 3.0 采用全新的 Android Profiler 窗口取代 Android Monitor 工具。</td>
+</tr>
+<tr>
+<td style="text-align:center">HeapViewer</td>
+<td style="text-align:center">查看APP内存分配大小和空闲内存大小</td>
+<td style="text-align:center">发现</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Allocation Tracker</td>
+<td style="text-align:center">申请内存次数过多和多大，辅助定位GC log发现的问题</td>
+<td style="text-align:center">发现+定位</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Android Lint</td>
+<td style="text-align:center">内存优化建议</td>
+<td style="text-align:center">发现+定位</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">MAT</td>
+<td style="text-align:center">内存泄漏</td>
+<td style="text-align:center">发现+定位</td>
+</tr>
+</tbody>
+</table>
+<h2 id="procrank"><a href="#procrank" class="headerlink" title="procrank"></a>procrank</h2><p>需要root权限才能运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div></pre></td><td class="code"><pre><div class="line">bogon:TestSomething heqiang$ adb shell procrank</div><div class="line">  PID       Vss      Rss      Pss      Uss  cmdline</div><div class="line">18283  1730504K  375064K  263512K  247516K  com.android.browser</div><div class="line"> 3030  2947812K  412340K  166613K  110032K  system_server</div><div class="line"> 3224  2918272K  245324K  114479K   98196K  com.android.systemui</div><div class="line"> 3880  2676696K  232392K  113036K  105568K  com.meizu.safe</div><div class="line"> 5198  1976632K  201196K   85256K   44832K  com.tencent.mm</div><div class="line"> 7982  1916864K  182152K   79986K   75428K  com.android.mms</div><div class="line"> 9154  2282932K  185652K   70449K   64024K  com.meizu.flyme.launcher</div><div class="line"> 6049  1909944K  175776K   65801K   26212K  com.tencent.mm:push</div><div class="line"> 5034  1311876K  122188K   40598K   34560K  com.meizu.mstore</div><div class="line"> 3211  1305292K  122488K   38756K   32440K  com.meizu.flyme.input</div><div class="line"> 4051  1920588K  137356K   38402K   34620K  com.meizu.alphame</div><div class="line">10578  2240584K  146452K   36268K   30252K  com.android.hq.ganktoutiao</div><div class="line"> 3373  2386504K  135396K   35837K   26664K  com.android.systemui:recents</div><div class="line"> 3777  1830536K  137488K   35311K   31452K  com.flyme.systemuitools</div><div class="line"> 7901  1276760K  110056K   35073K   29628K  com.meizu.media.music</div><div class="line"> 3454  1842652K  132772K   33837K   28928K  com.android.phone</div><div class="line"> 8179  1788376K  106376K   31661K   26564K  com.meizu.netcontactservice</div><div class="line">18024  2229044K  132416K   30948K   26108K  com.meizu.connectivitysettings</div><div class="line">12256  2351712K  133980K   28352K   20208K  com.example.heqiang.testsomething</div><div class="line"> 8302    65608K   29980K   28222K   28196K  /data/local/tmp/perfd/perfd</div><div class="line">23169  1817152K  120388K   26505K   23308K  com.meizu.location</div><div class="line"> 3766  1769968K  100584K   26504K   20976K  com.aricent.ims.service</div><div class="line"> 2674  2220164K  135512K   26358K   13476K  zygote64</div><div class="line"> 2675  1661988K  120100K   24547K    6932K  zygote</div><div class="line">13214  1805296K  122076K   24393K   20576K  com.meizu.flyme.weather</div><div class="line">18473    89192K   27524K   23947K   23188K  /data/app/com.android.browser-1/lib/arm/libweexjsb.so</div><div class="line"> 8091  1815400K  117116K   23922K   20872K  com.android.settings</div><div class="line"> 7973    88168K   26464K   23115K   22580K  /data/app/com.meizu.media.music-2/lib/arm/libweexjsb.so</div><div class="line"> 4359  1819236K  116936K   22713K   19668K  com.meizu.dataservice</div><div class="line"> 5666  1804476K  111588K   22225K   19512K  com.meizu.testdev.woody</div><div class="line"> 5964  1824344K  113516K   21408K   18608K  com.android.providers.downloads</div><div class="line"> 4901  1257932K   96244K   21112K   16716K  com.meizu.account</div><div class="line"> 4751  1904100K  114672K   20689K   17728K  com.meizu.battery</div><div class="line"> 4012  1883384K  107076K   20310K   17796K  com.zq.powerdoctor</div><div class="line"> 4826  1237936K   97156K   19583K   14632K  com.meizu.flyme.service.find</div><div class="line"> 3815  1816684K  111760K   19560K   16656K  com.meizu.pps</div><div class="line"> 8031  1778064K   82436K   19298K   15800K  com.meizu.media.gallery</div><div class="line">23110  1798528K  111224K   18338K   15428K  com.meizu.mzsyncservice</div><div class="line"> 2530   602168K   32796K   18308K   13616K  /system/bin/surfaceflinger</div><div class="line"> 2677   136676K   30624K   16063K   10740K  /system/bin/cameraserver</div><div class="line">29320  1855236K  108244K   15492K   12644K  com.meizu.logreport</div><div class="line"> 5918  1796792K  107920K   14689K   11768K  com.meizu.wifiadmin</div><div class="line"> 5945  1236844K   92000K   14636K    9932K  com.meizu.net.pedometer</div><div class="line"> 4070  1241304K   90588K   14061K    8376K  com.meizu.cloud</div><div class="line">29878  1791328K  101224K   13785K   11224K  com.meizu.flyme.update</div><div class="line"> 4995  1226176K   85184K   12021K    6608K  com.meizu.cloud:mzservice_v1</div><div class="line"> 4033  1775632K   84580K    9008K    6828K  com.android.incallui</div><div class="line"> 6013  1786868K   83752K    8263K    6248K  com.meizu.mzbasestationsafe</div><div class="line"> 2676    45476K   12336K    7147K    6760K  /system/bin/audioserver</div><div class="line"> 3786  1768168K   83260K    6587K    4424K  android.ext.services</div><div class="line"> 4092  1771200K   84608K    6359K    4188K  com.meizu.experiencedatasync</div><div class="line"> 5089  1211960K   69776K    6176K    2664K  com.activate.activatephone</div><div class="line"> 7885  1769652K   82556K    5920K    3864K  android.process.media</div><div class="line"> 8737  1767884K   79344K    5332K    3352K  com.android.carrierconfig</div><div class="line"> 3270  1772648K   80116K    5106K    3056K  com.meizu.facerecognition</div><div class="line"> 2687    64804K   14556K    5059K    3484K  /system/bin/mediaserver</div><div class="line"> 2468    28244K    7024K    4932K    4864K  /system/bin/logd</div><div class="line"> 7932  1778632K   79032K    4702K    2724K  com.samsung.slsi.telephony.usbmodeswitch</div><div class="line"> 4002  1768104K   76208K    4480K    2548K  com.goodix.fingerprint</div><div class="line"> 4878  1772096K   79028K    4464K    2452K  com.sec.jniril</div><div class="line"> 6041  1768856K   76504K    4355K    2384K  com.samsung.slsi.CtcSelfRegister</div><div class="line"> 5832  1769012K   77868K    4346K    2352K  com.wolfsonmicro.ez2control:ez2control_service</div><div class="line"> 4081  1767784K   77220K    4193K    2160K  com.wolfsonmicro.ez2control</div><div class="line"> 2684    37532K   10632K    4116K    3512K  media.codec</div><div class="line"> 2686    44948K   11684K    3522K    2688K  media.extractor</div><div class="line"> 2690    49204K    8156K    3366K    3132K  /system/bin/rild_exynos</div><div class="line"> 2672    26204K    7204K    3250K    3132K  /system/bin/glgps</div><div class="line"> 2688    45504K    6540K    3132K    3032K  /system/bin/netd</div><div class="line"> 3394    13472K    7056K    2681K    2540K  /system/bin/wpa_supplicant</div><div class="line"> 2685    18204K    9196K    2370K    1512K  /system/bin/mediadrmserver</div><div class="line"> 2471    53924K    6068K    1974K    1796K  /system/bin/vold</div><div class="line"> 2669    22000K    7024K    1887K    1500K  /system/bin/ez2controld</div><div class="line"> 2668    19120K    5056K    1648K    1568K  /system/bin/fingerprintd</div><div class="line"> 2681    15512K    6624K    1566K    1284K  /system/bin/drmserver</div><div class="line"> 8140    20524K    1664K    1518K    1500K  /sbin/adbd</div><div class="line">    1    10484K    2196K    1382K    1020K  /init</div><div class="line"> 2683    12744K    5408K    1304K    1180K  /system/bin/keystore</div><div class="line"> 2689    13324K    3712K    1281K    1236K  /sbin/rfsd</div><div class="line"> 2671    14416K    4828K    1252K    1148K  /system/bin/lhd</div><div class="line"> 2467    12260K    2952K    1050K    1020K  /system/vendor/bin/teei_daemon</div><div class="line"> 8795     9500K    3000K    1049K    1012K  procrank</div><div class="line"> 2696    12432K    4516K     912K     828K  /system/bin/gatekeeperd</div><div class="line"> 2682     9728K    3712K     878K     796K  /system/bin/installd</div><div class="line"> 1678     5972K    1580K     794K     436K  /sbin/ueventd</div><div class="line"> 2692    19068K    3476K     771K     720K  /system/bin/vcd</div><div class="line"> 2525     6724K     968K     734K     732K  /sbin/healthd</div><div class="line"> 2836    10724K    3592K     702K     652K  /system/bin/ifaad</div><div class="line"> 2528     9044K    3012K     702K     668K  /system/bin/lmkd</div><div class="line"> 2837    10676K    3504K     667K     620K  /system/bin/fidod</div><div class="line"> 2695    10676K    3616K     666K     616K  /system/vendor/bin/facerecod</div><div class="line"> 2678    10884K    3488K     656K     608K  /sbin/cbd</div><div class="line"> 2529     9100K    2916K     648K     608K  /system/bin/servicemanager</div><div class="line"> 2697     8384K    2976K     635K     584K  /system/xbin/perfprofd</div><div class="line"> 2526     7700K    2500K     629K     464K  /system/bin/sh</div><div class="line"> 2670     9568K    3416K     616K     556K  /system/bin/autobingend</div><div class="line"> 8300     7700K    2528K     598K     436K  /system/bin/sh</div><div class="line"> 2694     8144K    2784K     558K     508K  /system/bin/mdevice_manager</div><div class="line"> 8277     7988K    2700K     549K     508K  logcat</div><div class="line"> 2693     8020K    2736K     525K     488K  /system/bin/mpower_manager</div><div class="line"> 2680    17300K    2668K     508K     472K  /system/bin/dmd</div><div class="line"> 2691     7628K    2332K     420K     388K  /system/bin/sced</div><div class="line"> 2431     5640K     952K     409K     144K  /sbin/watchdogd</div><div class="line"> 2470    10252K    3044K     367K      52K  /system/bin/debuggerd64</div><div class="line"> 2469     5500K    2600K     349K      64K  /system/bin/debuggerd</div><div class="line"> 2482     9868K    1168K     335K      52K  debuggerd64:signaller</div><div class="line"> 2483     5116K     948K     272K      52K  debuggerd:signaller</div><div class="line">                           ------   ------  ------</div><div class="line">                          2174242K  1731360K  TOTAL</div><div class="line"></div><div class="line"> RAM: 5825640K total, 384368K free, 101036K buffers, 2805404K cached, 16472K shmem, 541972K slab</div></pre></td></tr></table></figure>
+<p>输出结果是按照 PSS 值从大到小进行排列的。</p>
+<ul>
+<li>VSS：Virtual Set Size 虚拟耗用内存（包含共享库占用的内存）是单个进程全部可访问的地址空间</li>
+<li>RSS：Resident Set Size 实际使用物理内存（包含共享库占用的内存）是单个进程实际占用的内存大小，对于单个共享库， 尽管无论多少个进程使用，实际该共享库只会被装入内存一次。</li>
+<li>PSS：Proportional Set Size 实际使用的物理内存（比例分配共享库占用的内存）</li>
+<li>USS：Unique Set Size 进程独自占用的物理内存（不包含共享库占用的内存）USS 是一个非常非常有用的数字， 因为它揭示了运行一个特定进程的真实的内存增量大小。如果进程被终止， USS 就是实际被返还给系统的内存大小。</li>
+</ul>
+<p>USS 是针对某个进程开始有可疑内存泄露的情况，进行检测的最佳数字。怀疑某个程序有内存泄露可以查看这个值是否一直有增加</p>
+<p>一般来说内存占用大小有如下规律：VSS &gt;= RSS &gt;= PSS &gt;= USS</p>
+<h2 id="dumpsys-meminfo"><a href="#dumpsys-meminfo" class="headerlink" title="dumpsys meminfo"></a>dumpsys meminfo</h2><p>我们可以使用下面的命令来查看某个进程使用内存的情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell dumpsys meminfo -a &lt;进程名称&gt;</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line">Applications Memory Usage (in Kilobytes):</div><div class="line">Uptime: 638409159 Realtime: 1205461779</div><div class="line"></div><div class="line">** MEMINFO in pid 8118 [com.android.hq.ganktoutiao] **</div><div class="line">                   Pss      Pss   Shared  Private   Shared  Private  SwapPss     Heap     Heap     Heap</div><div class="line">                 Total    Clean    Dirty    Dirty    Clean    Clean    Dirty     Size    Alloc     Free</div><div class="line">                ------   ------   ------   ------   ------   ------   ------   ------   ------   ------</div><div class="line">  Native Heap    18071        0      640    18004        0        0       18    29696    22848     6847</div><div class="line">  Dalvik Heap     3992        0      196     3972        0        0       23     6443     3222     3221</div><div class="line"> Dalvik Other     1600        0       16     1600        0        0        0                           </div><div class="line">        Stack      120        0        0      120        0        0        0                           </div><div class="line">       Ashmem        2        0        4        0        8        0        0                           </div><div class="line">      Gfx dev    14500        0        0    11136        0     3364        0                           </div><div class="line">    Other dev       19        0      108        0        0       16        0                           </div><div class="line">     .so mmap     9349     6092     1072      420    14984     6092       31                           </div><div class="line">    .jar mmap        8        0        0        8        0        0        0                           </div><div class="line">    .apk mmap      227      100        0        0     1388      100        0                           </div><div class="line">    .ttf mmap      258      192        0        0      188      192        0                           </div><div class="line">    .dex mmap    11583     9716        0        4     8008     9716        0                           </div><div class="line">    .oat mmap      379       80        0        0     2568       80        0                           </div><div class="line">    .art mmap     5942      248      324     5344     5232      248        4                           </div><div class="line">   Other mmap     2603        0       16        4     3076     1708        0                           </div><div class="line">   EGL mtrack    27744        0        0    27744        0        0        0                           </div><div class="line">    GL mtrack    28956        0        0    28956        0        0        0                           </div><div class="line">      Unknown     1469        0      280     1420        0        0        4                           </div><div class="line">        TOTAL   126902    16428     2656    98732    35452    21516       80    36139    26070    10068</div><div class="line"> </div><div class="line"> Dalvik Details</div><div class="line">        .Heap     3528        0        0     3528        0        0        0                           </div><div class="line">         .LOS      156        0        8      156        0        0       20                           </div><div class="line">      .Zygote      236        0      188      216        0        0        3                           </div><div class="line">   .NonMoving       72        0        0       72        0        0        0                           </div><div class="line"> .LinearAlloc      320        0        0      320        0        0        0                           </div><div class="line">          .GC       84        0       12       84        0        0        0                           </div><div class="line">    .JITCache     1088        0        0     1088        0        0        0                           </div><div class="line"> .IndirectRef      108        0        4      108        0        0        0                           </div><div class="line">   .Boot vdex     8099     6236        0        0     8008     6236        0                           </div><div class="line">     .App dex     1036     1032        0        4        0     1032        0                           </div><div class="line">    .App vdex     2448     2448        0        0        0     2448        0                           </div><div class="line">     .App art     1092        8        0     1084        0        8        0                           </div><div class="line">    .Boot art     4850      240      324     4260     5232      240        4                           </div><div class="line"> </div><div class="line"> App Summary</div><div class="line">                       Pss(KB)</div><div class="line">                        ------</div><div class="line">           Java Heap:     9564</div><div class="line">         Native Heap:    18004</div><div class="line">                Code:    16612</div><div class="line">               Stack:      120</div><div class="line">            Graphics:    71200</div><div class="line">       Private Other:     4748</div><div class="line">              System:     6654</div><div class="line"> </div><div class="line">               TOTAL:   126902       TOTAL SWAP PSS:       80</div><div class="line"> </div><div class="line"> Objects</div><div class="line">               Views:      593         ViewRootImpl:        2</div><div class="line">         AppContexts:        2           Activities:        1</div><div class="line">              Assets:        4        AssetManagers:        3</div><div class="line">       Local Binders:       17        Proxy Binders:       25</div><div class="line">       Parcel memory:        5         Parcel count:       23</div><div class="line">    Death Recipients:        3      OpenSSL Sockets:        1</div><div class="line">            WebViews:        0</div><div class="line"> </div><div class="line"> Dalvik</div><div class="line">         isLargeHeap:    false</div><div class="line"> </div><div class="line"> SQL</div><div class="line">         MEMORY_USED:      165</div><div class="line">  PAGECACHE_OVERFLOW:       24          MALLOC_SIZE:      117</div><div class="line"> </div><div class="line"> DATABASES</div><div class="line">      pgsz     dbsz   Lookaside(b)          cache  Dbname</div><div class="line">         4       24             59         2/17/3  /data/user/0/com.android.hq.ganktoutiao/databases/gank.db</div><div class="line"> </div><div class="line"> Asset Allocations</div><div class="line">    zip:/data/app/com.android.hq.ganktoutiao-jidQh1vu54x_dgItu-668g==/base.apk:/assets/fonts/material-design-iconic-font-v2.2.0.ttf: 97K</div></pre></td></tr></table></figure>
+<p>现在对上面输出内容的各项指标来做个解释：</p>
+<p>横轴指标：</p>
+<ul>
+<li>Native Heap：Native 分配的内存，就是非 Java 代码分配的内存。</li>
+<li>Dalvik Heap：Java对象分配的占据内存。</li>
+<li>Dalvik Other：类数据结构和索引占据内存</li>
+<li>Stack：栈内存</li>
+<li>Ashmem：匿名共享内存</li>
+<li>Other dev：内部driver占用的内存</li>
+<li>.so mmap：so库占用的内存</li>
+<li>.apk mmap：apk占用的内存</li>
+<li>.ttf mmap：ttf文件占用过的内存</li>
+<li>.dex mmap：</li>
+<li>.oat mmap：</li>
+<li>.art mmap：</li>
+<li>Other mmap</li>
+<li>App Summary：<ul>
+<li>Java Heap：从 Java 或 Kotlin 代码分配的对象内存。</li>
+<li>Native Heap：从 C 或 C++ 代码分配的对象内存。</li>
+<li>Code：您的应用用于处理代码和资源（如 dex 字节码、已优化或已编译的 dex 码、.so 库和字体）的内存。</li>
+<li>Stack：您的应用中的原生堆栈和 Java 堆栈使用的内存。 这通常与您的应用运行多少线程有关。</li>
+<li>Graphics：图形缓冲区队列向屏幕显示像素（包括 GL 表面、GL 纹理等等）所使用的内存。 （请注意，这是与 CPU 共享的内存，不是 GPU 专用内存。）</li>
+<li>Private Other</li>
+<li>System</li>
+</ul>
+</li>
+</ul>
+<p>对于应用的内存，一般我们主要关注 App Summary 就行了。</p>
+<h2 id="Memory-Profiler"><a href="#Memory-Profiler" class="headerlink" title="Memory Profiler"></a>Memory Profiler</h2><p><a href="https://developer.android.com/studio/profile/memory-profiler" target="_blank" rel="external">Android 官方文档：使用 Memory Profiler 查看 Java 堆和内存分配</a></p>
+<h2 id="Mat"><a href="#Mat" class="headerlink" title="Mat"></a>Mat</h2><p><a href="http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/" target="_blank" rel="external">Android 性能优化工具篇 – MAT分析内存泄漏 </a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《Android 移动性能实战》</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/内存优化/" rel="tag"># 内存优化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/08/android-performance-optimization-reduce-ram/" rel="next" title="Android 性能优化实战篇 -- 内存优化">
+                <i class="fa fa-chevron-left"></i> Android 性能优化实战篇 -- 内存优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/30/personal-reading-2018/" rel="prev" title="读书 2018">
+                读书 2018 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">177</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#procrank"><span class="nav-number">2.</span> <span class="nav-text">procrank</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dumpsys-meminfo"><span class="nav-number">3.</span> <span class="nav-text">dumpsys meminfo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Memory-Profiler"><span class="nav-number">4.</span> <span class="nav-text">Memory Profiler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mat"><span class="nav-number">5.</span> <span class="nav-text">Mat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
