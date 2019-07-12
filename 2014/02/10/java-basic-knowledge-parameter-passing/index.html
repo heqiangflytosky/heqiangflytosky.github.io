@@ -88,14 +88,14 @@
 
 <meta name="description" content="介绍 Java 值传递和引用传递的知识">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java 基础 -- 值传递和引用传递">
+<meta property="og:title" content="Java 基础 -- 值传递、引用传递和参数传递">
 <meta property="og:url" content="http://yoursite.com/2014/02/10/java-basic-knowledge-parameter-passing/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Java 值传递和引用传递的知识">
 <meta property="og:image" content="http://yoursite.com/images/java-basic-knowledge-parameter-passing/java-parameter.png">
-<meta property="og:updated_time" content="2018-06-03T15:45:33.617Z">
+<meta property="og:updated_time" content="2019-07-10T02:09:25.048Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 基础 -- 值传递和引用传递">
+<meta name="twitter:title" content="Java 基础 -- 值传递、引用传递和参数传递">
 <meta name="twitter:description" content="介绍 Java 值传递和引用传递的知识">
 <meta name="twitter:image" content="http://yoursite.com/images/java-basic-knowledge-parameter-passing/java-parameter.png">
 
@@ -131,7 +131,7 @@
 
 
 
-  <title> Java 基础 -- 值传递和引用传递 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Java 基础 -- 值传递、引用传递和参数传递 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -304,7 +304,7 @@
             
             
               
-                Java 基础 -- 值传递和引用传递
+                Java 基础 -- 值传递、引用传递和参数传递
               
             
           </h1>
@@ -371,7 +371,7 @@
 
           
           
-             <span id="/2014/02/10/java-basic-knowledge-parameter-passing/" class="leancloud_visitors" data-flag-title="Java 基础 -- 值传递和引用传递">
+             <span id="/2014/02/10/java-basic-knowledge-parameter-passing/" class="leancloud_visitors" data-flag-title="Java 基础 -- 值传递、引用传递和参数传递">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -435,11 +435,22 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">class Person &#123;</div><div class="line">    String name;</div><div class="line"></div><div class="line">    public Person(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">public class Test &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Person p = new Person(&quot;张三&quot;);</div><div class="line"></div><div class="line">        change(p);</div><div class="line"></div><div class="line">        System.out.println(p.name);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void change(Person p) &#123;</div><div class="line">        Person person = new Person(&quot;李四&quot;);</div><div class="line">        p = person; </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>运行的结果是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">张三</div></pre></td></tr></table></figure>
+<h2 id="方法的参数传递机制"><a href="#方法的参数传递机制" class="headerlink" title="方法的参数传递机制"></a>方法的参数传递机制</h2><p>方法的参数分为两种：</p>
+<ul>
+<li>形式参数：定义方法时声明的参数</li>
+<li>实际参数：调用方法时传给形参的具体参数值</li>
+</ul>
+<p>那么，Java的实参值是如何传入方法的呢？这是由 Java 方法的参数传递机制来控制的，Java 里方法的参数传递方式只有一种：值传递。<br>所谓的值传递就是将实际参数值的副本（复制品）传入方法内，而参数本身不会收到任何影响。<br>结合上面的例子，简单点将就是说，如果是引用类型作为参数来传递，这时传递的时引用类型指向对象的地址的一个copy，如果你这个时候修改它的属性什么的，虽然它是一个copy，但它们执行同一个对象的内存地址，那么修改的仍然是同一个对象。这时如果你给它重新赋值，就是修改它指向的地址，那么只是修改了这个copy的地址，原来的引用指向的地址仍然是不受影响的。</p>
+<p>如果将change方法的代码改成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public  void change(Person p) &#123;</div><div class="line">    //Person person = new Person(&quot;李四&quot;);</div><div class="line">    //p = person;</div><div class="line">    p.name = &quot;李四&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行的结果是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">李四</div></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>值传递的时候，将实参的值，copy 一份给形参。</li>
 <li>引用传递的时候，将实参的地址值，copy 一份给形参。</li>
 </ul>
 <p>也就是说，不管是值传递还是引用传递，形参拿到的仅仅是实参的副本，而不是实参本身。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《疯狂 Java 讲义》</p>
 
       
     </div>
@@ -556,7 +567,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">175</span>
+                <span class="site-state-item-count">176</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -574,7 +585,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">91</span>
+                <span class="site-state-item-count">92</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -636,7 +647,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#值传递和引用传递"><span class="nav-number">1.</span> <span class="nav-text">值传递和引用传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String类型传递"><span class="nav-number">2.</span> <span class="nav-text">String类型传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#值传递和引用传递"><span class="nav-number">1.</span> <span class="nav-text">值传递和引用传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String类型传递"><span class="nav-number">2.</span> <span class="nav-text">String类型传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法的参数传递机制"><span class="nav-number">3.</span> <span class="nav-text">方法的参数传递机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

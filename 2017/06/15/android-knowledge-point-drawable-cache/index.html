@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/android-knowledge-point-drawable-cache/drawable-3.png">
 <meta property="og:image" content="http://yoursite.com/images/android-knowledge-point-drawable-cache/drawable-6.jpg">
 <meta property="og:image" content="http://yoursite.com/images/android-knowledge-point-drawable-cache/drawable-7.jpg">
-<meta property="og:updated_time" content="2017-12-01T15:59:47.000Z">
+<meta property="og:updated_time" content="2019-07-12T06:52:53.212Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android：关于Drawable的缓存机制应该了解的知识">
 <meta name="twitter:description" content="在Android中，出于对内存优化的考虑，对于图片的存储使用了缓存机制，资源id相同的图片使用了同一个位图信息，如果对这些机制不了解的话开发过程中就会造成一些困扰。本文通过实例和分析Drawable的缓存机制源码的方式来介绍一下Drawable的缓存机制，并且了解一下Drawable.mutate()的用法。">
@@ -412,7 +412,7 @@
         <h2 id="问题演示"><a href="#问题演示" class="headerlink" title="问题演示"></a>问题演示</h2><p>下面我们通过一个实例来演示一个我们在使用Drawable过程中经常会遇到的一个问题。</p>
 <p>首先贴出UI布局文件，这里放了两个 <code>ImageView</code>，它们的寬高不一样，而且对他们加以蓝色的背景。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">              <span class="attr">xmlns:mz</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">              <span class="attr">android:id</span>=<span class="string">"@+id/root"</span></div><div class="line">              <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">              <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">              <span class="attr">android:padding</span>=<span class="string">"40dp"</span></div><div class="line">              <span class="attr">android:orientation</span>=<span class="string">"vertical"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">ImageView</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/first"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"100dp"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"200dp"</span></div><div class="line">        <span class="attr">android:scaleType</span>=<span class="string">"fitXY"</span></div><div class="line">        <span class="attr">android:background</span>=<span class="string">"#1E90FF"</span>/&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">ImageView</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/second"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"200dp"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"100dp"</span></div><div class="line">        <span class="attr">android:layout_marginTop</span>=<span class="string">"50dp"</span></div><div class="line">        <span class="attr">android:scaleType</span>=<span class="string">"fitXY"</span></div><div class="line">        <span class="attr">android:background</span>=<span class="string">"#1E90FF"</span>/&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <h3 id="实例1"><a href="#实例1" class="headerlink" title="实例1"></a>实例1</h3><p>首先我们给第一个<code>ImageView</code>设置一个显示图片。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> BitmapDrawable firstDrawable = (BitmapDrawable) getResources()</div><div class="line">        .getDrawable(R.drawable.test_mutate);</div><div class="line">mFirstImage = (ImageView) findViewById(R.id.first);</div><div class="line">mSecondImage = (ImageView) findViewById(R.id.second);</div><div class="line"></div><div class="line">mFirstImage.setImageDrawable(firstDrawable);</div></pre></td></tr></table></figure></p>
-<p>看下面的效果，因为第二个我们没有设置前景图片，因此会现实背景图片。这个很正常，我们不会有什么疑问。</p>
+<p>看下面的效果，因为第二个我们没有设置前景图片，因此会显示背景图片。这个很正常，我们不会有什么疑问。</p>
 <p><img src="/images/android-knowledge-point-drawable-cache/drawable-1.png" alt="效果图"></p>
 <h3 id="实例2"><a href="#实例2" class="headerlink" title="实例2"></a>实例2</h3><p>接下来我们在原来代码的基础上添加下面代码，为第二个<code>ImageView</code>设置图片。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">mSecondImage.setImageDrawable(firstDrawable);</div></pre></td></tr></table></figure>
@@ -598,7 +598,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">175</span>
+                <span class="site-state-item-count">176</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -616,7 +616,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">91</span>
+                <span class="site-state-item-count">92</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

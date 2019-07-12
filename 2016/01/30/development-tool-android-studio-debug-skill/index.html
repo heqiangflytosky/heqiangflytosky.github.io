@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://yoursite.com/images/development-tool-android-studio-debug-skill/as-crash-break-point-2.png">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-android-studio-debug-skill/as-crash-break-point-3.png">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-android-studio-debug-skill/as-value-break-point.png">
-<meta property="og:updated_time" content="2019-02-14T15:28:22.891Z">
+<meta property="og:updated_time" content="2019-07-09T02:56:01.862Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Studio 使用技巧">
 <meta name="twitter:description" content="介绍 Android Studio 的使用技巧：调试技巧，设置技巧，常用插件等">
@@ -452,9 +452,10 @@
 <h4 id="修改变量值"><a href="#修改变量值" class="headerlink" title="修改变量值"></a>修改变量值</h4><p>在调试过程中，我们可以方便的修改某个变量的值，以方便我们的调试。<br>在<strong>Variables</strong>窗口中选中改变量，右键点击，然后选择“Set Value…”就可以修改变量值。</p>
 <p><img src="/images/development-tool-android-studio-debug-skill/as-variables-set-value.png" alt="效果图"></p>
 <p>上图中变量 <code>a</code> 的值是2，现在我们想观察一下 <code>a</code> 为 20 的执行结果，我们不必在代码中修改然后编译运行程序这种方法来进行，用上图的方法和轻松的可以达到目的。</p>
-<h3 id="断点调试"><a href="#断点调试" class="headerlink" title="断点调试"></a>断点调试</h3><p>基本的断点调试方法这里就不多介绍，先介绍一下观察变量值的方法。</p>
+<h3 id="断点调试"><a href="#断点调试" class="headerlink" title="断点调试"></a>断点调试</h3><h4 id="普通断点"><a href="#普通断点" class="headerlink" title="普通断点"></a>普通断点</h4><p>普通断点也叫行断点，在需要调试的代码左方区域用鼠标左键点击，出现断点圆圈标记时即设置了一个行断点。代码执行到此位置时会自动停下来。</p>
 <h4 id="方法断点"><a href="#方法断点" class="headerlink" title="方法断点"></a>方法断点</h4><p>在方法名所在行断点位置单击鼠标会生成一个方法断点，当执行到这个方法时使程序停止。<br>这种断点在当前的代码和运行代码不匹配是非常有用，可以执行到特定的方法。</p>
 <p><img src="/images/development-tool-android-studio-debug-skill/as-function-break-point.png" alt="效果图"></p>
+<p>需要<strong>注意</strong>的是:方法断点有可能会拖累你的调试速度，使得调试时代码执行非常卡顿,当你看到Android Studio 报这样的提示时: <code>Method breakpoints my dramatically slow down debugging</code>，那你就需要去看一下是否有很多的方法断点存在，去掉这些断点会使调试流畅很多。</p>
 <h4 id="条件断点"><a href="#条件断点" class="headerlink" title="条件断点"></a>条件断点</h4><p>所谓的条件断点就是在特定条件发生的断点，也就是说，我们可将某个断点设置为只对某种事件感兴趣。<br>断点处右键单击，在弹框的Condition处填写过滤条件。此处我们只关心 <code>i==2</code> 的情况，因此填写<code>i==2</code>。那么代码在变量 <code>i</code> 为 2 时才会停下来。</p>
 <p><img src="/images/development-tool-android-studio-debug-skill/as-condition-break-point.png" alt="效果图"></p>
 <h4 id="日志断点"><a href="#日志断点" class="headerlink" title="日志断点"></a>日志断点</h4><p>该类型的断点不会使程序停下来，而是在输出我们要它输出的日志信息，然后继续执行。<br>步骤如下：<br>在断点出右键单击，在弹出的对话框中取消选中<strong>Suspend</strong>，在弹出的控制面板中，选中 <strong>Log evaluated</strong> 和 <strong>Condition</strong>，然后填写断点条件以及输出日志信息。<br>如下图：</p>
@@ -597,7 +598,7 @@ https://www.jianshu.com/p/011eb88f4e0d/
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">175</span>
+                <span class="site-state-item-count">176</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -615,7 +616,7 @@ https://www.jianshu.com/p/011eb88f4e0d/
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">91</span>
+                <span class="site-state-item-count">92</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -677,7 +678,7 @@ https://www.jianshu.com/p/011eb88f4e0d/
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#调试技巧"><span class="nav-number">1.</span> <span class="nav-text">调试技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动调试"><span class="nav-number">1.1.</span> <span class="nav-text">启动调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本调试方法"><span class="nav-number">1.2.</span> <span class="nav-text">基本调试方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#调试功能键"><span class="nav-number">1.2.1.</span> <span class="nav-text">调试功能键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#断点管理键"><span class="nav-number">1.2.2.</span> <span class="nav-text">断点管理键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求值表达式"><span class="nav-number">1.2.3.</span> <span class="nav-text">求值表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变量观察区"><span class="nav-number">1.2.4.</span> <span class="nav-text">变量观察区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改变量值"><span class="nav-number">1.2.5.</span> <span class="nav-text">修改变量值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#断点调试"><span class="nav-number">1.3.</span> <span class="nav-text">断点调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法断点"><span class="nav-number">1.3.1.</span> <span class="nav-text">方法断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件断点"><span class="nav-number">1.3.2.</span> <span class="nav-text">条件断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志断点"><span class="nav-number">1.3.3.</span> <span class="nav-text">日志断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异常断点"><span class="nav-number">1.3.4.</span> <span class="nav-text">异常断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#属性断点"><span class="nav-number">1.3.5.</span> <span class="nav-text">属性断点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置技巧"><span class="nav-number">2.</span> <span class="nav-text">设置技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用插件"><span class="nav-number">3.</span> <span class="nav-text">常用插件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#调试技巧"><span class="nav-number">1.</span> <span class="nav-text">调试技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动调试"><span class="nav-number">1.1.</span> <span class="nav-text">启动调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本调试方法"><span class="nav-number">1.2.</span> <span class="nav-text">基本调试方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#调试功能键"><span class="nav-number">1.2.1.</span> <span class="nav-text">调试功能键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#断点管理键"><span class="nav-number">1.2.2.</span> <span class="nav-text">断点管理键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求值表达式"><span class="nav-number">1.2.3.</span> <span class="nav-text">求值表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变量观察区"><span class="nav-number">1.2.4.</span> <span class="nav-text">变量观察区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改变量值"><span class="nav-number">1.2.5.</span> <span class="nav-text">修改变量值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#断点调试"><span class="nav-number">1.3.</span> <span class="nav-text">断点调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通断点"><span class="nav-number">1.3.1.</span> <span class="nav-text">普通断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法断点"><span class="nav-number">1.3.2.</span> <span class="nav-text">方法断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件断点"><span class="nav-number">1.3.3.</span> <span class="nav-text">条件断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志断点"><span class="nav-number">1.3.4.</span> <span class="nav-text">日志断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异常断点"><span class="nav-number">1.3.5.</span> <span class="nav-text">异常断点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#属性断点"><span class="nav-number">1.3.6.</span> <span class="nav-text">属性断点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置技巧"><span class="nav-number">2.</span> <span class="nav-text">设置技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用插件"><span class="nav-number">3.</span> <span class="nav-text">常用插件</span></a></li></ol></div>
             
 
           </div>
