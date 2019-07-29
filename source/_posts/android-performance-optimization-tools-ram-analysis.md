@@ -154,8 +154,8 @@ bogon:TestSomething heqiang$ adb shell procrank
  - PSS：Proportional Set Size 实际使用的物理内存（比例分配共享库占用的内存）
  - USS：Unique Set Size 进程独自占用的物理内存（不包含共享库占用的内存）USS 是一个非常非常有用的数字， 因为它揭示了运行一个特定进程的真实的内存增量大小。如果进程被终止， USS 就是实际被返还给系统的内存大小。
 
-USS 是针对某个进程开始有可疑内存泄露的情况，进行检测的最佳数字。怀疑某个程序有内存泄露可以查看这个值是否一直有增加
-
+USS 是针对某个进程开始有可疑内存泄露的情况，进行检测的最佳数字。怀疑某个程序有内存泄露可以查看这个值是否一直有增加。
+这些内存指标都是包含 Java 内存和 Native 内存的。
 一般来说内存占用大小有如下规律：VSS >= RSS >= PSS >= USS
 
 ## dumpsys meminfo
@@ -252,7 +252,7 @@ Uptime: 638409159 Realtime: 1205461779
 
 横轴指标：
 
- - Native Heap：Native 分配的内存，就是非 Java 代码分配的内存。
+ - Native Heap：Native 分配的内存，就是非 Java 代码分配的内存。不受Java Object Heap大小限制，但受限于系统内存。
  - Dalvik Heap：Java对象分配的占据内存。
  - Dalvik Other：类数据结构和索引占据内存
  - Stack：栈内存
@@ -266,7 +266,7 @@ Uptime: 638409159 Realtime: 1205461779
  - .art mmap：
  - Other mmap
  - App Summary：
-  - Java Heap：从 Java 或 Kotlin 代码分配的对象内存。
+  - Java Heap：从 Java 或 Kotlin 代码分配的对象内存。不受Java Object Heap大小限制，但受限于系统内存。
   - Native Heap：从 C 或 C++ 代码分配的对象内存。
   - Code：您的应用用于处理代码和资源（如 dex 字节码、已优化或已编译的 dex 码、.so 库和字体）的内存。
   - Stack：您的应用中的原生堆栈和 Java 堆栈使用的内存。 这通常与您的应用运行多少线程有关。
