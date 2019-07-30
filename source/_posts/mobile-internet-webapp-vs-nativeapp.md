@@ -9,7 +9,7 @@ date: 2017-8-5 10:00:00
 
 ## 概述
 
-自从Android系统在手机上应用开始，在移动端 Native App 和 Web App之间的战争似乎就没有停止过，Web App 及其各种变体向Native App 发起了无数次的冲锋，但Native App的地位仍然是岿然不动，甚至我们一提起移动互联网，就专指 Native App。这和 PC 端的景象完全不一样。随着轻应用、Hybrid App 、React Native、Weex已经微信小程序的出现，我们不得不再一次审视这个问题。
+自从Android系统在手机上应用开始，在移动端 Native App 和 Web App之间的战争似乎就没有停止过，Web App 及其各种变体向Native App 发起了无数次的冲锋，但Native App的地位仍然是岿然不动，甚至我们一提起移动互联网，就专指 Native App。这和 PC 端的景象完全不一样。随着轻应用、Hybrid App 、React Native、Weex、微信小程序以及Flutter的出现，我们不得不再一次审视这个问题。
 
 ## WebApp的特点
 
@@ -92,8 +92,8 @@ M站、轻应用 -> PWA -> HybridApp -> React Native、Weex
 
 [微信小程序，大多数人误解的8个问题 ](https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2650994254&idx=1&sn=b5a291309cb35e229bdc66052200a39f&chksm=bdbf0e1d8ac8870bd7a6a1b80cd6dbc906251c8b31ea5959419846b312b3b84b8048aa05cc3f&mpshare=1&scene=2&srcid=0928TYbsbovyAI1YJ7aXvfl9&from=timeline&isappinstalled=0&key=9289b6ec21f92a5928c971e763199c62958da88ae7805f55d3594ba99548c4cba2da3c66d7d31038140a81ad4b95694b&ascene=2&uin=MjgyMTI0MDAzMg==&devicetype=android-21&version=26031933&nettype=WIFI&pass_ticket=9nkAV8PvXod8+giTIP0YLiH5aU7EbFOiU8wA5OZrfdzQWSgzai7BiNlh3Ko9rg9y&wx_header=1)这篇文章写的很好，大家可以阅读一下。
 
-小程序和直达服务等形态应该是移动端App的未来，在移动互联网下半场你想打开一个应用，可能就不需要去应用商店下载个App，等下载完安装后使用，只需要打开微信就行了，找到相关应用就可以了。
-直达服务依据手机OS生态，可以做到与手机系统服务的紧密结合，小程序依据微信生态，但绝不是把微信作为一个入口或者是作为一个应用商店这么简单的事，它的野心是一个OS生态。
+小程序和快应用等形态应该是移动端App的未来，在移动互联网下半场你想打开一个应用，可能就不需要去应用商店下载个App，等下载完安装后使用，只需要打开微信就行了，找到相关应用就可以了。
+快应用依据手机OS生态，可以做到与手机系统服务的紧密结合，小程序依据微信生态，但绝不是把微信作为一个入口或者是作为一个应用商店这么简单的事，它的野心是一个OS生态。
 
 
 
