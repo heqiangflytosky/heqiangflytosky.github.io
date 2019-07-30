@@ -107,6 +107,7 @@ I/RxJava: onComplete
 ### interval()
 
 `interval(long period, TimeUnit unit)` 按照一个固定的时间间隔 `period` 来发射数据，可以作为一个定时器来使用。
+在订阅方法中，可以获取到当前发射数据的次数。
 
 ```java
         Observable.interval(2, TimeUnit.SECONDS)
@@ -132,7 +133,37 @@ I/RxJava: onComplete
                     }
                 });
 ```
-上面例子中当数据等于5解除订阅关系，停止发射数据。
+
+上面例子中当数据发射间隔是 2秒，发射5次后解除订阅关系，停止发射数据。
+
+### intervalRange
+
+如果我们不做上面的限制，那么 interval 是可以无限次发射数据的，我们还可以通过另外一个 intervalRange 操作符来限制发射次数。
+
+`Observable<Long> intervalRange(long start, long count, long initialDelay, long period, TimeUnit unit)`，可以起始点，触发次数，延时，触发周期等。
+
+```
+        Observable.intervalRange(5,10,10,2,TimeUnit.SECONDS)
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Long aLong) {
+                        Log.d(TAG,"onNext : " + aLong);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+```
 
 ### range()
 
@@ -225,6 +256,30 @@ I/RxJava: onComplete
 就是说顺序发射数据时，只要有一个 `Observable` 发射了数据，那么就不会发射后面的数据了。如果都不发射数据，那么就发送 `first(default)` 参数里面的默认数据。
 
 这个操作符做网络缓存的时候很有用。举个例子：依次检查 Disk 与 Network，如果 Disk 存在缓存，则不做网络请求，否则进行网络请求。
+
+## delay
+
+delay 操作符可以将发射源发射的数据等待一个延迟后再发送给观察者。
+
+```
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                emitter.onNext(1);
+                emitter.onComplete();
+                Log.d(TAG,"emitter end");
+            }
+        })
+                .delay(10, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.d(TAG,"accept "+integer);
+                    }
+                });
+```
+
+上面的例子中，被观察者发送数据后，10秒后观察者才收到数据。
 
 ## map、flatmap 和 concatMap （变换）
 

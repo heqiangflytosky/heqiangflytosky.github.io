@@ -299,9 +299,19 @@ RxJava的使用不当极有可能会导致内存泄漏。比如，使用RxJava�
  - 手动为 RxJava 的每一次订阅进行控制，在指定的时机进行取消订阅。这个时候，CompositeDisposable 可能会被排上用场。
  - 使用开源框架 RxLifecycle。
 
-## CompositeDisposable
+## Disposable 和 CompositeDisposable
 
-前面说过，使用 CompositeDisposable 来管理订阅可以有效地避免内存泄漏。
+前面说过，RxJava 可能会导致内存泄漏，RxJava 提供了 Disposable 接口来处理这类问题，它提供了两个方法。
+
+ - dispose():主动解除订阅
+ - isDisposed():查询是否解除订阅 true 代表 已经解除订阅
+
+我们可以在合适的时候取消订阅，来避免内存泄漏。
+`onSubscribe(@NonNull Disposable d)` 方法会传递一个实现了 Disposable 接口的对象，我们可以把这个对象保存下来，然后在合适的时机调用 `dispose()` 取消订阅。
+
+再来介绍一下 CompositeDisposable。它是一个 Disposable 的容器，可以容纳多个 Disposable。我们可以使用 CompositeDisposable 来管理订阅可以有效地避免内存泄漏。
+如果 CompositeDisposable 容器已经是处于 dispose 的状态，那么所有加进来的 Disposable 都会被自动切断。
+
 下面来给出它的用法：
 
 
