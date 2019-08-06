@@ -101,6 +101,7 @@ resolve 还可以是一个 Promise 实例，在这种个情况下，两个 Promi
 
 ## then 方法
 
+then()方法用于指定当前实例状态发生改变时的回调函数。它返回一个新的Promise实例。
 语法：`Promise.prototype.then(onFulfilled, onRejected);`
 
  - onFulfilled:当前实例变成fulfilled状态时，该参数作为回调函数被调用

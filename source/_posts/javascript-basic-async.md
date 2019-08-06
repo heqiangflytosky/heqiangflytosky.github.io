@@ -64,6 +64,29 @@ testAsync() 方法中，`await this.testPromise()` 表示阻塞在这里等待te
 ```
 
 await 关键字必须要在 async 函数中使用，否则会报错。
+
+如果 testAsync() 也有返回值，我们想在 test() 方法里面等待获取这个返回值，那就需要把 test() 声明为 async 方法，并且 await testAsync()。
+
+```
+    async test() {
+      var result = await this.testAsync()
+      console.log("test end "+result)
+    },
+    async testAsync() {
+      await this.testPromise()
+      console.log("testAsync end")
+      return "testAsync result"
+    },
+```
+
+执行结果：
+
+```
+testPromise done
+testAsync end
+test end testAsync result
+```
+
 上面我们介绍的是 await 后面跟一个返回 Promise对象的函数，那么可以加普通的函数吗？答案是可以的。
 
 ```
