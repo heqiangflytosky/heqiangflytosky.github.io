@@ -47,6 +47,9 @@ Retrofit 是 Squareup 公司开源的网络请求框架，它其实是对 OkHttp
                                                      at retrofit2.ServiceMethod$Builder.createCallAdapter(ServiceMethod.java:235)
 ```
 
+还有个库是 `com.squareup.retrofit2:adapter-rxjava`，这个是仅支持RxJava1，如果想使用 RxJava2，就要用上面的依赖。
+如果需要使用 Gson 作为转换器，就需要依赖 `com.squareup.retrofit2:converter-gson`，如果不想使用，可以自定义，比如 FastJson 等。
+
 先上代码：
 
 CallBack.java
@@ -113,6 +116,7 @@ public class RequestManager {
 
     public void getData(){
         Call<TestBean> call = mRequestService.getData();
+        // 异步请求
         call.enqueue(new Callback<TestBean>() {
 
             @Override
@@ -125,6 +129,12 @@ public class RequestManager {
 
             }
         });
+        // 同步请求
+        try {
+            Response<TestBean> response = call.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static class TestBean{
@@ -188,7 +198,7 @@ compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 ## Converter
 在默认情况下 Retrofit 只支持将 HTTP 的响应体转换换为 `ResponseBody`，那么接口的返回值都是 `Call<ResponseBody>`，如果我们需要把 `ResponseBody` 转换成我们需要的类型就需要 `Converter`。
 `Converter` 就是对数据的转换，代码中 `addConverterFactory(GsonConverterFactory.create())` 就是指定了 Gson 将 `ResponseBody`转换我们想要的类型。
-显然我们也可以自定义一个 `Converter`。
+显然我们也可以自定义一个 `Converter`，比如使用 FastJson 等。
 
 ## 注解的使用
 
@@ -263,7 +273,7 @@ HTTP 方式是对上面 6 中的扩展，用法：
 如果将 `@FromUrlEncoded` 添加在 `@GET` 上面呢，同样的也会抛出 `java.lang.IllegalArgumentException:FormUrlEncoded can only be specified on HTTP methods with request body (e.g., @POST)` 的错误异常。
 如果是使用 `@Body`，也是不用加 `@FormUrlEncoded` 注解的。
 
-### 动态Url
+ - Url：实现动态Url
 
 前面的使用都是基于BaseUrl的，如果我们想请求不同Url时只能重新生成一个 Retrofit 实例，实际上我们还可以通过 `@Url` 来操作。
 
@@ -274,6 +284,42 @@ HTTP 方式是对上面 6 中的扩展，用法：
 
 如果参数指定的 url 是一个以 `http` 开头的 url，那么就完全使用这个url，和前面指定的 BaseUrl 完全没有联系，如果 url 指定的只有类似 `/id/name` 的path，而没有指定 scheme 和 host，那么它就会用 BaseUrl 的 scheme 和 host。
 ** <font color=#ff0000>这里注意</font> **：只是用 BaseUrl 的 scheme 和 host，如果 BaseUrl 是 http://www.test.com/v/ ，那么还是会把 path 中的 v  去掉，组成 http://www.test.com/id/name 。
+
+ - Header：用于在方法参数里动态添加请求头：
+
+```
+Call<ResultBean> postSayHi(@Header("city") String city);
+```
+
+ - Part
+ - PartMap
+
+这两个用于上传文件，与 `@MultiPart` 注解结合使用
+
+```
+    @Multipart
+    @POST("test/upload")
+    Call<ResultBean> upload(@Part("file\"; filename=\"launcher_icon.png") RequestBody file);
+```
+
+### 方法注解
+
+ - FormUrlEncoded：上面已经介绍过了。
+ - Headers：用于在方法添加请求头
+
+```
+    @POST("test/sayHi")
+    @Headers("Accept-Encoding: application/json")
+    Call<ResultBean> postSayHi(@Body UserBean userBean, @Header("city") String city);
+```
+
+ - Streaming：如果您正在下载一个大文件，Retrofit2将尝试将整个文件移动到内存中。为了避免这种，我们必须向请求声明中添加一个特殊的注解
+
+```
+@Streaming
+@GET
+Call<ResponseBody> downloadFileByDynamicUrl(@Url String fileUrl);
+```
 
 <!--  
 http://www.jianshu.com/p/308f3c54abdd
