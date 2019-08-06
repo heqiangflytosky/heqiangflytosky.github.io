@@ -1,5 +1,5 @@
 ---
-Flutter -- 开发 Gank 客户端
+title: Flutter -- 开发 Gank 客户端
 categories: Flutter
 comments: true
 tags: [Flutter]
@@ -23,7 +23,9 @@ date: 2019-8-6 10:00:00
 
 ## 应用展示
 
-<img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/main.png" width="360" height="744"/> <img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/detail.png" width="360" height="744"/>
+<img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/main.png" width="360" height="744"/> 
+
+<img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/detail.png" width="360" height="744"/>
 
 ## 用到的第三方库
 

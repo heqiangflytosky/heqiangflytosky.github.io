@@ -3,7 +3,7 @@ title: Flutter -- 初步了解和学习资料
 categories: Flutter
 comments: true
 tags: [Flutter]
-description: Flutter 开发的 Gank 客户端
+description: Flutter 简单介绍以及一些学习资料汇总
 date: 2019-8-2 10:00:00
 ---
 
