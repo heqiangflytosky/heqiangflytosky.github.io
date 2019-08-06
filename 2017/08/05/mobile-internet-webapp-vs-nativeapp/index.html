@@ -94,7 +94,7 @@
 <meta property="og:description" content="分析一下WebApp的特点、性能问题、优化方向、进化史以及未来发展方向">
 <meta property="og:image" content="http://yoursite.com/images/mobile-internet-webapp-vs-nativeapp/webapp-evolution.png">
 <meta property="og:image" content="http://yoursite.com/images/mobile-internet-webapp-vs-nativeapp/webapps.png">
-<meta property="og:updated_time" content="2019-07-30T08:24:07.866Z">
+<meta property="og:updated_time" content="2019-08-06T08:41:04.559Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebApp 和 NativeApp 的世纪之战">
 <meta name="twitter:description" content="分析一下WebApp的特点、性能问题、优化方向、进化史以及未来发展方向">
@@ -423,6 +423,7 @@
 <li>Web基于DOM，而DOM很慢。浏览器打开网页时，需要解析文档，在内存中生成DOM结构，如果遇到复杂的文档，这个过程是很慢的。可以想象一下，如果网页上有上万个、甚至几十万个形状（不管是图片或CSS），生成DOM需要多久？更不要提与其中某一个形状互动了。</li>
 <li>DOM拖慢JavaScript。所有的DOM操作都是同步的，会堵塞浏览器。JavaScript 操作 DOM 时，必须等前一个操作结束，才能执行后一个操作。只要一个操作有卡顿，整个网页就会短暂失去响应。浏览器重绘网页的频率是60FPS（即16毫秒/帧），JavaScript 做不到在16毫秒内完成 DOM 操作，因此产生了跳帧。用户体验上的不流畅、不连贯就源于此。</li>
 <li>虽然现在浏览器也支持多线程，比如JS解析在一个线程，渲染在一个线程，但一般是按照先解析再渲染再执行 JS 这样的顺序执行的。</li>
+<li>原生渲染直接调用操作系统API，WebView渲染那样需要JavaScript运行环境和CSS渲染器，会有性能损失。</li>
 <li>在Android早期的版本中，webview的性能很差</li>
 </ul>
 <p>上面这些原因，对于PC还不至于造成严重的性能问题，但是手机的硬件资源相对有限，用户互动又相对频繁，结果跟 Native App 一比，就完全落在了下风。</p>
@@ -597,7 +598,7 @@ http://blog.csdn.net/edu_enth/article/details/56007422
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">179</span>
+                <span class="site-state-item-count">180</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -606,7 +607,7 @@ http://blog.csdn.net/edu_enth/article/details/56007422
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -615,7 +616,7 @@ http://blog.csdn.net/edu_enth/article/details/56007422
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-count">93</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

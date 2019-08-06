@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/05/15/javascript-basic-async/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 async 函数的使用">
-<meta property="og:updated_time" content="2019-07-30T11:26:28.383Z">
+<meta property="og:updated_time" content="2019-08-06T08:41:04.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript 基础 -- async/await 关键字">
 <meta name="twitter:description" content="介绍 async 函数的使用">
@@ -407,7 +407,12 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">test() &#123;</div><div class="line">  this.testAsync()</div><div class="line">  console.log(&quot;test end&quot;)</div><div class="line">&#125;,</div><div class="line">async testAsync() &#123;</div><div class="line">  await this.testPromise()</div><div class="line">  console.log(&quot;testAsync end&quot;)</div><div class="line">&#125;,</div><div class="line">testPromise() &#123;</div><div class="line">  return new Promise((resolve,reject) =&gt; &#123;</div><div class="line">    setTimeout(function () &#123;</div><div class="line">      console.log(&quot;testPromise done&quot;)</div><div class="line">      resolve(&apos;done&apos;)</div><div class="line">    &#125;,1000)</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在上面的代码中，testPromise() 返回了一个 Promise对象，异步执行一些耗时操作，1000ms 后打印 testPromise done。<br>testAsync() 方法中，<code>await this.testPromise()</code> 表示阻塞在这里等待testPromise的执行结果。注意，这里并不是说等待testPromise这个异步方法执行完毕返回，而是要等待异步的执行结果，也就是异步方法体执行完毕。<br>看输出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">16:04:43.528  test end</div><div class="line">16:04:44.534  testPromise done</div><div class="line">16:04:44.536  testAsync end</div></pre></td></tr></table></figure>
-<p>await 关键字必须要在 async 函数中使用，否则会报错。<br>上面我们介绍的是 await 后面跟一个返回 Promise对象的函数，那么可以加普通的函数吗？答案是可以的。</p>
+<p>await 关键字必须要在 async 函数中使用，否则会报错。</p>
+<p>如果 testAsync() 也有返回值，我们想在 test() 方法里面等待获取这个返回值，那就需要把 test() 声明为 async 方法，并且 await testAsync()。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">async test() &#123;</div><div class="line">  var result = await this.testAsync()</div><div class="line">  console.log(&quot;test end &quot;+result)</div><div class="line">&#125;,</div><div class="line">async testAsync() &#123;</div><div class="line">  await this.testPromise()</div><div class="line">  console.log(&quot;testAsync end&quot;)</div><div class="line">  return &quot;testAsync result&quot;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">testPromise done</div><div class="line">testAsync end</div><div class="line">test end testAsync result</div></pre></td></tr></table></figure>
+<p>上面我们介绍的是 await 后面跟一个返回 Promise对象的函数，那么可以加普通的函数吗？答案是可以的。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">test() &#123;</div><div class="line">  this.testAsync()</div><div class="line">  console.log(&quot;test end&quot;)</div><div class="line">&#125;,</div><div class="line">async testAsync() &#123;</div><div class="line">  await this.testTimeout()</div><div class="line">  console.log(&quot;testAsync end&quot;)</div><div class="line">&#125;,</div><div class="line">testTimeout() &#123;</div><div class="line">  setTimeout(function () &#123;</div><div class="line">      console.log(&quot;setTimeout done&quot;)</div><div class="line">  &#125;,1000)</div><div class="line">  console.log(&quot;testTimeout done&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">16:10:09.940 testTimeout done</div><div class="line">16:10:09.941 test end</div><div class="line">16:10:09.942 testAsync end</div><div class="line">16:10:10.946 setTimeout done</div></pre></td></tr></table></figure>
 <p>这种情况下 await 仅仅等待函数返回，而不是异步执行的结果。</p>
@@ -528,7 +533,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">179</span>
+                <span class="site-state-item-count">180</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -537,7 +542,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -546,7 +551,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-count">93</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
