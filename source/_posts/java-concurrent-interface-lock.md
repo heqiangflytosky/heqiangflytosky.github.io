@@ -21,7 +21,7 @@ date: 2015-7-15 10:00:00
 
 先来看一下 Lock 接口的类关系图：
 
-![效果图](http://poc98qeya.bkt.clouddn.com/images/main/java-concurrency-interface-lock/interface-lock.png)
+![效果图](/images/java-concurrency-interface-lock/interface-lock.png)
 
 Lock 接口的使用也很简单：
 
