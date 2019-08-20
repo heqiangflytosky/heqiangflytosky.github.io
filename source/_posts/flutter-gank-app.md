@@ -27,6 +27,14 @@ date: 2019-8-6 10:00:00
 
 <img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/detail.png" width="360" height="744"/>
 
+<img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/mine.png" width="360" height="744"/>
+
+<img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/fav.png" width="360" height="744"/>
+
+<img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/history.png" width="360" height="744"/>
+
+<img src="https://raw.githubusercontent.com/heqiangflytosky/gank_flutter/master/des_img/about.png" width="360" height="744"/>
+
 ## 用到的第三方库
 
 | 名称 | 功能 |
@@ -36,3 +44,6 @@ date: 2019-8-6 10:00:00
 | json_serializable | Json 模板 |
 | flutter_webview_plugin | Web 组件 |
 | flutter_spinkit | Loading 组件 |
+| sqflite | 数据库 |
+| flutter_linkify | 展示文本链接组件 |
+| url_launcher | 打开给定的url |
