@@ -92,12 +92,12 @@
 <meta property="og:url" content="http://yoursite.com/2015/07/15/java-concurrent-interface-lock/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍Lock接口">
-<meta property="og:image" content="http://poc98qeya.bkt.clouddn.com/images/main/java-concurrency-interface-lock/interface-lock.png">
-<meta property="og:updated_time" content="2019-03-14T06:49:29.484Z">
+<meta property="og:image" content="http://yoursite.com/images/java-concurrency-interface-lock/interface-lock.png">
+<meta property="og:updated_time" content="2019-08-20T03:21:24.542Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 并发编程 -- Lock">
 <meta name="twitter:description" content="介绍Lock接口">
-<meta name="twitter:image" content="http://poc98qeya.bkt.clouddn.com/images/main/java-concurrency-interface-lock/interface-lock.png">
+<meta name="twitter:image" content="http://yoursite.com/images/java-concurrency-interface-lock/interface-lock.png">
 
 
 
@@ -409,7 +409,7 @@
 <li>超时获取锁：在指定的截止时间之前获取锁，如果截止时间到了仍旧无法获取锁，则返回</li>
 </ul>
 <h2 id="Lock-接口"><a href="#Lock-接口" class="headerlink" title="Lock 接口"></a>Lock 接口</h2><p>先来看一下 Lock 接口的类关系图：</p>
-<p><img src="http://poc98qeya.bkt.clouddn.com/images/main/java-concurrency-interface-lock/interface-lock.png" alt="效果图"></p>
+<p><img src="/images/java-concurrency-interface-lock/interface-lock.png" alt="效果图"></p>
 <p>Lock 接口的使用也很简单：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Lock lock = new ReentrantLock();</div><div class="line">lock.lock();</div><div class="line">try &#123;</div><div class="line">    </div><div class="line">&#125; finally &#123;</div><div class="line">    lock.unlock();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在finally块中释放锁，目的是保证在获取到锁之后，最终能够被释放。<br>另外，不要讲获取锁的过程写在try块中，因为如果在获取锁时发生了异常，异常抛出的同时，也会导致锁无故释放。</p>
