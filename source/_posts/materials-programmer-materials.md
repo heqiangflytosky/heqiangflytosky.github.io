@@ -112,6 +112,7 @@ date: 2016-12-1 10:00:00
  - [进击的程序员](http://0xcc0xcd.com/p/index.php)：老罗，罗升阳的个人博客站点
  - [Weishu's Notes](http://weishu.me/)：有一些不错的文章
  - [HenCoder](http://hencoder.com/)：大神扔物线的给<font color=#DC143C>高阶Android工程师</font>的进阶手册
+ - [任玉刚](http://renyugang.io/)
 
 ### 微信公众号
 
@@ -174,6 +175,7 @@ date: 2016-12-1 10:00:00
  - 淘宝前端团队
  - LeetCode领扣：LeetCode官方微信公众号
  - 阿里技术：阿里巴巴官方技术号，关于阿里的技术创新均呈现于此
+ - 闲鱼技术：闲鱼技术团队公众号
 
 #### 其他
 
