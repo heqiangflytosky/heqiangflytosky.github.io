@@ -342,7 +342,7 @@ demo.jsp 代码为：
 </html>
 ```
 
-这个时候打开页面：http://localhost:8080/SpringDemo_war/api/show，发现并没有把 显示出来，那是因为由于web.xml自动生成的是servlet 2.3版本的配置，而我们项目中需要用servlet 3.0。所以需要改一下web.xml servlet版本：
+这个时候重新运行，打开页面：http://localhost:8080/SpringDemo_war/api/show，发现并没有把 显示出来，那是因为由于web.xml自动生成的是servlet 2.3版本的配置，而我们项目中需要用servlet 3.0。所以需要改一下web.xml servlet版本：
 
 ```
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
@@ -356,6 +356,63 @@ demo.jsp 代码为：
 我们再来测试一下 get 接口，在浏览器运行下面地址：
 http://localhost:8080/SpringDemo_war/api/get?nickname=James&gender=0&age=30
 数据正常显示。
+
+## 手动部署
+
+前面讲的在IDE上配置好服务器后，点击运行，IDE会帮助我们部署到服务器上面，现在我们讲解一下如何手动部署。
+先来说一下部署的各项配置，其实在建立工程时，IDE已经帮我们把配置什么的都生成了：
+
+pom.xml
+
+```
+  <packaging>war</packaging>
+
+  <build>
+    <finalName>SpringDemo</finalName>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.2.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+```
+
+现在来开始编译，首先进入到项目的根目录，运行：
+
+```
+mvn clean package
+```
+
+这个命令会把以前的编译清除后重新打包，这时可以在 target 目录下找到生成的 war 文件。
+把 war 文件复制到 tomcat 的 webapps 目录，然后 ./startup.sh 运行服务器，可以在浏览器里面测试前面的api。
 
 <!-- 
 https://www.cnblogs.com/cavinchen/p/9846427.html
