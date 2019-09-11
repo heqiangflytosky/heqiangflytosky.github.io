@@ -66,6 +66,7 @@ RxJava 提供众多的操作符以及它的链式操作可以替代深度回调�
         });
 ```
 
+`create` 方法创建一个 `ObservableCreate` 对象。
 `ObservableEmitter` 相当于一个事件发射器，每执行一次 `onNext()`，观察者就会收到一次数据，数据发送完毕后调用 `onComplete()` 方法。
 在事件处理过程中出异常时，触发`onError()` ，同时队列自动终止，不允许再有事件发出。在一个正确运行的事件序列中， `onCompleted()` 和 `onError()` 有且只有一个，并且是事件序列中的最后一个。需要注意的是，`onCompleted()` 和 `onError()` 二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个。
 
