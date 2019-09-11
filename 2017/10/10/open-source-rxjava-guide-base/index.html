@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/10/10/open-source-rxjava-guide-base/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 RxJava 的基本概念以及简单使用，介绍 Observable 创建数据流的多种操作符的用法以及线程调度的方法和它们之间的区别。">
-<meta property="og:updated_time" content="2019-07-29T09:24:30.558Z">
+<meta property="og:updated_time" content="2019-09-11T03:06:47.059Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxJava 使用指南 -- 基本概念、数据流创建和线程调度">
 <meta name="twitter:description" content="本文介绍 RxJava 的基本概念以及简单使用，介绍 Observable 创建数据流的多种操作符的用法以及线程调度的方法和它们之间的区别。">
@@ -422,7 +422,7 @@
 <p>订阅关系：Observable/Observer是一对，Flowable/Subscriber是一对。</p>
 <h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>正如我们实现一个基本的观察者模式一样，你要创建被观察者和观察者，然后通过订阅事件使他们联系起来。<br>下面介绍一个RxJava的最基本的实现：</p>
 <h3 id="创建Observable"><a href="#创建Observable" class="headerlink" title="创建Observable"></a>创建Observable</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Observable&lt;String&gt; observable = Observable.create(<span class="keyword">new</span> ObservableOnSubscribe&lt;String&gt;() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subscribe</span><span class="params">(@NonNull ObservableEmitter&lt;String&gt; observableEmitter)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        observableEmitter.onNext(<span class="string">"Hello "</span>);</div><div class="line">        observableEmitter.onNext(<span class="string">"World"</span>);</div><div class="line">        observableEmitter.onComplete();</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p><code>ObservableEmitter</code> 相当于一个事件发射器，每执行一次 <code>onNext()</code>，观察者就会收到一次数据，数据发送完毕后调用 <code>onComplete()</code> 方法。<br>在事件处理过程中出异常时，触发<code>onError()</code> ，同时队列自动终止，不允许再有事件发出。在一个正确运行的事件序列中， <code>onCompleted()</code> 和 <code>onError()</code> 有且只有一个，并且是事件序列中的最后一个。需要注意的是，<code>onCompleted()</code> 和 <code>onError()</code> 二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个。</p>
+<p><code>create</code> 方法创建一个 <code>ObservableCreate</code> 对象。<br><code>ObservableEmitter</code> 相当于一个事件发射器，每执行一次 <code>onNext()</code>，观察者就会收到一次数据，数据发送完毕后调用 <code>onComplete()</code> 方法。<br>在事件处理过程中出异常时，触发<code>onError()</code> ，同时队列自动终止，不允许再有事件发出。在一个正确运行的事件序列中， <code>onCompleted()</code> 和 <code>onError()</code> 有且只有一个，并且是事件序列中的最后一个。需要注意的是，<code>onCompleted()</code> 和 <code>onError()</code> 二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个。</p>
 <h3 id="创建Observer"><a href="#创建Observer" class="headerlink" title="创建Observer"></a>创建Observer</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Observer&lt;String&gt; observer = <span class="keyword">new</span> Observer&lt;String&gt;() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(@NonNull Disposable d)</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(@NonNull String s)</span> </span>&#123;</div><div class="line">        Log.i(TAG,<span class="string">"onNext : "</span> + s);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(@NonNull Throwable e)</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</div><div class="line">        Log.i(TAG,<span class="string">"onComplete"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>观察者的 <code>onNext()</code> 回调会收到被观察者发送的数据。</p>
 <h3 id="subscribe（订阅）"><a href="#subscribe（订阅）" class="headerlink" title="subscribe（订阅）"></a>subscribe（订阅）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">observable.subscribe(observer);</div></pre></td></tr></table></figure>
@@ -639,7 +639,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">183</span>
+                <span class="site-state-item-count">184</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -657,7 +657,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">94</span>
+                <span class="site-state-item-count">95</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

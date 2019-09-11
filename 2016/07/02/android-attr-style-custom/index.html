@@ -1,0 +1,927 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Attribute和Style," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="自定义Attribute和Style">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android -- 自定义Attribute和Style">
+<meta property="og:url" content="http://yoursite.com/2016/07/02/android-attr-style-custom/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="自定义Attribute和Style">
+<meta property="og:updated_time" content="2019-09-11T03:07:36.371Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android -- 自定义Attribute和Style">
+<meta name="twitter:description" content="自定义Attribute和Style">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/02/android-attr-style-custom/"/>
+
+
+
+
+
+  <title> Android -- 自定义Attribute和Style | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/02/android-attr-style-custom/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android -- 自定义Attribute和Style
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-02T10:00:00+08:00">
+                2016-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/07/02/android-attr-style-custom/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/02/android-attr-style-custom/" class="leancloud_visitors" data-flag-title="Android -- 自定义Attribute和Style">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  自定义Attribute和Style
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="自定义属性"><a href="#自定义属性" class="headerlink" title="自定义属性"></a>自定义属性</h2><h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><ol>
+<li>编写values/custom_attrs.xml，在其中编写styleable和item等标签元素</li>
+<li>自定义一个CustomView(extends View)类</li>
+<li>在布局文件中CustomView使用自定义的属性（注意namespace）</li>
+<li>在CustomView的构造方法中通过TypedArray获取</li>
+</ol>
+<p>custom_attrs.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;resources&gt;</div><div class="line">    &lt;declare-styleable name=&quot;CustomAttrs&quot;&gt;</div><div class="line">        &lt;attr name=&quot;custom_src&quot; format=&quot;string&quot; /&gt;</div><div class="line">        &lt;attr name=&quot;custom_text&quot; format=&quot;string&quot; /&gt;</div><div class="line">        &lt;attr name=&quot;custom_text_size&quot; format=&quot;dimension&quot; /&gt;</div><div class="line">        &lt;attr name=&quot;custom_text_color&quot; format=&quot;color&quot; /&gt;</div><div class="line">        &lt;attr name=&quot;custom_bg&quot; format=&quot;reference|color&quot; /&gt;</div><div class="line">    &lt;/declare-styleable&gt;</div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
+<p>在布局文件中给 CustomView 配置自定义属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    xmlns:custom=&quot;http://schemas.android.com/apk/res-auto&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;</div><div class="line">    android:orientation=&quot;vertical&quot;</div><div class="line">    android:gravity=&quot;center&quot;&gt;</div><div class="line">    &lt;com.example.heqiang.testsomething.graphic.CustomView</div><div class="line">        android:layout_width=&quot;100dp&quot;</div><div class="line">        android:layout_height=&quot;100dp&quot;</div><div class="line">        android:background=&quot;#ffff0000&quot;</div><div class="line">        custom:custom_src=&quot;src&quot;</div><div class="line">        custom:custom_text=&quot;text&quot;</div><div class="line">        custom:custom_text_size=&quot;16sp&quot;</div><div class="line">        custom:custom_text_color=&quot;#0000ff&quot;</div><div class="line">        custom:custom_bg=&quot;@mipmap/ic_launcher&quot;/&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
+<p>注意要在根布局中加入命名空间xmlns:custom，此处的 custom 名字可以随意指定。 </p>
+<p>在 CustomView 中获取自定义属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">public class CustomView extends View &#123;</div><div class="line">    private static final String TAG = &quot;CustomView&quot;;</div><div class="line"></div><div class="line">    public CustomView(Context context) &#123;</div><div class="line">        this(context, null);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public CustomView(Context context, AttributeSet attrs) &#123;</div><div class="line">        this(context, attrs, 0);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public CustomView(Context context, AttributeSet attrs, int defStyleAttr) &#123;</div><div class="line">        this(context, attrs, defStyleAttr, 0);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) &#123;</div><div class="line">        super(context, attrs, defStyleAttr, defStyleRes);</div><div class="line">        init(attrs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void init(AttributeSet attrs) &#123;</div><div class="line">        TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.CustomAttrs);</div><div class="line"></div><div class="line">        String src = ta.getString(R.styleable.CustomAttrs_custom_src);</div><div class="line">        String text = ta.getString(R.styleable.CustomAttrs_custom_text);</div><div class="line">        float textSize = ta.getDimension(R.styleable.CustomAttrs_custom_text_size, 10);</div><div class="line">        Drawable drawable = ta.getDrawable(R.styleable.CustomAttrs_custom_bg);</div><div class="line"></div><div class="line">        Log.e(TAG, &quot;src = &quot; + src + &quot; , text = &quot; + text + &quot; , textSize = &quot;+textSize);</div><div class="line">        Log.e(TAG, &quot;drawable = &quot; + drawable);</div><div class="line"></div><div class="line">        ta.recycle();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">src = src , text = text , textSize = 48.0</div><div class="line">color = -16776961</div><div class="line">drawable = android.graphics.drawable.BitmapDrawable@9bd65c6</div></pre></td></tr></table></figure>
+<h3 id="format选项"><a href="#format选项" class="headerlink" title="format选项"></a>format选项</h3><ul>
+<li>boolean:布尔值</li>
+<li>color:颜色值</li>
+<li>dimension:尺寸值</li>
+<li>enum:枚举值</li>
+<li>flag:位或运算</li>
+<li>float:浮点值</li>
+<li>fraction:百分数</li>
+<li>integer:整型值</li>
+<li>reference:参考某一资源ID</li>
+<li>string:字符串</li>
+</ul>
+<p>flag与enum的差别：flag表示这几个值可以做或运算，你可以叠加使用，如用bold|italic表示既加粗也变成斜体，而enum只能让你选择其中一个值。<br>format即使用错，只要你自定义的View中获取对应类型值也是可以的，只是在布局中写代码时，IDE就不会根据你定义的format给出相应的提示了，所以最好在自定义View时还是仔细斟酌下类型。</p>
+<h3 id="AttributeSet与TypedArray"><a href="#AttributeSet与TypedArray" class="headerlink" title="AttributeSet与TypedArray"></a>AttributeSet与TypedArray</h3><p>AttributeSet中保存的是该View声明的所有的属性，并且外面的确可以通过它去获取（自定义的）属性。但它和通过TypedArray获取到的有什么区别呢？<br>我们再添加下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">int count = attrs.getAttributeCount();</div><div class="line">for (int i = 0; i &lt; count; i++) &#123;</div><div class="line">    String attrName = attrs.getAttributeName(i);</div><div class="line">    String attrVal = attrs.getAttributeValue(i);</div><div class="line">    Log.e(TAG, &quot;attrName = &quot; + attrName + &quot; , attrVal = &quot; + attrVal);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">attrName = background , attrVal = #ffff0000</div><div class="line">attrName = layout_width , attrVal = 100.0dip</div><div class="line">attrName = layout_height , attrVal = 100.0dip</div><div class="line">attrName = custom_bg , attrVal = @2131492864</div><div class="line">attrName = custom_src , attrVal = src</div><div class="line">attrName = custom_text , attrVal = text</div><div class="line">attrName = custom_text_color , attrVal = #ff0000ff</div><div class="line">attrName = custom_text_size , attrVal = 16.0sp</div></pre></td></tr></table></figure>
+<p>看到custom_bg这个属性的值   相信大家就明白了，如果某个属性我们用的是引用，那么通过AttributeSet获取的值只是这个资源的ID，而TypedArray获得的是解析过的ID的值。因此使用TypedArray是比较方便的。</p>
+<h2 id="在自定义Style中加入自定义attr"><a href="#在自定义Style中加入自定义attr" class="headerlink" title="在自定义Style中加入自定义attr"></a>在自定义Style中加入自定义attr</h2><p>先在 values/styles.xml 中添加自定义 style：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;style name=&quot;CustomStyle&quot;&gt;</div><div class="line">    &lt;item name=&quot;android:background&quot;&gt;#ffff0000&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;custom_src&quot;&gt;Hello&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;custom_text&quot;&gt;@string/hello_world&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;custom_bg&quot;&gt;@mipmap/ic_launcher&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;custom_text_size&quot;&gt;10sp&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;custom_text_color&quot;&gt;#ffffff00&lt;/item&gt;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
+<p>在布局文件中使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;com.example.heqiang.testsomething.graphic.CustomView</div><div class="line">    android:layout_width=&quot;100dp&quot;</div><div class="line">    android:layout_height=&quot;100dp&quot;</div><div class="line">    style=&quot;@style/CustomStyle&quot;/&gt;</div></pre></td></tr></table></figure>
+<p>属性的获取和上面的是一样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.CustomAttrs);</div><div class="line"></div><div class="line">String src = ta.getString(R.styleable.CustomAttrs_custom_src);</div><div class="line">String text = ta.getString(R.styleable.CustomAttrs_custom_text);</div><div class="line">float textSize = ta.getDimension(R.styleable.CustomAttrs_custom_text_size, 10);</div><div class="line">int color = ta.getColor(R.styleable.CustomAttrs_custom_text_color, 0x000000);</div><div class="line">Drawable drawable = ta.getDrawable(R.styleable.CustomAttrs_custom_bg);</div><div class="line"></div><div class="line">Log.e(TAG, &quot;src = &quot; + src + &quot; , text = &quot; + text + &quot; , textSize = &quot;+textSize);</div><div class="line">Log.e(TAG, &quot;color = &quot; + color);</div><div class="line">Log.e(TAG, &quot;drawable = &quot; + drawable);</div><div class="line"></div><div class="line">ta.recycle();</div><div class="line">//</div><div class="line">int count = attrs.getAttributeCount();</div><div class="line">for (int i = 0; i &lt; count; i++) &#123;</div><div class="line">    String attrName = attrs.getAttributeName(i);</div><div class="line">    String attrVal = attrs.getAttributeValue(i);</div><div class="line">    Log.e(TAG, &quot;attrName = &quot; + attrName + &quot; , attrVal = &quot; + attrVal);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">src = Hello , text = Hello world! , textSize = 30.0</div><div class="line">color = -256</div><div class="line">drawable = android.graphics.drawable.BitmapDrawable@1d679e</div><div class="line"></div><div class="line">attrName = layout_width , attrVal = 100.0dip</div><div class="line">attrName = layout_height , attrVal = 100.0dip</div><div class="line">attrName = style , attrVal = @2131624100</div></pre></td></tr></table></figure>
+<h2 id="在自定义Attr中加入自定义Style"><a href="#在自定义Attr中加入自定义Style" class="headerlink" title="在自定义Attr中加入自定义Style"></a>在自定义Attr中加入自定义Style</h2><p>我们在 custom_attrs.xml 新加下面的属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;resources&gt;</div><div class="line">    ......</div><div class="line"></div><div class="line">    &lt;declare-styleable name=&quot;CustomTheme&quot;&gt;</div><div class="line">        &lt;attr name=&quot;customTheme&quot; format=&quot;reference&quot; /&gt;</div><div class="line">    &lt;/declare-styleable&gt;</div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
+<p>在布局文件中使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;com.example.heqiang.testsomething.graphic.CustomView</div><div class="line">    android:layout_width=&quot;100dp&quot;</div><div class="line">    android:layout_height=&quot;100dp&quot;</div><div class="line">    custom:customTheme=&quot;@style/CustomStyle&quot;/&gt;</div></pre></td></tr></table></figure>
+<p>获取属性值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line">private void init(AttributeSet attrs,int defStyleAttr, int defStyleRes) &#123;</div><div class="line">    TypedArray ta = getContext().obtainStyledAttributes(attrs,</div><div class="line">            R.styleable.CustomTheme, defStyleAttr, defStyleRes);</div><div class="line">    int customTheme = ta.getResourceId(R.styleable.CustomTheme_customTheme, 0);</div><div class="line">    ta.recycle();</div><div class="line">    Log.e(TAG, &quot;customTheme=&quot; + customTheme);</div><div class="line"></div><div class="line">    //获取自定义的5个属性</div><div class="line">    TypedArray a = getContext().obtainStyledAttributes(customTheme, R.styleable.CustomAttrs);</div><div class="line"></div><div class="line">    String src = null;</div><div class="line">    String text = null;</div><div class="line">    float textSize = 0f;</div><div class="line">    Drawable drawable = null;</div><div class="line">    int textColor = 0;</div><div class="line"></div><div class="line">    int N = a.getIndexCount();</div><div class="line">    Log.e(TAG, &quot;N=&quot;+N);</div><div class="line">    for (int i = 0; i &lt; N; i++) &#123;</div><div class="line">        int attr = a.getIndex(i);</div><div class="line">        if(attr == R.styleable.CustomAttrs_custom_src)&#123;</div><div class="line">            src = a.getString(R.styleable.CustomAttrs_custom_src);</div><div class="line">        &#125; else if(attr == R.styleable.CustomAttrs_custom_text)&#123;</div><div class="line">            text = a.getString(R.styleable.CustomAttrs_custom_text);</div><div class="line">        &#125; else if(attr == R.styleable.CustomAttrs_custom_text_size)&#123;</div><div class="line">            textSize = a.getDimension(R.styleable.CustomAttrs_custom_text_size, 8);</div><div class="line">        &#125; else if(attr == R.styleable.CustomAttrs_custom_bg)&#123;</div><div class="line">            drawable = a.getDrawable(R.styleable.CustomAttrs_custom_bg);</div><div class="line">        &#125; else if(attr == R.styleable.CustomAttrs_custom_text_color)&#123;</div><div class="line">            textColor = a.getColor(R.styleable.CustomAttrs_custom_text_color,0xffffffff);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Log.e(TAG, &quot;src = &quot; + src + &quot; , text = &quot; + text + &quot; , textSize = &quot;+textSize);</div><div class="line">    Log.e(TAG, &quot;drawable = &quot; + drawable+&quot;, textColor = &quot;+textColor);</div><div class="line">    a.recycle();</div><div class="line"></div><div class="line">    //获取&lt;item name=&quot;android:background&quot;&gt;#ffff0000&lt;/item&gt;</div><div class="line">    TypedArray a1 = getContext().obtainStyledAttributes(customTheme, styleable.View);</div><div class="line">    int N1 = a.getIndexCount();</div><div class="line">    for (int i = 0; i &lt; N1; i++) &#123;</div><div class="line">        int attr = a.getIndex(i);</div><div class="line">        if(attr == styleable.View_background)&#123;</div><div class="line">            Log.e(TAG,&quot;View_background attr &quot;+attr);</div><div class="line">            Drawable backgroundDr = a.getDrawable(attr);</div><div class="line">            setBackground(backgroundDr);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    a1.recycle();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class styleable &#123;</div><div class="line">    private static final Class&lt;?&gt; sClassStyleable = getStyleableClass();</div><div class="line">    public static int[] View;</div><div class="line">    public static int View_background;</div><div class="line">    static &#123;</div><div class="line">        try &#123;</div><div class="line">            View = (int[]) sClassStyleable.getField(&quot;View&quot;).get(null);</div><div class="line"></div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            Log.w(TAG, &quot;&quot;, e);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        try &#123;</div><div class="line">            View_background = sClassStyleable.getField(&quot;View_background&quot;).getInt(null);</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            Log.w(TAG, &quot;&quot;, e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static Class&lt;?&gt; getStyleableClass() &#123;</div><div class="line">        try &#123;</div><div class="line">            Class&lt;?&gt; clz = Class.forName(&quot;com.android.internal.R$styleable&quot;);</div><div class="line">            return clz;</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            Log.e(TAG, &quot;&quot;, e);</div><div class="line">        &#125;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">customTheme=2131624100</div><div class="line">N=5</div><div class="line">src = Hello , text = Hello world! , textSize = 30.0</div><div class="line">drawable = android.graphics.drawable.BitmapDrawable@9bd65c6, textColor = -256</div><div class="line">View_background attr 13</div></pre></td></tr></table></figure>
+<h2 id="获取Android原生属性值"><a href="#获取Android原生属性值" class="headerlink" title="获取Android原生属性值"></a>获取Android原生属性值</h2><p>参考上面代码中针对android:background属性的获取。</p>
+<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a href="https://www.jianshu.com/p/dd79220b47dd" target="_blank" rel="external">Attr、Style和Theme详解</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Attribute和Style/" rel="tag"># Attribute和Style</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/10/android-source-code-analysis-activity-start-process/" rel="next" title="Android startActivity 流程分析">
+                <i class="fa fa-chevron-left"></i> Android startActivity 流程分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/02/android-knowledge-intent-service-source-code/" rel="prev" title="Android 线程 -- IntentService 使用及源码分析">
+                Android 线程 -- IntentService 使用及源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">184</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">95</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义属性"><span class="nav-number">1.</span> <span class="nav-text">自定义属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实践"><span class="nav-number">1.1.</span> <span class="nav-text">实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#format选项"><span class="nav-number">1.2.</span> <span class="nav-text">format选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AttributeSet与TypedArray"><span class="nav-number">1.3.</span> <span class="nav-text">AttributeSet与TypedArray</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在自定义Style中加入自定义attr"><span class="nav-number">2.</span> <span class="nav-text">在自定义Style中加入自定义attr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在自定义Attr中加入自定义Style"><span class="nav-number">3.</span> <span class="nav-text">在自定义Attr中加入自定义Style</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取Android原生属性值"><span class="nav-number">4.</span> <span class="nav-text">获取Android原生属性值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关文章"><span class="nav-number">5.</span> <span class="nav-text">相关文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
