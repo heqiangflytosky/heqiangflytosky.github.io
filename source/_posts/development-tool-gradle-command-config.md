@@ -268,6 +268,15 @@ android {
             universalApk false
         }
     }
+
+    // 修改生成的apk的名字，也可以放在 buildTypes 里面，这样就只针对当前编译类型生效
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            //def apkName = "Demo_${defaultConfig.versionName}_${buildType.name}"
+            //outputFileName = apkName + ".apk"
+            outputFileName = outputFileName.replace("app","Demo_"+defaultConfig.versionName)
+        }
+    }
 }
 ```
 `android{}`设置编译android项目的参数，构建android项目的所有配置都写在这里。

@@ -71,3 +71,8 @@ on 方法都返回一个 Reflect 对象。
  - create()：调用构造方法
  - create(Object... args)：调用带参数的构造方法
  - `as(Class<P> proxyType)`
+
+
+## 异常处理
+
+JOOR 把反射相关的异常都统一转成了 ReflectException ，这个异常继承自 RuntimeException，不是强制捕获的异常，因此我们写代码时一定要注意对这个异常的处理。
