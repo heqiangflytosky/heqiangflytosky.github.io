@@ -562,7 +562,21 @@ SyncBarrier 是起什么作用的呢？它就像一个卡子，卡在消息链�
                 return;
             }
 
-            ......
+            // This must be in a local variable, in case a UI event sets the logger
+            // 打印开始分发消息 Log，可以通过 Looper.getMainLooper().setMessageLogging(printer) 为主线程设置 printer，
+            // 那么每次主线程处理消息都会触发开始和结束的打印，可以通过这个办法来监测系统的卡顿问题，
+            // 著名的卡顿监测框架BlockCanary就是用的这个原理
+            final Printer logging = me.mLogging;
+            if (logging != null) {
+                logging.println(">>>>> Dispatching to " + msg.target + " " +
+                        msg.callback + ": " + msg.what);
+            }
+
+            final long traceTag = me.mTraceTag;
+            if (traceTag != 0) {
+                Trace.traceBegin(traceTag, msg.target.getTraceName(msg));
+            }
+
             try {
                 // 分发消息
                 msg.target.dispatchMessage(msg);
@@ -570,6 +584,10 @@ SyncBarrier 是起什么作用的呢？它就像一个卡子，卡在消息链�
                 if (traceTag != 0) {
                     Trace.traceEnd(traceTag);
                 }
+            }
+            // 打印分发结束的 Log
+            if (logging != null) {
+                logging.println("<<<<< Finished to " + msg.target + " " + msg.callback);
             }
 
             ......
@@ -603,3 +621,9 @@ SyncBarrier 是起什么作用的呢？它就像一个卡子，卡在消息链�
  3. 如果上面两个回调方法都没有设置，那么就执行 `Handler.handleMessage` 方法。该方法默认为空实现，`Handler` 子类通过 override 该方法来完成具体的实现逻辑。
 
 消息队列中的消息都是同步执行的，一个任务执行完才会去消息队列中获取下一个消息进行执行。
+
+## 卡顿监测
+
+主线程的所有工作，做种都会回到 MainLooper 中来处理，都会通过 dispatchMessage 来执行，因此如果主线程卡住了，就是在dispatchMessage这里卡住了。
+上面代码分析中我们也提到了，在 loop 方法中，dispatchMessage 前后都有 Printer 来调用打印Log的接口，因此我们只要在 Printer 方法中判断start和end，来获取主线程dispatch该message的开始和结束时间，并判定该时间超过阈值(如2000毫秒)为主线程卡慢发生，并dump出各种信息，提供开发者分析性能瓶颈。
+著名的卡顿监测框架BlockCanary就是用的这个原理。

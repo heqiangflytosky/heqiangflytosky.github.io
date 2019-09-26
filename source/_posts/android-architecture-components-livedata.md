@@ -227,6 +227,17 @@ public interface UserDao {
 
 后面当数据库有数据更新时就可以收到通知了。
 
+
+## 使用 LiveData 构建事件总线
+
+关于 Android 中事件总线的使用，我们可能使用过 EventBus、RxBus等。学习了上面的关于 LiveData 的特效，LiveData 也可以方便的构建事件总线。
+使用LiveData构建事件总线有什么优点呢？
+
+ - 实现简单
+ - 官方支持，减少依赖	
+ - 避免内存泄露
+ - 免除Activity生命周期问题带来的困扰
+
 ## 和 RxJava 区别
 
 LiveData 与 RxJava 都是基于观察者模式, 功能上也有重合, Google 在官方文档上也明确表示, 如果你正在使用 RxJava, Agera 等类似功能的库, 只要你能正确的处理数据流的生命周期, 就完全可以继续使用它们来替代 LiveData。
