@@ -31,6 +31,7 @@ custom_attrs.xml
 </resources>
 ```
 
+`<declare-styleable name="CustomAttrs">` 这里的自定义属性的名称 name 如果不设置成和自定义 View的名字CustomView 一样的话，我们在xml布局文件里面将不会有这个属性的自动提示。所以这里最好是自定义属性的名称 和 自定义View一致。这该自定义View包含它的子类，在使用自定义属性时会有自动提示。
 在布局文件中给 CustomView 配置自定义属性：
 
 ```
