@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/07/02/android-attr-style-custom/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="自定义Attribute和Style">
-<meta property="og:updated_time" content="2019-09-11T03:07:36.371Z">
+<meta property="og:updated_time" content="2019-10-15T03:33:39.206Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- 自定义Attribute和Style">
 <meta name="twitter:description" content="自定义Attribute和Style">
@@ -408,7 +408,7 @@
 </ol>
 <p>custom_attrs.xml</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;resources&gt;</div><div class="line">    &lt;declare-styleable name=&quot;CustomAttrs&quot;&gt;</div><div class="line">        &lt;attr name=&quot;custom_src&quot; format=&quot;string&quot; /&gt;</div><div class="line">        &lt;attr name=&quot;custom_text&quot; format=&quot;string&quot; /&gt;</div><div class="line">        &lt;attr name=&quot;custom_text_size&quot; format=&quot;dimension&quot; /&gt;</div><div class="line">        &lt;attr name=&quot;custom_text_color&quot; format=&quot;color&quot; /&gt;</div><div class="line">        &lt;attr name=&quot;custom_bg&quot; format=&quot;reference|color&quot; /&gt;</div><div class="line">    &lt;/declare-styleable&gt;</div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
-<p>在布局文件中给 CustomView 配置自定义属性：</p>
+<p><code>&lt;declare-styleable name=&quot;CustomAttrs&quot;&gt;</code> 这里的自定义属性的名称 name 如果不设置成和自定义 View的名字CustomView 一样的话，我们在xml布局文件里面将不会有这个属性的自动提示。所以这里最好是自定义属性的名称 和 自定义View一致。这该自定义View包含它的子类，在使用自定义属性时会有自动提示。<br>在布局文件中给 CustomView 配置自定义属性：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    xmlns:custom=&quot;http://schemas.android.com/apk/res-auto&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;</div><div class="line">    android:orientation=&quot;vertical&quot;</div><div class="line">    android:gravity=&quot;center&quot;&gt;</div><div class="line">    &lt;com.example.heqiang.testsomething.graphic.CustomView</div><div class="line">        android:layout_width=&quot;100dp&quot;</div><div class="line">        android:layout_height=&quot;100dp&quot;</div><div class="line">        android:background=&quot;#ffff0000&quot;</div><div class="line">        custom:custom_src=&quot;src&quot;</div><div class="line">        custom:custom_text=&quot;text&quot;</div><div class="line">        custom:custom_text_size=&quot;16sp&quot;</div><div class="line">        custom:custom_text_color=&quot;#0000ff&quot;</div><div class="line">        custom:custom_bg=&quot;@mipmap/ic_launcher&quot;/&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
 <p>注意要在根布局中加入命名空间xmlns:custom，此处的 custom 名字可以随意指定。 </p>
 <p>在 CustomView 中获取自定义属性：</p>
@@ -567,7 +567,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">186</span>
+                <span class="site-state-item-count">187</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
