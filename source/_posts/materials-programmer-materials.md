@@ -503,6 +503,8 @@ date: 2016-12-1 10:00:00
  - [微博API](http://open.weibo.com/wiki/API)
  - [Dribbble](http://developer.dribbble.com/)
  - [Meting](https://github.com/metowolf/Meting)：Github上面的音乐API
+ - [WanAndroid](https://www.wanandroid.com/index)：本身是一个汇集Android优秀技术文章的网站，并提供本网站内容的API供开发者练手学习
+ - [万年历](https://mmp.51wnl.com/apiDetail_calandar.html)
 
 ### 专利检索
 
