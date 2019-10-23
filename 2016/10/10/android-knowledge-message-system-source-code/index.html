@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="本文介绍 Android 消息机制">
+<meta name="description" content="本文介绍 Android 消息机制，并分析卡顿监测工具BlockCanary的实现原理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android 消息机制 -- 源码分析">
 <meta property="og:url" content="http://yoursite.com/2016/10/10/android-knowledge-message-system-source-code/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="本文介绍 Android 消息机制">
+<meta property="og:description" content="本文介绍 Android 消息机制，并分析卡顿监测工具BlockCanary的实现原理">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/VP2zIWD1483xUOeXLKJo1XQnKr1GIISMUtV3ShW_nyvk8OS1kxo3leFOf53mRNA-XcFSFQEYrGpVV3i_E-UeGapMmAADXd1ow9hWsmQ7zMguUnmUdZUhzTlJo-R-TG9G6yMCHyerXWBsiCGJxpj9xMSKS4hCIjDveaHejm7sqLTHjIxNfdj2EiznUf6SKvMC3H-8oJL5oH4jwtzBjsMfGdkn9PS7cW86wipDmiDoN5hErHG5ZBDhPKobwkiVlSeDFSpmM9xc1fTNQCzaczRf7SfVbwFD2SFOiNnJ_yS7YGTPEPZDogwmgtuhvBXbMVebvvc5ZsvnO2vN96lU0G00">
-<meta property="og:updated_time" content="2019-09-26T07:48:43.061Z">
+<meta property="og:updated_time" content="2019-10-23T12:04:20.027Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 消息机制 -- 源码分析">
-<meta name="twitter:description" content="本文介绍 Android 消息机制">
+<meta name="twitter:description" content="本文介绍 Android 消息机制，并分析卡顿监测工具BlockCanary的实现原理">
 <meta name="twitter:image" content="http://www.plantuml.com/plantuml/svg/VP2zIWD1483xUOeXLKJo1XQnKr1GIISMUtV3ShW_nyvk8OS1kxo3leFOf53mRNA-XcFSFQEYrGpVV3i_E-UeGapMmAADXd1ow9hWsmQ7zMguUnmUdZUhzTlJo-R-TG9G6yMCHyerXWBsiCGJxpj9xMSKS4hCIjDveaHejm7sqLTHjIxNfdj2EiznUf6SKvMC3H-8oJL5oH4jwtzBjsMfGdkn9PS7cW86wipDmiDoN5hErHG5ZBDhPKobwkiVlSeDFSpmM9xc1fTNQCzaczRf7SfVbwFD2SFOiNnJ_yS7YGTPEPZDogwmgtuhvBXbMVebvvc5ZsvnO2vN96lU0G00">
 
 
@@ -387,7 +387,7 @@
 
           
               <div class="post-description">
-                  本文介绍 Android 消息机制
+                  本文介绍 Android 消息机制，并分析卡顿监测工具BlockCanary的实现原理
               </div>
           
 
@@ -651,7 +651,7 @@ class MessageQueue {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">188</span>
+                <span class="site-state-item-count">189</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -669,7 +669,7 @@ class MessageQueue {
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-count">97</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
