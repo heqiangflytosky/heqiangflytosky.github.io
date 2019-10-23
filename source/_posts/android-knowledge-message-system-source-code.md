@@ -3,7 +3,7 @@ title: Android 消息机制 -- 源码分析
 categories: Android 消息机制
 comments: true
 tags: [Android 消息机制]
-description: 本文介绍 Android 消息机制
+description: 本文介绍 Android 消息机制，并分析卡顿监测工具BlockCanary的实现原理
 date: 2016-10-10 10:00:00
 ---
 
