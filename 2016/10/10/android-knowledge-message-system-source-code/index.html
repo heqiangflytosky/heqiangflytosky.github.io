@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 Android 消息机制，并分析卡顿监测工具BlockCanary的实现原理">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/VP2zIWD1483xUOeXLKJo1XQnKr1GIISMUtV3ShW_nyvk8OS1kxo3leFOf53mRNA-XcFSFQEYrGpVV3i_E-UeGapMmAADXd1ow9hWsmQ7zMguUnmUdZUhzTlJo-R-TG9G6yMCHyerXWBsiCGJxpj9xMSKS4hCIjDveaHejm7sqLTHjIxNfdj2EiznUf6SKvMC3H-8oJL5oH4jwtzBjsMfGdkn9PS7cW86wipDmiDoN5hErHG5ZBDhPKobwkiVlSeDFSpmM9xc1fTNQCzaczRf7SfVbwFD2SFOiNnJ_yS7YGTPEPZDogwmgtuhvBXbMVebvvc5ZsvnO2vN96lU0G00">
-<meta property="og:updated_time" content="2019-10-23T12:04:20.027Z">
+<meta property="og:updated_time" content="2019-10-25T02:15:29.743Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 消息机制 -- 源码分析">
 <meta name="twitter:description" content="本文介绍 Android 消息机制，并分析卡顿监测工具BlockCanary的实现原理">
@@ -534,7 +534,7 @@ class MessageQueue {
 <li>如果上面两个回调方法都没有设置，那么就执行 <code>Handler.handleMessage</code> 方法。该方法默认为空实现，<code>Handler</code> 子类通过 override 该方法来完成具体的实现逻辑。</li>
 </ol>
 <p>消息队列中的消息都是同步执行的，一个任务执行完才会去消息队列中获取下一个消息进行执行。</p>
-<h2 id="卡顿监测"><a href="#卡顿监测" class="headerlink" title="卡顿监测"></a>卡顿监测</h2><p>主线程的所有工作，做种都会回到 MainLooper 中来处理，都会通过 dispatchMessage 来执行，因此如果主线程卡住了，就是在dispatchMessage这里卡住了。<br>上面代码分析中我们也提到了，在 loop 方法中，dispatchMessage 前后都有 Printer 来调用打印Log的接口，因此我们只要在 Printer 方法中判断start和end，来获取主线程dispatch该message的开始和结束时间，并判定该时间超过阈值(如2000毫秒)为主线程卡慢发生，并dump出各种信息，提供开发者分析性能瓶颈。<br>著名的卡顿监测框架BlockCanary就是用的这个原理。</p>
+<h2 id="卡顿监测"><a href="#卡顿监测" class="headerlink" title="卡顿监测"></a>卡顿监测</h2><p>主线程的所有工作，做种都会回到 MainLooper 中来处理，都会通过 dispatchMessage 来执行，因此如果主线程卡住了，就是在dispatchMessage这里卡住了。<br>上面代码分析中我们也提到了，在 loop 方法中，dispatchMessage 前后都有 Printer 来调用打印Log的接口，因此我们只要在应用程序中为主线程通过 <code>Looper.getMainLooper().setMessageLogging(printer)</code> 设置一个自定义的 Printer，在 Printer 方法中判断start和end，来获取主线程dispatch该message的开始和结束时间，并判定该时间超过阈值(如2000毫秒)为主线程卡慢发生，并dump出各种信息，提供开发者分析性能瓶颈。<br>著名的卡顿监测框架BlockCanary就是用的这个原理。</p>
 
       
     </div>
