@@ -277,6 +277,8 @@ public interface RunnableFuture<V> extends Runnable, Future<V> {
 
 ## Thread 类
 
+下面来看一些 Thread 类的方法。
+
 ### setPriority
 
 我们在使用 Thread 时，可以使用 `setPriority` 方法来设置线程的优先级，线程的优先级分为1-10这10个等级，数值越大，优先级越高。如果小于1或大于10，则抛出 `IllegalArgumentException` 异常，默认是5。
@@ -299,3 +301,87 @@ sleep 和 Object 对象的 wait 方法区别：它们都可以使当前线程由
 
 设置线程的中断标记位。注意，interrupt 并不能终止线程的执行，如果线程在调用 wait、sleep、join方法处于阻塞状态，那么调用它的 interrupt 方法后，该线程会抛出一个  InterruptedException 异常，并中断阻塞状态。
 如果线程想中断执行退出，那么就要在 run 方法中查询 isInterrupted() 来决定是否退出。
+
+### setUncaughtExceptionHandler
+
+设置该线程由于未捕获到异常而突然终止时调用的处理程序。通过明确设置未捕获到的异常处理程序，线程可以完全控制它对未捕获到的异常作出响应的方式。  
+在多线程中，run()方法无法继续向上显式抛出异常，因此我们可以通过这种方式来捕获线程内运行时发生的异常。
+
+```
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int a = 10/0;
+            }
+        });
+
+        thread.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                Log.e("Test","error1",e);
+            }
+        });
+        thread.start();
+```
+
+这样就把由于除数为0而抛出的 java.lang.ArithmeticException 异常捕获，而不会发生崩溃行为。
+
+
+### setDefaultUncaughtExceptionHandler
+
+设置当线程由于未捕获到异常而突然终止时所调用的默认处理程序。
+这个是个静态方法，那么它和上面的 setUncaughtExceptionHandler 方法有什么不同呢？
+由于它是静态方法，因此设置的所有线程的异常处理程序。
+未捕获到的异常处理首先由线程对象自身控制，然后由线程的 ThreadGroup 对象控制，最后由未捕获到的默认异常处理程序控制，也就是上面我们设置的默认处理程序。
+ThreadGroup 实现了 Thread.UncaughtExceptionHandler，我们看一下它的 uncaughtException 方法：
+
+```
+    public void uncaughtException(Thread t, Throwable e) {
+        if (parent != null) {
+            parent.uncaughtException(t, e);
+        } else {
+            Thread.UncaughtExceptionHandler ueh =
+                Thread.getDefaultUncaughtExceptionHandler();
+            if (ueh != null) {
+                ueh.uncaughtException(t, e);
+            } else if (!(e instanceof ThreadDeath)) {
+                System.err.print("Exception in thread \""
+                                 + t.getName() + "\" ");
+                e.printStackTrace(System.err);
+            }
+        }
+    }
+```
+
+首先也是看 ThreadGroup 所在的 ThreadGroup 是否为空，不为空交由 ThreadGroup 处理，如果为空，就由 DefaultUncaughtExceptionHandler 处理。
+
+看下面一段代码：
+
+```
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int a = 10/0;
+            }
+        });
+
+        thread.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                Log.e("Test","error1",e);
+            }
+        });
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                Log.e("Test","error22",e);
+            }
+        });
+        thread.start();
+```
+
+同时设置了UncaughtExceptionHandler和DefaultUncaughtExceptionHandler，按照上面介绍的异常处理顺序，那么异常发生时，会由 UncaughtExceptionHandler 来处理。
+那么如果都没有设置呢？
+“如果一个线程没有显式的设置它的UncaughtExceptionHandler，JVM就会检查该线程所在的线程组是否设置了UncaughtExceptionHandler，如果已经设置，就是用该UncaughtExceptionHandler；否则查看是否在Thread层面通过静态方法setDefaultUncaughtExceptionHandler()设置了UncaughtExceptionHandler，如果已经设置就是用该UncaughtExceptionHandler；如果上述都没有找到，JVM会在对应的console中打印异常的堆栈信息。”——翻译自JDK7 API文档
+那么为什么在我们Android程序中如果我们没有设置也会崩溃呢？这是因为系统默认设置了 DefaultUncaughtExceptionHandler，这个后面再详细讲。我们也可以在代码中设置 Thread.setDefaultUncaughtExceptionHandler(null)，然后再看有异常时会不会崩溃，这时就只有堆栈打印，而不会发生崩溃了。

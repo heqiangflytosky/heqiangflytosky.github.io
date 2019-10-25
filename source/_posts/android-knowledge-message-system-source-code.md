@@ -625,5 +625,5 @@ SyncBarrier 是起什么作用的呢？它就像一个卡子，卡在消息链�
 ## 卡顿监测
 
 主线程的所有工作，做种都会回到 MainLooper 中来处理，都会通过 dispatchMessage 来执行，因此如果主线程卡住了，就是在dispatchMessage这里卡住了。
-上面代码分析中我们也提到了，在 loop 方法中，dispatchMessage 前后都有 Printer 来调用打印Log的接口，因此我们只要在 Printer 方法中判断start和end，来获取主线程dispatch该message的开始和结束时间，并判定该时间超过阈值(如2000毫秒)为主线程卡慢发生，并dump出各种信息，提供开发者分析性能瓶颈。
+上面代码分析中我们也提到了，在 loop 方法中，dispatchMessage 前后都有 Printer 来调用打印Log的接口，因此我们只要在应用程序中为主线程通过 `Looper.getMainLooper().setMessageLogging(printer)` 设置一个自定义的 Printer，在 Printer 方法中判断start和end，来获取主线程dispatch该message的开始和结束时间，并判定该时间超过阈值(如2000毫秒)为主线程卡慢发生，并dump出各种信息，提供开发者分析性能瓶颈。
 著名的卡顿监测框架BlockCanary就是用的这个原理。
