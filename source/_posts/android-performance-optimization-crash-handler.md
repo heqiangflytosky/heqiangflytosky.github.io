@@ -11,13 +11,14 @@ date: 2017-2-21 10:00:00
 
 ## 概述
 
-Android应用开发中不可避免地会发生崩溃，特别是在用户使用过程中，一些特定场景的偶然概率的crash会通常让开发者抓狂。幸运的是Android提供了处理这类问题的方法，可以设置一个统一的接口来处理我们代码中没有处理的异常。
+Android应用开发中不可避免地会发生崩溃，特别是在用户使用过程中，一些特定场景的偶然概率的crash会通常让开发者抓狂。幸运的是 Java 提供了处理这类问题的方法，可以设置一个统一的接口来处理我们代码中没有处理的异常。
 通过这个接口，我们可以做一些事情，比如：
 
  - 忽略一些不影响应用运行的异常
  - 可以记录一些崩溃日志并上传服务器，以便开发者迅速定位问题原因。 
  - 可以添加一些友好的交互提示
 
+在 [Java 并发编程 -- 创建和使用线程 ](http://www.heqiangfly.com/2015/07/02/java-thread-how-to-create-thread/) 中介绍了 `Thread` 类的 `setUncaughtExceptionHandler` 和 `setDefaultUncaughtExceptionHandler` 方法，本文提供的解决方案也是基于 `setDefaultUncaughtExceptionHandler` 方法。
 下面分析一下它的一些应用场景。
 
 ## CrashHandler类

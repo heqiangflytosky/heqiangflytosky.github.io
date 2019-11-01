@@ -134,6 +134,34 @@ public interface BasePresenter {
 
 那么我们就选取其中的 taskdetail 模块来进行介绍。
 
+`TaskDetailContract` 类功能比较简单，定义了 View 和 Presenter 接口：
+
+```
+public interface TaskDetailContract {
+    interface View extends BaseView<Presenter> {
+        void setLoadingIndicator(boolean active);
+        void showMissingTask();
+        void hideTitle();
+        void showTitle(String title);
+        void hideDescription();
+        void showDescription(String description);
+        void showCompletionStatus(boolean complete);
+        void showEditTask(String taskId);
+        void showTaskDeleted();
+        void showTaskMarkedComplete();
+        void showTaskMarkedActive();
+        boolean isActive();
+    }
+
+    interface Presenter extends BasePresenter {
+        void editTask();
+        void deleteTask();
+        void completeTask();
+        void activateTask();
+    }
+}
+```
+
 在 `TaskDetailActivity` 中实例化 `TaskDetailFragment`、`TasksRepository` 和 `TaskDetailPresenter`，其中 `TaskDetailFragment` 和 `TasksRepository` 作为 `TaskDetailPresenter` 的参数。
 来看一下 `TaskDetailPresenter` 的构造函数：
 
