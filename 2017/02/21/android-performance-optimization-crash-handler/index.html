@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/02/21/android-performance-optimization-crash-handler/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍使用 CrashHandler 处理崩溃问题">
-<meta property="og:updated_time" content="2019-09-23T08:14:31.884Z">
+<meta property="og:updated_time" content="2019-11-01T08:39:22.400Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化实战篇 -- 使用 CrashHandler 处理崩溃问题">
 <meta name="twitter:description" content="介绍使用 CrashHandler 处理崩溃问题">
@@ -401,13 +401,13 @@
 
       
         <p><a href="https://github.com/heqiangflytosky/AndroidUtils" target="_blank" rel="external">GitHub源码地址</a></p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android应用开发中不可避免地会发生崩溃，特别是在用户使用过程中，一些特定场景的偶然概率的crash会通常让开发者抓狂。幸运的是Android提供了处理这类问题的方法，可以设置一个统一的接口来处理我们代码中没有处理的异常。<br>通过这个接口，我们可以做一些事情，比如：</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android应用开发中不可避免地会发生崩溃，特别是在用户使用过程中，一些特定场景的偶然概率的crash会通常让开发者抓狂。幸运的是 Java 提供了处理这类问题的方法，可以设置一个统一的接口来处理我们代码中没有处理的异常。<br>通过这个接口，我们可以做一些事情，比如：</p>
 <ul>
 <li>忽略一些不影响应用运行的异常</li>
 <li>可以记录一些崩溃日志并上传服务器，以便开发者迅速定位问题原因。 </li>
 <li>可以添加一些友好的交互提示</li>
 </ul>
-<p>下面分析一下它的一些应用场景。</p>
+<p>在 <a href="http://www.heqiangfly.com/2015/07/02/java-thread-how-to-create-thread/" target="_blank" rel="external">Java 并发编程 – 创建和使用线程 </a> 中介绍了 <code>Thread</code> 类的 <code>setUncaughtExceptionHandler</code> 和 <code>setDefaultUncaughtExceptionHandler</code> 方法，本文提供的解决方案也是基于 <code>setDefaultUncaughtExceptionHandler</code> 方法。<br>下面分析一下它的一些应用场景。</p>
 <h2 id="CrashHandler类"><a href="#CrashHandler类" class="headerlink" title="CrashHandler类"></a>CrashHandler类</h2><p>实现这个功能我们需要实现 <code>Thread.UncaughtExceptionHandler</code> 这个接口。里面只有一个方法 <code>uncaughtException</code>。当我们注册一个 <code>UncaughtExceptionHandler</code> 之后，当我们的程序 crash 时就会回调 <code>uncaughtException</code> 方法，我们就可以再这个方法中添加我们的处理。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class CrashHandler implements Thread.UncaughtExceptionHandler &#123;</div><div class="line">    private static final Thread.UncaughtExceptionHandler sDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void uncaughtException(Thread t, Throwable e) &#123;</div><div class="line">        // TODO</div><div class="line">        // 添加对异常的处理</div><div class="line">        </div><div class="line">        // 抛给系统去处理</div><div class="line">        if (sDefaultHandler != null) &#123;</div><div class="line">            sDefaultHandler.uncaughtException(t, e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static void registerExceptionHandler() &#123;</div><div class="line">        CrashHandler handler = new CrashHandler();</div><div class="line">        Thread.setDefaultUncaughtExceptionHandler(handler);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="解决-FinalizerWatchdogDaemon-线程的-TimeoutException-问题"><a href="#解决-FinalizerWatchdogDaemon-线程的-TimeoutException-问题" class="headerlink" title="解决 FinalizerWatchdogDaemon 线程的 TimeoutException 问题"></a>解决 FinalizerWatchdogDaemon 线程的 TimeoutException 问题</h2><p>关于这个问题的介绍，情况这篇文章<a href="https://mp.weixin.qq.com/s/uFcFYO2GtWWiblotem2bGg" target="_blank" rel="external">滴滴出行安卓端 finalize time out 的解决方案 </a>。<br>代码：</p>
