@@ -177,6 +177,8 @@ android 4.2 之后加入了多用户:
 
 ## Android O 上对广播的限制
 
+### 限制内容
+
 [Android 官网对广播限制的解释](https://developer.android.google.cn/guide/components/broadcast-exceptions)
 先来了解一下显式广播和隐式广播。
 显式广播就是通过显式 Intent 发送的广播。
@@ -305,6 +307,22 @@ Telephony.Sms.Intents.WAP_PUSH_RECEIVED_ACTION
 */
 "保留原因：SMS短信应用需要接收这些广播"
 ```
+
+### 如何应对
+
+对于应对这些受限制的广播来满足我们各种奇葩的需求呢？
+
+ 1.将静态注册修改为动态注册
+ 2.将隐式广播改为显式广播
+ 3.通过queryBroadcastReceivers检索接收intent的接收者，然后通过显式广播一一发送。
+ 4.这里的Android O并不是运行的Android版本，而是在AndroidManifest文件中定义的targetSdkVersion的值，因此如果我们不强依赖Android O，也可以把项目文件中的targetSdkVersion设置为25及以下的版本号。
+ 5.如果必须以一对多的方式发送广播，并且接收者无法动态注册的话，可以给Intent增加一个FLAG_RECEIVER_INCLUDE_BACKGROUND的Flag，不过这个标志位在源码中被hide掉了，直接用他的属性值，这样也是有效的，intent.addFlags(0x01000000)，谨慎使用，如果Android后面版本策略变更，这个也许会失效。
+
+## 一些广播
+
+ - android.intent.action.PACKAGE_ADDED、android.intent.action.PACKAGE_REPLACED、android.intent.action.PACKAGE_CHANGED、android.intent.action.PACKAGE_REMOVED、android.intent.action.PACKAGE_FULLY_REMOVED：当有应用被安装、更新、改变、卸载时系统会发出这些广播。这些广播都是隐式广播，符合Android O的限制条件。只有动态注册的应用启动后才能收到。
+ - android.intent.action.MY_PACKAGE_REPLACED：本应用更新时系统会发出这个广播，这个是显式广播，静态注册也可以把自身拉起并收到广播。
+ - Intent.ACTION_LOCKED_BOOT_COMPLETED 和 Intent.ACTION_BOOT_COMPLETED：https://www.jianshu.com/p/6198568d56a7
 
 ## 注意事项
 

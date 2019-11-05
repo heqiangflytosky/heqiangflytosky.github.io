@@ -21,7 +21,7 @@ date: 2015-7-20 10:00:00
 ### 不同点
 
  - `synchronized` 是依赖于JVM实现的，而 `ReenTrantLock` 是JDK实现的
- - `synchronized` 的使用比较方便简洁，并且由编译器去保证锁的加锁和释放，而 `ReenTrantLock` 需要手工声明来加锁和释放锁，为了避免忘记手工释放锁造成死锁，所以最好在 `finally` 中声明释放锁。
+ - `synchronized` 的使用比较方便简洁，并且由编译器去保证锁的加锁和释放，而 `ReenTrantLock` 需要手工声明来加锁和释放锁，为了避免忘记手工释放锁造成死锁，或者在加锁的代码块内由于程序异常退出而没有释放锁造成死锁，所以最好在 `finally` 中声明释放锁。
  - `ReenTrantLock` 可以指定是公平锁还是非公平锁。而 `synchronized` 只能是非公平锁。所谓的公平锁就是先等待的线程先获得锁。
  - `ReenTrantLock` 提供了一个 `Condition`（条件）类，用来实现分组唤醒需要唤醒的线程们，而不是像 `synchronized` 要么随机唤醒一个线程要么唤醒全部线程。一个 `Condition` 对象的 `signal`（`signalAll`）方法和该对象的 `await` 方法是一一对应的，也就是一个 `Condition` 对象的 `signal`（`signalAll`）方法不能唤醒其他 `Condition` 对象的 `await` 方法。
  - `ReenTrantLock` 提供了一种能够中断等待锁的线程的机制，通过 `lock.lockInterruptibly()` 来实现这个机制。
@@ -59,7 +59,7 @@ date: 2015-7-20 10:00:00
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    // 最好在finally代码块种释放
+                    // 最好在finally代码块种释放，能够避免死锁的发生
                     mLock.unlock();
                 }
             }

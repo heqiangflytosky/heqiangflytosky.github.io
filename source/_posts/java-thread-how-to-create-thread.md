@@ -275,6 +275,12 @@ public interface RunnableFuture<V> extends Runnable, Future<V> {
 22:35:14.496 E/Test: result = 100
 ```
 
+## 终止线程
+
+首先我们会发现 Thread 有个 stop 方法，但是这个方法是个废弃的方法，直接调用会抛出 UnsupportedOperationException() 异常。
+我们可以通过 interrupt() 来进行，但是这个方法本身不会使线程中断执行，它只是修改了被调用线程的中断标记位。然后可以再被调用的线程中通过Thread.currentThread().isInterrupted()来获取当前线程的中断状态，如果该状态为true，则可以做出响应的中断响应。
+在Java中的Thread.sleep()、Object.wait()、BlockingQueue.put()、BlockingQueue.take()等等方法中，实现了对中断的响应处理，当线程正在执行这些方法时，interrupt()被执行后，线程会清除当前中断状态，设置为false，然后抛出InterruptedException异常，中断当前的状态（比如阻塞状态）。
+
 ## Thread 类
 
 下面来看一些 Thread 类的方法。
