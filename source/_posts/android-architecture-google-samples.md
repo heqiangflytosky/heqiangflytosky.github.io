@@ -11,7 +11,7 @@ date: 2017-9-5 10:00:00
 
 开发框架对于每个 Android 开发者来说也是必须要面对的话题，从 MVC 到 MVP，再到 MVVM。并不能说哪种框架说最好的，他们各有自己的特点，那么我们就需要从自己的项目实际出发来选择合适的架构。
 Google 也给出了 Android 架构的示例，即 android-architecture。目前已经开源在 Github 上面供开发者学习使用。
-[GitHub 地址](https://github.com/googlesamples/android-architecture/)
+[GitHub 地址(旧)](https://github.com/googlesamples/android-architecture/) = [GitHub 地址](https://github.com/android/architecture-samples)
 本文作为 android-architecture 开篇之作来简单介绍一下这个项目。
 ## 源码简介
 

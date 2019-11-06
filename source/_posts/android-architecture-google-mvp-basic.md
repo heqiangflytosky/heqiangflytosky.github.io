@@ -1,6 +1,6 @@
 
 ---
-title: Android 架构 android-architecture 之 todo-mvp 介绍
+title: Android 架构 android-architecture 之 mvp 介绍
 categories: Android 架构
 comments: true
 tags: [Android 架构, android-architecture]
@@ -10,10 +10,18 @@ date: 2017-9-6 10:00:00
 
 ## 概述
 
-todo-mvp 是对 MVP 的一种基础的实现，里面没有用到其他的框架，下面来具体分析一下。
-[Github地址](https://github.com/googlesamples/android-architecture/tree/todo-mvp/)
+Android 官方给出了在 Android 开发中使用 MVP 架构的范例，我们可以在我们的项目中做为参考。
+todo-mvp 是对 MVP 的一种基础的实现，里面没有用到其他的框架。
+todo-mvp-rxjava 是使用 RxJava 搭建的响应式MVP架构。
+先来看一下 MVP 整个项目的逻辑图：
 
-## 源码简介
+![效果图](/images/android-architecture-google-mvp-basic/mvp.png)
+
+下面来具体分析一下。
+[todo-mvp Github地址](https://github.com/googlesamples/android-architecture/tree/todo-mvp/)
+[todo-mvp-rxjava Github地址](https://github.com/android/architecture-samples/tree/todo-mvp-rxjava)
+
+## todo-mvp 源码简介
 
 按功能划分模块，包结构如图：
 
@@ -30,14 +38,15 @@ todo-mvp 是对 MVP 的一种基础的实现，里面没有用到其他的框架
 
 ### 具体实现
 
- 1. 定义一个协议类 `Contract`，它定义了两个接口 `View` 和 `Presenter`，分别继承自 V 和 P 的基类 `BaseView` 和 `BasePresenter`。
- 2. 创建一个 `Presenter`，并实现协议类中的 `Presenter` 接口，实现`Presenter` 类的两个参数分别是 `TasksRepository` （M）和 `View` （V）实现类，建立 M 和 V 联系的桥梁。
- 3. 在 `Activity` 中实例化 `Presenter`，建立 M 和 V 的联系，实例化 `Fragment`。
+ 1. 定义一个协议类 `Contract`，它定义了两个接口 `View` 和 `Presenter`，分别继承自 V 和 P 的基类 `BaseView` 和 `BasePresenter`。把 V 和 P 的接口统一写在这个协议类里面，能够更清晰的看到在 V 层和 P 层有哪些功能，方便我们以后的维护。这是其他MVP框架没有的类。
+ 2. 创建一个 `Presenter`，并实现协议类中的 `Presenter` 接口，实现`Presenter` 类的两个参数分别是 `TasksRepository` （M）和 `View` （V）实现类，建立 M 和 V 联系的桥梁，将 M 层和 V 层联系在一起。
+ 3. 在 `Activity` 中实例化 `Presenter`，建立 M 和 V 的联系，实例化 `Fragment`。在这里的 MVP 架构例子中，Activity 没有负责任何的 View 层功能，仅仅是负责对 P 层 和 M/V 层的绑定。
  4. 在 `Fragment` 中实现了 `View` 接口，作为 `View` （V）实现类。
 
 V 层监听用户的操作，并把用户的操作传递到P层，并把P层中的指令转化为UI操作，并呈现出来。
 P 层建立 M 和 V 的联系，响应 V 层的操作并向 M 层获取数据，然后传递到 V 层。 
 M 层负责数据的存储与查询。
+可以看出，V 层和 M 层不再存在直接耦合，P 层是它们之间联系的桥梁。
 
 以 taskdetail 为例，用一个类图来展示它们的关系：
 
@@ -107,7 +116,7 @@ public interface BaseView<T> {
 }
 ```
 
-`BaseView` 是一个泛型接口，里面只有一个抽象方法 `setPresenter(T presenter)` ，用来设置 Presenter 。
+`BaseView` 是一个泛型接口，里面只有一个抽象方法 `setPresenter(T presenter)` ，用来设置 Presenter ，实现 P 层的注入。设置的时机是在 Presenter 实现类的构造方法中。
 P 的基类 `BasePresenter`：
 
 ```java
@@ -116,7 +125,7 @@ public interface BasePresenter {
 }
 ```
 
-它也只定义来一个方法 `start()`，用来在 `Activity` 或者 Fragm`ent` 的 `onResume()` 方法中调用，来进行数据的查询。
+它也只定义来一个方法 `start()`，用来在 `Activity` 或者 `Fragment` 的 `onResume()` 方法中调用，来进行数据的查询。
 
 ### 功能模块
 
@@ -134,7 +143,9 @@ public interface BasePresenter {
 
 那么我们就选取其中的 taskdetail 模块来进行介绍。
 
-`TaskDetailContract` 类功能比较简单，定义了 View 和 Presenter 接口：
+#### Contract
+
+`TaskDetailContract` 类功能比较简单，定义了 View 和 Presenter 接口，通过这个类，我们可以大概了解 V 层和 P 层具体实现的逻辑功能。
 
 ```
 public interface TaskDetailContract {
@@ -162,7 +173,23 @@ public interface TaskDetailContract {
 }
 ```
 
+#### Presenter
+
 在 `TaskDetailActivity` 中实例化 `TaskDetailFragment`、`TasksRepository` 和 `TaskDetailPresenter`，其中 `TaskDetailFragment` 和 `TasksRepository` 作为 `TaskDetailPresenter` 的参数。
+
+```
+        TaskDetailFragment taskDetailFragment = (TaskDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.contentFrame);
+
+        ......
+
+        // Create the presenter
+        new TaskDetailPresenter(
+                taskId,
+                Injection.provideTasksRepository(getApplicationContext()),
+                taskDetailFragment);
+```
+
 来看一下 `TaskDetailPresenter` 的构造函数：
 
 ```java
@@ -173,13 +200,13 @@ public interface TaskDetailContract {
         mTasksRepository = checkNotNull(tasksRepository, "tasksRepository cannot be null!");
         mTaskDetailView = checkNotNull(taskDetailView, "taskDetailView cannot be null!");
 
-        mTaskDetailView.setPresenter(this);
+        mTaskDetailView.setPresenter(this); // 为 V 层 注入 P 层
     }
 ```
 
-在这里调用了 `TaskDetailFragment` 的 `setPresenter` 方法来设置 P 模块。
+在这里调用了 `TaskDetailFragment` 的 `setPresenter` 方法来设置 P 模块。`TaskDetailView` 作为参数传递到 `TaskDetailPresenter`。那么，这里的 V 和 P 是互相注入的。
 
-分别调用 `TasksRepository`  和 `TaskDetailFragment` 的相应的方法来实现数据的操作以及视图的更新。
+在这里可以分别调用 `TasksRepository`（M）  和 `TaskDetailFragment`（V） 的相应的方法来实现数据的操作以及视图的更新。比如从 M 层得到数据，进行逻辑操作后分发给 V 层用来 UI 显示，或者 V 层响应用户操作后，把进行逻辑操作后的数据发给 M 层进行数据的保存。
 
 ```java
 
@@ -240,7 +267,9 @@ public interface TaskDetailContract {
     }
 ```
 
-`TaskDetailFragment` 中调用 `TaskDetailPresenter` 的对应方法来实现数据的增删改查。
+#### View 
+
+这里把 Fragment 来作为 View 层的实现类，`TaskDetailFragment` 中调用 `TaskDetailPresenter` 的对应方法来针对UI上面的操作进行相应数据的变更。
 
 ```java
     @Override
@@ -301,3 +330,83 @@ App需要的数据都是通过Data模块来提供，由它去完成访问网络�
 ### util工具类
 
 这部分不再介绍，想了解详情的看代码即可。
+
+## todo-mvp-rxjava
+
+在 mvp-rxjava 中，P 层的基类的方法有所不同：
+
+```
+public interface BasePresenter {
+    void subscribe(); //开启订阅
+    void unsubscribe(); //取消订阅
+}
+```
+这么做是由RxJava 的特点决定的，在需要数据的时候开始订阅数据，接收数据。不再需要数据就取消订阅数据，让数据不再发送。
+然后在 View 层的具体实现类Fragment中就做订阅和取消订阅两步操作，同步P层和V层的生命周期：
+
+```
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
+    }
+```
+
+主要区别在 Presenter 的实现类 TaskDetailPresenter 中：
+
+```
+public class TaskDetailPresenter implements TaskDetailContract.Presenter {
+
+    @NonNull
+    private final TasksRepository mTasksRepository;
+
+    @NonNull
+    private final TaskDetailContract.View mTaskDetailView;
+
+    @NonNull
+    private final BaseSchedulerProvider mSchedulerProvider;
+
+    @Nullable
+    private String mTaskId;
+
+    @NonNull
+    private CompositeDisposable mCompositeDisposable;
+
+    public TaskDetailPresenter(@Nullable String taskId,
+                               @NonNull TasksRepository tasksRepository,
+                               @NonNull TaskDetailContract.View taskDetailView,
+                               @NonNull BaseSchedulerProvider schedulerProvider) {
+        this.mTaskId = taskId;
+        mTasksRepository = checkNotNull(tasksRepository, "tasksRepository cannot be null!");
+        mTaskDetailView = checkNotNull(taskDetailView, "taskDetailView cannot be null!");
+        mSchedulerProvider = checkNotNull(schedulerProvider, "schedulerProvider cannot be null");
+
+        mCompositeDisposable = new CompositeDisposable();
+        mTaskDetailView.setPresenter(this);
+    }
+
+    @Override
+    public void subscribe() {
+        openTask();
+    }
+
+    @Override
+    public void unsubscribe() {
+        mCompositeDisposable.clear();
+    }
+
+    ....
+}
+```
+
+使用 CompositeDisposable 来管理 Disposable。
+
+## 总结
+
+通过上面的 MVP 结构可以看出，MVP 的设计使得程序的各个层次之间的职责更加单一，很大程度上降低了代码的耦合度。
