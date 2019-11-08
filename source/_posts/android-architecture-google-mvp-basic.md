@@ -318,14 +318,14 @@ public interface TaskDetailContract {
 ```
 ### Data Model层
 
-App需要的数据都是通过Data模块来提供，由它去完成访问网络和数据库等。
+Data Model层是业务逻辑处理层，App需要的数据都是通过Data模块来提供，由它去完成访问网络或者数据库等。
 
 ![效果图](http://www.plantuml.com/plantuml/svg/dPB1IWCn48RlUOhGKqNR9-XXfO88RH5Rl8_9j0sTtPHaTa7KcsyXz1syU15y6-jh6BVhrYvn1M_9Fr--6S8adi5ndfAO6IQKdV7rvNRpijqyZgr6-dX-VNzwwmWn0x_oPy0mjRbJA0Vt_Ruimv5LGFjA2tc5Q-iDMtVR2gMMyOUlwjre8mUzNjpQ54H9OJ96DuTGRevo9uxb0hcCkyd4PfESI8uiw38Q0j4Dg9LKrU4ey8Kr-llH_isKdSaMaaDueKzadP_lmDzD7WeyL7tTIb7DA9kk2VcVtC5eDGkAJG5_E-DStAa8mGsh8NPVsAsB3kSE_RAHXhqBx2bHD6zj-Y0Ip7HOvqy0)
 
  - 接口 `TasksDataSource` 定义了操作数据的各种方法。
  - 类 `TasksLocalDataSource` 实现了`TasksDataSource` 接口，可以操作本地数据库来实现数据的存储和读取。 
  - 类 `TasksRemoteDataSource` 实现了`TasksDataSource` 接口，用来模拟网络数据的读取上上传。
- - 类 `TasksRepository` 实现了`TasksDataSource` 接口，提供来对数据访问的能力，它持有 `TasksLocalDataSource` 和 `TasksRemoteDataSource` 的对象，由它们真正实现对本地数据和网络数据的操作。
+ - 类 `TasksRepository` 实现了`TasksDataSource` 接口，提供来对数据访问的能力，它持有 `TasksLocalDataSource` 和 `TasksRemoteDataSource` 的对象，来决定调用哪个对象类完成数据请求，再由它们真正实现对本地数据或者网络数据的操作。
 
 ### util工具类
 

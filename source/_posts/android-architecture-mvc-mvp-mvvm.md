@@ -9,7 +9,7 @@ date: 2017-9-2 10:00:00
 
 ## 概述
 
-架构模式有很多种，MVC（Model-View-Controller） 是其中一种，MVP （Model-View-Presenter）和 MVVM（Model-View-ViewModel）可以说是在 MVC 基础上发展而来的，它们是一种进化的关系：MVC --> MVP --> MVVM，这三种架构模式是我们在 Android 开发过程以及面试中经常涉及到的，因此，本文对这三种架构模式做一些介绍。
+架构模式有很多种，MVC（Model-View-Controller） 是其中一种，MVP （Model-View-Presenter）和 MVVM（Model-View-ViewModel）可以说是在 MVC 基础上发展而来的，它们是一种进化的关系：MVC --> MVP --> MVVM，这三种架构模式是我们在 Android 开发过程以及面试中经常涉及到的，本文对这三种架构模式做一些介绍。
 在不同的开发环境下，这三种模式的使用频率也是不一样的，在 Android 环境下，常用的是 MVC和MVP架构模式，但随着一些开源框架比如 Jetpack 的 databinding、live等的兴起，MVVM 在Android开发中也经常遇到。在iOS和HTML5的开发环境中，会经常使用 MVC和MVVM 架构模式，Java/PHP开发环境下常用到MVC架构模式等。
 对于不同的开发环境相同的模式的使用也是略有差距的，本文仅这种介绍一下 Android 环境下的使用。
 
@@ -40,9 +40,9 @@ Model 层主要负责网络请求，数据库处理，I/O操作等。
 
 MVP（Model-View-Presenter）可以说是 MVC 架构的一种进化，可以分为下面三个模块：
 
- - View：主要完成界面的展示，UI呈现。它持有 Presenter 的引用，当需要数据相关操作时，通知 Presenter 去处理。
- - Presenter：负责业务逻辑处理，响应界面事件，再通知 Model 层修改或者存储数据。Model 层提供好数据后，通知 View 层展示。
- - Model：对数据的储存和提供。
+ - View：主要完成界面的展示，UI呈现。它持有 Presenter 的引用，当需要数据相关操作时，通知 Presenter 去处理，以及根据 Presenter 提供的内容来决定如何显示他们。
+ - Presenter：负责表现层逻辑处理，告诉 View 层该显示什么，以及响应界面事件，再通知 Model 层修改或者存储数据。Model 层提供好数据后，通知 View 层展示。
+ - Model：业务逻辑处理，对数据的储存和提供。
 
 在 MVP 模式中，Model 和 View 不能直接通信，Presenter 充当桥梁的作用，实现 Model 和 View 的通信。因此，View 层和 Presenter 层需要互相持有对方的引用，Presenter 需要持有 Model 的引用。
 
@@ -50,7 +50,11 @@ MVP 架构的结构如下图设计：
 
 <img src="/images/android-architecture-mvc-mvp-mvvm/mvp.png" width="489" height="320"/>
 
-MVP模式的主要优点是：分离了 Model 层和 View 层，分离了视图操作和业务逻辑，降低了耦合。
+MVP模式的主要优点是：
+
+ - 分离了 Model 层和 View 层，分离了视图操作和业务逻辑，降低了耦合。方便功能扩展和代码变更和重构。
+ - Presenter 层和 View 层分离，几乎处理了所有的表现层逻辑，提高了可测试性，因为对视图控件的显示等等进行单元测试太难了，所以 View 是基本上没法进行单元测试的，但是 Presenter 是完全可以进行单元测试的。
+
 缺点是：View 层和 Presenter 层需要互相持有对方的引用，Presenter 需要持有 Model 的引用。
 
 ## MVVM 架构
@@ -58,8 +62,8 @@ MVP模式的主要优点是：分离了 Model 层和 View 层，分离了视图�
 MVVM（Model-View-ViewModel）可以说是 MVP 模式的一种进化，它也分为三个模块：
 
  - View：主要完成界面的展示，UI呈现。它持有ViewModel层的引用，当需要进行业务逻辑处理时通知ViewModel层。
- - ViewModel：负责业务逻辑处理。ViewModel层不涉及任何的视图操作。View 层和 ViewModel 层中的数据可以实现绑定，ViewModel 层中数据的变化可以自动通知 View 层进行更新，因此 ViewModel 层不需要持有 View 层的引用。ViewModel 层可以看作是 View 层的数据模型和 Presenter 层的结合。
- - Model：对数据的储存和提供。
+ - ViewModel：负责表现层逻辑处理。ViewModel层不涉及任何的视图操作。View 层和 ViewModel 层中的数据可以实现绑定，ViewModel 层中数据的变化可以自动通知 View 层进行更新，因此 ViewModel 层不需要持有 View 层的引用。ViewModel 层可以看作是 View 层的数据模型和 Presenter 层的结合。
+ - Model：业务逻辑处理，对数据的储存和提供。
 
 可以看出，MVVM 像对于 MVP 的核心在于数据绑定。
 它们的最大的区别在于：ViewModel 层不持有 View 层的引用。这样进一步降低了耦合，View 层代码的改变不会影响到 ViewModel 层。
@@ -86,3 +90,7 @@ MVP 架构的结构如下图设计：
   - MVC：拿到UI节点，渲染展示新的数据。
   - MVP：Presenter 拿到数据后，可能会做数据加工处理，然后通过 View 提供的接口更新数据，后面 View 渲染展示新的数据。
   - MVVM：无需任何操作，只要 ViewModel 的数据发生变化，通过双向绑定，View 自动更新。View 上面有了更新，ViewModel 这边的数据也会自动更新。
+
+## 相关文章
+
+[关于MVC/MVP/MVVM的一些错误认识](https://mp.weixin.qq.com/s/RVKaXY349jSBLtAiQsmwCg)
