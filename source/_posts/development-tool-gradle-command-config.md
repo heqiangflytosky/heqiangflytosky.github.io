@@ -350,7 +350,7 @@ dependencies {
 `compile`表示编译时提供并打包进apk。
 `provided`表示只在编译时提供，不打包进apk。
  - `implementation` 和 `api`
-这两个是 Gradle 3.0 以后的依赖方法，`implementation` 在编译期会将依赖隐藏在内部而不对外公开，就是说使用 `implementation` 的依赖不会传递。只有在运行时其他模块才能获取依赖。比如：一个项目中app模块依赖A模块，A模块使用 `implementation` 来依赖 fastjson ，那么app里面如果不添加依赖的话就不能直接引用fastjson。这样做的好处是1.加快编译速度，2. 隐藏对外不必要的接口。
+这两个是 Gradle 3.0 以后的依赖方法，`implementation` 在编译期会将依赖隐藏在内部而不对外公开，就是说使用 `implementation` 的依赖不会传递。只有在运行时其他模块才能获取依赖。比如：一个项目中app模块依赖A模块，A模块使用 `implementation` 来依赖 fastjson ，那么app里面如果不添加依赖的话就不能直接引用fastjson，会编译不通过。这样做的好处是1.加快编译速度，2. 隐藏对外不必要的接口。
 `api` 和以前的 `compile` 是一样的。
 gradle 3.0以后使用 `compileOnly` 来代替 `provided`，使用 `runtimeOnly` 来代替 `apk`
  - `exclude` 防止重复依赖，后面会重点介绍
