@@ -1,0 +1,905 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CPU架构," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="多CPU架构支持所需要了解的知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android -- 多CPU架构支持所需要了解的知识">
+<meta property="og:url" content="http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="多CPU架构支持所需要了解的知识">
+<meta property="og:updated_time" content="2019-11-19T11:36:45.815Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android -- 多CPU架构支持所需要了解的知识">
+<meta name="twitter:description" content="多CPU架构支持所需要了解的知识">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/"/>
+
+
+
+
+
+  <title> Android -- 多CPU架构支持所需要了解的知识 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android -- 多CPU架构支持所需要了解的知识
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-24T10:00:00+08:00">
+                2017-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/02/24/android-support-multi-cpu-arch/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/24/android-support-multi-cpu-arch/" class="leancloud_visitors" data-flag-title="Android -- 多CPU架构支持所需要了解的知识">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  多CPU架构支持所需要了解的知识
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Android系统目前支持以下七种不同的CPU架构：ARMv5，ARMv7 (从2010年起)，x86 (从2011年起)，MIPS (从2012年起)，ARMv8，MIPS64和x86_64 (从2014年起)，每一种都关联着一个相应的ABI。ABI是指应用基于哪种指令集来进行编译。<br>如果项目中使用到了NDK，它将会生成.so文件，Android应用支持的ABI取决于APK中位于lib/ABI目录中的.so文件，其中ABI可能是上面说过的七种ABI中的一种。 Android包管理器安装APK时，如果在对应的lib／ABI目录中存在.so文件的话，会自动选择APK包中为对应系统ABI预编译好的.so文件。当一个应用安装在设备上，只有该设备支持的CPU架构对应的.so文件会被安装。在x86设备上，libs/x86目录中如果存在.so文件的 话，会被安装，如果不存在，则会选择armeabi-v7a中的.so文件，如果也不存在，则选择armeabi目录中的.so文件（因为x86设备也支 持armeabi-v7a和armeabi）。</p>
+<h2 id="添加动态库"><a href="#添加动态库" class="headerlink" title="添加动态库"></a>添加动态库</h2><p>第一种方法：</p>
+<p>在 src/main中 新建 <code>jniLibs</code> 文件夹，再创建对应 ABI 架构的文件夹，比如：armeabi-v7a 或者 arm64-v8a 等，然后把 so 放到对应的 ABI 架构的文件夹中。</p>
+<p>第二种方法：</p>
+<p>在app 中新建和 src 同级的 libs 文件夹，再创建对应 ABI 架构的文件夹，比如：armeabi-v7a 或者 arm64-v8a 等，然后把 so 放到对应的 ABI 架构的文件夹中。<br>然后在 buuild.gradle 脚本中添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    ......</div><div class="line">    sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            jniLibs.srcDirs = [&apos;libs&apos;]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>意思是会把libs文件夹当成 jniLibs 文件夹，可以直接用so库了。</p>
+<h2 id="ABI-架构选择"><a href="#ABI-架构选择" class="headerlink" title="ABI 架构选择"></a>ABI 架构选择</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>如果我们平时开发过程中没有很好注意这些，那么就会带来一些兼容性的问题。<br>比如：你的App支持<code>armeabi-v7a</code>和<code>x86</code>架构，然后使用 Android Studio 新增了一个函数库依赖，这个函数库包含.so文件并支持更多的CPU架构，那么在某些进行上可能会发生Crash，会出现<code>&quot;UnsatisfiedLinkError&quot;</code>，<code>&quot;dlopen: failed&quot;</code>等等问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AndroidRuntime: java.lang.UnsatisfiedLinkError: dalvik.system.PathClassLoader[DexPathList[***********] couldn&apos;t find &quot;lib*******.so&quot;</div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">AndroidRuntime: java.lang.UnsatisfiedLinkError: dlopen failed: &quot;*********.so&quot; is 32-bit instead of 64-bit</div></pre></td></tr></table></figure>
+<p>上面报错表示，在 64 位的运行环境中加载 32 位的 so。<br>这是因为，你添加的一些库可能里面做了更多的架构适配，因为只要出现了这个目录，系统就只会在这个目录里找.so文件而不会遍历其他的目录，所以就出现了找不到so文件的情况（因为其他目录没有这个so文件）。<br>举个例子来详细说明一下：我们的APP只支持armeabi-v7a和x86架构，然后我们的APP使用了一个第三方的Library，而这个Library提供了AMR64等更多类型CPU架构的支持，构建APK的时候，这些ARM64的SO库依然会被打包进APK里面，也就是说我们自己的SO库没有对应的ARM64的SO库，而第三方的Library却有。这时候，某些ARM64的设备安装该APK的时候，发现我们的APK里带有ARM64的SO库，会误以为我们的APP已经做好了AMR64的适配工作，所以只会选择安装APK里面ARM64类型的SO库，这样会导致我们自己项目的SO库没有被正确安装（虽然armeabi-v7a和x86类型的SO库确实存在APK包里面）。</p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>给我们自己的SO库也提供AMR64支持，或者不打包第三方Library项目的ARM64的SO库。<br>使用第二种方案时，可以把APK里面不需要支持的ABI文件夹给删除，然后重新打包，而在Android Studio下，则可以通过以下的构建方式指定需要类型的SO库。<br>这个时候我们就需要使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">defaultConfig &#123;</div><div class="line">    ......</div><div class="line">    ndk &#123;</div><div class="line">        abiFilters &quot;***&quot;, &quot;***&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>来解决这些问题。<br>如果你用的<code>Android Studio</code>编译器，那么 <code>abiFilters</code> 后面加的应该是 <code>jniLibs/&lt;ABI名称&gt;</code> 里面所支持的机型。（当然这个目录也可以通过在 build.gradle 文件中的设置 <code>jniLibs.srcDir</code> 属性自己指定）。</p>
+<h2 id="APP多架构支持"><a href="#APP多架构支持" class="headerlink" title="APP多架构支持"></a>APP多架构支持</h2><p>我们平时用的so的存放位置：</p>
+<ul>
+<li>Android Studio工程放在 <code>jniLibs/&lt;ABI名称&gt;</code> 目录中（当然也可以通过在build.gradle文件中的设置 <code>jniLibs.srcDir</code> 属性自己指定放置 so 目录）</li>
+<li>Eclipse工程放在 <code>libs/&lt;ABI名称&gt;</code> 目录中（这也是ndk-build命令默认生成.so文件的目录）</li>
+<li>AAR压缩包中位于 <code>jni/&lt;ABI名称&gt;</code> 目录中（.so文件会自动包含到引用AAR压缩包的APK中）</li>
+<li>最终这些so会放在编译好的APK文件中的 <code>lib/&lt;ABI名称&gt;</code> 目录中</li>
+</ul>
+<p>所有的 <code>x86/x86_64/armeabi-v7a/arm64-v8a</code> 设备都支持 <code>armeabi</code> 架构的 .so 文件，x86 设备能够很好的运行 ARM 类型函数库，但并不保证100%不发生crash，特别是对旧设备。64位设备（arm64-v8a, x86_64, mips64）能够运行32位（armeabi-v7a）的函数库，但是以32位模式运行，在64位平台上运行32位版本的ART和Android组件，将丢失专为64位优化过的性能（ART，webview，media等等）。<br>基于这些问题，我们应该尽可能为每种CPU类型都提供对应的SO库。<br>因此，我们可以通过在app中只放置32位so，来减小apk的打包体积。<br>但是在我们需要体现64位CPU给我们带来的优异性能的前提下，以减少APK包大小为由来减少架构的支持显然不是一个好的理由。因为也可以选择在应用市场上传指定ABI版本的APK，生成不同ABI版本的APK可以在build.gradle中如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">   ... </div><div class="line">   splits &#123;</div><div class="line">	   abi &#123;</div><div class="line">		   enable true</div><div class="line">		   reset()</div><div class="line">		   include &apos;x86&apos;, &apos;x86_64&apos;, &apos;armeabi-v7a&apos;, &apos;arm64-v8a&apos; //select ABIs to build APKs for</div><div class="line">		   universalApk true //generate an additional APK that contains all the ABIs</div><div class="line">	   &#125;</div><div class="line">   &#125;</div><div class="line">   // map for the version code</div><div class="line">   project.ext.versionCodes = [&apos;armeabi&apos;: 1, &apos;armeabi-v7a&apos;: 2, &apos;arm64-v8a&apos;: 3, &apos;mips&apos;: 5, &apos;mips64&apos;: 6, &apos;x86&apos;: 8, &apos;x86_64&apos;: 9]</div><div class="line">   android.applicationVariants.all &#123; variant -&gt;</div><div class="line">	   // assign different version code for each output</div><div class="line">	   variant.outputs.each &#123; output -&gt;</div><div class="line">		   output.versionCodeOverride =</div><div class="line">				   project.ext.versionCodes.get(output.getFilter(com.android.build.OutputFile.ABI), 0) * 1000000 + android.defaultConfig.versionCode</div><div class="line">	   &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="多架构的加载机制"><a href="#多架构的加载机制" class="headerlink" title="多架构的加载机制"></a>多架构的加载机制</h2><p>apk在安装的过程中，系统就会对apk进行解析根据里面so文件类型，确定这个apk安装是在32 还是 64位的虚拟机上，如果是32位虚拟机那么就不能使用64位so，如果是64位虚拟机也不能使用32位so。而64位设备可以提供32和64位两种虚拟机，根据apk选择开启哪一种，因此说64位设备兼容32的so库。<br>一旦安装完成，就确定了该 App 在当前机器上的运行模式，系统是不允许 32位 so 和 64 位 so 混合使用的。因为虚拟机不允许这样做。<br>具体机制，分下面四种情况：</p>
+<p> 1.假设apk的lib目录放置了32和64位两种so，那么安装时根据当前设备的cpu架构从上到下筛选(X86 &gt; arm64 &gt; arm32)，一旦发现lib里面有和设备匹配的so文件，那么直接选定这种架构为标准。比如当前设备是64位并且发现lib有一个64位的so，那么apk会拷贝lib下所有64位的so文件到 <code>data/data/&lt;packageName&gt;/lib/</code> 目录（查看此目录需要ROOT）<br> 后面调用System.loadLibrary其实就是加载这个目录下的so文件，此时如果有某个64位so文件在我们项目的lib中没有提供，就会直接报错程序崩溃。因此这里如果放置部分功能32位so，部分功能放置放置64位so，即使用多进程来加载模型，也会报错崩溃。<br> 2.apk的lib目录只放置32位so，参照上面原理，运行在32位设备是OK的。绝大多数64位设备也是OK的，不过x86的设备肯定会崩溃。假设现在运行在64位设备，然后在代码中动态加载64位so文件，会报错：<code>so is 64-bit instead of 32-bit</code><br> 3.apk的lib目录只放64位的so，那这个apk只能运行在64位的设备了，同理如果在代码中动态加载32位的so，会报错：<code>so is 32-bit instead of 64-bit</code><br> 4.apk的lib不放任何so文件，全部动态加载。安装在32位设备就只能加载32位so，安装在64位的设备系统会默认你的apk运行在64位虚拟机，此时动态加载32位so也是不行的。</p>
+<h2 id="NDK生成支持多种CPU架构的SO"><a href="#NDK生成支持多种CPU架构的SO" class="headerlink" title="NDK生成支持多种CPU架构的SO"></a>NDK生成支持多种CPU架构的SO</h2><p>在android NDK项目的根目录下面有一个libs文件夹，这个文件夹下面有下面七个文件夹中的一个或者多个：<code>arm64-v8a</code>，<code>armeabi</code>，<code>armeabi-v7a</code>，<code>mips</code>，<code>mips64</code>，<code>x86</code>，<code>x86_64</code>。<br>默认情况下，NDK的编译系统根据 <code>armeabi</code> ABI生成机器代码。可以使用APP_ABI 来选择一个不同的ABI，我们可以通过下面的配置来制定支持的ABI：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">TARGET_CPU_API := all</div><div class="line">APP_ABI := all</div></pre></td></tr></table></figure>
+<p>或者是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">TARGET_CPU_API :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64</div><div class="line">APP_ABI :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CPU架构/" rel="tag"># CPU架构</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/21/android-performance-optimization-crash-handler/" rel="next" title="Android 性能优化实战篇 -- 使用 CrashHandler 处理崩溃问题">
+                <i class="fa fa-chevron-left"></i> Android 性能优化实战篇 -- 使用 CrashHandler 处理崩溃问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/06/android-source-code-analysis-usermanager/" rel="prev" title="Android UserManager相关源码分析">
+                Android UserManager相关源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">191</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加动态库"><span class="nav-number">2.</span> <span class="nav-text">添加动态库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ABI-架构选择"><span class="nav-number">3.</span> <span class="nav-text">ABI 架构选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">3.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">3.2.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APP多架构支持"><span class="nav-number">4.</span> <span class="nav-text">APP多架构支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多架构的加载机制"><span class="nav-number">5.</span> <span class="nav-text">多架构的加载机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NDK生成支持多种CPU架构的SO"><span class="nav-number">6.</span> <span class="nav-text">NDK生成支持多种CPU架构的SO</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
