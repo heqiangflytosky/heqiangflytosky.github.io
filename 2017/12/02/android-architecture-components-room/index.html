@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/12/02/android-architecture-components-room/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 Android 数据库架构组件 Room 的基本使用">
-<meta property="og:updated_time" content="2018-12-12T11:25:53.857Z">
+<meta property="og:updated_time" content="2019-12-02T09:16:56.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Architecture Components -- Room">
 <meta name="twitter:description" content="本文介绍 Android 数据库架构组件 Room 的基本使用">
@@ -423,7 +423,8 @@
 <p>否则会报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">E AndroidRuntime: java.lang.IllegalStateException: Room cannot verify the data integrity. Looks like you&apos;ve changed schema but forgot to update the version number. You can simply fix this by increasing the version number.</div><div class="line">E AndroidRuntime: 	at android.arch.persistence.room.RoomOpenHelper.checkIdentity(RoomOpenHelper.java:119)</div><div class="line">E AndroidRuntime: 	at android.arch.persistence.room.RoomOpenHelper.onOpen(RoomOpenHelper.java:100)</div></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public DBManager(Context context) &#123;</div><div class="line">    mDatabase = Room.databaseBuilder(context.getApplicationContext(),</div><div class="line">            AppDatabase.class, &quot;users&quot;).addMigrations(MIGRATION_1_2,  MIGRATION_2_3).build();</div><div class="line">&#125;</div><div class="line"></div><div class="line">static final Migration MIGRATION_1_2 = new Migration(1, 2) &#123;</div><div class="line">    @Override</div><div class="line">    public void migrate(SupportSQLiteDatabase database) &#123;</div><div class="line">        database.execSQL(&quot;ALTER TABLE user ADD is_male INTEGER NOT NULL DEFAULT 0&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">static final Migration MIGRATION_2_3 = new Migration(2, 3) &#123;</div><div class="line">    @Override</div><div class="line">    public void migrate(SupportSQLiteDatabase database) &#123;</div><div class="line">        database.execSQL(&quot;ALTER TABLE user ADD address TEXT&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>这里添加 <code>boolean</code> 型的字段，SQL 语句必须设置为 <code>NOT NULL</code>，而且要设置默认值，否则会报错。</p>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="http://www.jianshu.com/p/587f48dccf0a" target="_blank" rel="external">http://www.jianshu.com/p/587f48dccf0a</a><br><a href="https://developer.android.com/topic/libraries/architecture/room.html" target="_blank" rel="external">https://developer.android.com/topic/libraries/architecture/room.html</a></p>
+<h2 id="结合-ContentProvider-使用"><a href="#结合-ContentProvider-使用" class="headerlink" title="结合 ContentProvider 使用"></a>结合 ContentProvider 使用</h2><p>使用方法在 Android 提供 Sample Code 里面有，大家可以自行查看。<br><a href="https://github.com/android/architecture-components-samples/" target="_blank" rel="external">https://github.com/android/architecture-components-samples/</a><br>另外，通过 Android Studio 的 File -&gt; New -&gt; Import Sample 也可以导入相应的例程。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="http://www.jianshu.com/p/587f48dccf0a" target="_blank" rel="external">http://www.jianshu.com/p/587f48dccf0a</a><br><a href="https://developer.android.com/topic/libraries/architecture/room.html" target="_blank" rel="external">https://developer.android.com/topic/libraries/architecture/room.html</a><br><a href="https://github.com/android/architecture-components-samples/" target="_blank" rel="external">https://github.com/android/architecture-components-samples/</a></p>
 
       
     </div>
@@ -542,7 +543,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">191</span>
+                <span class="site-state-item-count">192</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -560,7 +561,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-count">99</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -622,7 +623,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组件介绍"><span class="nav-number">2.1.</span> <span class="nav-text">组件介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加依赖"><span class="nav-number">2.2.</span> <span class="nav-text">添加依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库"><span class="nav-number">3.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实体"><span class="nav-number">4.</span> <span class="nav-text">实体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据访问对象"><span class="nav-number">4.1.</span> <span class="nav-text">数据访问对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">4.2.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库升级"><span class="nav-number">4.3.</span> <span class="nav-text">数据库升级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组件介绍"><span class="nav-number">2.1.</span> <span class="nav-text">组件介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加依赖"><span class="nav-number">2.2.</span> <span class="nav-text">添加依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库"><span class="nav-number">3.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实体"><span class="nav-number">4.</span> <span class="nav-text">实体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据访问对象"><span class="nav-number">4.1.</span> <span class="nav-text">数据访问对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">4.2.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库升级"><span class="nav-number">4.3.</span> <span class="nav-text">数据库升级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合-ContentProvider-使用"><span class="nav-number">5.</span> <span class="nav-text">结合 ContentProvider 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
 
           </div>
