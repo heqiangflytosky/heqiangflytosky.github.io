@@ -61,7 +61,7 @@ on 方法都返回一个 Reflect 对象。
 
 方法：
 
- - get()：获取一个包装对象
+ - get()：获取一个包装对象，比如上面的执行方法后获取方法的返回值
  - set(String name, Object value)：为某个Field设置值
  - get(String name)：获取某个Field的值
  - field(String name)：获取某个Field

@@ -226,8 +226,15 @@ E AndroidRuntime: 	at android.arch.persistence.room.RoomOpenHelper.onOpen(RoomOp
 
 这里添加 `boolean` 型的字段，SQL 语句必须设置为 `NOT NULL`，而且要设置默认值，否则会报错。
 
+## 结合 ContentProvider 使用
+
+使用方法在 Android 提供 Sample Code 里面有，大家可以自行查看。
+https://github.com/android/architecture-components-samples/
+另外，通过 Android Studio 的 File -> New -> Import Sample 也可以导入相应的例程。
+
 ## 参考文档
 
 http://www.jianshu.com/p/587f48dccf0a
 https://developer.android.com/topic/libraries/architecture/room.html
+https://github.com/android/architecture-components-samples/
 

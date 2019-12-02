@@ -15,8 +15,9 @@ comments: false
 
 <!--
 
- - 2017.1.9 年基于 Hexo+Github 创建本博客，采用 next 主题 Pisces 风格，域名为 www.heqiangfly.com
- - 2017.1 年将CSDN部分博客迁移到本博客
+ - 2012.10 开始在 CSDN 上记录工作和学习过程中的点点滴滴
+ - 2017.1.9 基于 Hexo+Github 创建本博客，采用 next 主题 Pisces 风格，域名为 www.heqiangfly.com
+ - 2017.1 将CSDN部分博客迁移到本博客
  - 2017.1.19 使用多说评论系统
  - 2017.4.6 多说关闭，使用网易云跟帖评论系统
  - 2017.5.17 将博客风格换成 Mist
