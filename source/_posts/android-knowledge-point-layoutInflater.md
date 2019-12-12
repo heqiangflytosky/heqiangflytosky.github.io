@@ -1,11 +1,13 @@
 ---
-title: Android：使用LayoutInflater应该注意的问题
+title: Android -- 使用 LayoutInflater
 categories: Android
 comments: true
 tags: [Android, LayoutInflater]
-description: 通过解决在使用ViewGroup.addView()添加LayoutInflater生成的布局文件时遇到的布局文件的layout参数被忽略的问题来介绍如何正确使用LayoutInflater
+description: 使用 LayoutInflater 的一些知识点
 date: 2016-2-18 10:00:00
 ---
+
+## LayoutInflater root 参数的使用
 
 我们通常使用`addView`这个方法时，会先通过`LayoutInflater`的`inflate`生成一个`View`视图，然后添加到当前`ViewGroup`中，如果使用不恰当，就会出现这样的问题：
 
@@ -71,3 +73,64 @@ mListView.addHeaderView(headerView);
 lif.inflate(R.layout.header, mListView, false);
 ```
 
+## 设置 LayoutInflater.Factory
+
+在开发中我们可能有遇到这样的需求，需要全局的设置或者修改一些 View 的属性。这种情况下可以考虑使用 `LayoutInflaterCompat` 的 `setFactory` 方法来实现。它可以拦截 `LayoutInflater` 创建 `View` 的过程，我们可以实现一些针对 `View` 的一些客制化操作。
+`LayoutInflater` 提供了两个方法：
+
+ - setFactory(Factory factory)
+ - setFactory2(Factory2 factory)
+
+Factory2 继承自 Factory，多提供了一个 onCreateView 方法。
+Android 提供了一个 `LayoutInflaterCompat` 来完成不同 Android 版本的兼容，比如可以通过下面的方法来修改整个应用的 TextView 的字体类型：
+
+```
+        LayoutInflaterCompat.setFactory2(getLayoutInflater(), new LayoutInflater.Factory2() {
+            @Override
+            public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+                Log.e("Test","LayoutInflaterCompat 1" +name);
+                if ("TextView".equals(name)){
+                    TextView textView = new TextView(context, attrs);
+                    textView.setTypeface(Typeface.create("SFDIN-medium",Typeface.NORMAL));
+                    return textView;
+                }
+                return null;
+            }
+
+            @Override
+            public View onCreateView(String name, Context context, AttributeSet attrs) {
+                Log.e("Test","LayoutInflaterCompat 2" +name);
+                return null;
+            }
+        });
+```
+
+如果我们不想自定义View，只是想修改View的一些属性的话可以采用下面的方法：
+
+```
+            @Override
+            public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+                Log.e("Test","LayoutInflaterCompat 1" +name);
+                if ("TextView".equals(name)){
+                    //TextView textView = new TextView(context, attrs);
+                    View view = getDelegate().createView(parent,name,context,attrs);
+                    if (view instanceof TextView) {
+                        ((TextView)view).setTypeface(Typeface.create("SFDIN-medium",Typeface.NORMAL));
+                        return view;
+                    }
+                }
+                return null;
+            }
+```
+
+`AppCompatDelegate.createView` 会通过一系列方法调用链，创建系统默认的 View。
+如果我们需要修改View，那么就返回我们自定义的 View，如果返回 null 的话就会用系统默认的构造方式来构造View。
+下面是 LayoutInflater 中用默认Factory来构造View的代码：
+
+```
+            if (view == null && mPrivateFactory != null) {
+                view = mPrivateFactory.onCreateView(parent, name, context, attrs);
+            }
+```
+
+`LayoutInflaterCompat.setFactory2` 一定要设置 `super.onCreate(savedInstanceState);` 的前面，否则会报错。

@@ -13,6 +13,8 @@ date: 2019-5-3 10:00:00
 ConstraintLayout 作为 Android 在 support 包中提供的一个 ViewGroup 被 Google 官方推荐使用，ConstraintLayout 可以灵活调整它的布局元素，减少布局层级。
 全面、最新的介绍还是要看 Android 官方文档。
 [Google ConstraintLayout文档](https://developer.android.google.cn/reference/android/support/constraint/ConstraintLayout)
+想看例程源码可以看 [Android views-widgets-samples github 源码](https://github.com/android/views-widgets-samples/)
+
 ## 特点
 
 对比其他布局，比如 LinearLayout，我们很容易发现它的优点：

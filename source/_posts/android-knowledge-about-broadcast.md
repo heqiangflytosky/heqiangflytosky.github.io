@@ -23,7 +23,7 @@ date: 2015-1-10 10:00:00
 从发送广播的 Intent 类型上面可以分为：
 
  - 显式广播：通过显式 Intent （指明接收Intent的组件）发送的广播。
- - 隐式广播：通过隐式 Intent （不指明接收Intent的组件，而是通过 Action、Data、Category等设置，让系统根据所有的`<intent-filter>`进行筛选）发送的广播。
+ - 隐式广播：通过隐式 Intent （不指明接收Intent的组件，而是通过 Action、Data、Category等设置，让系统根据所有的`<intent-filter>`进行筛选）发送的广播。可以通过 `setClassName` 或者 `setPackage` + `setAction`将隐式广播转为显式广播。
 
 从发送广播的广播队列的不同可以分为：
 

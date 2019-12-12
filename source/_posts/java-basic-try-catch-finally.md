@@ -12,7 +12,53 @@ date: 2014-11-8 10:00:00
 
 try catch块是我们编程过程中经常用到的，也是面试时经常遇到的，会问到一些执行顺序方面的问题，本文就将这些问题汇总并用实例验证解答。
 
-## 问题描述：
+## 几个知识点
+
+### catch 的写法
+
+当 try 块中需要 catch 多个异常时，可以采用下面的写法：
+
+```
+        try {
+            a();
+            b();
+        }catch (NullPointerException | ClassNotFoundException |IOException e) {
+            Log.e("Test","error",e);
+        }
+```
+
+和常规写法是等同的：
+
+```
+        try {
+            a();
+            b();
+        }catch (NullPointerException e) {
+            Log.e("Test","error",e);
+        } catch (ClassNotFoundException e) {
+            Log.e("Test","error",e);
+        } catch (IOException e) {
+            Log.e("Test","error",e);
+        }
+```
+
+### 日志
+
+在 Android 中，异常日志最好使用下面方式打印：
+
+```
+Log.e("Test","error",e);
+```
+比传统的 
+
+```
+e.printStackTrace()
+```
+占用内存更少，更具有易读性。
+
+但第一种写法更美观，简介。
+
+## 问题描述
 
  1. 当try中没有出现异常时，finally块中代码是否会执行？
  2. 当try或者catch中有return时，finally是否会执行、以及执行顺序如何？
