@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/11/08/java-basic-try-catch-finally/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 try catch finally 在一些特殊情况下的执行顺序">
-<meta property="og:updated_time" content="2019-05-22T11:51:57.812Z">
+<meta property="og:updated_time" content="2019-12-12T11:56:38.164Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基础 -- 深入理解 try catch finally">
 <meta name="twitter:description" content="介绍 try catch finally 在一些特殊情况下的执行顺序">
@@ -401,7 +401,17 @@
 
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>try catch块是我们编程过程中经常用到的，也是面试时经常遇到的，会问到一些执行顺序方面的问题，本文就将这些问题汇总并用实例验证解答。</p>
-<h2 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h2><ol>
+<h2 id="几个知识点"><a href="#几个知识点" class="headerlink" title="几个知识点"></a>几个知识点</h2><h3 id="catch-的写法"><a href="#catch-的写法" class="headerlink" title="catch 的写法"></a>catch 的写法</h3><p>当 try 块中需要 catch 多个异常时，可以采用下面的写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">try &#123;</div><div class="line">    a();</div><div class="line">    b();</div><div class="line">&#125;catch (NullPointerException | ClassNotFoundException |IOException e) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;error&quot;,e);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>和常规写法是等同的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">try &#123;</div><div class="line">    a();</div><div class="line">    b();</div><div class="line">&#125;catch (NullPointerException e) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;error&quot;,e);</div><div class="line">&#125; catch (ClassNotFoundException e) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;error&quot;,e);</div><div class="line">&#125; catch (IOException e) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;error&quot;,e);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><p>在 Android 中，异常日志最好使用下面方式打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Log.e(&quot;Test&quot;,&quot;error&quot;,e);</div></pre></td></tr></table></figure>
+<p>比传统的 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">e.printStackTrace()</div></pre></td></tr></table></figure>
+<p>占用内存更少，更具有易读性。</p>
+<p>但第一种写法更美观，简介。</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><ol>
 <li>当try中没有出现异常时，finally块中代码是否会执行？</li>
 <li>当try或者catch中有return时，finally是否会执行、以及执行顺序如何？</li>
 <li>如果try或者catch中有return时，finally也有return时，会执行哪个return。</li>
@@ -621,7 +631,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述："><span class="nav-number">2.</span> <span class="nav-text">问题描述：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题解答"><span class="nav-number">3.</span> <span class="nav-text">问题解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题1"><span class="nav-number">3.1.</span> <span class="nav-text">问题1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题2"><span class="nav-number">3.2.</span> <span class="nav-text">问题2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题3"><span class="nav-number">3.3.</span> <span class="nav-text">问题3</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个知识点"><span class="nav-number">2.</span> <span class="nav-text">几个知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#catch-的写法"><span class="nav-number">2.1.</span> <span class="nav-text">catch 的写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志"><span class="nav-number">2.2.</span> <span class="nav-text">日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">3.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题解答"><span class="nav-number">4.</span> <span class="nav-text">问题解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题1"><span class="nav-number">4.1.</span> <span class="nav-text">问题1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题2"><span class="nav-number">4.2.</span> <span class="nav-text">问题2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题3"><span class="nav-number">4.3.</span> <span class="nav-text">问题3</span></a></li></ol></li></ol></div>
             
 
           </div>

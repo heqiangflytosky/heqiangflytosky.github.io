@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/01/10/android-knowledge-about-broadcast/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍广播的一些基础知识">
-<meta property="og:updated_time" content="2019-12-02T09:16:56.867Z">
+<meta property="og:updated_time" content="2019-12-12T11:56:38.157Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android  应该了解的知识系列 - 关于广播">
 <meta name="twitter:description" content="介绍广播的一些基础知识">
@@ -414,7 +414,7 @@
 <p>从发送广播的 Intent 类型上面可以分为：</p>
 <ul>
 <li>显式广播：通过显式 Intent （指明接收Intent的组件）发送的广播。</li>
-<li>隐式广播：通过隐式 Intent （不指明接收Intent的组件，而是通过 Action、Data、Category等设置，让系统根据所有的<code>&lt;intent-filter&gt;</code>进行筛选）发送的广播。</li>
+<li>隐式广播：通过隐式 Intent （不指明接收Intent的组件，而是通过 Action、Data、Category等设置，让系统根据所有的<code>&lt;intent-filter&gt;</code>进行筛选）发送的广播。可以通过 <code>setClassName</code> 或者 <code>setPackage</code> + <code>setAction</code>将隐式广播转为显式广播。</li>
 </ul>
 <p>从发送广播的广播队列的不同可以分为：</p>
 <ul>

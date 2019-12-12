@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="通过解决在使用ViewGroup.addView()添加LayoutInflater生成的布局文件时遇到的布局文件的layout参数被忽略的问题来介绍如何正确使用LayoutInflater">
+<meta name="description" content="使用 LayoutInflater 的一些知识点">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android：使用LayoutInflater应该注意的问题">
+<meta property="og:title" content="Android -- 使用 LayoutInflater">
 <meta property="og:url" content="http://yoursite.com/2016/02/18/android-knowledge-point-layoutInflater/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="通过解决在使用ViewGroup.addView()添加LayoutInflater生成的布局文件时遇到的布局文件的layout参数被忽略的问题来介绍如何正确使用LayoutInflater">
-<meta property="og:updated_time" content="2018-03-11T13:47:48.000Z">
+<meta property="og:description" content="使用 LayoutInflater 的一些知识点">
+<meta property="og:updated_time" content="2019-12-12T11:56:38.160Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android：使用LayoutInflater应该注意的问题">
-<meta name="twitter:description" content="通过解决在使用ViewGroup.addView()添加LayoutInflater生成的布局文件时遇到的布局文件的layout参数被忽略的问题来介绍如何正确使用LayoutInflater">
+<meta name="twitter:title" content="Android -- 使用 LayoutInflater">
+<meta name="twitter:description" content="使用 LayoutInflater 的一些知识点">
 
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title> Android：使用LayoutInflater应该注意的问题 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android -- 使用 LayoutInflater | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -302,7 +302,7 @@
             
             
               
-                Android：使用LayoutInflater应该注意的问题
+                Android -- 使用 LayoutInflater
               
             
           </h1>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2016/02/18/android-knowledge-point-layoutInflater/" class="leancloud_visitors" data-flag-title="Android：使用LayoutInflater应该注意的问题">
+             <span id="/2016/02/18/android-knowledge-point-layoutInflater/" class="leancloud_visitors" data-flag-title="Android -- 使用 LayoutInflater">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -385,7 +385,7 @@
 
           
               <div class="post-description">
-                  通过解决在使用ViewGroup.addView()添加LayoutInflater生成的布局文件时遇到的布局文件的layout参数被忽略的问题来介绍如何正确使用LayoutInflater
+                  使用 LayoutInflater 的一些知识点
               </div>
           
 
@@ -400,7 +400,7 @@
       
 
       
-        <p>我们通常使用<code>addView</code>这个方法时，会先通过<code>LayoutInflater</code>的<code>inflate</code>生成一个<code>View</code>视图，然后添加到当前<code>ViewGroup</code>中，如果使用不恰当，就会出现这样的问题：</p>
+        <h2 id="LayoutInflater-root-参数的使用"><a href="#LayoutInflater-root-参数的使用" class="headerlink" title="LayoutInflater root 参数的使用"></a>LayoutInflater root 参数的使用</h2><p>我们通常使用<code>addView</code>这个方法时，会先通过<code>LayoutInflater</code>的<code>inflate</code>生成一个<code>View</code>视图，然后添加到当前<code>ViewGroup</code>中，如果使用不恰当，就会出现这样的问题：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">        setContentView(R.layout.layout_inflate_test);</div><div class="line">        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.root);</div><div class="line"></div><div class="line">        <span class="comment">//1.inflate_test根布局layout参数被忽略</span></div><div class="line"><span class="comment">//        View v = LayoutInflater.from(this).inflate(R.layout.inflate_test, null);</span></div><div class="line"><span class="comment">//        viewGroup.addView(v);</span></div><div class="line"></div><div class="line">        <span class="comment">//2.不会忽略</span></div><div class="line"><span class="comment">//        View v = LayoutInflater.from(this).inflate(R.layout.inflate_test, viewGroup, false);</span></div><div class="line"><span class="comment">//        viewGroup.addView(v);</span></div><div class="line"></div><div class="line">        <span class="comment">//3.不会忽略</span></div><div class="line"><span class="comment">//        LayoutInflater.from(this).inflate(R.layout.inflate_test, viewGroup);</span></div><div class="line"></div><div class="line">        <span class="comment">//4.不会忽略</span></div><div class="line"><span class="comment">//        LayoutInflater.from(this).inflate(R.layout.inflate_test, viewGroup, true);</span></div></pre></td></tr></table></figure>
 <p>上面的代码中，第一种用法根布局 layout 参数会被忽略，后面都不会。我们从 <code>LayoutInflater</code> 源码中可以看出来原因，在<code>public View inflate(XmlPullParser parser, ViewGroup root, boolean attachToRoot)</code>方法中：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (root != <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (DEBUG) &#123;</div><div class="line">        System.out.println(<span class="string">"Creating params from root: "</span> +</div><div class="line">                root);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// Create layout params that match root, if supplied</span></div><div class="line">    params = root.generateLayoutParams(attrs);</div><div class="line">    <span class="keyword">if</span> (!attachToRoot) &#123;</div><div class="line">        <span class="comment">// Set the layout params for temp if we are not</span></div><div class="line">        <span class="comment">// attaching. (If we are, we use addView, below)</span></div><div class="line">        temp.setLayoutParams(params);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -410,6 +410,18 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">LayoutInflater lif = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);</div><div class="line">View headerView = lif.inflate(R.layout.header, <span class="keyword">null</span>);</div><div class="line">mListView.addHeaderView(headerView);</div></pre></td></tr></table></figure>
 <p>原因就是<code>lif.inflate(R.layout.header, null)</code>丢失了 XML 布局中根 <code>View</code> 的 <code>LayoutParam</code>，其实使用下面的方法就可以了：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lif.inflate(R.layout.header, mListView, <span class="keyword">false</span>);</div></pre></td></tr></table></figure>
+<h2 id="设置-LayoutInflater-Factory"><a href="#设置-LayoutInflater-Factory" class="headerlink" title="设置 LayoutInflater.Factory"></a>设置 LayoutInflater.Factory</h2><p>在开发中我们可能有遇到这样的需求，需要全局的设置或者修改一些 View 的属性。这种情况下可以考虑使用 <code>LayoutInflaterCompat</code> 的 <code>setFactory</code> 方法来实现。它可以拦截 <code>LayoutInflater</code> 创建 <code>View</code> 的过程，我们可以实现一些针对 <code>View</code> 的一些客制化操作。<br><code>LayoutInflater</code> 提供了两个方法：</p>
+<ul>
+<li>setFactory(Factory factory)</li>
+<li>setFactory2(Factory2 factory)</li>
+</ul>
+<p>Factory2 继承自 Factory，多提供了一个 onCreateView 方法。<br>Android 提供了一个 <code>LayoutInflaterCompat</code> 来完成不同 Android 版本的兼容，比如可以通过下面的方法来修改整个应用的 TextView 的字体类型：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">LayoutInflaterCompat.setFactory2(getLayoutInflater(), new LayoutInflater.Factory2() &#123;</div><div class="line">    @Override</div><div class="line">    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;LayoutInflaterCompat 1&quot; +name);</div><div class="line">        if (&quot;TextView&quot;.equals(name))&#123;</div><div class="line">            TextView textView = new TextView(context, attrs);</div><div class="line">            textView.setTypeface(Typeface.create(&quot;SFDIN-medium&quot;,Typeface.NORMAL));</div><div class="line">            return textView;</div><div class="line">        &#125;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public View onCreateView(String name, Context context, AttributeSet attrs) &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;LayoutInflaterCompat 2&quot; +name);</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>如果我们不想自定义View，只是想修改View的一些属性的话可以采用下面的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public View onCreateView(View parent, String name, Context context, AttributeSet attrs) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;LayoutInflaterCompat 1&quot; +name);</div><div class="line">    if (&quot;TextView&quot;.equals(name))&#123;</div><div class="line">        //TextView textView = new TextView(context, attrs);</div><div class="line">        View view = getDelegate().createView(parent,name,context,attrs);</div><div class="line">        if (view instanceof TextView) &#123;</div><div class="line">            ((TextView)view).setTypeface(Typeface.create(&quot;SFDIN-medium&quot;,Typeface.NORMAL));</div><div class="line">            return view;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return null;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>AppCompatDelegate.createView</code> 会通过一系列方法调用链，创建系统默认的 View。<br>如果我们需要修改View，那么就返回我们自定义的 View，如果返回 null 的话就会用系统默认的构造方式来构造View。<br>下面是 LayoutInflater 中用默认Factory来构造View的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (view == null &amp;&amp; mPrivateFactory != null) &#123;</div><div class="line">    view = mPrivateFactory.onCreateView(parent, name, context, attrs);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>LayoutInflaterCompat.setFactory2</code> 一定要设置 <code>super.onCreate(savedInstanceState);</code> 的前面，否则会报错。</p>
 
       
     </div>
@@ -505,8 +517,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/icon.png"
@@ -589,6 +610,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LayoutInflater-root-参数的使用"><span class="nav-number">1.</span> <span class="nav-text">LayoutInflater root 参数的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置-LayoutInflater-Factory"><span class="nav-number">2.</span> <span class="nav-text">设置 LayoutInflater.Factory</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>
