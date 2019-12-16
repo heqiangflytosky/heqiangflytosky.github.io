@@ -41,7 +41,7 @@ MainActivity.java
 我们知道，在 Java 中，非静态内部类会默认隐性引用外部类对象。而上面的例子中的静态变量`mInnerClassInstance`在第一个`MainActivity`实例创建后便会一直存在，那么它就会一直持有`MainActivity`的一个引用，在`MainActivity`实例销毁后它是无法被回收的，因此便造成了内存泄漏。
 
 ## 内存泄漏的初步分析
-首先可以用`adb shell dumpsys meminfo <包名>`先进行初步的分析。
+首先可以用 `adb shell dumpsys meminfo <进程名称或者进程ID>` 先进行初步的分析。
 我们按下手机的后退键回到桌面，这时会调用`MainActivity`的`onDestroy()`，正常情况下`MainActivity`实例会被回收。
 ```
 $ adb shell dumpsys meminfo com.example.hq.testsomething
