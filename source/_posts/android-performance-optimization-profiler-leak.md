@@ -65,7 +65,7 @@ mInnerClassInstance 的引用显示在第一个，对其他的引用一层层的
 首先我们要借助 Profiler 工具生成 hprof 文件，前面我们点击垃圾桶图标右侧的图标之后，会在内存中生成一份 Heap Dum 文件，这个文件是可以保存到磁盘上的。
 点击面板上的保存按钮：
 
-<img src="/images/android-performance-optimization-profiler-leak/export-hprof.png" width="662" height="310"/>
+<img src="/images/android-performance-optimization-profiler-leak/export-hprof.png" width="466" height="342"/>
 
 文件就会被保存到磁盘上，然后通过下面的命令转换：
 
