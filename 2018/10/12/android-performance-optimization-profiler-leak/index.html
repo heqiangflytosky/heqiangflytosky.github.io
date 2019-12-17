@@ -99,7 +99,8 @@
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/arrange.png">
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/result.png">
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/results-1.png">
-<meta property="og:updated_time" content="2019-12-13T13:25:41.581Z">
+<meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/export-hprof.png">
+<meta property="og:updated_time" content="2019-12-17T03:42:44.507Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化工具篇 -- Android Profiler 分析内存泄漏">
 <meta name="twitter:description" content="介绍使用 Android Profiler 分析内存泄漏">
@@ -431,6 +432,11 @@
 <p>点击 MainActivity 对象，在 Reference 窗口会出现对它的引用情况，你会发现会有好多对 MainActivity 的引用。<br>mInnerClassInstance 的引用显示在第一个，对其他的引用一层层的点击下去，最终都是由我们创造的泄漏场景 mInnerClassInstance 对象对一些对象的引用导致的。</p>
 <p><img src="/images/android-performance-optimization-profiler-leak/results-1.png" width="662" height="310"></p>
 <p>这样我们就最终发现了导致内存泄漏的元凶。</p>
+<h2 id="使用-Mat-分析内存泄漏"><a href="#使用-Mat-分析内存泄漏" class="headerlink" title="使用 Mat 分析内存泄漏"></a>使用 Mat 分析内存泄漏</h2><p>使用上面的方法可以分析一些简单的内存泄漏，但是对于一些复杂的情况，上面的方法由于对实例的引用很多，分析起来不太方便，这个时候我们可以借助 Mat(MemoryAnalyzer) 工具来分析。<br>首先我们要借助 Profiler 工具生成 hprof 文件，前面我们点击垃圾桶图标右侧的图标之后，会在内存中生成一份 Heap Dum 文件，这个文件是可以保存到磁盘上的。<br>点击面板上的保存按钮：</p>
+<p><img src="/images/android-performance-optimization-profiler-leak/export-hprof.png" width="662" height="310"></p>
+<p>文件就会被保存到磁盘上，然后通过下面的命令转换：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android-sdk/platform-tools/hprof-conv memory-xxxxx.hprof test.hprof</div></pre></td></tr></table></figure>
+<p>然后在通过 <a href="http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/" target="_blank" rel="external">Android 性能优化工具篇 – MAT分析内存泄漏 </a> 里面介绍的方法通过 Mat 来分析内存泄漏。</p>
 <h2 id="解决内存泄漏"><a href="#解决内存泄漏" class="headerlink" title="解决内存泄漏"></a>解决内存泄漏</h2>
       
     </div>
@@ -627,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发现内存泄漏"><span class="nav-number">2.</span> <span class="nav-text">发现内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具准备"><span class="nav-number">3.</span> <span class="nav-text">工具准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始分析"><span class="nav-number">4.</span> <span class="nav-text">开始分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决内存泄漏"><span class="nav-number">5.</span> <span class="nav-text">解决内存泄漏</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发现内存泄漏"><span class="nav-number">2.</span> <span class="nav-text">发现内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具准备"><span class="nav-number">3.</span> <span class="nav-text">工具准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始分析"><span class="nav-number">4.</span> <span class="nav-text">开始分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Mat-分析内存泄漏"><span class="nav-number">5.</span> <span class="nav-text">使用 Mat 分析内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决内存泄漏"><span class="nav-number">6.</span> <span class="nav-text">解决内存泄漏</span></a></li></ol></div>
             
 
           </div>

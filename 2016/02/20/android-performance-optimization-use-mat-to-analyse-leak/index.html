@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_path_to_gc_root_exclude_phontom_soft_weak.png">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_domintor_tree_analysis.png">
 <meta property="og:image" content="http://yoursite.com/images/development-tool-mat-to-analyse-leak/mat_bitmap_leak_result.png">
-<meta property="og:updated_time" content="2019-12-13T08:23:36.054Z">
+<meta property="og:updated_time" content="2019-12-17T03:42:44.508Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化工具篇 -- MAT分析内存泄漏">
 <meta name="twitter:description" content="介绍Android分析内存泄漏工具的使用方法">
@@ -437,7 +437,7 @@
 <h3 id="使用Eclipse"><a href="#使用Eclipse" class="headerlink" title="使用Eclipse"></a>使用Eclipse</h3><p>如果你的 Eclipse 安装了MAT插件，那么安装上面使用Android Studio生成hprof文件的步骤，点击 Dump HPROF file 按钮后，就直接打开了该hprof文件。</p>
 <h3 id="使用代码"><a href="#使用代码" class="headerlink" title="使用代码"></a>使用代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android.os.Debug.dumpHprofData(hprofName);</div></pre></td></tr></table></figure>
 <p>生成的hprof文件也需要用<code>hprof-conv</code>转换一下才能用MAT工具打开。</p>
-<h2 id="通过MAT工具分析内存泄漏"><a href="#通过MAT工具分析内存泄漏" class="headerlink" title="通过MAT工具分析内存泄漏"></a>通过MAT工具分析内存泄漏</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>打开hprof文件后首先进入主视图，下来看一下这个主视图：</p>
+<h2 id="通过MAT工具分析内存泄漏"><a href="#通过MAT工具分析内存泄漏" class="headerlink" title="通过MAT工具分析内存泄漏"></a>通过MAT工具分析内存泄漏</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>启动 MemoryAnalyzer，打开hprof文件后首先进入主视图，下来看一下这个主视图：</p>
 <p><img src="/images/development-tool-mat-to-analyse-leak/mat_overview.png" alt="效果图"></p>
 <p>MAT 提供了很多功能，但是最常用的只有 Histogram 和 Domintor Tree：</p>
 <ul>
