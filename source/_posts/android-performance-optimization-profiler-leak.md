@@ -59,5 +59,21 @@ mInnerClassInstance 的引用显示在第一个，对其他的引用一层层的
 
 这样我们就最终发现了导致内存泄漏的元凶。
 
+## 使用 Mat 分析内存泄漏
+
+使用上面的方法可以分析一些简单的内存泄漏，但是对于一些复杂的情况，上面的方法由于对实例的引用很多，分析起来不太方便，这个时候我们可以借助 Mat(MemoryAnalyzer) 工具来分析。
+首先我们要借助 Profiler 工具生成 hprof 文件，前面我们点击垃圾桶图标右侧的图标之后，会在内存中生成一份 Heap Dum 文件，这个文件是可以保存到磁盘上的。
+点击面板上的保存按钮：
+
+<img src="/images/android-performance-optimization-profiler-leak/export-hprof.png" width="662" height="310"/>
+
+文件就会被保存到磁盘上，然后通过下面的命令转换：
+
+```
+android-sdk/platform-tools/hprof-conv memory-xxxxx.hprof test.hprof
+```
+
+然后在通过 [Android 性能优化工具篇 -- MAT分析内存泄漏 ](http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/) 里面介绍的方法通过 Mat 来分析内存泄漏。
+
 ## 解决内存泄漏
 

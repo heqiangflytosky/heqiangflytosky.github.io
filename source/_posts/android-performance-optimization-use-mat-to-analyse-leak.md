@@ -154,7 +154,7 @@ android.os.Debug.dumpHprofData(hprofName);
 
 ### 介绍
 
-打开hprof文件后首先进入主视图，下来看一下这个主视图：
+启动 MemoryAnalyzer，打开hprof文件后首先进入主视图，下来看一下这个主视图：
 
 ![效果图](/images/development-tool-mat-to-analyse-leak/mat_overview.png)
 
