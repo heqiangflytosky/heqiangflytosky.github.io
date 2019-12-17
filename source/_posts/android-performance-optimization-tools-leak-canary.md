@@ -12,7 +12,7 @@ date: 2015-10-9 10:00:00
 在Android中检测内存泄露，除了我们熟知的MAT分析外，还有另外一种方法公选择：LeakCanary。
 leakcanary是一个由著名的GitHub开源组织Square贡献的开源项目。
 具体可以参考下面文章：
-[Github 地址](github：https://github.com/square/leakcanary)
+[Github 地址](https://github.com/square/leakcanary)
 [LeakCanary 中文使用说明](http://www.liaohuqiu.net/cn/posts/leak-canary-read-me/)
 [demo](https://github.com/liaohuqiu/leakcanary-demo)
 
