@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/result.png">
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/results-1.png">
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/export-hprof.png">
-<meta property="og:updated_time" content="2019-12-17T03:42:44.507Z">
+<meta property="og:updated_time" content="2019-12-17T08:08:22.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化工具篇 -- Android Profiler 分析内存泄漏">
 <meta name="twitter:description" content="介绍使用 Android Profiler 分析内存泄漏">
@@ -433,7 +433,7 @@
 <p><img src="/images/android-performance-optimization-profiler-leak/results-1.png" width="662" height="310"></p>
 <p>这样我们就最终发现了导致内存泄漏的元凶。</p>
 <h2 id="使用-Mat-分析内存泄漏"><a href="#使用-Mat-分析内存泄漏" class="headerlink" title="使用 Mat 分析内存泄漏"></a>使用 Mat 分析内存泄漏</h2><p>使用上面的方法可以分析一些简单的内存泄漏，但是对于一些复杂的情况，上面的方法由于对实例的引用很多，分析起来不太方便，这个时候我们可以借助 Mat(MemoryAnalyzer) 工具来分析。<br>首先我们要借助 Profiler 工具生成 hprof 文件，前面我们点击垃圾桶图标右侧的图标之后，会在内存中生成一份 Heap Dum 文件，这个文件是可以保存到磁盘上的。<br>点击面板上的保存按钮：</p>
-<p><img src="/images/android-performance-optimization-profiler-leak/export-hprof.png" width="662" height="310"></p>
+<p><img src="/images/android-performance-optimization-profiler-leak/export-hprof.png" width="466" height="342"></p>
 <p>文件就会被保存到磁盘上，然后通过下面的命令转换：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android-sdk/platform-tools/hprof-conv memory-xxxxx.hprof test.hprof</div></pre></td></tr></table></figure>
 <p>然后在通过 <a href="http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/" target="_blank" rel="external">Android 性能优化工具篇 – MAT分析内存泄漏 </a> 里面介绍的方法通过 Mat 来分析内存泄漏。</p>
@@ -553,7 +553,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">194</span>
+                <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
