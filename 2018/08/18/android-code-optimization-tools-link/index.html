@@ -94,7 +94,11 @@
 <meta property="og:description" content="介绍使用 Lint 工具检测代码规范的使用方法">
 <meta property="og:image" content="http://yoursite.com/images/android-code-optimization-tools-link/dialog.png">
 <meta property="og:image" content="http://yoursite.com/images/android-code-optimization-tools-link/result.png">
-<meta property="og:updated_time" content="2019-12-18T08:17:09.497Z">
+<meta property="og:image" content="http://yoursite.com/images/android-code-optimization-tools-link/p3c.png">
+<meta property="og:image" content="http://yoursite.com/images/android-code-optimization-tools-link/result-p3c.png">
+<meta property="og:image" content="http://yoursite.com/images/android-code-optimization-tools-link/p3c-hint.png">
+<meta property="og:image" content="http://yoursite.com/images/android-code-optimization-tools-link/lint-p3c.png">
+<meta property="og:updated_time" content="2019-12-18T11:14:07.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 代码优化工具篇 -- 静态代码检测工具">
 <meta name="twitter:description" content="介绍使用 Lint 工具检测代码规范的使用方法">
@@ -403,10 +407,12 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android 代码检测是我们开发工程中必不可少的步骤，高质量的代码检测可以提前发现问题，有效地避免线上bug的出现，是质量保证的关键。<br>Lint 是Android提供的代码检测工具，除了检查 Android 项目源码中潜在的错误，对于代码的正确性、安全性、性能、易用性、便利性和国际化方面也会作出检查。Lint 还可自定义一些检测约束规则。Lint 除了可以使用命令行外，已经集成Android Studio中使用方便。<br>另外pmd和阿里开源的代码检测工具p3c的使用也较普遍，我们可以把以上工具结合运用到我们的项目中去。<br>Lint 侧重进行 Android 项目规范检测，pmd和p3c侧重于Java规范检测。<br>对于Android和Java 的开发规范，建议大家看看阿里开源的《阿里巴巴Java开发手册》和《阿里巴巴Android开发手册》。</p>
-<p><a href="https://developer.android.com/studio/write/lint?hl=zh-CN" target="_blank" rel="external">Lint Android官方文档</a></p>
-<h2 id="Lint-命令行"><a href="#Lint-命令行" class="headerlink" title="Lint 命令行"></a>Lint 命令行</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">android &#123;</div><div class="line">    lintOptions &#123;</div><div class="line">        // 遇到lint错误时不中断</div><div class="line">        abortOnError false</div><div class="line">        // 配置lint规则，拷贝配置文件lint.xml文件到build.gradle所在目录</div><div class="line">        lintConfig file(&apos;lint.xml&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">...</div></pre></td></tr></table></figure>
-<p>./gradlew lintRelease</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android 代码检测是我们开发工程中必不可少的步骤，高质量的代码检测可以提前发现问题，有效地避免线上bug的出现，是质量保证的关键。<br>Lint 是Android提供的代码检测工具，除了检查 Android 项目源码中潜在的错误，对于代码的正确性、安全性、性能、易用性、便利性和国际化方面也会作出检查。Lint 还可自定义一些检测约束规则。Lint 除了可以使用命令行外，已经集成Android Studio中使用方便。<br>另外pmd、阿里开源的代码检测工具p3c和360的检测工具FireLine的使用也较普遍，我们可以把以上工具结合运用到我们的项目中去。<br>Lint 侧重进行 Android 项目规范检测，pmd和p3c侧重于Java规范检测。<br>对于Android和Java 的开发规范，建议大家看看阿里开源的《阿里巴巴Java开发手册》和《阿里巴巴Android开发手册》。</p>
+<p><a href="https://developer.android.com/studio/write/lint?hl=zh-CN" target="_blank" rel="external">Lint Android官方文档</a><br><a href="https://github.com/alibaba/p3c" target="_blank" rel="external">p3c Github源码</a><br><a href="http://magic.360.cn/zh/index.html" target="_blank" rel="external">FireLine</a></p>
+<h2 id="Lint-命令行"><a href="#Lint-命令行" class="headerlink" title="Lint 命令行"></a>Lint 命令行</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">android &#123;</div><div class="line">    lintOptions &#123;</div><div class="line">        // 默认为true，遇到lint错误时中断执行。</div><div class="line">        abortOnError false</div><div class="line">        // 配置lint规则，拷贝配置文件lint.xml文件到build.gradle所在目录</div><div class="line">        lintConfig file(&apos;lint.xml&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>lint.xml 这个文件是配置 Lint 的一些规则，比如哪些规则（issue）需要禁用，自定义规则的严重等级（severity）等。lint.xml 文件示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;</div><div class="line">&lt;lint&gt;</div><div class="line">    &lt;issue id=&quot;HardcodedText&quot; severity=&quot;ignore&quot; /&gt;</div><div class="line">    &lt;issue id=&quot;SmallSp&quot; severity=&quot;ignore&quot; /&gt;</div><div class="line">    &lt;issue id=&quot;AddJavascriptInterface&quot; severity=&quot;ignore&quot; /&gt;</div><div class="line">    &lt;issue id=&quot;AdapterViewChildren&quot; severity=&quot;warning&quot; /&gt;</div><div class="line">    &lt;issue id=&quot;AllowBackup&quot; severity=&quot;ignore&quot; /&gt;</div><div class="line">    &lt;issue id=&quot;Deprecated&quot; severity=&quot;warning&quot;&gt;</div><div class="line">        &lt;ignore regexp=&quot;singleLine&quot; /&gt;</div><div class="line">    &lt;/issue&gt;</div><div class="line">&lt;/lint&gt;</div></pre></td></tr></table></figure>
+<h3 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h3><p>./gradlew lintRelease</p>
 <p>运行结果会生成 html 和 xml 格式的报告。<br>相关的任务：</p>
 <ul>
 <li>lint - Runs lint on all variants.</li>
@@ -420,10 +426,29 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">repositories &#123;</div><div class="line">    ...</div><div class="line">    google()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="使用Android-Studio检测"><a href="#使用Android-Studio检测" class="headerlink" title="使用Android Studio检测"></a>使用Android Studio检测</h2><p>菜单栏选择 Analyze &gt; Inspect Code，在弹出的对话框中进行配置：</p>
 <p><img src="/images/android-code-optimization-tools-link/dialog.png" width="505" height="271"></p>
-<p>点击 OK 按钮后开始进行Lint检查，运行完成后显示运行结果：</p>
+<p>Inspection profile 可以选择启用哪些检查项。<br>点击 OK 按钮后开始进行Lint检查，运行完成后显示运行结果：</p>
 <p><img src="/images/android-code-optimization-tools-link/result.png" width="725" height="401"></p>
 <p>检测结果分为几类，可以根据提示进行修复。</p>
-<h2 id="p3c"><a href="#p3c" class="headerlink" title="p3c"></a>p3c</h2><h2 id="pmd"><a href="#pmd" class="headerlink" title="pmd"></a>pmd</h2>
+<ul>
+<li>Accessibility：</li>
+<li>Correctness：</li>
+<li>Internationalization：</li>
+<li>Performance：</li>
+<li>Security：</li>
+<li>Usability：</li>
+</ul>
+<h2 id="p3c"><a href="#p3c" class="headerlink" title="p3c"></a>p3c</h2><p>p3c是阿里巴巴提供的Java代码检测规范，并且提供了Android Studio插件供我们使用，除了可以进行扫描检查之外，还有实时代码规范提示功能。</p>
+<h3 id="插件安装"><a href="#插件安装" class="headerlink" title="插件安装"></a>插件安装</h3><p>菜单栏：Preferences -&gt; Plugins -&gt; Marketplace，搜索 Alibaba Java Guidelines，点击安装后重启 Android Studio就可以使用了。</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>菜单栏：Tools -&gt; 阿里编码规约 -&gt; 编码规约扫描：</p>
+<p><img src="/images/android-code-optimization-tools-link/p3c.png" width="549" height="367"></p>
+<p>扫描完成后会展示扫描结果：</p>
+<p><img src="/images/android-code-optimization-tools-link/result-p3c.png" width="728" height="403"></p>
+<p>实时提示功能：当代码中有不合符代码规约的地方会有红色波浪线提示，鼠标放在红色波浪线位置时会提示出错的原因。该实时提示功能可以在菜单栏中关闭。</p>
+<p><img src="/images/android-code-optimization-tools-link/p3c-hint.png" width="454" height="216"></p>
+<h2 id="pmd"><a href="#pmd" class="headerlink" title="pmd"></a>pmd</h2><h2 id="FireLine"><a href="#FireLine" class="headerlink" title="FireLine"></a>FireLine</h2><h2 id="Analyze-配置"><a href="#Analyze-配置" class="headerlink" title="Analyze 配置"></a>Analyze 配置</h2><p>Android 中可以选择同时进行 Lint 和 p3c 检测。<br>菜单栏：Analyze -&gt; Inspect Code -&gt; 配置 -&gt; 同时选择Ali-Check 和 Android lint。</p>
+<p><img src="/images/android-code-optimization-tools-link/lint-p3c.png" width="582" height="500"></p>
+<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a href="https://developer.android.com/studio/write/lint?hl=zh-CN" target="_blank" rel="external">https://developer.android.com/studio/write/lint?hl=zh-CN</a><br><a href="https://www.jianshu.com/p/1cc437973574" target="_blank" rel="external">https://www.jianshu.com/p/1cc437973574</a><br><a href="https://www.jianshu.com/p/cf1b97941856" target="_blank" rel="external">https://www.jianshu.com/p/cf1b97941856</a></p>
+
       
     </div>
 
@@ -619,7 +644,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lint-命令行"><span class="nav-number">2.</span> <span class="nav-text">Lint 命令行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">2.1.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Android-Studio检测"><span class="nav-number">3.</span> <span class="nav-text">使用Android Studio检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#p3c"><span class="nav-number">4.</span> <span class="nav-text">p3c</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pmd"><span class="nav-number">5.</span> <span class="nav-text">pmd</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lint-命令行"><span class="nav-number">2.</span> <span class="nav-text">Lint 命令行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">2.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行"><span class="nav-number">2.2.</span> <span class="nav-text">执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Android-Studio检测"><span class="nav-number">3.</span> <span class="nav-text">使用Android Studio检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#p3c"><span class="nav-number">4.</span> <span class="nav-text">p3c</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插件安装"><span class="nav-number">4.1.</span> <span class="nav-text">插件安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">4.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pmd"><span class="nav-number">5.</span> <span class="nav-text">pmd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FireLine"><span class="nav-number">6.</span> <span class="nav-text">FireLine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Analyze-配置"><span class="nav-number">7.</span> <span class="nav-text">Analyze 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关文章"><span class="nav-number">8.</span> <span class="nav-text">相关文章</span></a></li></ol></div>
             
 
           </div>
