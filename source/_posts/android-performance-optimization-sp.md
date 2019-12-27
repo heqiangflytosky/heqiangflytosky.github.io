@@ -131,9 +131,20 @@ sp.edit().putString("test4", "sss").apply();
 ```
 
 注意两点，第一，把一个带有 await 的 runnable 添加进了 QueueWork 类的一个队列；第二，把这个写入任务通过 enqueueDiskWrite 丢给了一个只有单个线程的线程池执行。
-到这里一切都OK，在子线程里面写入不会卡UI。但是，我们再来看一下 `ActivityThread` 类的 `handleStopActivity` 方法：
+到这里一切都OK，在子线程里面写入不会卡UI。但是，我们再来看一下 `ActivityThread` 类的 `handlePauseActivity ` 和 `handleStopActivity` 方法：
 
 ```
+@Override
+public void handlePauseActivity(IBinder token, boolean show, int configChanges, PendingTransactionActions pendingactions, boolean finalStateRequest, String reason){
+    //... 
+    if(!r.isPreHoneycomb()){
+      //这里检查，异步提交的SharedPreferences任务是否已经完成
+      //否则一直等到执行完成
+      QueuedWork.waitToFinish();
+    }
+    //...
+ }
+
 private void handleStopActivity(IBinder token, boolean show, int configChanges, int seq) {
 
     // ...
@@ -153,7 +164,7 @@ public static void waitToFinish() {
 }
 ```
 
-在 Activity stop 时会等待所有的任务操作完之后才能继续往下走，包括上面的写入 xml 的操作。如果碰巧在 stop 时有很多的写入 xml 任务在等待执行，那么这里就会出现卡顿。
+在 Activity pause 和 stop 时会等待所有的任务操作完之后才能继续往下走，包括上面的写入 xml 的操作。如果碰巧在 pause 或者 stop 时有很多的写入 xml 任务在等待执行，那么这里就会出现卡顿。
 因此，虽然apply是在子线程执行的，但是请不要无节制地使用。
 所以针对上面代码的优雅的做法应该是：
 
@@ -166,3 +177,8 @@ public static void waitToFinish() {
                 .apply();
 ```
 
+## 相关阅读推荐
+
+http://weishu.me/2016/10/13/sharedpreference-advices/
+https://www.jianshu.com/p/5fcef7f68341
+https://www.jianshu.com/p/f5a29bce2e6f
