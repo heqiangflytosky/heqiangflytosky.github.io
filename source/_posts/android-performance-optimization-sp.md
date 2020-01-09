@@ -177,6 +177,10 @@ public static void waitToFinish() {
                 .apply();
 ```
 
+## 使用 MMKV
+
+推荐使用 MMKV，可以带来更优越的性能
+
 ## 相关阅读推荐
 
 http://weishu.me/2016/10/13/sharedpreference-advices/
