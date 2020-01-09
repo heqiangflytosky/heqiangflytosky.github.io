@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/02/26/android-performance-optimization-sp/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍使用 SharedPreference 时需要注意的问题">
-<meta property="og:updated_time" content="2019-12-27T07:18:24.117Z">
+<meta property="og:updated_time" content="2019-12-27T08:34:20.927Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化理论篇 -- SharedPreference 使用优化">
 <meta name="twitter:description" content="介绍使用 SharedPreference 时需要注意的问题">
@@ -430,6 +430,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void handlePauseActivity(IBinder token, boolean show, int configChanges, PendingTransactionActions pendingactions, boolean finalStateRequest, String reason)&#123;</div><div class="line">    //... </div><div class="line">    if(!r.isPreHoneycomb())&#123;</div><div class="line">      //这里检查，异步提交的SharedPreferences任务是否已经完成</div><div class="line">      //否则一直等到执行完成</div><div class="line">      QueuedWork.waitToFinish();</div><div class="line">    &#125;</div><div class="line">    //...</div><div class="line"> &#125;</div><div class="line"></div><div class="line">private void handleStopActivity(IBinder token, boolean show, int configChanges, int seq) &#123;</div><div class="line"></div><div class="line">    // ...</div><div class="line">    // Make sure any pending writes are now committed.</div><div class="line">    if (!r.isPreHoneycomb()) &#123;</div><div class="line">        QueuedWork.waitToFinish();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void waitToFinish() &#123;</div><div class="line">    Runnable toFinish;</div><div class="line">    while ((toFinish = sPendingWorkFinishers.poll()) != null) &#123;</div><div class="line">        toFinish.run();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在 Activity pause 和 stop 时会等待所有的任务操作完之后才能继续往下走，包括上面的写入 xml 的操作。如果碰巧在 pause 或者 stop 时有很多的写入 xml 任务在等待执行，那么这里就会出现卡顿。<br>因此，虽然apply是在子线程执行的，但是请不要无节制地使用。<br>所以针对上面代码的优雅的做法应该是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SharedPreferences sp = getSharedPreferences(&quot;test&quot;, MODE_PRIVATE);</div><div class="line">sp.edit().putString(&quot;test1&quot;, &quot;sss&quot;)</div><div class="line">        .putString(&quot;test2&quot;, &quot;sss&quot;)</div><div class="line">        .putString(&quot;test3&quot;, &quot;sss&quot;)</div><div class="line">        .putString(&quot;test4&quot;, &quot;sss&quot;)</div><div class="line">        .apply();</div></pre></td></tr></table></figure>
+<h2 id="使用-MMKV"><a href="#使用-MMKV" class="headerlink" title="使用 MMKV"></a>使用 MMKV</h2><p>推荐使用 MMKV，可以带来更优越的性能</p>
 <h2 id="相关阅读推荐"><a href="#相关阅读推荐" class="headerlink" title="相关阅读推荐"></a>相关阅读推荐</h2><p><a href="http://weishu.me/2016/10/13/sharedpreference-advices/" target="_blank" rel="external">http://weishu.me/2016/10/13/sharedpreference-advices/</a><br><a href="https://www.jianshu.com/p/5fcef7f68341" target="_blank" rel="external">https://www.jianshu.com/p/5fcef7f68341</a><br><a href="https://www.jianshu.com/p/f5a29bce2e6f" target="_blank" rel="external">https://www.jianshu.com/p/f5a29bce2e6f</a></p>
 
       
@@ -547,7 +548,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">198</span>
+                <span class="site-state-item-count">199</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -627,7 +628,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#谨慎使用多进程"><span class="nav-number">2.</span> <span class="nav-text">谨慎使用多进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#避免存储超大的数据"><span class="nav-number">3.</span> <span class="nav-text">避免存储超大的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#避免直接存储JSON或者HTML格式的问题"><span class="nav-number">4.</span> <span class="nav-text">避免直接存储JSON或者HTML格式的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合理使用-apply-和-commit"><span class="nav-number">5.</span> <span class="nav-text">合理使用 apply 和 commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多次edit多次apply"><span class="nav-number">6.</span> <span class="nav-text">多次edit多次apply</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关阅读推荐"><span class="nav-number">7.</span> <span class="nav-text">相关阅读推荐</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#谨慎使用多进程"><span class="nav-number">2.</span> <span class="nav-text">谨慎使用多进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#避免存储超大的数据"><span class="nav-number">3.</span> <span class="nav-text">避免存储超大的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#避免直接存储JSON或者HTML格式的问题"><span class="nav-number">4.</span> <span class="nav-text">避免直接存储JSON或者HTML格式的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合理使用-apply-和-commit"><span class="nav-number">5.</span> <span class="nav-text">合理使用 apply 和 commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多次edit多次apply"><span class="nav-number">6.</span> <span class="nav-text">多次edit多次apply</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-MMKV"><span class="nav-number">7.</span> <span class="nav-text">使用 MMKV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关阅读推荐"><span class="nav-number">8.</span> <span class="nav-text">相关阅读推荐</span></a></li></ol></div>
             
 
           </div>
@@ -648,7 +649,7 @@
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
