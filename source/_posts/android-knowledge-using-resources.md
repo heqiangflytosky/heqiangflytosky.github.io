@@ -4,7 +4,7 @@ categories: Android
 comments: true
 tags: [Android]
 description: 介绍Android 中资源引用的几种方法
-date: 2015-2-20 10:00:00
+date: 2015-2-26 10:00:00
 ---
 
 ## 概述
