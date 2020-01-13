@@ -165,6 +165,40 @@ public static void waitToFinish() {
 ```
 
 在 Activity pause 和 stop 时会等待所有的任务操作完之后才能继续往下走，包括上面的写入 xml 的操作。如果碰巧在 pause 或者 stop 时有很多的写入 xml 任务在等待执行，那么这里就会出现卡顿。
+这样的ANR还真遇到过：
+
+```
+DALVIK THREADS (73):
+"main" prio=5 tid=1 Waiting
+  | group="main" sCount=1 dsCount=0 obj=0x73d94000 self=0xf4827800
+  | sysTid=10750 nice=-4 cgrp=default sched=0/0 handle=0xf7491bec
+  | state=S schedstat=( 1257651463 24243014 1911 ) utm=96 stm=29 core=2 HZ=100
+  | stack=0xff573000-0xff575000 stackSize=8MB
+  | held mutexes=
+  at java.lang.Object.wait!(Native method)
+  - waiting on <0x063b4511> (a java.lang.Object)
+  at java.lang.Thread.parkFor(Thread.java:1220)
+  - locked <0x063b4511> (a java.lang.Object)
+  at sun.misc.Unsafe.park(Unsafe.java:299)
+  at java.util.concurrent.locks.LockSupport.park(LockSupport.java:157)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt(AbstractQueuedSynchronizer.java:813)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.doAcquireSharedInterruptibly(AbstractQueuedSynchronizer.java:973)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly(AbstractQueuedSynchronizer.java:1281)
+  at java.util.concurrent.CountDownLatch.await(CountDownLatch.java:202)
+  at android.app.SharedPreferencesImpl$EditorImpl$1.run(SharedPreferencesImpl.java:363)
+  at android.app.QueuedWork.waitToFinish(QueuedWork.java:88)
+  at android.app.ActivityThread.handleStopActivity(ActivityThread.java:3907)
+  at android.app.ActivityThread.access$1200(ActivityThread.java:186)
+  at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1612)
+  at android.os.Handler.dispatchMessage(Handler.java:111)
+  at android.os.Looper.loop(Looper.java:200)
+  at android.app.ActivityThread.main(ActivityThread.java:5877)
+  at java.lang.reflect.Method.invoke!(Native method)
+  at java.lang.reflect.Method.invoke(Method.java:372)
+  at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:987)
+  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:782)
+```
+
 因此，虽然apply是在子线程执行的，但是请不要无节制地使用。
 所以针对上面代码的优雅的做法应该是：
 
