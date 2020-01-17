@@ -322,6 +322,7 @@ repositories {
 
 ```
 dependencies {
+        // 单个引入依赖
         compile files('libs/android-support-v4.jar')
         //在flatDir.dirs下面找依赖的aar
         compile (name:'ui', ext:'aar')
@@ -343,6 +344,9 @@ dependencies {
         // gradle 3.0以后版本支持的写法
         implementation 'com.android.support.constraint:constraint-layout:1.0.2'
         api 'com.android.support:design:26.1.0'
+
+        // 指定使用aar格式的依赖包，但是这样会关闭依赖传递
+        implementation 'com.android.support:appcompat-v7:22.1.1@aar
 }
 ```
 
@@ -359,9 +363,85 @@ gradle 3.0以后使用 `compileOnly` 来代替 `provided`，使用 `runtimeOnly`
 
 CommonSDK模块的定义可以参考`settings.gradle`
 其他的介绍可以参考 依赖库管理。
+
+### 本地依赖
+
+本地依赖指的是我们把jar包或者aar包放到本地依赖的方法，这样就不用发布到远程仓库。
+默认情况下，新建的Android工程有一个libs目录，并且被添加为依赖目录。
+文件过多时，你可以添加文件夹，这样就把所有的依赖包加入：
+
+```
+dependencies {
+    compile fileTree('libs')
+}
+```
+
+还可以添加过滤器，只添加 Jar 依赖包：
+
+```
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+```
+
+还可以单个添加依赖：
+
+```
+dependencies {
+    compile files('libs/xxx.jar') // aar 也可以
+}
+```
+
+或者：
+
+```
+dependencies {
+    compile(name:'libraryname', ext:'aar')
+}
+```
+
+但是这样会关闭依赖传递。
+
+如果在子模块中放入libs下的依赖包可以无法依赖，上面的添加单个依赖的方法可以解决这个问题。
+我们还可以指定目录地址作为放置依赖包的目录：
+
+```
+repositories {
+    flatDir {
+        dirs 'jars'
+    }
+}
+```
+
+当然，还可以指定多个：
+
+```
+repositories {
+    flatDir {
+        dirs 'jars';dirs 'aars'
+    }
+}
+```
+
+
+
+### 本地仓库
+
+除了上面的本地直接添加依赖包的方法，我们还可以设置本地仓库：
+
+```
+repositories {
+    maven {
+        url "../repo"
+    }
+}
+```
+
+
 ### 几点说明
 
  - 看到上面的两个一模一样的`repositories`和`dependencies`了吗？他们的作用是不一样的，在`buildscript`里面的那个是插件初始化环境用的，用于设定插件的下载仓库，而外面的这个是设定工程依赖的一些模块和远程library的下载仓库的。
+ - `@aar` 的使用：aar（Android Archive）和jar（Java Archive File）之间的区别：aar 可以包含源代码和资源（包含 AndroidManifest.xml 布局文件等资源文件），但是 jar 只能包含源代码。当您在项目的build.gradle 中包含一个带有后缀 `@arr` 的库时，该库将下载 aar 后缀的库文件。如果没有，默认情况下将下载 jar 文件。当然，您也可以添加后缀@jar使下载 jar 库文件。比如：`implementation 'com.android.support:appcompat-v7:22.1.1@aar'`
 
 
 ## settings.gradle
