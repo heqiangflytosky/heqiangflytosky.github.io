@@ -1,0 +1,933 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Kotlin," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 Kotlin 协程的使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin -- 协程">
+<meta property="og:url" content="http://yoursite.com/2019/12/22/kotlin-coroutines/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 Kotlin 协程的使用">
+<meta property="og:updated_time" content="2020-02-09T14:49:05.512Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kotlin -- 协程">
+<meta name="twitter:description" content="介绍 Kotlin 协程的使用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/22/kotlin-coroutines/"/>
+
+
+
+
+
+  <title> Kotlin -- 协程 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/kotlin-coroutines/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kotlin -- 协程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-22T10:00:00+08:00">
+                2019-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kotlin/" itemprop="url" rel="index">
+                    <span itemprop="name">Kotlin</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2019/12/22/kotlin-coroutines/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/12/22/kotlin-coroutines/" class="leancloud_visitors" data-flag-title="Kotlin -- 协程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 Kotlin 协程的使用
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>学习 Kotlin，就必须提一下协程，它是 Kotlin 中非常重要的一部分，如果你不知道协程，那就说明你还没有学习过  Kotlin。<br>在 Kotlin 1.1 版本中引入了协程（Coroutines），目前协程还是实验性功能，因此使用前还要在 gradle 里面加上依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">implementation &quot;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2&quot;</div><div class="line">implementation &apos;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2&apos;</div></pre></td></tr></table></figure>
+<p>它是将复杂的异步操作放入底层库中，程序逻辑可以在协程中按照顺序来表达，以此简化异步编程，该底层库将用户代码包装为回调/订阅事件，在不同线程或者不同机器调度执行。</p>
+<h2 id="协程的使用"><a href="#协程的使用" class="headerlink" title="协程的使用"></a>协程的使用</h2><h3 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h3><p>先来介绍一下 suspend 关键字，用该关键字修饰的方法可以被协程挂起，如果在协程外部，只有在该关键字修饰的方法中才可以使用 <code>delay</code> <code>Deferred.await</code> 等方法。</p>
+<h3 id="创建协程"><a href="#创建协程" class="headerlink" title="创建协程"></a>创建协程</h3><p>可以通过下面的方法创建一个协程</p>
+<ul>
+<li>GlobalScope.launch</li>
+<li>GlobalScope.async</li>
+<li>runBlocking</li>
+</ul>
+<h4 id="GlobalScope-launch"><a href="#GlobalScope-launch" class="headerlink" title="GlobalScope.launch"></a>GlobalScope.launch</h4><p>我们可以通过 <code>GlobalScope.launch</code> 启动一个协程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GlobalScope.launch &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Coroutine start&quot;)</div><div class="line">    delay(1000)</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</div><div class="line">&#125;</div><div class="line">Log.e(&quot;Test&quot;,&quot;continue&quot;)</div></pre></td></tr></table></figure>
+<p> <code>delay</code> 是一个特殊的挂起函数，它不会造成线程阻塞，但是会挂起协程，并且只能在协程或者 suspend 方法修饰的方法中使用。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> public fun CoroutineScope.launch(</div><div class="line">    context: CoroutineContext = EmptyCoroutineContext,</div><div class="line">    start: CoroutineStart = CoroutineStart.DEFAULT,</div><div class="line">    block: suspend CoroutineScope.() -&gt; Unit</div><div class="line">): Job &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>launch</code> 方法接受三个参数：</p>
+<ul>
+<li><p>context: CoroutineContext：协程的上下文，可以设置协程运行的线程调度器，有 4种模式可以选择：</p>
+<ul>
+<li>Dispatchers.Default：默认为子线程运行</li>
+<li>Dispatchers.IO：子线程运行</li>
+<li>Dispatchers.Main：主线程运行</li>
+<li>Dispatchers.Unconfined：没指定的情况下就是运行在当前创建协程的线程</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">GlobalScope.launch(Dispatchers.Main) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Coroutine start $&#123;Thread.currentThread()&#125;&quot;)</div><div class="line">    delay(1000)</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>或者我们可以自己创建线程池，通过 <code>newSingleThreadContext</code> 或者 <code>newFixedThreadPoolContext</code> 来创建。</p>
+</li>
+<li><p>start: CoroutineStart：启动模式，可以有下面四种模式：</p>
+<ul>
+<li>DEAFAULT：默认模式，也就是创建就启动</li>
+<li>ATOMIC：</li>
+<li>UNDISPATCHED：</li>
+<li>LAZY：懒加载模式，你需要它的时候再调用启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var job:Job = GlobalScope.launch( start = CoroutineStart.LAZY) &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Coroutine start $&#123;Thread.currentThread()&#125;&quot;)</div><div class="line">    delay(1000)</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</div><div class="line">&#125;</div><div class="line">Log.e(&quot;Test&quot;,&quot;continue&quot;)</div><div class="line">Thread.sleep(1000);</div><div class="line">job.start()</div></pre></td></tr></table></figure>
+</li>
+<li><p>block：闭包方法体，定义协程内需要执行的操作</p>
+</li>
+</ul>
+<p>launch 方法返回一个 Job 类型的对象，Job 类提供了下面的常用方法：</p>
+<ul>
+<li>start()：启动协程，除了 lazy 模式之外都不需要手动启动</li>
+<li>cancel()：取消协程</li>
+<li>join()：等待协程执行完毕</li>
+</ul>
+<h4 id="GlobalScope-async"><a href="#GlobalScope-async" class="headerlink" title="GlobalScope.async"></a>GlobalScope.async</h4><p><code>async</code> 方法和 <code>launch</code> 方法使用类似，唯一的区别就是 async 是有返回值的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">GlobalScope.launch &#123;</div><div class="line">    var deffer = GlobalScope.async &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Coroutine start $&#123;Thread.currentThread()&#125;&quot;)</div><div class="line">        delay(1000)</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</div><div class="line">        return@async 200;</div><div class="line">    &#125;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;continue &quot;)</div><div class="line">    Log.e(&quot;Test&quot;,&quot;result = $&#123;deffer.await()&#125; &quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">17:25:19.388 16973 17003 E Test    : continue </div><div class="line">17:25:19.388 16973 17004 E Test    : Coroutine start Thread[DefaultDispatcher-worker-4,5,main]</div><div class="line">17:25:20.393 16973 17002 E Test    : Coroutines end</div><div class="line">17:25:20.398 16973 17008 E Test    : result = 200</div></pre></td></tr></table></figure>
+<p>async 返回的是 Deferred 类型，Deferred 继承自 Job 接口，增加了一个 await 方法，这个方法只能在协程内部使用。async 的特点是不会阻塞当前线程，但会阻塞所在协程，也就是挂起。</p>
+<h4 id="runBlocking"><a href="#runBlocking" class="headerlink" title="runBlocking"></a>runBlocking</h4><p>runBlocking 方法和 launch 方法的区别是 delay 方法是可以阻塞当前的线程的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">runBlocking &#123;</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Coroutine start $&#123;Thread.currentThread()&#125;&quot;)</div><div class="line">    delay(1000)</div><div class="line">    Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</div><div class="line">&#125;</div><div class="line">Log.e(&quot;Test&quot;,&quot;continue &quot;)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">17:37:01.513 17388 17388 E Test    : Coroutine start Thread[main,5,main]</div><div class="line">17:37:02.516 17388 17388 E Test    : Coroutines end</div><div class="line">17:37:02.518 17388 17388 E Test    : continue</div></pre></td></tr></table></figure>
+<h2 id="协程的特点"><a href="#协程的特点" class="headerlink" title="协程的特点"></a>协程的特点</h2><p>协程主要有以下两个特点。</p>
+<ul>
+<li>协程挂起：协程提供了一种使程序避免阻塞且更廉价可控的操作，叫作协程挂起（coroutines suspension），协程挂起不阻塞线程。</li>
+<li>简化代码：协程让原来使用“异步+回调”方式写出来的复杂代码，简化成可以用看似同步的方式表达。</li>
+</ul>
+<p>协程是一种轻量级线程，主要还是运行在线程中的，因此协程不能代替线程。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/18/kotlin-advance-function/" rel="next" title="Kotlin -- 高阶函数">
+                <i class="fa fa-chevron-left"></i> Kotlin -- 高阶函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/31/personal-reading-2019/" rel="prev" title="读书 2019">
+                读书 2019 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">206</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协程的使用"><span class="nav-number">2.</span> <span class="nav-text">协程的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend"><span class="nav-number">2.1.</span> <span class="nav-text">suspend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建协程"><span class="nav-number">2.2.</span> <span class="nav-text">创建协程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GlobalScope-launch"><span class="nav-number">2.2.1.</span> <span class="nav-text">GlobalScope.launch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GlobalScope-async"><span class="nav-number">2.2.2.</span> <span class="nav-text">GlobalScope.async</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runBlocking"><span class="nav-number">2.2.3.</span> <span class="nav-text">runBlocking</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协程的特点"><span class="nav-number">3.</span> <span class="nav-text">协程的特点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
