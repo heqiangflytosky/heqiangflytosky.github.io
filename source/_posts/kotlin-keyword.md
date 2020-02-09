@@ -1,0 +1,307 @@
+---
+title: Kotlin -- 关键字
+categories: Kotlin
+comments: true
+tags: [Kotlin]
+description: 介绍 Kotlin 的关键字
+date: 2019-12-6 10:00:00
+---
+
+本文介绍一下 Kotlin 相对于 Java 来说一些特殊的关键字。
+
+先介绍一个技能，通过 Android Studio 的菜单 Tools -> Kotlin -> Show Kotlin Bytecode 可查看当前文件的字节码，这对于我们分析和加深理解 Kotlin 很有帮助。
+
+### open
+
+Kotlin 中的类和方法默认是final的，不能被继承和重写，可以使用 open 关键字修饰后，类可以被继承，方法可以被重写。
+
+### data
+
+data 关键字用来修饰一个只包含数据的类，在 Kotlin 中，不需要自己动手去写一个 JavaBean，可以直接使用 data 类，编译器会自动的从主构造函数中根据所有声明的属性提取以下函数：
+
+ -  equals() / hashCode() 
+ -  toString() 格式如 "User(name=John, age=42)" 
+ -  componentN() functions 对应于属性，按声明顺序排列
+ -  copy() 函数 
+
+data class 默认没有无参构造函数，而且默认为final类型，不可以被继承。这会在某些情况下给我们的使用造成一些不便，不过，我们可以使用官方给出的插件来解决这些问题（noarg、allopen）。
+[官方使用文档](https://www.kotlincn.net/docs/reference/compiler-plugins.html)
+下面来简单介绍使用方法：
+1.添加依赖：
+
+```
+buildscript {
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
+    }
+}
+```
+
+2.应用插件
+
+```
+apply plugin: 'kotlin-allopen'
+apply plugin: 'kotlin-noarg'
+```
+
+3.声明注解
+
+```
+annotation class OpenDataClass
+```
+
+4.添加配置
+
+在build.gradle 中添加：
+
+```
+allOpen{
+    annotation("com.android.hq.gank.gankkotlin.utils.OpenDataClass")
+}
+
+noArg{
+    annotation("com.android.hq.gank.gankkotlin.utils.OpenDataClass")
+}
+```
+
+5.为 data class 添加注解
+
+```
+@OpenDataClass
+data class GankItemBean (
+    ...
+)
+```
+
+经过上面的操作，编译器就会帮我去掉 final 关键字，并且生成一个无参的构造方法。
+
+### object
+
+object 关键字来声明一个对象或者一个对象表达式。
+Kotlin 中我们可以方便的通过对象声明来获得一个单例。
+```
+object AppUtils {
+    const val INTENT_ITEM_INFO = "intent_item_info"
+    fun getCacheDir(): String {
+        ....
+    }
+}
+```
+
+使用： 
+
+```
+AppUtils.getCacheDir()
+```
+
+通过对象表达式实现一个匿名内部类的对象用于方法的参数中：
+
+```
+        view.setOnSizeChangeListener(object : OnSizeWillChangeListener {
+            override fun onSizeWillChanged(w: Int, h: Int) {
+                
+            }
+        })
+```
+
+
+参考：
+https://www.runoob.com/kotlin/kotlin-object-declarations.html
+https://blog.csdn.net/xlh1191860939/article/details/79460601
+
+### companion
+
+伴生对象，类内部的对象声明可以用 companion 关键字标记，这样它就与外部类关联在一起，我们就可以直接通过外部类访问到对象的内部元素。
+
+```
+class MyClass {
+    companion object Factory {
+        fun create(): MyClass = MyClass()
+    }
+}
+
+val instance = MyClass.create()   // 访问到对象的内部元素
+// 或者
+val instance = MyClass.Factory.create() 
+```
+
+我们可以省略掉该对象的对象名：
+
+```
+class MyClass {
+    companion object {
+       fun create(): MyClass = MyClass()
+    }
+}
+
+val x = MyClass.create()
+// 或者
+val x = MyClass.Companion.create()
+```
+
+**注意**：一个类里面只能声明一个内部关联对象，即关键字 companion 只能使用一次。
+
+### var 与 val
+
+var 关键字进行可变变量的定义，对应的是 Java 语言中的普通变量：
+
+```
+var <标识符> : <类型> = <初始化值>
+```
+
+val关键字进行不可变变量定义,只能赋值一次的变量，类似Java中final修饰的变量：
+
+```
+val <标识符> : <类型> = <初始化值>
+```
+
+常量与变量都可以没有初始化值,但是在引用前必须初始化
+编译器支持自动类型判断,即声明时可以不指定类型,由编译器判断。
+
+我们看一下下面代码的字节码：
+
+```
+class GankApi {
+    var GANK_BASE_URL : String = "http://gank.io/api/"
+    val GANK_DAY_HISTORY : String  = "day/history"
+}
+```
+
+对应字节码：
+
+```
+public final class com/android/hq/gank/gankkotlin/data/GankApi {
+  // access flags 0x2
+  private Ljava/lang/String; GANK_BASE_URL = "http://gank.io/api/"
+  ......
+  public final getGANK_BASE_URL()Ljava/lang/String;
+  ......
+  public final setGANK_BASE_URL(Ljava/lang/String;)V
+  ......
+  private final Ljava/lang/String; GANK_DAY_HISTORY = "day/history"
+  ......
+  public final getGANK_DAY_HISTORY()Ljava/lang/String;
+  ......
+}
+```
+
+可见，var 相当于 Java 的 private 变量属性，但带有 public 的 set 和 get 方法。
+val 相当于 Java 的 private 常量属性，带有 public 的 get 方法。
+
+### const
+
+const 必须修饰 val，且只能在top-level级别和object中声明。
+top-level 也就是将静态常量的定义放到类的外面，不依赖类的而存在。
+比如：
+
+```
+const val GANK_SEARCH_URL : String = "http://gank.io/api/search/query"
+class GankApi {
+    val GANK_DAY_HISTORY : String  = "day/history"
+}
+```
+
+在 Kotlin 中可以直接这样使用：`com.android.hq.gank.gankkotlin.data.GANK_SEARCH_URL`，在 Java 中可以采取 文件名+Kt为类名调用：`GankApiKt.GANK_SEARCH_URL`。
+
+或者在 object 中定义：
+
+```
+object GankApi {
+    val GANK_DAY_HISTORY : String  = "day/history"
+    const val GANK_SEARCH_URL : String = "http://gank.io/api/search/query"
+}
+```
+
+对应字节码：
+
+```
+public final class com/android/hq/gank/gankkotlin/data/GankApi {
+  private final static Ljava/lang/String; GANK_DAY_HISTORY = "day/history"
+  ......
+  public final getGANK_DAY_HISTORY()Ljava/lang/String;
+  ......
+  public final static Ljava/lang/String; GANK_SEARCH_URL = "http://gank.io/api/search/query"
+  ......
+  public final static Lcom/android/hq/gank/gankkotlin/data/GankApi; INSTANCE
+  ......
+}
+```
+
+可见，在 object 中，val 对应 Java 的 private final static 属性，带有 public 的 get 方法，而 const val 对应 Java 的 public final static 属性。
+对于 val 和 var 的访问，我们都是通过其对应的 get 或者 set 方法来访问，因此，当定义常量时，出于效率考虑，我们应该使用 const val 方式，避免频繁函数调用。
+
+### when
+
+when 类似其他语言的 switch 操作符，语法如下：
+
+```
+when (表达式/语句) {
+    目标值1 -> 执行语句1
+    目标值2 -> 执行语句2
+    else -> {
+        执行语句3
+    }
+}
+```
+
+在 when 中，else 同 switch 的 default。如果其他分支都不满足条件将会求值 else 分支。
+如果很多分支需要用相同的方式处理，则可以把多个分支条件放在一起，用逗号分隔：
+
+```
+when (x) {
+    0, 1 -> print("x == 0 or x == 1")
+    else -> print("otherwise")
+}
+```
+
+when 中使用 in 运算符来判断集合内是否包含某实例：
+
+```
+fun main(args: Array<String>) {
+    val items = setOf("apple", "banana", "kiwi")
+    when {
+        "orange" in items -> println("juicy")
+        "apple" in items -> println("apple is fine too")
+    }
+}
+```
+
+### field
+
+### inline
+
+用来修饰function，那么这个function就被称作inline function（内联函数）。
+具体参考[Kotlin -- Lambda 表达式](http://www.heqiangfly.com/2019/12/16/kotlin-lambda/) 中关于内联函数部分的说明。
+
+### lazy 、lateinit 
+
+用于延迟初始化，第一次使用时再实例化。
+
+### suspend
+
+
+
+### is
+
+`!is`
+
+### as
+
+类型转换
+
+```
+o as HistoryFavItem
+```
+
+```
+(list?.get(position) as GankImageItem).imageUrl
+```
+
+### inner
+
+Kotlin 中使用 inner 关键字来修饰内部类。具体介绍参考 [Kotlin -- 类和对象](http://www.heqiangfly.com/2019/12/10/kotlin-class-object/) 中关于内部类部分的介绍。
+
+## 数据类型
+
+### UInt
