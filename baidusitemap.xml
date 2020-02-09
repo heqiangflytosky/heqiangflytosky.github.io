@@ -4,6 +4,46 @@
 
     
   <url>
+    <loc>http://yoursite.com/2019/12/18/kotlin-advance-function/</loc>
+    <lastmod>2020-02-09T13:26:09.406Z</lastmod>
+    <data>
+        <display>
+        <title>Kotlin -- 高阶函数</title>
+        <pubTime>2019-12-18T02:00:00.000Z</pubTime>
+        
+        <tag>Kotlin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kotlin" url="http://yoursite.com/categories/Kotlin/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2019/12/16/kotlin-lambda/</loc>
+    <lastmod>2020-02-09T13:25:23.281Z</lastmod>
+    <data>
+        <display>
+        <title>Kotlin -- Lambda 表达式</title>
+        <pubTime>2019-12-16T02:00:00.000Z</pubTime>
+        
+        <tag>Kotlin</tag>
+         
+         
+           
+             
+              <breadCrumb title="Kotlin" url="http://yoursite.com/categories/Kotlin/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2019/12/02/kotlin-brief-introduction/</loc>
     <lastmod>2020-02-09T09:15:54.376Z</lastmod>
     <data>
@@ -392,27 +432,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/</loc>
-    <lastmod>2019-12-02T09:16:56.868Z</lastmod>
-    <data>
-        <display>
-        <title>Android -- 多CPU架构支持所需要了解的知识</title>
-        <pubTime>2017-02-24T02:00:00.000Z</pubTime>
-        
-        <tag>CPU架构</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
-  <url>
     <loc>http://yoursite.com/2017/01/20/java-basic-joor/</loc>
     <lastmod>2019-12-02T09:16:56.868Z</lastmod>
     <data>
@@ -426,6 +445,27 @@
            
              
               <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/</loc>
+    <lastmod>2019-12-02T09:16:56.868Z</lastmod>
+    <data>
+        <display>
+        <title>Android -- 多CPU架构支持所需要了解的知识</title>
+        <pubTime>2017-02-24T02:00:00.000Z</pubTime>
+        
+        <tag>CPU架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -911,26 +951,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/05/12/javascript-basic-promise/</loc>
-    <lastmod>2019-08-06T08:41:04.559Z</lastmod>
-    <data>
-        <display>
-        <title>JavaScript 基础 -- Promise</title>
-        <pubTime>2018-05-12T02:00:00.000Z</pubTime>
-        
-        <tag>JavaScript</tag>
-         
-         
-           
-             
-              <breadCrumb title="JavaScript" url="http://yoursite.com/categories/JavaScript/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
     <lastmod>2019-08-06T08:41:04.559Z</lastmod>
     <data>
@@ -946,6 +966,26 @@
            
              
               <breadCrumb title="移动互联网" url="http://yoursite.com/categories/%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%94%E7%BD%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2018/05/12/javascript-basic-promise/</loc>
+    <lastmod>2019-08-06T08:41:04.559Z</lastmod>
+    <data>
+        <display>
+        <title>JavaScript 基础 -- Promise</title>
+        <pubTime>2018-05-12T02:00:00.000Z</pubTime>
+        
+        <tag>JavaScript</tag>
+         
+         
+           
+             
+              <breadCrumb title="JavaScript" url="http://yoursite.com/categories/JavaScript/"/>
           
         </display>
     </data>
@@ -1033,14 +1073,14 @@
 
     
   <url>
-    <loc>http://yoursite.com/2013/06/08/java-basic-arrays-collections/</loc>
+    <loc>http://yoursite.com/2014/02/10/java-basic-knowledge-parameter-passing/</loc>
     <lastmod>2019-07-10T02:09:25.048Z</lastmod>
     <data>
         <display>
-        <title>Java 基础 -- 算法类 Arrays 和 Collections</title>
-        <pubTime>2013-06-08T02:00:00.000Z</pubTime>
+        <title>Java 基础 -- 值传递、引用传递和参数传递</title>
+        <pubTime>2014-02-10T02:00:00.000Z</pubTime>
         
-        <tag>String</tag>
+        <tag>Java</tag>
          
          
            
@@ -1053,14 +1093,14 @@
 
     
   <url>
-    <loc>http://yoursite.com/2014/02/10/java-basic-knowledge-parameter-passing/</loc>
+    <loc>http://yoursite.com/2013/06/08/java-basic-arrays-collections/</loc>
     <lastmod>2019-07-10T02:09:25.048Z</lastmod>
     <data>
         <display>
-        <title>Java 基础 -- 值传递、引用传递和参数传递</title>
-        <pubTime>2014-02-10T02:00:00.000Z</pubTime>
+        <title>Java 基础 -- 算法类 Arrays 和 Collections</title>
+        <pubTime>2013-06-08T02:00:00.000Z</pubTime>
         
-        <tag>Java</tag>
+        <tag>String</tag>
          
          
            
@@ -1527,12 +1567,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2014/11/02/java-basic-reflect/</loc>
+    <loc>http://yoursite.com/2013/06/26/java-basic-enum/</loc>
     <lastmod>2019-05-16T05:54:58.523Z</lastmod>
     <data>
         <display>
-        <title>Java 基础 -- 反射</title>
-        <pubTime>2014-11-02T02:00:00.000Z</pubTime>
+        <title>Java 基础 -- enum</title>
+        <pubTime>2013-06-26T02:00:00.000Z</pubTime>
         
         <tag>Java</tag>
          
@@ -1547,12 +1587,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2013/06/26/java-basic-enum/</loc>
+    <loc>http://yoursite.com/2014/11/02/java-basic-reflect/</loc>
     <lastmod>2019-05-16T05:54:58.523Z</lastmod>
     <data>
         <display>
-        <title>Java 基础 -- enum</title>
-        <pubTime>2013-06-26T02:00:00.000Z</pubTime>
+        <title>Java 基础 -- 反射</title>
+        <pubTime>2014-11-02T02:00:00.000Z</pubTime>
         
         <tag>Java</tag>
          
@@ -1733,26 +1773,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2015/11/02/android-knowledge-event-transfer-process/</loc>
-    <lastmod>2019-04-28T07:32:15.064Z</lastmod>
-    <data>
-        <display>
-        <title>Android View 事件处理流程</title>
-        <pubTime>2015-11-02T02:00:00.000Z</pubTime>
-        
-        <tag>Android 事件分发体系</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android 事件分发体系" url="http://yoursite.com/categories/Android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%BD%93%E7%B3%BB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2014/07/08/data-structure-basic-tree/</loc>
     <lastmod>2019-04-28T07:32:15.064Z</lastmod>
     <data>
@@ -1766,6 +1786,26 @@
            
              
               <breadCrumb title="数据结构与算法" url="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/11/02/android-knowledge-event-transfer-process/</loc>
+    <lastmod>2019-04-28T07:32:15.064Z</lastmod>
+    <data>
+        <display>
+        <title>Android View 事件处理流程</title>
+        <pubTime>2015-11-02T02:00:00.000Z</pubTime>
+        
+        <tag>Android 事件分发体系</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android 事件分发体系" url="http://yoursite.com/categories/Android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%BD%93%E7%B3%BB/"/>
           
         </display>
     </data>
@@ -2856,12 +2896,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
+    <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
     <lastmod>2018-09-20T01:08:29.048Z</lastmod>
     <data>
         <display>
-        <title>Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程</title>
-        <pubTime>2017-05-12T02:00:00.000Z</pubTime>
+        <title>Android 插件化框架Small解析--初始化</title>
+        <pubTime>2017-05-10T02:00:00.000Z</pubTime>
         
         <tag>Android 插件化</tag>
          
@@ -2880,12 +2920,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/05/10/open-source-android-plugins-small-init/</loc>
+    <loc>http://yoursite.com/2017/05/12/open-source-android-plugins-small-principle/</loc>
     <lastmod>2018-09-20T01:08:29.048Z</lastmod>
     <data>
         <display>
-        <title>Android 插件化框架Small解析--初始化</title>
-        <pubTime>2017-05-10T02:00:00.000Z</pubTime>
+        <title>Android 插件化框架Small解析--动态注册组件原理及启动插件Activity流程</title>
+        <pubTime>2017-05-12T02:00:00.000Z</pubTime>
         
         <tag>Android 插件化</tag>
          
@@ -3380,12 +3420,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -3400,12 +3440,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -3571,26 +3611,6 @@
     
     
   <url>
-    <loc>http://yoursite.com/2016/11/01/java-development-skills-get-stacktrace/</loc>
-    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>Java 开发技巧 -- 获取 Java 的调用栈</title>
-        <pubTime>2016-11-01T02:00:00.000Z</pubTime>
-        
-        <tag>Java</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
@@ -3679,6 +3699,70 @@
 
     
   <url>
+    <loc>http://yoursite.com/2016/11/01/java-development-skills-get-stacktrace/</loc>
+    <lastmod>2018-03-11T13:47:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java 开发技巧 -- 获取 Java 的调用栈</title>
+        <pubTime>2016-11-01T02:00:00.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        
+        <tag>V8</tag>
+         
+        <tag>J2V8</tag>
+         
+         
+           
+             
+              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>开源项目- Lottie 简介</title>
+        <pubTime>2017-02-07T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Lottie</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-source-code-analysis/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -3701,12 +3785,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
+    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android PackageManager相关源码分析之安装应用</title>
-        <pubTime>2016-05-12T02:00:00.000Z</pubTime>
+        <title>Android PackageManager相关源码分析之卸载应用</title>
+        <pubTime>2016-05-16T02:00:00.000Z</pubTime>
         
         <tag>Android源码分析</tag>
          
@@ -3723,58 +3807,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
+    <loc>http://yoursite.com/2016/05/12/android-source-code-analysis-package-manager-installation/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android 深入理解 dumpsys</title>
-        <pubTime>2017-06-13T02:00:00.000Z</pubTime>
-        
-        <tag>dumpsys</tag>
-         
-        <tag>Android源码分析</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/12/16/open-source-andfix-source-code-analysis/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android热修复之AndFix源码分析</title>
-        <pubTime>2016-12-16T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>热修复</tag>
-         
-        <tag>AndFix</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/05/16/android-source-code-analysis-package-manager-uninstallation/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android PackageManager相关源码分析之卸载应用</title>
-        <pubTime>2016-05-16T02:00:00.000Z</pubTime>
+        <title>Android PackageManager相关源码分析之安装应用</title>
+        <pubTime>2016-05-12T02:00:00.000Z</pubTime>
         
         <tag>Android源码分析</tag>
          
@@ -3815,21 +3853,23 @@
 
     
   <url>
-    <loc>http://yoursite.com/2015/04/10/java-dynamic-proxy-invocationhandler-demo/</loc>
+    <loc>http://yoursite.com/2016/12/16/open-source-andfix-source-code-analysis/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Java InvocationHandler 实现动态代理</title>
-        <pubTime>2015-04-10T02:00:00.000Z</pubTime>
+        <title>Android热修复之AndFix源码分析</title>
+        <pubTime>2016-12-16T02:00:00.000Z</pubTime>
         
-        <tag>Java</tag>
+        <tag>Android</tag>
          
-        <tag>动态代理</tag>
+        <tag>热修复</tag>
+         
+        <tag>AndFix</tag>
          
          
            
              
-              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
           
         </display>
     </data>
@@ -3837,41 +3877,21 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        <title>Android PackageManager相关源码分析之PMS初始化</title>
+        <pubTime>2016-05-06T02:00:00.000Z</pubTime>
         
-        <tag>V8</tag>
+        <tag>Android源码分析</tag>
          
-        <tag>J2V8</tag>
+        <tag>PackageManager</tag>
          
          
            
              
-              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>搭建 React Native 开发环境</title>
-        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
-        
-        <tag>React Native</tag>
-         
-         
-           
-             
-              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
           
         </display>
     </data>
@@ -3921,6 +3941,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>搭建 React Native 开发环境</title>
+        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        
+        <tag>React Native</tag>
+         
+         
+           
+             
+              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -3941,12 +3981,34 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>Android 深入理解 dumpsys</title>
+        <pubTime>2017-06-13T02:00:00.000Z</pubTime>
+        
+        <tag>dumpsys</tag>
+         
+        <tag>Android源码分析</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -3961,34 +4023,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/10/08/android-knowledge-point-taskdescription/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android -- 使用 TaskDescription 定制任务管理器 Title</title>
-        <pubTime>2017-10-08T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>TaskDescription</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4063,72 +4103,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/01/12/blog-optimize-next-theme/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Hexo--Next主题优化</title>
-        <pubTime>2016-01-12T02:00:00.000Z</pubTime>
-        
-        <tag>Hexo</tag>
-         
-        <tag>Next Theme</tag>
-         
-         
-           
-             
-              <breadCrumb title="Hexo" url="http://yoursite.com/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>开源项目- Lottie 简介</title>
-        <pubTime>2017-02-07T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>Lottie</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/05/06/android-source-code-analysis-package-manager-init/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android PackageManager相关源码分析之PMS初始化</title>
-        <pubTime>2016-05-06T02:00:00.000Z</pubTime>
-        
-        <tag>Android源码分析</tag>
-         
-        <tag>PackageManager</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android源码分析" url="http://yoursite.com/categories/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4155,12 +4129,78 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2015/04/10/java-dynamic-proxy-invocationhandler-demo/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        <title>Java InvocationHandler 实现动态代理</title>
+        <pubTime>2015-04-10T02:00:00.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>动态代理</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/01/12/blog-optimize-next-theme/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo--Next主题优化</title>
+        <pubTime>2016-01-12T02:00:00.000Z</pubTime>
+        
+        <tag>Hexo</tag>
+         
+        <tag>Next Theme</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://yoursite.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/10/08/android-knowledge-point-taskdescription/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android -- 使用 TaskDescription 定制任务管理器 Title</title>
+        <pubTime>2017-10-08T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>TaskDescription</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
