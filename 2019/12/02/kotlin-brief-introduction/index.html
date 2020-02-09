@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/12/02/kotlin-brief-introduction/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Kotlin 的特点以及一些学习资料">
-<meta property="og:updated_time" content="2020-01-17T03:20:24.464Z">
+<meta property="og:updated_time" content="2020-02-09T09:15:54.376Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin -- 简介">
 <meta name="twitter:description" content="介绍 Kotlin 的特点以及一些学习资料">
@@ -415,10 +415,15 @@
 </ul>
 <p>Kotlin 有而 Java 没有的特性：</p>
 <ul>
-<li>Lambda表达式+内联函数=高性能自定义控制结构 — 扩展函数</li>
 <li>空安全</li>
 <li>智能类型转换</li>
-<li>字符串模板</li>
+<li>字符串模板表达式</li>
+<li>原生字符串 </li>
+<li>三元运算符：if(a&gt;b) ? a else b</li>
+<li>when条件语句</li>
+<li>forEach循环语句</li>
+<li>loop@</li>
+<li>===</li>
 <li>属性</li>
 <li>主构造函数</li>
 <li>委托</li>
@@ -428,9 +433,10 @@
 <li>区间表达式</li>
 <li>操作符重载</li>
 <li>伴生对象</li>
-<li>数据类</li>
+<li>数据类：data 关键字</li>
 <li>分离用于只读与可变集合的接口</li>
 <li>协程</li>
+<li>Lambda表达式+内联函数=高性能自定义控制结构 — 扩展函数</li>
 </ul>
 <h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><h3 id="空安全"><a href="#空安全" class="headerlink" title="空安全"></a>空安全</h3><p>这个可谓是 Kotlin 的标志性特性。Kotlin 的空安全设计对于声明可为空的参数，在使用时要进行空判断处理，有两种处理方式，字段后加 <code>!!</code> 像 Java 一样抛出空异常，另一种字段后加 <code>?</code> 可不做处理返回值为 null 或配合 <code>?:</code> 做空判断处理</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//类型后面加?表示可为空</div><div class="line">var age: String? = &quot;23&quot; </div><div class="line">//抛出空指针异常</div><div class="line">val ages = age!!.toInt()</div><div class="line">//不做处理返回 null</div><div class="line">val ages1 = age?.toInt()</div><div class="line">//age为空返回-1</div><div class="line">val ages2 = age?.toInt() ?: -1</div></pre></td></tr></table></figure>
@@ -485,8 +491,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/12/31/personal-reading-2019/" rel="prev" title="读书 2019">
-                读书 2019 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/10/kotlin-class-object/" rel="prev" title="Kotlin -- 类和对象">
+                Kotlin -- 类和对象 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -559,7 +565,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">201</span>
+                <span class="site-state-item-count">202</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
