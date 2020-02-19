@@ -12,8 +12,8 @@ date: 2016-9-8 10:00:00
 ### 什么是 SurfaceView
 
 `SurfaceView` 是 Android 中一种比较特殊的 `View`，它跟平时时候的 `TextView`、`Button` 等 最大的区别是它跟它的视图容器并不是在同一个视图层上。
-`SurfaceView` 的工作方式是创建一个置于应用窗口之后的新窗口。在屏幕显示的视图层中嵌入了一块用做图像绘制的 `Surface` 视图，相当于在屏幕上挖了个洞来显示它所绘制的图像。
-`SurfaceView` 的绘制也可以在一个独立的线程中完成，所以对 `SurfaceView` 的绘制并不会影响到主线程的运行。
+`SurfaceView` 的工作方式是创建一个置于应用窗口之后的新窗口。在屏幕显示的视图层中嵌入了一块用做图像绘制的独立的 `Surface` 视图，它不与宿主窗口共享同一个绘图表面。相当于在屏幕上挖了个洞来显示它所绘制的图像。
+`SurfaceView` 窗口刷新的时候不需要重绘应用程序的窗口。另外，`SurfaceView` 的绘制也可以在一个独立的线程中完成，所以对 `SurfaceView` 的绘制并不会影响到主线程的运行。因此可以实现复杂而高效的UI。
 
 ### 为什么要使用 SurfaceView
 
@@ -84,6 +84,8 @@ SurfaceView的SurfaceHolder提供了两个lockCanvas方法：
 ## SurfaceView 特点
 
 ### 多线程绘图
+
+SurfaceView 的绘制并不会影响到主线程的运行，因此可以实现复杂而高效的UI。
 
 ```
     @Override
@@ -319,7 +321,7 @@ SurfaceView的SurfaceHolder提供了两个lockCanvas方法：
 
 ## 和普通View的差异
 
-### 无法做选择位移等动画
+### 无法做旋转等动画
 
 SurfaceView 提供一个直接的绘图表面（Surface）嵌入到视图结构层次中。你可以控制这个Surface的格式，大小，SurfaceView负责在屏幕上正确的摆放Surface。简单说就是SurfaceView拥有自己的Surface，它与宿主窗口是分离的。
 SurfaceView 在 7.0 以前版本是不支持平移，缩放，旋转等动画，在7.0 以后版本可以支持平移，缩放的动画操作。但无法进行旋转操作。
@@ -327,3 +329,28 @@ SurfaceView 在 7.0 以前版本是不支持平移，缩放，旋转等动画，
 
 <img src="/images/android-graphic-system-surfaceview/rotate_1.jpg" width="270" height="540"/>
 <img src="/images/android-graphic-system-surfaceview/rotate_2.jpg" width="270" height="540"/>
+
+## 视频播放器
+
+Android 提供的组件 `VideoView` 是使用 `SurfaceView` 的。感兴趣的可以参考源码。
+另外，请参考我的github的Demo：[FloatWindowPlayer](https://github.com/heqiangflytosky/FloatWindowPlayer) 中的 SurfaceView 部分，实现了悬浮窗播放器。
+
+## 和 TextureView 对比
+
+TextureView 的特点是支持旋转等动画，但是它必须在硬件加速的窗口中使用，占用内存比SurfaceView高，在5.0以前在主线程渲染，5.0以后有单独的渲染线程。
+
+|  | SurfaceView | TextureView |
+|:-------------:|:-------------:|:-------------:|
+| 内存 | 低 | 高 |
+| 绘制 | 及时 | 1-3帧的延迟 |
+| 耗电 | 低 | 高 |
+| 动画和截图 | 不支持 | 支持 |
+
+综合以上对比，那么我们的做视频播放器时应该如何选择呢？
+从性能和安全性角度出发，使用播放器优先选SurfaceView。
+由于 SurfaceView 有自己独立的 Window，因此 SurfaceView 也不能放到 ListView 或者 ScrollView中，因此，在列表中播放视频就无法实现了，只能选择 TextureView。
+
+## 推荐文章
+
+小窗播放视频的原理和实现（上）：https://cloud.tencent.com/developer/article/1034235
+小窗播放视频的原理和实现（下）：https://cloud.tencent.com/developer/article/1047885

@@ -65,7 +65,7 @@ date: 2016-12-1 10:00:00
 
  - [codota](https://www.codota.com/)：如果你不知道一个Android的类怎么用，可以在Codota上面快速的找到很多不错的示例代码。
  - [android.googlesource](https://android.googlesource.com/)：Android所有的源代码都在这里，只需找到对应想要的模块，用Git克隆下来即可。比如，我想要的framework代码。
- - [androidxref](http://androidxref.com/)：
+ - [androidxref](http://androidxref.com/)：Android 源码在线阅读
  - [GrepCode](http://grepcode.com/)：除了AndroidXRef可以查看某个类的源代码外，GrepCode同样也能做到。而且GrepCode不限于Android的源码
 
 #### 学习网站

@@ -86,6 +86,49 @@ E Test    : Apple constructor
 
 **注意**：super调用用于显示调用父类的构造器，this调用用于显式调用本类中另一个重载的构造器。super和this都只能在构造器中使用，而且super和this都必须作为构造器的第一行代码，否则编译器会报错，通过super调用父类的普通方法则没有限制。因此，构造器中的super和this调用最多只能使用其中之一，而且最多只能调用一次。
 
+## 常见问题
+
+关于构造函数的初始化顺序我们做下面的测试：
+
+```
+abstract public class Fruit{
+    public Fruit() {
+        super();
+        Log.e("Test","Fruit constructor");
+        setName();
+    }
+
+    protected String name;
+    abstract public void setName();
+    public String getName() {
+        return name;
+    }
+}
+
+public class Apple extends Fruit {
+    public Apple() {
+        super();
+        Log.e("Test","Apple constructor");
+    }
+
+    String n = "Apple";
+    @Override
+    public void setName() {
+        name = n;
+    }
+}
+
+```
+
+调用下面代码：
+
+```
+        Apple apple = new  Apple();
+        Log.e("Test","name = "+apple.getName());
+```
+
+发现打印 name 为null。
+因此抽象父类构造函数调用抽象方法 setName 时，调用的是子类 Apple 的 setName 方法，此时子类的变量 n 还没有初始化，因此 name 为 null。
 
 ## 参考
 
