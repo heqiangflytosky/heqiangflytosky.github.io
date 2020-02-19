@@ -86,7 +86,7 @@ public class MyTextureView extends TextureView implements TextureView.SurfaceTex
 代码里 `canvas.isHardwareAccelerated()` 和 `isHardwareAccelerated()` 的结果分别是 false 和 true，具体的解释参考 [Android 图形系统 -- 硬件加速渲染 ](http://www.heqiangfly.com/2016/09/05/android-graphic-system-hardwareaccelerated/)。
 实验的结果是 TextureView 是可以进行旋转等动画的。
 
-<img src="/images/android-graphic-system-textureview/rotate.jpg" width="259" height="474"/>
+<img src="/images/android-graphic-system-textureview/rotate.png" width="259" height="474"/>
 
 ## 使用硬件加速绘制图形
 
