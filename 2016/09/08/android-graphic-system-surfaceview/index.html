@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/images/android-graphic-system-surfaceview/buffer_5.png">
 <meta property="og:image" content="http://yoursite.com/images/android-graphic-system-surfaceview/rotate_1.jpg">
 <meta property="og:image" content="http://yoursite.com/images/android-graphic-system-surfaceview/rotate_2.jpg">
-<meta property="og:updated_time" content="2019-04-29T00:51:18.884Z">
+<meta property="og:updated_time" content="2020-02-19T06:35:28.322Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 图形系统 -- SurfaceView 使用">
 <meta name="twitter:description" content="介绍 SurfaceView 的使用">
@@ -407,7 +407,7 @@
       
 
       
-        <h2 id="SurfaceView-简介"><a href="#SurfaceView-简介" class="headerlink" title="SurfaceView 简介"></a>SurfaceView 简介</h2><h3 id="什么是-SurfaceView"><a href="#什么是-SurfaceView" class="headerlink" title="什么是 SurfaceView"></a>什么是 SurfaceView</h3><p><code>SurfaceView</code> 是 Android 中一种比较特殊的 <code>View</code>，它跟平时时候的 <code>TextView</code>、<code>Button</code> 等 最大的区别是它跟它的视图容器并不是在同一个视图层上。<br><code>SurfaceView</code> 的工作方式是创建一个置于应用窗口之后的新窗口。在屏幕显示的视图层中嵌入了一块用做图像绘制的 <code>Surface</code> 视图，相当于在屏幕上挖了个洞来显示它所绘制的图像。<br><code>SurfaceView</code> 的绘制也可以在一个独立的线程中完成，所以对 <code>SurfaceView</code> 的绘制并不会影响到主线程的运行。</p>
+        <h2 id="SurfaceView-简介"><a href="#SurfaceView-简介" class="headerlink" title="SurfaceView 简介"></a>SurfaceView 简介</h2><h3 id="什么是-SurfaceView"><a href="#什么是-SurfaceView" class="headerlink" title="什么是 SurfaceView"></a>什么是 SurfaceView</h3><p><code>SurfaceView</code> 是 Android 中一种比较特殊的 <code>View</code>，它跟平时时候的 <code>TextView</code>、<code>Button</code> 等 最大的区别是它跟它的视图容器并不是在同一个视图层上。<br><code>SurfaceView</code> 的工作方式是创建一个置于应用窗口之后的新窗口。在屏幕显示的视图层中嵌入了一块用做图像绘制的独立的 <code>Surface</code> 视图，它不与宿主窗口共享同一个绘图表面。相当于在屏幕上挖了个洞来显示它所绘制的图像。<br><code>SurfaceView</code> 窗口刷新的时候不需要重绘应用程序的窗口。另外，<code>SurfaceView</code> 的绘制也可以在一个独立的线程中完成，所以对 <code>SurfaceView</code> 的绘制并不会影响到主线程的运行。因此可以实现复杂而高效的UI。</p>
 <h3 id="为什么要使用-SurfaceView"><a href="#为什么要使用-SurfaceView" class="headerlink" title="为什么要使用 SurfaceView"></a>为什么要使用 SurfaceView</h3><p>SurfaceView 一般用来实现动态的或者比较复杂的图像还有动画的显示。</p>
 <h3 id="相关的几个类"><a href="#相关的几个类" class="headerlink" title="相关的几个类"></a>相关的几个类</h3><ul>
 <li>SurfaceHolder：顾名思义，就是 <code>Surface</code> 的持有者，通过它的对象我们可以操作 <code>Surface</code>。<code>SurfaceView.getHolder()</code>方法可以获得 <code>SurfaceView</code> 的 <code>SurfaceHolder</code> 对象。</li>
@@ -426,7 +426,8 @@
 <li>lockCanvas(Rect inOutDirty)：锁住画布中的某个区域，绘画完成后也只更新这个区域的内容到屏幕。只更新必要的画面内容以节省时间，提高程序运行的效率，适用于大动态画面的场景。</li>
 </ul>
 <p>通过这两个方法来获取当前的 <code>Canvas</code> 绘图对象。接下来就可以在画布上进行绘制操作了，就和普通的 <code>View</code> 上面绘制没有什么两样了。</p>
-<h2 id="SurfaceView-特点"><a href="#SurfaceView-特点" class="headerlink" title="SurfaceView 特点"></a>SurfaceView 特点</h2><h3 id="多线程绘图"><a href="#多线程绘图" class="headerlink" title="多线程绘图"></a>多线程绘图</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void surfaceCreated(final SurfaceHolder surfaceHolder) &#123;</div><div class="line">    // 先绘制蓝色背景色</div><div class="line">    final Canvas canvas = surfaceHolder.lockCanvas();</div><div class="line">    canvas.drawColor(Color.BLUE);</div><div class="line">    surfaceHolder.unlockCanvasAndPost(canvas);</div><div class="line">    // 启动一个后台线程绘制两个颜色块</div><div class="line">    new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            Canvas canvas = surfaceHolder.lockCanvas(new Rect(200,200,400,400));</div><div class="line">            Paint paint1 = new Paint();</div><div class="line">            paint1.setColor(Color.GREEN);</div><div class="line">            canvas.drawRect(new Rect(200,200,400,400), paint1);</div><div class="line">            surfaceHolder.unlockCanvasAndPost(canvas);</div><div class="line"></div><div class="line">            canvas = surfaceHolder.lockCanvas(new Rect(20,20,200,200));</div><div class="line">            Paint paint = new Paint();</div><div class="line">            paint.setColor(Color.RED);</div><div class="line">            canvas.drawRect(new Rect(20,20,200,200), paint);</div><div class="line">            surfaceHolder.unlockCanvasAndPost(canvas);</div><div class="line">        &#125;</div><div class="line">    &#125;).start();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="SurfaceView-特点"><a href="#SurfaceView-特点" class="headerlink" title="SurfaceView 特点"></a>SurfaceView 特点</h2><h3 id="多线程绘图"><a href="#多线程绘图" class="headerlink" title="多线程绘图"></a>多线程绘图</h3><p>SurfaceView 的绘制并不会影响到主线程的运行，因此可以实现复杂而高效的UI。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void surfaceCreated(final SurfaceHolder surfaceHolder) &#123;</div><div class="line">    // 先绘制蓝色背景色</div><div class="line">    final Canvas canvas = surfaceHolder.lockCanvas();</div><div class="line">    canvas.drawColor(Color.BLUE);</div><div class="line">    surfaceHolder.unlockCanvasAndPost(canvas);</div><div class="line">    // 启动一个后台线程绘制两个颜色块</div><div class="line">    new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            Canvas canvas = surfaceHolder.lockCanvas(new Rect(200,200,400,400));</div><div class="line">            Paint paint1 = new Paint();</div><div class="line">            paint1.setColor(Color.GREEN);</div><div class="line">            canvas.drawRect(new Rect(200,200,400,400), paint1);</div><div class="line">            surfaceHolder.unlockCanvasAndPost(canvas);</div><div class="line"></div><div class="line">            canvas = surfaceHolder.lockCanvas(new Rect(20,20,200,200));</div><div class="line">            Paint paint = new Paint();</div><div class="line">            paint.setColor(Color.RED);</div><div class="line">            canvas.drawRect(new Rect(20,20,200,200), paint);</div><div class="line">            surfaceHolder.unlockCanvasAndPost(canvas);</div><div class="line">        &#125;</div><div class="line">    &#125;).start();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="双缓冲"><a href="#双缓冲" class="headerlink" title="双缓冲"></a>双缓冲</h3><p>其实这里叫双缓冲也不太合适，应该叫多缓冲，因为各个手机厂商的定制Rom设置的缓冲数量并不一样。<br>什么是双缓冲呢？我们先通过一个例子来了解一下：<br>我们先通过下面代码画一个方块A：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void surfaceCreated(final SurfaceHolder surfaceHolder) &#123;</div><div class="line">    // 方块A</div><div class="line">    Canvas canvas = surfaceHolder.lockCanvas();</div><div class="line">    Paint paint = new Paint();</div><div class="line">    paint.setColor(Color.RED);</div><div class="line">    canvas.drawRect(new Rect(0,0,200,200), paint);</div><div class="line">    surfaceHolder.unlockCanvasAndPost(canvas);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>通过 <code>lockCanvas()</code> 获取整个画布，得到下面的结果：</p>
@@ -455,8 +456,43 @@
 <p>下面来看一段使用 <code>lockHardwareCanvas</code> 进行GPU渲染的方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void surfaceCreated(final SurfaceHolder surfaceHolder) &#123;</div><div class="line">    Canvas canvas = surfaceHolder.getSurface().lockHardwareCanvas();</div><div class="line">    Paint paint = new Paint();</div><div class="line">    paint.setColor(Color.RED);</div><div class="line">    canvas.drawRect(new Rect(0,0,200,200), paint);</div><div class="line">    surfaceHolder.getSurface().unlockCanvasAndPost(canvas);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>通过调试发现 <code>canvas</code> 对象为 <code>DisplayListCanvas</code> 对象，它是使用GPU渲染的，后面会进行详细介绍。</p>
-<h2 id="和普通View的差异"><a href="#和普通View的差异" class="headerlink" title="和普通View的差异"></a>和普通View的差异</h2><h3 id="无法做选择位移等动画"><a href="#无法做选择位移等动画" class="headerlink" title="无法做选择位移等动画"></a>无法做选择位移等动画</h3><p>SurfaceView 提供一个直接的绘图表面（Surface）嵌入到视图结构层次中。你可以控制这个Surface的格式，大小，SurfaceView负责在屏幕上正确的摆放Surface。简单说就是SurfaceView拥有自己的Surface，它与宿主窗口是分离的。<br>SurfaceView 在 7.0 以前版本是不支持平移，缩放，旋转等动画，在7.0 以后版本可以支持平移，缩放的动画操作。但无法进行旋转操作。<br>如图是将 Surface 旋转30°后的效果，发现绘制内容并没有跟随旋转。</p>
+<h2 id="和普通View的差异"><a href="#和普通View的差异" class="headerlink" title="和普通View的差异"></a>和普通View的差异</h2><h3 id="无法做旋转等动画"><a href="#无法做旋转等动画" class="headerlink" title="无法做旋转等动画"></a>无法做旋转等动画</h3><p>SurfaceView 提供一个直接的绘图表面（Surface）嵌入到视图结构层次中。你可以控制这个Surface的格式，大小，SurfaceView负责在屏幕上正确的摆放Surface。简单说就是SurfaceView拥有自己的Surface，它与宿主窗口是分离的。<br>SurfaceView 在 7.0 以前版本是不支持平移，缩放，旋转等动画，在7.0 以后版本可以支持平移，缩放的动画操作。但无法进行旋转操作。<br>如图是将 Surface 旋转30°后的效果，发现绘制内容并没有跟随旋转。</p>
 <p><img src="/images/android-graphic-system-surfaceview/rotate_1.jpg" width="270" height="540"><br><img src="/images/android-graphic-system-surfaceview/rotate_2.jpg" width="270" height="540"></p>
+<h2 id="视频播放器"><a href="#视频播放器" class="headerlink" title="视频播放器"></a>视频播放器</h2><p>Android 提供的组件 <code>VideoView</code> 是使用 <code>SurfaceView</code> 的。感兴趣的可以参考源码。<br>另外，请参考我的github的Demo：<a href="https://github.com/heqiangflytosky/FloatWindowPlayer" target="_blank" rel="external">FloatWindowPlayer</a> 中的 SurfaceView 部分，实现了悬浮窗播放器。</p>
+<h2 id="和-TextureView-对比"><a href="#和-TextureView-对比" class="headerlink" title="和 TextureView 对比"></a>和 TextureView 对比</h2><p>TextureView 的特点是支持旋转等动画，但是它必须在硬件加速的窗口中使用，占用内存比SurfaceView高，在5.0以前在主线程渲染，5.0以后有单独的渲染线程。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">SurfaceView</th>
+<th style="text-align:center">TextureView</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">内存</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">高</td>
+</tr>
+<tr>
+<td style="text-align:center">绘制</td>
+<td style="text-align:center">及时</td>
+<td style="text-align:center">1-3帧的延迟</td>
+</tr>
+<tr>
+<td style="text-align:center">耗电</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">高</td>
+</tr>
+<tr>
+<td style="text-align:center">动画和截图</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+</tbody>
+</table>
+<p>综合以上对比，那么我们的做视频播放器时应该如何选择呢？<br>从性能和安全性角度出发，使用播放器优先选SurfaceView。<br>由于 SurfaceView 有自己独立的 Window，因此 SurfaceView 也不能放到 ListView 或者 ScrollView中，因此，在列表中播放视频就无法实现了，只能选择 TextureView。</p>
+<h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p>小窗播放视频的原理和实现（上）：<a href="https://cloud.tencent.com/developer/article/1034235" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1034235</a><br>小窗播放视频的原理和实现（下）：<a href="https://cloud.tencent.com/developer/article/1047885" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1047885</a></p>
 
       
     </div>
@@ -499,8 +535,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/12/android-source-code-analysis-sharedpreferences/" rel="prev" title="Android SharedPreferences 源码分析以及跨进程读写问题">
-                Android SharedPreferences 源码分析以及跨进程读写问题 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/10/android-graphic-system-textureview/" rel="prev" title="Android 图形系统 -- TextureView 使用">
+                Android 图形系统 -- TextureView 使用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -573,7 +609,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">206</span>
+                <span class="site-state-item-count">207</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -653,7 +689,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SurfaceView-简介"><span class="nav-number">1.</span> <span class="nav-text">SurfaceView 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-SurfaceView"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 SurfaceView</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要使用-SurfaceView"><span class="nav-number">1.2.</span> <span class="nav-text">为什么要使用 SurfaceView</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关的几个类"><span class="nav-number">1.3.</span> <span class="nav-text">相关的几个类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SurfaceView-的使用"><span class="nav-number">2.</span> <span class="nav-text">SurfaceView 的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SurfaceView-特点"><span class="nav-number">3.</span> <span class="nav-text">SurfaceView 特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程绘图"><span class="nav-number">3.1.</span> <span class="nav-text">多线程绘图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双缓冲"><span class="nav-number">3.2.</span> <span class="nav-text">双缓冲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬件加速"><span class="nav-number">3.3.</span> <span class="nav-text">硬件加速</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#和普通View的差异"><span class="nav-number">4.</span> <span class="nav-text">和普通View的差异</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无法做选择位移等动画"><span class="nav-number">4.1.</span> <span class="nav-text">无法做选择位移等动画</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SurfaceView-简介"><span class="nav-number">1.</span> <span class="nav-text">SurfaceView 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-SurfaceView"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 SurfaceView</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要使用-SurfaceView"><span class="nav-number">1.2.</span> <span class="nav-text">为什么要使用 SurfaceView</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关的几个类"><span class="nav-number">1.3.</span> <span class="nav-text">相关的几个类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SurfaceView-的使用"><span class="nav-number">2.</span> <span class="nav-text">SurfaceView 的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SurfaceView-特点"><span class="nav-number">3.</span> <span class="nav-text">SurfaceView 特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程绘图"><span class="nav-number">3.1.</span> <span class="nav-text">多线程绘图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双缓冲"><span class="nav-number">3.2.</span> <span class="nav-text">双缓冲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬件加速"><span class="nav-number">3.3.</span> <span class="nav-text">硬件加速</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#和普通View的差异"><span class="nav-number">4.</span> <span class="nav-text">和普通View的差异</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无法做旋转等动画"><span class="nav-number">4.1.</span> <span class="nav-text">无法做旋转等动画</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视频播放器"><span class="nav-number">5.</span> <span class="nav-text">视频播放器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#和-TextureView-对比"><span class="nav-number">6.</span> <span class="nav-text">和 TextureView 对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐文章"><span class="nav-number">7.</span> <span class="nav-text">推荐文章</span></a></li></ol></div>
             
 
           </div>

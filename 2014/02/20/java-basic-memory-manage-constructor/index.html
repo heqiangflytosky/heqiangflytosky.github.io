@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/02/20/java-basic-memory-manage-constructor/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 java 构造方法的初始化顺序">
-<meta property="og:updated_time" content="2019-05-29T06:44:26.979Z">
+<meta property="og:updated_time" content="2020-02-19T06:35:28.322Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 内存管理 -- 构造方法">
 <meta name="twitter:description" content="介绍 java 构造方法的初始化顺序">
@@ -416,6 +416,11 @@
 <li>子类构造器执行体中既没有super调用，也没有this调用，系统将会在执行子类构造器之前，隐式调用父类无参数的构造器。</li>
 </ul>
 <p><strong>注意</strong>：super调用用于显示调用父类的构造器，this调用用于显式调用本类中另一个重载的构造器。super和this都只能在构造器中使用，而且super和this都必须作为构造器的第一行代码，否则编译器会报错，通过super调用父类的普通方法则没有限制。因此，构造器中的super和this调用最多只能使用其中之一，而且最多只能调用一次。</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p>关于构造函数的初始化顺序我们做下面的测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">abstract public class Fruit&#123;</div><div class="line">    public Fruit() &#123;</div><div class="line">        super();</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Fruit constructor&quot;);</div><div class="line">        setName();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected String name;</div><div class="line">    abstract public void setName();</div><div class="line">    public String getName() &#123;</div><div class="line">        return name;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Apple extends Fruit &#123;</div><div class="line">    public Apple() &#123;</div><div class="line">        super();</div><div class="line">        Log.e(&quot;Test&quot;,&quot;Apple constructor&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    String n = &quot;Apple&quot;;</div><div class="line">    @Override</div><div class="line">    public void setName() &#123;</div><div class="line">        name = n;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调用下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Apple apple = new  Apple();</div><div class="line">Log.e(&quot;Test&quot;,&quot;name = &quot;+apple.getName());</div></pre></td></tr></table></figure>
+<p>发现打印 name 为null。<br>因此抽象父类构造函数调用抽象方法 setName 时，调用的是子类 Apple 的 setName 方法，此时子类的变量 n 还没有初始化，因此 name 为 null。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《深入理解 Java 虚拟机》<br>《疯狂Java-突破程序员基本功的16课》</p>
 
       
@@ -533,7 +538,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">206</span>
+                <span class="site-state-item-count">207</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -613,7 +618,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造方法调用"><span class="nav-number">2.</span> <span class="nav-text">构造方法调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造方法调用"><span class="nav-number">2.</span> <span class="nav-text">构造方法调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题"><span class="nav-number">3.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
