@@ -180,6 +180,10 @@ android {
         versionName "1.0"
         // 只打包后面配置的几种资源
         resConfigs "zh-rCN","zh-rHK","zh-rTW"
+	// ndk 配置，打包相应平台的so
+	ndk { abiFilters 'armeabi-v7a', 'arm64-v8a' }
+	// 开启分包
+	multiDexEnabled true
     }
 
     //编译配置
@@ -199,6 +203,16 @@ android {
              //指定多个源文件目录
              java.srcDirs = ['src/main/java', 'src/main/aidl']
         }
+    }
+
+    // native 代码配置
+    externalNativeBuild {
+	// ndk-build 配置
+        ndkBuild{
+            path "src/main/jni/Android.mk"
+        }
+	cmake {
+	}
     }
 
     //签名配置
@@ -295,6 +309,7 @@ android {
  - `minifyEnabled`也是最新的语法，很早之前是`runProguard`,这个也需要更新下。
  - `proguardFiles`这部分有两段，前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，免去了我们很多事，这个文件的目录在 sdk目录`/tools/proguard/proguard-android.txt` , 后一部分是我们项目里的自定义的混淆文件，目录就在 `app/proguard-rules.txt` , 如果你用Studio 1.0创建的新项目默认生成的文件名是 `proguard-rules.pro` , 这个名字没关系，在这个文件里你可以声明一些第三方依赖的一些混淆规则。最终混淆的结果是这两部分文件共同作用的。
  - `aaptOptions`更多介绍 http://blog.csdn.net/heqiangflytosky/article/details/51009123
+ - `externalNativeBuild{} `关于native代码的配置请参考我的博客[Android JNI -- Android Studio JNI 开发基础 ](http://www.heqiangfly.com/2015/12/10/android-jni-android-studio-base/)
 
 #### 变量的引用
 

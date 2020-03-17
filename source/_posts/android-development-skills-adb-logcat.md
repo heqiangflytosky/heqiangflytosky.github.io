@@ -68,6 +68,15 @@ date: 2014-10-10 10:00:00
 
 主要介绍 `adb logcat -v <format>` 选项的使用。
 
+ - brief：显示优先级/标记和原始进程的PID (默认格式)
+ - process：仅显示进程PID
+ - tag：仅显示优先级/标记
+ - thread：显示优先级/标记，消息线程的PID和TID
+ - raw：显示原始的日志信息，没有其他的元数据字段
+ - time：显示日期，调用时间，优先级/标记，PID
+ - threadtime：显示日期，调用时间，优先级/标记以及发出消息的线程的PID和TID
+ - long：显示所有的元数据字段并且用空行分隔消息内容
+
 ## 指定缓冲区
 
 `adb logcat -b <system, radio, events, main(default)>`，默认输出main buffer里面的日志

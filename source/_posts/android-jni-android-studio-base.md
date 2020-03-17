@@ -10,6 +10,10 @@ date: 2015-12-10 10:00:00
 ## 概述
 
 本文介绍如何在 Android Studio 环境下进行 JNI 开发。
+相关文档：
+[Android Developer:向您的项目添加 C 和 C++ 代码](https://developer.android.com/studio/projects/add-native-code) 
+[Android Developer:ndk-build](https://developer.android.com/ndk/guides/ndk-build)
+[Android Developer:CMake](https://developer.android.com/ndk/guides/cmake)
 
 ## 准备工作
 
@@ -56,20 +60,34 @@ JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_g
 
 ### AS 自动编译
 
+#### 使用 ndk-build
+
 首先配置 build.gradle :
 
 ```
+android {
+    ...
+
     defaultConfig {
-        ndk {
-            ndk {
-                moduleName "JniDemo"                       //生成的so名字
-                abiFilters "armeabi", "armeabi-v7a", "x86" //输出指定三种abi体系结构下的so库
+	...
+        externalNativeBuild {
+            ndkBuild {
+		// 这配置的 abiFilters 只是指定我们自动生成的so的abiFilters，
+		// 和ndk配置的不同,ndk 是配置打包到apk的so类型
+                abiFilters "armeabi-v7a"
             }
         }
 
     }
+
+    externalNativeBuild {
+        ndkBuild{
+            path "src/main/jni/Android.mk"
+        }
+    }
 ```
 
+这种方法会把 cpp 文件添加到当前 Android Studio 中，方便我们阅读jni代码。
 触发编译，这个时候可以会报错：
 
 ```
@@ -83,9 +101,55 @@ Error:Execution failed for task ':app:compileDebugNdk'.
 android.useDeprecatedNdk=true
 ```
 
-然后再次编译，在 `build/intermediates/ndk/debug/` 目录下会找到生成的各个平台的 so 文件。
+
+
+#### 使用 cmake
+
+```
+// CMakeLists.txt
+cmake_minimum_required(VERSION 3.4.1)
+
+    add_library( # Specifies the name of the library.
+                 JniDemo
+
+                 # Sets the library as a shared library.
+                 SHARED
+
+                 # Provides a relative path to your source file(s).
+                 src/main/jni/Constants.c )
+```
+
+配置gradle：
+
+```
+android {
+    ...
+
+    defaultConfig {
+        ...
+
+        externalNativeBuild {
+            cmake {
+                abiFilters  "armeabi-v7a"
+            }
+
+        }
+
+    }
+
+    externalNativeBuild {
+        cmake{
+            path "CMakeLists.txt"
+        }
+    }
+```
+
+
+在 app/build/intermediates/cmake/ 目录下生成so。
 
 ### 手动编译
+
+#### ndk-build
 
 上面的方法容易受到 AS 版本的影响，下面来介绍创建 Android.mk 文件的方法来生成so。
 其实在上面的方法中在 build/intermediates/ndk/debug 路径下也有生成 Android.mk 文件。
@@ -124,6 +188,10 @@ ndk-build
             jni.srcDirs = []                    //disable automatic ndk-build call with auto-generated Android.mk file
         }
 ```
+
+#### cmake
+
+
 
 ## 加载so
 
