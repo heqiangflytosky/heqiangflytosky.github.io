@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/10/10/android-development-skills-adb-logcat/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍logcat的使用">
-<meta property="og:updated_time" content="2019-03-06T12:01:46.728Z">
+<meta property="og:updated_time" content="2020-03-17T05:58:49.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android实用技巧之adb命令：logcat命令的使用">
 <meta name="twitter:description" content="介绍logcat的使用">
@@ -413,6 +413,16 @@
 <h2 id="清空日志缓冲区"><a href="#清空日志缓冲区" class="headerlink" title="清空日志缓冲区"></a>清空日志缓冲区</h2><p><code>adb logcat -c</code></p>
 <h2 id="输出日志到指定文件"><a href="#输出日志到指定文件" class="headerlink" title="输出日志到指定文件"></a>输出日志到指定文件</h2><p><code>adb logcat -f /sdcard/log.txt</code>：将日志输出到手机的/sdcard/log.txt，注意是手机上。<br><code>adb logcat &gt; ~/log.txt</code>：将日志输出到终端所在电脑的 ~/log.txt 文件。</p>
 <h2 id="指定日志输出格式"><a href="#指定日志输出格式" class="headerlink" title="指定日志输出格式"></a>指定日志输出格式</h2><p>主要介绍 <code>adb logcat -v &lt;format&gt;</code> 选项的使用。</p>
+<ul>
+<li>brief：显示优先级/标记和原始进程的PID (默认格式)</li>
+<li>process：仅显示进程PID</li>
+<li>tag：仅显示优先级/标记</li>
+<li>thread：显示优先级/标记，消息线程的PID和TID</li>
+<li>raw：显示原始的日志信息，没有其他的元数据字段</li>
+<li>time：显示日期，调用时间，优先级/标记，PID</li>
+<li>threadtime：显示日期，调用时间，优先级/标记以及发出消息的线程的PID和TID</li>
+<li>long：显示所有的元数据字段并且用空行分隔消息内容</li>
+</ul>
 <h2 id="指定缓冲区"><a href="#指定缓冲区" class="headerlink" title="指定缓冲区"></a>指定缓冲区</h2><p><code>adb logcat -b &lt;system, radio, events, main(default)&gt;</code>，默认输出main buffer里面的日志<br><code>adb logcat -b events</code>：输出 event log。</p>
 <h2 id="查看日志缓冲区"><a href="#查看日志缓冲区" class="headerlink" title="查看日志缓冲区"></a>查看日志缓冲区</h2><p><code>adb logcat -g</code></p>
 
