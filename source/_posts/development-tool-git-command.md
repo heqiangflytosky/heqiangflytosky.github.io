@@ -35,6 +35,7 @@ date: 2015-3-7 10:00:00
  - `git branch test`：创建一个test的本地分支
  - `git branch -d`：删除本地分支
  - `git branch -D`：强行删除本地分支
+ - `git branch --set-upstream-to=origin/V3.3 V3.3`：将本地分支和远程分支关联
 
 ## git stash
 
@@ -114,6 +115,7 @@ $ git rebase origin
 ## git push
 
  - `git push origin --delete <branch_name>`：删除远程分支
+ - `git push origin <branch_name>`：将本地分支推到远程，然后再调用 `git branch --set-upstream-to=origin/V3.3 V3.3` 将本地分支和远程分支关联
 
 ## patch
 `git format-patch -n`：为前面的n次提交生成一个patch
