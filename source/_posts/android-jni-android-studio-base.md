@@ -60,6 +60,11 @@ JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_g
 
 ### AS 自动编译
 
+支持两种方式：
+
+ - ndk-build + Android.mk + Application.mk 
+ - CMake + CMakeLists.txt 
+
 #### 使用 ndk-build
 
 首先配置 build.gradle :
@@ -185,7 +190,7 @@ ndk-build
         sourceSets.main {
             // JNI build
             jniLibs.srcDirs = ['src/main/libs'] //set libs as .so's location instead of jni
-            jni.srcDirs = []                    //disable automatic ndk-build call with auto-generated Android.mk file
+            jni.srcDirs = []                    //disable automatic ndk-build call with auto-generated Android.mk file 禁用通过Gradle来编译本地c/c++代码
         }
 ```
 
