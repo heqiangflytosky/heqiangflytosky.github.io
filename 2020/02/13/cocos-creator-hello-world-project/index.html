@@ -1,0 +1,896 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="cocos," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Cocos Creator HelloWorld 工程简介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cocos Creator -- HelloWorld 工程">
+<meta property="og:url" content="http://yoursite.com/2020/02/13/cocos-creator-hello-world-project/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="Cocos Creator HelloWorld 工程简介">
+<meta property="og:updated_time" content="2020-03-27T07:24:13.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cocos Creator -- HelloWorld 工程">
+<meta name="twitter:description" content="Cocos Creator HelloWorld 工程简介">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/13/cocos-creator-hello-world-project/"/>
+
+
+
+
+
+  <title> Cocos Creator -- HelloWorld 工程 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/cocos-creator-hello-world-project/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Cocos Creator -- HelloWorld 工程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-13T10:00:00+08:00">
+                2020-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cocos/" itemprop="url" rel="index">
+                    <span itemprop="name">cocos</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2020/02/13/cocos-creator-hello-world-project/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2020/02/13/cocos-creator-hello-world-project/" class="leancloud_visitors" data-flag-title="Cocos Creator -- HelloWorld 工程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  Cocos Creator HelloWorld 工程简介
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>前面的一篇文章介绍了如何使用 cocos creator 创建 HelloWorld 工程，本文就来简单分析一下这个工程，以便对 cocos 引擎的工作原理有个初步的了解。</p>
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p><a href="https://docs.cocos.com/creator/2.2/manual/zh/getting-started/project-structure.html" target="_blank" rel="external">https://docs.cocos.com/creator/2.2/manual/zh/getting-started/project-structure.html</a></p>
+<h2 id="Android-工程文件"><a href="#Android-工程文件" class="headerlink" title="Android 工程文件"></a>Android 工程文件</h2><p>Android 工程目录在 <code>HelloWorld/build/jsb-link/frameworks/runtime-src/proj.android-studio</code> 目录下面，我们先从 settings.gralde 中看看它包含哪些模块：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">include &apos;:libcocos2dx&apos;,&apos;:game&apos;, &apos;:instantapp&apos;</div><div class="line">project(&apos;:libcocos2dx&apos;).projectDir = new File(&apos;/Users/heqiang/workspace/android-studio-workspace/cocos2d/cocos2d-x-lite/cocos/platform/android/libcocos2dx&apos;)</div><div class="line">include &apos;:hello_world&apos;</div><div class="line">project(&apos;:hello_world&apos;).projectDir = new File(settingsDir, &apos;app&apos;)</div></pre></td></tr></table></figure>
+<p>game 和 instantapp 模块可以先不用去管，下面我们主要分析的就是 hello_world 和 libcocos2dx 模块了，hello_world 是我们的 app 模块，libcocos2dx 是引擎中关于 Android 平台的相关类。<br>另外，和 proj.android-studio 同级有个 Classes 目录，里面的 AppDelegate.cpp、AppDelegate.h、jsb_module_register.cpp 文件也是我们工程需要的文件，后面会介绍。</p>
+<h2 id="APK-目录"><a href="#APK-目录" class="headerlink" title="APK 目录"></a>APK 目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">├── AndroidManifest.xml</div><div class="line">├── assets</div><div class="line">    ├── jsb-adapter</div><div class="line">    │   ├── jsb-builtin.js</div><div class="line">    │   └── jsb-engine.js</div><div class="line">    ├── main.js</div><div class="line">    ├── project.json</div><div class="line">    ├── res</div><div class="line">    └── src</div><div class="line">├── classes.dex</div><div class="line">├── lib</div><div class="line">├── META-INF</div><div class="line">├── org.cocos2dx.</div><div class="line">├── res</div><div class="line">└── resources.arsc</div></pre></td></tr></table></figure>
+<p>assets 目录中是游戏相关的文件，这些文件是从来的呢？我们先来看一下 Android 工程中的 build.gradle 文件中相关的一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">android.applicationVariants.all &#123; variant -&gt;</div><div class="line">    // delete previous files first</div><div class="line">    delete &quot;$&#123;buildDir&#125;/intermediates/merged_assets/$&#123;variant.dirName&#125;&quot;</div><div class="line"></div><div class="line">    variant.mergeAssets.doLast &#123;</div><div class="line">        def sourceDir = &quot;$&#123;buildDir&#125;/../../../../..&quot;</div><div class="line"></div><div class="line">        copy &#123;</div><div class="line">            from &quot;$&#123;sourceDir&#125;/res&quot;</div><div class="line">            into &quot;$&#123;outputDir&#125;/res&quot;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        copy &#123;</div><div class="line">            from &quot;$&#123;sourceDir&#125;/subpackages&quot;</div><div class="line">            into &quot;$&#123;outputDir&#125;/subpackages&quot;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        copy &#123;</div><div class="line">            from &quot;$&#123;sourceDir&#125;/src&quot;</div><div class="line">            into &quot;$&#123;outputDir&#125;/src&quot;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        copy &#123;</div><div class="line">            from &quot;$&#123;sourceDir&#125;/jsb-adapter&quot;</div><div class="line">            into &quot;$&#123;outputDir&#125;/jsb-adapter&quot;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        copy &#123;</div><div class="line">            from &quot;$&#123;sourceDir&#125;/main.js&quot;</div><div class="line">            from &quot;$&#123;sourceDir&#125;/project.json&quot;</div><div class="line">            into outputDir</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译是，从cocos游戏工程的 build/jsb-link 目录中把相关的文件打包到 assets 目录。至于这些文件何时加载，后面将会详细的介绍。</p>
+<h2 id="jni-部分"><a href="#jni-部分" class="headerlink" title="jni 部分"></a>jni 部分</h2><p>来看一下工程根目录下面的 jni 目录，里面的文件列表如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">├── CocosAndroid.mk</div><div class="line">├── CocosApplication.mk</div><div class="line">├── hellojavascript</div><div class="line">    └── main.cpp</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//CocosAndroid.mk</div><div class="line"></div><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line">include $(CLEAR_VARS)</div><div class="line">LOCAL_MODULE := cocos2djs_shared</div><div class="line">LOCAL_MODULE_FILENAME := libcocos2djs</div><div class="line">ifeq ($(USE_ARM_MODE),1)</div><div class="line">LOCAL_ARM_MODE := arm</div><div class="line">endif</div><div class="line">LOCAL_SRC_FILES := hellojavascript/main.cpp \</div><div class="line">				   ../../Classes/AppDelegate.cpp \</div><div class="line">				   ../../Classes/jsb_module_register.cpp \</div><div class="line">LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes</div><div class="line">LOCAL_STATIC_LIBRARIES := cocos2dx_static</div><div class="line">include $(BUILD_SHARED_LIBRARY)</div><div class="line">$(call import-module, cocos)</div></pre></td></tr></table></figure>
+<p>把上面的 <code>hellojavascript/main.cpp</code> 文件和 <code>runtime-src/Classes</code> 目录下面的 AppDelegate.cpp 和 jsb_module_register.cpp 三个文件编译生成 libcocos2djs.so。<br>AppDelegate.cpp 中定义了 AppDelegate 类，该类继承自 cocos/platfrom/android/CCApplication-android.cpp 中的 Application 类。<br>AppDelegate 类是游戏程序的入口，主要用于游戏程序的逻辑初始化，并创建运行程序的入口界面（即第一个游戏界面场景）。这部分的源码分析后面再详细介绍。<br>AppDelegate 类在 main.cpp 中的 cocos_android_app_init 方法中初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">// main.cpp</div><div class="line">#include &quot;AppDelegate.h&quot;</div><div class="line">#include &quot;cocos2d.h&quot;</div><div class="line">#include &quot;platform/android/jni/JniHelper.h&quot;</div><div class="line">#include &lt;jni.h&gt;</div><div class="line">#include &lt;android/log.h&gt;</div><div class="line"></div><div class="line">#define LOG_TAG &quot;main&quot;</div><div class="line">#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)</div><div class="line">using namespace cocos2d;</div><div class="line"></div><div class="line">//called when JNI_OnLoad()</div><div class="line">void cocos_jni_env_init(JNIEnv *env)</div><div class="line">&#123;</div><div class="line">    LOGD(&quot;cocos_jni_env_init&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//called when onSurfaceCreated()</div><div class="line">Application *cocos_android_app_init(JNIEnv *env, int width, int height)</div><div class="line">&#123;</div><div class="line">    LOGD(&quot;cocos_android_app_init&quot;);</div><div class="line">    auto app = new AppDelegate(width, height);</div><div class="line">    return app;</div><div class="line">&#125;</div><div class="line"></div><div class="line">extern &quot;C&quot;</div><div class="line">&#123;</div><div class="line">    /*JNI_CALL_FUNCTION*/</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么 cocos_android_app_init 方法在哪里被调用呢？在cocos引擎的 cocos/platfrom/android/jni/JniImp.cpp 中的 <code>nativeInit</code> 方法中被初始化。这部分等后面的渲染流程中详细介绍。</p>
+<h2 id="Java-部分"><a href="#Java-部分" class="headerlink" title="Java 部分"></a>Java 部分</h2><p>工程中 AppActivity 继承自 Cocos2dxActivity，除了在 <code>onCreateView</code> 中创建了 Cocos2dxGLSurfaceView 实例，其他并没有做什么工作，那么，我们就来看看 Cocos2dxActivity 类。<br>Cocos2dxActivity 主要就是创建了一个 Cocos2dxGLSurfaceView，并把它加入到 contentView 中去，由 Cocos2dxGLSurfaceView 对游戏进行渲染。<br>下面先对 onCreate 方法进行一些解释：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onCreate(final Bundle savedInstanceState) &#123;</div><div class="line">    super.onCreate(savedInstanceState);</div><div class="line"></div><div class="line">    Utils.setActivity(this);</div><div class="line"></div><div class="line">    // Workaround in https://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508</div><div class="line">    if (!isTaskRoot()) &#123;</div><div class="line">        // Android launched another instance of the root activity into an existing task</div><div class="line">        //  so just quietly finish and go away, dropping the user back into the activity</div><div class="line">        //  at the top of the stack (ie: the last state of this task)</div><div class="line">        finish();</div><div class="line">        Log.w(TAG, &quot;[Workaround] Ignore the activity started from icon!&quot;);</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    // 隐藏一些底栏的虚拟按钮，全屏显示</div><div class="line">    Utils.hideVirtualButton();</div><div class="line">    // 监听电量</div><div class="line">    Cocos2dxHelper.registerBatteryLevelReceiver(this);</div><div class="line">    // 把工程中libs下面的so文件load进来，定义在AndroidManifest, meta-data标签下</div><div class="line">    onLoadNativeLibraries();</div><div class="line"></div><div class="line">    sContext = this;</div><div class="line">    this.mHandler = new Cocos2dxHandler(this);</div><div class="line">    </div><div class="line">    Cocos2dxHelper.init(this);</div><div class="line">    CanvasRenderingContext2DImpl.init(this);</div><div class="line">    // 获取OpenGLEs的相关属性</div><div class="line">    this.mGLContextAttrs = getGLContextAttrs();</div><div class="line">    // 初始化方法，添加布局，下面介绍</div><div class="line">    this.init();</div><div class="line"></div><div class="line">    if (mVideoHelper == null) &#123;</div><div class="line">        mVideoHelper = new Cocos2dxVideoHelper(this, mFrameLayout);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if(mWebViewHelper == null)&#123;</div><div class="line">        mWebViewHelper = new Cocos2dxWebViewHelper(mFrameLayout);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Window window = this.getWindow();</div><div class="line">    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);</div><div class="line">    this.setVolumeControlStream(AudioManager.STREAM_MUSIC);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">public void init() &#123;</div><div class="line">    ViewGroup.LayoutParams frameLayoutParams =</div><div class="line">            new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,</div><div class="line">                                       ViewGroup.LayoutParams.MATCH_PARENT);</div><div class="line">    mFrameLayout = new FrameLayout(this);</div><div class="line">    mFrameLayout.setLayoutParams(frameLayoutParams);</div><div class="line"></div><div class="line">    Cocos2dxRenderer renderer = this.addSurfaceView();</div><div class="line">    this.addDebugInfo(renderer);</div><div class="line"></div><div class="line">    mEditBox = new Cocos2dxEditBox(this, mFrameLayout);</div><div class="line"></div><div class="line">    // 将 mFrameLayout 设置为 content view</div><div class="line">    setContentView(mFrameLayout);</div><div class="line">&#125;</div><div class="line"></div><div class="line">private Cocos2dxRenderer addSurfaceView() &#123;</div><div class="line">    // 创建 Cocos2dxGLSurfaceView 实例</div><div class="line">    this.mGLSurfaceView = this.onCreateView();</div><div class="line">    this.mGLSurfaceView.setPreserveEGLContextOnPause(true);</div><div class="line">    mGLSurfaceView.setBackgroundColor(Color.TRANSPARENT);</div><div class="line">    // Switch to supported OpenGL (ARGB888) mode on emulator</div><div class="line">    if (isAndroidEmulator())</div><div class="line">        this.mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);</div><div class="line">    // 设置渲染器 Cocos2dxRenderer</div><div class="line">    Cocos2dxRenderer renderer = new Cocos2dxRenderer();</div><div class="line">    this.mGLSurfaceView.setCocos2dxRenderer(renderer);</div><div class="line">    // 将 glSurfaceView 添加到 布局上</div><div class="line">    mFrameLayout.addView(this.mGLSurfaceView);</div><div class="line"></div><div class="line">    return renderer;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Cocos2dxRenderer"><a href="#Cocos2dxRenderer" class="headerlink" title="Cocos2dxRenderer"></a>Cocos2dxRenderer</h3><p>下面来看看渲染器 Cocos2dxRenderer 类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void onSurfaceCreated(final GL10 GL10, final EGLConfig EGLConfig) &#123;</div><div class="line">    mNativeInitCompleted = false;</div><div class="line">    Cocos2dxRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight, mDefaultResourcePath);</div><div class="line">    mOldNanoTime = System.nanoTime();</div><div class="line">    this.mLastTickInNanoSeconds = System.nanoTime();</div><div class="line">    mNativeInitCompleted = true;</div><div class="line">    if (mGameEngineInitializedListener != null) &#123;</div><div class="line">        Cocos2dxHelper.getActivity().runOnUiThread(new Runnable() &#123;</div><div class="line">            @Override</div><div class="line">            public void run() &#123;</div><div class="line">                mGameEngineInitializedListener.onGameEngineInitialized();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>onSurfaceCreated 方法里面主要调用了 <code>Cocos2dxRenderer.nativeInit</code> 本地方法对做一些引擎的初始化工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void onDrawFrame(final GL10 gl) &#123;</div><div class="line">    if (mNeedToPause)</div><div class="line">        return;</div><div class="line"></div><div class="line">    if (mNeedShowFPS) &#123;</div><div class="line">        /////////////////////////////////////////////////////////////////////</div><div class="line">        //IDEA: show FPS in Android Text control rather than outputing log.</div><div class="line">        ++mFrameCount;</div><div class="line">        long nowFpsTime = System.nanoTime();</div><div class="line">        long fpsTimeInterval = nowFpsTime - mOldNanoTime;</div><div class="line">        if (fpsTimeInterval &gt; 1000000000L) &#123;</div><div class="line">            double frameRate = 1000000000.0 * mFrameCount / fpsTimeInterval;</div><div class="line">            Cocos2dxHelper.OnGameInfoUpdatedListener listener = Cocos2dxHelper.getOnGameInfoUpdatedListener();</div><div class="line">            if (listener != null) &#123;</div><div class="line">                listener.onFPSUpdated((float) frameRate);</div><div class="line">            &#125;</div><div class="line">            mFrameCount = 0;</div><div class="line">            mOldNanoTime = System.nanoTime();</div><div class="line">        &#125;</div><div class="line">        /////////////////////////////////////////////////////////////////////</div><div class="line">    &#125;</div><div class="line">    /*</div><div class="line">     * No need to use algorithm in default(60 FPS) situation,</div><div class="line">     * since onDrawFrame() was called by system 60 times per second by default.</div><div class="line">     */</div><div class="line">    if (sAnimationInterval &lt;= INTERVAL_60_FPS) &#123;</div><div class="line">        Cocos2dxRenderer.nativeRender();</div><div class="line">    &#125; else &#123;</div><div class="line">        final long now = System.nanoTime();</div><div class="line">        final long interval = now - this.mLastTickInNanoSeconds;</div><div class="line"></div><div class="line">        if (interval &lt; Cocos2dxRenderer.sAnimationInterval) &#123;</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep((Cocos2dxRenderer.sAnimationInterval - interval) / Cocos2dxRenderer.NANOSECONDSPERMICROSECOND);</div><div class="line">            &#125; catch (final Exception e) &#123;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        /*</div><div class="line">         * Render time MUST be counted in, or the FPS will slower than appointed.</div><div class="line">        */</div><div class="line">        this.mLastTickInNanoSeconds = System.nanoTime();</div><div class="line">        Cocos2dxRenderer.nativeRender();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>onDrawFrame 每一帧都会调用一次来进行帧面面的渲染，渲染的方法主要是调用本地方法 <code>Cocos2dxRenderer.nativeRender()</code> 。<br>我们从 Cocos2dxRenderer 类中可以看到有很多的native 方法，这些方法会调用的c++实现的引擎中去，是我们研究cocos引擎游戏渲染的关键，后面我们会详细介绍。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文我们主要对 HelloWorld 工程进行了概要的介绍。接下来将会深入到 cocos 引擎，介绍一些它的实现原理。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cocos/" rel="tag"># cocos</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/10/cocos-creator-start/" rel="next" title="Cocos Creator -- 启动篇">
+                <i class="fa fa-chevron-left"></i> Cocos Creator -- 启动篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">213</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目结构"><span class="nav-number">2.</span> <span class="nav-text">项目结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-工程文件"><span class="nav-number">3.</span> <span class="nav-text">Android 工程文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APK-目录"><span class="nav-number">4.</span> <span class="nav-text">APK 目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jni-部分"><span class="nav-number">5.</span> <span class="nav-text">jni 部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-部分"><span class="nav-number">6.</span> <span class="nav-text">Java 部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cocos2dxRenderer"><span class="nav-number">6.1.</span> <span class="nav-text">Cocos2dxRenderer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

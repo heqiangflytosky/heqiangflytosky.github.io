@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/12/10/android-jni-android-studio-base/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="Android Studio JNI 开发基础">
-<meta property="og:updated_time" content="2020-03-17T05:58:49.528Z">
+<meta property="og:updated_time" content="2020-03-27T07:20:50.397Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android JNI -- Android Studio JNI 开发基础">
 <meta name="twitter:description" content="Android Studio JNI 开发基础">
@@ -410,7 +410,12 @@
 <p>就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。当然这个头文件的文件名你也可以自定义成其他。</p>
 <h3 id="JNI-开发"><a href="#JNI-开发" class="headerlink" title="JNI 开发"></a>JNI 开发</h3><p>在 src/main 路径下新建一个名为 jni 的文件夹，再将前面生成的头文件放到该目录下面。<br>然后可以在目前下面创建 native 文件，名字可以随意定。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#include &quot;com_example_heqiang_testsomething_util_JniUtils.h&quot;</div><div class="line"></div><div class="line">JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getKey(JNIEnv *env, jobject obj) &#123;</div><div class="line">    return (*env)-&gt;NewStringUTF(env,&quot;abcdefghijk&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><h3 id="AS-自动编译"><a href="#AS-自动编译" class="headerlink" title="AS 自动编译"></a>AS 自动编译</h3><h4 id="使用-ndk-build"><a href="#使用-ndk-build" class="headerlink" title="使用 ndk-build"></a>使用 ndk-build</h4><p>首先配置 build.gradle :</p>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><h3 id="AS-自动编译"><a href="#AS-自动编译" class="headerlink" title="AS 自动编译"></a>AS 自动编译</h3><p>支持两种方式：</p>
+<ul>
+<li>ndk-build + Android.mk + Application.mk </li>
+<li>CMake + CMakeLists.txt </li>
+</ul>
+<h4 id="使用-ndk-build"><a href="#使用-ndk-build" class="headerlink" title="使用 ndk-build"></a>使用 ndk-build</h4><p>首先配置 build.gradle :</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    ...</div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">	...</div><div class="line">        externalNativeBuild &#123;</div><div class="line">            ndkBuild &#123;</div><div class="line">		// 这配置的 abiFilters 只是指定我们自动生成的so的abiFilters，</div><div class="line">		// 和ndk配置的不同,ndk 是配置打包到apk的so类型</div><div class="line">                abiFilters &quot;armeabi-v7a&quot;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    externalNativeBuild &#123;</div><div class="line">        ndkBuild&#123;</div><div class="line">            path &quot;src/main/jni/Android.mk&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>这种方法会把 cpp 文件添加到当前 Android Studio 中，方便我们阅读jni代码。<br>触发编译，这个时候可以会报错：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Error:Execution failed for task &apos;:app:compileDebugNdk&apos;.</div><div class="line">&gt; Error: NDK integration is deprecated in the current plugin.  Consider trying the new experimental plugin.  For details, see http://tools.android.com/tech-docs/new-build-system/gradle-experimental.  Set &quot;$USE_DEPRECATED_NDK=true&quot; in gradle.properties to continue using the current NDK integration.</div></pre></td></tr></table></figure>
@@ -427,7 +432,7 @@
 <p>在 jni 目录下面运行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ndk-build</div></pre></td></tr></table></figure>
 <p>这样会在 <code>src/main/libs</code> 下面生成 so 文件。<br>然后在 build.gradle 中配置:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sourceSets.main &#123;</div><div class="line">    // JNI build</div><div class="line">    jniLibs.srcDirs = [&apos;src/main/libs&apos;] //set libs as .so&apos;s location instead of jni</div><div class="line">    jni.srcDirs = []                    //disable automatic ndk-build call with auto-generated Android.mk file</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sourceSets.main &#123;</div><div class="line">    // JNI build</div><div class="line">    jniLibs.srcDirs = [&apos;src/main/libs&apos;] //set libs as .so&apos;s location instead of jni</div><div class="line">    jni.srcDirs = []                    //disable automatic ndk-build call with auto-generated Android.mk file 禁用通过Gradle来编译本地c/c++代码</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="cmake"><a href="#cmake" class="headerlink" title="cmake"></a>cmake</h4><h2 id="加载so"><a href="#加载so" class="headerlink" title="加载so"></a>加载so</h2><p>在 JniUtils 类中添加下面代码记载so：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class JniUtils &#123;</div><div class="line">    static &#123;</div><div class="line">        System.loadLibrary(&quot;JniDemo&quot;);</div><div class="line">    &#125;</div><div class="line">    public static native String getString();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后就可以通过 <code>JniUtils.getString()</code> </p>
@@ -547,7 +552,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">211</span>
+                <span class="site-state-item-count">213</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -556,7 +561,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -565,7 +570,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">105</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

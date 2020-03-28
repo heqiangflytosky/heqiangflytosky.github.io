@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/07/development-tool-git-command/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="列举一些常用的Git命令">
-<meta property="og:updated_time" content="2019-04-04T08:57:42.941Z">
+<meta property="og:updated_time" content="2020-03-28T02:55:33.557Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="列举一些常用的Git命令">
@@ -424,6 +424,7 @@
 <li><code>git branch test</code>：创建一个test的本地分支</li>
 <li><code>git branch -d</code>：删除本地分支</li>
 <li><code>git branch -D</code>：强行删除本地分支</li>
+<li><code>git branch --set-upstream-to=origin/V3.3 V3.3</code>：将本地分支和远程分支关联</li>
 </ul>
 <h2 id="git-stash"><a href="#git-stash" class="headerlink" title="git stash"></a>git stash</h2><ul>
 <li><code>git stash</code>：把当前修改保存到暂存区</li>
@@ -481,6 +482,7 @@
 </ul>
 <h2 id="git-push"><a href="#git-push" class="headerlink" title="git push"></a>git push</h2><ul>
 <li><code>git push origin --delete &lt;branch_name&gt;</code>：删除远程分支</li>
+<li><code>git push origin &lt;branch_name&gt;</code>：将本地分支推到远程，然后再调用 <code>git branch --set-upstream-to=origin/V3.3 V3.3</code> 将本地分支和远程分支关联</li>
 </ul>
 <h2 id="patch"><a href="#patch" class="headerlink" title="patch"></a>patch</h2><p><code>git format-patch -n</code>：为前面的n次提交生成一个patch<br>应用patch：<br>先检查patch文件：<code># git apply --stat newpatch.patch</code><br>检查能否应用成功：<code># git apply --check  newpatch.patch</code><br>打补丁：<code># git am --signoff &lt; newpatch.patch</code><br>如果有冲突将会合并不成功<br>可以下面方法：<br><a href="http://blog.chinaunix.net/uid-27714502-id-3479018.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-27714502-id-3479018.html</a><br>先手工 <code>apply patch</code>中没有冲突的部分：<br><code>git apply --reject 0001-test.patch</code><br>这样，就把没有冲突的文件先合并了，剩下有冲突的作了标记。<br>可以看输出，同时，还会产生一个<code>*.rej</code>文件，里面也是上面这段因为冲突无法合并的代码片断。<br>根据apply的输出提示以及<code>mm/sparse.c.rej</code>文件中的描述，手动修正代码。<br>改好之后，用 <code>git add</code> 把文件添加到缓冲区，同时也要把其他没有冲突合并成功了的文件也加进来，因为在作 <code>apply</code> 操作的时候他们也发生了变化。<br><code>git am --resolved</code><br>然后合并提交即可。</p>
 <h2 id="git-remote"><a href="#git-remote" class="headerlink" title="git remote"></a>git remote</h2><ul>
@@ -613,7 +615,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">211</span>
+                <span class="site-state-item-count">213</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -622,7 +624,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -631,7 +633,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">105</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
