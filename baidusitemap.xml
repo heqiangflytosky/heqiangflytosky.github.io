@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2020/04/15/opengl-es-texture/</loc>
+    <lastmod>2020-04-15T01:55:21.478Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES -- 纹理</title>
+        <pubTime>2020-04-15T02:00:00.000Z</pubTime>
+        
+        <tag>OpenGL ES</tag>
+         
+         
+           
+             
+              <breadCrumb title="OpenGL" url="http://yoursite.com/categories/OpenGL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2020/04/09/opengl-es-basic-render/</loc>
-    <lastmod>2020-04-15T01:31:13.016Z</lastmod>
+    <lastmod>2020-04-15T01:35:01.342Z</lastmod>
     <data>
         <display>
         <title>OpenGL ES -- 基础绘制</title>
@@ -4183,12 +4203,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4203,12 +4223,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4311,12 +4331,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>搭建 React Native 开发环境</title>
-        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        <title>React Native-组件Component</title>
+        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4331,12 +4351,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-组件Component</title>
-        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
+        <title>搭建 React Native 开发环境</title>
+        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
