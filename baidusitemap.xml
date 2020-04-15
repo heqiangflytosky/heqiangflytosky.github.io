@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2020/04/09/opengl-es-basic-render/</loc>
+    <lastmod>2020-04-15T01:31:13.016Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES -- 基础绘制</title>
+        <pubTime>2020-04-09T02:00:00.000Z</pubTime>
+        
+        <tag>OpenGL ES</tag>
+         
+         
+           
+             
+              <breadCrumb title="OpenGL" url="http://yoursite.com/categories/OpenGL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2020/04/04/opengl-es-basic-knowledge/</loc>
     <lastmod>2020-04-15T01:26:23.229Z</lastmod>
     <data>
@@ -3833,16 +3853,16 @@
     
     
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
-        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
+        <title>Android BuildConfig的使用</title>
+        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>buildType</tag>
+        <tag>BuildConfig</tag>
          
          
            
@@ -3855,16 +3875,16 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android BuildConfig的使用</title>
-        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
+        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
+        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>BuildConfig</tag>
+        <tag>buildType</tag>
          
          
            
@@ -4291,6 +4311,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>搭建 React Native 开发环境</title>
+        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        
+        <tag>React Native</tag>
+         
+         
+           
+             
+              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4311,12 +4351,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>搭建 React Native 开发环境</title>
-        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4357,26 +4397,6 @@
         <display>
         <title>React Native封装原生UI组件</title>
         <pubTime>2017-01-15T02:00:00.000Z</pubTime>
-        
-        <tag>React Native</tag>
-         
-         
-           
-             
-              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          

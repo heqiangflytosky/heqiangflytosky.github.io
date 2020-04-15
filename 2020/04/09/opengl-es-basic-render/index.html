@@ -1,0 +1,895 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OpenGL ES," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 OpenGL ES 2.0 的一些绘制方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL ES -- 基础绘制">
+<meta property="og:url" content="http://yoursite.com/2020/04/09/opengl-es-basic-render/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 OpenGL ES 2.0 的一些绘制方法">
+<meta property="og:image" content="http://yoursite.com/images/opengl-es-basic-render/result.png">
+<meta property="og:updated_time" content="2020-04-15T01:31:13.016Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGL ES -- 基础绘制">
+<meta name="twitter:description" content="介绍 OpenGL ES 2.0 的一些绘制方法">
+<meta name="twitter:image" content="http://yoursite.com/images/opengl-es-basic-render/result.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/09/opengl-es-basic-render/"/>
+
+
+
+
+
+  <title> OpenGL ES -- 基础绘制 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/opengl-es-basic-render/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenGL ES -- 基础绘制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T10:00:00+08:00">
+                2020-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenGL/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenGL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2020/04/09/opengl-es-basic-render/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2020/04/09/opengl-es-basic-render/" class="leancloud_visitors" data-flag-title="OpenGL ES -- 基础绘制">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 OpenGL ES 2.0 的一些绘制方法
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在前面的文章 <a href="http://www.heqiangfly.com/2016/09/18/android-graphic-system-glsurfaceview/" target="_blank" rel="external">Android 图形系统 – GLSurfaceView 使用 </a> 一文中我们了解了 GLSurfaceView 的基本使用以及使用 Android 提供的 OpenGL ES 接口绘制了一个三角形，接下来本文会较为详细地介绍一下在 Android 环境下的 OpenGL ES 的基本操作。<br>前面也讲过，在 OpenGL 里面只能绘制点、直线和三角形，每个物体的绘制都是通过这三个基本绘制聚合而成的。那么今天我们就绘制一个矩形、一条直线和两个点来介绍这些基本绘制操作。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>先贴上代码，里面有部分注释，想了解细节的话可以参考下面的章节。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div></pre></td><td class="code"><pre><div class="line">public class FirstRender implements GLSurfaceView.Renderer &#123;</div><div class="line">    // 每个顶点分量的个数，这里是2，也可以用3个分量来表示一个顶点</div><div class="line">    private static final int POSITOIN_COMPONENT_COUNT = 2;</div><div class="line">    private static final int BYTES_PER_FLOAT = 4;</div><div class="line">    private static final String U_COLOR = &quot;u_Color&quot;;</div><div class="line">    private static final String A_POSITION = &quot;a_Position&quot;;</div><div class="line">    private static final float color_grey[] = &#123; 0.5f, 0.5f, 0.5f, 1.0f &#125;;</div><div class="line">    private static final float color_red[] = &#123; 1.0f, 0.0f, 0.0f, 1.0f &#125;;</div><div class="line"></div><div class="line">    private float[] tableVerticesWithTriangles = &#123;</div><div class="line">            // 第一个三角形</div><div class="line">            -0.5f, -0.5f,</div><div class="line">            0.5f, 0.5f,</div><div class="line">            -0.5f, 0.5f,</div><div class="line"></div><div class="line">            // 第二个三角形</div><div class="line">            -0.5f, -0.5f,</div><div class="line">            0.5f, -0.5f,</div><div class="line">            0.5f, 0.5f,</div><div class="line"></div><div class="line">            // 直线</div><div class="line">            -0.5f, 0f,</div><div class="line">            0.5f, 0f,</div><div class="line"></div><div class="line">            // 两个点</div><div class="line">            0f, -0.25f,</div><div class="line">            0f, 0.25f&#125;;</div><div class="line"></div><div class="line">    // 顶点着色器代码</div><div class="line">    private final String vertexShaderCode =</div><div class="line">            &quot;attribute vec4 a_Position;&quot; +</div><div class="line">                    &quot;void main() &#123;&quot; +</div><div class="line">                    &quot;  gl_Position = a_Position;&quot; +</div><div class="line">                    &quot;  gl_PointSize = 10.0;&quot; +</div><div class="line">                    &quot;&#125;&quot;;</div><div class="line">    // 片元着色器代码</div><div class="line">    private final String fragmentShaderCode =</div><div class="line">            &quot;precision mediump float;&quot; +</div><div class="line">                    &quot;uniform vec4 u_Color;&quot; +</div><div class="line">                    &quot;void main() &#123;&quot; +</div><div class="line">                    &quot;  gl_FragColor = u_Color;&quot; +</div><div class="line">                    &quot;&#125;&quot;;</div><div class="line"></div><div class="line">    private FloatBuffer vertexData;</div><div class="line">    private int mPrograme;</div><div class="line">    private int uColorLocation;</div><div class="line">    private int aPosition;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onSurfaceCreated(GL10 gl, EGLConfig config) &#123;</div><div class="line">        GLES20.glClearColor(0f,0,0,0f);</div><div class="line"></div><div class="line">        // 1. 为顶点数据分配内存</div><div class="line">        vertexData = ByteBuffer.allocateDirect(tableVerticesWithTriangles.length * BYTES_PER_FLOAT)</div><div class="line">                .order(ByteOrder.nativeOrder())</div><div class="line">                .asFloatBuffer();</div><div class="line">        vertexData.put(tableVerticesWithTriangles);</div><div class="line"></div><div class="line">        // 2. 编译着色器</div><div class="line">        int vertexShader = ShaderHelper.compileVertexShader(vertexShaderCode);</div><div class="line">        int fragmentShader = ShaderHelper.compileFragmentShader(fragmentShaderCode);</div><div class="line"></div><div class="line">        // 3. 链接到 OpenGL 程序</div><div class="line">        mPrograme = ShaderHelper.linkPrograme(vertexShader, fragmentShader);</div><div class="line"></div><div class="line">        // 4. 验证 OpenGL 程序对象</div><div class="line">        ShaderHelper.validatePrograme(mPrograme);</div><div class="line"></div><div class="line">        // 5. 使用 OpenGL 程序，告诉 OpenGL 在绘制任何东西到屏幕上的时候要使用这里定义的程序</div><div class="line">        GLES20.glUseProgram(mPrograme);</div><div class="line"></div><div class="line">        // 6. 获取数据</div><div class="line">        aPosition = GLES20.glGetAttribLocation(mPrograme, A_POSITION);</div><div class="line">        uColorLocation = GLES20.glGetUniformLocation(mPrograme, U_COLOR);</div><div class="line"></div><div class="line">        // 7. 关联属性与顶点数据的数组</div><div class="line">        // 把当前位置设置在数组的开头</div><div class="line">        vertexData.position(0);</div><div class="line">        // 告诉 OpenGL，可以在 vertexData 中找到 a_Position 定义的数据</div><div class="line">        GLES20.glVertexAttribPointer(aPosition, POSITOIN_COMPONENT_COUNT, GLES20.GL_FLOAT,</div><div class="line">                false, 0, vertexData);</div><div class="line"></div><div class="line">        // 8. 使能顶点数组</div><div class="line">        GLES20.glEnableVertexAttribArray(aPosition);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onSurfaceChanged(GL10 gl, int width, int height) &#123;</div><div class="line">        GLES20.glViewport(0,0,width,height);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onDrawFrame(GL10 gl) &#123;</div><div class="line">        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);</div><div class="line"></div><div class="line">        // 6.开始绘制图形</div><div class="line">        // 6.1 更新颜色，画正方形</div><div class="line">        GLES20.glUniform4f(uColorLocation, 0.5f, 0.5f, 0.5f, 1.0f);</div><div class="line">        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0 , 6);</div><div class="line"></div><div class="line">        // 6.2 更新颜色，画直线</div><div class="line">        GLES20.glUniform4f(uColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);</div><div class="line">        GLES20.glDrawArrays(GLES20.GL_LINES, 6 , 2);</div><div class="line"></div><div class="line">        // 6.3 更新颜色，画点，颜色为蓝色</div><div class="line">        GLES20.glUniform4f(uColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);</div><div class="line">        GLES20.glDrawArrays(GLES20.GL_POINTS, 8 , 1);</div><div class="line"></div><div class="line">        // 6.4 更新颜色，画点，颜色为红色，这里用另外一个api glUniform4fv 指定Uniform变量的值</div><div class="line">        GLES20.glUniform4fv(uColorLocation, 1, color_red, 0);</div><div class="line">        GLES20.glDrawArrays(GLES20.GL_POINTS, 9 , 1);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">public static int compileVertexShader(String shaderCode)&#123;</div><div class="line">    // 编译顶点着色器</div><div class="line">    return compileShader(GLES20.GL_VERTEX_SHADER, shaderCode);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static int compileFragmentShader(String shaderCode) &#123;</div><div class="line">    // 编译片元着色器</div><div class="line">    return compileShader(GLES20.GL_FRAGMENT_SHADER, shaderCode);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static int compileShader(int type, String shaderCode) &#123;</div><div class="line">    // 创建一个新的着色器对象</div><div class="line">    final int sharderObjectId = GLES20.glCreateShader(type);</div><div class="line">    // 检查是否创建成功</div><div class="line">    if (sharderObjectId == 0) &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;create shader error&quot;);</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">    // 上传着色器源码</div><div class="line">    GLES20.glShaderSource(sharderObjectId, shaderCode);</div><div class="line">    // 编译着色器源码</div><div class="line">    GLES20.glCompileShader(sharderObjectId);</div><div class="line"></div><div class="line">    // 获取编译状态</div><div class="line">    final int[] compileStatus = new int[2];</div><div class="line">    GLES20.glGetShaderiv(sharderObjectId, GLES20.GL_COMPILE_STATUS, compileStatus,0);</div><div class="line">    // 取出日志信息</div><div class="line">    Log.e(&quot;Test&quot;,&quot;compile: &quot;+GLES20.glGetShaderInfoLog(sharderObjectId));</div><div class="line"></div><div class="line">    if (compileStatus[0] == 0) &#123;</div><div class="line">        // 编译失败时删除该着色器对象</div><div class="line">        GLES20.glDeleteShader(sharderObjectId);</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">    // 返回着色器id</div><div class="line">    return sharderObjectId;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public static int linkPrograme(int vertexShaderId,int fragmentShaderId) &#123;</div><div class="line">    // 创建一个 OpenGL 程序对象</div><div class="line">    final int programeObjectId = GLES20.glCreateProgram();</div><div class="line">    if (programeObjectId == 0) &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;create programe error&quot;);</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 把顶点着色器和片段着色器附加到程序对象上</div><div class="line">    GLES20.glAttachShader(programeObjectId, vertexShaderId);</div><div class="line">    GLES20.glAttachShader(programeObjectId, fragmentShaderId);</div><div class="line"></div><div class="line">    // 链接程序</div><div class="line">    GLES20.glLinkProgram(programeObjectId);</div><div class="line"></div><div class="line">    // 验证链接的状态</div><div class="line">    final int[] linkStatus = new int[2];</div><div class="line">    GLES20.glGetProgramiv(programeObjectId, GLES20.GL_LINK_STATUS, linkStatus,0);</div><div class="line">    // 打印链接信息</div><div class="line">    Log.e(&quot;Test&quot;,&quot;link programe: &quot;+GLES20.glGetProgramInfoLog(programeObjectId));</div><div class="line"></div><div class="line">    if (linkStatus[0] == 0) &#123;</div><div class="line">        GLES20.glDeleteProgram(programeObjectId);</div><div class="line">        Log.e(&quot;Test&quot;,&quot;lint programe error&quot;);</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return programeObjectId;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="/images/opengl-es-basic-render/result.png" width="209" height="397"></p>
+<h2 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h2><h3 id="定义顶点"><a href="#定义顶点" class="headerlink" title="定义顶点"></a>定义顶点</h3><p>了解顶点前，建议先了解一下 OpenGL 的坐标映射，该部分在<a href="http://www.heqiangfly.com/2020/04/04/opengl-es-basic-knowledge/" target="_blank" rel="external">OpenGL ES – 基础知识 </a>一文中。<br>前面我们说过，在 OpenGL 里面只能绘制点、直线和三角形，那么这里的长方形就是被分解为两个三角形来绘制的。<br>我们把两个三角形，一条直线和两个点的顶点信息放在一个数组里面。<br>这里我们用两个分量来标识一个顶点，在后面的章节里面，我们将会用三个分量来走进三维的世界。<br>另外，我们还可在顶点里面加入其它属性，比如颜色属性、纹理左边属性等，这些后面的文章会介绍，今天介绍的顶点里面，仅包含顶点的位置属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">private float[] tableVerticesWithTriangles = &#123;</div><div class="line">        // 第一个三角形</div><div class="line">        -0.5f, -0.5f,</div><div class="line">        0.5f, 0.5f,</div><div class="line">        -0.5f, 0.5f,</div><div class="line"></div><div class="line">        // 第二个三角形</div><div class="line">        -0.5f, -0.5f,</div><div class="line">        0.5f, -0.5f,</div><div class="line">        0.5f, 0.5f,</div><div class="line"></div><div class="line">        // 直线</div><div class="line">        -0.5f, 0f,</div><div class="line">        0.5f, 0f,</div><div class="line"></div><div class="line">        // 两个点</div><div class="line">        0f, -0.25f,</div><div class="line">        0f, 0.25f&#125;;</div></pre></td></tr></table></figure>
+<p>当我们定义三角形时，我们总是以逆时针的顺序排列顶点，这称为卷曲顺序。因为在任何地方都使用这种一致的卷曲顺序，可以优化性能。使用卷曲顺序可以指出一个三角形属于任何给定物体的前面或者后面，OpenGL 可以忽略哪些无论如何都无法被看到的后面的三角形。</p>
+<h3 id="为顶点分配内存"><a href="#为顶点分配内存" class="headerlink" title="为顶点分配内存"></a>为顶点分配内存</h3><p>OpenGL 是运行在 native 环境，因此我们需要为顶点创建本地内存缓冲来存储数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">private FloatBuffer vertexData;</div><div class="line"></div><div class="line">    vertexData = ByteBuffer.allocateDirect(tableVerticesWithTriangles.length * BYTES_PER_FLOAT)</div><div class="line">            .order(ByteOrder.nativeOrder())</div><div class="line">            .asFloatBuffer();</div><div class="line">    vertexData.put(tableVerticesWithTriangles);</div></pre></td></tr></table></figure>
+<p>在 Java 中一个浮点数占 4 个字节，由此可以算出需要创建的缓冲区的大小。<br><code>order(ByteOrder.nativeOrder())</code> 来告诉缓冲区按照本地字节顺序来存储内容。因为有的起始大端，有的是小端。<br>掉用 <code>vertexData.put</code> 就把数据从 Android 虚拟机的内存赋值到本地内存了。当进程结束时，这块内存会被释放掉。</p>
+<h3 id="创建着色器"><a href="#创建着色器" class="headerlink" title="创建着色器"></a>创建着色器</h3><p>着色器的代码我们可以放在一个单独的文件中，因为我们目前的着色器代码比较简单，可以直接定义在 Java 文件中。<br>另外推荐一个 Android Studio 插件：Android Studio GLSL Support。当我们把着色器代码写在单独文件中时，这个插件比较有用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// 顶点着色器代码</div><div class="line">private final String vertexShaderCode =</div><div class="line">        &quot;attribute vec4 aPosition;&quot; +</div><div class="line">                &quot;void main() &#123;&quot; +</div><div class="line">                &quot;  gl_Position = aPosition;&quot; +</div><div class="line">                &quot;  gl_PointSize = 10.0;&quot; +</div><div class="line">                &quot;&#125;&quot;;</div><div class="line">// 片元着色器代码</div><div class="line">private final String fragmentShaderCode =</div><div class="line">        &quot;precision mediump float;&quot; +</div><div class="line">                &quot;uniform vec4 uColor;&quot; +</div><div class="line">                &quot;void main() &#123;&quot; +</div><div class="line">                &quot;  gl_FragColor = uColor;&quot; +</div><div class="line">                &quot;&#125;&quot;;</div></pre></td></tr></table></figure>
+<p>对于我们定义过的每个单一的定点，顶点着色器都会被调用一次；当它被调用的时候，它会在 a_Position 属性里接收当前顶点的位置，这个属性被定义为vec4类型。<br>一个vec4是包含了4个分量的向量；在位置的上下文中，可以认为这4个分量是X,Y,Z和W坐标，X,Y和Z对应一个三维位置，而W是一个特殊的坐标，后面会专门讲解W坐标，现在暂时略过。如果没有指定，默认情况下，OpenGL都是把向量的前三个坐标设为0，并把最后一个坐标设为1。<br>一个顶点会有几个属性，比如颜色和位置。关键词”attribute”就是把这些属性放进着色器的手段。<br>之后，可以定义main()，这是着色器的主要入口点；它所做的就是把前面定义过的位置复制到指定的输出变量gl_Position；这个着色器一定要给gl_Position赋值；OpenGL会把gl_Position中存储的位置当作顶点的最终位置，并把这些顶点组装成点，直线和三角形。<br>在片段着色器我们定义了一个 uniform 类型的变量 u_Color。它不像前面用 attribute 定义顶点时，每个顶点都要设置一个值。一个 uniform 会让每个顶点都使用同一个值，除非我们在次改变它。如顶点着色器中的位置所使用的属性一样，u_Color 也是一个四分量向量，但是在颜色的上下文中，这四分量分别对应红色，绿色，蓝色和阿尔法。<br>后面在<a href=""></a>一文中我们会对比介绍 varying 限定符。<br>接着我们定义了main()，它是这个着色器的住入口点，它把我们在uniform里定义的颜色复制到那个特殊的输出变量 gl_FragColor。着色器一定要给 gl_FragColor 赋值，OpenGL会使用这个颜色作为当前片段的最终颜色。</p>
+<h3 id="编译着色器"><a href="#编译着色器" class="headerlink" title="编译着色器"></a>编译着色器</h3><p>这里，用 <code>GLES20.glCreateShader</code> 调用创建了一个新的着色器对象，并把这个对象的ID存入变量 <code>shaderObjectId</code>。这个type可以代表定点着色器的 <code>GLES20.GL_VERTEX_SHADER</code>，或者是代表片段着色器的 <code>GLES20.GL_FRAGMENT_SHADER</code>。<br>然后检查着色器对象的有效性。<br>然后，调用 <code>GLES20.glShaderSource</code> 上传着色器代码，调用 <code>GLES20.glCompileShader</code> 编译着色器代码。<br>最后调用 <code>GLES20.glGetShaderiv</code> 取出编译状态并检查是否编译成功。<br>这是 Android 平台上的 OpenGL 的另一个通用模式。 为了取出一个值，我们通常会使用一个长度为1的数组，并把这个数组传进 OpenGL 调用。在一个调用中，我们告诉OpenGL把结果存进数组的第一个元素。</p>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>既然我们已经加载并编译了一个顶点着色器和一个片段着色器，下一步就是把它们绑定在一起放入一个程序（program）里。<br>一个 OpenGL 程序就是把一个顶点着色器和一个片段着色器链接在一起变成单个对象。顶点着色器和片段着色器总是一起工作的。没有片段着色器，OpenGL 就不知道怎么绘制那些组成的每个点，直线和三角形片段；如果没有顶点着色器，OpenGL 就不知道在哪里绘制这些片段。顶点着色器和片段着色器一起合作生成屏幕上最终的图像。<br>虽然顶点着色器和片段着色器总是要一起工作的，但并不意味着它们必须是一对一匹配的，我们可以同时在多个程序中使用同一个着色器。<br>首先调用 <code>GLES20.glCreateProgram()</code> 新建程序对象，并把那个对象的ID存进programObjectId。<br>然后调用 <code>GLES20.glAttachShader</code> 把顶点着色器和片段着色器附加到程序对象上，然后通过 <code>GLES20.glLinkProgram</code> 把这些着色器联合起来。<br>然后可以再调用 <code>GLES20.glValidateProgram</code> 来验证一下这个程序对于当前的OpenGL状态是不是有效的。<br>验证通过后调用 <code>GLES20.glUseProgram()</code> 告诉OpenGL在绘制任何东西到屏幕上的时候要使用这个定义的程序。</p>
+<h3 id="关联数据"><a href="#关联数据" class="headerlink" title="关联数据"></a>关联数据</h3><p>接下来就是要获得我们在着色语言中定义的属性和uniform的位置。我们通过 <code>GLES20.glGetAttribLocation</code> 和 <code>GLES20.glGetUniformLocation</code> 获得 a_Position 和 u_Color 的位置，并把它们存入 aPosition 和 uColorLocation。<br>接下来就是要告诉 OpenGL 去哪里寻找 aPosition 属性对应的数据了。对于 uColorLocation 因为我们没有在顶点数据中去定义，那么后面绘制是我们将会去手动更新它的值，这样来绘制出不同的颜色。<br>我们通过 <code>GLES20.glVertexAttribPointer</code> 告诉 OpenGL，可以在 vertexData 中找到 a_Position 定义的数据。</p>
+<p>下面来介绍一下 glVertexAttribPointer 的参数：<br>| 1 | 2 |<br>|:————-:|:————-:|<br>| int index | 这个是位置属性，我们传入 aPosition |<br>| int size | 这是每个属性的数据的计数，或者是多对于这个属性，有多少个分量与每一个顶点关联。前面我们介绍过，可以是2个分量，也可以是3或4个分量 |<br>| int type | 这是数据的类型 |<br>| boolean normalized | 只有使用整形数据的时候，这个参数才有意义 |<br>| int stride | 只有当一个数组存储多于一个属性时，才有意义。这里只有一个属性，可以传 0 进去 |<br>| Buffer ptr| 这个参数告诉 OpenGL 去哪里读取数据。 |</p>
+<h3 id="使能顶点数组"><a href="#使能顶点数组" class="headerlink" title="使能顶点数组"></a>使能顶点数组</h3><p>尽管我们已经把数据属性链接起来了，在开始绘制之前，还需要调用 <code>GLES20.glEnableVertexAttribArray</code> 来使能顶点数组，这样，OpenGL 就知道去哪里寻找它所需要的数据了。</p>
+<h3 id="绘制"><a href="#绘制" class="headerlink" title="绘制"></a>绘制</h3><p>绘制的方法比较简单了，主要是通过 <code>GLES20.glDrawArrays</code> 来实现绘制三角形、点和线的。<br>由于我们定义顶点数据时没有指定颜色，那么我们在绘制图形前可以通过 <code>GLES20.glUniform4f</code> 来为他们设置颜色。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenGL-ES/" rel="tag"># OpenGL ES</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/04/opengl-es-basic-knowledge/" rel="next" title="OpenGL ES -- 基础知识">
+                <i class="fa fa-chevron-left"></i> OpenGL ES -- 基础知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">216</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#详解"><span class="nav-number">3.</span> <span class="nav-text">详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义顶点"><span class="nav-number">3.1.</span> <span class="nav-text">定义顶点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为顶点分配内存"><span class="nav-number">3.2.</span> <span class="nav-text">为顶点分配内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建着色器"><span class="nav-number">3.3.</span> <span class="nav-text">创建着色器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译着色器"><span class="nav-number">3.4.</span> <span class="nav-text">编译着色器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接"><span class="nav-number">3.5.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关联数据"><span class="nav-number">3.6.</span> <span class="nav-text">关联数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使能顶点数组"><span class="nav-number">3.7.</span> <span class="nav-text">使能顶点数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绘制"><span class="nav-number">3.8.</span> <span class="nav-text">绘制</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
