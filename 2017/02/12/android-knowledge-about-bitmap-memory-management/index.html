@@ -94,7 +94,7 @@
 <meta property="og:description" content="分析 Bitmap 内存管理">
 <meta property="og:image" content="http://yoursite.com/images/android-knowledge-about-bitmap-memory-management/image1.png">
 <meta property="og:image" content="http://yoursite.com/images/android-knowledge-about-bitmap-memory-management/image2.png">
-<meta property="og:updated_time" content="2019-07-12T06:52:22.961Z">
+<meta property="og:updated_time" content="2020-04-15T01:25:04.855Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- Bitmap 内存管理">
 <meta name="twitter:description" content="分析 Bitmap 内存管理">
@@ -421,11 +421,9 @@
 </ul>
 <p>这里声明一点，Bitmap 对象本身和其他Java对象一样是放在 Java Heap 中存储的。<br>关于 Bitmap 的存储区域的位置我们现在来在真机上进行一下测试，来验证一下前面的说法。<br>先来看一下测试代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">private void testLoadBitmap() &#123;</div><div class="line">    Bitmap bitmap = Bitmap.createBitmap(2*1024,1024,Bitmap.Config.ARGB_8888);</div><div class="line">    bitmap.eraseColor(0xffffffff);</div><div class="line">    Log.e(&quot;Test&quot;,&quot;图片大小 = &quot;+bitmap.getByteCount());</div><div class="line">    mBitmaps.put(String.valueOf(System.currentTimeMillis()),bitmap);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>代码中创建了一个2048x1024大小的Bitmap，采用 ARGB_8888 存储，那么它的大小为 2048x1024x4 byte = 8M。<br>我们通过一个按钮，点击一次创建一个 Bitmap 并放到 HashMap 中存储。<br>我们来通过 Android Studio 自带的 Android Profiler 工具来查看内存。<br>首先我们在一台 Android 7 的手机上做测试，内存使用情况如下，我们发现，Bitmap 的内存是在 Java 堆上创建的。<br>当创建的 Bitmap 内存超过 Android 内存限制时，会发生 OOM。<br>这个内存限制大小可以通过 <code>adb shell getprop |grep vm</code> 命令来查看：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[dalvik.vm.heapgrowthlimit]: [256m]</div><div class="line">[dalvik.vm.heapsize]: [512m]</div></pre></td></tr></table></figure>
-<p>dalvik.vm.heapgrowthlimit 表示受控情况下每个进程可用的最大堆内存。dalvik.vm.heapsize 表示 设置了 <code>android:largeHeap=&quot;true&quot;</code> 的应用可以使用的最大堆内存。</p>
+<p>代码中创建了一个2048x1024大小的Bitmap，采用 ARGB_8888 存储，那么它的大小为 2048x1024x4 byte = 8M。<br>我们通过一个按钮，点击一次创建一个 Bitmap 并放到 HashMap 中存储。<br>我们来通过 Android Studio 自带的 Android Profiler 工具来查看内存。<br>首先我们在一台 Android 7 的手机上做测试，内存使用情况如下，我们发现，Bitmap 的内存是在 Java 堆上创建的。<br>当创建的 Bitmap 内存超过 Android 内存限制时，会发生 OOM。<br>这个内存限制大小可以通过 <code>adb shell getprop |grep vm</code> 命令来查看，具体参考 <a href="http://www.heqiangfly.com/2018/10/10/android-performance-optimization-tools-ram-analysis/" target="_blank" rel="external">Android 性能优化工具篇 – 内存查看和分析工具 </a> 一文。</p>
 <p><img src="/images/android-knowledge-about-bitmap-memory-management/image1.png" alt="效果图"></p>
-<p>下面是一台 Android 9 的手机上做的测试，Bitmap 的内存是在 Native 内存空间中创建的。</p>
+<p>下面是一台 Android 9 的手机上做的测试，Bitmap 的内存是在 Native 内存空间中创建的。Native heap的增长并不受dalvik vm heapsize的限制，只要RAM有剩余空间，就可以一直在native heap上申请空间，当然如果 RAM快耗尽，memory killer会杀进程释放RAM。</p>
 <p><img src="/images/android-knowledge-about-bitmap-memory-management/image2.png" alt="效果图"></p>
 <h2 id="Bitmap-内存优化"><a href="#Bitmap-内存优化" class="headerlink" title="Bitmap 内存优化"></a>Bitmap 内存优化</h2><p>关于一些 Bitmap 内存优化方面的知识，也可以看一下我的另外一篇博客<a href="http://www.heqiangfly.com/2018/10/08/android-performance-optimization-reduce-ram/" target="_blank" rel="external">Android 性能优化实战篇 – 内存优化</a>，里面有部分内容也是介绍这方面知识的。</p>
 
@@ -544,7 +542,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">214</span>
+                <span class="site-state-item-count">215</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -553,7 +551,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -562,7 +560,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-count">107</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -1,0 +1,903 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OpenGL ES," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 OpenGL ES 2.0 的一些基础知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL ES -- 基础知识">
+<meta property="og:url" content="http://yoursite.com/2020/04/04/opengl-es-basic-knowledge/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 OpenGL ES 2.0 的一些基础知识">
+<meta property="og:updated_time" content="2020-04-15T01:26:23.229Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGL ES -- 基础知识">
+<meta name="twitter:description" content="介绍 OpenGL ES 2.0 的一些基础知识">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/04/opengl-es-basic-knowledge/"/>
+
+
+
+
+
+  <title> OpenGL ES -- 基础知识 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/04/opengl-es-basic-knowledge/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenGL ES -- 基础知识
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-04T10:00:00+08:00">
+                2020-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenGL/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenGL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2020/04/04/opengl-es-basic-knowledge/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2020/04/04/opengl-es-basic-knowledge/" class="leancloud_visitors" data-flag-title="OpenGL ES -- 基础知识">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 OpenGL ES 2.0 的一些基础知识
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>OpenGL ES是基于OpenGL三维图形API的子集，主要是针对手机及PDA（掌上电脑）等嵌入式设备设计的。<br>经过多年的发展，OpenGL ES主要分为两个主版本，基本情况如下。<br>一个是OpenGL ES 1.x（主要包括1.0与1.1），其采用的是固定渲染管线，可以由硬件GPU支持或用软件模拟实现，渲染能力有限，在纯软件模拟情况下性能也较弱。<br>另一个是OpenGL ES 2.0，其采用的是可编程渲染管线，渲染能力大大提高。OpenGL ES2.0要求设备中必须有相应的GPU硬件支持，目前不支持在设备上用软件模拟实现。<br>接下来的一系列关于 OpenGL ES 的文章，都是基于 OpenGL ES 2.0 来介绍。</p>
+<ul>
+<li>渲染管线 Graphics Pipeline：</li>
+<li>顶点 Vertex：</li>
+<li>着色器 Shader：</li>
+</ul>
+<h2 id="基本图形"><a href="#基本图形" class="headerlink" title="基本图形"></a>基本图形</h2><p>在 OpenGL 里，只能绘制点，直线以及三角形。<br>点和直线可以用于某些效果，但是只有三角形才能用来构造拥有复杂的对象和纹理的场景。在 OpenGL 里，我们把单独的点放在一个组里构建出三角形，再告诉 OpenGL 如何连接这些点。我们想要构建的所有东西都要用点，直线和三角形定义，如果想构建更复杂的图形，例如拱形，那我们就需要用足够的点拟合这样的曲线。</p>
+<h2 id="渲染管线"><a href="#渲染管线" class="headerlink" title="渲染管线"></a>渲染管线</h2><p>我们把定义的的一些数据复制到 OpenGL 本地内存之后，到完成屏幕渲染之前，这些数据需要再 OpenGL 的管道中进行传递。<br>读取顶点数据 - 执行顶点着色器 - 组装图元 - 光栅化图元 - 执行片段着色器 - 写入帧缓冲区 - 显示在屏幕上</p>
+<h2 id="顶点"><a href="#顶点" class="headerlink" title="顶点"></a>顶点</h2><p>OpenGL中，我们使用独立的点集合来构建物体，这些点称为顶点。每个物体的构建都是通过顶点的聚合形成点、直线和三角形。<br>一个顶点就是一个代表几何对象的拐角的点，这个点又很多附加属性，最重要的就是位置，它代表了这个顶点在空间中的位置。</p>
+<h2 id="着色器"><a href="#着色器" class="headerlink" title="着色器"></a>着色器</h2><p>OpenGL中，我们把定义的一些数据绘制到屏幕上之前，它需要在 OpenGL 的渲染管线中传递，那么我们就需要使用着色器。这些着色器会告诉 GPU 如何绘制数据。<br>着色器分为顶点着色器和片段着色器。在绘制任何内容到屏幕之前，我们都需要定义它们。<br>顶点着色器（vertex shader）生成每个顶点的最终位置，针对每个顶点，它都会执行一次，一旦位置确定了，OpenGL 就可以把这些可见顶点的集合组装成点、直线以及三角形。<br>片段着色器（fragment shader）为组成点、直线或者三角形的每个片段生成最终的颜色，针对每个片段，它都会执行一次，一个片段是一个小的、颜色单一的长方形区域、类似于计算机屏幕上的一个像素。<br>一旦最后的颜色生成了，OpenGL 就会把他们写到一块称为帧缓冲区（frame buffer）的内存块中，然后，Android 会把这个帧缓冲区显示到屏幕上。<br>我们为什么要使用着色器呢？<br>在着色器出现之前，OpenGL 只能使用一个固定的方法集合控制很少而有限的事情，这些固定的 API 很容易使用，但是他们很难扩展，几乎不能添加一些自定义效果。在 OpenGL ES 2.0 里，设计人员使用着色器加入了可编程 API，为了保持简洁，他们把那些固定的 API 完全删除了，因此，开发者必须使用着色器。<br>现在我们可以使用着色器控制每个顶点应该如何绘制到屏幕上，我们也控制所有点、直线和三角形上每个片段应该如何绘制。只要我们可以用着色器语言表达出来，就可以加入任何理想的自定义效果。</p>
+<h2 id="光栅化技术"><a href="#光栅化技术" class="headerlink" title="光栅化技术"></a>光栅化技术</h2><p>我们使用片段着色器为每个片段生成颜色之前，需要生成这些片段，那么这时就用到了光栅化技术。<br>移动设备的显示屏是由成千上万个小的，独立的部件组成，它们被称为像素；这些像素中的每一个都有能力显示几百万种不同颜色范围中的一种。然而，这实际上是一种视觉技巧：大多数显示器并不能真正创造几百万种颜色，所以每个像素通常是由三个单独的子构建构成的，它们发出红色，绿色，和蓝色的光，因为每个像素都非常小，人的眼睛会把红色，绿色和蓝色的光混合在一起，从而创造出巨量的颜色范围；把足够多的单独的像素放在一起，就能显示出多种颜色。<br>OpenGL通过“光栅化”的过程把每个点，直线及三角形分解成大量的小片段，它们可以映射到移动设备显示屏上，从而生成一幅图像。这些片段类似于显示屏上的像素，每个都包含单一的纯色。为了表示颜色，每个片段都有4个分量：其中红色，绿色，蓝色用来表示颜色，阿尔法分量用来表示透明度，<br>显示系统通常会把这些片段直接映射到屏幕上的像素，结果一个片段就对应一个像素。然而，事情并不总是这样，一个超高分辨率的设备可能需要较大的片段，以减少 GPU 的工作负荷。</p>
+<h2 id="OpenGL-的坐标归一化"><a href="#OpenGL-的坐标归一化" class="headerlink" title="OpenGL 的坐标归一化"></a>OpenGL 的坐标归一化</h2><p>对于顶点坐标而言，无论是 x 坐标还是 y 坐标，OpenGL 都会把屏幕映射到 [-1, 1] 这个范围内。这也就以为着屏幕的左边对应着 x 轴的 -1 ，而屏幕右边对应 +1，屏幕底边对应 y 轴的 -1，屏幕顶部对应 +1 。不管屏幕大小和形状，这个坐标范围都是一样的，如果我们要在屏幕上显示任何东西，都要在这个范围内绘制。<br>因此，在定义一些顶点坐标时，我们就需要把屏幕的坐标转换成 OpenGL 的坐标。</p>
+<h2 id="跨距Stride"><a href="#跨距Stride" class="headerlink" title="跨距Stride"></a>跨距Stride</h2><p>如果我们分别要描述位置和颜色信息，我们可以用两个数组来表示，这样必须保证两个数组中顶点的位置和颜色是一一对应的。<br>除了这种方式，还可以选择一个数组存储两种信息的方式：“顶点1位置+顶点1颜色+顶点2位置+顶点2颜色+”，这样就引出了跨距的概念，即一个顶点和颜色占用的空间个数之和。<br>设置了跨距，我们调用 <code>glVertexAttribPointer</code> 就可以找到对应的顶点信息和颜色信息。<br>具体可以参考 <a href=""></a>。</p>
+<h2 id="绘制方法"><a href="#绘制方法" class="headerlink" title="绘制方法"></a>绘制方法</h2><p><code>glDrawArrays</code> 顶点法和 <code>glDrawElements</code> 索引法都是从一个数据数组中提取数据渲染基本图元。</p>
+<p><code>glDrawElements</code> 只能用在 OPENGL1.1 或者更高的版本。</p>
+<p><code>glDrawArrays</code> 和 <code>glDrawElements</code>的性能区别</p>
+<p><code>glDrawArrays</code>传输或指定的数据是最终的真实数据,在绘制时效能更好。<br>而<code>glDrawElements</code>指定的是真实数据的调用索引,在内存/显存占用上更节省。</p>
+<p><code>glDrawArrays</code> 和 <code>glDrawElements</code> 的损耗说明及其使用场景</p>
+<p><code>glDrawArrays</code> 主要讲数据空间损耗在顶点的定义处;<br><code>glDrawElements</code> 主要讲数据空间损耗在顶点索引的定义处;<br>如果在你的工程中，画的图形较少或者，图形虽多但很多相同的，则可采用<code>glDrawArrays</code>更节省数据占用的空间；相反，如果图形多，而且形状大不相同的时候，可以优先考虑采用<code>glDrawElements</code>函数。</p>
+<h2 id="绘制模式"><a href="#绘制模式" class="headerlink" title="绘制模式"></a>绘制模式</h2><p>绘制模式有如下几种：</p>
+<ul>
+<li>GL_POINTS</li>
+<li>GL_LINES</li>
+<li>GL_LINE_LOOP</li>
+<li>GL_LINE_STRIP</li>
+<li>GL_TRIANGLES</li>
+<li>GL_TRIANGLE_STRIP</li>
+<li>GL_TRIANGLE_FAN</li>
+</ul>
+<h2 id="一些工具类"><a href="#一些工具类" class="headerlink" title="一些工具类"></a>一些工具类</h2><p>GLES20<br>GLUtils</p>
+<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《OpenGL ES 应用开发实践指南 Android 卷》</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenGL-ES/" rel="tag"># OpenGL ES</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/13/cocos-creator-hello-world-project/" rel="next" title="Cocos Creator -- HelloWorld 工程">
+                <i class="fa fa-chevron-left"></i> Cocos Creator -- HelloWorld 工程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">215</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本图形"><span class="nav-number">2.</span> <span class="nav-text">基本图形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染管线"><span class="nav-number">3.</span> <span class="nav-text">渲染管线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#顶点"><span class="nav-number">4.</span> <span class="nav-text">顶点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#着色器"><span class="nav-number">5.</span> <span class="nav-text">着色器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#光栅化技术"><span class="nav-number">6.</span> <span class="nav-text">光栅化技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenGL-的坐标归一化"><span class="nav-number">7.</span> <span class="nav-text">OpenGL 的坐标归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跨距Stride"><span class="nav-number">8.</span> <span class="nav-text">跨距Stride</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绘制方法"><span class="nav-number">9.</span> <span class="nav-text">绘制方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绘制模式"><span class="nav-number">10.</span> <span class="nav-text">绘制模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些工具类"><span class="nav-number">11.</span> <span class="nav-text">一些工具类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#学习资料"><span class="nav-number">12.</span> <span class="nav-text">学习资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
