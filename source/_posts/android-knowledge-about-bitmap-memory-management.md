@@ -58,18 +58,11 @@ date: 2017-2-12 10:00:00
 我们来通过 Android Studio 自带的 Android Profiler 工具来查看内存。
 首先我们在一台 Android 7 的手机上做测试，内存使用情况如下，我们发现，Bitmap 的内存是在 Java 堆上创建的。
 当创建的 Bitmap 内存超过 Android 内存限制时，会发生 OOM。
-这个内存限制大小可以通过 `adb shell getprop |grep vm` 命令来查看：
-
-```
-[dalvik.vm.heapgrowthlimit]: [256m]
-[dalvik.vm.heapsize]: [512m]
-```
-
-dalvik.vm.heapgrowthlimit 表示受控情况下每个进程可用的最大堆内存。dalvik.vm.heapsize 表示 设置了 `android:largeHeap="true"` 的应用可以使用的最大堆内存。
+这个内存限制大小可以通过 `adb shell getprop |grep vm` 命令来查看，具体参考 [Android 性能优化工具篇 -- 内存查看和分析工具 ](http://www.heqiangfly.com/2018/10/10/android-performance-optimization-tools-ram-analysis/) 一文。
 
 ![效果图](/images/android-knowledge-about-bitmap-memory-management/image1.png)
 
-下面是一台 Android 9 的手机上做的测试，Bitmap 的内存是在 Native 内存空间中创建的。
+下面是一台 Android 9 的手机上做的测试，Bitmap 的内存是在 Native 内存空间中创建的。Native heap的增长并不受dalvik vm heapsize的限制，只要RAM有剩余空间，就可以一直在native heap上申请空间，当然如果 RAM快耗尽，memory killer会杀进程释放RAM。
 
 ![效果图](/images/android-knowledge-about-bitmap-memory-management/image2.png)
 

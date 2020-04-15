@@ -12,6 +12,7 @@ date: 2016-9-18 10:00:00
 GLSurfaceView 继承自 SurfaceView，并且实现了 SurfaceHolder.Callback2 接口。在 SurfaceView 的基础上添加了 EGL 的管理，并自带了一个GLThread绘制线程。
 这使得 GLSurfaceView 也拥有了 OpenGlES 所提供的图形处理能力，通过它定义的 Render 接口，使更改具体的 Render 的行为非常灵活性，只需要将实现了渲染函数的 Renderer 的实现类设置给 GLSurfaceView 即可。
 GLSurfaceView 涉及到了OpenGL ES，使用 GLSurfaceView 必须开启硬件加速属性。
+本文我们只简单介绍 GLSurfaceView 的使用，相关 OpenGL ES 2.0的使用后面会有专门的文章来介绍。
 
 ## GLSurfaceView 的特性
 
@@ -29,6 +30,16 @@ GLSurfaceView 涉及到了OpenGL ES，使用 GLSurfaceView 必须开启硬件加
  - setEGLWindowSurfaceFactory：自定义EGLSurface工厂
  - setEGLContextClientVersion：设置 opengl es 版本
  - setRenderer(Renderer renderer)：设置渲染器。
+
+## Renderer 接口
+
+看一下渲染器接口定义的方法：
+
+ - onSurfaceCreated(GL10 gl, EGLConfig config)：当 Surface 被创建的时候，GLSurfaceView 会调用这个方法；在应用程序第一次调用时会调用，当设备被唤醒或者用户从其他 Activity 切换回来时，也可能会被调用。
+ - onSurfaceChanged(GL10 gl, int width, int height)：在 Surface 被创建以后，每次 Surface 尺寸变化时，这个方法都会被 GLSurfaceView 调用到。
+ - onDrawFrame(GL10 gl)：当绘制一帧时，这个方法会被调用。在这个方法返回后，渲染缓冲区会被交换并显示在屏幕上。
+
+为什么上面的方法都有个 GL01 呢？它是 OpenGL ES 1.0 的API遗留下来的，如果要编写使用 OpenGL ES 1.0 的渲染器，就要使用这个参数。但是，对于 OpenGL ES 2.0 来说，GLES20类提供了静态方法来存取。
 
 ## GLSurfaceView 的使用
 
@@ -85,14 +96,18 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //将背景设置为灰色
         GLES20.glClearColor(0.5f,0.5f,0.5f,1.0f);
+        //清空屏幕，会擦除屏幕上所有的颜色，并用前面 glClearColor 调用定义的颜色填充屏幕
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        //申请底层空间
+        //开辟对应容量的缓冲，申请底层空间
         ByteBuffer bb = ByteBuffer.allocateDirect(
                 triangleCoords.length * 4);
+        // 设置字节顺序为本地操作系统顺序
         bb.order(ByteOrder.nativeOrder());
-        //将坐标数据转换为FloatBuffer，用以传入给OpenGL ES程序
+        // 将坐标数据转换为FloatBuffer，用以传入给OpenGL ES程序
         vertexBuffer = bb.asFloatBuffer();
+        // 将数组中的顶点数据送入缓冲
         vertexBuffer.put(triangleCoords);
+        // 设置缓冲起始位置
         vertexBuffer.position(0);
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER,
                 vertexShaderCode);
@@ -120,11 +135,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //将程序加入到OpenGLES2.0环境
         GLES20.glUseProgram(mProgram);
 
-        //获取顶点着色器的vPosition成员句柄
+        // 获取顶点着色器的定点位置属性引用vPosition的值
+        // mProgram 为采用的着色器程序id
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
-        //启用三角形顶点的句柄
+        //启用定点位置数据
         GLES20.glEnableVertexAttribArray(mPositionHandle);
-        //准备三角形的坐标数据
+        //准备三角形的坐标数据，将顶点数据传送进渲染管线
         GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 vertexStride, vertexBuffer);

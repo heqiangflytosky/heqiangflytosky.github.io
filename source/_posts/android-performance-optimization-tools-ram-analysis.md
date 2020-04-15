@@ -27,6 +27,16 @@ Android 中关于的工具很多，参考下表。所以我们要灵活地选用
 | MAT | 内存泄漏 | 发现+定位 |  |
 
 
+## getprop
+
+我们可以使用 `adb shell getprop |grep vm` 来看 Android 虚拟机对内存的一些配置：
+
+```
+[dalvik.vm.heapgrowthlimit]: [256m]
+[dalvik.vm.heapsize]: [512m]
+```
+dalvik.vm.heapgrowthlimit 表示受控情况下每个进程可用的最大堆内存。dalvik.vm.heapsize 表示 设置了 `android:largeHeap="true"` 的应用可以使用的最大堆内存。
+
 
 ## procrank
 
@@ -266,8 +276,8 @@ Uptime: 638409159 Realtime: 1205461779
  - .art mmap：
  - Other mmap
  - App Summary：
-  - Java Heap：从 Java 或 Kotlin 代码分配的对象内存。不受Java Object Heap大小限制，但受限于系统内存。
-  - Native Heap：从 C 或 C++ 代码分配的对象内存。
+  - Java Heap：从 Java 或 Kotlin 代码分配的对象内存。
+  - Native Heap：从 C 或 C++ 代码分配的对象内存。不受Java Object Heap大小限制，但受限于系统内存。当然如果 RAM 快耗尽，memory killer 就会杀进程释放 RAM。
   - Code：您的应用用于处理代码和资源（如 dex 字节码、已优化或已编译的 dex 码、.so 库和字体）的内存。
   - Stack：您的应用中的原生堆栈和 Java 堆栈使用的内存。 这通常与您的应用运行多少线程有关。
   - Graphics：图形缓冲区队列向屏幕显示像素（包括 GL 表面、GL 纹理等等）所使用的内存。 （请注意，这是与 CPU 共享的内存，不是 GPU 专用内存。）
@@ -275,6 +285,7 @@ Uptime: 638409159 Realtime: 1205461779
   - System
  
 对于应用的内存，一般我们主要关注 App Summary 就行了。
+进程空间中的 heap 空间是我们需要重点关注的，heap 空间完全由程序员控制，我们使用的 malloc、C++ new 和 java new 所申请的空间都是 heap 空间， 其中 C/C++ 申请的内存空间在 native heap 中，而 java 申请的内存空间则在 dalvik heap中。
 
 ## Memory Profiler
 
