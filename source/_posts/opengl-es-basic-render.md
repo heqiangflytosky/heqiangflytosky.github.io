@@ -315,6 +315,7 @@ OpenGL 是运行在 native 环境，因此我们需要为顶点创建本地内�
 我们通过 `GLES20.glVertexAttribPointer` 告诉 OpenGL，可以在 vertexData 中找到 a_Position 定义的数据。
 
 下面来介绍一下 glVertexAttribPointer 的参数：
+
 | 1 | 2 |
 |:-------------:|:-------------:|
 | int index | 这个是位置属性，我们传入 aPosition |
