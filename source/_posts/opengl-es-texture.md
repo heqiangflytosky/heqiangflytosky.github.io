@@ -294,8 +294,7 @@ public class Utils {
 
 图片绘制效果：
 
-<img src="/images/opengl-es-texture/r1.png" width="238" height="457"/>
-
+<img src="/images/opengl-es-texture/r2.png" width="258" height="487"/>
 
 ## 裁剪纹理
 
@@ -317,4 +316,4 @@ public class Utils {
 
 裁剪后的效果：
 
-<img src="/images/opengl-es-texture/r2.png" width="258" height="487"/>
+<img src="/images/opengl-es-texture/r1.png" width="238" height="457"/>
