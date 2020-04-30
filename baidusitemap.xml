@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://yoursite.com/2020/04/30/opengl-es-color-blend/</loc>
-    <lastmod>2020-04-30T08:16:41.268Z</lastmod>
+    <lastmod>2020-04-30T08:19:29.080Z</lastmod>
     <data>
         <display>
         <title>OpenGL ES -- 混合</title>
@@ -4431,6 +4431,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>搭建 React Native 开发环境</title>
+        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        
+        <tag>React Native</tag>
+         
+         
+           
+             
+              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4457,26 +4477,6 @@
         <display>
         <title>React Native创建原生模块</title>
         <pubTime>2017-01-14T04:00:00.000Z</pubTime>
-        
-        <tag>React Native</tag>
-         
-         
-           
-             
-              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>搭建 React Native 开发环境</title>
-        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          

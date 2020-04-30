@@ -92,13 +92,13 @@
 <meta property="og:url" content="http://yoursite.com/2020/04/30/opengl-es-color-blend/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 OpenGL ES 混合">
-<meta property="og:image" content="http://yoursite.com/images/opengl-es-texture/disable-blend.png">
-<meta property="og:image" content="http://yoursite.com/images/opengl-es-texture/enable-blend.png">
-<meta property="og:updated_time" content="2020-04-30T08:16:41.268Z">
+<meta property="og:image" content="http://yoursite.com/images/opengl-es-color-blend/disable-blend.png">
+<meta property="og:image" content="http://yoursite.com/images/opengl-es-color-blend/enable-blend.png">
+<meta property="og:updated_time" content="2020-04-30T08:19:29.080Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenGL ES -- 混合">
 <meta name="twitter:description" content="介绍 OpenGL ES 混合">
-<meta name="twitter:image" content="http://yoursite.com/images/opengl-es-texture/disable-blend.png">
+<meta name="twitter:image" content="http://yoursite.com/images/opengl-es-color-blend/disable-blend.png">
 
 
 
@@ -464,12 +464,12 @@
 <p>修改 onDrawFrame 方法，增加对小矩形的绘制：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Override</div><div class="line">public void onDrawFrame(GL10 gl) &#123;</div><div class="line">    GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);</div><div class="line"></div><div class="line">    GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0 , 6);</div><div class="line">    GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 6 , 6);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>我们先来看一下绘制后的效果：</p>
-<p><img src="/images/opengl-es-texture/disable-blend.png" width="200" height="400"></p>
+<p><img src="/images/opengl-es-color-blend/disable-blend.png" width="200" height="400"></p>
 <p>可见，小矩形并未实现透明混合的效果。</p>
 <h2 id="实现混合效果"><a href="#实现混合效果" class="headerlink" title="实现混合效果"></a>实现混合效果</h2><p>我们在 <code>onSurfaceCreated</code> 中增加下面的代码，来开启混合：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GLES20.glEnable(GL_BLEND);</div><div class="line">GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);</div></pre></td></tr></table></figure>
 <p>来看一下绘制后的效果：</p>
-<p><img src="/images/opengl-es-texture/enable-blend.png" width="200" height="400"></p>
+<p><img src="/images/opengl-es-color-blend/enable-blend.png" width="200" height="400"></p>
 <p>已经实现了颜色的混合。</p>
 
       
