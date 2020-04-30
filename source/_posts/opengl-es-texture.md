@@ -69,6 +69,7 @@ void main()
 public class TestRender implements GLSurfaceView.Renderer {
     private Context mContext;
     private static final float[] vertexData = {
+            // Order of coordinates: X,Y,S,T
             // 第一个三角形
             -0.5f, -0.5f,  0f, 1f,
             0.5f, 0.5f,   1f, 0f,
@@ -121,11 +122,11 @@ public class TestRender implements GLSurfaceView.Renderer {
 
         // 加载纹理
         textureId = TextureHelper.loadTexture(mContext, R.drawable.test);
-
+        // 激活纹理单元，GL_TEXTURE0代表纹理单元0，GL_TEXTURE1代表纹理单元1，以此类推。OpenGL使用纹理单元来表示被绘制的纹理
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         // 绑定纹理到这个纹理单元
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-        // 把选定的纹理单元传给片段着色器中的 u_TextureUnit，
+        // 把选定的纹理单元传给片段着色器中的 u_TextureUnit，对应前面设置的 GL_TEXTUREi，设置为 GL_TEXTURE0，这里就设置0
         GLES20.glUniform1i(uTextureUnitLocation, 0);
 
         // 传递矩形顶点坐标
@@ -151,6 +152,8 @@ public class TestRender implements GLSurfaceView.Renderer {
     }
 }
 ```
+
+在上面的顶点数据中，处理 x 和 y 的位置，我们也定义了纹理坐标 S 和 T。
 
 ```
 public class TextureHelper {
@@ -302,6 +305,7 @@ public class Utils {
 
 ```
     private static final float[] vertexData = {
+            // Order of coordinates: X,Y,S,T
             // 第一个三角形
             -0.5f, -0.5f,  0.5f, 1f,
             0.5f, 0.5f,   1f, 0f,
@@ -317,3 +321,94 @@ public class Utils {
 裁剪后的效果：
 
 <img src="/images/opengl-es-texture/r1.png" width="238" height="457"/>
+
+## 纹理混合
+
+如果理解了纹理贴图，那么多重纹理混合其实很简单了，比如双层纹理混合就是传入两张纹理图像，然后在OpenGL ES中生成纹理，我们在片段着色器中对两个纹理的颜色就是混合（比如相加、相乘等），这样最后显示的效果就是双层纹理混合的效果。
+
+更新顶点着色器代码：
+
+```
+attribute vec4 a_Position;
+
+attribute vec2 a_TextureCoordinates;
+varying vec2 v_TextureCoordinates;
+
+attribute vec2 a_TextureCoordinates2;
+varying vec2 v_TextureCoordinates2;
+
+void main()
+{
+    v_TextureCoordinates = a_TextureCoordinates;
+    v_TextureCoordinates2 = a_TextureCoordinates2;
+    gl_Position = a_Position;
+}
+```
+
+更新片段着色器代码：
+
+```
+precision mediump float;
+
+uniform sampler2D u_TextureUnit;
+varying vec2 v_TextureCoordinates;
+
+uniform sampler2D u_TextureUnit2;
+varying vec2 v_TextureCoordinates2;
+
+void main()
+{
+    gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates) + texture2D(u_TextureUnit2, v_TextureCoordinates2);
+}
+```
+
+```
+    protected static final String U_TEXTURE_UNIT_2 = "u_TextureUnit2";
+    protected static final String A_TEXTURE_COORDINATES_2 = "a_TextureCoordinates2";
+
+    private int textureId2;
+    private int uTextureUnitLocation2;
+    private int aTextureCoordinatesLocation2;
+```
+
+```
+        // 加载纹理
+        textureId = TextureHelper.loadTexture(mContext, R.drawable.test);
+
+        // 加载纹理2
+        textureId2 = TextureHelper.loadTexture(mContext, R.drawable.back_home_on);
+
+        // 激活纹理单元，GL_TEXTURE0代表纹理单元0，GL_TEXTURE1代表纹理单元1，以此类推。OpenGL使用纹理单元来表示被绘制的纹理
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        // 绑定纹理到这个纹理单元
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+        // 把选定的纹理单元传给片段着色器中的 u_TextureUnit，对应前面设置的 GL_TEXTUREi，设置为 GL_TEXTURE0，这里就设置0，
+        GLES20.glUniform1i(uTextureUnitLocation, 0);
+
+        // 传递矩形顶点坐标
+        vertexDataBuffer.position(0);
+        GLES20.glVertexAttribPointer(aPositionLocation, POSITION_COMPONENT_COUNT, GLES20.GL_FLOAT, false, 16, vertexDataBuffer);
+        GLES20.glEnableVertexAttribArray(aPositionLocation);
+        // 传递纹理顶点坐标
+        vertexDataBuffer.position(POSITION_COMPONENT_COUNT);
+        GLES20.glVertexAttribPointer(aTextureCoordinatesLocation, TEXTURE_COORDINATES_COMPONENT_COUNT, GLES20.GL_FLOAT, false, 16, vertexDataBuffer);
+        GLES20.glEnableVertexAttribArray(aTextureCoordinatesLocation);
+
+        // 纹理2
+        // 激活纹理单元2，GL_TEXTURE0代表纹理单元0，GL_TEXTURE1代表纹理单元1，以此类推。OpenGL使用纹理单元来表示被绘制的纹理
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        // 绑定纹理2到这个纹理单元
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId2);
+        // 把选定的纹理单元传给片段着色器中的 u_TextureUnit2，
+        GLES20.glUniform1i(uTextureUnitLocation2, 1);
+
+        // 传递纹理2顶点坐标
+        vertexDataBuffer.position(POSITION_COMPONENT_COUNT);
+        GLES20.glVertexAttribPointer(aTextureCoordinatesLocation2, TEXTURE_COORDINATES_COMPONENT_COUNT, GLES20.GL_FLOAT, false, 16, vertexDataBuffer);
+        GLES20.glEnableVertexAttribArray(aTextureCoordinatesLocation2);
+```
+
+纹理1 和纹理2的坐标相同，所以顶点坐标就不用更新了，绘制的方法也是和上面是相同的。
+效果图：
+
+<img src="/images/opengl-es-texture/r1.png" width="342" height="603"/>

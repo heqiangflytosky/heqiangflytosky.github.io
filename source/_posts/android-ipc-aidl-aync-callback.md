@@ -8,7 +8,7 @@ date: 2015-2-5 10:00:00
 ---
 ## 概述
 
-上一篇博客 [Android IPC 之 AIDL ](http://www.heqiangfly.com/2015/02/01/android-ipc-aidl/) 中我们了解到 AIDL 是默认异步调用的，本文我们就探索如何实现 AIDL 的异步调用。
+上一篇博客 [Android IPC 之 AIDL ](http://www.heqiangfly.com/2015/02/01/android-ipc-aidl/) 中我们了解到 AIDL 是默认同步调用的，本文我们就探索如何实现 AIDL 的异步调用。
 异步调用可以有两种方法实现：
 
  - 在 AILD 方法前添加 oneway 关键字
