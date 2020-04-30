@@ -411,4 +411,4 @@ void main()
 纹理1 和纹理2的坐标相同，所以顶点坐标就不用更新了，绘制的方法也是和上面是相同的。
 效果图：
 
-<img src="/images/opengl-es-texture/r1.png" width="342" height="603"/>
+<img src="/images/opengl-es-texture/blend.png" width="300" height="536"/>
