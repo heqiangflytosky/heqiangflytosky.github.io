@@ -4,6 +4,46 @@
 
     
   <url>
+    <loc>http://yoursite.com/2020/04/30/opengl-es-color-blend/</loc>
+    <lastmod>2020-04-30T08:16:41.268Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES -- 混合</title>
+        <pubTime>2020-04-30T02:00:00.000Z</pubTime>
+        
+        <tag>OpenGL ES</tag>
+         
+         
+           
+             
+              <breadCrumb title="OpenGL" url="http://yoursite.com/categories/OpenGL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2020/04/20/opengl-es-smoonth-shade/</loc>
+    <lastmod>2020-04-30T06:35:38.724Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES -- 平滑着色</title>
+        <pubTime>2020-04-20T02:00:00.000Z</pubTime>
+        
+        <tag>OpenGL ES</tag>
+         
+         
+           
+             
+              <breadCrumb title="OpenGL" url="http://yoursite.com/categories/OpenGL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2020/04/15/opengl-es-texture/</loc>
     <lastmod>2020-04-30T04:49:52.776Z</lastmod>
     <data>
@@ -81,26 +121,6 @@
            
              
               <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2020/04/20/opengl-es-smoonth-shade/</loc>
-    <lastmod>2020-04-20T02:56:09.096Z</lastmod>
-    <data>
-        <display>
-        <title>OpenGL ES -- 平滑着色</title>
-        <pubTime>2020-04-20T02:00:00.000Z</pubTime>
-        
-        <tag>OpenGL ES</tag>
-         
-         
-           
-             
-              <breadCrumb title="OpenGL" url="http://yoursite.com/categories/OpenGL/"/>
           
         </display>
     </data>
@@ -2677,9 +2697,9 @@
         
         <tag>Android</tag>
          
-        <tag>Gradle</tag>
-         
         <tag>Android Studio</tag>
+         
+        <tag>Gradle</tag>
          
          
            
@@ -2745,9 +2765,9 @@
         
         <tag>Android</tag>
          
-        <tag>Gradle</tag>
-         
         <tag>Android Studio</tag>
+         
+        <tag>Gradle</tag>
          
          
            
@@ -4177,12 +4197,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4221,12 +4241,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4263,12 +4283,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4283,12 +4303,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4391,32 +4411,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
-        
-        <tag>React Native</tag>
-         
-         
-           
-             
-              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>搭建 React Native 开发环境</title>
-        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        <title>React Native-组件Component</title>
+        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4451,12 +4451,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-组件Component</title>
-        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4471,12 +4471,32 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>搭建 React Native 开发环境</title>
+        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        
+        <tag>React Native</tag>
+         
+         
+           
+             
+              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
