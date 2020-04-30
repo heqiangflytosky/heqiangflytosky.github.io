@@ -45,6 +45,7 @@ GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0 , 6);
 
 ```
     private float[] tableVerticesWithTriangles = {
+            // Order of coordinates: X,Y,R,G,B
             // 矩形
             0f,   0f, 1f, 1f, 1f,
             -0.5f, -0.5f, 0.7f,0.7f,0.7f,
@@ -110,6 +111,7 @@ public class SecondRender implements GLSurfaceView.Renderer {
     private static final String A_POSITION = "a_Position";
 
     private float[] tableVerticesWithTriangles = {
+            // Order of coordinates: X,Y,R,G,B
             // 矩形
             0f,   0f, 1f, 1f, 1f,
             -0.5f, -0.5f, 0.7f,0.7f,0.7f,
