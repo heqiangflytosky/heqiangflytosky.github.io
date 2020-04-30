@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/04/15/opengl-es-texture/</loc>
+    
+    <lastmod>2020-04-30T04:43:42.267Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2015/02/05/android-ipc-aidl-aync-callback/</loc>
+    
+    <lastmod>2020-04-22T01:48:52.620Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2020/04/25/opengl-es-view-port-resize/</loc>
     
     <lastmod>2020-04-21T11:45:34.522Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>http://yoursite.com/2020/04/20/opengl-es-smoonth-shade/</loc>
     
     <lastmod>2020-04-20T02:56:09.096Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/04/15/opengl-es-texture/</loc>
-    
-    <lastmod>2020-04-20T02:03:53.972Z</lastmod>
     
   </url>
   
@@ -661,13 +668,6 @@
   
   <url>
     <loc>http://yoursite.com/2018/08/06/android-basic-oncreate-application-contentprovider/</loc>
-    
-    <lastmod>2019-05-20T08:10:44.126Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2015/02/05/android-ipc-aidl-aync-callback/</loc>
     
     <lastmod>2019-05-20T08:10:44.126Z</lastmod>
     
@@ -1353,14 +1353,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -1437,14 +1437,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1521,14 +1521,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
