@@ -111,7 +111,7 @@ glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA ); // 是最常使用的
 
 我们先来看一下绘制后的效果：
 
-<img src="/images/opengl-es-texture/disable-blend.png" width="200" height="400"/>
+<img src="/images/opengl-es-color-blend/disable-blend.png" width="200" height="400"/>
 
 可见，小矩形并未实现透明混合的效果。
 
@@ -126,6 +126,6 @@ glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA ); // 是最常使用的
 
 来看一下绘制后的效果：
 
-<img src="/images/opengl-es-texture/enable-blend.png" width="200" height="400"/>
+<img src="/images/opengl-es-color-blend/enable-blend.png" width="200" height="400"/>
 
 已经实现了颜色的混合。
