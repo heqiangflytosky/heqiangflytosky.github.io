@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="介绍 RecycleView 的基本特点和使用方法">
+<meta name="description" content="介绍 RecyclerView 的基本特点和使用方法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android View -- RecycleView 的基本特点和使用方法">
+<meta property="og:title" content="Android View -- RecyclerView 的基本特点和使用方法">
 <meta property="og:url" content="http://yoursite.com/2017/08/26/android-view-recycleview-basic-method-of-use/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="介绍 RecycleView 的基本特点和使用方法">
-<meta property="og:updated_time" content="2020-05-09T07:49:55.621Z">
+<meta property="og:description" content="介绍 RecyclerView 的基本特点和使用方法">
+<meta property="og:updated_time" content="2020-05-09T08:09:14.517Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android View -- RecycleView 的基本特点和使用方法">
-<meta name="twitter:description" content="介绍 RecycleView 的基本特点和使用方法">
+<meta name="twitter:title" content="Android View -- RecyclerView 的基本特点和使用方法">
+<meta name="twitter:description" content="介绍 RecyclerView 的基本特点和使用方法">
 
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title> Android View -- RecycleView 的基本特点和使用方法 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android View -- RecyclerView 的基本特点和使用方法 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -302,7 +302,7 @@
             
             
               
-                Android View -- RecycleView 的基本特点和使用方法
+                Android View -- RecyclerView 的基本特点和使用方法
               
             
           </h1>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2017/08/26/android-view-recycleview-basic-method-of-use/" class="leancloud_visitors" data-flag-title="Android View -- RecycleView 的基本特点和使用方法">
+             <span id="/2017/08/26/android-view-recycleview-basic-method-of-use/" class="leancloud_visitors" data-flag-title="Android View -- RecyclerView 的基本特点和使用方法">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -385,7 +385,7 @@
 
           
               <div class="post-description">
-                  介绍 RecycleView 的基本特点和使用方法
+                  介绍 RecyclerView 的基本特点和使用方法
               </div>
           
 
@@ -400,7 +400,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>RecycleView 是 Android support-v7 包中提供的组件，其灵活易用的特点使其在一些列表场景中深得我们的喜爱。<br>RecycleView 的特点：数据绑定，Item的创建和View的回收复用机制等。<br>本文简单介绍一下 RecycleView 的一些使用方法。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>RecyclerView 是 Android support-v7 包中提供的组件，其灵活易用的特点使其在一些列表场景中深得我们的喜爱。<br>RecyclerView 的特点：数据绑定，Item的创建和View的回收复用机制等。<br>本文简单介绍一下 RecyclerView 的一些使用方法。</p>
 <h2 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">com.android.support:recyclerview-v7:26.1.0</div></pre></td></tr></table></figure>
 <p>另外在 <code>com.android.support:design</code> 包中默认引入了 recyclerview-v7 包。如果使用了 <code>com.android.support:design</code> 就不需手动添加。</p>
 <h3 id="添加-RecycleView-布局"><a href="#添加-RecycleView-布局" class="headerlink" title="添加 RecycleView 布局"></a>添加 RecycleView 布局</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;android.support.v7.widget.RecyclerView</div><div class="line">    android:id=&quot;@+id/recycle_view&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;&gt;</div></pre></td></tr></table></figure>
@@ -461,7 +461,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public void onLoadMore()&#123;</div><div class="line">    int size = mList.size();</div><div class="line">    mList.add(new GankFooterItem());</div><div class="line">    notifyItemRangeInserted(size,1);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="删除加载更多View"><a href="#删除加载更多View" class="headerlink" title="删除加载更多View"></a>删除加载更多View</h4><p>加载完毕后删除这个 Item，并添加新的数据：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public void loadMoreData(List&lt;GankItem&gt; list)&#123;</div><div class="line">    mList.remove(mList.size() - 1);</div><div class="line">    notifyItemRangeRemoved(mList.size(),1);</div><div class="line">    if(list != null) &#123;</div><div class="line">        int size = mList.size();</div><div class="line">        mList.addAll(size,list);</div><div class="line">        notifyItemRangeInserted(size,list.size());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="与-ListView-对比"><a href="#与-ListView-对比" class="headerlink" title="与 ListView 对比"></a>与 ListView 对比</h2>
+<h2 id="与-ListView-对比"><a href="#与-ListView-对比" class="headerlink" title="与 ListView 对比"></a>与 ListView 对比</h2><p>RecyclerView 和 ListView 最大的区别在于数据源改变时的缓存的处理逻辑。<br>ListView 只有两级缓存：mActiveViews 和 mScrapViews。mActiveViews 不需要重新绑定数据，mScrapViews 需要重新绑定数据。<br>ListView是”一锅端”，将所有的 mActiveViews 都移入了二级缓存 mScrapViews，而 RecyclerView 则是更加灵活地对每个 View 修改标志位，区分是否重新 bindView。</p>
+
       
     </div>
 
@@ -595,7 +596,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-count">109</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

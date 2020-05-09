@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2014/11/12/java-basic-design-pattern-abstract-factory/</loc>
+    
+    <lastmod>2020-05-09T08:47:20.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2014/11/16/java-basic-design-pattern-chain-of-responsibility/</loc>
+    
+    <lastmod>2020-05-09T08:47:10.870Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2014/11/10/java-basic-design-pattern-factory-method/</loc>
+    
+    <lastmod>2020-05-09T08:47:00.298Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</loc>
+    
+    <lastmod>2020-05-09T08:46:47.699Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/08/26/android-view-recycleview-basic-method-of-use/</loc>
     
-    <lastmod>2020-05-09T07:49:55.621Z</lastmod>
+    <lastmod>2020-05-09T08:09:14.517Z</lastmod>
     
   </url>
   
@@ -40,13 +68,6 @@
     <loc>http://yoursite.com/2020/04/25/opengl-es-view-port-resize/</loc>
     
     <lastmod>2020-04-21T11:45:34.522Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2014/11/16/java-basic-design-pattern-chain-of-responsibility/</loc>
-    
-    <lastmod>2020-04-20T11:42:20.983Z</lastmod>
     
   </url>
   
@@ -607,27 +628,6 @@
     <loc>http://yoursite.com/2014/04/12/java-io-stream-base/</loc>
     
     <lastmod>2019-06-12T09:32:15.854Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2014/11/12/java-basic-design-pattern-abstract-factory/</loc>
-    
-    <lastmod>2019-05-31T02:57:00.371Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2014/11/10/java-basic-design-pattern-factory-method/</loc>
-    
-    <lastmod>2019-05-30T11:53:56.187Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</loc>
-    
-    <lastmod>2019-05-29T11:00:08.206Z</lastmod>
     
   </url>
   
@@ -1367,14 +1367,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -1451,14 +1451,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1514,14 +1514,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1535,14 +1535,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     

@@ -4,11 +4,91 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/26/android-view-recycleview-basic-method-of-use/</loc>
-    <lastmod>2020-05-09T07:49:55.621Z</lastmod>
+    <loc>http://yoursite.com/2014/11/12/java-basic-design-pattern-abstract-factory/</loc>
+    <lastmod>2020-05-09T08:47:20.397Z</lastmod>
     <data>
         <display>
-        <title>Android View -- RecycleView 的基本特点和使用方法</title>
+        <title>Java 设计模式 -- 抽象工厂模式</title>
+        <pubTime>2014-11-12T02:00:00.000Z</pubTime>
+        
+        <tag>设计模式</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2014/11/16/java-basic-design-pattern-chain-of-responsibility/</loc>
+    <lastmod>2020-05-09T08:47:10.870Z</lastmod>
+    <data>
+        <display>
+        <title>Java 设计模式 -- 职责链模式</title>
+        <pubTime>2014-11-16T02:00:00.000Z</pubTime>
+        
+        <tag>设计模式</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2014/11/10/java-basic-design-pattern-factory-method/</loc>
+    <lastmod>2020-05-09T08:47:00.298Z</lastmod>
+    <data>
+        <display>
+        <title>Java 设计模式 -- 工厂方法模式</title>
+        <pubTime>2014-11-10T02:00:00.000Z</pubTime>
+        
+        <tag>设计模式</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</loc>
+    <lastmod>2020-05-09T08:46:47.699Z</lastmod>
+    <data>
+        <display>
+        <title>Java 设计模式 -- 单例模式的几种实现</title>
+        <pubTime>2014-11-05T02:00:00.000Z</pubTime>
+        
+        <tag>设计模式</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/08/26/android-view-recycleview-basic-method-of-use/</loc>
+    <lastmod>2020-05-09T08:09:14.517Z</lastmod>
+    <data>
+        <display>
+        <title>Android View -- RecyclerView 的基本特点和使用方法</title>
         <pubTime>2017-08-26T02:00:00.000Z</pubTime>
         
         <tag>RecycleView</tag>
@@ -121,26 +201,6 @@
            
              
               <breadCrumb title="OpenGL" url="http://yoursite.com/categories/OpenGL/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2014/11/16/java-basic-design-pattern-chain-of-responsibility/</loc>
-    <lastmod>2020-04-20T11:42:20.983Z</lastmod>
-    <data>
-        <display>
-        <title>Java 设计模式 -- 职责链模式</title>
-        <pubTime>2014-11-16T02:00:00.000Z</pubTime>
-        
-        <tag>Java</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
           
         </display>
     </data>
@@ -1771,66 +1831,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2014/11/12/java-basic-design-pattern-abstract-factory/</loc>
-    <lastmod>2019-05-31T02:57:00.371Z</lastmod>
-    <data>
-        <display>
-        <title>Java 设计模式 -- 抽象工厂模式</title>
-        <pubTime>2014-11-12T02:00:00.000Z</pubTime>
-        
-        <tag>Java</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2014/11/10/java-basic-design-pattern-factory-method/</loc>
-    <lastmod>2019-05-30T11:53:56.187Z</lastmod>
-    <data>
-        <display>
-        <title>Java 设计模式 -- 工厂方法模式</title>
-        <pubTime>2014-11-10T02:00:00.000Z</pubTime>
-        
-        <tag>Java</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</loc>
-    <lastmod>2019-05-29T11:00:08.206Z</lastmod>
-    <data>
-        <display>
-        <title>Java 设计模式 -- 单例模式的几种实现</title>
-        <pubTime>2014-11-05T02:00:00.000Z</pubTime>
-        
-        <tag>Java</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2014/02/24/java-basic-final/</loc>
     <lastmod>2019-05-29T06:47:54.149Z</lastmod>
     <data>
@@ -2717,9 +2717,9 @@
         
         <tag>Android</tag>
          
-        <tag>Android Studio</tag>
-         
         <tag>Gradle</tag>
+         
+        <tag>Android Studio</tag>
          
          
            
@@ -2785,9 +2785,9 @@
         
         <tag>Android</tag>
          
-        <tag>Android Studio</tag>
-         
         <tag>Gradle</tag>
+         
+        <tag>Android Studio</tag>
          
          
            
@@ -3973,16 +3973,16 @@
     
     
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android BuildConfig的使用</title>
-        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
+        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
+        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>BuildConfig</tag>
+        <tag>buildType</tag>
          
          
            
@@ -3995,16 +3995,16 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
-        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
+        <title>Android BuildConfig的使用</title>
+        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>buildType</tag>
+        <tag>BuildConfig</tag>
          
          
            
@@ -4239,28 +4239,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>开源项目- Lottie 简介</title>
-        <pubTime>2017-02-07T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>Lottie</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4276,6 +4254,28 @@
            
              
               <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>开源项目- Lottie 简介</title>
+        <pubTime>2017-02-07T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Lottie</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
           
         </display>
     </data>
@@ -4431,12 +4431,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>搭建 React Native 开发环境</title>
-        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        <title>React Native-组件Component</title>
+        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4451,12 +4451,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-组件Component</title>
-        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
+        <title>搭建 React Native 开发环境</title>
+        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4491,12 +4491,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>React Native封装原生UI组件</title>
+        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4511,12 +4511,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native封装原生UI组件</title>
-        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
