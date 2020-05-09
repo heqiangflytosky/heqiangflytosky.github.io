@@ -2,7 +2,7 @@
 title: Java 设计模式 -- 工厂方法模式
 categories: Java
 comments: true
-tags: [Java]
+tags: [设计模式]
 description: 介绍单例模式的几种实现
 date: 2014-11-10 10:00:00
 ---

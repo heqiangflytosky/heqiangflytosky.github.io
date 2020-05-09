@@ -1,17 +1,17 @@
 ---
-title: Android View -- RecycleView 的基本特点和使用方法
+title: Android View -- RecyclerView 的基本特点和使用方法
 categories: Android
 comments: true
 tags: [RecycleView]
-description: 介绍 RecycleView 的基本特点和使用方法
+description: 介绍 RecyclerView 的基本特点和使用方法
 date: 2017-8-26 10:00:00
 ---
 
 ## 概述
 
-RecycleView 是 Android support-v7 包中提供的组件，其灵活易用的特点使其在一些列表场景中深得我们的喜爱。
-RecycleView 的特点：数据绑定，Item的创建和View的回收复用机制等。
-本文简单介绍一下 RecycleView 的一些使用方法。
+RecyclerView 是 Android support-v7 包中提供的组件，其灵活易用的特点使其在一些列表场景中深得我们的喜爱。
+RecyclerView 的特点：数据绑定，Item的创建和View的回收复用机制等。
+本文简单介绍一下 RecyclerView 的一些使用方法。
 
 ## 基础用法
 
@@ -311,3 +311,6 @@ androidx 扩展包下的 recyclerview 1.2 以上版本新增了一个 MergeAdapt
 
 ## 与 ListView 对比
 
+RecyclerView 和 ListView 最大的区别在于数据源改变时的缓存的处理逻辑。
+ListView 只有两级缓存：mActiveViews 和 mScrapViews。mActiveViews 不需要重新绑定数据，mScrapViews 需要重新绑定数据。
+ListView是”一锅端”，将所有的 mActiveViews 都移入了二级缓存 mScrapViews，而 RecyclerView 则是更加灵活地对每个 View 修改标志位，区分是否重新 bindView。

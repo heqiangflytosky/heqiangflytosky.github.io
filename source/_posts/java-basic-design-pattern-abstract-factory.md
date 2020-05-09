@@ -2,7 +2,7 @@
 title: Java 设计模式 -- 抽象工厂模式
 categories: Java
 comments: true
-tags: [Java]
+tags: [设计模式]
 description: 介绍单例模式的几种实现
 date: 2014-11-12 10:00:00
 ---
