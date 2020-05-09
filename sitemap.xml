@@ -2,30 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2014/11/12/java-basic-design-pattern-abstract-factory/</loc>
+    <loc>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</loc>
     
-    <lastmod>2020-05-09T08:47:20.397Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2014/11/16/java-basic-design-pattern-chain-of-responsibility/</loc>
-    
-    <lastmod>2020-05-09T08:47:10.870Z</lastmod>
+    <lastmod>2020-05-09T08:50:41.400Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2014/11/10/java-basic-design-pattern-factory-method/</loc>
     
-    <lastmod>2020-05-09T08:47:00.298Z</lastmod>
+    <lastmod>2020-05-09T08:50:31.652Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</loc>
+    <loc>http://yoursite.com/2014/11/16/java-basic-design-pattern-chain-of-responsibility/</loc>
     
-    <lastmod>2020-05-09T08:46:47.699Z</lastmod>
+    <lastmod>2020-05-09T08:50:23.225Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2014/11/12/java-basic-design-pattern-abstract-factory/</loc>
+    
+    <lastmod>2020-05-09T08:50:13.542Z</lastmod>
     
   </url>
   
@@ -1290,14 +1290,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
@@ -1514,6 +1514,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1521,7 +1528,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1536,13 +1543,6 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
