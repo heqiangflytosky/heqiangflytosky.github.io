@@ -1,6 +1,6 @@
 ---
 title: Java 设计模式 -- 单例模式的几种实现
-categories: Java
+categories: 设计模式
 comments: true
 tags: [设计模式]
 description: 介绍单例模式的几种实现

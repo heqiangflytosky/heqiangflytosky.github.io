@@ -1,6 +1,6 @@
 ---
 title: Java 设计模式 -- 职责链模式
-categories: Java
+categories: 设计模式
 comments: true
 tags: [设计模式]
 description: 介绍职责链模式的实现
