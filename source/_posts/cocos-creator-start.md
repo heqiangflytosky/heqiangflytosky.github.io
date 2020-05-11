@@ -9,7 +9,8 @@ date: 2020-2-10 10:00:00
 
 ## 概述
 
-项目中正在使用 Cocos Creator（cocos2d-x-lite + jsb-adapter + engine） 来打造小游戏运行平台，从本文开始，将会通过一系列文章来介绍 Cocos Creator 的使用以及源码分析。
+项目中正在使用 Cocos Creator（cocos2d-x-lite + jsb-adapter + engine） 来打造小游戏运行平台，来运行包括 cocos、laya、egret 引擎编译生成的 web 版游戏，web 版游戏是 js 标准接口。
+从本文开始，将会通过一系列文章来介绍 Cocos Creator 的使用以及源码分析。
 源码是基于 cocos creator 2.3.1 版本进行的，并根据版本发展持续跟新中。
 
 ## Cocos2d-x 特点
@@ -35,7 +36,7 @@ js-framework 模拟浏览器标准接口、生命周期规范，js层简化实�
 
 Cocos Creator 的引擎部分包括 JavaScript、Cocos2d-x-lite 和 adapter 三个部分。全部都在 GitHub 上开源。
 
-[JavaScript 引擎](https://github.com/cocos-creator/engine)：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口。这部分代码编译成 cocos2d-jsb.js 集成在游戏应用包中。
+[JavaScript 引擎](https://github.com/cocos-creator/engine)：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-jsb.js 集成在游戏应用包中。
 
 [jsb-adapter](https://github.com/cocos-creator-packages/jsb-adapter)：js 适配层，提供js到cocos运行时引擎的桥接。
 Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做一些适配工作。 这些工作包括：
@@ -50,16 +51,16 @@ Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做
 
 在 jsb-adapter 目录下，主要包括以下两个目录结构：
 
- - builtin：适配原生平台的 runtime
- - engine：适配引擎层面的一些 api
+ - builtin：适配原生平台的 runtime。
+ - engine：适配和实现 cocos 引擎层面的一些 api，如果游戏平台是适配 web 标准 api 的话就不用关注这个目录。
 
 builtin 部分除了适配 BOM 和 DOM 运行环境，还包括了一些相关的 jsb 接口，如 openGL, audioEngine 等。
-cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成这些标准接口到cocos 运行时的调用。
-这部分其实就是 JS binding 的js 部分。这部分编译成的 jsb-builtin.js文件集成Android客户端中，供 Cocos2d-x-lite 在初始化时读取。
+cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成这些标准接口到 cocos 运行时的调用。
+这部分其实就是 JS binding 的 js 部分。这部分编译成的 jsb-builtin.js 文件集成 Android 客户端中，供 Cocos2d-x-lite 在初始化时读取。
 它架设在 Cocos2d-x-lite 引擎之上，底层通过 JSB 绑定调用 Cocos2d-x-lite 引擎。
 
 [Cocos2d-x-lite](https://github.com/cocos-creator/cocos2d-x-lite)：cocos 渲染引擎，我们可以称之为 cocos 运行时引擎，集成了Android、ios和windows等原生平台特性。它是 Cocos2d-x 的轻量级版本，删除了 3D 以及其他一些特性。
-综上所述，cocos 的原理就是通过 cocos JavaScript 引擎把 cocos 的一些 api 转换成标准的 js 代码，然后通过 v8 解析js代码，回传给 jsb，通过 jsb 桥接调用 cocos2d-x-lite 。
+综上所述，cocos 的原理就是通过 cocos IDE 把开发者通过调用 cocos JavaScript 引擎 API 形成的游戏代码转换成标准的 js 代码，然后通过 v8 解析js代码，回传给 jsb，通过 jsb 桥接调用 cocos2d-x-lite 。
 
 ## 环境准备
 
@@ -78,6 +79,7 @@ cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成�
 ### 构建 Android 工程
 
 在构建的对话框中 发布平台 选项中选择 Android，构建完成后就在 HelloWorld 工程的 `HelloWorld/build/jsb-link/frameworks/runtime-src/proj.android-studio` 目录下面生成了 Android 工程，下面的一篇文章会对 HelloWorld 工程进行介绍。
+如果 发布平台 选项中选择 Web Mobile 平台，就对应的是 HelloWorld/build/web-mobile 目录，这是在 web 上运行的游戏。生成标准的 html 标准接口。
 
 ## 定制引擎
 

@@ -4,7 +4,7 @@ categories: JavaScript
 comments: true
 tags: [JavaScript]
 description: 介绍 async 函数的使用
-date: 2018-5-15 10:00:00
+date: 2018-5-25 10:00:00
 ---
 
 ## 概述

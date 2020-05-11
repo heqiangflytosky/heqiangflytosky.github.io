@@ -4,7 +4,7 @@ categories: JavaScript
 comments: true
 tags: [JavaScript]
 description: 介绍import和export的使用
-date: 2018-5-10 10:00:00
+date: 2018-5-15 10:00:00
 ---
 
 [MDN export 文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/export)
