@@ -1,5 +1,5 @@
 ---
-title: JavaScript 基础 -- export 和 import
+title: JavaScript 基础 -- 函数
 categories: JavaScript
 comments: true
 tags: [JavaScript]
