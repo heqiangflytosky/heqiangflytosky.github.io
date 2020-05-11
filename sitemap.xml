@@ -2,6 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2018/05/10/javascript-basic-function/</loc>
+    
+    <lastmod>2020-05-11T03:35:26.524Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/05/25/javascript-basic-async/</loc>
+    
+    <lastmod>2020-05-11T03:32:53.925Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/05/20/javascript-basic-promise/</loc>
+    
+    <lastmod>2020-05-11T03:32:34.457Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/05/15/javascript-basic-export-import/</loc>
+    
+    <lastmod>2020-05-11T03:31:58.265Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/02/10/cocos-creator-start/</loc>
+    
+    <lastmod>2020-05-09T10:48:50.637Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</loc>
     
     <lastmod>2020-05-09T08:50:41.400Z</lastmod>
@@ -117,13 +152,6 @@
     <loc>http://yoursite.com/2020/02/13/cocos-creator-hello-world-project/</loc>
     
     <lastmod>2020-03-27T07:24:13.336Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/02/10/cocos-creator-start/</loc>
-    
-    <lastmod>2020-03-27T07:22:19.197Z</lastmod>
     
   </url>
   
@@ -534,23 +562,9 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/05/12/javascript-basic-promise/</loc>
-    
-    <lastmod>2019-08-06T08:41:04.559Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/08/05/mobile-internet-webapp-vs-nativeapp/</loc>
     
     <lastmod>2019-08-06T08:41:04.559Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/05/15/javascript-basic-async/</loc>
-    
-    <lastmod>2019-08-06T08:41:04.558Z</lastmod>
     
   </url>
   
@@ -670,13 +684,6 @@
     <loc>http://yoursite.com/2017/01/11/react-native-first-step/</loc>
     
     <lastmod>2019-05-20T08:10:44.129Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/05/10/javascript-basic-export-import/</loc>
-    
-    <lastmod>2019-05-20T08:10:44.128Z</lastmod>
     
   </url>
   
@@ -1367,14 +1374,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     

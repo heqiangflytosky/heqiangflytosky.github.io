@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2020/02/10/cocos-creator-start/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="Cocos2d-x 介绍以及一些学习资料">
-<meta property="og:updated_time" content="2020-03-27T07:22:19.197Z">
+<meta property="og:updated_time" content="2020-05-09T10:48:50.637Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cocos Creator -- 启动篇">
 <meta name="twitter:description" content="Cocos2d-x 介绍以及一些学习资料">
@@ -400,7 +400,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>项目中正在使用 Cocos Creator（cocos2d-x-lite + jsb-adapter + engine） 来打造小游戏运行平台，从本文开始，将会通过一系列文章来介绍 Cocos Creator 的使用以及源码分析。<br>源码是基于 cocos creator 2.3.1 版本进行的，并根据版本发展持续跟新中。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>项目中正在使用 Cocos Creator（cocos2d-x-lite + jsb-adapter + engine） 来打造小游戏运行平台，来运行包括 cocos、laya、egret 引擎编译生成的 web 版游戏，web 版游戏是 js 标准接口。<br>从本文开始，将会通过一系列文章来介绍 Cocos Creator 的使用以及源码分析。<br>源码是基于 cocos creator 2.3.1 版本进行的，并根据版本发展持续跟新中。</p>
 <h2 id="Cocos2d-x-特点"><a href="#Cocos2d-x-特点" class="headerlink" title="Cocos2d-x 特点"></a>Cocos2d-x 特点</h2><ul>
 <li>跨平台。Cocos 支持使用同一套代码构建生成 Web、iOS、Android 等几个端，最新的版本还支持发布到微信小游戏、Facebook Instant Games 和 QQ 玩一玩；</li>
 <li>性能。在 Android 平台上，Cocos 的原理是在 Activity 中绘制一个 OpenGL 的 SurfaceView ，并由其完成页面的渲染的。与基于 WebView 渲染的 Hybrid 应用相比，Cocos 的渲染速度更快，性能更好。</li>
@@ -411,7 +411,7 @@
 <h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><p><a href="https://www.cocos.com/" target="_blank" rel="external">cocos 官网</a><br><a href="https://github.com/cocos2d/cocos2d-x" target="_blank" rel="external">Cocos2d-x github 源码</a><br><a href="https://docs.cocos.com/cocos2d-x/manual/zh/" target="_blank" rel="external">Cocos2d-x 用户手册</a></p>
 <p><a href="https://docs.cocos.com/creator/manual/zh/" target="_blank" rel="external">Cocos Creator 用户手册</a><br><a href="https://docs.cocos.com/creator/api/zh/" target="_blank" rel="external">Cocos Creator API 参考</a></p>
 <h2 id="Cocos-Creator"><a href="#Cocos-Creator" class="headerlink" title="Cocos Creator"></a>Cocos Creator</h2><p>Cocos Creator 的引擎部分包括 JavaScript、Cocos2d-x-lite 和 adapter 三个部分。全部都在 GitHub 上开源。</p>
-<p><a href="https://github.com/cocos-creator/engine" target="_blank" rel="external">JavaScript 引擎</a>：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口。这部分代码编译成 cocos2d-jsb.js 集成在游戏应用包中。</p>
+<p><a href="https://github.com/cocos-creator/engine" target="_blank" rel="external">JavaScript 引擎</a>：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-jsb.js 集成在游戏应用包中。</p>
 <p><a href="https://github.com/cocos-creator-packages/jsb-adapter" target="_blank" rel="external">jsb-adapter</a>：js 适配层，提供js到cocos运行时引擎的桥接。<br>Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做一些适配工作。 这些工作包括：</p>
 <ul>
 <li>为不同平台适配 BOM 和 DOM 等运行环境</li>
@@ -424,15 +424,15 @@
 </ul>
 <p>在 jsb-adapter 目录下，主要包括以下两个目录结构：</p>
 <ul>
-<li>builtin：适配原生平台的 runtime</li>
-<li>engine：适配引擎层面的一些 api</li>
+<li>builtin：适配原生平台的 runtime。</li>
+<li>engine：适配和实现 cocos 引擎层面的一些 api，如果游戏平台是适配 web 标准 api 的话就不用关注这个目录。</li>
 </ul>
-<p>builtin 部分除了适配 BOM 和 DOM 运行环境，还包括了一些相关的 jsb 接口，如 openGL, audioEngine 等。<br>cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成这些标准接口到cocos 运行时的调用。<br>这部分其实就是 JS binding 的js 部分。这部分编译成的 jsb-builtin.js文件集成Android客户端中，供 Cocos2d-x-lite 在初始化时读取。<br>它架设在 Cocos2d-x-lite 引擎之上，底层通过 JSB 绑定调用 Cocos2d-x-lite 引擎。</p>
-<p><a href="https://github.com/cocos-creator/cocos2d-x-lite" target="_blank" rel="external">Cocos2d-x-lite</a>：cocos 渲染引擎，我们可以称之为 cocos 运行时引擎，集成了Android、ios和windows等原生平台特性。它是 Cocos2d-x 的轻量级版本，删除了 3D 以及其他一些特性。<br>综上所述，cocos 的原理就是通过 cocos JavaScript 引擎把 cocos 的一些 api 转换成标准的 js 代码，然后通过 v8 解析js代码，回传给 jsb，通过 jsb 桥接调用 cocos2d-x-lite 。</p>
+<p>builtin 部分除了适配 BOM 和 DOM 运行环境，还包括了一些相关的 jsb 接口，如 openGL, audioEngine 等。<br>cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成这些标准接口到 cocos 运行时的调用。<br>这部分其实就是 JS binding 的 js 部分。这部分编译成的 jsb-builtin.js 文件集成 Android 客户端中，供 Cocos2d-x-lite 在初始化时读取。<br>它架设在 Cocos2d-x-lite 引擎之上，底层通过 JSB 绑定调用 Cocos2d-x-lite 引擎。</p>
+<p><a href="https://github.com/cocos-creator/cocos2d-x-lite" target="_blank" rel="external">Cocos2d-x-lite</a>：cocos 渲染引擎，我们可以称之为 cocos 运行时引擎，集成了Android、ios和windows等原生平台特性。它是 Cocos2d-x 的轻量级版本，删除了 3D 以及其他一些特性。<br>综上所述，cocos 的原理就是通过 cocos IDE 把开发者通过调用 cocos JavaScript 引擎 API 形成的游戏代码转换成标准的 js 代码，然后通过 v8 解析js代码，回传给 jsb，通过 jsb 桥接调用 cocos2d-x-lite 。</p>
 <h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><h3 id="下载-cocos-creator"><a href="#下载-cocos-creator" class="headerlink" title="下载 cocos-creator"></a>下载 cocos-creator</h3><p>下载地址：<a href="https://www.cocos.com/creator" target="_blank" rel="external">https://www.cocos.com/creator</a></p>
 <h3 id="运行-HelloWorld"><a href="#运行-HelloWorld" class="headerlink" title="运行 HelloWorld"></a>运行 HelloWorld</h3><p>打开 cocos creator 后新建工程，选择 HelloWorld 工程。</p>
 <h3 id="定制引擎"><a href="#定制引擎" class="headerlink" title="定制引擎"></a>定制引擎</h3><p>如果需要研究定制引擎或者有定制引擎的需求，请参考下面定制引擎章节。</p>
-<h3 id="构建-Android-工程"><a href="#构建-Android-工程" class="headerlink" title="构建 Android 工程"></a>构建 Android 工程</h3><p>在构建的对话框中 发布平台 选项中选择 Android，构建完成后就在 HelloWorld 工程的 <code>HelloWorld/build/jsb-link/frameworks/runtime-src/proj.android-studio</code> 目录下面生成了 Android 工程，下面的一篇文章会对 HelloWorld 工程进行介绍。</p>
+<h3 id="构建-Android-工程"><a href="#构建-Android-工程" class="headerlink" title="构建 Android 工程"></a>构建 Android 工程</h3><p>在构建的对话框中 发布平台 选项中选择 Android，构建完成后就在 HelloWorld 工程的 <code>HelloWorld/build/jsb-link/frameworks/runtime-src/proj.android-studio</code> 目录下面生成了 Android 工程，下面的一篇文章会对 HelloWorld 工程进行介绍。<br>如果 发布平台 选项中选择 Web Mobile 平台，就对应的是 HelloWorld/build/web-mobile 目录，这是在 web 上运行的游戏。生成标准的 html 标准接口。</p>
 <h2 id="定制引擎-1"><a href="#定制引擎-1" class="headerlink" title="定制引擎"></a>定制引擎</h2><h3 id="定制-JavaScript-引擎"><a href="#定制-JavaScript-引擎" class="headerlink" title="定制 JavaScript 引擎"></a>定制 JavaScript 引擎</h3><p>我们可以使用 cocos creator 内置的 JavaScript 引擎和 Cocossd-x 引擎，当然也可以使用自定义的引擎，因为他们都是开源的，方便我们加入个性化的需求。<br><a href="https://docs.cocos.com/creator/manual/zh/advanced-topics/engine-customization.html" target="_blank" rel="external">引擎定制工作流程</a><br>JavaScript 引擎的版本最好要和 CocosCreater 的版本保持一致。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 安装 gulp 构建工具</div><div class="line">npm install -g gulp</div><div class="line"># 安装依赖的模块</div><div class="line">npm install</div><div class="line">gulp build  </div><div class="line">gulp build --max-old-space-size=8192 // 出现 JavaScript heap out of memory 时</div></pre></td></tr></table></figure>
 <p>编译完成后通过 项目 -&gt; 项目设置 面板的 自定义引擎 选项卡，设置本地定制后的 JavaScript 引擎路径。</p>
@@ -569,7 +569,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">222</span>
+                <span class="site-state-item-count">223</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

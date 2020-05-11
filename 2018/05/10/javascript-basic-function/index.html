@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="介绍 async 函数的使用">
+<meta name="description" content="介绍import和export的使用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaScript 基础 -- async/await 关键字">
-<meta property="og:url" content="http://yoursite.com/2018/05/15/javascript-basic-async/index.html">
+<meta property="og:title" content="JavaScript 基础 -- export 和 import">
+<meta property="og:url" content="http://yoursite.com/2018/05/10/javascript-basic-function/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="介绍 async 函数的使用">
-<meta property="og:updated_time" content="2019-08-06T08:41:04.558Z">
+<meta property="og:description" content="介绍import和export的使用">
+<meta property="og:updated_time" content="2020-05-11T03:35:26.524Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript 基础 -- async/await 关键字">
-<meta name="twitter:description" content="介绍 async 函数的使用">
+<meta name="twitter:title" content="JavaScript 基础 -- export 和 import">
+<meta name="twitter:description" content="介绍import和export的使用">
 
 
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/05/15/javascript-basic-async/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/10/javascript-basic-function/"/>
 
 
 
 
 
-  <title> JavaScript 基础 -- async/await 关键字 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> JavaScript 基础 -- export 和 import | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/15/javascript-basic-async/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/10/javascript-basic-function/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="寒江蓑笠">
@@ -302,7 +302,7 @@
             
             
               
-                JavaScript 基础 -- async/await 关键字
+                JavaScript 基础 -- export 和 import
               
             
           </h1>
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-15T10:00:00+08:00">
-                2018-05-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-10T10:00:00+08:00">
+                2018-05-10
               </time>
             
 
@@ -358,7 +358,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2018/05/15/javascript-basic-async/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2018/05/10/javascript-basic-function/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2018/05/15/javascript-basic-async/" class="leancloud_visitors" data-flag-title="JavaScript 基础 -- async/await 关键字">
+             <span id="/2018/05/10/javascript-basic-function/" class="leancloud_visitors" data-flag-title="JavaScript 基础 -- export 和 import">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -385,7 +385,7 @@
 
           
               <div class="post-description">
-                  介绍 async 函数的使用
+                  介绍import和export的使用
               </div>
           
 
@@ -400,23 +400,44 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>async 关键字用来标识一个异步函数，它是 ES7 引入的语法，用来代替异步编程使用的 Callback 与 Promise，可以使代码更加整洁优雅。</p>
-<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>声明 async 函数很简单，直接在方法前面加上 async 就行了。<br>async 函数返回一个 Promise 对象，可以使用then方法添加回调函数。我们先来做个测试：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">test() &#123;</div><div class="line">  this.testAsync().then((value) =&gt; &#123;</div><div class="line">    console.log(&quot;value = &quot;+value)</div><div class="line">  &#125;,(error) =&gt; &#123;</div><div class="line">    console.log(&quot;error = &quot;+error)</div><div class="line">  &#125;)</div><div class="line">&#125;,</div><div class="line">async testAsync() &#123;</div><div class="line">  //throw new Error(&apos;test&apos;)</div><div class="line">  console.log(&quot;testAsync before return&quot;)</div><div class="line">  return &quot;hello async&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里大家可能有个疑问，这里返回个 Promise 有什么用呢？下面再来介绍一下 await。<br>await 顾名思义就是等待的意思，等待后面的异步方法的执行结果。下面来通过例子来介绍。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">test() &#123;</div><div class="line">  this.testAsync()</div><div class="line">  console.log(&quot;test end&quot;)</div><div class="line">&#125;,</div><div class="line">async testAsync() &#123;</div><div class="line">  await this.testPromise()</div><div class="line">  console.log(&quot;testAsync end&quot;)</div><div class="line">&#125;,</div><div class="line">testPromise() &#123;</div><div class="line">  return new Promise((resolve,reject) =&gt; &#123;</div><div class="line">    setTimeout(function () &#123;</div><div class="line">      console.log(&quot;testPromise done&quot;)</div><div class="line">      resolve(&apos;done&apos;)</div><div class="line">    &#125;,1000)</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在上面的代码中，testPromise() 返回了一个 Promise对象，异步执行一些耗时操作，1000ms 后打印 testPromise done。<br>testAsync() 方法中，<code>await this.testPromise()</code> 表示阻塞在这里等待testPromise的执行结果。注意，这里并不是说等待testPromise这个异步方法执行完毕返回，而是要等待异步的执行结果，也就是异步方法体执行完毕。<br>看输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">16:04:43.528  test end</div><div class="line">16:04:44.534  testPromise done</div><div class="line">16:04:44.536  testAsync end</div></pre></td></tr></table></figure>
-<p>await 关键字必须要在 async 函数中使用，否则会报错。</p>
-<p>如果 testAsync() 也有返回值，我们想在 test() 方法里面等待获取这个返回值，那就需要把 test() 声明为 async 方法，并且 await testAsync()。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">async test() &#123;</div><div class="line">  var result = await this.testAsync()</div><div class="line">  console.log(&quot;test end &quot;+result)</div><div class="line">&#125;,</div><div class="line">async testAsync() &#123;</div><div class="line">  await this.testPromise()</div><div class="line">  console.log(&quot;testAsync end&quot;)</div><div class="line">  return &quot;testAsync result&quot;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">testPromise done</div><div class="line">testAsync end</div><div class="line">test end testAsync result</div></pre></td></tr></table></figure>
-<p>上面我们介绍的是 await 后面跟一个返回 Promise对象的函数，那么可以加普通的函数吗？答案是可以的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">test() &#123;</div><div class="line">  this.testAsync()</div><div class="line">  console.log(&quot;test end&quot;)</div><div class="line">&#125;,</div><div class="line">async testAsync() &#123;</div><div class="line">  await this.testTimeout()</div><div class="line">  console.log(&quot;testAsync end&quot;)</div><div class="line">&#125;,</div><div class="line">testTimeout() &#123;</div><div class="line">  setTimeout(function () &#123;</div><div class="line">      console.log(&quot;setTimeout done&quot;)</div><div class="line">  &#125;,1000)</div><div class="line">  console.log(&quot;testTimeout done&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">16:10:09.940 testTimeout done</div><div class="line">16:10:09.941 test end</div><div class="line">16:10:09.942 testAsync end</div><div class="line">16:10:10.946 setTimeout done</div></pre></td></tr></table></figure>
-<p>这种情况下 await 仅仅等待函数返回，而不是异步执行的结果。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="external">阮一峰：async 函数</a></p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>和 Java 函数的定义类似，JavaScript 函数是被设计为执行特定任务的代码块，它会在某代码调用它时被执行。函数是一段可以反复调用的代码块。函数还能接受输入的参数，不同的参数会返回不同的值。它体现的是一种封装的思想。<br>函数是 JavaScript 中一种复杂的数据结构，它既有对象的复杂度，又有函数独特的特性，尤其是函数中的 this 的指向。<br>函数是对象，它有自己的属性和方法。</p>
+<h2 id="函数定义"><a href="#函数定义" class="headerlink" title="函数定义"></a>函数定义</h2><p>JavaScript 使用关键字 function 定义函数。函数定义可以用下面三种方式来实现：</p>
+<h3 id="使用-function-声明"><a href="#使用-function-声明" class="headerlink" title="使用 function 声明"></a>使用 function 声明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function add(a,b)&#123;</div><div class="line">	return a+b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过 <code>add(4,3)</code> 调用。</p>
+<h3 id="函数表达式"><a href="#函数表达式" class="headerlink" title="函数表达式"></a>函数表达式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var fun = function (a, b) &#123;</div><div class="line">    return a + b</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>相当于把函数表达式存储在变量中，那么变量久可作为一个函数使用了。<br>通过 <code>fun(4,3)</code> 调用。<br>再看下面一种定义形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var fun = function add(a, b) &#123;</div><div class="line">    return a + b</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>上面的定义方法仍然只能通过 <code>fun(4,3)</code> 调用，而不能通过 <code>add(4,3)</code> 调用，但是在函数体内，可以通过 <code>add(4,3)</code> 来递归调用。</p>
+<h3 id="Function构造函数"><a href="#Function构造函数" class="headerlink" title="Function构造函数"></a>Function构造函数</h3><p>函数同样可以通过内置的 JavaScript 函数构造器（Function()）定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myFunction = new Function(&quot;a&quot;, &quot;b&quot;, &quot;return a * b&quot;);</div><div class="line">var x = myFunction(4, 3);</div></pre></td></tr></table></figure>
+<p>其实 new 关键字也是可以省略的，这种声明函数的方式非常不直观，较少使用。</p>
+<h3 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h3><p>ES6 提供了 lambda 表达式定义函数的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myFunction = (a,b) =&gt; &#123;return a*b&#125;;</div><div class="line">var x = myFunction(4, 3);</div></pre></td></tr></table></figure>
+<p>当箭头函数有一个参数的时候，参数可以不加括号，没有参数的时候就必须要加。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myFunction = a =&gt; &#123;return a&#125;;</div><div class="line">var x = myFunction(4);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myFunction = () =&gt; &#123;return &quot;Test&quot;&#125;;</div><div class="line">var x = myFunction();</div></pre></td></tr></table></figure>
+<p>如何函数体就一行，且不用return显式返回，函数体可以不适用花括号。如果函数体不止一行，应该用花括号括起来，这时就要显示地返回。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myFunction = () =&gt; console.log (&quot;Test&quot;);</div><div class="line">var x = myFunction();</div></pre></td></tr></table></figure>
+<h2 id="立即执行函数"><a href="#立即执行函数" class="headerlink" title="立即执行函数"></a>立即执行函数</h2><p>立即执行函数也叫自调用函数，是一个在定义的时候就立即执行的JavaScript函数。<br>如果表达式后面紧跟 () ，则会自动调用。通过添加括号，来说明它是一个函数表达式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(function () &#123;</div><div class="line">    console.log(&quot;Hello! 我是自己调用的&quot;)</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<p>也可以加参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var str = &quot;Test&quot;;</div><div class="line">(function (str) &#123;</div><div class="line">    console.log(&quot;Hello! 我是自己调用的 &quot;+str)</div><div class="line">&#125;)(str);</div></pre></td></tr></table></figure>
+<h2 id="函数属性"><a href="#函数属性" class="headerlink" title="函数属性"></a>函数属性</h2><p>前面说过，函数是对象，有自己的属性和方法。</p>
+<h3 id="name"><a href="#name" class="headerlink" title="name"></a>name</h3><p>name属性返回函数的名字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 函数声明的方式定义函数</div><div class="line">function f1() &#123;&#125;</div><div class="line">f1.name // &quot;f1&quot;</div><div class="line"></div><div class="line">// 函数表达式的方式：1、等号右边是个匿名函数</div><div class="line">var f2 = function () &#123;&#125;;</div><div class="line">f2.name // &quot;f2&quot;</div><div class="line"></div><div class="line">// 函数表达式的方式：2、等号右边是个具名函数（function关键字后面又名称）</div><div class="line">var f3 = function myName() &#123;&#125;;</div><div class="line">f3.name // &quot;myName&quot;</div></pre></td></tr></table></figure>
+<h3 id="length"><a href="#length" class="headerlink" title="length"></a>length</h3><p>函数的length属性返回函数在定义时，预期要传入的参数个数，也就是定义时()中的变量个数，也就是形参的个数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function f1() &#123;&#125;</div><div class="line">f1.length //0</div><div class="line"></div><div class="line">function f2(ac_a,ac_b,ac_c)&#123;&#125;</div><div class="line">f2.length //3</div></pre></td></tr></table></figure>
+<h3 id="arguments对象"><a href="#arguments对象" class="headerlink" title="arguments对象"></a>arguments对象</h3><p>由于JavaScript允许函数有不定数目的参数，所以需要一种机制，可以再函数体内部读取到所有的实际传入的参数（实参），这样arguments对象就诞生了。<br>arguments是一个运行时的对象，只有在函数运行的时候才会产生。它的数据方式访问类似数组的形式：arguments[0]，第一个实参，依次类推；它也有一个length属性，记录实参个数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function arg(arg1,arg2)&#123;</div><div class="line">  console.log(&apos;arguments.length:&apos;+arguments.length)</div><div class="line">  console.log(arguments[0])</div><div class="line">  console.log(arguments[1])</div><div class="line">  console.log(arguments[2])</div><div class="line">&#125;</div><div class="line"></div><div class="line">arg(1) </div><div class="line">// arguments.length:1</div><div class="line">// 1</div><div class="line">// undefined</div><div class="line">// undefined</div><div class="line">arg(2,3,5)</div><div class="line">// arguments.length:3</div><div class="line">// 2</div><div class="line">// 3</div><div class="line">// 5</div></pre></td></tr></table></figure>
+<p>在正常模式下，arguments是可以被修改的，但是在严格模式下，arguments是只读的。<br>arguments这种像数组的对象，我们通常称为伪数组。<br>arguments对象还有个callee属性，返回它所对应的原函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var f = function () &#123;</div><div class="line">  console.log(arguments.callee === f);</div><div class="line">&#125;</div><div class="line"></div><div class="line">f() // true</div></pre></td></tr></table></figure>
+<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><h3 id="函数提升"><a href="#函数提升" class="headerlink" title="函数提升"></a>函数提升</h3><p>提升（Hoisting）是 JavaScript 默认将当前作用域提升到前面去的的行为。<br>提升（Hoisting）应用在变量的声明与函数的声明。<br>因此，函数可以在声明之前调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">myFunction(5);</div><div class="line"></div><div class="line">function myFunction(y) &#123;</div><div class="line">    return y * y;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用表达式定义函数时无法提升。<br>因为函数提升的存在，因此，当一个函数被多次重复声明的时候，后面的声明会覆盖前面的声明。</p>
+<h3 id="变量提升"><a href="#变量提升" class="headerlink" title="变量提升"></a>变量提升</h3><p>在全局作用域存在变量提升和函数提升，在函数作用域同样存在。var关键字声明的变量，不论在什么位置，变量声明都会被提升到函数体的头部。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function foo(x) &#123;</div><div class="line">  if (x &gt; 100) &#123;</div><div class="line">    var tmp = x - 100;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 等同于</div><div class="line">function foo(x) &#123;</div><div class="line">  var tmp;</div><div class="line">  if (x &gt; 100) &#123;</div><div class="line">    tmp = x - 100;</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通常在实际工作中，我们推荐在代码的一开始集中定义变量，就是因为这个原因，让代码一目了然。</p>
+<h2 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h2><p><a href="https://www.runoob.com/js/js-function-parameters.html" target="_blank" rel="external">https://www.runoob.com/js/js-function-parameters.html</a></p>
 
       
     </div>
@@ -449,8 +470,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/12/javascript-basic-promise/" rel="next" title="JavaScript 基础 -- Promise">
-                <i class="fa fa-chevron-left"></i> JavaScript 基础 -- Promise
+              <a href="/2018/05/06/javascript-basic-object/" rel="next" title="JavaScritp 基础 -- 类和对象">
+                <i class="fa fa-chevron-left"></i> JavaScritp 基础 -- 类和对象
               </a>
             
           </div>
@@ -459,8 +480,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/02/development-tool-gradle-plugin-debug/" rel="prev" title="Gradle 使用指南 -- Plugin 断点调试">
-                Gradle 使用指南 -- Plugin 断点调试 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/15/javascript-basic-export-import/" rel="prev" title="JavaScript 基础 -- export 和 import">
+                JavaScript 基础 -- export 和 import <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -533,7 +554,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">222</span>
+                <span class="site-state-item-count">223</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -613,7 +634,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本用法"><span class="nav-number">2.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">3.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数定义"><span class="nav-number">2.</span> <span class="nav-text">函数定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-function-声明"><span class="nav-number">2.1.</span> <span class="nav-text">使用 function 声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数表达式"><span class="nav-number">2.2.</span> <span class="nav-text">函数表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Function构造函数"><span class="nav-number">2.3.</span> <span class="nav-text">Function构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#箭头函数"><span class="nav-number">2.4.</span> <span class="nav-text">箭头函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#立即执行函数"><span class="nav-number">3.</span> <span class="nav-text">立即执行函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数属性"><span class="nav-number">4.</span> <span class="nav-text">函数属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#name"><span class="nav-number">4.1.</span> <span class="nav-text">name</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#length"><span class="nav-number">4.2.</span> <span class="nav-text">length</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#arguments对象"><span class="nav-number">4.3.</span> <span class="nav-text">arguments对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域"><span class="nav-number">5.</span> <span class="nav-text">作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数提升"><span class="nav-number">5.1.</span> <span class="nav-text">函数提升</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量提升"><span class="nav-number">5.2.</span> <span class="nav-text">变量提升</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数参数"><span class="nav-number">6.</span> <span class="nav-text">函数参数</span></a></li></ol></div>
             
 
           </div>
