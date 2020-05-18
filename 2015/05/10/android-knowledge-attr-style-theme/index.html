@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/05/10/android-knowledge-attr-style-theme/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="Android Attr、Style和Theme 介绍">
-<meta property="og:updated_time" content="2020-05-18T01:14:57.376Z">
+<meta property="og:updated_time" content="2020-05-18T01:20:02.790Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- Attr、Style和Theme">
 <meta name="twitter:description" content="Android Attr、Style和Theme 介绍">
@@ -412,7 +412,7 @@
 <h2 id="风格"><a href="#风格" class="headerlink" title="风格"></a>风格</h2><p>style 其实就是一个属性的集合，把View的不同的属性结合在一起，就形成了一个统一的风格。<br>首先在 style.xml 中定义一个 style：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;style name=&quot;customText&quot;&gt;</div><div class="line">    &lt;item name=&quot;android:textSize&quot;&gt;20sp&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;android:textColor&quot;&gt;#FF00FF00&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;android:background&quot;&gt;#ffff0000&lt;/item&gt;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
 <p>然后在布局文件中使用。</p>
-<h2 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h2><p>Theme与Style使用同一个元素标签<style>，区别在于所包含的属性不同，并且使用的地方也不一样。Theme你需要设置到AndroidManifest.xml的<application>或者<activity>标签下，设置后，被设置的Activity或整个应用下所有的View都可以使用该<style>里面的属性了。</p>
+<h2 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h2><p>Theme与Style使用同一个元素标签 <code>&lt;style&gt;</code>，区别在于所包含的属性不同，并且使用的地方也不一样。Theme你需要设置到AndroidManifest.xml的 <code>&lt;application&gt;</code> 或者 <code>&lt;activity&gt;</code> 标签下，设置后，被设置的 Activity 或整个应用下所有的 View 都可以使用该 <code>&lt;style&gt;</code> 里面的属性了。</p>
 <h2 id="属性优先级"><a href="#属性优先级" class="headerlink" title="属性优先级"></a>属性优先级</h2><p>我们先来做一个测试，</p>
 <p>先为 Activity 设置一个布局文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</div><div class="line">    xmlns:tools=&quot;http://schemas.android.com/tools&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot;</div><div class="line">    tools:context=&quot;.attr.AttrActivity&quot;&gt;</div><div class="line">    &lt;TextView</div><div class="line">        android:layout_width=&quot;wrap_content&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:text=&quot;测试Attr&quot;/&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
@@ -441,10 +441,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;TextView</div><div class="line">    android:layout_width=&quot;wrap_content&quot;</div><div class="line">    android:layout_height=&quot;wrap_content&quot;</div><div class="line">    android:textColor=&quot;?attr/myCutsomColor&quot;</div><div class="line">    android:text=&quot;测试Attr&quot;/&gt;</div></pre></td></tr></table></figure>
 <p>Attr 的使用格式是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?[*&lt;package_name&gt;*:][*&lt;resource_type&gt;*/]*&lt;resource_name&gt;*</div></pre></td></tr></table></figure>
-<p>如果是本应用中的attr使用，则可以省去<package_name>部分。<br>如果想要使用系统的属性值：</p>
+<p>如果是本应用中的attr使用，则可以省去<package_name>部分。<br>如果想要使用系统的属性值：</package_name></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android:textColor=&quot;?android:textColorSecondary&quot;</div></pre></td></tr></table></figure>
-<p>此处的textColor使用当前主题的android:textColorSecondary属性内容。因为资源工具知道此处是一个属性，所以省去了attr （完整写法：?android:attr/textColorSecondary）。</p>
-</style></p>
+<p>此处的 textColor 使用当前主题的 <code>android:textColorSecondary</code> 属性内容。因为资源工具知道此处是一个属性，所以省去了attr （完整写法：<code>?android:attr/textColorSecondary</code> ）。</p>
+
       
     </div>
 
@@ -640,7 +640,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概念说明"><span class="nav-number">2.</span> <span class="nav-text">概念说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性"><span class="nav-number">3.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#风格"><span class="nav-number">4.</span> <span class="nav-text">风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主题"><span class="nav-number">5.</span> <span class="nav-text">主题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概念说明"><span class="nav-number">2.</span> <span class="nav-text">概念说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性"><span class="nav-number">3.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#风格"><span class="nav-number">4.</span> <span class="nav-text">风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主题"><span class="nav-number">5.</span> <span class="nav-text">主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性优先级"><span class="nav-number">6.</span> <span class="nav-text">属性优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取-Attr"><span class="nav-number">7.</span> <span class="nav-text">获取 Attr</span></a></li></ol></div>
             
 
           </div>
