@@ -3,7 +3,7 @@ title: JavaScript 基础 -- 函数
 categories: JavaScript
 comments: true
 tags: [JavaScript]
-description: 介绍import和export的使用
+description: 介绍 JavaScript 函数的使用
 date: 2018-5-10 10:00:00
 ---
 
