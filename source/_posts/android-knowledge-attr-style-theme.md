@@ -54,7 +54,7 @@ style 其实就是一个属性的集合，把View的不同的属性结合在一�
 
 ## 主题
 
-Theme与Style使用同一个元素标签<style>，区别在于所包含的属性不同，并且使用的地方也不一样。Theme你需要设置到AndroidManifest.xml的<application>或者<activity>标签下，设置后，被设置的Activity或整个应用下所有的View都可以使用该<style>里面的属性了。
+Theme与Style使用同一个元素标签 `<style>`，区别在于所包含的属性不同，并且使用的地方也不一样。Theme你需要设置到AndroidManifest.xml的 `<application>` 或者 `<activity>` 标签下，设置后，被设置的 Activity 或整个应用下所有的 View 都可以使用该 `<style>` 里面的属性了。
 
 ## 属性优先级
 
@@ -196,4 +196,4 @@ Attr 的使用格式是：
 android:textColor="?android:textColorSecondary"
 ```
 
-此处的textColor使用当前主题的android:textColorSecondary属性内容。因为资源工具知道此处是一个属性，所以省去了attr （完整写法：?android:attr/textColorSecondary）。
+此处的 textColor 使用当前主题的 `android:textColorSecondary` 属性内容。因为资源工具知道此处是一个属性，所以省去了attr （完整写法：`?android:attr/textColorSecondary` ）。
