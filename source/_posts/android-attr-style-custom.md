@@ -80,6 +80,8 @@ public class CustomView extends View {
     }
 
     private void init(AttributeSet attrs) {
+        // 获取所有设置的属性值中 R.styleable.CustomAttrs 相关的属性。
+        // 如果在 R.styleable.CustomAttrs 中声明了但是在 attrs 中没有设置，返回默认值或null
         TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.CustomAttrs);
 
         String src = ta.getString(R.styleable.CustomAttrs_custom_src);
