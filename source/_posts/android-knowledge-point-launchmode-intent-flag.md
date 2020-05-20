@@ -265,23 +265,7 @@ FLAG_ACTIVITY_NEW_TASK 只会去关心该 `Activity` 的 Task 的个数，如果
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=1 lastLaunchTime=-4s128ms
-          haveState=false icicle=null
-          state=RESUMED stopped=false delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=true sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_SHOWN
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=true lastVisibleTime=-3s703ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #1: ActivityRecord{df6006f u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3345}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0
@@ -295,23 +279,7 @@ FLAG_ACTIVITY_NEW_TASK 只会去关心该 `Activity` 的 Task 的个数，如果
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-9s585ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=952]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-9s130ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #0: ActivityRecord{1111663 u0 com.example.heqiang.testsomething/.MainActivity t3345}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10033 launchedFromPackage=com.android.systemui userId=0
@@ -325,23 +293,7 @@ FLAG_ACTIVITY_NEW_TASK 只会去关心该 `Activity` 的 Task 的个数，如果
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f100006
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ffe6e6e6
-           backgroundColor=fff3f3f3
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-11s848ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=1520]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=2
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-11s378ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
 
     Running activities (most recent first):
       TaskRecord{a4848a0 #3345 A=com.example.heqiang.testsomething U=0 StackId=1571 sz=3}
@@ -385,23 +337,7 @@ FLAG_ACTIVITY_NEW_TASK 只会去关心该 `Activity` 的 Task 的个数，如果
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-5s512ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=648]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_SHOWN
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-5s53ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
 
     Running activities (most recent first):
       TaskRecord{c72201e #3346 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1572 sz=1}
@@ -450,23 +386,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=1 lastLaunchTime=-1s631ms
-          haveState=false icicle=null
-          state=RESUMED stopped=false delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=true sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_NOT_SHOWN
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=true lastVisibleTime=-1s277ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #0: ActivityRecord{83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0
@@ -480,23 +400,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-2s550ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=648]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-2s110ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
 
     Running activities (most recent first):
       TaskRecord{b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2}
@@ -540,23 +444,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-3s650ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=952]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_NOT_SHOWN
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-3s193ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #0: ActivityRecord{731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10033 launchedFromPackage=com.android.systemui userId=0
@@ -570,23 +458,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f100006
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ffe6e6e6
-           backgroundColor=fff3f3f3
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-6s805ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=1520]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=2
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-6s338ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
 
     Running activities (most recent first):
       TaskRecord{f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2}
@@ -633,23 +505,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-3m53s49ms
-          haveState=false icicle=null
-          state=RESUMED stopped=false delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=true sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_SHOWN
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=true lastVisibleTime=-2s596ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #0: ActivityRecord{83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0
@@ -663,23 +519,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-3m53s968ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=648]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-3m53s528ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
 
     Running activities (most recent first):
       TaskRecord{b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2}
@@ -722,23 +562,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-3m55s68ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=952]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_SHOWN
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-4s142ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #0: ActivityRecord{731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10033 launchedFromPackage=com.android.systemui userId=0
@@ -752,23 +576,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f100006
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ffe6e6e6
-           backgroundColor=fff3f3f3
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-3m58s223ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=1520]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=2
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-3m57s756ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
 
     Running activities (most recent first):
       TaskRecord{f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2}
@@ -815,23 +623,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=1 lastLaunchTime=-2s300ms
-          haveState=false icicle=null
-          state=RESUMED stopped=false delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=true sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_NOT_SHOWN
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=true lastVisibleTime=-1s924ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #1: ActivityRecord{66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0
@@ -845,23 +637,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-7m34s863ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=648]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-3m44s410ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #0: ActivityRecord{83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0
@@ -875,23 +651,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-7m35s782ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=648]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-7m35s342ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
 
     Running activities (most recent first):
       TaskRecord{b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=3}
@@ -936,23 +696,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ff212121
-           backgroundColor=ff303030
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-7m36s881ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=952]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=0
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-3m45s955ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
       * Hist #0: ActivityRecord{731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351}
           packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething
           launchedFromUid=10033 launchedFromPackage=com.android.systemui userId=0
@@ -966,23 +710,7 @@ OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinit
           stateNotNeeded=false componentSpecified=true mActivityType=standard
           compat={480dpi} labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f100006
           mLastReportedConfigurations:
-           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=undefined} themeChanged.4 s.206}
-           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw360dp w360dp h684dp 480dpi nrml long hdr port finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1080, 2136) mAppBounds=Rect(0, 0 - 1080, 2136) mWindowingMode=fullscreen mActivityType=standard} themeChanged.4 s.206}
-          taskDescription: label="null" icon=null iconResource=0 iconFilename=null primaryColor=ffe6e6e6
-           backgroundColor=fff3f3f3
-           statusBarColor=ff000000
-           navigationBarColor=ff000000
-          launchFailed=false launchCount=0 lastLaunchTime=-7m40s36ms
-          haveState=true icicle=Bundle[mParcelledData.dataSize=1520]
-          state=STOPPED stopped=true delayedResume=false finishing=false
-          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
-          fullscreen=true noDisplay=false immersive=false launchMode=2
-          frozenBeforeDestroy=false forceNewConfig=false
-          mActivityType=standard
-          waitingVisible=false nowVisible=false lastVisibleTime=-7m39s569ms
-          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
-          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+           ......
 
     Running activities (most recent first):
       TaskRecord{f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2}
