@@ -102,3 +102,4 @@ GLUtils
 ## 学习资料
 
 《OpenGL ES 应用开发实践指南 Android 卷》
+《OpenGL ES 2.0游戏开发》
