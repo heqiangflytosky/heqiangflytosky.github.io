@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/07/development-tool-git-command/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="列举一些常用的Git命令">
-<meta property="og:updated_time" content="2020-03-28T02:55:33.557Z">
+<meta property="og:updated_time" content="2020-05-23T07:51:42.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="列举一些常用的Git命令">
@@ -438,16 +438,16 @@
 <li><code>git stash show -p stash@{0}</code>  查看名为stash{0}缓存的文件差异</li>
 <li><code>git stash drop stash@{0}</code> 丢弃名为stash{0}缓存</li>
 </ul>
-<h2 id="git-config"><a href="#git-config" class="headerlink" title="git config"></a>git config</h2><p>先说一下–local、–global和–system三个参数的区别：</p>
+<h2 id="git-config"><a href="#git-config" class="headerlink" title="git config"></a>git config</h2><p>先说一下<code>--local</code>、<code>--global</code>和<code>--system</code>三个参数的区别：</p>
 <ol>
-<li>–local的作用域最小，仅对当前的git项目的配置</li>
-<li>–global的作用域是针对当前用户</li>
-<li>–system的作用域最大，是针对整个计算机系统</li>
+<li><code>--local</code>的作用域最小，仅对当前的git项目的配置</li>
+<li><code>--global</code>的作用域是针对当前用户</li>
+<li><code>--system</code>的作用域最大，是针对整个计算机系统</li>
 </ol>
-<p>再来说一下他们的优先级，如果在三个级别都有配置，那么优先级为：<br>–local &gt; –global &gt; –system</p>
+<p>再来说一下他们的优先级，如果在三个级别都有配置，那么优先级为：<br><code>--local</code> &gt; <code>--global</code> &gt; <code>--system</code></p>
 <ul>
-<li>查看配置：git config –local -l</li>
-<li>配置用户名和邮箱：git config –local user.name “xx”  git config –global user.email “xx”</li>
+<li>查看配置：<code>git config --local -l</code></li>
+<li>配置用户名和邮箱：<code>git config --local user.name &quot;xx&quot;</code>  <code>git config --global user.email &quot;xx&quot;</code></li>
 </ul>
 <h2 id="git-reset"><a href="#git-reset" class="headerlink" title="git reset"></a>git reset</h2><ul>
 <li><code>git reset --mixed</code>：此为默认方式，不带任何参数的<code>git reset</code>，即时这种方式，它回退到某个版本，只保留源码，回退commit和index信息</li>
@@ -615,7 +615,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">225</span>
+                <span class="site-state-item-count">226</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
