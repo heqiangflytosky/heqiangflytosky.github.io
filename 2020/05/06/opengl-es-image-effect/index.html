@@ -98,10 +98,12 @@
 <meta property="og:image" content="http://yoursite.com/images/opengl-es-image-effect/3.png">
 <meta property="og:image" content="http://yoursite.com/images/opengl-es-image-effect/4.png">
 <meta property="og:image" content="http://yoursite.com/images/opengl-es-image-effect/5.png">
+<meta property="og:image" content="http://yoursite.com/images/opengl-es-image-effect/10.png">
+<meta property="og:image" content="http://yoursite.com/images/opengl-es-image-effect/11.png">
 <meta property="og:image" content="http://yoursite.com/images/opengl-es-image-effect/6.png">
 <meta property="og:image" content="http://yoursite.com/images/opengl-es-image-effect/7.png">
 <meta property="og:image" content="http://yoursite.com/images/opengl-es-image-effect/8.png">
-<meta property="og:updated_time" content="2020-05-23T08:38:04.398Z">
+<meta property="og:updated_time" content="2020-06-03T01:20:18.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenGL ES -- 图像处理">
 <meta name="twitter:description" content="介绍 OpenGL ES 2.0 实现一些滤镜效果">
@@ -437,10 +439,15 @@
 <h2 id="放大镜"><a href="#放大镜" class="headerlink" title="放大镜"></a>放大镜</h2><p>放大镜效果相对模糊处理来说，处理过程也会相对简单一些。我们只需要将制定区域的像素点，都以需要放大的区域中心点为中心，向外延伸其到这个中心的距离即可实现放大效果。</p>
 <p>放大镜效果：</p>
 <p><img src="/images/opengl-es-image-effect/5.png" width="342" height="239"></p>
+<h2 id="浮雕效果"><a href="#浮雕效果" class="headerlink" title="浮雕效果"></a>浮雕效果</h2><p>浮雕效果是指图像的前景前向凸出背景。实现思路：把图象的一个象素和左上方的象素进行求差运算，并加上一个灰度。这个灰度就是表示背景颜色。这里我们设置这个插值为128 (图象RGB的值是0-255)。同时，我们还应该把这两个颜色的差值转换为亮度信息，避免浮雕图像出现彩色像素。</p>
+<p><img src="/images/opengl-es-image-effect/10.png" width="342" height="239"></p>
+<h2 id="马赛克效果"><a href="#马赛克效果" class="headerlink" title="马赛克效果"></a>马赛克效果</h2><p>马赛克效果就是把图片的一个相当大小的区域用同一个点的颜色来表示。可以认为是大规模的降低图像的分辨率，而让图像的一些细节隐藏起来。</p>
+<p><img src="/images/opengl-es-image-effect/11.png" width="342" height="239"></p>
 <h2 id="一半处理"><a href="#一半处理" class="headerlink" title="一半处理"></a>一半处理</h2><p>Demo 中对以上的效果有一个选项，叫处理一半的效果，这个其实很简单，就是当x坐标小于0时不加任何效果，x坐标大于0时再做对应的效果。</p>
 <p><img src="/images/opengl-es-image-effect/6.png" width="342" height="239"></p>
 <p><img src="/images/opengl-es-image-effect/7.png" width="342" height="239"></p>
 <p><img src="/images/opengl-es-image-effect/8.png" width="342" height="239"></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://blog.csdn.net/junzia/article/details/52902189" target="_blank" rel="external">https://blog.csdn.net/junzia/article/details/52902189</a></p>
 
       
     </div>
@@ -633,7 +640,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#黑白滤镜"><span class="nav-number">2.</span> <span class="nav-text">黑白滤镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#暖色滤镜和冷色滤镜"><span class="nav-number">3.</span> <span class="nav-text">暖色滤镜和冷色滤镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模糊效果"><span class="nav-number">4.</span> <span class="nav-text">模糊效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#放大镜"><span class="nav-number">5.</span> <span class="nav-text">放大镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一半处理"><span class="nav-number">6.</span> <span class="nav-text">一半处理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#黑白滤镜"><span class="nav-number">2.</span> <span class="nav-text">黑白滤镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#暖色滤镜和冷色滤镜"><span class="nav-number">3.</span> <span class="nav-text">暖色滤镜和冷色滤镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模糊效果"><span class="nav-number">4.</span> <span class="nav-text">模糊效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#放大镜"><span class="nav-number">5.</span> <span class="nav-text">放大镜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮雕效果"><span class="nav-number">6.</span> <span class="nav-text">浮雕效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#马赛克效果"><span class="nav-number">7.</span> <span class="nav-text">马赛克效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一半处理"><span class="nav-number">8.</span> <span class="nav-text">一半处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">9.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>
