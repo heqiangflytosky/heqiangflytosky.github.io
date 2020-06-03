@@ -91,6 +91,18 @@ void modifyColor(vec4 color){
 
 <img src="/images/opengl-es-image-effect/5.png" width="342" height="239"/>
 
+## 浮雕效果
+
+浮雕效果是指图像的前景前向凸出背景。实现思路：把图象的一个象素和左上方的象素进行求差运算，并加上一个灰度。这个灰度就是表示背景颜色。这里我们设置这个插值为128 (图象RGB的值是0-255)。同时，我们还应该把这两个颜色的差值转换为亮度信息，避免浮雕图像出现彩色像素。
+
+<img src="/images/opengl-es-image-effect/10.png" width="342" height="239"/>
+
+## 马赛克效果
+
+马赛克效果就是把图片的一个相当大小的区域用同一个点的颜色来表示。可以认为是大规模的降低图像的分辨率，而让图像的一些细节隐藏起来。
+
+<img src="/images/opengl-es-image-effect/11.png" width="342" height="239"/>
+
 ## 一半处理
 
 Demo 中对以上的效果有一个选项，叫处理一半的效果，这个其实很简单，就是当x坐标小于0时不加任何效果，x坐标大于0时再做对应的效果。
@@ -101,3 +113,7 @@ Demo 中对以上的效果有一个选项，叫处理一半的效果，这个其
 
 <img src="/images/opengl-es-image-effect/8.png" width="342" height="239"/>
 
+
+## 参考文章
+
+https://blog.csdn.net/junzia/article/details/52902189
