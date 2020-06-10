@@ -1,6 +1,6 @@
 ---
 title: Android 组件 -- 广播
-categories: Android
+categories: Android 组件
 comments: true
 tags: [Android]
 description: 介绍广播的一些基础知识
