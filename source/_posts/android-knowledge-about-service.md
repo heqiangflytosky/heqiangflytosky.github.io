@@ -1,6 +1,6 @@
 ---
-title: Android 基础 -- 关于 Service
-categories: Android
+title: Android 组件 -- 关于 Service
+categories: Android 组件
 comments: true
 tags: [Android]
 description: 介绍 Service 的一些基础知识

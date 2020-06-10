@@ -1,6 +1,6 @@
 ---
-title: Android 基础 -- 前台 Service
-categories: Android
+title: Android 组件 -- 前台 Service
+categories: Android 组件
 comments: true
 tags: [Android]
 description: 介绍前台 Service

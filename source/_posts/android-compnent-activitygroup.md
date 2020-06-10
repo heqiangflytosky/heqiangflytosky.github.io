@@ -1,6 +1,6 @@
 ---
-title: Android ActivityGroup简介
-categories: Android
+title: Android 组件 --  ActivityGroup 简介
+categories: Android 组件
 comments: true
 tags: [Android, ActivityGroup]
 description: 介绍ActivityGroup的使用

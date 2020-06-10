@@ -1,6 +1,6 @@
 ---
-title: Android ContentProvider 使用以及源码分析
-categories: Android
+title: Android 组件 --  ContentProvider 使用以及源码分析
+categories: Android 组件
 comments: true
 tags: [ContentProvider]
 description: 本文介绍 ContentProvider 的基本使用

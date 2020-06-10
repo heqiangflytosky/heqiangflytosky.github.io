@@ -1,5 +1,5 @@
 ---
-title: Android  应该了解的知识系列 - 关于广播
+title: Android 组件 -- 广播
 categories: Android
 comments: true
 tags: [Android]
