@@ -10,7 +10,7 @@ date: 2016-9-10 10:00:00
 
 ## 概述
 
-TextureView 是 Android 4 引入的组件，继承自 View，用来承载数据流的显示。与 SurfaceView 相比，它并没有创建一个单独的 Surface 来绘制，解决了 SurfaceView 无法做一些动画的问题。
+TextureView 是 Android 4 引入的组件，继承自 View，用来承载数据流的显示，它将 SurfaceTexture 和 View 结合到了一起。与 SurfaceView 相比，它并没有创建一个单独的 Surface 来绘制，解决了 SurfaceView 无法做一些动画的问题。
 TextureView 必须在硬件加速开启的窗口中。在 Androidmanifest 加 android:hardwareAccelerated="true"，否则会无法正常绘制，并出现下面的错误：
 
 ```
@@ -21,7 +21,7 @@ TextureView: A TextureView or a subclass can only be used with hardware accelera
 
 ## SurfaceTexture
 
-SurfaceTexture 作为 TextureView 的成员变量，是用于渲染内容的，它能捕获一个图像流的一帧来作为 OpenGL 的 texture 也就是纹理。这个图像流主要是来自相机的预览或视频的解码。
+SurfaceTexture 是 Surface 和 OpenGL ES 纹理相结合的产物，它作为 TextureView 的成员变量，是用于渲染内容的，它能捕获一个图像流的一帧来作为 OpenGL 的 texture 也就是纹理。这个图像流主要是来自相机的预览或视频的解码。
 和 SurfaceView 不同，SurfaceTexture 对图像流的处理并不直接显示，而是转为GL外部纹理，因此可用于图像流数据的二次处理(如Camera滤镜，桌面特效等)。比如 Camera 的预览数据，变成纹理后可以交给 GLSurfaceView 直接显示，也可以通过 SurfaceTexture 交给 TextureView 作为 View heirachy 中的一个硬件加速层来显示。
 首先，SurfaceTexture 从图像流（来自Camera预览，视频解码，GL绘制场景等）中获得帧数据，当调用 `updateTexImage()` 时，根据内容流中最近的图像更新 SurfaceTexture 对应的GL纹理对象，接下来，就可以像操作普通GL纹理一样操作它了。
 以SurfaceTexture为中心的一个pipeline大体是这样的：
