@@ -4,6 +4,46 @@
 
     
   <url>
+    <loc>http://yoursite.com/2016/08/02/android-graphic-system-view-drawing/</loc>
+    <lastmod>2020-06-22T08:58:18.984Z</lastmod>
+    <data>
+        <display>
+        <title>Android 图形系统 -- View 绘制流程</title>
+        <pubTime>2016-08-02T02:00:00.000Z</pubTime>
+        
+        <tag>Android 图形系统</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android 图形系统" url="http://yoursite.com/categories/Android-%E5%9B%BE%E5%BD%A2%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/09/10/android-graphic-system-textureview/</loc>
+    <lastmod>2020-06-18T06:24:05.216Z</lastmod>
+    <data>
+        <display>
+        <title>Android 图形系统 -- TextureView 使用</title>
+        <pubTime>2016-09-10T02:00:00.000Z</pubTime>
+        
+        <tag>Android 图形系统</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android 图形系统" url="http://yoursite.com/categories/Android-%E5%9B%BE%E5%BD%A2%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2014/11/18/java-basic-design-pattern-template-method/</loc>
     <lastmod>2020-06-16T06:49:03.483Z</lastmod>
     <data>
@@ -835,26 +875,6 @@
            
              
               <breadCrumb title="Android性能优化" url="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/09/10/android-graphic-system-textureview/</loc>
-    <lastmod>2020-02-19T10:41:37.739Z</lastmod>
-    <data>
-        <display>
-        <title>Android 图形系统 -- TextureView 使用</title>
-        <pubTime>2016-09-10T02:00:00.000Z</pubTime>
-        
-        <tag>Android 图形系统</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android 图形系统" url="http://yoursite.com/categories/Android-%E5%9B%BE%E5%BD%A2%E7%B3%BB%E7%BB%9F/"/>
           
         </display>
     </data>
@@ -3884,12 +3904,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -3904,12 +3924,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4317,12 +4337,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4339,12 +4359,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4403,12 +4423,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4423,12 +4443,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
