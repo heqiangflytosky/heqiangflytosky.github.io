@@ -23,16 +23,23 @@ date: 2020-2-10 10:00:00
 cocos2d-x-lite 在 Android 平台上采用v8 作为js的运行环境，提供js运行基础类库。通过Android OpenGL 接口模拟实现 WebGL 接口。
 js-framework 模拟浏览器标准接口、生命周期规范，js层简化实现逻辑，减小开发成本。
 
-## 相关资料
+同样是运行js开发的游戏，那么和H5游戏方案相比，它有什么优势呢？
 
-[cocos 官网](https://www.cocos.com/)
-[Cocos2d-x github 源码](https://github.com/cocos2d/cocos2d-x)
-[Cocos2d-x 用户手册](https://docs.cocos.com/cocos2d-x/manual/zh/)
-
-[Cocos Creator 用户手册](https://docs.cocos.com/creator/manual/zh/)
-[Cocos Creator API 参考](https://docs.cocos.com/creator/api/zh/)
+ - 更高的性能：支持原生游戏品质，高性能渲染器，而H5游戏的性能受限于浏览器。
+ - 更强扩展能力：
+ - 生态可控度：运行环境安全可控，内容可管控，支付通道原生支持，不会被非法切支付。H5在这方面的可管控度较低，可能会被切支付和广告。
+ - 游戏移植成本低：支持 Canvas 2d api 和 WebGL api，adapter的引入可以提供大部分H5游戏所依赖的浏览器接口。
 
 ## Cocos Creator
+
+### Cocos Creator 和 Cocos2d-x 的区别
+
+Cocos2d-x 是游戏引擎，Cocos Creator 是一个完整的游戏开发解决方案，包含了游戏引擎+图形界面工具(编辑器)。
+Cocos Creator 是以内容创作为核心的游戏开发工具，在 Cocos2d-x 基础上实现了彻底脚本化、组件化和数据驱动等特点。Cocos Creator 编辑器提供面向设计和开发的两种工作流，提供简单顺畅的分工合作方式。除了开发人员，也可以让策划和美术人员也加入到对引擎的使用中，可以大大加速整个游戏的开发过程。
+Cocos2d-x一直在追求「性能快」，而Cocos Creator则追求在「性能快」和「开发快」之间取一个最佳平衡点，并且附加上AnySDK打包工具能带来的「发布快」优势。
+Cocos Creator 目前支持发布游戏到 Web、iOS、Android、各类"小游戏"、PC 客户端等平台，真正实现一次开发，全平台运行。
+
+### Cocos Creator 引擎简介
 
 Cocos Creator 的引擎部分包括 JavaScript、Cocos2d-x-lite 和 adapter 三个部分。全部都在 GitHub 上开源。
 
@@ -249,3 +256,17 @@ AssertionError [ERR_ASSERTION] [ERR_ASSERTION]: Task function must be specified
 
 在 HelloWorld Android 工程中直接修改编译即可。
 编译按照 [引擎定制工作流程](https://docs.cocos.com/creator/manual/zh/advanced-topics/engine-customization.html) 提供的步骤即可。
+
+## 相关资料
+
+[cocos 官网](https://www.cocos.com/)
+[Cocos2d-x github 源码](https://github.com/cocos2d/cocos2d-x)
+[Cocos2d-x 用户手册](https://docs.cocos.com/cocos2d-x/manual/zh/)
+
+[Cocos Creator 用户手册](https://docs.cocos.com/creator/manual/zh/)
+[Cocos Creator API 参考](https://docs.cocos.com/creator/api/zh/)
+
+## 文章推荐
+
+[Cocos 引擎创始人王哲：选择和努力一样重要](https://xw.qq.com/amphtml/20171204015864/GAM2017120401586400)
+[微信「跳一跳」带火小游戏，开发者如何快速上手？](http://www.gamelook.com.cn/2018/01/317302)
