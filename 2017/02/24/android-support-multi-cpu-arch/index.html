@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="多CPU架构支持所需要了解的知识">
-<meta property="og:updated_time" content="2019-12-02T09:16:56.868Z">
+<meta property="og:updated_time" content="2020-07-02T11:35:17.870Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- 多CPU架构支持所需要了解的知识">
 <meta name="twitter:description" content="多CPU架构支持所需要了解的知识">
@@ -400,7 +400,7 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Android系统目前支持以下七种不同的CPU架构：ARMv5，ARMv7 (从2010年起)，x86 (从2011年起)，MIPS (从2012年起)，ARMv8，MIPS64和x86_64 (从2014年起)，每一种都关联着一个相应的ABI。ABI是指应用基于哪种指令集来进行编译。<br>如果项目中使用到了NDK，它将会生成.so文件，Android应用支持的ABI取决于APK中位于lib/ABI目录中的.so文件，其中ABI可能是上面说过的七种ABI中的一种。 Android包管理器安装APK时，如果在对应的lib／ABI目录中存在.so文件的话，会自动选择APK包中为对应系统ABI预编译好的.so文件。当一个应用安装在设备上，只有该设备支持的CPU架构对应的.so文件会被安装。在x86设备上，libs/x86目录中如果存在.so文件的 话，会被安装，如果不存在，则会选择armeabi-v7a中的.so文件，如果也不存在，则选择armeabi目录中的.so文件（因为x86设备也支 持armeabi-v7a和armeabi）。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Android系统目前支持以下七种不同的CPU架构：ARMv5，ARMv7 (从2010年起)，x86 (从2011年起)，MIPS (从2012年起)，ARMv8，MIPS64和x86_64 (从2014年起)，每一种都关联着一个相应的ABI。ABI是指应用基于哪种指令集来进行编译。<br>如果项目中使用到了NDK，它将会生成.so文件，Android应用支持的ABI取决于APK中位于lib/ABI目录中的.so文件，其中ABI可能是上面说过的七种ABI中的一种。 Android apk 打包时，只有指定的.so文件会被安装到 apk 中，Android包管理器安装APK时，如果在对应的lib／ABI目录中存在.so文件的话，会自动选择APK包中为对应系统ABI预编译好的.so文件。当一个应用安装在设备上，只有该设备支持的CPU架构对应的.so文件会被安装。在x86设备上，libs/x86目录中如果存在.so文件的 话，会被安装，如果不存在，则会选择armeabi-v7a中的.so文件，如果也不存在，则选择armeabi目录中的.so文件（因为x86设备也支 持armeabi-v7a和armeabi）。</p>
 <h2 id="添加动态库"><a href="#添加动态库" class="headerlink" title="添加动态库"></a>添加动态库</h2><p>第一种方法：</p>
 <p>在 src/main中 新建 <code>jniLibs</code> 文件夹，再创建对应 ABI 架构的文件夹，比如：armeabi-v7a 或者 arm64-v8a 等，然后把 so 放到对应的 ABI 架构的文件夹中。</p>
 <p>第二种方法：</p>
@@ -424,7 +424,8 @@
 </ul>
 <p>所有的 <code>x86/x86_64/armeabi-v7a/arm64-v8a</code> 设备都支持 <code>armeabi</code> 架构的 .so 文件，x86 设备能够很好的运行 ARM 类型函数库，但并不保证100%不发生crash，特别是对旧设备。64位设备（arm64-v8a, x86_64, mips64）能够运行32位（armeabi-v7a）的函数库，但是以32位模式运行，在64位平台上运行32位版本的ART和Android组件，将丢失专为64位优化过的性能（ART，webview，media等等）。<br>基于这些问题，我们应该尽可能为每种CPU类型都提供对应的SO库。<br>因此，我们可以通过在app中只放置32位so，来减小apk的打包体积。<br>但是在我们需要体现64位CPU给我们带来的优异性能的前提下，以减少APK包大小为由来减少架构的支持显然不是一个好的理由。因为也可以选择在应用市场上传指定ABI版本的APK，生成不同ABI版本的APK可以在build.gradle中如下配置：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">   ... </div><div class="line">   splits &#123;</div><div class="line">	   abi &#123;</div><div class="line">		   enable true</div><div class="line">		   reset()</div><div class="line">		   include &apos;x86&apos;, &apos;x86_64&apos;, &apos;armeabi-v7a&apos;, &apos;arm64-v8a&apos; //select ABIs to build APKs for</div><div class="line">		   universalApk true //generate an additional APK that contains all the ABIs</div><div class="line">	   &#125;</div><div class="line">   &#125;</div><div class="line">   // map for the version code</div><div class="line">   project.ext.versionCodes = [&apos;armeabi&apos;: 1, &apos;armeabi-v7a&apos;: 2, &apos;arm64-v8a&apos;: 3, &apos;mips&apos;: 5, &apos;mips64&apos;: 6, &apos;x86&apos;: 8, &apos;x86_64&apos;: 9]</div><div class="line">   android.applicationVariants.all &#123; variant -&gt;</div><div class="line">	   // assign different version code for each output</div><div class="line">	   variant.outputs.each &#123; output -&gt;</div><div class="line">		   output.versionCodeOverride =</div><div class="line">				   project.ext.versionCodes.get(output.getFilter(com.android.build.OutputFile.ABI), 0) * 1000000 + android.defaultConfig.versionCode</div><div class="line">	   &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="多架构的加载机制"><a href="#多架构的加载机制" class="headerlink" title="多架构的加载机制"></a>多架构的加载机制</h2><p>apk在安装的过程中，系统就会对apk进行解析根据里面so文件类型，确定这个apk安装是在32 还是 64位的虚拟机上，如果是32位虚拟机那么就不能使用64位so，如果是64位虚拟机也不能使用32位so。而64位设备可以提供32和64位两种虚拟机，根据apk选择开启哪一种，因此说64位设备兼容32的so库。<br>一旦安装完成，就确定了该 App 在当前机器上的运行模式，系统是不允许 32位 so 和 64 位 so 混合使用的。因为虚拟机不允许这样做。<br>具体机制，分下面四种情况：</p>
+<h2 id="多架构在-APK-打包时的选择"><a href="#多架构在-APK-打包时的选择" class="headerlink" title="多架构在 APK 打包时的选择"></a>多架构在 APK 打包时的选择</h2><p>前面我们说到 <code>abiFilters</code> 可以决定把哪种 .so 打包到 apk 中去，它也只是决定了打包时的多架构选择，具体 app 运行时选择什么架构，还是由 app 安装时来决定的。</p>
+<h2 id="多架构的安装和加载机制"><a href="#多架构的安装和加载机制" class="headerlink" title="多架构的安装和加载机制"></a>多架构的安装和加载机制</h2><p>apk在安装的过程中，系统就会对apk进行解析根据里面so文件类型，确定这个apk安装是在32 还是 64位的虚拟机上，如果是32位虚拟机那么就不能使用64位so，如果是64位虚拟机也不能使用32位so。而64位设备可以提供32和64位两种虚拟机，根据apk选择开启哪一种，因此说64位设备兼容32的so库。<br>另外，安装过程中虚拟机类型的选择和 AndroidManifest 里面的 <code>android:multiArch</code> 有关系，系统在解包动态库的时候，如果 multiArch设置为true，那么 abilist32 和 abilist64这两个数组都被选中；否则，在abilist和 abilist32间选择一个合适的数组。选择好abilist后，数组中的<primary-abi>/*.so 会被拷贝出来，如果不存在，则选择 secondary-abi下的so文件。<br>一旦安装完成，就确定了该 App 在当前机器上的运行模式，系统是不允许 32位 so 和 64 位 so 混合使用的。因为虚拟机不允许这样做。<br>具体机制，分下面四种情况：</primary-abi></p>
 <ol>
 <li>假设apk的lib目录放置了32和64位两种so，那么安装时根据当前设备的cpu架构从上到下筛选(X86 &gt; arm64 &gt; arm32)，一旦发现lib里面有和设备匹配的so文件，那么直接选定这种架构为标准。比如当前设备是64位并且发现lib有一个64位的so，那么apk会拷贝lib下所有64位的so文件到 <code>data/data/&lt;packageName&gt;/lib/</code> 目录（查看此目录需要ROOT）<br>后面调用System.loadLibrary其实就是加载这个目录下的so文件，此时如果有某个64位so文件在我们项目的lib中没有提供，就会直接报错程序崩溃。因此这里如果放置部分功能32位so，部分功能放置放置64位so，即使用多进程来加载模型，也会报错崩溃。</li>
 <li>apk的lib目录只放置32位so，参照上面原理，运行在32位设备是OK的。绝大多数64位设备也是OK的，不过x86的设备肯定会崩溃。假设现在运行在64位设备，然后在代码中动态加载64位so文件，会报错：<code>so is 64-bit instead of 32-bit</code></li>
@@ -550,7 +551,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">228</span>
+                <span class="site-state-item-count">231</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -568,7 +569,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">110</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -630,7 +631,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加动态库"><span class="nav-number">2.</span> <span class="nav-text">添加动态库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ABI-架构选择"><span class="nav-number">3.</span> <span class="nav-text">ABI 架构选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">3.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">3.2.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APP多架构支持"><span class="nav-number">4.</span> <span class="nav-text">APP多架构支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多架构的加载机制"><span class="nav-number">5.</span> <span class="nav-text">多架构的加载机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NDK生成支持多种CPU架构的SO"><span class="nav-number">6.</span> <span class="nav-text">NDK生成支持多种CPU架构的SO</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加动态库"><span class="nav-number">2.</span> <span class="nav-text">添加动态库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ABI-架构选择"><span class="nav-number">3.</span> <span class="nav-text">ABI 架构选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">3.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">3.2.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APP多架构支持"><span class="nav-number">4.</span> <span class="nav-text">APP多架构支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多架构在-APK-打包时的选择"><span class="nav-number">5.</span> <span class="nav-text">多架构在 APK 打包时的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多架构的安装和加载机制"><span class="nav-number">6.</span> <span class="nav-text">多架构的安装和加载机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NDK生成支持多种CPU架构的SO"><span class="nav-number">7.</span> <span class="nav-text">NDK生成支持多种CPU架构的SO</span></a></li></ol></div>
             
 
           </div>

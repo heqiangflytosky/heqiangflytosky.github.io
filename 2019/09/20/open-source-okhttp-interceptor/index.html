@@ -1,0 +1,921 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OkHttp," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 OkHttp 的拦截器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OkHttp 源码分析 -- 拦截器">
+<meta property="og:url" content="http://yoursite.com/2019/09/20/open-source-okhttp-interceptor/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 OkHttp 的拦截器">
+<meta property="og:updated_time" content="2020-07-06T09:20:20.642Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OkHttp 源码分析 -- 拦截器">
+<meta name="twitter:description" content="介绍 OkHttp 的拦截器">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/20/open-source-okhttp-interceptor/"/>
+
+
+
+
+
+  <title> OkHttp 源码分析 -- 拦截器 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/20/open-source-okhttp-interceptor/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OkHttp 源码分析 -- 拦截器
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-20T10:00:00+08:00">
+                2019-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android开源项目/" itemprop="url" rel="index">
+                    <span itemprop="name">Android开源项目</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2019/09/20/open-source-okhttp-interceptor/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/09/20/open-source-okhttp-interceptor/" class="leancloud_visitors" data-flag-title="OkHttp 源码分析 -- 拦截器">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 OkHttp 的拦截器
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 OkHttp 中，拦截器是非常重要的一个知识点，它将整个请求网络的过程的每一步都封装在不同的 Interceptor 里。这里使用到了设计模式中的责任链模式，即每个拦截器只处理与自己相关的业务逻辑。<br>OkHttp 不仅提供了 5 个固定的拦截器，而且我们还可以添加自定义的拦截器。就想在<a href="">OkHttp 使用指南 – 基本使用</a> 中介绍的添加 <code>HttpLoggingInterceptor</code> 一样。<br>我们先来看一下 OkHttp 提供的5个基础拦截器：</p>
+<ul>
+<li>RetryAndFollowUpInterceptor：重试及重定向拦截器，负责请求的重试和重定向。</li>
+<li>BridgeInterceptor：桥接拦截器，给请求添加对应的 header 信息，处理响应结果的 header 信息。</li>
+<li>CacheInterceptor：缓存拦截器，根据当前获取的状态选择 网络请求 、读取缓存、更新缓存。</li>
+<li>ConnectInterceptor：连接拦截器，建立 http 连接。</li>
+<li>CallServerInterceptor：读写拦截器，读写网络数据。</li>
+</ul>
+<p>有了这些拦截器，我们才能通过 OkHttp 进行网络的请求，这里先做一个概念性的了解，后面会做详细的介绍。</p>
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><h3 id="创建拦截器"><a href="#创建拦截器" class="headerlink" title="创建拦截器"></a>创建拦截器</h3><p>在我们创建网络请求任务后，不管是同步请求还是异步请求，网络请求的结果都是通过 <code>getResponseWithInterceptorChain()</code> 方法来获得的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Override public Response execute() throws IOException &#123;</div><div class="line">  ......</div><div class="line">    client.dispatcher().executed(this);</div><div class="line">    Response result = getResponseWithInterceptorChain();</div><div class="line">    ......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">final class AsyncCall extends NamedRunnable &#123;</div><div class="line">  ......</div><div class="line"></div><div class="line">  @Override protected void execute() &#123;</div><div class="line">    boolean signalledCallback = false;</div><div class="line">    try &#123;</div><div class="line">      Response response = getResponseWithInterceptorChain();</div><div class="line">      ......</div><div class="line">    &#125; catch (IOException e) &#123;</div><div class="line">      ......</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>接下来，我们就研究一下 <code>getResponseWithInterceptorChain()</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Response getResponseWithInterceptorChain() throws IOException &#123;</div><div class="line">  // Build a full stack of interceptors.</div><div class="line">  List&lt;Interceptor&gt; interceptors = new ArrayList&lt;&gt;();</div><div class="line">  interceptors.addAll(client.interceptors());</div><div class="line">  interceptors.add(retryAndFollowUpInterceptor);</div><div class="line">  interceptors.add(new BridgeInterceptor(client.cookieJar()));</div><div class="line">  interceptors.add(new CacheInterceptor(client.internalCache()));</div><div class="line">  interceptors.add(new ConnectInterceptor(client));</div><div class="line">  if (!forWebSocket) &#123;</div><div class="line">    interceptors.addAll(client.networkInterceptors());</div><div class="line">  &#125;</div><div class="line">  interceptors.add(new CallServerInterceptor(forWebSocket));</div><div class="line"></div><div class="line">  Interceptor.Chain chain = new RealInterceptorChain(interceptors, null, null, null, 0,</div><div class="line">      originalRequest, this, eventListener, client.connectTimeoutMillis(),</div><div class="line">      client.readTimeoutMillis(), client.writeTimeoutMillis());</div><div class="line"></div><div class="line">  return chain.proceed(originalRequest);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它的工作流程大致分为两个部分：</p>
+<p> 1.创建一系列的拦截器，包括用户自定义拦截器和框架提供的基础拦截器。<br> 2.创建一个拦截器链 <code>RealInterceptorChain</code>，调用 <code>proceed</code> 方法开始执行拦截器。</p>
+<p>在这里创建 <code>RealInterceptorChain</code> 时，StreamAllocation、HttpCodec 和 RealConnection 参数都为 null，不用担心，这些参数在需要的时候会在后面的拦截器里面创建相应的对象。</p>
+<h3 id="拦截器链"><a href="#拦截器链" class="headerlink" title="拦截器链"></a>拦截器链</h3><p>拦截器链的作用就是负责按照拦截器的添加顺序执行拦截器定义的相关操作，来获取服务器的响应返回。<br>我们先来分析一下拦截器链的主要代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">  public RealInterceptorChain(List&lt;Interceptor&gt; interceptors, StreamAllocation streamAllocation,</div><div class="line">      HttpCodec httpCodec, RealConnection connection, int index, Request request, Call call,</div><div class="line">      EventListener eventListener, int connectTimeout, int readTimeout, int writeTimeout) &#123;</div><div class="line">    this.interceptors = interceptors;</div><div class="line">    this.connection = connection;</div><div class="line">    this.streamAllocation = streamAllocation;</div><div class="line">    this.httpCodec = httpCodec;</div><div class="line">    this.index = index;</div><div class="line">    this.request = request;</div><div class="line">    this.call = call;</div><div class="line">    this.eventListener = eventListener;</div><div class="line">    this.connectTimeout = connectTimeout;</div><div class="line">    this.readTimeout = readTimeout;</div><div class="line">    this.writeTimeout = writeTimeout;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  ......</div><div class="line">  </div><div class="line">  @Override public Response proceed(Request request) throws IOException &#123;</div><div class="line">    return proceed(request, streamAllocation, httpCodec, connection);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public Response proceed(Request request, StreamAllocation streamAllocation, HttpCodec httpCodec,</div><div class="line">      RealConnection connection) throws IOException &#123;</div><div class="line">    if (index &gt;= interceptors.size()) throw new AssertionError();</div><div class="line"></div><div class="line">    calls++;</div><div class="line"></div><div class="line">    // If we already have a stream, confirm that the incoming request will use it.</div><div class="line">    if (this.httpCodec != null &amp;&amp; !this.connection.supportsUrl(request.url())) &#123;</div><div class="line">      throw new IllegalStateException(&quot;network interceptor &quot; + interceptors.get(index - 1)</div><div class="line">          + &quot; must retain the same host and port&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // If we already have a stream, confirm that this is the only call to chain.proceed().</div><div class="line">    if (this.httpCodec != null &amp;&amp; calls &gt; 1) &#123;</div><div class="line">      throw new IllegalStateException(&quot;network interceptor &quot; + interceptors.get(index - 1)</div><div class="line">          + &quot; must call proceed() exactly once&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Call the next interceptor in the chain.</div><div class="line">    RealInterceptorChain next = new RealInterceptorChain(interceptors, streamAllocation, httpCodec,</div><div class="line">        connection, index + 1, request, call, eventListener, connectTimeout, readTimeout,</div><div class="line">        writeTimeout);</div><div class="line">    Interceptor interceptor = interceptors.get(index);</div><div class="line">    Response response = interceptor.intercept(next);</div><div class="line"></div><div class="line">    // Confirm that the next interceptor made its required call to chain.proceed().</div><div class="line">    if (httpCodec != null &amp;&amp; index + 1 &lt; interceptors.size() &amp;&amp; next.calls != 1) &#123;</div><div class="line">      throw new IllegalStateException(&quot;network interceptor &quot; + interceptor</div><div class="line">          + &quot; must call proceed() exactly once&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Confirm that the intercepted response isn&apos;t null.</div><div class="line">    if (response == null) &#123;</div><div class="line">      throw new NullPointerException(&quot;interceptor &quot; + interceptor + &quot; returned null&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (response.body() == null) &#123;</div><div class="line">      throw new IllegalStateException(</div><div class="line">          &quot;interceptor &quot; + interceptor + &quot; returned a response with no body&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return response;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 1.首先判断一下拦截器是否执行完毕，执行完毕就抛出一个 AssertionError 异常，一般不会满足这个条件。<br> 2.为下一个拦截器创建一个新的拦截器链。<br> 3.从拦截器数组中取出当前需要执行的拦截器，开始执行拦截器的实现 <code>intercept</code> 方法，并把创建的下一个拦截器链作为参数传递进去。获取拦截器的返回结果。<br> 4.从 <code>intercept</code> 开始就会递归调动拦截器数组里面所有的拦截器。在拦截器的 <code>intercept</code> 里面一般会在调用新创建的拦截器链的 <code>proceed</code> 方法之前（请求信息）或者之后（响应信息）加入自己需要执行的代码。直到调用最后一个拦截器 <code>CallServerInterceptor</code>，由于是最后一个拦截器，它的 <code>intercept</code> 不会再调用参数 <code>chain</code> 的 <code>proceed</code> 方法。<br> 5.执行完后就再一层一层的返回响应信息。</p>
+<p>其实看我后我们就会觉得 OkHttp 的实现其实挺简单，就是这些链接器的执行过程。下面开始简单介绍一下拦截器。</p>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>拦截器的执行一般为三个部分：</p>
+<ul>
+<li>在发起请求前对request进行处理。</li>
+<li>调用下一个拦截器，获取response。</li>
+<li>对response进行处理，返回给上一个拦截器。</li>
+</ul>
+<p>这就是 OkHttp 拦截器机制的核心逻辑。所以一个网络请求实际上就是一个个拦截器执行其 intercept 方法的过程。<br>拦截器关键的代码就是 <code>chain.proceed()</code> 方法的执行，我们知道在下一个拦截器链中又会执行下一个拦截器的intercept方法。所以整个执行链就在拦截器与拦截器链中交替执行，最终完成所有拦截器的操作。这也是 OkHttp 拦截器的链式执行逻辑。</p>
+<h3 id="RetryAndFollowUpInterceptor"><a href="#RetryAndFollowUpInterceptor" class="headerlink" title="RetryAndFollowUpInterceptor"></a>RetryAndFollowUpInterceptor</h3><p>重试及重定向拦截器，负责请求的重试和重定向。主要是初始化的一些工作，创建 StreamAllocation 对象，用来传递给后面的拦截器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</div><div class="line">  Request request = chain.request();</div><div class="line">  RealInterceptorChain realChain = (RealInterceptorChain) chain;</div><div class="line">  Call call = realChain.call();</div><div class="line">  EventListener eventListener = realChain.eventListener();</div><div class="line">  // 创建 StreamAllocation 对象</div><div class="line">  StreamAllocation streamAllocation = new StreamAllocation(client.connectionPool(),</div><div class="line">      createAddress(request.url()), call, eventListener, callStackTrace);</div><div class="line">  this.streamAllocation = streamAllocation;</div><div class="line"></div><div class="line">  int followUpCount = 0;</div><div class="line">  Response priorResponse = null;</div><div class="line">  // 从这里开始，整个方法进入循环</div><div class="line">  while (true) &#123;</div><div class="line">    if (canceled) &#123;</div><div class="line">      streamAllocation.release();</div><div class="line">      throw new IOException(&quot;Canceled&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Response response;</div><div class="line">    boolean releaseConnection = true;</div><div class="line">    try &#123;</div><div class="line">      //执行下一个拦截器链的proceed方法</div><div class="line">      response = realChain.proceed(request, streamAllocation, null, null);</div><div class="line">      releaseConnection = false;</div><div class="line">    &#125; catch (RouteException e) &#123;</div><div class="line">      // 如果不需要重试一起没有设置多路由等逻辑，这里直接抛出异常，否则就重新请求</div><div class="line">      if (!recover(e.getLastConnectException(), streamAllocation, false, request)) &#123;</div><div class="line">        throw e.getFirstConnectException();</div><div class="line">      &#125;</div><div class="line">      // 无需释放资源</div><div class="line">      releaseConnection = false;</div><div class="line">      continue;</div><div class="line">    &#125; catch (IOException e) &#123;</div><div class="line">      // IOException 异常时也要判断 recover 逻辑</div><div class="line">      boolean requestSendStarted = !(e instanceof ConnectionShutdownException);</div><div class="line">      if (!recover(e, streamAllocation, requestSendStarted, request)) throw e;</div><div class="line">      releaseConnection = false;</div><div class="line">      continue;</div><div class="line">    &#125; finally &#123;</div><div class="line">      // 抛出异常后，释放资源</div><div class="line">      if (releaseConnection) &#123;</div><div class="line">        streamAllocation.streamFailed(null);</div><div class="line">        streamAllocation.release();</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Attach the prior response if it exists. Such responses never have a body.</div><div class="line">    if (priorResponse != null) &#123;</div><div class="line">      response = response.newBuilder()</div><div class="line">          .priorResponse(priorResponse.newBuilder()</div><div class="line">                  .body(null)</div><div class="line">                  .build())</div><div class="line">          .build();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Request followUp;</div><div class="line">    try &#123;</div><div class="line">      // 处理重定向逻辑，如果返回不为null，表示需要重定向</div><div class="line">      followUp = followUpRequest(response, streamAllocation.route());</div><div class="line">    &#125; catch (IOException e) &#123;</div><div class="line">      streamAllocation.release();</div><div class="line">      throw e;</div><div class="line">    &#125;</div><div class="line">    // 返回null时，释放资源，跳出while循环返回 response</div><div class="line">    if (followUp == null) &#123;</div><div class="line">      if (!forWebSocket) &#123;</div><div class="line">        streamAllocation.release();</div><div class="line">      &#125;</div><div class="line">      return response;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    closeQuietly(response.body());</div><div class="line">    // 判断是否大于重定向次数</div><div class="line">    if (++followUpCount &gt; MAX_FOLLOW_UPS) &#123;</div><div class="line">      streamAllocation.release();</div><div class="line">      throw new ProtocolException(&quot;Too many follow-up requests: &quot; + followUpCount);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (followUp.body() instanceof UnrepeatableRequestBody) &#123;</div><div class="line">      streamAllocation.release();</div><div class="line">      throw new HttpRetryException(&quot;Cannot retry streamed HTTP body&quot;, response.code());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (!sameConnection(response, followUp.url())) &#123;</div><div class="line">      streamAllocation.release();</div><div class="line">      streamAllocation = new StreamAllocation(client.connectionPool(),</div><div class="line">          createAddress(followUp.url()), call, eventListener, callStackTrace);</div><div class="line">      this.streamAllocation = streamAllocation;</div><div class="line">    &#125; else if (streamAllocation.codec() != null) &#123;</div><div class="line">      throw new IllegalStateException(&quot;Closing the body of &quot; + response</div><div class="line">          + &quot; didn&apos;t close its backing stream. Bad interceptor?&quot;);</div><div class="line">    &#125;</div><div class="line">    // 重新执行重定向请求</div><div class="line">    request = followUp;</div><div class="line">    priorResponse = response;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>recover</code> 方法用来判断是否要重新进行网络请求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">private boolean recover(IOException e, StreamAllocation streamAllocation,</div><div class="line">    boolean requestSendStarted, Request userRequest) &#123;</div><div class="line">  streamAllocation.streamFailed(e);</div><div class="line"></div><div class="line">  // The application layer has forbidden retries.</div><div class="line">  if (!client.retryOnConnectionFailure()) return false;</div><div class="line"></div><div class="line">  // We can&apos;t send the request body again.</div><div class="line">  if (requestSendStarted &amp;&amp; userRequest.body() instanceof UnrepeatableRequestBody) return false;</div><div class="line"></div><div class="line">  // This exception is fatal.</div><div class="line">  if (!isRecoverable(e, requestSendStarted)) return false;</div><div class="line"></div><div class="line">  // No more routes to attempt.</div><div class="line">  if (!streamAllocation.hasMoreRoutes()) return false;</div><div class="line"></div><div class="line">  // For failure recovery, use the same route selector with a new connection.</div><div class="line">  return true;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="BridgeInterceptor"><a href="#BridgeInterceptor" class="headerlink" title="BridgeInterceptor"></a>BridgeInterceptor</h3><p>桥接拦截器主要进行下面的工作：</p>
+<ul>
+<li>将用户的 Request 信息构建一个能进行网络访问的请求，并给请求添加缺少的一些必要的 header 信息。</li>
+<li>处理响应结果的 header 信息。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</div><div class="line">  Request userRequest = chain.request();</div><div class="line">  Request.Builder requestBuilder = userRequest.newBuilder();</div><div class="line"></div><div class="line">  RequestBody body = userRequest.body();</div><div class="line">  // 对header信息进行补充</div><div class="line">  if (body != null) &#123;</div><div class="line">    MediaType contentType = body.contentType();</div><div class="line">    if (contentType != null) &#123;</div><div class="line">      requestBuilder.header(&quot;Content-Type&quot;, contentType.toString());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    long contentLength = body.contentLength();</div><div class="line">    if (contentLength != -1) &#123;</div><div class="line">      requestBuilder.header(&quot;Content-Length&quot;, Long.toString(contentLength));</div><div class="line">      requestBuilder.removeHeader(&quot;Transfer-Encoding&quot;);</div><div class="line">    &#125; else &#123;</div><div class="line">      requestBuilder.header(&quot;Transfer-Encoding&quot;, &quot;chunked&quot;);</div><div class="line">      requestBuilder.removeHeader(&quot;Content-Length&quot;);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  if (userRequest.header(&quot;Host&quot;) == null) &#123;</div><div class="line">    requestBuilder.header(&quot;Host&quot;, hostHeader(userRequest.url(), false));</div><div class="line">  &#125;</div><div class="line">  // 默认是保持连接</div><div class="line">  if (userRequest.header(&quot;Connection&quot;) == null) &#123;</div><div class="line">    requestBuilder.header(&quot;Connection&quot;, &quot;Keep-Alive&quot;);</div><div class="line">  &#125;</div><div class="line">  //默认是 GZIP 压缩的</div><div class="line">  boolean transparentGzip = false;</div><div class="line">  if (userRequest.header(&quot;Accept-Encoding&quot;) == null &amp;&amp; userRequest.header(&quot;Range&quot;) == null) &#123;</div><div class="line">    transparentGzip = true;</div><div class="line">    requestBuilder.header(&quot;Accept-Encoding&quot;, &quot;gzip&quot;);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  List&lt;Cookie&gt; cookies = cookieJar.loadForRequest(userRequest.url());</div><div class="line">  if (!cookies.isEmpty()) &#123;</div><div class="line">    requestBuilder.header(&quot;Cookie&quot;, cookieHeader(cookies));</div><div class="line">  &#125;</div><div class="line">  //设置默认的 user-egent &quot;okhttp/3.11.0&quot;</div><div class="line">  if (userRequest.header(&quot;User-Agent&quot;) == null) &#123;</div><div class="line">    requestBuilder.header(&quot;User-Agent&quot;, Version.userAgent());</div><div class="line">  &#125;</div><div class="line">  //发送网络请求，执行下一个拦截器，接收返回结果</div><div class="line">  Response networkResponse = chain.proceed(requestBuilder.build());</div><div class="line"></div><div class="line">  HttpHeaders.receiveHeaders(cookieJar, userRequest.url(), networkResponse.headers());</div><div class="line"></div><div class="line">  Response.Builder responseBuilder = networkResponse.newBuilder()</div><div class="line">      .request(userRequest);</div><div class="line">  //当服务器返回的数据是 GZIP 压缩的，那么客户端去进行解压操作</div><div class="line">  if (transparentGzip</div><div class="line">      &amp;&amp; &quot;gzip&quot;.equalsIgnoreCase(networkResponse.header(&quot;Content-Encoding&quot;))</div><div class="line">      &amp;&amp; HttpHeaders.hasBody(networkResponse)) &#123;</div><div class="line">    GzipSource responseBody = new GzipSource(networkResponse.body().source());</div><div class="line">    Headers strippedHeaders = networkResponse.headers().newBuilder()</div><div class="line">        .removeAll(&quot;Content-Encoding&quot;)</div><div class="line">        .removeAll(&quot;Content-Length&quot;)</div><div class="line">        .build();</div><div class="line">    responseBuilder.headers(strippedHeaders);</div><div class="line">    String contentType = networkResponse.header(&quot;Content-Type&quot;);</div><div class="line">    responseBuilder.body(new RealResponseBody(contentType, -1L, Okio.buffer(responseBody)));</div><div class="line">  &#125;</div><div class="line">  //构建一个Response</div><div class="line">  return responseBuilder.build();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="CacheInterceptor"><a href="#CacheInterceptor" class="headerlink" title="CacheInterceptor"></a>CacheInterceptor</h3><p>缓存拦截器，根据当前获取的状态选择 网络请求 、读取缓存、更新缓存。</p>
+<h3 id="ConnectInterceptor"><a href="#ConnectInterceptor" class="headerlink" title="ConnectInterceptor"></a>ConnectInterceptor</h3><p>连接拦截器，建立 http 连接。是 OkHttp 核心拦截器，网络交互的关键。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</div><div class="line">  RealInterceptorChain realChain = (RealInterceptorChain) chain;</div><div class="line">  Request request = realChain.request();</div><div class="line">  // StreamAllocation 对象是在 RetryAndFollowUpInterceptor 中创建的</div><div class="line">  // 在这里拦截使用</div><div class="line">  StreamAllocation streamAllocation = realChain.streamAllocation();</div><div class="line"></div><div class="line">  // We need the network to satisfy this request. Possibly for validating a conditional GET.</div><div class="line">  boolean doExtensiveHealthChecks = !request.method().equals(&quot;GET&quot;);</div><div class="line">  // 通过socket建立和服务器的连接</div><div class="line">  HttpCodec httpCodec = streamAllocation.newStream(client, chain, doExtensiveHealthChecks);</div><div class="line">  // 得到前面建立的连接</div><div class="line">  RealConnection connection = streamAllocation.connection();</div><div class="line">  // 执行下一个拦截器</div><div class="line">  return realChain.proceed(request, streamAllocation, httpCodec, connection);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ConnectInterceptor 的执行流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">├── ConnectInterceptor.intercept</div><div class="line">    ├── StreamAllocation.newStream</div><div class="line">        ├── StreamAllocation.findHealthyConnection</div><div class="line">            ├── StreamAllocation.findConnection</div><div class="line">                ├── RealConnection.connect</div><div class="line">                    ├── RealConnection.connectSocket</div><div class="line">                        ├── SocketFactory().createSocket()</div><div class="line">                        ├── Platform.get().connectSocket</div><div class="line">                            ├── AndroidPlatform.connectSocket</div><div class="line">                                ├── Socket.connect</div></pre></td></tr></table></figure>
+<p><strong>注意</strong>：这里直接调用的是 <code>RealInterceptorChain</code> 重载的 <code>proceed(Request request, StreamAllocation streamAllocation, HttpCodec httpCodec, RealConnection connection)</code> 方法，传递的都是非空的参数，和在 <code>RealCall</code> 的 <code>getResponseWithInterceptorChain()</code>  方法以及前面的拦截器里面调用的 <code>proceed</code> 有所区别。</p>
+<h3 id="CallServerInterceptor"><a href="#CallServerInterceptor" class="headerlink" title="CallServerInterceptor"></a>CallServerInterceptor</h3><p>读写拦截器，读写网络数据。主要负责将请求写入到 IO 流当中，并且从 IO 流当中获取服务端返回给客服端的响应数据，它也是 OkHttp 核心拦截器，网络交互的关键。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OkHttp/" rel="tag"># OkHttp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/15/open-source-okhttp-workflow/" rel="next" title="OkHttp 源码分析 -- 基本流程">
+                <i class="fa fa-chevron-left"></i> OkHttp 源码分析 -- 基本流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/02/kotlin-brief-introduction/" rel="prev" title="Kotlin -- 简介">
+                Kotlin -- 简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">231</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作流程"><span class="nav-number">2.</span> <span class="nav-text">工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建拦截器"><span class="nav-number">2.1.</span> <span class="nav-text">创建拦截器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拦截器链"><span class="nav-number">2.2.</span> <span class="nav-text">拦截器链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拦截器"><span class="nav-number">3.</span> <span class="nav-text">拦截器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RetryAndFollowUpInterceptor"><span class="nav-number">3.1.</span> <span class="nav-text">RetryAndFollowUpInterceptor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BridgeInterceptor"><span class="nav-number">3.2.</span> <span class="nav-text">BridgeInterceptor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CacheInterceptor"><span class="nav-number">3.3.</span> <span class="nav-text">CacheInterceptor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConnectInterceptor"><span class="nav-number">3.4.</span> <span class="nav-text">ConnectInterceptor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CallServerInterceptor"><span class="nav-number">3.5.</span> <span class="nav-text">CallServerInterceptor</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

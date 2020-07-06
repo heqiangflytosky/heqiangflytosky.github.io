@@ -4,8 +4,108 @@
 
     
   <url>
+    <loc>http://yoursite.com/2019/09/20/open-source-okhttp-interceptor/</loc>
+    <lastmod>2020-07-06T09:20:20.642Z</lastmod>
+    <data>
+        <display>
+        <title>OkHttp 源码分析 -- 拦截器</title>
+        <pubTime>2019-09-20T02:00:00.000Z</pubTime>
+        
+        <tag>OkHttp</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2019/09/15/open-source-okhttp-workflow/</loc>
+    <lastmod>2020-07-06T09:19:54.875Z</lastmod>
+    <data>
+        <display>
+        <title>OkHttp 源码分析 -- 基本流程</title>
+        <pubTime>2019-09-15T02:00:00.000Z</pubTime>
+        
+        <tag>OkHttp</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
+    <lastmod>2020-07-06T09:19:27.342Z</lastmod>
+    <data>
+        <display>
+        <title>OkHttp 使用指南 -- 基本使用</title>
+        <pubTime>2019-09-01T02:00:00.000Z</pubTime>
+        
+        <tag>OkHttp</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/</loc>
+    <lastmod>2020-07-02T11:35:17.870Z</lastmod>
+    <data>
+        <display>
+        <title>Android -- 多CPU架构支持所需要了解的知识</title>
+        <pubTime>2017-02-24T02:00:00.000Z</pubTime>
+        
+        <tag>CPU架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2020/02/10/cocos-creator-start/</loc>
+    <lastmod>2020-06-30T06:45:01.478Z</lastmod>
+    <data>
+        <display>
+        <title>Cocos Creator -- 启动篇</title>
+        <pubTime>2020-02-10T02:00:00.000Z</pubTime>
+        
+        <tag>cocos</tag>
+         
+         
+           
+             
+              <breadCrumb title="cocos" url="http://yoursite.com/categories/cocos/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2016/08/02/android-graphic-system-view-drawing/</loc>
-    <lastmod>2020-06-22T08:58:18.984Z</lastmod>
+    <lastmod>2020-06-22T09:08:07.877Z</lastmod>
     <data>
         <display>
         <title>Android 图形系统 -- View 绘制流程</title>
@@ -425,26 +525,6 @@
            
              
               <breadCrumb title="JavaScript" url="http://yoursite.com/categories/JavaScript/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2020/02/10/cocos-creator-start/</loc>
-    <lastmod>2020-05-09T10:48:50.637Z</lastmod>
-    <data>
-        <display>
-        <title>Cocos Creator -- 启动篇</title>
-        <pubTime>2020-02-10T02:00:00.000Z</pubTime>
-        
-        <tag>cocos</tag>
-         
-         
-           
-             
-              <breadCrumb title="cocos" url="http://yoursite.com/categories/cocos/"/>
           
         </display>
     </data>
@@ -1341,26 +1421,6 @@
            
              
               <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/</loc>
-    <lastmod>2019-12-02T09:16:56.868Z</lastmod>
-    <data>
-        <display>
-        <title>Android -- 多CPU架构支持所需要了解的知识</title>
-        <pubTime>2017-02-24T02:00:00.000Z</pubTime>
-        
-        <tag>CPU架构</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -4337,12 +4397,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4359,12 +4419,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
