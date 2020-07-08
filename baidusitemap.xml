@@ -4,6 +4,46 @@
 
     
   <url>
+    <loc>http://yoursite.com/2019/09/25/open-source-okhttp-dispatcher-task-queue/</loc>
+    <lastmod>2020-07-08T08:53:07.060Z</lastmod>
+    <data>
+        <display>
+        <title>OkHttp 源码分析 -- 任务队列</title>
+        <pubTime>2019-09-25T02:00:00.000Z</pubTime>
+        
+        <tag>OkHttp</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/09/01/java-thread-thread-pool-basic/</loc>
+    <lastmod>2020-07-08T07:41:02.145Z</lastmod>
+    <data>
+        <display>
+        <title>Java 线程池 -- 线程池基础</title>
+        <pubTime>2015-09-01T02:00:00.000Z</pubTime>
+        
+        <tag>线程池</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java 并发" url="http://yoursite.com/categories/Java-%E5%B9%B6%E5%8F%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2019/09/20/open-source-okhttp-interceptor/</loc>
     <lastmod>2020-07-06T09:20:20.642Z</lastmod>
     <data>
@@ -2668,26 +2708,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2015/09/01/java-thread-thread-pool-basic/</loc>
-    <lastmod>2019-03-14T06:17:34.534Z</lastmod>
-    <data>
-        <display>
-        <title>Java 线程池 -- 线程池基础</title>
-        <pubTime>2015-09-01T02:00:00.000Z</pubTime>
-        
-        <tag>线程池</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java 并发" url="http://yoursite.com/categories/Java-%E5%B9%B6%E5%8F%91/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2015/09/06/java-thread-sourcecode-of-threadpoolexecutor/</loc>
     <lastmod>2019-03-14T06:17:18.637Z</lastmod>
     <data>
@@ -4175,16 +4195,16 @@
     
     
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android BuildConfig的使用</title>
-        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
+        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
+        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>BuildConfig</tag>
+        <tag>buildType</tag>
          
          
            
@@ -4197,16 +4217,16 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
-        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
+        <title>Android BuildConfig的使用</title>
+        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>buildType</tag>
+        <tag>BuildConfig</tag>
          
          
            
@@ -4483,12 +4503,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4503,12 +4523,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
