@@ -120,7 +120,12 @@ public interface ThreadFactory {
  - newSingleThreadExecutor
   - 创建一个单线程化的Executor。
  - newCachedThreadPool
-  - 创建一个可缓存的线程池，调用execute将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线 程并添加到池中。终止并从缓存中移除那些已有 60 秒钟未被使用的线程。
+  - `new ThreadPoolExecutor(0, Integer.MAX_VALUE,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>())`
+  - corePoolSize为0，maximumPoolSize为无限大，意味着线程数量可以无限大
+  - keepAliveTime为60S，意味着线程空闲时间超过60S就会被杀死
+  - 采用SynchronousQueue作为等待任务队列，这个阻塞队列没有存储空间，这意味着只要有请求到来，就必须要找到一条工作线程处理他，如果当前没有空闲的线程，那么就会再创建一条新的线程。
+  - 它比较适合处理执行时间比较小的任务
+  - 创建一个可缓存的线程池，调用execute将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线程并添加到池中。终止并从缓存中移除那些已有 60 秒钟未被使用的线程。
   - 池线程数支持 0-Integer.MAX_VALUE(显然完全没考虑主机的资源承受能力）。
   - 能重用的线程，必须是 timeout IDLE 内的池中线程，缺省 timeout 是 60s，超过这个 IDLE 时长，空闲线程将被移出线程池。
  - newScheduledThreadPool
