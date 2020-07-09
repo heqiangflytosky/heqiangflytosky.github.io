@@ -42,10 +42,11 @@ public final class Dispatcher {
   // 正在执行的同步任务
   private final Deque<RealCall> runningSyncCalls = new ArrayDeque<>();
 
+  // 构造Dispatcher时自定义线程池
   public Dispatcher(ExecutorService executorService) {
     this.executorService = executorService;
   }
-
+  // 使用默认线程池
   public Dispatcher() {
   }
 
@@ -64,7 +65,7 @@ public final class Dispatcher {
 ```
 
 Dispatcher 内部有三个任务队列，去执行同步任务和异步任务。
-创建的线程池的 corePoolSize 为0，maximumPoolSize 为无限大，意味着线程数量可以无限大。
+默认创建的线程池的 corePoolSize 为0，maximumPoolSize 为无限大，意味着线程数量可以无限大。
 采用SynchronousQueue装等待的任务，这个阻塞队列没有存储空间，这意味着只要有请求到来，就必须要找到一条工作线程处理他，如果当前没有空闲的线程，那么就会再创建一条新的线程。
 keepAliveTime为60S，意味着线程空闲时间超过60S就会被杀死。
 也就是说，在实际运行中，当收到10个并发请求时，线程池会创建十个线程，当工作完成后，线程池会在60s后相继关闭所有线程。

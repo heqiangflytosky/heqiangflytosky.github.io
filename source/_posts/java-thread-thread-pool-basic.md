@@ -111,14 +111,6 @@ public interface ThreadFactory {
     Thread newThread(Runnable r);
 }
 ```
-
- - newFixedThreadPool
-  - 创建固定数目线程的线程池。
-  - 线程池中有可以重复使用的线程时就重复使用，没有的话就创建一个，但线程数量不能大于最大线程数。
-  - 任意时间点，最多只能有固定数目的活动线程存在，此时如果有新的任务要运行，只能放在另外的队列中等待，直到线程池中某个任务执行完有空闲线程出现。
-  - FixedThreadPool 没有 IDLE 机制。
- - newSingleThreadExecutor
-  - 创建一个单线程化的Executor。
  - newCachedThreadPool
   - `new ThreadPoolExecutor(0, Integer.MAX_VALUE,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>())`
   - corePoolSize为0，maximumPoolSize为无限大，意味着线程数量可以无限大
@@ -128,6 +120,16 @@ public interface ThreadFactory {
   - 创建一个可缓存的线程池，调用execute将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线程并添加到池中。终止并从缓存中移除那些已有 60 秒钟未被使用的线程。
   - 池线程数支持 0-Integer.MAX_VALUE(显然完全没考虑主机的资源承受能力）。
   - 能重用的线程，必须是 timeout IDLE 内的池中线程，缺省 timeout 是 60s，超过这个 IDLE 时长，空闲线程将被移出线程池。
+ - newFixedThreadPool
+  - `new ThreadPoolExecutor(nThreads, nThreads,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<Runnable>());`
+  - 创建固定数目线程的线程池，corePoolSize和maximunPoolSize都为用户设定的线程数量nThreads。
+  - keepAliveTime为0，意味着一旦有多余的空闲线程，就会被立即停止掉。
+  - 阻塞队列采用了LinkedBlockingQueue，它是一个无界队列，因此永远不可能拒绝任务。
+  - 由于采用了无界队列，实际线程数量将永远维持在nThreads，因此maximumPoolSize和keepAliveTime将无效。
+ - newSingleThreadExecutor
+  - `new ThreadPoolExecutor(1, 1,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<Runnable>())`
+  - 创建一个单线程化的Executor，它只会创建一条工作线程处理任务。
+  - 和 newFixedThreadPool 一样，采用的阻塞队列为LinkedBlockingQueue
  - newScheduledThreadPool
   - 创建一个可调度线程池
   - 这个池子里的线程可以按 schedule 依次 delay 执行，或周期执行
