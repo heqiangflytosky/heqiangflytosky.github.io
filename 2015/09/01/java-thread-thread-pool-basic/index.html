@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 Java 多线程编程中线程池的使用">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/XP5BJiOW58NdNGKRe2jmK3KwSAIf6q2uMbBADJoCWt_nVnFQbF8eGpZdWtFl6QnZnlb5TL8xCD-C0tdv1-uTciBL2EPFSkZObtM6SKUuOjQIn-sOseBwEHbWuXrHxVeclAAPtr3gLOh_7_a4mYiGwNEHvncNNmLEeZx_jIEv7i5F2laizS-71xyAEqCURfHceoPd4bpLZ3LXnVh-m0exwKf4TRML-v0kV_tIVouYXuFfCdkwxv2-NaUqT4eBjiQO3IekkEKjpXj5jqUbJUS0MlX5tG40">
-<meta property="og:updated_time" content="2020-07-08T07:41:02.145Z">
+<meta property="og:updated_time" content="2020-07-09T06:29:42.123Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 线程池 -- 线程池基础">
 <meta name="twitter:description" content="本文介绍 Java 多线程编程中线程池的使用">
@@ -432,17 +432,6 @@
 <p>上面的每个方法都有两个重载的方法，不同的是多了个 <code>ThreadFactory</code> 参数。这是个线程工厂类，为什么要使用线程工厂呢？其实就是为了统一在创建线程时设置一些参数，如是否守护线程。线程一些特性等，如优先级。通过这个 <code>TreadFactory</code> 创建出来的线程能保证有相同的特性。它首先是一个接口类，而且方法只有一个。就是创建一个线程。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface ThreadFactory &#123;</div><div class="line">    Thread newThread(Runnable r);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
-<li>newFixedThreadPool<ul>
-<li>创建固定数目线程的线程池。</li>
-<li>线程池中有可以重复使用的线程时就重复使用，没有的话就创建一个，但线程数量不能大于最大线程数。</li>
-<li>任意时间点，最多只能有固定数目的活动线程存在，此时如果有新的任务要运行，只能放在另外的队列中等待，直到线程池中某个任务执行完有空闲线程出现。</li>
-<li>FixedThreadPool 没有 IDLE 机制。</li>
-</ul>
-</li>
-<li>newSingleThreadExecutor<ul>
-<li>创建一个单线程化的Executor。</li>
-</ul>
-</li>
 <li>newCachedThreadPool<ul>
 <li><code>new ThreadPoolExecutor(0, Integer.MAX_VALUE,60L, TimeUnit.SECONDS,new SynchronousQueue&lt;Runnable&gt;())</code></li>
 <li>corePoolSize为0，maximumPoolSize为无限大，意味着线程数量可以无限大</li>
@@ -452,6 +441,20 @@
 <li>创建一个可缓存的线程池，调用execute将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线程并添加到池中。终止并从缓存中移除那些已有 60 秒钟未被使用的线程。</li>
 <li>池线程数支持 0-Integer.MAX_VALUE(显然完全没考虑主机的资源承受能力）。</li>
 <li>能重用的线程，必须是 timeout IDLE 内的池中线程，缺省 timeout 是 60s，超过这个 IDLE 时长，空闲线程将被移出线程池。</li>
+</ul>
+</li>
+<li>newFixedThreadPool<ul>
+<li><code>new ThreadPoolExecutor(nThreads, nThreads,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue&lt;Runnable&gt;());</code></li>
+<li>创建固定数目线程的线程池，corePoolSize和maximunPoolSize都为用户设定的线程数量nThreads。</li>
+<li>keepAliveTime为0，意味着一旦有多余的空闲线程，就会被立即停止掉。</li>
+<li>阻塞队列采用了LinkedBlockingQueue，它是一个无界队列，因此永远不可能拒绝任务。</li>
+<li>由于采用了无界队列，实际线程数量将永远维持在nThreads，因此maximumPoolSize和keepAliveTime将无效。</li>
+</ul>
+</li>
+<li>newSingleThreadExecutor<ul>
+<li><code>new ThreadPoolExecutor(1, 1,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue&lt;Runnable&gt;())</code></li>
+<li>创建一个单线程化的Executor，它只会创建一条工作线程处理任务。</li>
+<li>和 newFixedThreadPool 一样，采用的阻塞队列为LinkedBlockingQueue</li>
 </ul>
 </li>
 <li>newScheduledThreadPool<ul>
