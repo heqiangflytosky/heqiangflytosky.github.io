@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2019/09/28/open-source-okhttp-cache/</loc>
+    
+    <lastmod>2020-07-10T06:29:32.616Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
+    
+    <lastmod>2020-07-10T03:03:01.233Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2015/09/01/java-thread-thread-pool-basic/</loc>
     
     <lastmod>2020-07-09T06:29:42.123Z</lastmod>
@@ -26,13 +40,6 @@
     <loc>http://yoursite.com/2019/09/15/open-source-okhttp-workflow/</loc>
     
     <lastmod>2020-07-06T09:19:54.875Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
-    
-    <lastmod>2020-07-06T09:19:27.342Z</lastmod>
     
   </url>
   
@@ -1367,14 +1374,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
@@ -1444,14 +1451,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -1514,14 +1521,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1542,14 +1549,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1584,14 +1591,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1605,7 +1612,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
