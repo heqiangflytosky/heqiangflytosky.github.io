@@ -140,3 +140,77 @@ OkHttp 也提供了对 WebSocket 的支持。
         OkHttpClient.Builder builder  = new OkHttpClient.Builder();
         builder.addInterceptor(loggingInterceptor);
 ```
+
+### 缓存
+
+OKHttp 提供了缓存机制以将我们的的 HTTP 和 HTTPS 请求的响应缓存到文件系统中，但是它默认是不使用缓存的，所以如果我们需要使用缓存，就得在实例化 OKHttpClient 的时候进行相关的配置。
+
+#### 配置缓存
+
+配置缓存需要进行下面两个步骤：
+
+ - 构造 OkHttpClient 时配置 Cache，设置缓存路径已经缓存大小
+ - 构造 Request 时配置 CacheControl，配置缓存相关属性
+
+```
+        Cache cache = new Cache(new File(context.getExternalCacheDir(),"okhttp"), 10*1024*1024);
+        mOkHttpClient = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .cache(cache)
+                .build();
+
+        CacheControl cacheControl = new CacheControl.Builder().maxStale(30,TimeUnit.SECONDS)
+                .maxAge(30, TimeUnit.SECONDS)
+                .build();
+
+        okhttp3.Request okRequest = new okhttp3.Request.Builder()
+                .url("http://www.qq.com/")
+                .cacheControl(cacheControl)
+                .build();
+
+        try {
+            Response response = mOkHttpClient.newCall(okRequest).execute();
+            if(response  != null){
+                Log.e("Test","network response = " + response.networkResponse());
+                Log.e("Test","cache response = " + response.cacheResponse());
+                response.body().close();
+            }
+        } catch (IOException e) {
+            Log.e(TAG , "Http get error ", e);
+        }
+```
+
+#### 常见问题
+
+没有缓存的原因：
+一. 看应用是否申请了响应权限：
+
+```
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+```
+
+二. 没有调用 `response.body().close()`
+
+如果在缓存目录里面出现了下面的文件：
+
+```
+d0dae34b88fc0cc86e305ce4c60e1670.0.tmp d0dae34b88fc0cc86e305ce4c60e1670.1.tmp journal
+```
+
+d0dae34b88fc0cc86e305ce4c60e1670.0.tmp 显示了一些返回的头信息，但是 d0dae34b88fc0cc86e305ce4c60e1670.1.tmp 为空，journal 里面只有
+
+```
+libcore.io.DiskLruCache
+1
+201105
+2
+
+DIRTY d0dae34b88fc0cc86e305ce4c60e1670
+```
+
+而没有类似 `CLEAN d0dae34b88fc0cc86e305ce4c60e1670 651 71465` 的字段，那基本是上面的代码没有调用导致写入缓存不成功。具体原因后面的源码分析再介绍。
+
+三. okhttp 对post请求不做缓存处理
