@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/09/01/open-source-okhttp-usage/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 OkHttp 的基本使用">
-<meta property="og:updated_time" content="2020-07-10T03:03:01.233Z">
+<meta property="og:updated_time" content="2020-07-13T09:35:33.861Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OkHttp 使用指南 -- 基本使用">
 <meta name="twitter:description" content="介绍 OkHttp 的基本使用">
@@ -400,7 +400,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>OkHttp 很久之前就开始使用了，源码也看了部分。近期想着开始写系列关于OkHttp的博客，把这部分只是记录下来，以备查看。<br>本章节只简单介绍一下 OkHttp 的基本用法，关于源码分析和更深入的介绍参考后面的文章。<br>本系列文章分析 OkHttp 是基于 3.11.0 版本为基础的，后面有版本更新会尽可能同步更新博客的内容。<br><a href="https://github.com/square/okhttp" target="_blank" rel="external">Github 源码</a></p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>OkHttp 可以说是使用最广泛的网络请求库了，我们通常会利用它来实现 HTTP 请求，而且它还实现了 WebSocket。很久之前就开始使用 OkHttp 了，源码也看了部分。近期想着开始写系列关于OkHttp的博客，把这部分只是记录下来，以备查看。<br>本章节只简单介绍一下 OkHttp 的基本用法，关于源码分析和更深入的介绍参考后面的文章。<br>本系列文章分析 OkHttp 是基于 3.11.0 版本为基础的，后面有版本更新会尽可能同步更新博客的内容。<br><a href="https://github.com/square/okhttp" target="_blank" rel="external">Github 源码</a></p>
 <h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">api &apos;com.squareup.okhttp3:okhttp:3.11.0&apos;</div></pre></td></tr></table></figure>
 <h3 id="创建-OkHttpClient"><a href="#创建-OkHttpClient" class="headerlink" title="创建 OkHttpClient"></a>创建 OkHttpClient</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Cache cache = new Cache(new File(context.getExternalCacheDir(),&quot;okhttp&quot;), 10*1024*1024);</div><div class="line">mOkHttpClient = new OkHttpClient.Builder()</div><div class="line">        .retryOnConnectionFailure(true)</div><div class="line">        .connectTimeout(10, TimeUnit.SECONDS)</div><div class="line">        //.cache(cache)</div><div class="line">        .build();</div></pre></td></tr></table></figure>
 <blockquote>
@@ -549,7 +549,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">233</span>
+                <span class="site-state-item-count">234</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

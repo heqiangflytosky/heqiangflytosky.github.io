@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2019/09/28/open-source-okhttp-cache/</loc>
-    <lastmod>2020-07-10T06:29:32.616Z</lastmod>
+    <loc>http://yoursite.com/2019/10/10/open-source-okhttp-websocket/</loc>
+    <lastmod>2020-07-14T06:09:37.573Z</lastmod>
     <data>
         <display>
-        <title>OkHttp 源码分析 -- 缓存</title>
-        <pubTime>2019-09-28T02:00:00.000Z</pubTime>
+        <title>OkHttp 源码分析 -- WebSocket 实现原理</title>
+        <pubTime>2019-10-10T02:00:00.000Z</pubTime>
         
         <tag>OkHttp</tag>
          
@@ -25,11 +25,31 @@
     
   <url>
     <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
-    <lastmod>2020-07-10T03:03:01.233Z</lastmod>
+    <lastmod>2020-07-13T09:35:33.861Z</lastmod>
     <data>
         <display>
         <title>OkHttp 使用指南 -- 基本使用</title>
         <pubTime>2019-09-01T02:00:00.000Z</pubTime>
+        
+        <tag>OkHttp</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2019/09/28/open-source-okhttp-cache/</loc>
+    <lastmod>2020-07-10T06:29:32.616Z</lastmod>
+    <data>
+        <display>
+        <title>OkHttp 源码分析 -- 缓存</title>
+        <pubTime>2019-09-28T02:00:00.000Z</pubTime>
         
         <tag>OkHttp</tag>
          
@@ -4437,12 +4457,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4459,12 +4479,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4523,12 +4543,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4543,12 +4563,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4651,26 +4671,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>React Native-组件Component</title>
-        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
-        
-        <tag>React Native</tag>
-         
-         
-           
-             
-              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4691,12 +4691,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>React Native-组件Component</title>
+        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4717,6 +4717,26 @@
         <display>
         <title>Android项目中集成React Native</title>
         <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        
+        <tag>React Native</tag>
+         
+         
+           
+             
+              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
