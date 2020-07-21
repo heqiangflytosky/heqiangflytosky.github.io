@@ -4,12 +4,32 @@
 
     
   <url>
-    <loc>http://yoursite.com/2019/10/10/open-source-okhttp-websocket/</loc>
-    <lastmod>2020-07-14T06:09:37.573Z</lastmod>
+    <loc>http://yoursite.com/2016/08/02/android-graphic-system-view-drawing/</loc>
+    <lastmod>2020-07-21T03:43:55.989Z</lastmod>
     <data>
         <display>
-        <title>OkHttp 源码分析 -- WebSocket 实现原理</title>
-        <pubTime>2019-10-10T02:00:00.000Z</pubTime>
+        <title>Android 图形系统 -- View 绘制流程</title>
+        <pubTime>2016-08-02T02:00:00.000Z</pubTime>
+        
+        <tag>Android 图形系统</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android 图形系统" url="http://yoursite.com/categories/Android-%E5%9B%BE%E5%BD%A2%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
+    <lastmod>2020-07-15T08:38:07.528Z</lastmod>
+    <data>
+        <display>
+        <title>OkHttp 使用指南 -- 基本使用</title>
+        <pubTime>2019-09-01T02:00:00.000Z</pubTime>
         
         <tag>OkHttp</tag>
          
@@ -24,12 +44,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
-    <lastmod>2020-07-13T09:35:33.861Z</lastmod>
+    <loc>http://yoursite.com/2019/10/10/open-source-okhttp-websocket/</loc>
+    <lastmod>2020-07-14T06:09:37.573Z</lastmod>
     <data>
         <display>
-        <title>OkHttp 使用指南 -- 基本使用</title>
-        <pubTime>2019-09-01T02:00:00.000Z</pubTime>
+        <title>OkHttp 源码分析 -- WebSocket 实现原理</title>
+        <pubTime>2019-10-10T02:00:00.000Z</pubTime>
         
         <tag>OkHttp</tag>
          
@@ -177,26 +197,6 @@
            
              
               <breadCrumb title="cocos" url="http://yoursite.com/categories/cocos/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/08/02/android-graphic-system-view-drawing/</loc>
-    <lastmod>2020-06-22T09:08:07.877Z</lastmod>
-    <data>
-        <display>
-        <title>Android 图形系统 -- View 绘制流程</title>
-        <pubTime>2016-08-02T02:00:00.000Z</pubTime>
-        
-        <tag>Android 图形系统</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android 图形系统" url="http://yoursite.com/categories/Android-%E5%9B%BE%E5%BD%A2%E7%B3%BB%E7%BB%9F/"/>
           
         </display>
     </data>
@@ -4024,12 +4024,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4044,12 +4044,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4457,12 +4457,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4479,12 +4479,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4543,12 +4543,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4563,12 +4563,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4711,26 +4711,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
-        
-        <tag>React Native</tag>
-         
-         
-           
-             
-              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4757,6 +4737,26 @@
         <display>
         <title>React Native封装原生UI组件</title>
         <pubTime>2017-01-15T02:00:00.000Z</pubTime>
+        
+        <tag>React Native</tag>
+         
+         
+           
+             
+              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          

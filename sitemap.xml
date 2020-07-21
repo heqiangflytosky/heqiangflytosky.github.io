@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2019/10/10/open-source-okhttp-websocket/</loc>
+    <loc>http://yoursite.com/2016/08/02/android-graphic-system-view-drawing/</loc>
     
-    <lastmod>2020-07-14T06:09:37.573Z</lastmod>
+    <lastmod>2020-07-21T03:43:55.989Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
     
-    <lastmod>2020-07-13T09:35:33.861Z</lastmod>
+    <lastmod>2020-07-15T08:38:07.528Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/10/10/open-source-okhttp-websocket/</loc>
+    
+    <lastmod>2020-07-14T06:09:37.573Z</lastmod>
     
   </url>
   
@@ -61,13 +68,6 @@
     <loc>http://yoursite.com/2020/02/10/cocos-creator-start/</loc>
     
     <lastmod>2020-06-30T06:45:01.478Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/08/02/android-graphic-system-view-drawing/</loc>
-    
-    <lastmod>2020-06-22T09:08:07.877Z</lastmod>
     
   </url>
   
@@ -1381,14 +1381,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
@@ -1528,14 +1528,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1556,14 +1556,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1612,13 +1612,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1627,6 +1620,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     

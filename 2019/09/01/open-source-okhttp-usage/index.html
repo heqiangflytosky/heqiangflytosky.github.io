@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/09/01/open-source-okhttp-usage/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 OkHttp 的基本使用">
-<meta property="og:updated_time" content="2020-07-13T09:35:33.861Z">
+<meta property="og:updated_time" content="2020-07-15T08:38:07.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OkHttp 使用指南 -- 基本使用">
 <meta name="twitter:description" content="介绍 OkHttp 的基本使用">
@@ -400,7 +400,16 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>OkHttp 可以说是使用最广泛的网络请求库了，我们通常会利用它来实现 HTTP 请求，而且它还实现了 WebSocket。很久之前就开始使用 OkHttp 了，源码也看了部分。近期想着开始写系列关于OkHttp的博客，把这部分只是记录下来，以备查看。<br>本章节只简单介绍一下 OkHttp 的基本用法，关于源码分析和更深入的介绍参考后面的文章。<br>本系列文章分析 OkHttp 是基于 3.11.0 版本为基础的，后面有版本更新会尽可能同步更新博客的内容。<br><a href="https://github.com/square/okhttp" target="_blank" rel="external">Github 源码</a></p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>OkHttp 可以说是使用最广泛的网络请求库了，基于 Socket 对 HTTP 协议和 WebSocket 协议进行了封装，我们可以很方便地用它来实现 HTTP 和 WebSocket 请求。<br>OkHttp 其实就是一个 Http 客户端，类似一个浏览器。下面介绍一些 OkHttp 的特点，其实大部分也是 Http 协议的特点：</p>
+<ul>
+<li>支持 Http2.0，允许同一主机的所有请求共享套接字。</li>
+<li>使用连接池减少请求延迟（如果HTTP / 2不可用）。</li>
+<li>透明GZIP缩小下载大小。</li>
+<li>响应缓存可以避免重复请求的网络。</li>
+<li>内部实现任务队列，提高并发访问的效率。</li>
+<li>实现拦截器链（InterceptorChain），实现request与response的分层处理</li>
+</ul>
+<p>很久之前就开始使用 OkHttp 了，源码也看了部分。近期想着开始写系列关于OkHttp的博客，把这部分只是记录下来，以备查看。<br>本章节只简单介绍一下 OkHttp 的基本用法，关于源码分析和更深入的介绍参考后面的文章。<br>本系列文章分析 OkHttp 是基于 3.11.0 版本为基础的，后面有版本更新会尽可能同步更新博客的内容。<br><a href="https://github.com/square/okhttp" target="_blank" rel="external">Github 源码</a></p>
 <h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">api &apos;com.squareup.okhttp3:okhttp:3.11.0&apos;</div></pre></td></tr></table></figure>
 <h3 id="创建-OkHttpClient"><a href="#创建-OkHttpClient" class="headerlink" title="创建 OkHttpClient"></a>创建 OkHttpClient</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Cache cache = new Cache(new File(context.getExternalCacheDir(),&quot;okhttp&quot;), 10*1024*1024);</div><div class="line">mOkHttpClient = new OkHttpClient.Builder()</div><div class="line">        .retryOnConnectionFailure(true)</div><div class="line">        .connectTimeout(10, TimeUnit.SECONDS)</div><div class="line">        //.cache(cache)</div><div class="line">        .build();</div></pre></td></tr></table></figure>
 <blockquote>
