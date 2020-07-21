@@ -447,6 +447,167 @@ draw 方法其实就是在传入的参数 Cavas 上面进行一些绘制。
 
 自定义 View 可以在 onDraw 方法里面自定义自己的实现。
 
+### 绘制顺序
+
+另外，我们再介绍一个小技巧：修改子View的绘制顺序。
+这个需求的使用场景是什么呢？比如有时我们想把某个下面的子View全部显示出来，不被其他View遮挡，这时就需要调整绘制顺序了。我们先看一下 `dispatchDraw()` 的源码：
+
+```
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        ......
+        // Only use the preordered list if not HW accelerated, since the HW pipeline will do the
+        // draw reordering internally
+        // 看是否有子View设置Z轴，只有在关闭硬件加速时才会生效
+        final ArrayList<View> preorderedList = usingRenderNodeProperties
+                ? null : buildOrderedChildList();
+        // 是否启用自定义绘制顺序，只有当 preorderedList 为空而且使能自定义顺序时才生效
+        final boolean customOrder = preorderedList == null
+                && isChildrenDrawingOrderEnabled();
+        for (int i = 0; i < childrenCount; i++) {
+            while (transientIndex >= 0 && mTransientIndices.get(transientIndex) == i) {
+                final View transientChild = mTransientViews.get(transientIndex);
+                if ((transientChild.mViewFlags & VISIBILITY_MASK) == VISIBLE ||
+                        transientChild.getAnimation() != null) {
+                    more |= drawChild(canvas, transientChild, drawingTime);
+                }
+                transientIndex++;
+                if (transientIndex >= transientCount) {
+                    transientIndex = -1;
+                }
+            }
+            // 获取需要绘制view的索引
+            final int childIndex = getAndVerifyPreorderedIndex(childrenCount, i, customOrder);
+            // 根据索引来获取需要绘制的View
+            final View child = getAndVerifyPreorderedView(preorderedList, children, childIndex);
+            if ((child.mViewFlags & VISIBILITY_MASK) == VISIBLE || child.getAnimation() != null) {
+                more |= drawChild(canvas, child, drawingTime);
+            }
+        }
+        while (transientIndex >= 0) {
+            // there may be additional transient views after the normal views
+            final View transientChild = mTransientViews.get(transientIndex);
+            if ((transientChild.mViewFlags & VISIBILITY_MASK) == VISIBLE ||
+                    transientChild.getAnimation() != null) {
+                more |= drawChild(canvas, transientChild, drawingTime);
+            }
+            transientIndex++;
+            if (transientIndex >= transientCount) {
+                break;
+            }
+        }
+        if (preorderedList != null) preorderedList.clear();
+
+        ......
+```
+
+我们先来看一下 `buildOrderedChildList ` 方法：
+
+```
+    ArrayList<View> buildOrderedChildList() {
+        final int childrenCount = mChildrenCount;
+        if (childrenCount <= 1 || !hasChildWithZ()) return null;
+
+        if (mPreSortedChildren == null) {
+            mPreSortedChildren = new ArrayList<>(childrenCount);
+        } else {
+            // callers should clear, so clear shouldn't be necessary, but for safety...
+            mPreSortedChildren.clear();
+            mPreSortedChildren.ensureCapacity(childrenCount);
+        }
+
+        final boolean customOrder = isChildrenDrawingOrderEnabled();
+        for (int i = 0; i < childrenCount; i++) {
+            // add next child (in child order) to end of list
+            final int childIndex = getAndVerifyPreorderedIndex(childrenCount, i, customOrder);
+            final View nextChild = mChildren[childIndex];
+            final float currentZ = nextChild.getZ();
+
+            // insert ahead of any Views with greater Z
+            int insertIndex = i;
+            while (insertIndex > 0 && mPreSortedChildren.get(insertIndex - 1).getZ() > currentZ) {
+                insertIndex--;
+            }
+            mPreSortedChildren.add(insertIndex, nextChild);
+        }
+        return mPreSortedChildren;
+    }
+```
+
+`buildOrderedChildList` 的逻辑就是按照 Z 轴调整 children 顺序，Z 轴值相同则参考 customOrder 的配置。
+`getAndVerifyPreorderedIndex ` 方法是获取获取需要绘制view的索引
+
+```
+    private int getAndVerifyPreorderedIndex(int childrenCount, int i, boolean customOrder) {
+        final int childIndex;
+        // 如果开启自定义绘制顺序，就根据自定义顺序来绘制，否则就按照默认顺序绘制
+        if (customOrder) {
+            final int childIndex1 = getChildDrawingOrder(childrenCount, i);
+            if (childIndex1 >= childrenCount) {
+                throw new IndexOutOfBoundsException("getChildDrawingOrder() "
+                        + "returned invalid index " + childIndex1
+                        + " (child count is " + childrenCount + ")");
+            }
+            childIndex = childIndex1;
+        } else {
+            childIndex = i;
+        }
+        return childIndex;
+    }
+
+    protected int getChildDrawingOrder(int childCount, int i) {
+        return i;
+    }
+```
+
+因此，我们可以得到自定义绘制顺序的两种方法：
+
+ - 修改子view的Z轴大小，可以通过 `view.setZ(float z);`z值越大，越靠近顶端。只有在不开启硬件加速时才生效
+ - 调用 `setChildrenDrawingOrderEnable(true)` 开启自定义绘制顺序，并且重写 `getChildDrawingOrder()` 修改子 View 的取值索引。
+
+其实，还有一种方法，调用 `view.bringToFront()`，但是这种方式是系统先将view移除出当前viewGroup，然后再添加进来，会导致重新绘制当前界面。
+
+```
+    @Override
+    public void bringChildToFront(View child) {
+        final int index = indexOfChild(child);
+        if (index >= 0) {
+            removeFromArray(index);
+            addInArray(child, mChildrenCount);
+            child.mParent = this;
+            requestLayout();
+            invalidate();
+        }
+    }
+```
+
+其实，`RecyclerView` 给我们提供了一个回调来自定义子View的绘制顺序，它就是重写了 `getChildDrawingOrder` 方法：
+
+```
+    public interface ChildDrawingOrderCallback {
+        /**
+         * Returns the index of the child to draw for this iteration. Override this
+         * if you want to change the drawing order of children. By default, it
+         * returns i.
+         *
+         * @param i The current iteration.
+         * @return The index of the child to draw this iteration.
+         *
+         * @see RecyclerView#setChildDrawingOrderCallback(RecyclerView.ChildDrawingOrderCallback)
+         */
+        int onGetChildDrawingOrder(int childCount, int i);
+    }
+
+    @Override
+    protected int getChildDrawingOrder(int childCount, int i) {
+        if (mChildDrawingOrderCallback == null) {
+            return super.getChildDrawingOrder(childCount, i);
+        } else {
+            return mChildDrawingOrderCallback.onGetChildDrawingOrder(childCount, i);
+        }
+    }
+```
+
 ## 一些知识点
 
 ### getMeasureHeight 和 getHeight 的区别
@@ -455,3 +616,7 @@ draw 方法其实就是在传入的参数 Cavas 上面进行一些绘制。
 `getMeasureHeight()/getMeasuredWidth()` 表示该view在它的父view里期望的值，在 measure 后可以得到。
 `getHeight()/getWidth()` 表示该 View 在屏幕上的实际大小，在 layout 方法后可以得到。
 实际上在当屏幕可以包裹内容的时候，他们的值相等，只有当 View 超出屏幕后，才能看出他们的区别： `getMeasuredHeight()/getMeasuredWidth()` 是实际 View 的大小，与屏幕无关，而 `getHeight()/getWidth()` 的大小此时则是屏幕的大小。当超出屏幕后，`getMeasureHeight()/getMeasuredWidth()`等于 `getHeight()/getWidth()` 加上屏幕之外没有显示的大小。
+
+## 推荐阅读
+
+[绘制流程小细节，如何修改 View绘制的顺序？](https://mp.weixin.qq.com/s/xAl1yPs4al2czSXsw6__hQ)
