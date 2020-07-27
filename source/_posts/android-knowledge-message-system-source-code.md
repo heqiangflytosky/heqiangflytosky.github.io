@@ -16,7 +16,7 @@ date: 2016-10-10 10:00:00
  - MessageQueue：消息队列，主要用来存放消息 `MessageQueue.enqueueMessage` 和发出消息 `MessageQueue.next()` 。`MessageQueue` 是一个单向链表，`Message` 对象有个 `next` 变量保存列表中的下一个，`MessageQueue` 中的 `mMessages` 保存链表的第一个元素。
  - Looper：不断循环执行 `Looper.loop`，按分发机制将消息分发给目标处理者。
 
-Handler 是我们在 Android 线程间通信的主要手段。
+Handler 是我们在 Android 线程间通信的主要手段。Activity的生命周期的运转也是通过 Handler 来实现的。
 看一下它们之间的关系图：
 
 ![效果图](http://www.plantuml.com/plantuml/svg/VP2zIWD1483xUOeXLKJo1XQnKr1GIISMUtV3ShW_nyvk8OS1kxo3leFOf53mRNA-XcFSFQEYrGpVV3i_E-UeGapMmAADXd1ow9hWsmQ7zMguUnmUdZUhzTlJo-R-TG9G6yMCHyerXWBsiCGJxpj9xMSKS4hCIjDveaHejm7sqLTHjIxNfdj2EiznUf6SKvMC3H-8oJL5oH4jwtzBjsMfGdkn9PS7cW86wipDmiDoN5hErHG5ZBDhPKobwkiVlSeDFSpmM9xc1fTNQCzaczRf7SfVbwFD2SFOiNnJ_yS7YGTPEPZDogwmgtuhvBXbMVebvvc5ZsvnO2vN96lU0G00)
@@ -339,6 +339,7 @@ class MessageQueue {
             }
 
             // We can assume mPtr != 0 because mQuitting is false.
+            // 唤醒消息执行的线程
             if (needWake) {
                 nativeWake(mPtr);
             }
@@ -655,3 +656,18 @@ SyncBarrier 是起什么作用的呢？它就像一个卡子，卡在消息链�
 主线程的所有工作，做种都会回到 MainLooper 中来处理，都会通过 dispatchMessage 来执行，因此如果主线程卡住了，就是在dispatchMessage这里卡住了。
 上面代码分析中我们也提到了，在 loop 方法中，dispatchMessage 前后都有 Printer 来调用打印Log的接口，因此我们只要在应用程序中为主线程通过 `Looper.getMainLooper().setMessageLogging(printer)` 设置一个自定义的 Printer，在 Printer 方法中判断start和end，来获取主线程dispatch该message的开始和结束时间，并判定该时间超过阈值(如2000毫秒)为主线程卡慢发生，并dump出各种信息，提供开发者分析性能瓶颈。
 著名的卡顿监测框架BlockCanary就是用的这个原理。
+
+## 几个问题
+
+### looper 循环为什么不会导致系统ANR
+
+这个是面试时经常遇到的问题。首先我们从 ANR 发生的原因来看一下。ANR 的原因是因为Looper对象MessageQueue队列中的事件没有能够得到及时执行，比如某一个消息由于处理时间过长导致其他消息得不到处理。所以，死循环不是造成ANR的必然原因。
+
+### looper 循环会不会导致性能问题
+
+通过上面的代码我们也看到，looper在消息队列没有消息时可能会进入阻塞状态，此时主线程会释放CPU资源进入休眠状态，直到子线程往消息队列发送消息，唤醒主线程，主线程被唤醒只是为了读取消息，当读取完消息后，再次睡眠。因此主线程大多数时候都是处于休眠状态，loop的循环并不会对CPU性能有过多的消耗。
+looper 循环对ui线程的阻塞是有的，在没有消息的时候会阻塞ui线程，但是不会造成卡死。
+
+## 文章推荐
+
+https://zhuanlan.zhihu.com/p/143353788

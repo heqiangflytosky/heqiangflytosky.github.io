@@ -97,7 +97,7 @@ ActivityThread *-- ApplicationThread
 ![效果图](/images/android-source-code-analysis-ams-app-ipc/ams-ipc-app.png)
 
 在 App 进程侧，App 进程作为Binder的客户端当发起启动 `Activity` 时，通过作为服务端的代理对象的 `ActivityManagerProxy` 来发起远程调用，此时 system 进程作为服务端，`ActivityManagerNative` 作为 `Binder` 本地对象收到远程调用后，由它的实现类 `ActivityManagerService` 完成相应的生命周期管理以及任务栈管理后，会把控制权交给App进程，让App进程完成Activity类对象的创建，以及生命周期回调。
-接下来的调用 system 进程作为客户端，App 进程作为服务端，通过system进程作为服务端的代理对象的 `ApplicationThreadProxy` 发起调用，`ApplicationThread` 作为服务端的 `Binder` 本地对象收到远程调用后，通过 `Handler` 发送消息由 `ActivityThread` 进程处理。
+接下来的调用 system 进程作为客户端，App 进程作为服务端，通过system进程作为服务端的代理对象的 `ApplicationThreadProxy` 发起调用，`ApplicationThread` 作为服务端的 `Binder` 本地对象收到远程调用后，通过 `Handler` 发送消息由 `ActivityThread` (也就是UI线程 )处理。
 了解了这些知识后再看[Android startActivity 流程分析](http://www.heqiangfly.com/2016/04/10/android-source-code-analysis-activity-start-process/)的流程图，会有助于理解。
 
 <!--   
