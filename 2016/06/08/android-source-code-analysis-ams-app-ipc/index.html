@@ -94,7 +94,7 @@
 <meta property="og:description" content="基于Android6.0来分析 AMS 与 APP 进程通信">
 <meta property="og:image" content="http://www.plantuml.com/plantuml/svg/jLHDRzD04BtlhnZrn8TIn9LQbb8EA1Af8j9xDRQtpGfxrzhTM4HGn8KJFI3K4wc4UiiLzOA8rFmPB8T_mHhRn8ut7nTkA-VDUs_UpEIKwP32GRS_XFJB5NG70_ZzuUklnMqs_P5-lCk-pzFf_G5HhncFKM84VeXAmLi2S2naGELp4GhfE6gYD8tE59K9bQuBGuel9ALy7OTnV1PBuLEb3AgF5vHh99T021UQ0YeuUKeSptNy7F-ieW4NbelFozkhz6QMtSsp-RVbOfhDFe7pv2yGt5fHoLglINzUPzUpLWtb0UIwX32kgJn7dqAlLpr9qUinuyP_7T7rDKkOdlIH6wdcJt4SCXyr4_nq92a613sb9VgwJAu5E37lX0AiPvD7_1ZYiMVWu0aHKkHWYYHoPUWUF3mYbsG3vq2ADnDeJoNdx40iMO8cx7F6COHUqHz4hsXaeZYgonQ8HB00F8EgwUJoTg3oHpGOX_GbZha_ggBQQdT7y__9HNE8GvCHCnEqXxOcOGOEIgFKTMAx4TGQZO6cvmqUobNOOM77BZGfgqrenxlQWsqRiAlJ_NlSDkhtbfs8pAVYcNDL7frtXuVLHVxxrEdOasmYx8T7oEhW2_RMURS1hICdwqK5qZQC_Q2bkRPKYRPU_FxmglSD2sX9jBmFikd_ovxnIg6qyyY6-WC0">
 <meta property="og:image" content="http://yoursite.com/images/android-source-code-analysis-ams-app-ipc/ams-ipc-app.png">
-<meta property="og:updated_time" content="2018-05-06T07:27:21.829Z">
+<meta property="og:updated_time" content="2020-07-24T07:42:41.832Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android AMS 与 APP 进程通信">
 <meta name="twitter:description" content="基于Android6.0来分析 AMS 与 APP 进程通信">
@@ -470,7 +470,7 @@ ActivityThread *-- ApplicationThread
 -->
 <h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><p>下面通过一个图来表示一下 AMS 和 APP 的通信，该图片摘自<a href="http://weishu.me/2016/01/12/binder-index-for-newer/" target="_blank" rel="external">Weishu Note</a>，描述的很好，直接拿来用来。</p>
 <p><img src="/images/android-source-code-analysis-ams-app-ipc/ams-ipc-app.png" alt="效果图"></p>
-<p>在 App 进程侧，App 进程作为Binder的客户端当发起启动 <code>Activity</code> 时，通过作为服务端的代理对象的 <code>ActivityManagerProxy</code> 来发起远程调用，此时 system 进程作为服务端，<code>ActivityManagerNative</code> 作为 <code>Binder</code> 本地对象收到远程调用后，由它的实现类 <code>ActivityManagerService</code> 完成相应的生命周期管理以及任务栈管理后，会把控制权交给App进程，让App进程完成Activity类对象的创建，以及生命周期回调。<br>接下来的调用 system 进程作为客户端，App 进程作为服务端，通过system进程作为服务端的代理对象的 <code>ApplicationThreadProxy</code> 发起调用，<code>ApplicationThread</code> 作为服务端的 <code>Binder</code> 本地对象收到远程调用后，通过 <code>Handler</code> 发送消息由 <code>ActivityThread</code> 进程处理。<br>了解了这些知识后再看<a href="http://www.heqiangfly.com/2016/04/10/android-source-code-analysis-activity-start-process/" target="_blank" rel="external">Android startActivity 流程分析</a>的流程图，会有助于理解。</p>
+<p>在 App 进程侧，App 进程作为Binder的客户端当发起启动 <code>Activity</code> 时，通过作为服务端的代理对象的 <code>ActivityManagerProxy</code> 来发起远程调用，此时 system 进程作为服务端，<code>ActivityManagerNative</code> 作为 <code>Binder</code> 本地对象收到远程调用后，由它的实现类 <code>ActivityManagerService</code> 完成相应的生命周期管理以及任务栈管理后，会把控制权交给App进程，让App进程完成Activity类对象的创建，以及生命周期回调。<br>接下来的调用 system 进程作为客户端，App 进程作为服务端，通过system进程作为服务端的代理对象的 <code>ApplicationThreadProxy</code> 发起调用，<code>ApplicationThread</code> 作为服务端的 <code>Binder</code> 本地对象收到远程调用后，通过 <code>Handler</code> 发送消息由 <code>ActivityThread</code> (也就是UI线程 )处理。<br>了解了这些知识后再看<a href="http://www.heqiangfly.com/2016/04/10/android-source-code-analysis-activity-start-process/" target="_blank" rel="external">Android startActivity 流程分析</a>的流程图，会有助于理解。</p>
 <!--   
 http://duanqz.github.io/2016-01-29-Activity-IPC
 http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/

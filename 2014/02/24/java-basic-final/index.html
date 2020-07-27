@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/02/24/java-basic-final/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 final 修饰符">
-<meta property="og:updated_time" content="2019-05-29T06:47:54.149Z">
+<meta property="og:updated_time" content="2020-07-23T06:30:19.756Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基础 -- 深入理解 final 修饰符">
 <meta name="twitter:description" content="介绍 final 修饰符">
@@ -455,7 +455,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">String str1 = &quot;abcdef&quot;;</div><div class="line">String abc = &quot;abc&quot;;</div><div class="line">String def = &quot;def&quot;;</div><div class="line">String str2 = abc + def;</div><div class="line">System.out.println(str1 == str2);</div></pre></td></tr></table></figure>
 <p>这个打印输出为false，如何才能输出true呢？</p>
 <p>把abc和def改成final类型就行了，会执行宏替换，str2 仍然相当于执行 <code>&quot;abc&quot;+&quot;def&quot;</code>。</p>
-<h2 id="内部类中的局部变量"><a href="#内部类中的局部变量" class="headerlink" title="内部类中的局部变量"></a>内部类中的局部变量</h2><p>我们知道，如果程序需要在匿名内部类和局部内部类中使用局部变量，那么这个局部变量必须使用final修饰。<br>那么原因是什么呢？<br>对于普通局部变量而言，它的作用域就是停留在该方法内，当方法执行结束，该局部变量也随之消失；但是内部类则可能产生隐式的闭包，闭包使得局部变量脱离它所在的方法继续存在。比如创建一个局部 Thread 变量里面使用局部变量。也就是内部类会扩大局部变量的作用域，如果不被final修饰的话，该变量的值可能会被随意的改变，那么就会引起混乱，因此Java编译器要求被内部类访问的局部变量必须使用final修饰。</p>
+<h2 id="内部类中的局部变量"><a href="#内部类中的局部变量" class="headerlink" title="内部类中的局部变量"></a>内部类中的局部变量</h2><p>我们知道，如果程序需要在匿名内部类和局部内部类中使用局部变量，那么这个局部变量必须使用final修饰。<br>那么原因是什么呢？<br>对于普通局部变量而言，它的作用域就是停留在该方法内，当方法执行结束，该局部变量也随之消失；但是内部类则可能产生隐式的闭包，闭包使得局部变量脱离它所在的方法继续存在，也就是内部类会扩大局部变量的作用域。比如创建一个局部 Thread 变量里面使用局部变量。如果不被final修饰的话，该变量的值可能会被随意的改变，那么就会引起混乱，因此Java编译器要求被内部类访问的局部变量必须使用final修饰。局部变量被final修饰之后，此时会在内存中保有一份局部变得的复制品，当内部类访问的时候其实访问的是这个复制品。这就好像是把局部变量的生命周期变长了。</p>
 
       
     </div>
