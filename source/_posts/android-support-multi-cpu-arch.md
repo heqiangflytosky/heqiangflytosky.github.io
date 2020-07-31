@@ -146,3 +146,24 @@ APP_ABI := all
 TARGET_CPU_API :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64
 APP_ABI :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64
 ```
+
+## 一些命令
+
+### 查看设备支持的 ABI 类型
+
+```
+adb shell getprop |grep ro.product.cpu.abilist
+```
+
+### 查看某个应用的 ABI 类型
+
+```
+adb shell dumpsys package <packageName>
+```
+
+查看 Packages 中的 primaryCpuAbi 和 secondaryCpuAbi
+
+## 推荐文章
+
+[Android中app进程ABI确定过程](https://zhuanlan.zhihu.com/p/29801087)
+[APK安装流程详解4——安装中关于so库的那些事](https://www.jianshu.com/p/c9fc6743a383)

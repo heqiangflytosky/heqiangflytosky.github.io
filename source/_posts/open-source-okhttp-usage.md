@@ -25,6 +25,25 @@ OkHttp 其实就是一个 Http 客户端，类似一个浏览器。下面介绍�
 本系列文章分析 OkHttp 是基于 3.11.0 版本为基础的，后面有版本更新会尽可能同步更新博客的内容。
 [Github 源码](https://github.com/square/okhttp)
 
+## 对比
+
+|  | HTTPURLConnection | Apache HttpClient | OkHttp |
+|:-------------:|:-------------:|:-------------:|:-------------:|
+| 提供分析记录请求各个阶段的能力 | 不支持 | 不支持 | 支持 |
+| 支持响应缓存 | 支持 | 支持 | 支持 |
+| 支持重试 | 支持 | 支持 | 支持 |
+| 支持连接池复用连接 | 不支持 | 支持 | 支持 |
+| 易用性 | JDK标准量，未做任何封装，使用起来非常原始，不方便 | 较易用 | 易用 |
+| 支持HTTP/1.0、HTTP/1.1 | 支持 | 支持 | 支持 |
+| 支持HTTP/2.0 | 不支持 | 不支持 | 支持 |
+| 支持同步和异步请求 | 支持 | 支持 | 支持 |
+| 支持取消请求 | 支持 | 支持 | 支持 |
+| 支持设置超时 | 支持 | 支持 | 支持 |
+| 稳定性 | 稳定 | 历史悠久，bug少，功能全 | Google在Android6.0剔除了HttpClient，采用OKHttp；现已广泛使用 |
+| 性能 | 优 | 一般 | 优 |
+| 支持WebSocket | 不支持 | 不支持 | 支持 |
+| 引入对用户影响 | JDK自带，无影响 | 需要引入org.apache.http.legacy | 需要引入 okhttp 依赖 |
+
 
 ## 基本使用
 
@@ -224,3 +243,27 @@ DIRTY d0dae34b88fc0cc86e305ce4c60e1670
 而没有类似 `CLEAN d0dae34b88fc0cc86e305ce4c60e1670 651 71465` 的字段，那基本是上面的代码没有调用导致写入缓存不成功。具体原因后面的源码分析再介绍。
 
 三. okhttp 对post请求不做缓存处理
+
+### pingInterval
+
+通过跟源码我们可以看到,这个值只有http2和webSocket中有使用。
+
+Http2Connection.java
+
+```
+    if (builder.pingIntervalMillis != 0) {
+      writerExecutor.scheduleAtFixedRate(new PingRunnable(false, 0, 0),
+          builder.pingIntervalMillis, builder.pingIntervalMillis, MILLISECONDS);
+    }
+```
+
+RealWebSocket.java
+
+```
+      if (pingIntervalMillis != 0) {
+        executor.scheduleAtFixedRate(
+            new PingRunnable(), pingIntervalMillis, pingIntervalMillis, MILLISECONDS);
+      }
+```
+
+如果设置了这个值会定时的向服务器发送一个消息来保持长连接。

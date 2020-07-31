@@ -50,9 +50,15 @@ javah -jni com.example.heqiang.testsomething.util.JniUtils
 
 ```
 #include "com_example_heqiang_testsomething_util_JniUtils.h"
+#include <android/log.h>
 
-JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getKey(JNIEnv *env, jobject obj) {
-    return (*env)->NewStringUTF(env,"abcdefghijk");
+#define  LOG_TAG    "TestJNI"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+
+JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getString(JNIEnv *env, jobject obj) {
+    LOGD("call jni sucessfully");
+    return (*env)->NewStringUTF(env,"abcdefghijklmn");
 }
 ```
 
@@ -170,9 +176,11 @@ APP_ABI := armeabi,armeabi-v7a,arm64-v8a
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
+LOCAL_LDLIBS    := -llog
 
 LOCAL_MODULE    := JniDemo
-LOCAL_SRC_FILES := Constants.c
+LOCAL_SRC_FILES := Constants.c \
+	Test.cpp
 
 include $(BUILD_SHARED_LIBRARY)
 ```

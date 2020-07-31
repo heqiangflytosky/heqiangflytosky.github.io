@@ -117,3 +117,4 @@ Demo 中对以上的效果有一个选项，叫处理一半的效果，这个其
 ## 参考文章
 
 https://blog.csdn.net/junzia/article/details/52902189
+https://github.com/doggycoder/AndroidOpenGLDemo

@@ -149,5 +149,6 @@ $ adb shell watchprops
  - ro.config.notification_sound：默认通知铃声
  - ro.config.alarm_alert：默认闹钟铃声
  - dalvik.vm.stack-trace-file：trace文件放置目录
+ - ro.product.cpu.abilist：系统支持的ABI列表
 
      
