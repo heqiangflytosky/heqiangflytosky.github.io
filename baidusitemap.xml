@@ -4,6 +4,132 @@
 
     
   <url>
+    <loc>http://yoursite.com/2019/10/15/open-source-okhttp-connect-pool/</loc>
+    <lastmod>2020-07-31T06:36:46.575Z</lastmod>
+    <data>
+        <display>
+        <title>OkHttp 源码分析 -- 连接池</title>
+        <pubTime>2019-10-15T02:00:00.000Z</pubTime>
+        
+        <tag>OkHttp</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
+    <lastmod>2020-07-30T08:20:38.673Z</lastmod>
+    <data>
+        <display>
+        <title>OkHttp 使用指南 -- 基本使用</title>
+        <pubTime>2019-09-01T02:00:00.000Z</pubTime>
+        
+        <tag>OkHttp</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2020/05/06/opengl-es-image-effect/</loc>
+    <lastmod>2020-07-28T06:55:23.885Z</lastmod>
+    <data>
+        <display>
+        <title>OpenGL ES -- 图像处理</title>
+        <pubTime>2020-05-06T02:00:00.000Z</pubTime>
+        
+        <tag>OpenGL ES</tag>
+         
+         
+           
+             
+              <breadCrumb title="OpenGL" url="http://yoursite.com/categories/OpenGL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
+    <lastmod>2020-07-28T05:59:47.165Z</lastmod>
+    <data>
+        <display>
+        <title>Android JNI -- Android Studio JNI 开发基础</title>
+        <pubTime>2015-12-10T02:00:00.000Z</pubTime>
+        
+        <tag>JNI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/</loc>
+    <lastmod>2020-07-27T10:03:07.186Z</lastmod>
+    <data>
+        <display>
+        <title>Android -- 多CPU架构支持所需要了解的知识</title>
+        <pubTime>2017-02-24T02:00:00.000Z</pubTime>
+        
+        <tag>CPU架构</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
+    <lastmod>2020-07-27T08:22:50.037Z</lastmod>
+    <data>
+        <display>
+        <title>Android实用技巧之adb命令：getprop，setprop，watchprops命令的使用</title>
+        <pubTime>2014-10-18T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>getprop</tag>
+         
+        <tag>setprop</tag>
+         
+        <tag>watchprops</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android实用技巧" url="http://yoursite.com/categories/Android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2016/10/10/android-knowledge-message-system-source-code/</loc>
     <lastmod>2020-07-24T08:02:14.988Z</lastmod>
     <data>
@@ -99,26 +225,6 @@
            
              
               <breadCrumb title="Android 图形系统" url="http://yoursite.com/categories/Android-%E5%9B%BE%E5%BD%A2%E7%B3%BB%E7%BB%9F/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2019/09/01/open-source-okhttp-usage/</loc>
-    <lastmod>2020-07-15T08:38:07.528Z</lastmod>
-    <data>
-        <display>
-        <title>OkHttp 使用指南 -- 基本使用</title>
-        <pubTime>2019-09-01T02:00:00.000Z</pubTime>
-        
-        <tag>OkHttp</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
           
         </display>
     </data>
@@ -239,26 +345,6 @@
            
              
               <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/</loc>
-    <lastmod>2020-07-02T11:35:17.870Z</lastmod>
-    <data>
-        <display>
-        <title>Android -- 多CPU架构支持所需要了解的知识</title>
-        <pubTime>2017-02-24T02:00:00.000Z</pubTime>
-        
-        <tag>CPU架构</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -421,26 +507,6 @@
            
              
               <breadCrumb title="Android 组件" url="http://yoursite.com/categories/Android-%E7%BB%84%E4%BB%B6/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2020/05/06/opengl-es-image-effect/</loc>
-    <lastmod>2020-06-03T01:20:18.142Z</lastmod>
-    <data>
-        <display>
-        <title>OpenGL ES -- 图像处理</title>
-        <pubTime>2020-05-06T02:00:00.000Z</pubTime>
-        
-        <tag>OpenGL ES</tag>
-         
-         
-           
-             
-              <breadCrumb title="OpenGL" url="http://yoursite.com/categories/OpenGL/"/>
           
         </display>
     </data>
@@ -971,26 +1037,6 @@
            
              
               <breadCrumb title="cocos" url="http://yoursite.com/categories/cocos/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
-    <lastmod>2020-03-27T07:20:50.397Z</lastmod>
-    <data>
-        <display>
-        <title>Android JNI -- Android Studio JNI 开发基础</title>
-        <pubTime>2015-12-10T02:00:00.000Z</pubTime>
-        
-        <tag>JNI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -4046,12 +4092,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4066,12 +4112,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4235,16 +4281,16 @@
     
     
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
-        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
+        <title>Android BuildConfig的使用</title>
+        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>buildType</tag>
+        <tag>BuildConfig</tag>
          
          
            
@@ -4257,16 +4303,16 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android BuildConfig的使用</title>
-        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
+        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
+        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>BuildConfig</tag>
+        <tag>buildType</tag>
          
          
            
@@ -4336,32 +4382,6 @@
            
              
               <breadCrumb title="Java" url="http://yoursite.com/categories/Java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android实用技巧之adb命令：getprop，setprop，watchprops命令的使用</title>
-        <pubTime>2014-10-18T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>getprop</tag>
-         
-        <tag>setprop</tag>
-         
-        <tag>watchprops</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android实用技巧" url="http://yoursite.com/categories/Android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"/>
           
         </display>
     </data>
@@ -4457,6 +4477,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        
+        <tag>V8</tag>
+         
+        <tag>J2V8</tag>
+         
+         
+           
+             
+              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4494,28 +4536,6 @@
            
              
               <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
-        
-        <tag>V8</tag>
-         
-        <tag>J2V8</tag>
-         
-         
-           
-             
-              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
           
         </display>
     </data>
@@ -4671,12 +4691,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>搭建 React Native 开发环境</title>
-        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        <title>React Native-组件Component</title>
+        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4691,12 +4711,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-组件Component</title>
-        <pubTime>2017-01-12T02:00:00.000Z</pubTime>
+        <title>搭建 React Native 开发环境</title>
+        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4731,12 +4751,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native封装原生UI组件</title>
-        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4751,12 +4771,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native封装原生UI组件</title>
+        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          

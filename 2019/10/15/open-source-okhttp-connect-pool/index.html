@@ -1,0 +1,910 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OkHttp," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 OkHttp 的连接池">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OkHttp 源码分析 -- 连接池">
+<meta property="og:url" content="http://yoursite.com/2019/10/15/open-source-okhttp-connect-pool/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 OkHttp 的连接池">
+<meta property="og:updated_time" content="2020-07-31T06:36:46.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OkHttp 源码分析 -- 连接池">
+<meta name="twitter:description" content="介绍 OkHttp 的连接池">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/15/open-source-okhttp-connect-pool/"/>
+
+
+
+
+
+  <title> OkHttp 源码分析 -- 连接池 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/15/open-source-okhttp-connect-pool/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OkHttp 源码分析 -- 连接池
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T10:00:00+08:00">
+                2019-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android开源项目/" itemprop="url" rel="index">
+                    <span itemprop="name">Android开源项目</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2019/10/15/open-source-okhttp-connect-pool/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/10/15/open-source-okhttp-connect-pool/" class="leancloud_visitors" data-flag-title="OkHttp 源码分析 -- 连接池">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 OkHttp 的连接池
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>连接池也是OkHttp的核心部分。通过维护连接池，最大限度重用现有连接，减少网络连接的创建开销，以此提升网络请求效率。<br>OkHttp 使用 ConnectInterceptor 拦截器来负责建立与服务器的连接，那么连接池就工作在这一阶段。</p>
+<h2 id="keep-alive机制"><a href="#keep-alive机制" class="headerlink" title="keep-alive机制"></a>keep-alive机制</h2><h3 id="HTTP-1-0"><a href="#HTTP-1-0" class="headerlink" title="HTTP 1.0"></a>HTTP 1.0</h3><p>在 Http 1.0 中，每次连接只处理一个请求，服务端在响应客户端的请求后，就主动断开连接，不继续维护该连接。但是如果一个网页包含很多图片，典型场景下这些资源中大部分来自同一个站点。按照 Http 1.0 的做法，每个图片的请求都要创建一个连接，意味着一次 Socket 的创建销毁，创建一个TCP连接需要3次握手，而释放连接则需要2次或4次握手，又是一个相对比较费时的过程。重复的创建和释放连接极大地影响了网络效率，同时也增加了系统开销。</p>
+<h3 id="HTTP-1-1"><a href="#HTTP-1-1" class="headerlink" title="HTTP 1.1"></a>HTTP 1.1</h3><p>为了有效地解决这一问题，HTTP/1.1提出了Keep-Alive机制：当一个HTTP请求的数据传输结束后，TCP连接不立即释放，如果此时有新的HTTP请求，且其请求的Host通上次请求相同，则可以直接复用为释放的TCP连接，从而省去了TCP的释放和再次创建的开销，减少了网络延时。在现代浏览器中，一般同时开启6～8个keepalive connections的socket连接，并保持一定的链路生命，当不需要时再关闭；而在服务器中，一般是由软件根据负载情况(比如FD最大值、Socket内存、超时时间、栈内存、栈数量等)决定是否主动关闭。<br>在该版本中默认是打开持久连接的，即在请求头中添加Connection:keep-alive，如果要关闭，需要在请求头中指定Connection:close，keep-alive不会永久保持连接，它有一个保持时间，可以在不同的服务器软件（如Apache）中设定这个时间。</p>
+<h2 id="HTTP-2-0"><a href="#HTTP-2-0" class="headerlink" title="HTTP 2.0"></a>HTTP 2.0</h2><p>HTTP 2.0 的改进如下：</p>
+<ul>
+<li>报头压缩：HTTP/2使用HPACK压缩格式压缩请求和响应报头数据，减少不必要流量开销。</li>
+<li>新的二进制格式：http/1.x使用的是明文协议，其协议格式由三部分组成：request line，header，body，其协议解析是基于文本，但是这种方式存在天然缺陷，文本的表现形式有多样性，要做到健壮性考虑的场景必然很多，二进制则不同，只认0和1的组合；基于这种考虑，http/2.0的协议解析决定采用二进制格式，实现方便且健壮。</li>
+<li>多路复用：HTTP 2通过引入新的二进制分帧层实现了完整的请求和响应复用，客户端和服务器可以将HTTP消息分解为互不依赖的帧，然后交错发送，最后再在另一端将其重新组装。在一个 TCP 连接上，我们可以向对方不断发送帧，每帧的 stream identifier 的标明这一帧属于哪个流，然后在对方接收时，根据 stream identifier 拼接每个流的所有帧组成一整块数据。把 HTTP/1.1 每个请求都当作一个流，那么多个请求变成多个流，请求响应数据分成多个帧，不同流中的帧交错地发送给对方，这就是 HTTP/2 中的多路复用。流的概念实现了单连接上多请求 - 响应并行，解决了线头阻塞的问题，减少了 TCP 连接数量和 TCP 连接慢启动造成的问题.http2 对于同一域名只需要创建一个连接，而不是像 http/1.1 那样创建 6~8 个连接。</li>
+<li>数据流优先级：将 HTTP 消息分解为很多独立的帧之后，我们就可以复用多个数据流中的帧，客户端和服务器交错发送和传输这些帧的顺序就成为关键的性能决定因素。为了做到这一点，HTTP/2 标准允许每个数据流都有一个关联的权重和依赖关系</li>
+</ul>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>无论是HTTP/1.1的Keep-Alive机制还是HTTP/2的多路复用机制，在实现上都需要引入连接池来维护网络连接。接下来看下OkHttp中的连接池实现。<br>OkHttp内部通过 ConnectionPool 来管理连接池，主要涉及下面几个类：</p>
+<ul>
+<li>StreamAllocation</li>
+<li>RealConnection</li>
+<li>ConnectionPool</li>
+<li>HttpCodec：两个子类：Http1Codec和Http2Codec，分别对应Http1.1协议以及Http2.0协议。具体在介绍 CallServerInterceptor 时详细介绍。</li>
+</ul>
+<h3 id="ConnectInterceptor"><a href="#ConnectInterceptor" class="headerlink" title="ConnectInterceptor"></a>ConnectInterceptor</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public final class ConnectInterceptor implements Interceptor &#123;</div><div class="line">  public final OkHttpClient client;</div><div class="line"></div><div class="line">  public ConnectInterceptor(OkHttpClient client) &#123;</div><div class="line">    this.client = client;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @Override public Response intercept(Chain chain) throws IOException &#123;</div><div class="line">    RealInterceptorChain realChain = (RealInterceptorChain) chain;</div><div class="line">    Request request = realChain.request();</div><div class="line">    StreamAllocation streamAllocation = realChain.streamAllocation();</div><div class="line"></div><div class="line">    // We need the network to satisfy this request. Possibly for validating a conditional GET.</div><div class="line">    boolean doExtensiveHealthChecks = !request.method().equals(&quot;GET&quot;);</div><div class="line">    HttpCodec httpCodec = streamAllocation.newStream(client, chain, doExtensiveHealthChecks);</div><div class="line">    RealConnection connection = streamAllocation.connection();</div><div class="line"></div><div class="line">    return realChain.proceed(request, streamAllocation, httpCodec, connection);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">├── StreamAllocation.newStream</div><div class="line">    ├── StreamAllocation.findHealthyConnection</div><div class="line">        ├── StreamAllocation.findConnection</div><div class="line">            ├── Internal.instance.get 尝试从连接池中获取连接，如果存在，返回该连接</div><div class="line">            ├── routeSelector.next() 寻找新的路由</div><div class="line">                ├── RouteSelector.nextProxy()</div><div class="line">                    ├── RouteSelector.resetNextInetSocketAddress</div><div class="line">                        ├── address.dns().lookup dns解析</div><div class="line">            ├── RealConnection.connect 进行 TCP + TLS 握手</div><div class="line">                ├── RealConnection.connectSocket</div><div class="line">                ├── RealConnection.establishProtocol</div><div class="line">                    ├── RealConnection.connectTls</div><div class="line">                    ├── RealConnection.startHttp2</div><div class="line">    ├── RealConnection.newCodec 确定是使用http1还是http2协议</div></pre></td></tr></table></figure>
+<h3 id="获取连接"><a href="#获取连接" class="headerlink" title="获取连接"></a>获取连接</h3><p>重点介绍一下 <code>StreamAllocation.findConnection</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div></pre></td><td class="code"><pre><div class="line">private RealConnection findConnection(int connectTimeout, int readTimeout, int writeTimeout,</div><div class="line">    int pingIntervalMillis, boolean connectionRetryEnabled) throws IOException &#123;</div><div class="line">  boolean foundPooledConnection = false;</div><div class="line">  RealConnection result = null;</div><div class="line">  Route selectedRoute = null;</div><div class="line">  Connection releasedConnection;</div><div class="line">  Socket toClose;</div><div class="line">  synchronized (connectionPool) &#123;</div><div class="line">    if (released) throw new IllegalStateException(&quot;released&quot;);</div><div class="line">    if (codec != null) throw new IllegalStateException(&quot;codec != null&quot;);</div><div class="line">    if (canceled) throw new IOException(&quot;Canceled&quot;);</div><div class="line"></div><div class="line">    // Attempt to use an already-allocated connection. We need to be careful here because our</div><div class="line">    // already-allocated connection may have been restricted from creating new streams.</div><div class="line">    // 一个StreamAllocation刻画的是一个Call的数据流动，</div><div class="line">    // 一个Call可能存在多次请求(重定向，Authenticate等)，</div><div class="line">    // 所以当发生类似重定向等事件时优先使用原有的连接</div><div class="line">    releasedConnection = this.connection;</div><div class="line">    toClose = releaseIfNoNewStreams();</div><div class="line">    if (this.connection != null) &#123;</div><div class="line">      // 如果有正在连接的连接时就直接使用</div><div class="line">      result = this.connection;</div><div class="line">      releasedConnection = null;</div><div class="line">    &#125;</div><div class="line">    if (!reportedAcquired) &#123;</div><div class="line">      // If the connection was never reported acquired, don&apos;t report it as released!</div><div class="line">      releasedConnection = null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (result == null) &#123;</div><div class="line">      // 如果上面没有正在连接的连接，就从连接池里面找</div><div class="line">      Internal.instance.get(connectionPool, address, this, null);</div><div class="line">      if (connection != null) &#123;</div><div class="line">        foundPooledConnection = true;</div><div class="line">        result = connection;</div><div class="line">      &#125; else &#123;</div><div class="line">        selectedRoute = route;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  closeQuietly(toClose);</div><div class="line"></div><div class="line">  if (releasedConnection != null) &#123;</div><div class="line">    eventListener.connectionReleased(call, releasedConnection);</div><div class="line">  &#125;</div><div class="line">  if (foundPooledConnection) &#123;</div><div class="line">    eventListener.connectionAcquired(call, result);</div><div class="line">  &#125;</div><div class="line">  if (result != null) &#123;</div><div class="line">    // If we found an already-allocated or pooled connection, we&apos;re done.</div><div class="line">    return result;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 获取路由配置</div><div class="line">  boolean newRouteSelection = false;</div><div class="line">  if (selectedRoute == null &amp;&amp; (routeSelection == null || !routeSelection.hasNext())) &#123;</div><div class="line">    newRouteSelection = true;</div><div class="line">    routeSelection = routeSelector.next();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  synchronized (connectionPool) &#123;</div><div class="line">    if (canceled) throw new IOException(&quot;Canceled&quot;);</div><div class="line"></div><div class="line">    if (newRouteSelection) &#123;</div><div class="line">      // Now that we have a set of IP addresses, make another attempt at getting a connection from</div><div class="line">      // the pool. This could match due to connection coalescing.</div><div class="line">      List&lt;Route&gt; routes = routeSelection.getAll();</div><div class="line">      for (int i = 0, size = routes.size(); i &lt; size; i++) &#123;</div><div class="line">        Route route = routes.get(i);</div><div class="line">        Internal.instance.get(connectionPool, address, this, route);</div><div class="line">        if (connection != null) &#123;</div><div class="line">          foundPooledConnection = true;</div><div class="line">          result = connection;</div><div class="line">          this.route = route;</div><div class="line">          break;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (!foundPooledConnection) &#123;</div><div class="line">      if (selectedRoute == null) &#123;</div><div class="line">        selectedRoute = routeSelection.next();</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      // Create a connection and assign it to this allocation immediately. This makes it possible</div><div class="line">      // for an asynchronous cancel() to interrupt the handshake we&apos;re about to do.</div><div class="line">      route = selectedRoute;</div><div class="line">      refusedStreamCount = 0;</div><div class="line">      result = new RealConnection(connectionPool, selectedRoute);</div><div class="line">      acquire(result, false);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // If we found a pooled connection on the 2nd time around, we&apos;re done.</div><div class="line">  if (foundPooledConnection) &#123;</div><div class="line">    eventListener.connectionAcquired(call, result);</div><div class="line">    return result;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 进行 TCP + TLS 握手</div><div class="line">  result.connect(connectTimeout, readTimeout, writeTimeout, pingIntervalMillis,</div><div class="line">      connectionRetryEnabled, call, eventListener);</div><div class="line">  routeDatabase().connected(result.route());</div><div class="line"></div><div class="line">  Socket socket = null;</div><div class="line">  synchronized (connectionPool) &#123;</div><div class="line">    reportedAcquired = true;</div><div class="line"></div><div class="line">    // 将新建的连接放入到连接池中</div><div class="line">    Internal.instance.put(connectionPool, result);</div><div class="line"></div><div class="line">    // If another multiplexed connection to the same address was created concurrently, then</div><div class="line">    // release this connection and acquire that one.</div><div class="line">    if (result.isMultiplexed()) &#123;</div><div class="line">      socket = Internal.instance.deduplicate(connectionPool, address, this);</div><div class="line">      result = connection;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  closeQuietly(socket);</div><div class="line"></div><div class="line">  eventListener.connectionAcquired(call, result);</div><div class="line">  return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="清理连接"><a href="#清理连接" class="headerlink" title="清理连接"></a>清理连接</h3><p>ConnectionPool有一个独立的线程cleanupRunnable来清理连接池。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">private final Runnable cleanupRunnable = new Runnable() &#123;</div><div class="line">  @Override public void run() &#123;</div><div class="line">    while (true) &#123;</div><div class="line">      //对连接池进行清理，返回下次清理等待时间</div><div class="line">      long waitNanos = cleanup(System.nanoTime());</div><div class="line">      if (waitNanos == -1) return;</div><div class="line">      if (waitNanos &gt; 0) &#123;</div><div class="line">        long waitMillis = waitNanos / 1000000L;</div><div class="line">        waitNanos -= (waitMillis * 1000000L);</div><div class="line">        synchronized (ConnectionPool.this) &#123;</div><div class="line">          try &#123;</div><div class="line">            // 进入超时等待</div><div class="line">            ConnectionPool.this.wait(waitMillis, (int) waitNanos);</div><div class="line">          &#125; catch (InterruptedException ignored) &#123;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>当连接池中put新的连接时，开始执行 cleanupRunnable。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">void put(RealConnection connection) &#123;</div><div class="line">    assert (Thread.holdsLock(this));</div><div class="line">    if (!cleanupRunning) &#123;</div><div class="line">      cleanupRunning = true;</div><div class="line">      executor.execute(cleanupRunnable);</div><div class="line">    &#125;</div><div class="line">    connections.add(connection);</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>这段死循环实际上是一个阻塞的清理任务，首先进行清理(clean)，并返回下次需要清理的间隔时间，然后调用wait(timeout)进行等待以释放锁与时间片，当被唤醒后，再次进行清理，并返回下次要清理的间隔时间。<br>其唤醒时机有两个：</p>
+<ul>
+<li>超时时间到。</li>
+<li>调用 connectionBecameIdle 时，这个方法在 StreamAllocation.deallocate 方法中调用。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">boolean connectionBecameIdle(RealConnection connection) &#123;</div><div class="line">  assert (Thread.holdsLock(this));</div><div class="line">  if (connection.noNewStreams || maxIdleConnections == 0) &#123;</div><div class="line">    connections.remove(connection);</div><div class="line">    return true;</div><div class="line">  &#125; else &#123;</div><div class="line">    // 唤醒cleanup线程</div><div class="line">    notifyAll(); // Awake the cleanup thread: we may have exceeded the idle connection limit.</div><div class="line">    return false;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再来看一下 cleanup 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">long cleanup(long now) &#123;</div><div class="line">  int inUseConnectionCount = 0;</div><div class="line">  int idleConnectionCount = 0;</div><div class="line">  RealConnection longestIdleConnection = null;</div><div class="line">  long longestIdleDurationNs = Long.MIN_VALUE;</div><div class="line"></div><div class="line">  // 遍历连接池中的所有连接</div><div class="line">  synchronized (this) &#123;</div><div class="line">    for (Iterator&lt;RealConnection&gt; i = connections.iterator(); i.hasNext(); ) &#123;</div><div class="line">      RealConnection connection = i.next();</div><div class="line"></div><div class="line">      // 如果当前连接正在使用，开始遍历下一个连接</div><div class="line">      if (pruneAndGetAllocationCount(connection, now) &gt; 0) &#123;</div><div class="line">        inUseConnectionCount++;</div><div class="line">        continue;</div><div class="line">      &#125;</div><div class="line">      // 空闲连接数+1</div><div class="line">      idleConnectionCount++;</div><div class="line"></div><div class="line">      //选择排序法，标记出空闲时间最长的连接</div><div class="line">      long idleDurationNs = now - connection.idleAtNanos;</div><div class="line">      if (idleDurationNs &gt; longestIdleDurationNs) &#123;</div><div class="line">        longestIdleDurationNs = idleDurationNs;</div><div class="line">        longestIdleConnection = connection;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (longestIdleDurationNs &gt;= this.keepAliveDurationNs</div><div class="line">        || idleConnectionCount &gt; this.maxIdleConnections) &#123;</div><div class="line">      // 如果空闲连接已经空闲了 5 秒</div><div class="line">      // 或者如果空闲连接超过 5 个</div><div class="line">      // 将改连接从连接池中移除</div><div class="line">      connections.remove(longestIdleConnection);</div><div class="line">    &#125; else if (idleConnectionCount &gt; 0) &#123;</div><div class="line">      // 如果有空闲连接，就返回到期的时间</div><div class="line">      return keepAliveDurationNs - longestIdleDurationNs;</div><div class="line">    &#125; else if (inUseConnectionCount &gt; 0) &#123;</div><div class="line">      // 如果没有空闲连接，就 5 秒后再执行清理</div><div class="line">      return keepAliveDurationNs;</div><div class="line">    &#125; else &#123;</div><div class="line">      //没有任何连接，跳出循环</div><div class="line">      cleanupRunning = false;</div><div class="line">      return -1;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  closeQuietly(longestIdleConnection.socket());</div><div class="line"></div><div class="line">  // 立即进行再次清理</div><div class="line">  return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p><a href="https://developer.aliyun.com/article/78101" target="_blank" rel="external">https://developer.aliyun.com/article/78101</a><br><a href="https://mp.weixin.qq.com/s/TeQhe4T4wRjdAEPz6Ne45g" target="_blank" rel="external">https://mp.weixin.qq.com/s/TeQhe4T4wRjdAEPz6Ne45g</a><br><a href="https://blog.csdn.net/qq_30993595/article/details/94405694" target="_blank" rel="external">https://blog.csdn.net/qq_30993595/article/details/94405694</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OkHttp/" rel="tag"># OkHttp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/10/open-source-okhttp-websocket/" rel="next" title="OkHttp 源码分析 -- WebSocket 实现原理">
+                <i class="fa fa-chevron-left"></i> OkHttp 源码分析 -- WebSocket 实现原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/02/kotlin-brief-introduction/" rel="prev" title="Kotlin -- 简介">
+                Kotlin -- 简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">235</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keep-alive机制"><span class="nav-number">2.</span> <span class="nav-text">keep-alive机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-1-0"><span class="nav-number">2.1.</span> <span class="nav-text">HTTP 1.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-1-1"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP 1.1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-2-0"><span class="nav-number">3.</span> <span class="nav-text">HTTP 2.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">4.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConnectInterceptor"><span class="nav-number">4.1.</span> <span class="nav-text">ConnectInterceptor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">4.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取连接"><span class="nav-number">4.3.</span> <span class="nav-text">获取连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清理连接"><span class="nav-number">4.4.</span> <span class="nav-text">清理连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐文章"><span class="nav-number">5.</span> <span class="nav-text">推荐文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

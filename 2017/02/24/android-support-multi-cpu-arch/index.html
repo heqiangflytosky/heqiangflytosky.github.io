@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="多CPU架构支持所需要了解的知识">
-<meta property="og:updated_time" content="2020-07-02T11:35:17.870Z">
+<meta property="og:updated_time" content="2020-07-27T10:03:07.186Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- 多CPU架构支持所需要了解的知识">
 <meta name="twitter:description" content="多CPU架构支持所需要了解的知识">
@@ -436,6 +436,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">TARGET_CPU_API := all</div><div class="line">APP_ABI := all</div></pre></td></tr></table></figure>
 <p>或者是</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">TARGET_CPU_API :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64</div><div class="line">APP_ABI :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64</div></pre></td></tr></table></figure>
+<h2 id="一些命令"><a href="#一些命令" class="headerlink" title="一些命令"></a>一些命令</h2><h3 id="查看设备支持的-ABI-类型"><a href="#查看设备支持的-ABI-类型" class="headerlink" title="查看设备支持的 ABI 类型"></a>查看设备支持的 ABI 类型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell getprop |grep ro.product.cpu.abilist</div></pre></td></tr></table></figure>
+<h3 id="查看某个应用的-ABI-类型"><a href="#查看某个应用的-ABI-类型" class="headerlink" title="查看某个应用的 ABI 类型"></a>查看某个应用的 ABI 类型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell dumpsys package &lt;packageName&gt;</div></pre></td></tr></table></figure>
+<p>查看 Packages 中的 primaryCpuAbi 和 secondaryCpuAbi</p>
+<h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p><a href="https://zhuanlan.zhihu.com/p/29801087" target="_blank" rel="external">Android中app进程ABI确定过程</a><br><a href="https://www.jianshu.com/p/c9fc6743a383" target="_blank" rel="external">APK安装流程详解4——安装中关于so库的那些事</a></p>
+
       
     </div>
 
@@ -551,7 +556,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">234</span>
+                <span class="site-state-item-count">235</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -631,7 +636,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加动态库"><span class="nav-number">2.</span> <span class="nav-text">添加动态库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ABI-架构选择"><span class="nav-number">3.</span> <span class="nav-text">ABI 架构选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">3.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">3.2.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APP多架构支持"><span class="nav-number">4.</span> <span class="nav-text">APP多架构支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多架构在-APK-打包时的选择"><span class="nav-number">5.</span> <span class="nav-text">多架构在 APK 打包时的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多架构的安装和加载机制"><span class="nav-number">6.</span> <span class="nav-text">多架构的安装和加载机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NDK生成支持多种CPU架构的SO"><span class="nav-number">7.</span> <span class="nav-text">NDK生成支持多种CPU架构的SO</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加动态库"><span class="nav-number">2.</span> <span class="nav-text">添加动态库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ABI-架构选择"><span class="nav-number">3.</span> <span class="nav-text">ABI 架构选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">3.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">3.2.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APP多架构支持"><span class="nav-number">4.</span> <span class="nav-text">APP多架构支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多架构在-APK-打包时的选择"><span class="nav-number">5.</span> <span class="nav-text">多架构在 APK 打包时的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多架构的安装和加载机制"><span class="nav-number">6.</span> <span class="nav-text">多架构的安装和加载机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NDK生成支持多种CPU架构的SO"><span class="nav-number">7.</span> <span class="nav-text">NDK生成支持多种CPU架构的SO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些命令"><span class="nav-number">8.</span> <span class="nav-text">一些命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看设备支持的-ABI-类型"><span class="nav-number">8.1.</span> <span class="nav-text">查看设备支持的 ABI 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看某个应用的-ABI-类型"><span class="nav-number">8.2.</span> <span class="nav-text">查看某个应用的 ABI 类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐文章"><span class="nav-number">9.</span> <span class="nav-text">推荐文章</span></a></li></ol></div>
             
 
           </div>

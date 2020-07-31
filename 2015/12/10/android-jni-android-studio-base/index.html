@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/12/10/android-jni-android-studio-base/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="Android Studio JNI 开发基础">
-<meta property="og:updated_time" content="2020-03-27T07:20:50.397Z">
+<meta property="og:updated_time" content="2020-07-28T05:59:47.165Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android JNI -- Android Studio JNI 开发基础">
 <meta name="twitter:description" content="Android Studio JNI 开发基础">
@@ -409,7 +409,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">javah -jni com.example.heqiang.testsomething.util.JniUtils</div></pre></td></tr></table></figure>
 <p>就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。当然这个头文件的文件名你也可以自定义成其他。</p>
 <h3 id="JNI-开发"><a href="#JNI-开发" class="headerlink" title="JNI 开发"></a>JNI 开发</h3><p>在 src/main 路径下新建一个名为 jni 的文件夹，再将前面生成的头文件放到该目录下面。<br>然后可以在目前下面创建 native 文件，名字可以随意定。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#include &quot;com_example_heqiang_testsomething_util_JniUtils.h&quot;</div><div class="line"></div><div class="line">JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getKey(JNIEnv *env, jobject obj) &#123;</div><div class="line">    return (*env)-&gt;NewStringUTF(env,&quot;abcdefghijk&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#include &quot;com_example_heqiang_testsomething_util_JniUtils.h&quot;</div><div class="line">#include &lt;android/log.h&gt;</div><div class="line"></div><div class="line">#define  LOG_TAG    &quot;TestJNI&quot;</div><div class="line">#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)</div><div class="line">#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)</div><div class="line"></div><div class="line">JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getString(JNIEnv *env, jobject obj) &#123;</div><div class="line">    LOGD(&quot;call jni sucessfully&quot;);</div><div class="line">    return (*env)-&gt;NewStringUTF(env,&quot;abcdefghijklmn&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><h3 id="AS-自动编译"><a href="#AS-自动编译" class="headerlink" title="AS 自动编译"></a>AS 自动编译</h3><p>支持两种方式：</p>
 <ul>
 <li>ndk-build + Android.mk + Application.mk </li>
@@ -428,7 +428,7 @@
 <h3 id="手动编译"><a href="#手动编译" class="headerlink" title="手动编译"></a>手动编译</h3><h4 id="ndk-build"><a href="#ndk-build" class="headerlink" title="ndk-build"></a>ndk-build</h4><p>上面的方法容易受到 AS 版本的影响，下面来介绍创建 Android.mk 文件的方法来生成so。<br>其实在上面的方法中在 build/intermediates/ndk/debug 路径下也有生成 Android.mk 文件。<br>首先我们在 jni 目录下面创建 Application.mk 文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">APP_ABI := armeabi,armeabi-v7a,arm64-v8a</div></pre></td></tr></table></figure>
 <p>创建 Android.mk：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line"></div><div class="line">LOCAL_MODULE    := JniDemo</div><div class="line">LOCAL_SRC_FILES := Constants.c</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line">LOCAL_LDLIBS    := -llog</div><div class="line"></div><div class="line">LOCAL_MODULE    := JniDemo</div><div class="line">LOCAL_SRC_FILES := Constants.c \</div><div class="line">	Test.cpp</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
 <p>在 jni 目录下面运行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ndk-build</div></pre></td></tr></table></figure>
 <p>这样会在 <code>src/main/libs</code> 下面生成 so 文件。<br>然后在 build.gradle 中配置:</p>
@@ -552,7 +552,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">234</span>
+                <span class="site-state-item-count">235</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

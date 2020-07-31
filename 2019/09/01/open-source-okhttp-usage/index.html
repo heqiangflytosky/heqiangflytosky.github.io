@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/09/01/open-source-okhttp-usage/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 OkHttp 的基本使用">
-<meta property="og:updated_time" content="2020-07-15T08:38:07.528Z">
+<meta property="og:updated_time" content="2020-07-30T08:20:38.673Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OkHttp 使用指南 -- 基本使用">
 <meta name="twitter:description" content="介绍 OkHttp 的基本使用">
@@ -410,6 +410,102 @@
 <li>实现拦截器链（InterceptorChain），实现request与response的分层处理</li>
 </ul>
 <p>很久之前就开始使用 OkHttp 了，源码也看了部分。近期想着开始写系列关于OkHttp的博客，把这部分只是记录下来，以备查看。<br>本章节只简单介绍一下 OkHttp 的基本用法，关于源码分析和更深入的介绍参考后面的文章。<br>本系列文章分析 OkHttp 是基于 3.11.0 版本为基础的，后面有版本更新会尽可能同步更新博客的内容。<br><a href="https://github.com/square/okhttp" target="_blank" rel="external">Github 源码</a></p>
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">HTTPURLConnection</th>
+<th style="text-align:center">Apache HttpClient</th>
+<th style="text-align:center">OkHttp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">提供分析记录请求各个阶段的能力</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">支持响应缓存</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">支持重试</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">支持连接池复用连接</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">易用性</td>
+<td style="text-align:center">JDK标准量，未做任何封装，使用起来非常原始，不方便</td>
+<td style="text-align:center">较易用</td>
+<td style="text-align:center">易用</td>
+</tr>
+<tr>
+<td style="text-align:center">支持HTTP/1.0、HTTP/1.1</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">支持HTTP/2.0</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">支持同步和异步请求</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">支持取消请求</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">支持设置超时</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">稳定性</td>
+<td style="text-align:center">稳定</td>
+<td style="text-align:center">历史悠久，bug少，功能全</td>
+<td style="text-align:center">Google在Android6.0剔除了HttpClient，采用OKHttp；现已广泛使用</td>
+</tr>
+<tr>
+<td style="text-align:center">性能</td>
+<td style="text-align:center">优</td>
+<td style="text-align:center">一般</td>
+<td style="text-align:center">优</td>
+</tr>
+<tr>
+<td style="text-align:center">支持WebSocket</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">不支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">引入对用户影响</td>
+<td style="text-align:center">JDK自带，无影响</td>
+<td style="text-align:center">需要引入org.apache.http.legacy</td>
+<td style="text-align:center">需要引入 okhttp 依赖</td>
+</tr>
+</tbody>
+</table>
 <h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">api &apos;com.squareup.okhttp3:okhttp:3.11.0&apos;</div></pre></td></tr></table></figure>
 <h3 id="创建-OkHttpClient"><a href="#创建-OkHttpClient" class="headerlink" title="创建 OkHttpClient"></a>创建 OkHttpClient</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Cache cache = new Cache(new File(context.getExternalCacheDir(),&quot;okhttp&quot;), 10*1024*1024);</div><div class="line">mOkHttpClient = new OkHttpClient.Builder()</div><div class="line">        .retryOnConnectionFailure(true)</div><div class="line">        .connectTimeout(10, TimeUnit.SECONDS)</div><div class="line">        //.cache(cache)</div><div class="line">        .build();</div></pre></td></tr></table></figure>
 <blockquote>
@@ -442,6 +538,12 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">libcore.io.DiskLruCache</div><div class="line">1</div><div class="line">201105</div><div class="line">2</div><div class="line"></div><div class="line">DIRTY d0dae34b88fc0cc86e305ce4c60e1670</div></pre></td></tr></table></figure>
 <p>而没有类似 <code>CLEAN d0dae34b88fc0cc86e305ce4c60e1670 651 71465</code> 的字段，那基本是上面的代码没有调用导致写入缓存不成功。具体原因后面的源码分析再介绍。</p>
 <p>三. okhttp 对post请求不做缓存处理</p>
+<h3 id="pingInterval"><a href="#pingInterval" class="headerlink" title="pingInterval"></a>pingInterval</h3><p>通过跟源码我们可以看到,这个值只有http2和webSocket中有使用。</p>
+<p>Http2Connection.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">if (builder.pingIntervalMillis != 0) &#123;</div><div class="line">  writerExecutor.scheduleAtFixedRate(new PingRunnable(false, 0, 0),</div><div class="line">      builder.pingIntervalMillis, builder.pingIntervalMillis, MILLISECONDS);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>RealWebSocket.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">if (pingIntervalMillis != 0) &#123;</div><div class="line">  executor.scheduleAtFixedRate(</div><div class="line">      new PingRunnable(), pingIntervalMillis, pingIntervalMillis, MILLISECONDS);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果设置了这个值会定时的向服务器发送一个消息来保持长连接。</p>
 
       
     </div>
@@ -558,7 +660,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">234</span>
+                <span class="site-state-item-count">235</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -638,7 +740,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本使用"><span class="nav-number">2.</span> <span class="nav-text">基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入依赖"><span class="nav-number">2.1.</span> <span class="nav-text">引入依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-OkHttpClient"><span class="nav-number">2.2.</span> <span class="nav-text">创建 OkHttpClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get"><span class="nav-number">2.3.</span> <span class="nav-text">get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#post"><span class="nav-number">2.4.</span> <span class="nav-text">post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步请求"><span class="nav-number">2.5.</span> <span class="nav-text">同步请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步请求"><span class="nav-number">2.6.</span> <span class="nav-text">异步请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket"><span class="nav-number">2.7.</span> <span class="nav-text">WebSocket</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关配置"><span class="nav-number">3.</span> <span class="nav-text">相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置超时时间"><span class="nav-number">3.1.</span> <span class="nav-text">设置超时时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打印网络请求日志"><span class="nav-number">3.2.</span> <span class="nav-text">打印网络请求日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">3.3.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置缓存"><span class="nav-number">3.3.1.</span> <span class="nav-text">配置缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见问题"><span class="nav-number">3.3.2.</span> <span class="nav-text">常见问题</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对比"><span class="nav-number">2.</span> <span class="nav-text">对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本使用"><span class="nav-number">3.</span> <span class="nav-text">基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入依赖"><span class="nav-number">3.1.</span> <span class="nav-text">引入依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-OkHttpClient"><span class="nav-number">3.2.</span> <span class="nav-text">创建 OkHttpClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get"><span class="nav-number">3.3.</span> <span class="nav-text">get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#post"><span class="nav-number">3.4.</span> <span class="nav-text">post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步请求"><span class="nav-number">3.5.</span> <span class="nav-text">同步请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步请求"><span class="nav-number">3.6.</span> <span class="nav-text">异步请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket"><span class="nav-number">3.7.</span> <span class="nav-text">WebSocket</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关配置"><span class="nav-number">4.</span> <span class="nav-text">相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置超时时间"><span class="nav-number">4.1.</span> <span class="nav-text">设置超时时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打印网络请求日志"><span class="nav-number">4.2.</span> <span class="nav-text">打印网络请求日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">4.3.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置缓存"><span class="nav-number">4.3.1.</span> <span class="nav-text">配置缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见问题"><span class="nav-number">4.3.2.</span> <span class="nav-text">常见问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pingInterval"><span class="nav-number">4.4.</span> <span class="nav-text">pingInterval</span></a></li></ol></li></ol></div>
             
 
           </div>
