@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="ThreadPoolExecutor 源码解析">
+<meta name="description" content="ThreadPoolExecutor 使用以及优化攻略">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java 线程池 -- ThreadPoolExecutor 使用攻略">
+<meta property="og:title" content="Java 线程池 -- ThreadPoolExecutor 使用以及优化攻略">
 <meta property="og:url" content="http://yoursite.com/2015/09/07/java-thread-how-to-use-threadpoolexecutor/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="ThreadPoolExecutor 源码解析">
-<meta property="og:updated_time" content="2020-01-09T07:33:36.807Z">
+<meta property="og:description" content="ThreadPoolExecutor 使用以及优化攻略">
+<meta property="og:updated_time" content="2020-08-06T07:16:25.021Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 线程池 -- ThreadPoolExecutor 使用攻略">
-<meta name="twitter:description" content="ThreadPoolExecutor 源码解析">
+<meta name="twitter:title" content="Java 线程池 -- ThreadPoolExecutor 使用以及优化攻略">
+<meta name="twitter:description" content="ThreadPoolExecutor 使用以及优化攻略">
 
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title> Java 线程池 -- ThreadPoolExecutor 使用攻略 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Java 线程池 -- ThreadPoolExecutor 使用以及优化攻略 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -302,7 +302,7 @@
             
             
               
-                Java 线程池 -- ThreadPoolExecutor 使用攻略
+                Java 线程池 -- ThreadPoolExecutor 使用以及优化攻略
               
             
           </h1>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2015/09/07/java-thread-how-to-use-threadpoolexecutor/" class="leancloud_visitors" data-flag-title="Java 线程池 -- ThreadPoolExecutor 使用攻略">
+             <span id="/2015/09/07/java-thread-how-to-use-threadpoolexecutor/" class="leancloud_visitors" data-flag-title="Java 线程池 -- ThreadPoolExecutor 使用以及优化攻略">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -385,7 +385,7 @@
 
           
               <div class="post-description">
-                  ThreadPoolExecutor 源码解析
+                  ThreadPoolExecutor 使用以及优化攻略
               </div>
           
 
@@ -414,11 +414,13 @@
 <p>计算密集型任务的阻塞系数为0，而IO密集型任务的阻塞系数则接近1。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CPU可用核心数 = Runtime.getRuntime().availableProcessors();</div></pre></td></tr></table></figure>
 <p>简单的分析来看，如果是CPU密集型的任务，我们应该设置数目较小的线程数，比如CPU数目加1。如果是IO密集型的任务，则应该设置可能多的线程数，由于IO操作不占用CPU，所以，不能让CPU闲下来。当然，如果线程数目太多，那么线程切换所带来的开销又会对系统的响应时间带来影响。</p>
-<h2 id="如何设置-workQueue"><a href="#如何设置-workQueue" class="headerlink" title="如何设置 workQueue"></a>如何设置 workQueue</h2><p>通过 <a href="http://www.heqiangfly.com/2015/09/01/java-thread-thread-pool-basic/" target="_blank" rel="external">Java 线程池 – 线程池基础</a>以及<a href="http://www.heqiangfly.com/2015/09/06/java-thread-sourcecode-of-threadpoolexecutor/" target="_blank" rel="external">Java 线程池 – ThreadPoolExecutor 源码解析</a>，我们知道，当线程数量大于 corePoolSize 时，在 workQueue 未满的情况下，不管线程数量有没有大于 maximumPoolSize，并不会去创建新的线程。如果我们配置的 workQueue 是默认的 <code>new LinkedBlockingQueue&lt;Runnable&gt;()</code>，那么一般情况下（LinkedBlockingQueue允许队列长度为 Integer.MAX_VALUE），maximumPoolSize 参数是不起作用的，它将永远不会启动大于 corePoolSize 的第二个线程。<br>通过前面的源码分析，我们发现，<code>ThreadPoolExecutor.execute()</code> 方法判断请求队列是否有空间是用的 <code>offer</code> 方法，那么我们是不是可以覆盖 ThreadPoolExecutor 的 offer 方法，使其永远返回 false，设置 RejectedExecutionHandler 调用实际的 offer 方法来决定是否执行拒绝策略。<br>这样就保证了在线程大于核心线程时，会继续创建线程达到 maximumPoolSize，然后才进入到请求队列等待。</p>
+<h2 id="设置-workQueue-来优化线程池的执行顺序"><a href="#设置-workQueue-来优化线程池的执行顺序" class="headerlink" title="设置 workQueue 来优化线程池的执行顺序"></a>设置 workQueue 来优化线程池的执行顺序</h2><p>我们都知道线程池执行流程是先corePool再workQueue，最后才是maxPool的一个执行流程。<br>如果一个线程池执行的任务属于IO密集型，CPU大多属于闲置状态，系统资源未充分利用。如果一瞬间来了大量请求，如果线程池数量大于coreSize时，多余的请求都会放入到等待队列中。等待着corePool中的线程执行完成后再来执行等待队列中的任务。<br>试想一下，这种场景我们该如何优化？<br>我们可以修改线程池的执行顺序为corePool-&gt;maxPool-&gt;workQueue。这样就能够充分利用CPU资源，提交的任务会被优先执行。当线程池中线程数量大于maxSize时才会将任务放入等待队列中。<br>通过 <a href="http://www.heqiangfly.com/2015/09/01/java-thread-thread-pool-basic/" target="_blank" rel="external">Java 线程池 – 线程池基础</a>以及<a href="http://www.heqiangfly.com/2015/09/06/java-thread-sourcecode-of-threadpoolexecutor/" target="_blank" rel="external">Java 线程池 – ThreadPoolExecutor 源码解析</a>，我们知道，当线程数量大于 corePoolSize 时，在 workQueue 未满的情况下，不管线程数量有没有大于 maximumPoolSize，并不会去创建新的线程。如果我们配置的 workQueue 是默认的 <code>new LinkedBlockingQueue&lt;Runnable&gt;()</code>，那么一般情况下（LinkedBlockingQueue允许队列长度为 Integer.MAX_VALUE），maximumPoolSize 参数是不起作用的，它将永远不会启动大于 corePoolSize 的第二个线程。<br>通过前面的源码分析，我们发现，<code>ThreadPoolExecutor.execute()</code> 方法判断请求队列是否有空间是用的 <code>offer</code> 方法，那么我们是不是可以覆盖 ThreadPoolExecutor 的 offer 方法，使其永远返回 false，这样当当前线程数大于核心线程数而小于最大线程数时，都会创建线程去执行。当当前线程数大于最大线程数时，回去执行拒绝策略，设置 RejectedExecutionHandler 调用实际的 offer 方法来决定是否执行拒绝策略，然后这里我们在拒绝策略里面才把任务加入到等待队列里面去。<br>这样就保证了在线程大于核心线程时，会继续创建线程达到 maximumPoolSize，然后才进入到请求队列等待。<br>这样也就相当于改变了线程池中线程的执行顺序为：corePool-&gt;maxPool-&gt;workQueue。这也是面试时关于线程池经常会问到的问题。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class AppExecutors &#123;</div><div class="line">    private static final WorkQueue&lt;Runnable&gt; mIoWorkQueue = new WorkQueue&lt;&gt;();</div><div class="line"></div><div class="line">    private static final RejectedExecutionHandler mIoRejectedPolicy = new RejectedExecutionHandler() &#123;</div><div class="line">        @Override</div><div class="line">        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) &#123;</div><div class="line">            mIoWorkQueue.superOffer(r);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    private static final Executor diskIO = new ThreadPoolExecutor(CORE_POOL_SIZE,MAX_POOL_SIZE_IO,</div><div class="line">            KEEP_ALIVE_TIME, TimeUnit.MILLISECONDS, mIoWorkQueue,</div><div class="line">            new DefaultThreadFactory(THREAD_NAME_IO), mIoRejectedPolicy);</div><div class="line"></div><div class="line">    public static Executor diskIO() &#123;</div><div class="line">        return diskIO;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static class WorkQueue&lt;E&gt; extends LinkedBlockingQueue&lt;E&gt; &#123;</div><div class="line">        @Override</div><div class="line">        public boolean offer(E e) &#123;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public void superOffer(E e) &#123;</div><div class="line">            super.offer(e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面是借助于等待队列把大于最大线程数的任务添加到等待队列中去，其实这个逻辑我们还可以在 offer 方法中去处理，如果当前线程数小于最大线程数时，则直接返回false，其他情况下返回 <code>super.offer(e)</code> 也可以实现，具体参考 dubbo中的 <code>EagerThreadPoolExecutor</code>。<br><a href="https://github.com/apache/dubbo/blob/master/dubbo-common/src/main/java/org/apache/dubbo/common/threadpool/support/eager/TaskQueue.java" target="_blank" rel="external">https://github.com/apache/dubbo/blob/master/dubbo-common/src/main/java/org/apache/dubbo/common/threadpool/support/eager/TaskQueue.java</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public boolean offer(Runnable runnable) &#123;</div><div class="line">    if (executor == null) &#123;</div><div class="line">        throw new RejectedExecutionException(&quot;The task queue does not have executor!&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    int currentPoolThreadSize = executor.getPoolSize();</div><div class="line">    // have free worker. put task into queue to let the worker deal with task.</div><div class="line">    if (executor.getSubmittedTaskCount() &lt; currentPoolThreadSize) &#123;</div><div class="line">        return super.offer(runnable);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // return false to let executor create new worker.</div><div class="line">    if (currentPoolThreadSize &lt; executor.getMaximumPoolSize()) &#123;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // currentPoolThreadSize &gt;= max</div><div class="line">    return super.offer(runnable);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="如何设置-threadFactory"><a href="#如何设置-threadFactory" class="headerlink" title="如何设置 threadFactory"></a>如何设置 threadFactory</h2><p>创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">private static class DefaultThreadFactory implements ThreadFactory &#123;</div><div class="line">    private final String namePrefix;</div><div class="line"></div><div class="line">    DefaultThreadFactory(@NonNull String prefix) &#123;</div><div class="line">        namePrefix = prefix;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Thread newThread(@NonNull Runnable r) &#123;</div><div class="line">        Thread t = new Thread(r);</div><div class="line">        t.setName(namePrefix + t.getId());</div><div class="line">        if (t.isDaemon()) &#123;</div><div class="line">            t.setDaemon(false);</div><div class="line">        &#125;</div><div class="line">        return t;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p>《java并发编程实践》<br>《Java 虚拟机并发编程》<br><a href="http://www.imooc.com/wenda/detail/602949" target="_blank" rel="external">http://www.imooc.com/wenda/detail/602949</a><br><a href="https://www.jianshu.com/p/78c7df3c762d" target="_blank" rel="external">https://www.jianshu.com/p/78c7df3c762d</a><br><a href="https://blog.csdn.net/tbdp6411/article/details/78443732" target="_blank" rel="external">https://blog.csdn.net/tbdp6411/article/details/78443732</a></p>
+<h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p>《java并发编程实践》<br>《Java 虚拟机并发编程》<br><a href="https://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651488151&amp;idx=2&amp;sn=40872a4979087378d893589ec1d52bfa&amp;chksm=bd2513e88a529afee2e7296260da2882fc034efec1790544aba3f2ed46dc50df589b2475d8fd&amp;scene=21#wechat_redirect" target="_blank" rel="external">面试官：线程池如何按照 core、max、queue 的执行循序去执行？</a><br><a href="http://www.imooc.com/wenda/detail/602949" target="_blank" rel="external">http://www.imooc.com/wenda/detail/602949</a><br><a href="https://www.jianshu.com/p/78c7df3c762d" target="_blank" rel="external">https://www.jianshu.com/p/78c7df3c762d</a><br><a href="https://blog.csdn.net/tbdp6411/article/details/78443732" target="_blank" rel="external">https://blog.csdn.net/tbdp6411/article/details/78443732</a></p>
 
       
     </div>
@@ -615,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何选择核心线程数"><span class="nav-number">1.</span> <span class="nav-text">如何选择核心线程数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何设置-workQueue"><span class="nav-number">2.</span> <span class="nav-text">如何设置 workQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何设置-threadFactory"><span class="nav-number">3.</span> <span class="nav-text">如何设置 threadFactory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐文章"><span class="nav-number">4.</span> <span class="nav-text">推荐文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何选择核心线程数"><span class="nav-number">1.</span> <span class="nav-text">如何选择核心线程数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置-workQueue-来优化线程池的执行顺序"><span class="nav-number">2.</span> <span class="nav-text">设置 workQueue 来优化线程池的执行顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何设置-threadFactory"><span class="nav-number">3.</span> <span class="nav-text">如何设置 threadFactory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐文章"><span class="nav-number">4.</span> <span class="nav-text">推荐文章</span></a></li></ol></div>
             
 
           </div>
