@@ -2,9 +2,9 @@
 title: Vue -- 开发 Gank Web App
 categories: JavaScript
 comments: true
-tags: [JavaScript]
+tags: [Vue]
 description: 使用 Vue 开发 Gank Web App
-date: 2019-6-2 10:00:00
+date: 2019-1-2 10:00:00
 ---
 
 各个版本的Gank客户端：
