@@ -8,13 +8,17 @@ date: 2018-5-6 10:00:00
 ---
 ## 概述
 
-Javascript 是一种基于对象的语言，你遇到的所有东西几乎都是对象。但是，它又不是一种真正的面向对象编程（OOP）语言，因为它的语法中没有 class（类），没有 extend 关键字，这也就导致传统的面向对象编程方法无法直接使用。
+Javascript 是一种基于对象的语言，你遇到的所有东西几乎都是对象。但是，它又不是一种真正的面向对象编程（OOP）语言，因为它的语法中没有 class（类），没有 extends 关键字，这也就导致传统的面向对象编程方法无法直接使用。
+在 ES 6中引入了 class 和 extends 关键字，使得我们可以像 Java 那也来定义类。
+ES 6 中的 class 只是一种语法糖。
 
 ## 类
 
-虽然 Javascript 中没有 class 关键字，但是可以用一些变通的方法，模拟出"类"。
+虽然 Javascript 中在 ES 6 中没有 class 关键字，但是可以用一些变通的方法，模拟出"类"。
 
-### 定义类
+### 用 function 定义类
+
+#### 定义类
 
 我们可以是用 function 来定义一个类，相当于一个构造函数，内部用 this 来指代当前实例对象。
 
@@ -37,7 +41,7 @@ Javascript 是一种基于对象的语言，你遇到的所有东西几乎都是
       console.log(person.interests)
 ```
 
-### 定义公有属性和私有属性
+#### 定义公有属性和私有属性
 
 下面我们定义下面的类：
 
@@ -77,7 +81,7 @@ Javascript 是一种基于对象的语言，你遇到的所有东西几乎都是
       person.run()
 ```
 
-### 定义公有方法和私有方法
+#### 定义公有方法和私有方法
 
 同样，用this指定的方法就是公有方法，用 var 定义的方法是私有方法。
 
@@ -94,7 +98,7 @@ Javascript 是一种基于对象的语言，你遇到的所有东西几乎都是
       }
 ```
 
-### 构造函数
+#### 构造函数
 
 同样我们仍然可以模拟构造函数：
 
@@ -114,7 +118,7 @@ Javascript 是一种基于对象的语言，你遇到的所有东西几乎都是
 
 在 Person 的最后，调用了init函数，在创建了一个 Person 对象时，init 总会被自动调用，可以模拟我们的构造函数了。
 
-### 动态添加类的属性和方法
+#### 动态添加类的属性和方法
 
 ```
       function Person(n, age) {
@@ -135,6 +139,41 @@ Javascript 是一种基于对象的语言，你遇到的所有东西几乎都是
 上面的代码扩展了类的属性id和draw方法，然后调用他们。它们相当于静态属性和方法。
 是属于类的，不是属于对象的。如果你通过对象来调用他们，你们会发现会报错。
 那么如何为扩展的属性和方法让对象也拥有呢？下面我们介绍过 prototype 就会知道了。
+
+### 用 class 定义类
+
+```
+      class Person {
+        constructor(name,age) {
+          this.name = name
+          this.age = age
+        }
+        getName() {
+          console.log('call getName')
+          return this.name
+        }
+      }
+
+      var p = new Person('john',22)
+      console.log(p.getName())
+```
+
+使用extends 关键字进行继承：
+
+```
+      class Student extends Person {
+        constructor(id,name,age){
+          super(name,age)
+          this.id = id
+        }
+        getID() {
+          return this.id
+        }
+      }
+
+      var student = new Student(100,'james',26)
+      console.log('name ='+student.getName()+',id='+student.getID())
+```
 
 
 ## prototype
@@ -186,6 +225,22 @@ prototype 称为原型对象，所有的 JavaScript 对象都会从一个 protot
       var person = new Person("John", 10, ["music", 'swimming']);
       person.run()
       console.log(person.interests)
+```
+
+```
+      class Person {
+        constructor(name,age) {
+          this.name = name
+          this.age = age
+        }
+        getName() {
+          console.log('call getName')
+          return this.name
+        }
+      }
+
+      var p = new Person('john',22)
+      console.log(p.getName())
 ```
 
 ### 使用 Object 创建对象
