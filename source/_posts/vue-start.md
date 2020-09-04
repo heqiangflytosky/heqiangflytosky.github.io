@@ -27,6 +27,7 @@ Vue.js 优点：
  - Vue Test Utils：是官方提供的一个单元测试工具。它能让你更方便的写单元测试。
  - Vue Dev-Tools：Vue 在浏览器下的调试工具。写 vue 必备的一个浏览器插件，能大大的提高你调试的效率。
  - Vetur：    是 VS Code 的插件. 如果你使用 VS Code 来写 vue 的话，这个插件是必不可少的。
+ - mockjs：可以模拟后台返回数据，这样就可以脱离后台进行一些前端的开发。可以结合 axios-mock-adapter 使用。
 
 ## Vue ui 框架
 
@@ -61,10 +62,42 @@ Vue.js 优点：
 vue init webpack my-project
 ```
 
+安装依赖，运行项目：
+
 ```
 npm install
+
+```
+
+开发时安装单个依赖：
+
+```
+npm install --save vue-resource
+//或者
+npm i vue-resource --save
+```
+
+运行开发环境：
+
+```
 npm run dev
 ```
+
+根据 webPack 配置在浏览器中打开。
+
+运行生产环境：
+
+```
+nom run build
+```
+
+如果想查看生产环境运行效果，打开dist目录，然后运行：
+
+```
+php -S 127.0.0.1:9999
+```
+
+然后在浏览器中打开 127.0.0.1:9999。
 
 ## 学习资料
 

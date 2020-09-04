@@ -96,7 +96,7 @@ import api from './test'
       console.log(api.URL)
 ```
 
-可以使用任何名称导入默认导出，但是，只能有一个默认导出。
+可以使用任何名称导入默认导出，而且不需要用大括号括起来，但是，只能有一个默认导出。
 
 ```
 export default function print() {

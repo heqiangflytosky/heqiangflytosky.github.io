@@ -14,7 +14,7 @@ ES 6 中的 class 只是一种语法糖。
 
 ## 类
 
-虽然 Javascript 中在 ES 6 中没有 class 关键字，但是可以用一些变通的方法，模拟出"类"。
+虽然 Javascript 中在 ES 6 之前没有 class 关键字，但是可以用一些变通的方法，模拟出"类"。
 
 ### 用 function 定义类
 
