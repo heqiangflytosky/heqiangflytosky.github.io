@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/01/08/vue-start/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍一下Vue的学习资料">
-<meta property="og:updated_time" content="2020-08-26T08:20:25.576Z">
+<meta property="og:updated_time" content="2020-09-02T09:31:56.735Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue -- 启动篇">
 <meta name="twitter:description" content="介绍一下Vue的学习资料">
@@ -415,6 +415,7 @@
 <li>Vue Test Utils：是官方提供的一个单元测试工具。它能让你更方便的写单元测试。</li>
 <li>Vue Dev-Tools：Vue 在浏览器下的调试工具。写 vue 必备的一个浏览器插件，能大大的提高你调试的效率。</li>
 <li>Vetur：    是 VS Code 的插件. 如果你使用 VS Code 来写 vue 的话，这个插件是必不可少的。</li>
+<li>mockjs：可以模拟后台返回数据，这样就可以脱离后台进行一些前端的开发。可以结合 axios-mock-adapter 使用。</li>
 </ul>
 <h2 id="Vue-ui-框架"><a href="#Vue-ui-框架" class="headerlink" title="Vue ui 框架"></a>Vue ui 框架</h2><ul>
 <li><a href="https://element.eleme.cn/#/zh-CN/" target="_blank" rel="external">桌面端后台UI组件库element-ui</a>：饿了么团队维护</li>
@@ -436,7 +437,18 @@
 <li><a href="https://github.com/jdf2e/nutui-demo" target="_blank" rel="external">nutui-demo：基于 Vue CLI 搭建 NutUI 的相关示例项目</a></li>
 </ul>
 <h2 id="工具安装"><a href="#工具安装" class="headerlink" title="工具安装"></a>工具安装</h2><h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vue init webpack my-project</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install</div><div class="line">npm run dev</div></pre></td></tr></table></figure>
+<p>安装依赖，运行项目：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install</div></pre></td></tr></table></figure>
+<p>开发时安装单个依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">npm install --save vue-resource</div><div class="line">//或者</div><div class="line">npm i vue-resource --save</div></pre></td></tr></table></figure>
+<p>运行开发环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm run dev</div></pre></td></tr></table></figure>
+<p>根据 webPack 配置在浏览器中打开。</p>
+<p>运行生产环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nom run build</div></pre></td></tr></table></figure>
+<p>如果想查看生产环境运行效果，打开dist目录，然后运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php -S 127.0.0.1:9999</div></pre></td></tr></table></figure>
+<p>然后在浏览器中打开 127.0.0.1:9999。</p>
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p><a href="http://www.fontawesome.com.cn/" target="_blank" rel="external">Font Awesome图标库</a><br><a href="https://www.runoob.com/vue2/vue-tutorial.html" target="_blank" rel="external">https://www.runoob.com/vue2/vue-tutorial.html</a><br><a href="https://github.com/opendigg/awesome-github-vue" target="_blank" rel="external">https://github.com/opendigg/awesome-github-vue</a><br><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="external">https://github.com/vuejs/awesome-vue</a><br><a href="https://github.com/bradtraversy/vanillawebprojects" target="_blank" rel="external">https://github.com/bradtraversy/vanillawebprojects</a><br><a href="https://github.com/eveningwater/my-web-projects" target="_blank" rel="external">https://github.com/eveningwater/my-web-projects</a><br><a href="https://www.toutiao.com/i6864495017101099531/?timestamp=1598275821&amp;app=news_article&amp;group_id=6864495017101099531&amp;use_new_style=1&amp;req_id=202008242130210101310750941F0DDACA" target="_blank" rel="external">ElementUI 不维护？供我们选择 Vue 组件库有很多</a></p>
 
       

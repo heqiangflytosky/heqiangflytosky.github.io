@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/05/15/javascript-basic-export-import/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍import和export的使用">
-<meta property="og:updated_time" content="2020-05-11T03:31:58.265Z">
+<meta property="og:updated_time" content="2020-08-28T02:45:35.514Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript 基础 -- export 和 import">
 <meta name="twitter:description" content="介绍import和export的使用">
@@ -411,7 +411,7 @@
 <h3 id="默认导出"><a href="#默认导出" class="headerlink" title="默认导出"></a>默认导出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var person = &#123;</div><div class="line">    name: &apos;James&apos;,</div><div class="line">    say: function() &#123;</div><div class="line">        console.log(&apos;I am James&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const URL = &quot;http://www.heqiangfly.com&quot;</div><div class="line"></div><div class="line">export default &#123;print, person,URL&#125;</div></pre></td></tr></table></figure>
 <p>导出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import api from &apos;./test&apos;</div><div class="line"></div><div class="line">      api.print()</div><div class="line">      api.person.say()</div><div class="line">      console.log(api.URL)</div></pre></td></tr></table></figure>
-<p>可以使用任何名称导入默认导出，但是，只能有一个默认导出。</p>
+<p>可以使用任何名称导入默认导出，而且不需要用大括号括起来，但是，只能有一个默认导出。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export default function print() &#123;</div><div class="line">    console.log(&apos;print function&apos;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import api from &apos;./test&apos;</div><div class="line"></div><div class="line">api()</div></pre></td></tr></table></figure>
 <p>注意，不能使用 var、let 或 const 用于导出默认值 export default。</p>

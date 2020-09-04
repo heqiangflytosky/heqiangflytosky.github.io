@@ -4,8 +4,68 @@
 
     
   <url>
+    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
+    <lastmod>2020-09-04T10:01:07.266Z</lastmod>
+    <data>
+        <display>
+        <title>程序员学习资料汇总</title>
+        <pubTime>2016-12-01T02:00:00.000Z</pubTime>
+        
+        <tag>学习资料</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习资料" url="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2019/01/08/vue-start/</loc>
+    <lastmod>2020-09-02T09:31:56.735Z</lastmod>
+    <data>
+        <display>
+        <title>Vue -- 启动篇</title>
+        <pubTime>2019-01-08T02:00:00.000Z</pubTime>
+        
+        <tag>Vue</tag>
+         
+         
+           
+             
+              <breadCrumb title="JavaScript" url="http://yoursite.com/categories/JavaScript/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2018/05/15/javascript-basic-export-import/</loc>
+    <lastmod>2020-08-28T02:45:35.514Z</lastmod>
+    <data>
+        <display>
+        <title>JavaScript 基础 -- export 和 import</title>
+        <pubTime>2018-05-15T02:00:00.000Z</pubTime>
+        
+        <tag>JavaScript</tag>
+         
+         
+           
+             
+              <breadCrumb title="JavaScript" url="http://yoursite.com/categories/JavaScript/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2018/05/06/javascript-basic-object/</loc>
-    <lastmod>2020-08-28T00:41:10.290Z</lastmod>
+    <lastmod>2020-08-28T01:11:29.431Z</lastmod>
     <data>
         <display>
         <title>JavaScritp 基础 -- 类和对象</title>
@@ -30,26 +90,6 @@
         <display>
         <title>Vue -- 开发 Gank Web App</title>
         <pubTime>2019-01-02T02:00:00.000Z</pubTime>
-        
-        <tag>Vue</tag>
-         
-         
-           
-             
-              <breadCrumb title="JavaScript" url="http://yoursite.com/categories/JavaScript/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2019/01/08/vue-start/</loc>
-    <lastmod>2020-08-26T08:20:25.576Z</lastmod>
-    <data>
-        <display>
-        <title>Vue -- 启动篇</title>
-        <pubTime>2019-01-08T02:00:00.000Z</pubTime>
         
         <tag>Vue</tag>
          
@@ -860,26 +900,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/05/15/javascript-basic-export-import/</loc>
-    <lastmod>2020-05-11T03:31:58.265Z</lastmod>
-    <data>
-        <display>
-        <title>JavaScript 基础 -- export 和 import</title>
-        <pubTime>2018-05-15T02:00:00.000Z</pubTime>
-        
-        <tag>JavaScript</tag>
-         
-         
-           
-             
-              <breadCrumb title="JavaScript" url="http://yoursite.com/categories/JavaScript/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2014/11/05/java-basic-design-pattern-singleton/</loc>
     <lastmod>2020-05-09T08:50:41.400Z</lastmod>
     <data>
@@ -1263,26 +1283,6 @@
            
              
               <breadCrumb title="Android性能优化" url="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
-    <lastmod>2020-02-19T06:35:28.323Z</lastmod>
-    <data>
-        <display>
-        <title>程序员学习资料汇总</title>
-        <pubTime>2016-12-01T02:00:00.000Z</pubTime>
-        
-        <tag>学习资料</tag>
-         
-         
-           
-             
-              <breadCrumb title="学习资料" url="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/"/>
           
         </display>
     </data>
@@ -4341,16 +4341,16 @@
     
     
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android BuildConfig的使用</title>
-        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
+        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
+        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>BuildConfig</tag>
+        <tag>buildType</tag>
          
          
            
@@ -4363,16 +4363,16 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
-        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
+        <title>Android BuildConfig的使用</title>
+        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>buildType</tag>
+        <tag>BuildConfig</tag>
          
          
            
@@ -4537,12 +4537,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 开始使用J2V8</title>
+        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4559,12 +4559,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>J2V8 -- 开始使用J2V8</title>
-        <pubTime>2017-08-07T02:00:00.000Z</pubTime>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
         
         <tag>V8</tag>
          
@@ -4791,12 +4791,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4811,12 +4811,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          

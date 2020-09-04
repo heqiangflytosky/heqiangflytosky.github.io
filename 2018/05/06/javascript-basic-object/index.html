@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/05/06/javascript-basic-object/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 JavaScritp 的类和对象">
-<meta property="og:updated_time" content="2020-08-28T00:41:10.290Z">
+<meta property="og:updated_time" content="2020-08-28T01:11:29.431Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScritp 基础 -- 类和对象">
 <meta name="twitter:description" content="介绍 JavaScritp 的类和对象">
@@ -401,7 +401,7 @@
 
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Javascript 是一种基于对象的语言，你遇到的所有东西几乎都是对象。但是，它又不是一种真正的面向对象编程（OOP）语言，因为它的语法中没有 class（类），没有 extends 关键字，这也就导致传统的面向对象编程方法无法直接使用。<br>在 ES 6中引入了 class 和 extends 关键字，使得我们可以像 Java 那也来定义类。<br>ES 6 中的 class 只是一种语法糖。</p>
-<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>虽然 Javascript 中在 ES 6 中没有 class 关键字，但是可以用一些变通的方法，模拟出”类”。</p>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>虽然 Javascript 中在 ES 6 之前没有 class 关键字，但是可以用一些变通的方法，模拟出”类”。</p>
 <h3 id="用-function-定义类"><a href="#用-function-定义类" class="headerlink" title="用 function 定义类"></a>用 function 定义类</h3><h4 id="定义类"><a href="#定义类" class="headerlink" title="定义类"></a>定义类</h4><p>我们可以是用 function 来定义一个类，相当于一个构造函数，内部用 this 来指代当前实例对象。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function Person(name, age, interests) &#123;</div><div class="line">  this.name = name</div><div class="line">  this.age = age</div><div class="line">  this.interests = interests</div><div class="line">  this.run = function () &#123;</div><div class="line">    console.log(this.name + &quot; run&quot;)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>现在，我们可以通过 new 来创建对象了，然后通过对象访问它的属性和方法：</p>
