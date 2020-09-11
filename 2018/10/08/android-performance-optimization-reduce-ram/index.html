@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/10/08/android-performance-optimization-reduce-ram/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍内存优化的一些方法">
-<meta property="og:updated_time" content="2019-07-05T01:28:25.057Z">
+<meta property="og:updated_time" content="2020-09-11T07:12:00.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化实战篇 -- 内存优化">
 <meta name="twitter:description" content="介绍内存优化的一些方法">
@@ -437,7 +437,7 @@
 <h5 id="ArrayMap、SparseArray-和-HashMap"><a href="#ArrayMap、SparseArray-和-HashMap" class="headerlink" title="ArrayMap、SparseArray 和 HashMap"></a>ArrayMap、SparseArray 和 HashMap</h5><p>HashMap 是我们经常用到的容器，但它并不是最节约内存的容器。<br>我们可以使用 Android 提供的 ArrayMap 来代替 HashMap 的使用。<br>ArrayMap 在执行插入或者删除操作时，从性能角度来讲是比 HashMap 稍微差一点。但是如果涉及很小的对象数，比如 1000 以下，就不需要担心这个问题了。ArrayMap 在循环遍历时会比 HashMap 更加高效。<br>SparseArray仅仅能存储key为int类型的数据。同一时候，SparseArray在存储和读取数据时候，使用的是二分查找法。<br>SparseArray比HashMap更省内存，在某些条件下性能更好，主要是由于它避免了对key的自己主动装箱（int转为Integer类型），它内部则是通过两个数组来进行数据存储的。一个存储key，另外一个存储value，为了优化性能，它内部对数据还採取了压缩的方式来表示稀疏数组的数据，从而节约内存空间。</p>
 <h5 id="枚举类型"><a href="#枚举类型" class="headerlink" title="枚举类型"></a>枚举类型</h5><p>使用枚举类型会占用额外的内存空间，是直接定义常量的三倍以上，我可以使用注解来代替枚举。<br>参考 <a href="http://www.heqiangfly.com/2013/06/26/java-basic-enum/" target="_blank" rel="external">Java 基础 – enum </a></p>
 <h5 id="LruCache"><a href="#LruCache" class="headerlink" title="LruCache"></a>LruCache</h5><p>Android 在 support v4 包中提供了 LruCache 来保存需要缓存的对象，可以翻译为最近最少使用缓存。它内部维护一个双向链表，不支持线程安全，当其中一个值被访问时，它被放到队列的尾部，当缓存将满时，队列头部的值（也就是最近最少被访问的）被丢弃，之后可以被垃圾回收。<br>Android 官方也一致推荐使用 LruCache最为图片内存缓存。</p>
-<h4 id="d-图片内存优化"><a href="#d-图片内存优化" class="headerlink" title="d.图片内存优化"></a>d.图片内存优化</h4><p>应用中一般有很多图片需要显示，图片占用的内存在整个应用中是非常突出的。而且图片需要申请连续的内存，如果剩余的内存碎片化比较严重，虽然剩余内存大于图片所需的内存，仍然会导致位图内存不够引发OOM。<br>在Android中，一张图片解码成位图后，占用的内存=图片长度 <em> 图片宽度 </em> 单位像素占用的字节数。所以我们可以从这个几个方面考虑优化。<br>在 Android 默认情况下，当图片解码时，会按照每个像素占32bit来处理。即红色、绿色、蓝色和透明通道各占8bit，即使是没有透明通道的JPEG格式。并且这些图片在被渲染之前，首先要被作为纹理传送到GPU，这意味着每一张图片会同时占用 CPU 和 GPU 内存。</p>
+<h4 id="d-图片内存优化"><a href="#d-图片内存优化" class="headerlink" title="d.图片内存优化"></a>d.图片内存优化</h4><p>应用中一般有很多图片需要显示，图片占用的内存在整个应用中是非常突出的。而且图片需要申请连续的内存，如果剩余的内存碎片化比较严重，虽然剩余内存大于图片所需的内存，仍然会导致位图内存不够引发OOM。<br>在Android中，一张图片解码成位图后，占用的内存=图片长度 <em> 图片宽度 </em> 单位像素占用的字节数。所以我们可以从这个几个方面考虑优化。<br>在 Android 默认情况下，当图片解码时，会按照每个像素占32bit来处理。即红色、绿色、蓝色和透明通道各占8bit，即使是没有透明通道的JPEG格式。并且这些图片在被渲染之前，首先要被作为纹理传送到GPU，这意味着每一张图片会同时占用 CPU 和 GPU 内存。<br>BitmapFactory.Options 提供了一些选项，来供我们解码图片时进行优化设置。</p>
 <h5 id="设置位图规格"><a href="#设置位图规格" class="headerlink" title="设置位图规格"></a>设置位图规格</h5><p>Android 提供了多种位图格式，可以根据产品需求来选择。</p>
 <table>
 <thead>

@@ -2,16 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
+    <loc>http://yoursite.com/2017/02/12/android-knowledge-about-bitmap-memory-management/</loc>
     
-    <lastmod>2020-09-04T10:01:07.266Z</lastmod>
+    <lastmod>2020-09-11T08:48:44.835Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/10/08/android-performance-optimization-reduce-ram/</loc>
+    
+    <lastmod>2020-09-11T07:12:00.144Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/06/15/android-knowledge-point-drawable-cache/</loc>
+    
+    <lastmod>2020-09-11T06:06:14.447Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2019/01/08/vue-start/</loc>
     
-    <lastmod>2020-09-02T09:31:56.735Z</lastmod>
+    <lastmod>2020-09-10T09:12:44.079Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
+    
+    <lastmod>2020-09-04T10:01:07.266Z</lastmod>
     
   </url>
   
@@ -380,13 +401,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/12/android-knowledge-about-bitmap-memory-management/</loc>
-    
-    <lastmod>2020-04-15T01:25:04.855Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2018/10/10/android-performance-optimization-tools-ram-analysis/</loc>
     
     <lastmod>2020-04-15T01:25:04.855Z</lastmod>
@@ -744,13 +758,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/06/15/android-knowledge-point-drawable-cache/</loc>
-    
-    <lastmod>2019-07-12T06:52:53.212Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2013/06/08/java-basic-arrays-collections/</loc>
     
     <lastmod>2019-07-10T02:09:25.048Z</lastmod>
@@ -782,13 +789,6 @@
     <loc>http://yoursite.com/2018/08/15/android-knowledge-about-view-save-state/</loc>
     
     <lastmod>2019-07-09T02:35:40.981Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/10/08/android-performance-optimization-reduce-ram/</loc>
-    
-    <lastmod>2019-07-05T01:28:25.057Z</lastmod>
     
   </url>
   
@@ -1423,14 +1423,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
@@ -1584,14 +1584,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
