@@ -45,6 +45,7 @@ date: 2017-2-12 10:00:00
 先来看一下测试代码：
 
 ```
+    Map<String, Bitmap> mBitmaps = new HashMap<>();
     private void testLoadBitmap() {
         Bitmap bitmap = Bitmap.createBitmap(2*1024,1024,Bitmap.Config.ARGB_8888);
         bitmap.eraseColor(0xffffffff);
@@ -55,6 +56,7 @@ date: 2017-2-12 10:00:00
 
 代码中创建了一个2048x1024大小的Bitmap，采用 ARGB_8888 存储，那么它的大小为 2048x1024x4 byte = 8M。
 我们通过一个按钮，点击一次创建一个 Bitmap 并放到 HashMap 中存储。
+这里把创建的 Bitmap 放到 HashMap 里面是保持对 Bitmap 的引用，防止内存回收掉。
 我们来通过 Android Studio 自带的 Android Profiler 工具来查看内存。
 首先我们在一台 Android 7 的手机上做测试，内存使用情况如下，我们发现，Bitmap 的内存是在 Java 堆上创建的。
 当创建的 Bitmap 内存超过 Android 内存限制时，会发生 OOM。
@@ -66,8 +68,78 @@ date: 2017-2-12 10:00:00
 
 ![效果图](/images/android-knowledge-about-bitmap-memory-management/image2.png)
 
-
+如果我们在创建完 Bitmap 后调用 `mBitmaps.clear();`，会发现 Native 内存马上会回收回到正常水平，这也说明对于 Bitmap 的 Native 内存也是可以自动回收的，不需要我们额外干预。
 
 ## Bitmap 内存优化
 
 关于一些 Bitmap 内存优化方面的知识，也可以看一下我的另外一篇博客[Android 性能优化实战篇 -- 内存优化](http://www.heqiangfly.com/2018/10/08/android-performance-optimization-reduce-ram/)，里面有部分内容也是介绍这方面知识的。
+
+### inBitmap
+
+这里我们针对 inBitmap 进行一些测试：
+首先我们先创建一个Bitmap数据，然后通过 `BitmapFactory.decodeByteArray` 来解码生成图片。
+这里为什么不用 
+
+```
+    private byte[] mBitmapData;
+    private void testLoadBitmap() {
+        Bitmap bitmap = Bitmap.createBitmap(20 * 1024, 1024, Bitmap.Config.ARGB_8888);
+        bitmap.eraseColor(0xffffffff);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        mBitmapData = baos.toByteArray();
+    }
+```
+
+```
+    private void testDecodeBitmpa () {
+        Log.e("Test","mBitmapData.length = "+mBitmapData.length);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeByteArray(mBitmapData,0,mBitmapData.length,options);
+        mBitmaps.put(System.currentTimeMillis()+"",bitmap);
+    }
+```
+
+![效果图](/images/android-knowledge-about-bitmap-memory-management/image3.png)
+
+可以看到，每次解码图片，native 内存都增大80M左右。
+那么如果我们设置了 inBitmap 呢？
+
+```
+    private Bitmap mInBitmap;
+    private void testDecodeBitmpa () {
+        Log.e("Test","mBitmapData.length = "+mBitmapData.length);
+        if (mInBitmap == null) {
+            mInBitmap = Bitmap.createBitmap(20 * 1024, 1024, Bitmap.Config.ARGB_8888);
+            mInBitmap.eraseColor(0xffffffff);
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        options.inBitmap = mInBitmap;
+        Bitmap bitmap = BitmapFactory.decodeByteArray(mBitmapData,0,mBitmapData.length,options);
+        mBitmaps.put(System.currentTimeMillis()+"",bitmap);
+    }
+```
+
+![效果图](/images/android-knowledge-about-bitmap-memory-management/image4.png)
+
+可以看到，每次解码图片，native 内存没有再增加，说明重用了 mInBitmap 的内存。
+这里用 `BitmapFactory.decodeResource` 测试也是 OK 的，效果一样。
+
+```
+    private Bitmap mInBitmap;
+    private void testDecodeBitmpa () {
+        if (mInBitmap == null) {
+            mInBitmap = Bitmap.createBitmap(20 * 1024, 1024, Bitmap.Config.ARGB_8888);
+            mInBitmap.eraseColor(0xffffffff);
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inBitmap = mInBitmap;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.big,options);
+        mBitmaps.put(System.currentTimeMillis()+"",bitmap);
+    }
+```

@@ -54,6 +54,18 @@ Vue.js 优点：
 
  - [nutui-demo：基于 Vue CLI 搭建 NutUI 的相关示例项目](https://github.com/jdf2e/nutui-demo)
 
+### 其他
+
+ - Material-Dashboard
+ - iview-admin
+ - layui
+ - AdminLTE
+ - tabler
+ - gentelella
+ - ng2-admin
+ - ant-design-pro
+ - blur-admin
+
 ## 工具安装
 
 ## 创建项目
@@ -108,3 +120,4 @@ https://github.com/vuejs/awesome-vue
 https://github.com/bradtraversy/vanillawebprojects
 https://github.com/eveningwater/my-web-projects
 [ElementUI 不维护？供我们选择 Vue 组件库有很多](https://www.toutiao.com/i6864495017101099531/?timestamp=1598275821&app=news_article&group_id=6864495017101099531&use_new_style=1&req_id=202008242130210101310750941F0DDACA)
+[vue.js实例项目有木有？](https://www.zhihu.com/question/37984203)
