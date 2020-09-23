@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/02/24/android-support-multi-cpu-arch/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="多CPU架构支持所需要了解的知识">
-<meta property="og:updated_time" content="2020-07-27T10:03:07.186Z">
+<meta property="og:updated_time" content="2020-09-21T08:48:59.038Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- 多CPU架构支持所需要了解的知识">
 <meta name="twitter:description" content="多CPU架构支持所需要了解的知识">
@@ -437,6 +437,8 @@
 <p>或者是</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">TARGET_CPU_API :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64</div><div class="line">APP_ABI :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64</div></pre></td></tr></table></figure>
 <h2 id="一些命令"><a href="#一些命令" class="headerlink" title="一些命令"></a>一些命令</h2><h3 id="查看设备支持的-ABI-类型"><a href="#查看设备支持的-ABI-类型" class="headerlink" title="查看设备支持的 ABI 类型"></a>查看设备支持的 ABI 类型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell getprop |grep ro.product.cpu.abilist</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[ro.product.cpu.abilist]: [arm64-v8a,armeabi-v7a,armeabi]</div><div class="line">[ro.product.cpu.abilist32]: [armeabi-v7a,armeabi]</div><div class="line">[ro.product.cpu.abilist64]: [arm64-v8a]</div></pre></td></tr></table></figure>
+<p>ro.product.cpu.abilist的值表明当前系统所支持所有的ABI类型。<br>ro.product.cpu.abilist32和ro.product.cpu.abilist64分别表示系统所支持的32位和64位的ABI类型。<br>需要注意的是，这些property的排序代表着ABI的优先级，比如ro.product.cpu.abilist的值里arm64-v8a排在第一个，就表明如果没有指定，arm64-v8a就会成为app进程默认启动的关联ABI。</p>
 <h3 id="查看某个应用的-ABI-类型"><a href="#查看某个应用的-ABI-类型" class="headerlink" title="查看某个应用的 ABI 类型"></a>查看某个应用的 ABI 类型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb shell dumpsys package &lt;packageName&gt;</div></pre></td></tr></table></figure>
 <p>查看 Packages 中的 primaryCpuAbi 和 secondaryCpuAbi</p>
 <h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p><a href="https://zhuanlan.zhihu.com/p/29801087" target="_blank" rel="external">Android中app进程ABI确定过程</a><br><a href="https://www.jianshu.com/p/c9fc6743a383" target="_blank" rel="external">APK安装流程详解4——安装中关于so库的那些事</a></p>
@@ -556,7 +558,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">238</span>
+                <span class="site-state-item-count">239</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -574,7 +576,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
