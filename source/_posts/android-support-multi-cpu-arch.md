@@ -155,6 +155,16 @@ APP_ABI :=  armeabi armeabi-v7a x86 x86_64 arm64-v8a mips mips64
 adb shell getprop |grep ro.product.cpu.abilist
 ```
 
+```
+[ro.product.cpu.abilist]: [arm64-v8a,armeabi-v7a,armeabi]
+[ro.product.cpu.abilist32]: [armeabi-v7a,armeabi]
+[ro.product.cpu.abilist64]: [arm64-v8a]
+```
+
+ro.product.cpu.abilist的值表明当前系统所支持所有的ABI类型。
+ro.product.cpu.abilist32和ro.product.cpu.abilist64分别表示系统所支持的32位和64位的ABI类型。
+需要注意的是，这些property的排序代表着ABI的优先级，比如ro.product.cpu.abilist的值里arm64-v8a排在第一个，就表明如果没有指定，arm64-v8a就会成为app进程默认启动的关联ABI。
+
 ### 查看某个应用的 ABI 类型
 
 ```

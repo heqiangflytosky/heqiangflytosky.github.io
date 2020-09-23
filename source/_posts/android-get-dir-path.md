@@ -61,6 +61,7 @@ Android 外部存储可以分为两类：一个是机身存储的外部存储，
  - DIRECTORY_DOCUMENTS
  - 任何在/storage/emulated/0/的目录
 
+在Android Q之后，由于对存储权限的收紧，`getExternalStorageDirectory` 已经标记位弃用的方法，此方法返回的路径不再可供应用程序直接访问。通过迁移到`Context＃getExternalFilesDir（String）`，`MediaStore`或`Intent＃ACTION_OPEN_DOCUMENT`之类的替代方案，应用程序可以继续访问共享/外部存储中存储的内容。
 
 ### Context中的方法
 
@@ -79,7 +80,7 @@ Android 外部存储可以分为两类：一个是机身存储的外部存储，
 | getFilesDir() | /data/user/0/com.example.hq.testsomething/files |
 | getObbDir() | /storage/emulated/0/Android/obb/com.example.hq.testsomething |
 
-`getExternalFilesDir(String type)` 的参数类型和前面的 `getExternalStoragePublicDirectory(String type)` 一样。
+`getExternalFilesDir(String type)` 的参数可以自定义文件夹，比如 'getExternalFilesDir("test")' 的目录就是 '/storage/emulated/0/Android/data/com.example.hq.testsomething/files/test'
 
 ## Android 不同版本存储路径的区别
 

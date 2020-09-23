@@ -669,6 +669,7 @@ Android的应用安装有下面几个阶段的工作：
             scanFlags |= SCAN_NO_DEX;
 
             try {
+                // 确定abi 类型，即要使用哪种类型的so
                 derivePackageAbi(pkg, new File(pkg.codePath), args.abiOverride,
                         true /* extract libs */);
             } catch (PackageManagerException pme) {
