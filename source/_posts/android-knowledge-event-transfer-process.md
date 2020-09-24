@@ -511,6 +511,16 @@ C onTouchEvent ACTION_UP
 
 可以看出，除了 DOWN 事件 C 的父元素们将无法通过 `onInterceptTouchEvent` 拦截 MOVE 和 UP 事件。
 
+## 多点触控
+
+前面我们介绍的都是在单点触摸的情况下，Android 也是支持多点触控的，当已经有手指接触屏幕的情况下，当再有其他触摸点出现是，会触发 `ACTION_POINTER_DOWN` 事件，当有手指离开屏幕时会触发 `ACTION_POINTER_UP` 事件，最后一根手指离开屏幕是触发 `ACTION_UP ` 事件，因此多点触控的事件可能是下面的流程：
+
+```
+ACTION_DOWN -> ACTION_POINTER_DOWN -> ACTION_POINTER_UP -> ACTION_UP
+```
+
+获取多点触控获取事件类型请使用 `event.getAction() & MotionEvent.ACTION_MASK` 或者 `getActionMasked()`。追踪事件流可以使用 PointId。
+
 ## 几个问题
 
 在总结几个关于 Android 事件分发经常遇到的几个问题：

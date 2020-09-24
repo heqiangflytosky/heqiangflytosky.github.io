@@ -109,23 +109,33 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
 ## ViewGroup 的事件分发
 
 来看一下 `ViewGroup.dispatchTouchEvent` 方法，这个方法比较长，我们只选择事件传递的关键代码进行分析。
-先来看下面一段代码：
+先来看下面一段代码，这段代码主要做一些事件派发前的准备工作：
 
 ```
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+
             ....
+        // 标记ViewGroup或child是否有消费该事件
+        boolean handled = false;
+        // onFilterTouchEventForSecurity中会进行安全校验
+        // 判断当前窗口被部分遮蔽的情况下是否仍然派发事件。
+        if (onFilterTouchEventForSecurity(ev)) {
+            // 获取事件类型。action的值高8位会包含该事件触摸点索引信息，actionMasked为干净的事件类型，
+            // 在单点触摸情况下action和actionMasked是一样的
+            final int action = ev.getAction();
+            final int actionMasked = action & MotionEvent.ACTION_MASK;
+
             // Handle an initial down.
             if (actionMasked == MotionEvent.ACTION_DOWN) {
-                // Throw away all previous state when starting a new touch gesture.
-                // The framework may have dropped the up or cancel event for the previous gesture
-                // due to an app switch, ANR, or some other state change.
-                // 清除 mFirstTouchTarget
+                // ACTION_DOWN表示一次全新的事件序列开始，那么就清除旧的TouchTarget
+                // 清除 mFirstTouchTarget，正常情况下TouchTarget在上一轮事件序列结束时会清空，
+                // 若此时仍存在，则需要先给这些TouchTarget派发ACTION_CANCEL事件，然后再清除
                 cancelAndClearTouchTargets(ev);
-                // 这个方法将会对 FLAG_DISALLOW_INTERCEPT 标志进行重置
+                // 这个方法将会对触摸滚动 FLAG_DISALLOW_INTERCEPT 标志进行重置
                 resetTouchState();
             }
-            // Check for interception.
+            // 标记ViewGroup是否拦截该事件（全新事件序列开始时判断）。
             final boolean intercepted;
             // mFirstTouchTarget != null 表示有子View消费事件或者事件没有被拦截
             if (actionMasked == MotionEvent.ACTION_DOWN
@@ -134,7 +144,7 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
                 // 通过requestDisallowInterceptTouchEvent设置
                 final boolean disallowIntercept = (mGroupFlags & FLAG_DISALLOW_INTERCEPT) != 0;
                 if (!disallowIntercept) {
-                    // 如果允许被拦，则调用 onInterceptTouchEvent 方法，再次判断是否拦截
+                    // 如果允许被拦，则调用 onInterceptTouchEvent 方法，再次判断是否拦截（子类可重写）
                     intercepted = onInterceptTouchEvent(ev);
                     ev.setAction(action); // restore action in case it was changed
                 } else {
@@ -145,11 +155,19 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
                 // so this view group continues to intercept touches.
                 intercepted = true;
             }
+            // If intercepted, start normal event dispatch. Also if there is already
+            // a view that is handling the gesture, do normal event dispatch.
+            if (intercepted || mFirstTouchTarget != null) {
+                ev.setTargetAccessibilityFocus(false);
+            }
+            // 标记是否派发ACTION_CANCEL事件
+            final boolean canceled = resetCancelNextUpFlag(this)
+                    || actionMasked == MotionEvent.ACTION_CANCEL;
             ....
     }
 ```
 
-上面的一段代码主要判断是否对当前事件进行拦截。
+上面的一段代码主要是做了一些事件派发前的准备工作，判断是否对当前事件进行拦截。
 首先第一个条件是当前事件是否是 `ACTION_DOWN` 或者 `mFirstTouchTarget != null`，判断当前是否是 `ACTION_DOWN` 事件我们容易理解，上一篇博客的例子我们也知道，`ACTION_DOWN` 事件是一个手势事件系列的开始，是会调用 `onInterceptTouchEvent` 的。那么 `mFirstTouchTarget != null` 是什么呢？从 `dispatchTouchEvent` 后面的代码我们就可以看出来，当事件被 `ViewGroup` 的子元素处理时，`mFirstTouchTarget` 就会指向这个子元素。也就是说，如果当前 `ViewGroup` 拦截该事件时，`mFirstTouchTarget != null`这个条件是不成立的，那么当后面的 `ACTION_MOVE` 和 `ACTION_UP` 事件到来时，将不会执行这段代码，那么 `onInterceptTouchEvent` 方法就不会被调用。如果有子元素处理事件，那么后面的 `ACTION_MOVE` 和 `ACTION_UP` 事件到来时，将会执行这段代码，那么 `ViewGroup` 就会有机会拦截事件的传递。
 这里还有另外一个判断条件，就是是否设置了 `FLAG_DISALLOW_INTERCEPT` 这个标志位，这个标志位一般是子 `View` 通过 `ViewGroup.requestDisallowInterceptTouchEvent` 方法来设置的，一旦设置，`ViewGroup` 将无法拦截除了 DOWN 事件的其他一切事件。
 为什么说可以拦截 DOWN 事件呢？因为 `ViewGroup` 在事件分发时，如果是 DOWN 事件就重置 `FLAG_DISALLOW_INTERCEPT` 标志位，这一点从上面的源码中也可以看到，这个操作将会导致子 View 设置的该标志位无效，因此当分发 DOWN 事件时，总是会调用 `onInterceptTouchEvent` 来询问是否要拦截该事件。
@@ -160,13 +178,54 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
  - `onInterceptTouchEvent` 不是每次都调用，如果我们想操控所有的点击事件，只能在 `dispatchTouchEvent` 方法中处理。只有这个方法保证每次都会被调用（前提是事件能传递到当前的 `ViewGroup`）。
  - 子 View 调用父 View 的 `requestDisallowInterceptTouchEvent` 一定要注意调用时机，否则是不会生效的。
 
-下面我们接着看当 `ViewGrou` 不拦截事件时的处理。
+下面我们接着看当 `ViewGroup` 不拦截事件时的处理，主要是进行派发目标的查找。
 
 ```
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-                        ...
+            ... // 衔接上面
+            // split标记是否需要进行事件拆分
+            final boolean split = (mGroupFlags & FLAG_SPLIT_MOTION_EVENTS) != 0;
+            // newTouchTarget用于保存新的派发目标
+            TouchTarget newTouchTarget = null;
+            // 标记在目标查找过程中是否已经对newTouchTarget进行过派发
+            boolean alreadyDispatchedToNewTouchTarget = false;
+            // 只有当非cancele且不拦截的情况才进行目标查找，否则直接跳到执行派发步骤。
+            // 如果事件被拦截那么由ViewGroup自己处理事件。
+            if (!canceled && !intercepted) {
+                // If the event is targeting accessiiblity focus we give it to the
+                // view that has accessibility focus and if it does not handle it
+                // we clear the flag and dispatch the event to all children as usual.
+                // We are looking up the accessibility focused host to avoid keeping
+                // state since these events are very rare.
+                View childWithAccessibilityFocus = ev.isTargetAccessibilityFocus()
+                        ? findChildWithAccessibilityFocus() : null;
+                if (actionMasked == MotionEvent.ACTION_DOWN
+                        || (split && actionMasked == MotionEvent.ACTION_POINTER_DOWN)
+                        || actionMasked == MotionEvent.ACTION_HOVER_MOVE) {
+                    // 当ev为ACTION_DOWN或ACTION_POINTER_DOWN时，表示对于当前ViewGroup
+                    // 来说有一个新的事件序列开始，那么需要进行目标查找。
+                    final int actionIndex = ev.getActionIndex(); // always 0 for down
+                    // 通过触摸点索引取得触摸点ID，然后左移x位（x=ID值）
+                    final int idBitsToAssign = split ? 1 << ev.getPointerId(actionIndex)
+                            : TouchTarget.ALL_POINTER_IDS;
+                    // Clean up earlier touch targets for this pointer id in case they
+                    // have become out of sync.
+                    // 遍历mFirstTouchTarget链表，进行清理。若有TouchTarget设置了此触摸点ID，
+                    // 则将其移除该ID，若移除后的TouchTarget已经没有触摸点ID了，那么接着移除这个TouchTarget。
+                    removePointersFromTouchTargets(idBitsToAssign);
+                    final int childrenCount = mChildrenCount;
+                    if (newTouchTarget == null && childrenCount != 0) {
+                        // 通过触摸点索引获取对应触摸点的位置
+                        final float x = ev.getX(actionIndex);
+                        final float y = ev.getY(actionIndex);
+                        // Find a child that can receive the event.
+                        // Scan children from front to back.
+                        final ArrayList<View> preorderedList = buildTouchDispatchChildList();
+                        final boolean customOrder = preorderedList == null
+                                && isChildrenDrawingOrderEnabled();
                         final View[] children = mChildren;
+                        // 逆序遍历子view，即先查询上面的view
                         for (int i = childrenCount - 1; i >= 0; i--) {
                             final int childIndex = customOrder
                                     ? getChildDrawingOrder(childrenCount, i) : i;
@@ -184,26 +243,30 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
                                 childWithAccessibilityFocus = null;
                                 i = childrenCount - 1;
                             }
-                            // 判断子View是否可、是否在做动画或者点击事件的坐标是否在子View范围之内
+                            // 判断子View是否可以接收触摸事件、是否在做动画或者点击事件的坐标是否在子View范围之内
                             // 以此来作为是否可以接收点击事件的先决条件
                             if (!canViewReceivePointerEvents(child)
                                     || !isTransformedTouchPointInView(x, y, child, null)) {
                                 ev.setTargetAccessibilityFocus(false);
-                                ...
                                 continue;
                             }
-                            // 满足接收条件，看当前子View是否正在处理事件
+                            // 遍历mFirstTouchTarget链表，查找该child对应的TouchTarget。
+                            // 看当前子View是否正在处理事件，
+                            // 也就是说如果之前已经有触摸点落于该child中且消费了事件，这次新的触摸点也落于该child中，
+                            // 那么就会找到之前保存的TouchTarget。
+                            // getTouchTarget 方法后面再介绍 TouchTarget 时会专门讲
                             newTouchTarget = getTouchTarget(child);
-                            ...
                             if (newTouchTarget != null) {
                                 // Child is already receiving touch within its bounds.
                                 // Give it the new pointer in addition to the ones it is handling.
+                                // 派发目标已经存在，只要给TouchTarget的触摸点ID集合添加新的ID即可，然后退出子view遍历。
                                 newTouchTarget.pointerIdBits |= idBitsToAssign;
                                 break;
                             }
-
+                            // 再往下面表示还没有找到派发的view之前会执行
                             resetCancelNextUpFlag(child);
                             // 在dispatchTransformedTouchEvent中调用子 View的dispatchTouchEvent
+                            // 若child消费了事件，将返回true。
                             if (dispatchTransformedTouchEvent(ev, false, child, idBitsToAssign)) {
                                 // Child wants to receive touch within its bounds.
                                 mLastTouchDownTime = ev.getDownTime();
@@ -220,7 +283,9 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
                                 }
                                 mLastTouchDownX = ev.getX();
                                 mLastTouchDownY = ev.getY();
+                                // 为该child创建TouchTarget，添加到mFirstTouchTarget链表的头部，并将其设置为新的头节点。
                                 newTouchTarget = addTouchTarget(child, idBitsToAssign);
+                                // 标记已经派发过事件
                                 alreadyDispatchedToNewTouchTarget = true;
                                 break;
                             }
@@ -229,12 +294,34 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
                             // the flag and do a normal dispatch to all children.
                             ev.setTargetAccessibilityFocus(false);
                         }
+                        if (preorderedList != null) preorderedList.clear();
+                    }
+                    // 子view遍历完毕
+
+                    // 检查是否找到派发目标
+                    if (newTouchTarget == null && mFirstTouchTarget != null) {
+                        // Did not find a child to receive the event.
+                        // Assign the pointer to the least recently added target.
+                        // 若没有找到派发目标（没有命中child或命中的child不消费），但是存在
+                        // 旧的TouchTarget，那么将该事件派发给最开始添加的那个TouchTarget，
+                        // 多点触摸情况下有可能这个事件是它想要的。
+                        newTouchTarget = mFirstTouchTarget;
+                        while (newTouchTarget.next != null) {
+                            newTouchTarget = newTouchTarget.next;
+                        }
+                        newTouchTarget.pointerIdBits |= idBitsToAssign;
+                    }
+                }
+            }
                         ...
     }
 ```
 
-从上面源码可以看到，当 `ViewGroup` 不拦截事件时，事件会向下分发交由它的子 View 处理。
-首先会遍历一遍所有的子元素，判断元素是否能接收点击事件，条件是判断子View是否可、是否在做动画或者点击事件的坐标是否在子View范围之内来作为依据，如果可以接收事件，则调用 `dispatchTransformedTouchEvent` 方法。
+从上面源码可以看到，当 `ViewGroup` 不拦截事件时，事件会向下分发交由它的子 View 处理。这个事件必须是ACTION_DOWN或ACTION_POINTER_DOWN，即新的事件序列或子序列的开始，才会进行派发事件查找。
+首先会逆序遍历一遍所有的子元素，判断元素是否能接收点击事件，条件是判断子View是否可以处理、是否在做动画或者点击事件的坐标是否在子View范围之内来作为依据，如果可以接收事件，再通过 getTouchTarget 来寻找是否有 TouchTarget 来处理，如果找到，则意味着之前已经有触摸点落于该child且消费了事件，那么只需要给其添加触摸点ID，然后结束子view遍历；如果没有找到 TouchTarget ，说明对于该child是新的事件，则调用 `dispatchTransformedTouchEvent` 方法对其进行派发。
+若 `dispatchTransformedTouchEvent ` 找到child消费事件，则创建TouchTarget添加至mFirstTouchTarget链表，并标记已经派发过事件。
+注意：这里先前存在TouchTarget的情况下不执行dispatchTransformedTouchEvent，是因为需要对当次事件进行事件拆分，对ACTION_POINTER_DOWN类型进行转化，所以留到后面执行派发阶段，再统一处理。
+当遍历完子view，若没有找到派发目标，但是mFirstTouchTarget链表不为空，则把最早添加的那个TouchTarget当作查找到的目标。
 
 那么再来看一下这个方法：
 
