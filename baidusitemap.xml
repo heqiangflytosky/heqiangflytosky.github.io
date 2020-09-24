@@ -4,6 +4,66 @@
 
     
   <url>
+    <loc>http://yoursite.com/2015/11/10/android-knowledge-event-transfer-process-touchtarget/</loc>
+    <lastmod>2020-09-24T04:39:03.581Z</lastmod>
+    <data>
+        <display>
+        <title>Android View 事件处理流程 -- TouchTarget</title>
+        <pubTime>2015-11-10T02:00:00.000Z</pubTime>
+        
+        <tag>Android 事件分发体系</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android 事件分发体系" url="http://yoursite.com/categories/Android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%BD%93%E7%B3%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/11/06/android-knowledge-event-transfer-process-source-code/</loc>
+    <lastmod>2020-09-24T02:57:55.735Z</lastmod>
+    <data>
+        <display>
+        <title>Android View 事件处理流程源码解析</title>
+        <pubTime>2015-11-06T02:00:00.000Z</pubTime>
+        
+        <tag>Android 事件分发体系</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android 事件分发体系" url="http://yoursite.com/categories/Android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%BD%93%E7%B3%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/11/02/android-knowledge-event-transfer-process/</loc>
+    <lastmod>2020-09-24T01:39:31.628Z</lastmod>
+    <data>
+        <display>
+        <title>Android View 事件处理流程</title>
+        <pubTime>2015-11-02T02:00:00.000Z</pubTime>
+        
+        <tag>Android 事件分发体系</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android 事件分发体系" url="http://yoursite.com/categories/Android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%BD%93%E7%B3%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2019/11/02/development-tool-charles/</loc>
     <lastmod>2020-09-23T03:12:03.375Z</lastmod>
     <data>
@@ -2753,46 +2813,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2015/11/02/android-knowledge-event-transfer-process/</loc>
-    <lastmod>2019-04-28T07:32:15.064Z</lastmod>
-    <data>
-        <display>
-        <title>Android View 事件处理流程</title>
-        <pubTime>2015-11-02T02:00:00.000Z</pubTime>
-        
-        <tag>Android 事件分发体系</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android 事件分发体系" url="http://yoursite.com/categories/Android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%BD%93%E7%B3%BB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2015/11/06/android-knowledge-event-transfer-process-source-code/</loc>
-    <lastmod>2019-04-28T07:32:15.063Z</lastmod>
-    <data>
-        <display>
-        <title>Android View 事件处理流程源码解析</title>
-        <pubTime>2015-11-06T02:00:00.000Z</pubTime>
-        
-        <tag>Android 事件分发体系</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android 事件分发体系" url="http://yoursite.com/categories/Android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%BD%93%E7%B3%BB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/07/28/android-performance-optimization-reduce-apk-size/</loc>
     <lastmod>2019-04-23T11:07:24.080Z</lastmod>
     <data>
@@ -4196,12 +4216,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4216,12 +4236,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4835,26 +4855,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>React Native封装原生UI组件</title>
-        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
-        
-        <tag>React Native</tag>
-         
-         
-           
-             
-              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4881,6 +4881,26 @@
         <display>
         <title>React Native创建原生模块</title>
         <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        
+        <tag>React Native</tag>
+         
+         
+           
+             
+              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>React Native封装原生UI组件</title>
+        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
