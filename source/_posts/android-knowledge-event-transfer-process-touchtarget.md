@@ -94,7 +94,9 @@ TouchTarget的构造函数为私有，不允许直接创建。因为应用在使
 
 具体调用流程参考前面文章。
 
-`getTouchTarget` 方法说明 根据child查找对应的TouchTarget
+#### 查找 TouchTarget
+
+`getTouchTarget` 方法说根据child查找对应的 TouchTarget
 
 ```
 private TouchTarget getTouchTarget(@NonNull View child) {
@@ -109,7 +111,9 @@ private TouchTarget getTouchTarget(@NonNull View child) {
 }
 ```
 
-`addTouchTarget` 方法说明 将 child 和 pointerIdBits 保存到 TouchTarget 链表中
+#### 添加 TouchTarget
+
+在 `ViewGroup` 的 `dispatchTouchEvent` 方法中，会通过 `dispatchTransformedTouchEvent` 将调整后的`TouchEvent` 派发给子 `View`，如果子 `View` 感兴趣，会返回 true，此时就会把该子 `View` 和它感兴趣的` TouchEvent` 的 pointer 存储到 `TouchTarget` 中，加入链表作为表头存储，mFirstTouchTarget指向表头。这个添加操作时调用 `addTouchTarget` 实现的，它会将 child 和 pointerIdBits 保存到 TouchTarget 链表中，并且把新添加的 `TouchTarget` 作为表头。
 
 ```
 private TouchTarget addTouchTarget(@NonNull View child, int pointerIdBits) {
@@ -121,6 +125,42 @@ private TouchTarget addTouchTarget(@NonNull View child, int pointerIdBits) {
     return target;
 }
 ```
+
+#### 删除 TouchTarget
+
+当一个 `TouchTarget` 不捕获任何 pointer 的时候，如按在该 `View` 上的所有手指抬起时，该 `TouchTarget` 就会从链表中删除，并且执行 recycle 操作。
+当调用 `ViewGroup#removeView` 移除某个子 `View` 时，`ViewGroup` 会调用下面的方法，该方法不仅从链表中删除了 `TouchTarget`，调用其 recycle 方法，还给它保存的 `View` 发了一个 ACTION_CANCEL 事件，使得View能清理各类状态。
+
+
+```
+private void cancelTouchTarget(View view) {
+    TouchTarget predecessor = null;
+    TouchTarget target = mFirstTouchTarget;
+    while (target != null) {
+        final TouchTarget next = target.next;
+        if (target.child == view) {
+            if (predecessor == null) {
+                mFirstTouchTarget = next;
+            } else {
+                predecessor.next = next;
+            }
+            target.recycle();
+            final long now = SystemClock.uptimeMillis();
+            MotionEvent event = MotionEvent.obtain(now, now,
+                    MotionEvent.ACTION_CANCEL, 0.0f, 0.0f, 0);
+            event.setSource(InputDevice.SOURCE_TOUCHSCREEN);
+            view.dispatchTouchEvent(event);
+            event.recycle();
+            return;
+        }
+        predecessor = target;
+        target = next;
+    }
+}
+
+```
+
+#### 关于 mFirstTouchTarget
 
 `ViewGroup` 不用单个 `TouchTarget` 保存消费了事件的 child，而是通过 `mFirstTouchTarget` 链表保存多个 `TouchTarget`，是因为存在多点触摸情况下，需要将事件拆分后派发给不同的child。
 加入一个 `ViewGroup` 有两个子 `View` childA 和 childB，他们是兄弟 `View` 的关系，假设childA、childB都能响应事件：
