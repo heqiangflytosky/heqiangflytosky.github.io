@@ -144,9 +144,6 @@ Crash 发生的 `resetCancelNextUpFlag` 如下：
 在 ContainerView 中有两个 RecycleView，在每个 RecycleView 的 `onItemClick` 方法中写入了对该 ContainerView 的 `mWindowManager.removeViewImmediate(mContainerView)` 操作。
 当长按其中一个 RecycleView 的 ItemView 时，点击另外一个 RecycleView 的 ItemView，就必现这个崩溃。
 为什么会出现崩溃呢？
-在前面的博客中我们也介绍过，在`ViewGroup#removeView` 移除某个子 `View` 时，会调用 `ViewGroup#cancelTouchTarget` 这里面会调用 TouchTarget 的 `recycle()` 方法把 view 设置为 null。
-
-removeView - removeViewInternal - removeViewInternal - cancelTouchTarget - target.recycle()
 
 再看一下我们 `removeView` 的时机，
 
@@ -217,34 +214,38 @@ removeView - removeViewInternal - removeViewInternal - cancelTouchTarget - targe
 
 然后用一根手指按住 ViewD，此时用另外一根手指点击 ViewC，ViewC 上的手指抬起时发生崩溃。日志和上面是一样一样的。
 
-前面的博客中我们介绍过，当当调用 ViewGroup#removeView 移除某个子 View 时，ViewGroup 会调用 cancelTouchTarget，该方法不仅从链表中删除了 TouchTarget，调用其 recycle 方法，还给它保存的 View 发了一个 ACTION_CANCEL 事件，使得View能清理各类状态。
+前面的博客中我们介绍过，当当调用 ViewGroup#removeView 移除某个子 View 时，ViewGroup 会调用 cancelTouchTarget，该方法不仅从链表中删除了该 View 对应的 TouchTarget，调用其 recycle 方法，还给它对应的 View 发了一个 ACTION_CANCEL 事件，使得View能清理各类状态。
 
 ```
-    private void cancelTouchTarget(View view) {
-        TouchTarget predecessor = null;
-        TouchTarget target = mFirstTouchTarget;
-        while (target != null) {
-            final TouchTarget next = target.next;
-            if (target.child == view) {
-                if (predecessor == null) {
-                    mFirstTouchTarget = next;
-                } else {
-                    predecessor.next = next;
-                }
-                target.recycle();
+        // Update list of touch targets for pointer up or cancel, if needed.
+        if (canceled
+                || actionMasked == MotionEvent.ACTION_UP
+                || actionMasked == MotionEvent.ACTION_HOVER_MOVE) {
+            resetTouchState();
+        } else if (split && actionMasked == MotionEvent.ACTION_POINTER_UP) {
+            final int actionIndex = ev.getActionIndex();
+            final int idBitsToRemove = 1 << ev.getPointerId(actionIndex);
+            removePointersFromTouchTargets(idBitsToRemove);
+        }
+```
 
-                final long now = SystemClock.uptimeMillis();
-                MotionEvent event = MotionEvent.obtain(now, now,
-                        MotionEvent.ACTION_CANCEL, 0.0f, 0.0f, 0);
-                event.setSource(InputDevice.SOURCE_TOUCHSCREEN);
-                view.dispatchTouchEvent(event);
-                event.recycle();
-                return;
-            }
-            predecessor = target;
-            target = next;
+那么主要问题就出现在这，LinearLayoutA 向 LinearLayoutB 和 ViewD 分发 ACTION_CANCEL 事件，那么就会调用它们的 TouchTarget 链表里面 TouchTarget 的 recycle 操作，当然就包括了 ViewD：
+
+ViewGroup.dispatchTouchEvent() -> ViewGroup.resetTouchState() -> ViewGroup.clearTouchTargets()
+
+```
+    private void clearTouchTargets() {
+        TouchTarget target = mFirstTouchTarget;
+        if (target != null) {
+            do {
+                TouchTarget next = target.next;
+                target.recycle();
+                target = next;
+            } while (target != null);
+            mFirstTouchTarget = null;
         }
     }
+
 ```
 
 看一下下面的调用日志：

@@ -161,6 +161,23 @@ private void cancelTouchTarget(View view) {
 
 ```
 
+再有就是ViewGroup收到ACTION_CANCEL 事件，就会执行它的 TouchTarget 链表里面 TouchTarget 的 recycle 操作。
+
+```
+    private void clearTouchTargets() {
+        TouchTarget target = mFirstTouchTarget;
+        if (target != null) {
+            do {
+                TouchTarget next = target.next;
+                target.recycle();
+                target = next;
+            } while (target != null);
+            mFirstTouchTarget = null;
+        }
+    }
+
+```
+
 #### 关于 mFirstTouchTarget
 
 `ViewGroup` 不用单个 `TouchTarget` 保存消费了事件的 child，而是通过 `mFirstTouchTarget` 链表保存多个 `TouchTarget`，是因为存在多点触摸情况下，需要将事件拆分后派发给不同的child。

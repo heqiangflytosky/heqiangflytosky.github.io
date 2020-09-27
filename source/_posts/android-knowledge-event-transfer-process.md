@@ -513,7 +513,7 @@ C onTouchEvent ACTION_UP
 
 ## 多点触控
 
-前面我们介绍的都是在单点触摸的情况下，Android 也是支持多点触控的，当已经有手指接触屏幕的情况下，当再有其他触摸点出现是，会触发 `ACTION_POINTER_DOWN` 事件，当有手指离开屏幕时会触发 `ACTION_POINTER_UP` 事件，最后一根手指离开屏幕是触发 `ACTION_UP ` 事件，因此多点触控的事件可能是下面的流程：
+前面我们介绍的都是在单点触摸的情况下，Android 也是支持多点触控的，当已经有手指接触屏幕的情况下，当再有其他触摸点出现是，会触发 `ACTION_POINTER_DOWN` 事件，当有手指离开屏幕时会触发 `ACTION_POINTER_UP` 事件（当然这个事件在某个View上还可能转换为`ACTION_UP ` 事件，具体后面博客在解释），最后一根手指离开屏幕是触发 `ACTION_UP ` 事件，因此多点触控的事件可能是下面的流程：
 
 ```
 ACTION_DOWN -> ACTION_POINTER_DOWN -> ACTION_POINTER_UP -> ACTION_UP
