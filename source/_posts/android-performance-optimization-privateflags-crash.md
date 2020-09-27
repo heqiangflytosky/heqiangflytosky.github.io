@@ -146,11 +146,196 @@ Crash 发生的 `resetCancelNextUpFlag` 如下：
 为什么会出现崩溃呢？
 在前面的博客中我们也介绍过，在`ViewGroup#removeView` 移除某个子 `View` 时，会调用 `ViewGroup#cancelTouchTarget` 这里面会调用 TouchTarget 的 `recycle()` 方法把 view 设置为 null。
 
+removeView - removeViewInternal - removeViewInternal - cancelTouchTarget - target.recycle()
+
 再看一下我们 `removeView` 的时机，
 
 <img src="/images/android-performance-optimization-privateflags-crash/1.png" width="479" height="568"/>
 
-具体原因解析请参考 https://www.jianshu.com/p/ab1fb00fcb90
+为了方便调试，我们模拟了一个环境，布局如下：
+
+```
+<com.example.heqiang.testsomething.event.LinearLayoutA xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:id="@+id/view_a"
+    android:background="#B9D3EE">
+    <com.example.heqiang.testsomething.event.LinearLayoutB
+        android:id="@+id/view_b"
+        android:layout_width="500dp"
+        android:layout_height="300dp"
+        android:background="#CD8162">
+        <com.example.heqiang.testsomething.event.ViewC
+            android:id="@+id/view_c"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="#9F79EE"/>
+
+    </com.example.heqiang.testsomething.event.LinearLayoutB>
+    <com.example.heqiang.testsomething.event.ViewD
+        android:id="@+id/view_d"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="#9F79EE"/>
+</com.example.heqiang.testsomething.event.LinearLayoutA>
+```
+
+然后在 ViewC 和 ViewD 的 onTouchEvent 中收到 MotionEvent.ACTION_DOWN 时返回 true，表示可以处理事件。在 ViewC 的 收到 MotionEvent.ACTION_UP 时把根布局从根布局的父布局中 remove 掉。 
+
+```
+// ViewC
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if(ev.getAction() != MotionEvent.ACTION_MOVE) {
+            Log.e("Event", "ViewC onTouchEvent " + EventActivity.getActionString(ev));
+        }
+        if(ev.getActionMasked() == MotionEvent.ACTION_UP){
+            Log.e("Event","RRRRRRRRRRRR ");
+            ((ViewGroup)(mRoot.getParent())).removeView(mRoot);
+        } else if (ev.getActionMasked() == MotionEvent.ACTION_DOWN){
+            return true;
+        }
+        return super.onTouchEvent(ev);
+    }
+```
+
+```
+// ViewD
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if(ev.getAction() != MotionEvent.ACTION_MOVE) {
+            Log.e("Event", "ViewD onTouchEvent " + EventActivity.getActionString(ev));
+        }
+        if (ev.getActionMasked() == MotionEvent.ACTION_DOWN){
+            return true;
+        }
+        return super.onTouchEvent(ev);
+    }
+```
+
+然后用一根手指按住 ViewD，此时用另外一根手指点击 ViewC，ViewC 上的手指抬起时发生崩溃。日志和上面是一样一样的。
+
+前面的博客中我们介绍过，当当调用 ViewGroup#removeView 移除某个子 View 时，ViewGroup 会调用 cancelTouchTarget，该方法不仅从链表中删除了 TouchTarget，调用其 recycle 方法，还给它保存的 View 发了一个 ACTION_CANCEL 事件，使得View能清理各类状态。
+
+```
+    private void cancelTouchTarget(View view) {
+        TouchTarget predecessor = null;
+        TouchTarget target = mFirstTouchTarget;
+        while (target != null) {
+            final TouchTarget next = target.next;
+            if (target.child == view) {
+                if (predecessor == null) {
+                    mFirstTouchTarget = next;
+                } else {
+                    predecessor.next = next;
+                }
+                target.recycle();
+
+                final long now = SystemClock.uptimeMillis();
+                MotionEvent event = MotionEvent.obtain(now, now,
+                        MotionEvent.ACTION_CANCEL, 0.0f, 0.0f, 0);
+                event.setSource(InputDevice.SOURCE_TOUCHSCREEN);
+                view.dispatchTouchEvent(event);
+                event.recycle();
+                return;
+            }
+            predecessor = target;
+            target = next;
+        }
+    }
+```
+
+看一下下面的调用日志：
+RRRRRRRRRRRR 这里表示 removeView 操作。
+
+```
+Event   : Activity dispatchTouchEvent ACTION_DOWN
+Event   : LinearLayoutA dispatchTouchEvent ACTION_DOWN
+Event   : LinearLayoutA onInterceptTouchEvent ACTION_DOWN
+Event   : ViewD dispatchTouchEvent ACTION_DOWN
+Event   : ViewD onTouchEvent ACTION_DOWN
+Event   : Activity dispatchTouchEvent ACTION_POINTER_DOWN
+Event   : LinearLayoutA dispatchTouchEvent ACTION_POINTER_DOWN
+Event   : LinearLayoutA onInterceptTouchEvent ACTION_POINTER_DOWN
+Event   : LinearLayoutB dispatchTouchEvent ACTION_DOWN
+Event   : LinearLayoutB onInterceptTouchEvent ACTION_DOWN
+Event   : ViewC dispatchTouchEvent ACTION_DOWN
+Event   : ViewC onTouchEvent ACTION_DOWN
+Event   : Activity dispatchTouchEvent ACTION_POINTER_UP
+Event   : LinearLayoutA dispatchTouchEvent ACTION_POINTER_UP
+Event   : LinearLayoutA onInterceptTouchEvent ACTION_POINTER_UP
+Event   : LinearLayoutB dispatchTouchEvent ACTION_UP
+Event   : LinearLayoutB onInterceptTouchEvent ACTION_UP
+Event   : ViewC dispatchTouchEvent ACTION_UP
+Event   : ViewC onTouchEvent ACTION_UP
+Event   : RRRRRRRRRRRR 
+Event   : LinearLayoutA dispatchTouchEvent ACTION_CANCEL
+Event   : LinearLayoutA onInterceptTouchEvent ACTION_CANCEL
+Event   : LinearLayoutB dispatchTouchEvent ACTION_CANCEL
+Event   : LinearLayoutB onInterceptTouchEvent ACTION_CANCEL
+Event   : ViewC dispatchTouchEvent ACTION_CANCEL
+Event   : ViewC onTouchEvent ACTION_CANCEL
+Event   : ViewD dispatchTouchEvent ACTION_CANCEL
+Event   : ViewD onTouchEvent ACTION_CANCEL
+
+```
+
+LinearLayoutA 在处理 ACTION_POINTER_UP 过程中，首先向它的子 View LinearLayoutB 派发事件，派发前，先把该事件转换为 ACTION_UP，当该事件分发到 ViewC 时，触发 removeView LinearLayoutA 操作，然后 LinearLayoutA 就会向它的所有子 View 分发 ACTION_CANCEL，这样就会触发所有的 TouchTarget 链表的 recycle 操作。
+然后 LinearLayoutA 的 dispatchTouchEvent 方法会继续处理 ACTION_POINTER_UP 事件，当它继续分发给 LinearLayoutB 所在的 TouchTarget 的下一个 TouchTarget 也就是 ViewD 时，由于 ViewD 所在的 TouchTarget 已经执行了 recycle 操作，因此就会出现调用 resetCancelNextUpFlag(target.child) 时传入了 null 参数。
+
+来看一下到 LinearLayoutA 开始分发ACTION_CANCEL 之前的流程。
+```
+LinearLayoutA.dispatchTouchEvent ACTION_POINTER_UP
+  ViewGroup.dispatchTouchEvent ACTION_POINTER_UP
+```
+```
+            // Dispatch to touch targets.
+            if (mFirstTouchTarget == null) {
+                // No touch targets so treat this as an ordinary view.
+                handled = dispatchTransformedTouchEvent(ev, canceled, null,
+                        TouchTarget.ALL_POINTER_IDS);
+            } else {
+                // Dispatch to touch targets, excluding the new touch target if we already
+                // dispatched to it.  Cancel touch targets if necessary.
+                TouchTarget predecessor = null;
+                TouchTarget target = mFirstTouchTarget;
+                while (target != null) {
+                    final TouchTarget next = target.next;
+                    if (alreadyDispatchedToNewTouchTarget && target == newTouchTarget) {
+                        handled = true;
+                    } else {
+                        final boolean cancelChild = resetCancelNextUpFlag(target.child)
+                                || intercepted;
+                        // 调用这里的 dispatchTransformedTouchEvent
+                        if (dispatchTransformedTouchEvent(ev, cancelChild,
+                                target.child, target.pointerIdBits)) {
+                            handled = true;
+                        }
+```
+```
+    // while循环，向 LinearLayoutB 分发ACTION_POINTER_UP
+    ViewGroup.dispatchTransformedTouchEvent ACTION_POINTER_UP
+      ViewGroup.dispatchTouchEvent ACTION_POINTER_UP
+        LinearLayoutB.dispatchTouchEvent ACTION_UP
+          ViewGroup.dispatchTransformedTouchEvent ACTION_UP
+            ViewC.dispatchTouchEvent ACTION_UP
+              View.dispatchTouchEvent ACTION_UP
+                ViewC.onTouchEvent ACTION_UP
+                  ViewGroup.removeView
+                    ViewGroup.removeViewInternal
+                      ViewGroup.cancelTouchTarget
+                        LinearLayoutA dispatchTouchEvent ACTION_CANCEL
+                          ViewGroup.dispatchTouchEvent ACTION_CANCEL
+                            ViewGroup.dispatchTransformedTouchEvent ACTION_CANCEL
+......
+                               ViewD.dispatchTouchEvent ACTION_CANCEL
+    // while 循环继续向　ViewD 分发 ACTION_POINTER_UP
+    ViewGroup.resetCancelNextUpFlag ACTION_POINTER_UP 引发null
+```
+
+所以我们看到，派发 ACTION_POINTER_UP 事件的事件循环中，在传递给 LinearLayoutB 时，先转换 ACTION_UP 事件，然后执行 removeView 操作，之后派发 ACTION_CANCEL 操作，然后再派发给 ViewD ACTION_POINTER_UP 事件， 这些都是在一次事件派发循环中进行的，于是就出现了逻辑上的问题导致了崩溃，因此，稳妥的做法是在这次事件循环进行完毕后再进行 removeView 操作，这样派发 ACTION_CANCEL 操作以及EventTarget的recycle都是在另外的事件循环中进行的了，这样就能避免这个逻辑错误。
 
 ## 解决办法
 

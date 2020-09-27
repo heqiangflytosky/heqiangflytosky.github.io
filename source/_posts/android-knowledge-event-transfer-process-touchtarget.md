@@ -128,7 +128,7 @@ private TouchTarget addTouchTarget(@NonNull View child, int pointerIdBits) {
 
 #### 删除 TouchTarget
 
-当一个 `TouchTarget` 不捕获任何 pointer 的时候，如按在该 `View` 上的所有手指抬起时，该 `TouchTarget` 就会从链表中删除，并且执行 recycle 操作。
+当一个 `TouchTarget` 不捕获任何 pointer 的时候，如按在该 `View` 上的所有手指抬起时，或者触发 ACTION_CANCEL 时，该 `TouchTarget` 就会从链表中删除，并且执行 recycle 操作。
 当调用 `ViewGroup#removeView` 移除某个子 `View` 时，`ViewGroup` 会调用下面的方法，该方法不仅从链表中删除了 `TouchTarget`，调用其 recycle 方法，还给它保存的 `View` 发了一个 ACTION_CANCEL 事件，使得View能清理各类状态。
 
 
@@ -146,6 +146,7 @@ private void cancelTouchTarget(View view) {
             }
             target.recycle();
             final long now = SystemClock.uptimeMillis();
+            // 发送 ACTION_CANCEL 事件
             MotionEvent event = MotionEvent.obtain(now, now,
                     MotionEvent.ACTION_CANCEL, 0.0f, 0.0f, 0);
             event.setSource(InputDevice.SOURCE_TOUCHSCREEN);
