@@ -285,12 +285,15 @@ Event   : ViewD onTouchEvent ACTION_CANCEL
 
 LinearLayoutA 在处理 ACTION_POINTER_UP 过程中，首先向它的子 View LinearLayoutB 派发事件，派发前，先把该事件转换为 ACTION_UP，当该事件分发到 ViewC 时，触发 removeView LinearLayoutA 操作，然后 LinearLayoutA 就会向它的所有子 View 分发 ACTION_CANCEL，这样就会触发所有的 TouchTarget 链表的 recycle 操作。
 然后 LinearLayoutA 的 dispatchTouchEvent 方法会继续处理 ACTION_POINTER_UP 事件，当它继续分发给 LinearLayoutB 所在的 TouchTarget 的下一个 TouchTarget 也就是 ViewD 时，由于 ViewD 所在的 TouchTarget 已经执行了 recycle 操作，因此就会出现调用 resetCancelNextUpFlag(target.child) 时传入了 null 参数。
+这里有个问题，为什么 ACTION_POINTER_UP 是先分发给 LinearLayoutB ，然后分发给 ViewD 呢？这是因为我们是最后触摸 LinearLayoutB 上的 ViewC，那么它所对应的 TouchTarget 就位于 TouchTarget 链表的表头。
 
 来看一下到 LinearLayoutA 开始分发ACTION_CANCEL 之前的流程。
+
 ```
 LinearLayoutA.dispatchTouchEvent ACTION_POINTER_UP
   ViewGroup.dispatchTouchEvent ACTION_POINTER_UP
 ```
+
 ```
             // Dispatch to touch targets.
             if (mFirstTouchTarget == null) {
@@ -315,6 +318,7 @@ LinearLayoutA.dispatchTouchEvent ACTION_POINTER_UP
                             handled = true;
                         }
 ```
+
 ```
     // while循环，向 LinearLayoutB 分发ACTION_POINTER_UP
     ViewGroup.dispatchTransformedTouchEvent ACTION_POINTER_UP

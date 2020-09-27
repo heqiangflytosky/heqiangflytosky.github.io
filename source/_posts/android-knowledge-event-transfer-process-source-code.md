@@ -329,6 +329,7 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
     private boolean dispatchTransformedTouchEvent(MotionEvent event, boolean cancel,
             View child, int desiredPointerIdBits) {
         ...
+        // 对单点事件的正常分发
         if (newPointerIdBits == oldPointerIdBits) {
             if (child == null || child.hasIdentityMatrix()) {
                 if (child == null) {
@@ -346,6 +347,7 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
             }
             transformedEvent = MotionEvent.obtain(event);
         } else {
+        // 对多点触控事件比如ACTION_POINTER_DOWN、ACTION_POINTER_UP的拆分
             transformedEvent = event.split(newPointerIdBits);
         }
 
@@ -354,6 +356,7 @@ Activity 中的 `mWindow` 在 `Activity.attach()` 中被实例化，是一个 `P
 ```
 
 如果子元素为null则调用父类的 `dispatchTouchEvent`，如果子元素不为null，则调用子元素的 `dispatchTouchEvent`。
+关于对多点触控事件的分发，后面会有专门的文章来介绍。
 
 再来回到 `dispatchTouchEvent` 方法，如果遍历子元素后事件都没有被处理，这包含两种情况：一是 `ViewGroup` 没有子元素，二是子元素处理了点击事件，但是子元素 `dispatchTouchEvent` 返回了 false，这时  `ViewGroup`会自己处理事件。这时还是会调用 `dispatchTransformedTouchEvent`，只是 child 参数为  null，这是根据上面的的代码，会调用 `super.dispatchTouchEvent`，即 `View.dispatchTouchEvent` 来处理。
 
