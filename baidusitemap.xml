@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://yoursite.com/2018/10/22/android-performance-optimization-privateflags-crash/</loc>
-    <lastmod>2020-09-24T10:20:31.765Z</lastmod>
+    <lastmod>2020-09-27T00:55:03.961Z</lastmod>
     <data>
         <display>
         <title>Android 性能优化实战篇 -- 解决 'int android.view.View.mPrivateFlags' NullPointerException</title>
@@ -25,7 +25,7 @@
     
   <url>
     <loc>http://yoursite.com/2015/11/10/android-knowledge-event-transfer-process-touchtarget/</loc>
-    <lastmod>2020-09-24T06:17:29.676Z</lastmod>
+    <lastmod>2020-09-25T10:46:24.765Z</lastmod>
     <data>
         <display>
         <title>Android View 事件处理流程 -- TouchTarget</title>
@@ -45,7 +45,7 @@
     
   <url>
     <loc>http://yoursite.com/2015/11/06/android-knowledge-event-transfer-process-source-code/</loc>
-    <lastmod>2020-09-24T02:57:55.735Z</lastmod>
+    <lastmod>2020-09-25T07:46:28.859Z</lastmod>
     <data>
         <display>
         <title>Android View 事件处理流程源码解析</title>
@@ -4236,12 +4236,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4256,12 +4256,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4425,16 +4425,16 @@
     
     
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
-        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
+        <title>Android BuildConfig的使用</title>
+        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>buildType</tag>
+        <tag>BuildConfig</tag>
          
          
            
@@ -4447,16 +4447,16 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android BuildConfig的使用</title>
-        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
+        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
+        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>BuildConfig</tag>
+        <tag>buildType</tag>
          
          
            
@@ -4621,6 +4621,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        
+        <tag>V8</tag>
+         
+        <tag>J2V8</tag>
+         
+         
+           
+             
+              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4665,28 +4687,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
-        
-        <tag>V8</tag>
-         
-        <tag>J2V8</tag>
-         
-         
-           
-             
-              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/01/10/react-native-begin-to-study/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4707,12 +4707,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4727,12 +4727,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4835,26 +4835,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>搭建 React Native 开发环境</title>
-        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
-        
-        <tag>React Native</tag>
-         
-         
-           
-             
-              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -4875,12 +4855,32 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>搭建 React Native 开发环境</title>
+        <pubTime>2017-01-10T04:00:00.000Z</pubTime>
+        
+        <tag>React Native</tag>
+         
+         
+           
+             
+              <breadCrumb title="React Native" url="http://yoursite.com/categories/React-Native/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -4915,12 +4915,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
