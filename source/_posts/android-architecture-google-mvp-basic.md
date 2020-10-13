@@ -407,6 +407,13 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter {
 
 使用 CompositeDisposable 来管理 Disposable。
 
+## todo-mvp-clean
+
+对比基本的 MVP 架构，clean 架构又增加了一层新的 Domain Layer 层，所有的业务逻辑都在这一层进行处理，通过一个个UseCase来完成M层和P层的交互。这些UseCase代表了从 P 层可能进行的行为。
+从 P 层抽取 Domain Layer 层有助于避免 P 层中的代码重复。
+
+![效果图](/images/android-architecture-google-mvp-basic/mvp-clean.png)
+
 ## 总结
 
 通过上面的 MVP 结构可以看出，MVP 的设计使得程序的各个层次之间的职责更加单一，很大程度上降低了代码的耦合度。
