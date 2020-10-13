@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2017/12/16/open-source-sqlbrite/</loc>
+    
+    <lastmod>2020-10-13T07:04:30.258Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2015/01/26/android-knowledge-about-contentprovider/</loc>
+    
+    <lastmod>2020-10-12T08:10:22.853Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/09/06/android-architecture-google-mvp-basic/</loc>
+    
+    <lastmod>2020-10-12T06:29:50.560Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2015/11/15/android-knowledge-event-transfer-process-multi-point/</loc>
     
-    <lastmod>2020-09-27T10:53:10.063Z</lastmod>
+    <lastmod>2020-09-27T10:58:58.299Z</lastmod>
     
   </url>
   
@@ -292,13 +313,6 @@
     <loc>http://yoursite.com/2015/12/20/android-knowledge-about-service/</loc>
     
     <lastmod>2020-06-10T07:10:40.480Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2015/01/26/android-knowledge-about-contentprovider/</loc>
-    
-    <lastmod>2020-06-10T07:10:09.144Z</lastmod>
     
   </url>
   
@@ -677,13 +691,6 @@
     <loc>http://yoursite.com/2017/09/02/android-architecture-mvc-mvp-mvvm/</loc>
     
     <lastmod>2019-11-12T01:14:15.655Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/09/06/android-architecture-google-mvp-basic/</loc>
-    
-    <lastmod>2019-11-08T08:07:01.829Z</lastmod>
     
   </url>
   
@@ -1528,14 +1535,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -1598,14 +1605,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1661,13 +1668,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1675,7 +1675,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1683,6 +1683,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
