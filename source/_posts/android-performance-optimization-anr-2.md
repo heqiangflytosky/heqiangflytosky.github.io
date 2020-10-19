@@ -1,5 +1,3 @@
-
-
 ---
 title: Android 性能优化实战篇 -- ANR 问题分析2
 categories: Android性能优化
