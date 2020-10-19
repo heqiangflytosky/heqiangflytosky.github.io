@@ -244,6 +244,8 @@ date: 2016-12-1 10:00:00
  - [VirtualAPK](https://github.com/didi/VirtualAPK)：滴滴插件化框架
  - [RePlugin](https://github.com/Qihoo360/RePlugin)：360插件化框架
  - [Small](https://github.com/wequick/Small)：插件化框架Small
+ - [KOOM](https://github.com/KwaiAppTeam/KOOM/)：快手团队开源的线上OOM分析方案
+ - [Transferee](https://github.com/Hitomis/transferee)：缩略图切换大图动画方案
 
 #### Java
 
