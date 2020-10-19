@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="ANR," />
 
 
 
@@ -86,19 +86,16 @@
 
 
 
-<meta name="description" content="title: Android 性能优化实战篇 – ANR 问题分析2categories: Android性能优化comments: truetags: [ANR]description: 分析通过 Binder 进行数据调用时出现的 ANR
-date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 Binder 进行数据调用时出现的 anr，涉及到了多个进程">
+<meta name="description" content="分析通过 Binder 进行数据调用时出现的 ANR">
 <meta property="og:type" content="article">
-<meta property="og:title" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:url" content="http://yoursite.com/2020/10/19/android-performance-optimization-anr-2/index.html">
+<meta property="og:title" content="Android 性能优化实战篇 -- ANR 问题分析2">
+<meta property="og:url" content="http://yoursite.com/2018/01/16/android-performance-optimization-anr-2/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="title: Android 性能优化实战篇 – ANR 问题分析2categories: Android性能优化comments: truetags: [ANR]description: 分析通过 Binder 进行数据调用时出现的 ANR
-date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 Binder 进行数据调用时出现的 anr，涉及到了多个进程">
-<meta property="og:updated_time" content="2020-10-19T07:35:32.239Z">
+<meta property="og:description" content="分析通过 Binder 进行数据调用时出现的 ANR">
+<meta property="og:updated_time" content="2020-10-19T07:41:02.418Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="孤舟蓑笠翁，独钓寒江雪">
-<meta name="twitter:description" content="title: Android 性能优化实战篇 – ANR 问题分析2categories: Android性能优化comments: truetags: [ANR]description: 分析通过 Binder 进行数据调用时出现的 ANR
-date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 Binder 进行数据调用时出现的 anr，涉及到了多个进程">
+<meta name="twitter:title" content="Android 性能优化实战篇 -- ANR 问题分析2">
+<meta name="twitter:description" content="分析通过 Binder 进行数据调用时出现的 ANR">
 
 
 
@@ -126,13 +123,13 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/10/19/android-performance-optimization-anr-2/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/16/android-performance-optimization-anr-2/"/>
 
 
 
 
 
-  <title>  | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android 性能优化实战篇 -- ANR 问题分析2 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -281,7 +278,7 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/19/android-performance-optimization-anr-2/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/android-performance-optimization-anr-2/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="寒江蓑笠">
@@ -305,7 +302,7 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
             
             
               
-                
+                Android 性能优化实战篇 -- ANR 问题分析2
               
             
           </h1>
@@ -320,8 +317,8 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-19T15:33:58+08:00">
-                2020-10-19
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-16T10:00:00+08:00">
+                2018-01-16
               </time>
             
 
@@ -331,6 +328,28 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
+                    <span itemprop="name">Android性能优化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -339,7 +358,7 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2020/10/19/android-performance-optimization-anr-2/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2018/01/16/android-performance-optimization-anr-2/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -350,7 +369,7 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
 
           
           
-             <span id="/2020/10/19/android-performance-optimization-anr-2/" class="leancloud_visitors" data-flag-title="">
+             <span id="/2018/01/16/android-performance-optimization-anr-2/" class="leancloud_visitors" data-flag-title="Android 性能优化实战篇 -- ANR 问题分析2">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -365,6 +384,10 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
           
 
           
+              <div class="post-description">
+                  分析通过 Binder 进行数据调用时出现的 ANR
+              </div>
+          
 
         </div>
       </header>
@@ -377,9 +400,7 @@ date: 2018-01-16 10:00:00概述本次分析 ANR 的问题原因是由于通过 B
       
 
       
-        <hr>
-<p>title: Android 性能优化实战篇 – ANR 问题分析2<br>categories: Android性能优化<br>comments: true<br>tags: [ANR]<br>description: 分析通过 Binder 进行数据调用时出现的 ANR</p>
-<h2 id="date-2018-01-16-10-00-00"><a href="#date-2018-01-16-10-00-00" class="headerlink" title="date: 2018-01-16 10:00:00"></a>date: 2018-01-16 10:00:00</h2><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本次分析 ANR 的问题原因是由于通过 Binder 进行数据调用时出现的 anr，涉及到了多个进程。<br>现象是进入应用后出现了一段事件的白屏，后面就尝试唤出多任务界面，结果就提示系统界面无响应。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本次分析 ANR 的问题原因是由于通过 Binder 进行数据调用时出现的 anr，涉及到了多个进程。<br>现象是进入应用后出现了一段事件的白屏，后面就尝试唤出多任务界面，结果就提示系统界面无响应。</p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>先来看一下系统界面的主线程的 trace 日志信息：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&quot;main&quot; prio=5 tid=1 Native</div><div class="line">  | group=&quot;main&quot; sCount=1 dsCount=0 flags=1 obj=0x741842b0 self=0xede4d000</div><div class="line">  | sysTid=2443 nice=-10 cgrp=default sched=0/0 handle=0xf1e14494</div><div class="line">  | state=S schedstat=( 10051801161 3897847955 16280 ) utm=783 stm=222 core=5 HZ=100</div><div class="line">  | stack=0xff543000-0xff545000 stackSize=8MB</div><div class="line">  | held mutexes=</div><div class="line">  kernel: (couldn&apos;t read /proc/self/task/2443/stack)</div><div class="line">  native: #00 pc 0006146c  /system/lib/libc.so (__ioctl+8)</div><div class="line">  native: #01 pc 00022e63  /system/lib/libc.so (ioctl+30)</div><div class="line">  native: #02 pc 000405b9  /system/lib/libbinder.so (android::IPCThreadState::talkWithDriver(bool)+204)</div><div class="line">  native: #03 pc 00040fc1  /system/lib/libbinder.so (android::IPCThreadState::waitForResponse(android::Parcel*, int*)+28)</div><div class="line">  native: #04 pc 000387fd  /system/lib/libbinder.so (android::BpBinder::transact(unsigned int, android::Parcel const&amp;, android::Parcel*, unsigned int)+36)</div><div class="line">  native: #05 pc 000cabcf  /system/lib/libandroid_runtime.so (android_os_BinderProxy_transact(_JNIEnv*, _jobject*, int, _jobject*, _jobject*, int)+82)</div><div class="line">  at android.os.BinderProxy.transactNative(Native method)</div><div class="line">  at android.os.BinderProxy.transact(Binder.java:1146)</div><div class="line">  at com.*.*.launcher.IExternalService$Stub$Proxy.setExternalCallback(IExternalService.java:230)</div><div class="line">  at com.*.systemui.fullscreen.misc.LauncherHelper.setExternalCallback(LauncherHelper.java:75)</div><div class="line">  at com.*.systemui.fullscreen.SystemUIGestureTouchHanlder.setCallback(SystemUIGestureTouchHanlder.java:160)</div><div class="line">  at com.*.systemui.recents.FlymeRecentsImpl.dismissStage(FlymeRecentsImpl.java:1148)</div><div class="line">  at com.*.systemui.recents.FlymeRecentsImpl$7.onDissmis(FlymeRecentsImpl.java:1052)</div><div class="line">  at com.*.systemui.recents.RecentsWindow.dismissStage(RecentsWindow.java:216)</div><div class="line">  at com.*.systemui.recents.RecentsWindow.onStop(RecentsWindow.java:354)</div><div class="line">  at com.*.systemui.recents.RecentsWindow$19$1.run(RecentsWindow.java:1018)</div><div class="line">  at android.os.Handler.handleCallback(Handler.java:873)</div><div class="line">  at android.os.Handler.dispatchMessage(Handler.java:99)</div><div class="line">  at android.os.Looper.loop(Looper.java:193)</div><div class="line">  at android.app.ActivityThread.main(ActivityThread.java:6921)</div><div class="line">  at java.lang.reflect.Method.invoke(Native method)</div><div class="line">  at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)</div><div class="line">  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:937)</div></pre></td></tr></table></figure>
 <p>可以看到是是多任务在进行 binder 调用时出现了 anr。<br>从调用栈来看，IExternalService 的服务端是 launcher ，我们需要分析 launcher 卡主的原因。<br>从抓取的日志文件中，也发现了 launcher 进行的 trace 日志信息。<br>发现 launcher 的几个 Binder 的 16 个线程都处于 Blocked 状态，在等待 15 号线程释放锁：</p>
@@ -30464,13 +30485,19 @@ DALVIK THREADS (49):
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/ANR/" rel="tag"># ANR</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/10/19/android-performance-optimization-anr-1/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2018/01/10/android-performance-optimization-anr-1/" rel="next" title="Android 性能优化实战篇 -- ANR 问题分析1">
+                <i class="fa fa-chevron-left"></i> Android 性能优化实战篇 -- ANR 问题分析1
               </a>
             
           </div>
@@ -30478,6 +30505,10 @@ DALVIK THREADS (49):
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/02/open-source-weex-android-introduction/" rel="prev" title="Weex 源码研究 -- 序言">
+                Weex 源码研究 -- 序言 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -30567,7 +30598,7 @@ DALVIK THREADS (49):
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">116</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -30629,7 +30660,7 @@ DALVIK THREADS (49):
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#date-2018-01-16-10-00-00"><span class="nav-number">1.</span> <span class="nav-text">date: 2018-01-16 10:00:00</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">3.</span> <span class="nav-text">分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li></ol></div>
             
 
           </div>

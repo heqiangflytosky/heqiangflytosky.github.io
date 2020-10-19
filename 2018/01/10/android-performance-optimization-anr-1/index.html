@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="ANR," />
 
 
 
@@ -86,22 +86,16 @@
 
 
 
-<meta name="description" content="title: Android 性能优化实战篇 – ANR 问题分析1categories: Android性能优化comments: truetags: [ANR]description: 分析内存过低一起的 ANR
-date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用内存过低，主线程等待 GC 线程完成而导致的 ANR。
-分析从 /data/anr/ 目">
+<meta name="description" content="分析内存过低一起的 ANR">
 <meta property="og:type" content="article">
-<meta property="og:title" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:url" content="http://yoursite.com/2020/10/19/android-performance-optimization-anr-1/index.html">
+<meta property="og:title" content="Android 性能优化实战篇 -- ANR 问题分析1">
+<meta property="og:url" content="http://yoursite.com/2018/01/10/android-performance-optimization-anr-1/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
-<meta property="og:description" content="title: Android 性能优化实战篇 – ANR 问题分析1categories: Android性能优化comments: truetags: [ANR]description: 分析内存过低一起的 ANR
-date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用内存过低，主线程等待 GC 线程完成而导致的 ANR。
-分析从 /data/anr/ 目">
-<meta property="og:updated_time" content="2020-10-19T07:35:10.042Z">
+<meta property="og:description" content="分析内存过低一起的 ANR">
+<meta property="og:updated_time" content="2020-10-19T07:40:43.467Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="孤舟蓑笠翁，独钓寒江雪">
-<meta name="twitter:description" content="title: Android 性能优化实战篇 – ANR 问题分析1categories: Android性能优化comments: truetags: [ANR]description: 分析内存过低一起的 ANR
-date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用内存过低，主线程等待 GC 线程完成而导致的 ANR。
-分析从 /data/anr/ 目">
+<meta name="twitter:title" content="Android 性能优化实战篇 -- ANR 问题分析1">
+<meta name="twitter:description" content="分析内存过低一起的 ANR">
 
 
 
@@ -129,13 +123,13 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/10/19/android-performance-optimization-anr-1/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/10/android-performance-optimization-anr-1/"/>
 
 
 
 
 
-  <title>  | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android 性能优化实战篇 -- ANR 问题分析1 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -284,7 +278,7 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/19/android-performance-optimization-anr-1/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/10/android-performance-optimization-anr-1/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="寒江蓑笠">
@@ -308,7 +302,7 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
             
             
               
-                
+                Android 性能优化实战篇 -- ANR 问题分析1
               
             
           </h1>
@@ -323,8 +317,8 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-19T15:33:41+08:00">
-                2020-10-19
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-10T10:00:00+08:00">
+                2018-01-10
               </time>
             
 
@@ -334,6 +328,28 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
+                    <span itemprop="name">Android性能优化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -342,7 +358,7 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a class="cloud-tie-join-count" href="/2020/10/19/android-performance-optimization-anr-1/#comments" itemprop="discussionUrl">
+                <a class="cloud-tie-join-count" href="/2018/01/10/android-performance-optimization-anr-1/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count join-count" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -353,7 +369,7 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
 
           
           
-             <span id="/2020/10/19/android-performance-optimization-anr-1/" class="leancloud_visitors" data-flag-title="">
+             <span id="/2018/01/10/android-performance-optimization-anr-1/" class="leancloud_visitors" data-flag-title="Android 性能优化实战篇 -- ANR 问题分析1">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -368,6 +384,10 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
           
 
           
+              <div class="post-description">
+                  分析内存过低一起的 ANR
+              </div>
+          
 
         </div>
       </header>
@@ -380,9 +400,7 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
       
 
       
-        <hr>
-<p>title: Android 性能优化实战篇 – ANR 问题分析1<br>categories: Android性能优化<br>comments: true<br>tags: [ANR]<br>description: 分析内存过低一起的 ANR</p>
-<h2 id="date-2018-01-10-10-00-00"><a href="#date-2018-01-10-10-00-00" class="headerlink" title="date: 2018-01-10 10:00:00"></a>date: 2018-01-10 10:00:00</h2><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本次分析 ANR 的问题原因是由于应用内存过低，主线程等待 GC 线程完成而导致的 ANR。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本次分析 ANR 的问题原因是由于应用内存过低，主线程等待 GC 线程完成而导致的 ANR。</p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>从 /data/anr/ 目录下面拉取到 trace 文件，首先看看 main 线程的情况：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">&quot;main&quot; prio=5 tid=1 WaitingForGcToComplete</div><div class="line">  | group=&quot;main&quot; sCount=1 dsCount=0 flags=1 obj=0x73c16330 self=0xf0d48000</div><div class="line">  | sysTid=23755 nice=-10 cgrp=default sched=0/0 handle=0xf4ead494</div><div class="line">  | state=S schedstat=( 66207538885 3504506943 19134 ) utm=6386 stm=234 core=3 HZ=100</div><div class="line">  | stack=0xff710000-0xff712000 stackSize=8MB</div><div class="line">  | held mutexes=</div><div class="line">  kernel: (couldn&apos;t read /proc/self/task/23755/stack)</div><div class="line">  native: #00 pc 00019eb0  /system/lib/libc.so (syscall+28)</div><div class="line">  native: #01 pc 000a6ba3  /system/lib/libart.so (art::ConditionVariable::WaitHoldingLocks(art::Thread*)+78)</div><div class="line">  native: #02 pc 0017ba95  /system/lib/libart.so (art::gc::Heap::WaitForGcToCompleteLocked(art::gc::GcCause, art::Thread*)+244)</div><div class="line">  native: #03 pc 00184b53  /system/lib/libart.so (art::gc::Heap::WaitForGcToComplete(art::gc::GcCause, art::Thread*)+186)</div><div class="line">  native: #04 pc 0018272f  /system/lib/libart.so (art::gc::Heap::AllocateInternalWithGc(art::Thread*, art::gc::AllocatorType, bool, unsigned int, unsigned int*, unsigned int*, unsigned int*, art::ObjPtr&lt;art::mirror::Class&gt;*)+74)</div><div class="line">  native: #05 pc 003ccb8b  /system/lib/libart.so (artAllocObjectFromCodeInitializedRegionTLAB+246)</div><div class="line">  native: #06 pc 00412d47  /system/lib/libart.so (art_quick_alloc_object_initialized_region_tlab+70)</div><div class="line">  native: #07 pc 0008c6f5  [anon:dalvik-jit-code-cache] (Java_org_hapjs_component_view_b_a_a__Ljava_lang_String_2Landroid_view_MotionEvent_2Z+196)</div><div class="line">  at org.hapjs.component.view.b.a.a(SourceFile:375)</div><div class="line">  at org.hapjs.component.view.b.a.a(SourceFile:359)</div><div class="line">  at org.hapjs.component.view.b.a.a(SourceFile:335)</div><div class="line">  at org.hapjs.component.view.a.a.onTouchEvent(SourceFile:164)</div><div class="line">  at android.view.View.dispatchTouchEvent(View.java:12560)</div><div class="line">  at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3024)</div><div class="line">  at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2705)</div><div class="line">  ......</div></pre></td></tr></table></figure>
 <p>主线程正在 WaitingForGcToComplete，等待 GC 结束。<br>看一下内存使用情况：</p>
@@ -416,13 +434,19 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/ANR/" rel="tag"># ANR</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/05/06/opengl-es-image-effect/" rel="next" title="OpenGL ES -- 图像处理">
-                <i class="fa fa-chevron-left"></i> OpenGL ES -- 图像处理
+              <a href="/2018/01/02/python-practice-web-crawler-iqiyi/" rel="next" title="Python实战 -- 网络爬虫之解析爱奇艺视频">
+                <i class="fa fa-chevron-left"></i> Python实战 -- 网络爬虫之解析爱奇艺视频
               </a>
             
           </div>
@@ -431,8 +455,8 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/10/19/android-performance-optimization-anr-2/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/16/android-performance-optimization-anr-2/" rel="prev" title="Android 性能优化实战篇 -- ANR 问题分析2">
+                Android 性能优化实战篇 -- ANR 问题分析2 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -523,7 +547,7 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">116</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -585,7 +609,7 @@ date: 2018-01-10 10:00:00概述本次分析 ANR 的问题原因是由于应用�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#date-2018-01-10-10-00-00"><span class="nav-number">1.</span> <span class="nav-text">date: 2018-01-10 10:00:00</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">3.</span> <span class="nav-text">分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li></ol></div>
             
 
           </div>
