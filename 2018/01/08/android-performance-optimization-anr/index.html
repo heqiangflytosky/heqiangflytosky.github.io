@@ -1,0 +1,1010 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ANR," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍一些关于处理 ANR 问题的理论知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 性能优化理论篇 -- ANR">
+<meta property="og:url" content="http://yoursite.com/2018/01/08/android-performance-optimization-anr/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍一些关于处理 ANR 问题的理论知识">
+<meta property="og:updated_time" content="2020-10-20T01:38:24.331Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 性能优化理论篇 -- ANR">
+<meta name="twitter:description" content="介绍一些关于处理 ANR 问题的理论知识">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/08/android-performance-optimization-anr/"/>
+
+
+
+
+
+  <title> Android 性能优化理论篇 -- ANR | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/08/android-performance-optimization-anr/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 性能优化理论篇 -- ANR
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-08T10:00:00+08:00">
+                2018-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
+                    <span itemprop="name">Android性能优化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2018/01/08/android-performance-optimization-anr/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/01/08/android-performance-optimization-anr/" class="leancloud_visitors" data-flag-title="Android 性能优化理论篇 -- ANR">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍一些关于处理 ANR 问题的理论知识
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>无论我们是在 Android 设备的使用过程中还是 Android 开发过程中，基本都遇到过这样的情况，系统卡死，弹框提示应用无响应。也就是我们常说的 ANR – Application Not Responding。</p>
+<h2 id="理论知识"><a href="#理论知识" class="headerlink" title="理论知识"></a>理论知识</h2><p>ANR 是 Android 系统设计的一种机制，我们常见的有下面三种 ANR：</p>
+<ul>
+<li>KeyDispatchTimeout：按键或触摸事件在特定时间内无响应 </li>
+<li>BroadcastTimeout：BroadcastReceiver 在特定时间内无法处理完成</li>
+<li>ServiceTimeout：Service 在特定的时间内无法处理完成 </li>
+<li>ContentProvider：ContentProvider 执行超时，这种比较少见</li>
+</ul>
+<p>系统认定产生 ANR 的超时时间设置如下：</p>
+<p>ActiveServices.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// How long we wait for a service to finish executing.</div><div class="line">// Service 超时时间</div><div class="line">static final int SERVICE_TIMEOUT = 20*1000;</div><div class="line"></div><div class="line">// How long we wait for a service to finish executing.</div><div class="line">// 后台 Service 超时时间</div><div class="line">static final int SERVICE_BACKGROUND_TIMEOUT = SERVICE_TIMEOUT * 10;</div></pre></td></tr></table></figure>
+<p>ActivityManagerService.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// How long we allow a receiver to run before giving up on it.</div><div class="line">static final int BROADCAST_FG_TIMEOUT = 10*1000;</div><div class="line">static final int BROADCAST_BG_TIMEOUT = 60*1000;</div><div class="line"></div><div class="line">// How long we wait until we timeout on key dispatching.</div><div class="line">static final int KEY_DISPATCHING_TIMEOUT = 5*1000;</div></pre></td></tr></table></figure>
+<p>而产生 ANR 的原因一般有：</p>
+<ul>
+<li>主线程耗时操作</li>
+<li>主线程被其它线程 Block</li>
+<li>被 Binder 对端 Block</li>
+<li>Binder 被占满导致主线程无法和 SystemServer 通信</li>
+<li>得不到系统资源（CPU/RAM/IO）</li>
+</ul>
+<p>从进程的角度看：</p>
+<ul>
+<li>问题出在当前进程：<ul>
+<li>主线程本身耗时, 或则主线程的消息队列存在耗时操作;</li>
+<li>主线程被本进程的其他子线程所blocked;</li>
+</ul>
+</li>
+<li>问题出在远端进程(一般是binder call或socket等通信方式)</li>
+</ul>
+<p>上面的每种场景我们尽量都在后面的性能优化实战系列中挑选有代表性的来介绍。</p>
+<h2 id="日志获取"><a href="#日志获取" class="headerlink" title="日志获取"></a>日志获取</h2><p>ANR 问题发生了，我们首先要获取日志，才能接下来进一步分析。</p>
+<ul>
+<li>使用 Log Report App 抓取。</li>
+<li>使用 adb bugreprot <file></file></li>
+<li>使用 adb pull /data/anr/traces.txt <file></file></li>
+</ul>
+<h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><p>下面分析看一下各种日志对我们分析 ANR 的作用。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Log 名称</th>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">关键词</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">trace.txt</td>
+<td style="text-align:center">记录了在发生ANR时刻系统各个线程的执行状态</td>
+<td style="text-align:center">搜索发生 anr 的进程名称</td>
+</tr>
+<tr>
+<td style="text-align:center">system.log</td>
+<td style="text-align:center">包含ANR发生时间点信息、ANR发生前的CPU信息,还包含大量系统服务输出的信息</td>
+<td style="text-align:center">“ANR in”</td>
+</tr>
+<tr>
+<td style="text-align:center">main.log</td>
+<td style="text-align:center">包含ANR发生前应用自身输出的信息,可供分析应用是否有异常;此外还包含输出的GC信息，可供分析内存回收的速度,判断系统是否处于低内存或内存碎片化状态</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">event.log</td>
+<td style="text-align:center">包含AMS与WMS输出的应用程序声明周期信息,可供分析窗口创建速度以及焦点转换情况</td>
+<td style="text-align:center">“am_anr”</td>
+</tr>
+<tr>
+<td style="text-align:center">kernel.log</td>
+<td style="text-align:center">包含kernel打出的信息,LowMemoryKiller杀进程、内存碎片化或内存不足,mmc驱动异常都可以在这里找到。</td>
+</tr>
+</tbody>
+</table>
+<p>拿到日志后，我们首先要确定 ANR 发生的时间点，可以通过 trace.txt 里面搜索进程的名字来查看，或者通过在 是system log里搜索 Anr in 来搜索，或者通过在 event log 里面搜索 am_anr 关键字来确定发生的时间。</p>
+<h2 id="system-分析"><a href="#system-分析" class="headerlink" title="system 分析"></a>system 分析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">15:57:26.938  1380  1420 E ActivityManager: ANR in com.android.systemui:recents</div><div class="line">E ActivityManager: PID: 2443</div><div class="line">E ActivityManager: Reason: Broadcast of Intent &#123; act=android.intent.action.SCREEN_OFF flg=0x50200010 &#125;</div><div class="line">E ActivityManager: Load: 5.01 / 6.61 / 5.59</div><div class="line">E ActivityManager: CPU usage from 0ms to 6626ms later (2018-01-23 15:57:20.275 to 2018-01-23 15:57:26.900):</div><div class="line">E ActivityManager:   49% 685/surfaceflinger: 33% user + 15% kernel / faults: 1437 minor 2 major</div><div class="line">E ActivityManager:   41% 830/media.codec: 19% user + 21% kernel / faults: 7619 minor 5 major</div><div class="line">E ActivityManager:   26% 820/mediaserver: 16% user + 10% kernel / faults: 514 minor</div><div class="line">E ActivityManager:   24% 7710/com.flyme.systemuiex: 20% user + 3.7% kernel / faults: 1775 minor</div><div class="line">E ActivityManager:   23% 1380/system_server: 11% user + 11% kernel / faults: 3762 minor 4 major</div><div class="line">E ActivityManager:   22% 682/audioserver: 3.7% user + 19% kernel / faults: 583 minor 2 major</div><div class="line">E ActivityManager:   13% 512/logd: 5.5% user + 7.8% kernel</div><div class="line">E ActivityManager:   12% 5114/com.tencent.weread: 8.7% user + 3.7% kernel / faults: 2587 minor 5 major</div><div class="line">E ActivityManager:   11% 643/android.hardware.graphics.composer@2.2-service: 6.4% user + 4.6% kernel / faults: 490 minor 6 major</div><div class="line">E ActivityManager:   8.9% 2044/com.android.systemui: 6.6% user + 2.2% kernel / faults: 2476 minor 2 major</div><div class="line">E ActivityManager:   5.8% 437/crtc_commit:110: 0% user + 5.8% kernel</div><div class="line">E ActivityManager:   5.4% 246/kgsl_worker_thr: 0% user + 5.4% kernel</div><div class="line">E ActivityManager:   4% 2207/com.android.phone: 2.7% user + 1.3% kernel / faults: 1896 minor 8 major</div><div class="line">E ActivityManager:   3.6% 8497/wtlogcat: 2.2% user + 1.3% kernel</div><div class="line">E ActivityManager:   3.4% 8676/main-log: 1.9% user + 1.5% kernel</div><div class="line">E ActivityManager:   3.1% 3016/com.sohu.inputmethod.sogou.meizu: 2.7% user + 0.4% kernel / faults: 2317 minor</div><div class="line">E ActivityManager:   3% 2809/com.meizu.alphame: 1.6% user + 1.3% kernel / faults: 1164 minor 7 major</div><div class="line">E ActivityManager:   2.8% 2025/com.meizu.facerecognition: 1.3% user + 1.5% kernel / faults: 874 minor 7 major</div><div class="line">E ActivityManager:   2.7% 480/kworker/u16:10: 0% user + 2.7% kernel</div><div class="line">E ActivityManager:   2.7% 2443/com.android.systemui:recents: 2.4% user + 0.3% kernel / faults: 2163 minor 10 major</div><div class="line">E ActivityManager:   2.5% 2645/kworker/u16:7: 0% user + 2.5% kernel</div><div class="line">E ActivityManager:   0.7% 18304/kworker/u16:11: 0% user + 0.7% kernel</div><div class="line">E ActivityManager:   1.9% 1//init: 1% user + 0.9% kernel / faults: 11 minor 1 major</div><div class="line">E ActivityManager:   0.1% 2790/com.android.incallui: 0% user + 0% kernel / faults: 1606 minor</div><div class="line">E ActivityManager:   0.6% 20057/kworker/u16:13: 0% user + 0.6% kernel</div><div class="line">E ActivityManager:   1.8% 649/android.hardware.sensors@1.0-service: 0.9% user + 0.9% kernel / faults: 228 minor 3 major</div><div class="line">E ActivityManager:   1.6% 25046/kworker/u16:9: 0% user + 1.6% kernel</div><div class="line">E ActivityManager:   0% 2863/com.qualcomm.qti.services.secureui:sui_service: 0% user + 0% kernel / faults: 810 minor 2 major</div><div class="line">E ActivityManager:   1.2% 2160/.dataservices: 0.7% user + 0.4% kernel / faults: 796 minor</div><div class="line">E ActivityManager:   0% 2193/com.qualcomm.qti.telephonyservice: 0% user + 0% kernel / faults: 719 minor</div><div class="line">E ActivityManager:   0.3% 2828/com.meizu.dataservice: 0.3% user + 0% kernel / faults: 797 minor</div><div class="line">E ActivityManager:   1.2% 6850/com.tencent.qqlive.player.meizu: 1% user + 0.1% kernel / faults: 2 minor</div><div class="line">E ActivityManager:   0.3% 815/media.extractor: 0.1% user + 0.1% kernel / faults: 1387 minor 2 major</div><div class="line">E ActivityManager:   0.3% 2803/com.android.se: 0.2% user + 0% kernel / faults: 719 minor</div><div class="line">E ActivityManager:   1% 20602/kworker/u16:3: 0% user + 1% kernel</div><div class="line">E ActivityManager:   0.9% 328/mmc-cmdqd/0: 0% user + 0.9% kernel</div><div class="line">E ActivityManager:   0.9% 2000/kworker/u16:2: 0% user + 0.9% kernel</div><div class="line">E ActivityManager:   0.7% 289/irq/136-hxcommo: 0% user + 0.7% kernel</div><div class="line">E ActivityManager:   0.7% 438/crtc_event:110: 0% user + 0.7% kernel</div><div class="line">E ActivityManager:   0% 2845/com.wingtech.logcat: 0% user + 0% kernel / faults: 712 minor</div><div class="line">E ActivityManager:   0.7% 5834/com.flyme.systemuitools: 0.4% user + 0.3% kernel / faults: 1 minor</div><div class="line">E ActivityManager:   0.7% 8070/com.android.mms: 0.3% user + 0.4% kernel / faults: 850 minor 71 major</div><div class="line">E ActivityManager:   0.6% 2766/irq/66-90b6300.: 0% user + 0.6% kernel</div><div class="line">E ActivityManager:   0.4% 9/rcu_preempt: 0% user + 0.4% kernel</div><div class="line">E ActivityManager:   0.4% 632/android.hardware.audio@2.0-service: 0% user + 0.4% kernel / faults: 85 minor 8 major</div><div class="line">E ActivityManager:   0.4% 661/vendor.qti.hardware.perf@1.0-service: 0.1% user + 0.3% kernel / faults: 18 minor</div><div class="line">E ActivityManager:   0.4% 869/tombstoned: 0% user + 0.4% kernel / faults: 1 minor</div><div class="line">E ActivityManager:   0.4% 8325/com.ct.client: 0.3% user + 0.1% kernel</div><div class="line">E ActivityManager:   0% 10/rcu_sched: 0% user + 0% kernel</div><div class="line">E ActivityManager:   0.3% 12/rcuop/0: 0% user + 0.3% kernel</div><div class="line">E ActivityManager:   0.3% 50/migration/5: 0% user + 0.3% kernel</div><div class="line">E ActivityManager:   0% 865/dpmd: 0% user + 0% kernel / faults: 168 minor</div><div class="line">E ActivityManager:   0.3% 8369/com.ct.client:pushcore: 0% user + 0.3% kernel</div><div class="line">E ActivityManager:   0.1% 19/ksoftirqd/1: 0% user + 0.1% kernel</div><div class="line">E ActivityManager:   0% 23/rcuos/1: 0% user + 0% kernel</div><div class="line">E ActivityManager:   0.1% 30/rcuop/2: 0% user + 0.1% kernel</div><div class="line">E ActivityManager:   0% 35/ksoftirqd/3: 0% user + 0% kernel</div><div class="line">E ActivityManager:   0.1% 38/rcuop/3: 0% user + 0.1% kernel</div><div class="line">E ActivityManager:   0% 39/rcuos/3: 0% user + 0%</div><div class="line">I ActivityManager: addErrorToDropBox com.android.systemui:recents anr</div></pre></td></tr></table></figure>
+<p><code>ActivityManager: Load: 5.01 / 6.61 / 5.59</code> 这一行表示当时的 CPU 负载，另外我们还可以通过 <code>adb shell uptime</code> 命令来来获取设备的 CPU 负载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">20:08:58 up  5:52,  0 users,  load average: 1.27, 0.77, 0.76</div></pre></td></tr></table></figure>
+<p>Load后面的三个数字的意思分别是1分钟、5分钟、15分钟内系统的平均负荷。当CPU完全空闲的时候，平均负荷为0；当CPU工作量饱和的时候，平均负荷为1，通过Load可以判断系统负荷是否过重。<br>经验法则是这样的：<br>当系统负荷持续大于0.7，你必须开始调查了，问题出在哪里，防止情况恶化。<br>当系统负荷持续大于1.0，你必须动手寻找解决办法，把这个值降下来。<br>当系统负荷达到5.0，就表明你的系统有很严重的问题。</p>
+<p>更准确的CPU使用信息我们还可以通过 Log Report 目录中 dumpsys/dumpsys_cpuinfo 来查看。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">  49% 685/surfaceflinger: 33% user + 15% kernel / faults: 1437 minor 2 major</div><div class="line">  41% 830/media.codec: 19% user + 21% kernel / faults: 7619 minor 5 major</div><div class="line">  26% 820/mediaserver: 16% user + 10% kernel / faults: 514 minor</div><div class="line">  ......</div><div class="line">44% TOTAL: 21% user + 21% kernel + 0.3% iowait + 1.7% irq + 0.4% softirq</div></pre></td></tr></table></figure>
+<p>上面这一段日志可以得到ANR发生的时候，Top进程的Cpu占用情况，user代表是用户空间，kernel是内核空间。对于 CPU 的占用率，在多核中每个核最大占用率都是100%，如果机器是8核的，那么每个进程的CPU最大占用率就是800%，这也就是为什么我们会经常看到某些进程 CPU 占用率会大于100%，其实百分之一百多的CPU占用率不算很高的。<br>分析这一部分，一般的有如下的规律。</p>
+<ul>
+<li>kswapd0 cpu占用率偏高，系统整体运行会缓慢，从而引起各种ANR。把问题转给”内存优化”，请他们进行优化。</li>
+<li>logd　CPU占用率偏高，也会引起系统卡顿和ANR，因为各个进程输出LOG的操作被阻塞从而执行的极为缓慢。</li>
+<li>Vold占用CPU过高，会引起系统卡顿和ANR，请负责存储的同学先调查</li>
+<li>qcom.sensor CPU占用率过高，会引起卡顿，请系统同学调查</li>
+<li>应用自身CPU占用率较高，高概率应用自身问题</li>
+<li>系统CPU占用率不高，但主线程在等待一个锁，高概率应用自身问题</li>
+<li>应用处于D状态，发生ANR，如果最后的操作是refriger，那么是应用被冻结了，正常情况下是功耗优化引起的</li>
+</ul>
+<h2 id="trace-分析"><a href="#trace-分析" class="headerlink" title="trace 分析"></a>trace 分析</h2><p>要查看应用被阻塞的位置，还是需要分析 trace 文件。<br>下面通过一个人为制造的 ANR 事件来讲解一下 traces 的分析技巧。<br>traces 文件在 /data/anr/traces.txt 可以找到，一般 ANR 发生时，在弹出无响应对话框之前，AMS 会把 ANR 相关的信息保存在这个文件中，因此，这个文件是分析 ANR 的利器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div></pre></td><td class="code"><pre><div class="line">Cmd line: com.example.heqiang.testsomething</div><div class="line">Build fingerprint: &apos;alps/m1891/m1891:7.0/NRD90M/eng.heqian.20180417.201920:userdebug/test-keys&apos;</div><div class="line">ABI: &apos;arm64&apos;</div><div class="line">Build type: optimized</div><div class="line">Zygote loaded classes=4383 post zygote classes=162</div><div class="line">Intern table: 44871 strong; 182 weak</div><div class="line">JNI: CheckJNI is on; globals=506 (plus 226 weak)</div><div class="line">Libraries: /data/app/com.example.heqiang.testsomething-1/lib/arm64/libJniDemo.so /system/lib64/libandroid.so /system/lib64/libcompiler_rt.so /system/lib64/libfilterUtils.so /system/lib64/libjavacrypto.so /system/lib64/libjnigraphics.so /system/lib64/libmedia_jni.so /system/lib64/libwebviewchromium_loader.so libjavacore.so libopenjdk.so (10)</div><div class="line">Heap: 18% free, 11MB/13MB; 33582 objects</div><div class="line">Dumping cumulative Gc timings</div><div class="line">Start Dumping histograms for 1 iterations for sticky concurrent mark sweep</div><div class="line">ScanGrayImageSpaceObjects:	Sum: 1.959ms 99% C.I. 0.264us-1375us Avg: 54.416us Max: 1557us</div><div class="line">MarkConcurrentRoots:	Sum: 1.573ms 99% C.I. 3us-1570us Avg: 786.500us Max: 1570us</div><div class="line">FreeList:	Sum: 1.281ms 99% C.I. 4us-147.750us Avg: 71.166us Max: 149us</div><div class="line">ProcessMarkStack:	Sum: 1.076ms 99% C.I. 4us-933us Avg: 269us Max: 943us</div><div class="line">SweepArray:	Sum: 528us 99% C.I. 528us-528us Avg: 528us Max: 528us</div><div class="line">ScanGrayAllocSpaceObjects:	Sum: 451us 99% C.I. 1us-271us Avg: 112.750us Max: 271us</div><div class="line">MarkRootsCheckpoint:	Sum: 444us 99% C.I. 203us-241us Avg: 222us Max: 241us</div><div class="line">ScanGrayZygoteSpaceObjects:	Sum: 388us 99% C.I. 9us-379us Avg: 194us Max: 379us</div><div class="line">SweepSystemWeaks:	Sum: 271us 99% C.I. 271us-271us Avg: 271us Max: 271us</div><div class="line">MarkingPhase:	Sum: 126us 99% C.I. 126us-126us Avg: 126us Max: 126us</div><div class="line">ReMarkRoots:	Sum: 95us 99% C.I. 95us-95us Avg: 95us Max: 95us</div><div class="line">AllocSpaceClearCards:	Sum: 79us 99% C.I. 2us-38us Avg: 19.750us Max: 38us</div><div class="line">ImageModUnionClearCards:	Sum: 63us 99% C.I. 0.250us-21us Avg: 1.750us Max: 21us</div><div class="line">MarkNonThreadRoots:	Sum: 62us 99% C.I. 22us-40us Avg: 31us Max: 40us</div><div class="line">BindBitmaps:	Sum: 55us 99% C.I. 55us-55us Avg: 55us Max: 55us</div><div class="line">ProcessCards:	Sum: 27us 99% C.I. 13us-14us Avg: 13.500us Max: 14us</div><div class="line">ZygoteModUnionClearCards:	Sum: 26us 99% C.I. 8us-18us Avg: 13us Max: 18us</div><div class="line">ResetStack:	Sum: 24us 99% C.I. 24us-24us Avg: 24us Max: 24us</div><div class="line">FinishPhase:	Sum: 23us 99% C.I. 23us-23us Avg: 23us Max: 23us</div><div class="line">EnqueueFinalizerReferences:	Sum: 22us 99% C.I. 22us-22us Avg: 22us Max: 22us</div><div class="line">InitializePhase:	Sum: 18us 99% C.I. 18us-18us Avg: 18us Max: 18us</div><div class="line">(Paused)PausePhase:	Sum: 17us 99% C.I. 17us-17us Avg: 17us Max: 17us</div><div class="line">PreCleanCards:	Sum: 15us 99% C.I. 15us-15us Avg: 15us Max: 15us</div><div class="line">ForwardSoftReferences:	Sum: 13us 99% C.I. 13us-13us Avg: 13us Max: 13us</div><div class="line">(Paused)ScanGrayImageSpaceObjects:	Sum: 9us 99% C.I. 250ns-5000ns Avg: 500ns Max: 5000ns</div><div class="line">ReclaimPhase:	Sum: 7us 99% C.I. 7us-7us Avg: 7us Max: 7us</div><div class="line">RevokeAllThreadLocalAllocationStacks:	Sum: 6us 99% C.I. 6us-6us Avg: 6us Max: 6us</div><div class="line">MarkRoots:	Sum: 2us 99% C.I. 2us-2us Avg: 2us Max: 2us</div><div class="line">(Paused)ProcessMarkStack:	Sum: 1us 99% C.I. 1us-1us Avg: 1us Max: 1us</div><div class="line">FindDefaultSpaceBitmap:	Sum: 0 99% C.I. 0ns-0ns Avg: 0ns Max: 0ns</div><div class="line">Done Dumping histograms</div><div class="line">sticky concurrent mark sweep paused:	Sum: 183us 99% C.I. 183us-183us Avg: 183us Max: 183us</div><div class="line">sticky concurrent mark sweep total time: 8.697ms mean time: 8.697ms</div><div class="line">sticky concurrent mark sweep freed: 16488 objects with total size 1933KB</div><div class="line">sticky concurrent mark sweep throughput: 2.061e+06/s / 236MB/s</div><div class="line">Total time spent in GC: 8.697ms</div><div class="line">Mean GC size throughput: 109MB/s</div><div class="line">Mean GC object throughput: 1.89456e+06 objects/s</div><div class="line">Total number of allocations 50059</div><div class="line">Total bytes allocated 12MB</div><div class="line">Total bytes freed 977KB</div><div class="line">Free memory 2MB</div><div class="line">Free memory until GC 2MB</div><div class="line">Free memory until OOME 244MB</div><div class="line">Total memory 13MB</div><div class="line">Max memory 256MB</div><div class="line">Zygote space size 1196KB</div><div class="line">Total mutator paused time: 183us</div><div class="line">Total time waiting for GC to complete: 5.617us</div><div class="line">Total GC count: 1</div><div class="line">Total GC time: 8.697ms</div><div class="line">Total blocking GC count: 0</div><div class="line">Total blocking GC time: 0</div><div class="line">Histogram of GC count per 10000 ms: 0:22</div><div class="line">Histogram of blocking GC count per 10000 ms: 0:22</div><div class="line">Histogram of native allocation 0:749,128:245,256:108,384:61,512:21,640:1,896:16,1152:2 bucket size 128</div><div class="line">Histogram of native free 0:13,64:72,192:223,256:37,448:10,512:10 bucket size 64</div><div class="line">/data/app/com.example.heqiang.testsomething-1/oat/arm64/base.odex: interpret-only</div><div class="line">Current JIT code cache size: 9KB</div><div class="line">Current JIT data cache size: 8KB</div><div class="line">Current JIT capacity: 64KB</div><div class="line">Current number of JIT code cache entries: 11</div><div class="line">Total number of JIT compilations: 11</div><div class="line">Total number of JIT compilations for on stack replacement: 0</div><div class="line">Total number of deoptimizations: 0</div><div class="line">Total number of JIT code cache collections: 0</div><div class="line">Memory used for stack maps: Avg: 451B Max: 1520B Min: 24B</div><div class="line">Memory used for compiled code: Avg: 815B Max: 2024B Min: 112B</div><div class="line">Memory used for profiling info: Avg: 300B Max: 848B Min: 32B</div><div class="line">Start Dumping histograms for 11 iterations for JIT timings</div><div class="line">Compiling:	Sum: 28.336ms 99% C.I. 0.305ms-6.501ms Avg: 2.576ms Max: 6.535ms</div><div class="line">TrimMaps:	Sum: 480us 99% C.I. 11us-103us Avg: 43.636us Max: 103us</div><div class="line">Done Dumping histograms</div><div class="line">Memory used for compilation: Avg: 321KB Max: 869KB Min: 48KB</div><div class="line">ProfileSaver total_bytes_written=308</div><div class="line">ProfileSaver total_number_of_writes=1</div><div class="line">ProfileSaver total_number_of_code_cache_queries=1</div><div class="line">ProfileSaver total_number_of_skipped_writes=0</div><div class="line">ProfileSaver total_number_of_failed_writes=0</div><div class="line">ProfileSaver total_ms_of_sleep=212475</div><div class="line">ProfileSaver total_ms_of_work=2</div><div class="line">ProfileSaver total_number_of_foreign_dex_marks=0</div><div class="line">ProfileSaver max_number_profile_entries_cached=89</div><div class="line">ProfileSaver total_number_of_hot_spikes=0</div><div class="line">ProfileSaver total_number_of_wake_ups=1</div><div class="line"></div><div class="line">suspend all histogram:	Sum: 157us 99% C.I. 1us-31us Avg: 9.812us Max: 31us</div><div class="line">DALVIK THREADS (15):</div><div class="line">&quot;Signal Catcher&quot; daemon prio=5 tid=3 Runnable</div><div class="line">  | group=&quot;system&quot; sCount=0 dsCount=0 obj=0x12c67e50 self=0x750eff9000</div><div class="line">  | sysTid=8147 nice=0 cgrp=default sched=0/0 handle=0x7518808450</div><div class="line">  | state=R schedstat=( 17661038 27346 3 ) utm=0 stm=0 core=1 HZ=100</div><div class="line">  | stack=0x751870e000-0x7518710000 stackSize=1005KB</div><div class="line">  | held mutexes= &quot;mutator lock&quot;(shared held)</div><div class="line">  native: #00 pc 0000000000476d74  /system/lib64/libart.so (_ZN3art15DumpNativeStackERNSt3__113basic_ostreamIcNS0_11char_traitsIcEEEEiP12BacktraceMapPKcPNS_9ArtMethodEPv+220)</div><div class="line">  native: #01 pc 0000000000476d70  /system/lib64/libart.so (_ZN3art15DumpNativeStackERNSt3__113basic_ostreamIcNS0_11char_traitsIcEEEEiP12BacktraceMapPKcPNS_9ArtMethodEPv+216)</div><div class="line">  native: #02 pc 000000000044b5bc  /system/lib64/libart.so (_ZNK3art6Thread9DumpStackERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEEbP12BacktraceMap+472)</div><div class="line">  native: #03 pc 0000000000462cdc  /system/lib64/libart.so (_ZN3art14DumpCheckpoint3RunEPNS_6ThreadE+820)</div><div class="line">  native: #04 pc 000000000045afbc  /system/lib64/libart.so (_ZN3art10ThreadList13RunCheckpointEPNS_7ClosureE+456)</div><div class="line">  native: #05 pc 000000000045abcc  /system/lib64/libart.so (_ZN3art10ThreadList4DumpERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEEb+288)</div><div class="line">  native: #06 pc 000000000045aa68  /system/lib64/libart.so (_ZN3art10ThreadList14DumpForSigQuitERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEE+804)</div><div class="line">  native: #07 pc 00000000004369ec  /system/lib64/libart.so (_ZN3art7Runtime14DumpForSigQuitERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEE+344)</div><div class="line">  native: #08 pc 000000000043d278  /system/lib64/libart.so (_ZN3art13SignalCatcher13HandleSigQuitEv+2240)</div><div class="line">  native: #09 pc 000000000043bd38  /system/lib64/libart.so (_ZN3art13SignalCatcher3RunEPv+612)</div><div class="line">  native: #10 pc 00000000000680ec  /system/lib64/libc.so (_ZL15__pthread_startPv+196)</div><div class="line">  native: #11 pc 000000000001d940  /system/lib64/libc.so (__start_thread+16)</div><div class="line">  (no managed stack frames)</div><div class="line"></div><div class="line">&quot;main&quot; prio=5 tid=1 Sleeping</div><div class="line">  | group=&quot;main&quot; sCount=1 dsCount=0 obj=0x75c5c348 self=0x7519295a00</div><div class="line">  | sysTid=8141 nice=0 cgrp=default sched=0/0 handle=0x751d25fa98</div><div class="line">  | state=S schedstat=( 173407732 13795308 237 ) utm=14 stm=2 core=5 HZ=100</div><div class="line">  | stack=0x7ff4d74000-0x7ff4d76000 stackSize=8MB</div><div class="line">  | held mutexes=</div><div class="line">  at java.lang.Thread.sleep!(Native method)</div><div class="line">  - sleeping on &lt;0x0c2a799d&gt; (a java.lang.Object)</div><div class="line">  at java.lang.Thread.sleep(Thread.java:371)</div><div class="line">  - locked &lt;0x0c2a799d&gt; (a java.lang.Object)</div><div class="line">  at java.lang.Thread.sleep(Thread.java:313)</div><div class="line">  at com.example.heqiang.testsomething.aidl.AIDLClientActivity.hasShortcutInstalled(AIDLClientActivity.java:105)</div><div class="line">  at java.lang.reflect.Method.invoke!(Native method)</div><div class="line">  at android.view.View$DeclaredOnClickListener.onClick(View.java:4729)</div><div class="line">  at android.view.View.performClick(View.java:5660)</div><div class="line">  at android.view.View$PerformClick.run(View.java:22436)</div><div class="line">  at android.os.Handler.handleCallback(Handler.java:751)</div><div class="line">  at android.os.Handler.dispatchMessage(Handler.java:95)</div><div class="line">  at android.os.Looper.loop(Looper.java:154)</div><div class="line">  at android.app.ActivityThread.main(ActivityThread.java:6351)</div><div class="line">  at java.lang.reflect.Method.invoke!(Native method)</div><div class="line">  at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:983)</div><div class="line">  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:873)</div></pre></td></tr></table></figure>
+<p><strong>第一行</strong>： <code>&quot;main&quot; prio=5 tid=1 Sleeping</code><br>这一行的信息主要包括：</p>
+<ul>
+<li>线程名称（main）</li>
+<li>线程的优先级（prio=5）</li>
+<li>线程id（tid=1）</li>
+<li>线程状态（Sleeping）。</li>
+</ul>
+<p>线程状态在 art/runtime/thread_state.h 文件中，主要有下面的状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">enum ThreadState &#123;</div><div class="line">  //                                   Thread.State   JDWP state</div><div class="line">  kTerminated = 66,                 // TERMINATED     TS_ZOMBIE    Thread.run has returned, but Thread* still around</div><div class="line">  kRunnable,                        // RUNNABLE       TS_RUNNING   runnable</div><div class="line">  kTimedWaiting,                    // TIMED_WAITING  TS_WAIT      in Object.wait() with a timeout</div><div class="line">  kSleeping,                        // TIMED_WAITING  TS_SLEEPING  in Thread.sleep()</div><div class="line">  kBlocked,                         // BLOCKED        TS_MONITOR   blocked on a monitor</div><div class="line">  kWaiting,                         // WAITING        TS_WAIT      in Object.wait()</div><div class="line">  kWaitingForGcToComplete,          // WAITING        TS_WAIT      blocked waiting for GC</div><div class="line">  kWaitingForCheckPointsToRun,      // WAITING        TS_WAIT      GC waiting for checkpoints to run</div><div class="line">  kWaitingPerformingGc,             // WAITING        TS_WAIT      performing GC</div><div class="line">  kWaitingForDebuggerSend,          // WAITING        TS_WAIT      blocked waiting for events to be sent</div><div class="line">  kWaitingForDebuggerToAttach,      // WAITING        TS_WAIT      blocked waiting for debugger to attach</div><div class="line">  kWaitingInMainDebuggerLoop,       // WAITING        TS_WAIT      blocking/reading/processing debugger events</div><div class="line">  kWaitingForDebuggerSuspension,    // WAITING        TS_WAIT      waiting for debugger suspend all</div><div class="line">  kWaitingForJniOnLoad,             // WAITING        TS_WAIT      waiting for execution of dlopen and JNI on load code</div><div class="line">  kWaitingForSignalCatcherOutput,   // WAITING        TS_WAIT      waiting for signal catcher IO to complete</div><div class="line">  kWaitingInMainSignalCatcherLoop,  // WAITING        TS_WAIT      blocking/reading/processing signals</div><div class="line">  kWaitingForDeoptimization,        // WAITING        TS_WAIT      waiting for deoptimization suspend all</div><div class="line">  kWaitingForMethodTracingStart,    // WAITING        TS_WAIT      waiting for method tracing to start</div><div class="line">  kWaitingForVisitObjects,          // WAITING        TS_WAIT      waiting for visiting objects</div><div class="line">  kWaitingForGetObjectsAllocated,   // WAITING        TS_WAIT      waiting for getting the number of allocated objects</div><div class="line">  kWaitingWeakGcRootRead,           // WAITING        TS_WAIT      waiting on the GC to read a weak root</div><div class="line">  kWaitingForGcThreadFlip,          // WAITING        TS_WAIT      waiting on the GC thread flip (CC collector) to finish</div><div class="line">  kStarting,                        // NEW            TS_WAIT      native thread started, not yet ready to run managed code</div><div class="line">  kNative,                          // RUNNABLE       TS_RUNNING   running in a JNI native method</div><div class="line">  kSuspended,                       // RUNNABLE       TS_RUNNING   suspended by GC or debugger</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><strong>第二行</strong>：<code>| group=&quot;main&quot; sCount=1 dsCount=0 obj=0x75c5c348 self=0x7519295a00</code><br>主要信息包括：</p>
+<ul>
+<li>线程所处的线程组（group=”main”）</li>
+<li>线程被正常挂起的次处（sCount=1）</li>
+<li>线程因调试而挂起次数（dsCount=0），当一个进程被调试后，sCount会重置为0，调试完毕后sCount会根据是否被正常挂起增长，但是dsCount不会被重置为0，所以dsCount也可以用来判断这个线程是否被调试过</li>
+<li>当前线程所关联的java线程对象（obj=0x75c5c348）</li>
+<li>该线程本身的地址（self=0x7519295a00）。</li>
+</ul>
+<p><strong>第三行</strong>：<code>| sysTid=8141 nice=0 cgrp=default sched=0/0 handle=0x751d25fa98</code><br>主要信息包括线程调度信息，分别是：</p>
+<ul>
+<li>线程在linux系统下的内核线程id （sysTid=8141）</li>
+<li>线程的调度有优先级（nice=0），nice值越小，优先级越高</li>
+<li>调度策略（sched=0/0）</li>
+<li>优先组属（cgrp=default）</li>
+<li>处理函数地址（handle=0x751d25fa98）。</li>
+</ul>
+<p><strong>第四行</strong>：<code>| state=S schedstat=( 173407732 13795308 237 ) utm=14 stm=2 core=5 HZ=100</code><br>主要信息包括当前线程的上下文信息：</p>
+<ul>
+<li>分别是线程调度状态（state=S）</li>
+<li>schedstat=( 173407732 13795308 237 ) 从 /proc/[pid]/task/[tid]/schedstat读出，三个值分别表示线程在cpu上执行的时间、线程的等待时间和线程执行的时间片长度，有的android内核版本不支持这项信息，得到的三个值都是0</li>
+<li>线程用户态下使用的时间值(单位是jiffies）（utm=14） </li>
+<li>内核态下得调度时间值（stm=2）</li>
+<li>最后运行该线程的cup核的序号（core=5）；</li>
+</ul>
+<p><strong>第五行</strong>：<code>| stack=0x7ff4d74000-0x7ff4d76000 stackSize=8MB</code><br>主要信息包括：</p>
+<ul>
+<li>线程栈的地址（stack=0x7ff4d74000-0x7ff4d76000）</li>
+<li>栈大小（stackSize=8MB）；</li>
+</ul>
+<p>另外，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Total number of allocations 50059</div><div class="line">Total bytes allocated 12MB</div><div class="line">Total bytes freed 977KB</div><div class="line">Free memory 2MB</div><div class="line">Free memory until GC 2MB</div><div class="line">Free memory until OOME 244MB</div><div class="line">Total memory 13MB</div><div class="line">Max memory 256MB</div></pre></td></tr></table></figure>
+<p>这里介绍了进程的内存使用情况，有时可以辅助我们分析 ANR。</p>
+<p>再后面就是线程的调用栈信息，也是我们分析ANR的关键信息。<br>由于上面的log是在主线程中调用 Thread.sleep 导致的，直接通过调用栈信息就可以定位到问题发生的原因，这里不再介绍。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ANR/" rel="tag"># ANR</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/02/python-practice-web-crawler-iqiyi/" rel="next" title="Python实战 -- 网络爬虫之解析爱奇艺视频">
+                <i class="fa fa-chevron-left"></i> Python实战 -- 网络爬虫之解析爱奇艺视频
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/10/android-performance-optimization-anr-1/" rel="prev" title="Android 性能优化实战篇 -- ANR 问题分析1">
+                Android 性能优化实战篇 -- ANR 问题分析1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">247</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">116</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理论知识"><span class="nav-number">2.</span> <span class="nav-text">理论知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志获取"><span class="nav-number">3.</span> <span class="nav-text">日志获取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小技巧"><span class="nav-number">4.</span> <span class="nav-text">小技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system-分析"><span class="nav-number">5.</span> <span class="nav-text">system 分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trace-分析"><span class="nav-number">6.</span> <span class="nav-text">trace 分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
