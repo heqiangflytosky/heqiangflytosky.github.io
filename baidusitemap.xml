@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://yoursite.com/2018/01/08/android-performance-optimization-anr/</loc>
-    <lastmod>2020-10-20T01:38:24.331Z</lastmod>
+    <lastmod>2020-10-20T10:13:59.382Z</lastmod>
     <data>
         <display>
         <title>Android 性能优化理论篇 -- ANR</title>
@@ -4995,12 +4995,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5015,12 +5015,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
