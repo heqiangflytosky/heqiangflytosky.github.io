@@ -171,6 +171,16 @@ Load后面的三个数字的意思分别是1分钟、5分钟、15分钟内系统
 更准确的CPU使用信息我们还可以通过 Log Report 目录中 dumpsys/dumpsys_cpuinfo 来查看。
 
 ```
+CPU usage from 0ms to 6626ms later
+```
+
+这里表示 ANR 发生之后这段时间的 CPU 使用情况，有时还会有 ANR 发生之前 CPU 的使用情况：
+
+```
+CPU usage from 3446ms to -6045ms ago
+```
+
+```
   49% 685/surfaceflinger: 33% user + 15% kernel / faults: 1437 minor 2 major
   41% 830/media.codec: 19% user + 21% kernel / faults: 7619 minor 5 major
   26% 820/mediaserver: 16% user + 10% kernel / faults: 514 minor
@@ -179,6 +189,7 @@ Load后面的三个数字的意思分别是1分钟、5分钟、15分钟内系统
 ```
 
 上面这一段日志可以得到ANR发生的时候，Top进程的Cpu占用情况，user代表是用户空间，kernel是内核空间。对于 CPU 的占用率，在多核中每个核最大占用率都是100%，如果机器是8核的，那么每个进程的CPU最大占用率就是800%，这也就是为什么我们会经常看到某些进程 CPU 占用率会大于100%，其实百分之一百多的CPU占用率不算很高的。
+iowait 系统因为 io 导致的进程 wait，如果这部分数值较高，可能要查一下是不是 io 问题导致的 anr，有可能在主线程中进行了 io 操作。
 分析这一部分，一般的有如下的规律。
 
  - kswapd0 cpu占用率偏高，系统整体运行会缓慢，从而引起各种ANR。把问题转给"内存优化"，请他们进行优化。
@@ -432,3 +443,88 @@ Max memory 256MB
 
 再后面就是线程的调用栈信息，也是我们分析ANR的关键信息。
 由于上面的log是在主线程中调用 Thread.sleep 导致的，直接通过调用栈信息就可以定位到问题发生的原因，这里不再介绍。
+
+## 分析binder调用
+
+### binder 对端超时
+
+下面我们制造一个 binder 调用对端耗时操作导致的 anr。
+
+看trace文件，main线程正在进行binder调用。
+
+```
+"main" prio=5 tid=1 Native
+  | group="main" sCount=1 dsCount=0 flags=1 obj=0x75eac798 self=0x7c1d614c00
+  | sysTid=19401 nice=-10 cgrp=default sched=0/0 handle=0x7ca3815548
+  | state=S schedstat=( 364544900 52611090 241 ) utm=27 stm=8 core=5 HZ=100
+  | stack=0x7ff5458000-0x7ff545a000 stackSize=8MB
+  | held mutexes=
+  kernel: (couldn't read /proc/self/task/19401/stack)
+  native: #00 pc 000000000007cd28  /system/lib64/libc.so (__ioctl+4)
+  native: #01 pc 000000000002cb7c  /system/lib64/libc.so (ioctl+132)
+  native: #02 pc 000000000005f790  /system/lib64/libbinder.so (android::IPCThreadState::talkWithDriver(bool)+244)
+  native: #03 pc 0000000000060548  /system/lib64/libbinder.so (android::IPCThreadState::waitForResponse(android::Parcel*, int*)+60)
+  native: #04 pc 000000000006039c  /system/lib64/libbinder.so (android::IPCThreadState::transact(int, unsigned int, android::Parcel const&, android::Parcel*, unsigned int)+176)
+  native: #05 pc 0000000000053d10  /system/lib64/libbinder.so (android::BpBinder::transact(unsigned int, android::Parcel const&, android::Parcel*, unsigned int)+72)
+  native: #06 pc 00000000001377d0  /system/lib64/libandroid_runtime.so (android_os_BinderProxy_transact(_JNIEnv*, _jobject*, int, _jobject*, _jobject*, int)+152)
+  at android.os.BinderProxy.transactNative(Native method)
+  at android.os.BinderProxy.transact(Binder.java:1148)
+  at com.meizu.flyme.directservice.IQuickAppService$Stub$Proxy.hasQuickApp(IQuickAppService.java:214)
+  at com.example.heqiang.testsomething.aidl.AIDLClientActivity.hasQuickApp(AIDLClientActivity.java:92)
+  at com.example.heqiang.testsomething.aidl.AIDLClientActivity.hasQuickApp(AIDLClientActivity.java:60)
+```
+
+假如我们不知道对端是什么进程的情况下，可以分析 binderinfo 文件，这个文件一般在 /data/anr 目录中，类似 `BinderTraces_19401_com.example.heqiang.testsomething:aidl.txt` 这样命名。
+
+```
+proc 19401
+context binder
+  thread 19401: l 10 need_return 0 tr 0
+    outgoing transaction 1512708: 0000000000000000 from 19401:19401 to 19307:19320 code 2 flags 10 pri 0:110 r1
+    transaction complete
+```
+
+可以看到通信的binder进程号为 19307，线程号为 19320。
+接下来就可以分析一下 19307 进程，看看 19320 线程进行的一些操作。
+
+### binder 线程池占满
+
+另外，如果 Binder 线程池被占满（16个），导致处理不了其他的 binder 请求，从而导致 anr。
+判断Binder是否用完，可以在trace中搜索关键字"binder_f"，如果搜索到则表示已经用完，然后就要找log其他地方看是谁一直在消耗binder或者是有死锁发生。
+
+## 线程状态分析
+
+这里多说两句线程状态的问题，有时我们经常在线程的堆栈中看到这样的信息：
+
+```
+  at java.lang.Object.wait!(Native method)
+  - waiting on <0x0b2886e9> (a java.lang.Object)
+  at java.lang.Thread.parkFor$(Thread.java:2127)
+  - locked <0x0b2886e9> (a java.lang.Object)
+  at sun.misc.Unsafe.park(Unsafe.java:325)
+```
+
+这里需要解释一下，为什么先 lock 了这个对象，然后又 waiting on 同一个对象呢？让我们看看这个线程对应的代码：
+
+```
+synchronized(obj) {
+………
+obj.wait();
+………
+}
+```
+
+线程的执行中，先用 synchronized 获得了这个对象的 Monitor（对应于 locked <0x0b2886e9> ）。当执行到 obj.wait(), 线程即放弃了 Monitor的所有权，进入 “wait set”队列（对应于 waiting on <0x0b2886e9> ）。
+往往在你的程序中，会出现多个类似的线程，他们都有相似的 DUMP信息。这也可能是正常的。比如，在程序中，有多个服务线程，设计成从一个队列里面读取请求数据。这个队列就是 lock以及 waiting on的对象。当队列为空的时候，这些线程都会在这个队列上等待，直到队列有了数据，这些线程被 Notify，当然只有一个线程获得了 lock，继续执行，而其它线程继续等待。
+
+## io 分析
+
+如果 anr 时你发现 iowait 数值很高（在 30% 以上），这时要注意了，需要分析一下是不是由于 io 操作导致了 anr，看主线程中是否有进行 io 操作。
+看看当前的调用堆栈，或者在这段ANR点往前看0~4s，看看当时做的什么文件操作，这种场景有遇到过，常见解决方法是对耗时文件操作采取异步操作。
+假如和有关情况，一般blocked的位置应该是在io文件操作上。
+iowait 就是系统因为 io 导致的进程 wait。这时候系统在做 io ，导致没有进程在干活，cpu 在执行 idle 进程空转，所以说 iowait 的产生要满足两个条件，一是进程在等 io ，二是等 io 时没有进程可运行。
+iowait = (cpu idle time)/(all cpu time)。
+如果想实时查看 IO 读写情况，可以使用 vmstat 命令，此命令还可以查看CPU使用率，内存使用，虚拟内存交换情况等。
+
+## 一般分析套路
+
