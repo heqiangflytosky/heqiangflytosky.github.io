@@ -88,7 +88,9 @@ android.applicationVariants.all { variant ->
 }
 ```
 
-编译是，从cocos游戏工程的 build/jsb-link 目录中把相关的文件打包到 assets 目录。至于这些文件何时加载，后面将会详细的介绍。
+编译时，从cocos游戏工程的 build/jsb-link 目录中把相关的文件打包到 assets 目录。
+这个 outputDir 目录就是`build/jsb-link/frameworks/runtime-src/proj.android-studio/app/build/intermediates/merged_assets/debug/mergeDebugAssets/`
+至于这些文件何时加载，后面将会详细的介绍。
 
 ## jni 部分
 

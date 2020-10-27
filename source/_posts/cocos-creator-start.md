@@ -43,7 +43,7 @@ Cocos Creator 目前支持发布游戏到 Web、iOS、Android、各类"小游戏
 
 Cocos Creator 的引擎部分包括 JavaScript、Cocos2d-x-lite 和 adapter 三个部分。全部都在 GitHub 上开源。
 
-[JavaScript 引擎](https://github.com/cocos-creator/engine)：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-jsb.js 集成在游戏应用包中。
+[JavaScript 引擎](https://github.com/cocos-creator/engine)：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-js.js 或者 cocos2d-js-min.js（debug模式）集成在游戏应用包中。
 
 [jsb-adapter](https://github.com/cocos-creator-packages/jsb-adapter)：js 适配层，提供js到cocos运行时引擎的桥接。
 Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做一些适配工作。 这些工作包括：
@@ -109,8 +109,28 @@ gulp build --max-old-space-size=8192 // 出现 JavaScript heap out of memory 时
 
 ### 定制 jsb
 
-在 CocosCreator 的安装目录 `/Applications/CocosCreator.app/Contents/Resources/builtin` 下面重新 clone 一份 jsb-adapter，然后可以基于这份代码上面修改。注意修改后一定要重新通过 Cocos Creater 编辑器打开项目代码，这样才会重新编译 jsb-adapter。
-编译按照 [引擎定制工作流程](https://docs.cocos.com/creator/manual/zh/advanced-topics/engine-customization.html) 提供的步骤即可。
+在 CocosCreator 的安装目录 `/Applications/CocosCreator.app/Contents/Resources/builtin` 下面重新 clone 一份 jsb-adapter，然后可以基于这份代码上面修改。
+Creator v2.0.7 之后的版本打开编辑器时会自动编译，注意修改后一定要重新通过 Cocos Creater 编辑器打开项目代码，这样才会自动重新编译 jsb-adapter。编译后会在 `/Applications/CocosCreator.app/Contents/Resources/builtin/jsb-adapter/bin` 下面生成对应文件 jsb-engine.js 和 jsb-builtin.js。
+如果要单独手动编译 jsb-adapter，编译按照 [引擎定制工作流程](https://docs.cocos.com/creator/manual/zh/advanced-topics/engine-customization.html) 提供的 `Creator v2.0.5 和 v2.0.6 的定制流程` 步骤即可：
+定制前需要先安装相关依赖，请在命令行中执行：
+
+```
+# 在命令行进入 jsb-adapter 路径
+cd jsb-adapter/
+# 安装 gulp 构建工具
+npm install -g gulp
+# 安装依赖的模块
+npm install
+```
+
+接下来就可以对 jsb-adapter 的代码进行定制修改了，修改完成之后请在命令行中继续执行：
+
+```
+# jsb-adapter 目录下
+gulp
+```
+
+gulp 命令执行会将 bultin 部分的代码打包到 jsb-builtin.js 文件，并且将 engine 部分的代码从 ES6 转为 ES5。所有这些编译生成的文件会输出到 dist 目录下。
 
 #### 可能遇到的问题
 

@@ -548,6 +548,9 @@ def name = System.properties['versionName']
 ** build versionName=2.1.0
 ```
 
+如果找不到 Gradle Console ，可以 View ->Tool Windows -> Gradle, 任意选择一个Task，双击执行即可。
+或者使用命令行编译。
+
 # 依赖库管理
 ## 本地依赖
 
