@@ -13,6 +13,20 @@ date: 2020-2-10 10:00:00
 从本文开始，将会通过一系列文章来介绍 Cocos Creator 的使用以及源码分析。
 源码是基于 cocos creator 2.3.1 版本进行的，并根据版本发展持续跟新中。
 
+## 相关资料
+
+[cocos 官网](https://www.cocos.com/)
+[Cocos2d-x github 源码](https://github.com/cocos2d/cocos2d-x)
+[Cocos2d-x 用户手册](https://docs.cocos.com/cocos2d-x/manual/zh/)
+
+[Cocos Creator 用户手册](https://docs.cocos.com/creator/manual/zh/)
+[Cocos Creator API 参考](https://docs.cocos.com/creator/api/zh/)
+
+相关博客：
+
+[Cocos Creator入门教程](https://blog.csdn.net/ccnu027cs/category_9293818.html)
+[Cocos Creator笔记](https://blog.csdn.net/ccnu027cs/category_9188426.html)
+
 ## Cocos2d-x 特点
 
  - 跨平台。Cocos 支持使用同一套代码构建生成 Web、iOS、Android 等几个端，最新的版本还支持发布到微信小游戏、Facebook Instant Games 和 QQ 玩一玩；
@@ -45,10 +59,10 @@ Cocos Creator 的引擎部分包括 JavaScript、Cocos2d-x-lite 和 adapter 三�
 
 [JavaScript 引擎](https://github.com/cocos-creator/engine)：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-js.js 或者 cocos2d-js-min.js（debug模式）集成在游戏应用包中。
 
-[jsb-adapter](https://github.com/cocos-creator-packages/jsb-adapter)：js 适配层，提供js到cocos运行时引擎的桥接。
+[jsb-adapter](https://github.com/cocos-creator-packages/jsb-adapter)：js 适配层，提供js到cocos运行时引擎的桥接。这部分代码就是原生平台（比如 Android）对cocos引擎的适配，在engine我们经常看到有对 CC_JSB 的判断来区别平台，在 H5 平台（web-mobile）就没有这部分内容。
 Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做一些适配工作。 这些工作包括：
 
- - 为不同平台适配 BOM 和 DOM 等运行环境
+ - 为不同平台适配 BOM 和 DOM 等运行环境（HTMLElement、HTMLCanvasElement、HTMLScriptElement等）
  - 一些引擎层面的适配 
 
 目前适配层主要包括两个部分：
@@ -59,7 +73,7 @@ Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做
 在 jsb-adapter 目录下，主要包括以下两个目录结构：
 
  - builtin：适配原生平台的 runtime。
- - engine：适配和实现 cocos 引擎层面的一些 api，如果游戏平台是适配 web 标准 api 的话就不用关注这个目录。
+ - engine：适配和实现 cocos 引擎层面的一些 api，某些 api 在原生平台进行重新实现（比如 jsb-loader.js 中重新实现了 loader 的一些 api），如果游戏平台是适配 web 标准 api 的话就不用关注这个目录。
 
 builtin 部分除了适配 BOM 和 DOM 运行环境，还包括了一些相关的 jsb 接口，如 openGL, audioEngine 等。
 cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成这些标准接口到 cocos 运行时的调用。
@@ -90,6 +104,8 @@ cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成�
 
 ## 定制引擎
 
+定制引擎的选择可以通过 CocosCreator -> 偏好设置 -> 原生开发环境 进行全局设置，也可以通过 项目设置 -> 自定义引擎 进行本项目的设置。
+
 ### 定制 JavaScript 引擎
 
 我们可以使用 cocos creator 内置的 JavaScript 引擎和 Cocossd-x 引擎，当然也可以使用自定义的引擎，因为他们都是开源的，方便我们加入个性化的需求。
@@ -104,6 +120,8 @@ npm install
 gulp build  
 gulp build --max-old-space-size=8192 // 出现 JavaScript heap out of memory 时
 ```
+
+或者通过 `gulp build-dev` 编译调试版本，是不带混淆的。
 
 编译完成后通过 项目 -> 项目设置 面板的 自定义引擎 选项卡，设置本地定制后的 JavaScript 引擎路径。
 
@@ -277,14 +295,20 @@ AssertionError [ERR_ASSERTION] [ERR_ASSERTION]: Task function must be specified
 在 HelloWorld Android 工程中直接修改编译即可。
 编译按照 [引擎定制工作流程](https://docs.cocos.com/creator/manual/zh/advanced-topics/engine-customization.html) 提供的步骤即可。
 
-## 相关资料
+## 调试
 
-[cocos 官网](https://www.cocos.com/)
-[Cocos2d-x github 源码](https://github.com/cocos2d/cocos2d-x)
-[Cocos2d-x 用户手册](https://docs.cocos.com/cocos2d-x/manual/zh/)
+参考文章 [原生平台 JavaScript 调试](https://docs.cocos.com/creator/manual/zh/publish/debug-jsb.html)
+如果是想调试 engine 加载流程的代码，就需要延迟加载 main.js，可以把 AppDelegate.cpp 中 `applicationDidFinishLaunching` 方法中的 `jsb_run_script("main.js");` 方法去掉，然后在 JniImp.cpp 的 nativeRender 方法中添加下面的代码实现延迟加载：
 
-[Cocos Creator 用户手册](https://docs.cocos.com/creator/manual/zh/)
-[Cocos Creator API 参考](https://docs.cocos.com/creator/api/zh/)
+```
+        if (!g_isTest) {
+            g_testCount ++;
+            if (g_testCount > 60 *5) { // 延迟5分钟
+                g_isTest = true;
+                jsb_run_script("main.js");
+            }
+        }
+```
 
 ## 文章推荐
 
