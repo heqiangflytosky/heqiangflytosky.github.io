@@ -2,6 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/03/15/cocos-creator-native-render-process/</loc>
+    
+    <lastmod>2020-11-06T09:24:49.619Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/02/25/cocos-creator-native-engine-init-process/</loc>
+    
+    <lastmod>2020-11-06T09:23:51.172Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/02/28/cocos-creator-native-game-file-load/</loc>
+    
+    <lastmod>2020-11-06T09:23:43.501Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/03/05/cocos-creator-native-game-start-process/</loc>
+    
+    <lastmod>2020-11-06T09:23:32.885Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/03/10/cocos-creator-res-load/</loc>
+    
+    <lastmod>2020-11-06T09:00:25.206Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2014/11/16/java-basic-design-pattern-chain-of-responsibility/</loc>
+    
+    <lastmod>2020-11-06T06:53:46.352Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/02/10/cocos-creator-start/</loc>
+    
+    <lastmod>2020-11-04T01:15:13.624Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2020/02/20/cocos-creator-javascript-java/</loc>
     
     <lastmod>2020-10-29T08:22:42.216Z</lastmod>
@@ -12,13 +61,6 @@
     <loc>http://yoursite.com/2020/02/16/cocos-creator-jsb-manu-extend/</loc>
     
     <lastmod>2020-10-29T08:21:02.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/02/10/cocos-creator-start/</loc>
-    
-    <lastmod>2020-10-29T08:12:38.379Z</lastmod>
     
   </url>
   
@@ -474,13 +516,6 @@
     <loc>http://yoursite.com/2014/11/10/java-basic-design-pattern-factory-method/</loc>
     
     <lastmod>2020-05-09T08:50:31.652Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2014/11/16/java-basic-design-pattern-chain-of-responsibility/</loc>
-    
-    <lastmod>2020-05-09T08:50:23.225Z</lastmod>
     
   </url>
   
@@ -1710,13 +1745,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1724,7 +1752,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1732,6 +1760,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     

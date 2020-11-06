@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2020/02/10/cocos-creator-start/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="Cocos2d-x 介绍以及一些学习资料">
-<meta property="og:updated_time" content="2020-10-29T08:12:38.379Z">
+<meta property="og:updated_time" content="2020-11-04T01:15:13.624Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cocos Creator -- 启动篇">
 <meta name="twitter:description" content="Cocos2d-x 介绍以及一些学习资料">
@@ -401,10 +401,10 @@
 
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>项目中正在使用 Cocos Creator（cocos2d-x-lite + jsb-adapter + engine） 来打造小游戏运行平台，来运行包括 cocos、laya、egret 引擎编译生成的 web 版游戏，web 版游戏是 js 标准接口。<br>从本文开始，将会通过一系列文章来介绍 Cocos Creator 的使用以及源码分析。<br>源码是基于 cocos creator 2.3.1 版本进行的，并根据版本发展持续跟新中。</p>
-<h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><p><a href="https://www.cocos.com/" target="_blank" rel="external">cocos 官网</a><br><a href="https://github.com/cocos2d/cocos2d-x" target="_blank" rel="external">Cocos2d-x github 源码</a><br><a href="https://docs.cocos.com/cocos2d-x/manual/zh/" target="_blank" rel="external">Cocos2d-x 用户手册</a></p>
+<h2 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h2><p><a href="https://www.cocos.com/" target="_blank" rel="external">cocos 官网</a><br><a href="https://forum.cocos.org/" target="_blank" rel="external">cocos 论坛</a><br><a href="https://github.com/cocos2d/cocos2d-x" target="_blank" rel="external">Cocos2d-x github 源码</a><br><a href="https://docs.cocos.com/cocos2d-x/manual/zh/" target="_blank" rel="external">Cocos2d-x 用户手册</a></p>
 <p><a href="https://docs.cocos.com/creator/manual/zh/" target="_blank" rel="external">Cocos Creator 用户手册</a><br><a href="https://docs.cocos.com/creator/api/zh/" target="_blank" rel="external">Cocos Creator API 参考</a></p>
 <p>相关博客：</p>
-<p><a href="https://blog.csdn.net/ccnu027cs/category_9293818.html" target="_blank" rel="external">Cocos Creator入门教程</a><br><a href="https://blog.csdn.net/ccnu027cs/category_9188426.html" target="_blank" rel="external">Cocos Creator笔记</a></p>
+<p><a href="https://blog.csdn.net/ccnu027cs/category_9293818.html" target="_blank" rel="external">Cocos Creator入门教程</a><br><a href="https://blog.csdn.net/ccnu027cs/category_9188426.html" target="_blank" rel="external">Cocos Creator笔记</a><br><a href="https://www.jianshu.com/u/01450ce9ecbf" target="_blank" rel="external">https://www.jianshu.com/u/01450ce9ecbf</a></p>
 <h2 id="Cocos2d-x-特点"><a href="#Cocos2d-x-特点" class="headerlink" title="Cocos2d-x 特点"></a>Cocos2d-x 特点</h2><ul>
 <li>跨平台。Cocos 支持使用同一套代码构建生成 Web、iOS、Android 等几个端，最新的版本还支持发布到微信小游戏、Facebook Instant Games 和 QQ 玩一玩；</li>
 <li>性能。在 Android 平台上，Cocos 的原理是在 Activity 中绘制一个 OpenGL 的 SurfaceView ，并由其完成页面的渲染的。与基于 WebView 渲染的 Hybrid 应用相比，Cocos 的渲染速度更快，性能更好。</li>
@@ -421,7 +421,7 @@
 </ul>
 <h2 id="Cocos-Creator"><a href="#Cocos-Creator" class="headerlink" title="Cocos Creator"></a>Cocos Creator</h2><h3 id="Cocos-Creator-和-Cocos2d-x-的区别"><a href="#Cocos-Creator-和-Cocos2d-x-的区别" class="headerlink" title="Cocos Creator 和 Cocos2d-x 的区别"></a>Cocos Creator 和 Cocos2d-x 的区别</h3><p>Cocos2d-x 是游戏引擎，Cocos Creator 是一个完整的游戏开发解决方案，包含了游戏引擎+图形界面工具(编辑器)。<br>Cocos Creator 是以内容创作为核心的游戏开发工具，在 Cocos2d-x 基础上实现了彻底脚本化、组件化和数据驱动等特点。Cocos Creator 编辑器提供面向设计和开发的两种工作流，提供简单顺畅的分工合作方式。除了开发人员，也可以让策划和美术人员也加入到对引擎的使用中，可以大大加速整个游戏的开发过程。<br>Cocos2d-x一直在追求「性能快」，而Cocos Creator则追求在「性能快」和「开发快」之间取一个最佳平衡点，并且附加上AnySDK打包工具能带来的「发布快」优势。<br>Cocos Creator 目前支持发布游戏到 Web、iOS、Android、各类”小游戏”、PC 客户端等平台，真正实现一次开发，全平台运行。</p>
 <h3 id="Cocos-Creator-引擎简介"><a href="#Cocos-Creator-引擎简介" class="headerlink" title="Cocos Creator 引擎简介"></a>Cocos Creator 引擎简介</h3><p>Cocos Creator 的引擎部分包括 JavaScript、Cocos2d-x-lite 和 adapter 三个部分。全部都在 GitHub 上开源。</p>
-<p><a href="https://github.com/cocos-creator/engine" target="_blank" rel="external">JavaScript 引擎</a>：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-js.js 或者 cocos2d-js-min.js（debug模式）集成在游戏应用包中。</p>
+<p><a href="https://github.com/cocos-creator/engine" target="_blank" rel="external">cocos 引擎</a>：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用，适配各平台的统一接口。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-js.js （debug模式，代码没有混淆）或者 cocos2d-js-min.js集成在游戏应用包中。</p>
 <p><a href="https://github.com/cocos-creator-packages/jsb-adapter" target="_blank" rel="external">jsb-adapter</a>：js 适配层，提供js到cocos运行时引擎的桥接。这部分代码就是原生平台（比如 Android）对cocos引擎的适配，在engine我们经常看到有对 CC_JSB 的判断来区别平台，在 H5 平台（web-mobile）就没有这部分内容。<br>Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做一些适配工作。 这些工作包括：</p>
 <ul>
 <li>为不同平台适配 BOM 和 DOM 等运行环境（HTMLElement、HTMLCanvasElement、HTMLScriptElement等）</li>
@@ -435,7 +435,7 @@
 <p>在 jsb-adapter 目录下，主要包括以下两个目录结构：</p>
 <ul>
 <li>builtin：适配原生平台的 runtime。</li>
-<li>engine：适配和实现 cocos 引擎层面的一些 api，某些 api 在原生平台进行重新实现（比如 jsb-loader.js 中重新实现了 loader 的一些 api），如果游戏平台是适配 web 标准 api 的话就不用关注这个目录。</li>
+<li>engine：适配和实现 cocos 引擎层面的一些 api，某些 api 在原生平台进行重新实现（比如 jsb-loader.js 中重新实现了 loader 的一些 api，比如 editbox 重新实现（调用原生实现）），如果游戏平台是适配 web 标准 api 的话就不用关注这个目录。</li>
 </ul>
 <p>builtin 部分除了适配 BOM 和 DOM 运行环境，还包括了一些相关的 jsb 接口，如 openGL, audioEngine 等。<br>cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成这些标准接口到 cocos 运行时的调用。<br>这部分其实就是 JS binding 的 js 部分。这部分编译成的 jsb-builtin.js 文件集成 Android 客户端中，供 Cocos2d-x-lite 在初始化时读取。<br>它架设在 Cocos2d-x-lite 引擎之上，底层通过 JSB 绑定调用 Cocos2d-x-lite 引擎。</p>
 <p><a href="https://github.com/cocos-creator/cocos2d-x-lite" target="_blank" rel="external">Cocos2d-x-lite</a>：cocos 渲染引擎，我们可以称之为 cocos 运行时引擎，集成了Android、ios和windows等原生平台特性。它是 Cocos2d-x 的轻量级版本，删除了 3D 以及其他一些特性。<br>综上所述，cocos 的原理就是通过 cocos IDE 把开发者通过调用 cocos JavaScript 引擎 API 形成的游戏代码转换成标准的 js 代码，然后通过 v8 解析js代码，回传给 jsb，通过 jsb 桥接调用 cocos2d-x-lite 。</p>
@@ -588,7 +588,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">249</span>
+                <span class="site-state-item-count">254</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
