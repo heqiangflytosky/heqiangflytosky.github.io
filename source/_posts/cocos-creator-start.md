@@ -16,6 +16,7 @@ date: 2020-2-10 10:00:00
 ## 相关资料
 
 [cocos 官网](https://www.cocos.com/)
+[cocos 论坛](https://forum.cocos.org/)
 [Cocos2d-x github 源码](https://github.com/cocos2d/cocos2d-x)
 [Cocos2d-x 用户手册](https://docs.cocos.com/cocos2d-x/manual/zh/)
 
@@ -26,6 +27,7 @@ date: 2020-2-10 10:00:00
 
 [Cocos Creator入门教程](https://blog.csdn.net/ccnu027cs/category_9293818.html)
 [Cocos Creator笔记](https://blog.csdn.net/ccnu027cs/category_9188426.html)
+https://www.jianshu.com/u/01450ce9ecbf
 
 ## Cocos2d-x 特点
 
@@ -57,7 +59,7 @@ Cocos Creator 目前支持发布游戏到 Web、iOS、Android、各类"小游戏
 
 Cocos Creator 的引擎部分包括 JavaScript、Cocos2d-x-lite 和 adapter 三个部分。全部都在 GitHub 上开源。
 
-[JavaScript 引擎](https://github.com/cocos-creator/engine)：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-js.js 或者 cocos2d-js-min.js（debug模式）集成在游戏应用包中。
+[cocos 引擎](https://github.com/cocos-creator/engine)：cocos js 引擎，游戏开发者集成到游戏包中，封装一些游戏开发的组件和API供开发者调用，适配各平台的统一接口。这部分是集成在IDE中打包时根据所选的平台转换成运行时环境匹配的接口（我们只适配运行web-mobile平台）。这部分代码编译成 cocos2d-js.js （debug模式，代码没有混淆）或者 cocos2d-js-min.js集成在游戏应用包中。
 
 [jsb-adapter](https://github.com/cocos-creator-packages/jsb-adapter)：js 适配层，提供js到cocos运行时引擎的桥接。这部分代码就是原生平台（比如 Android）对cocos引擎的适配，在engine我们经常看到有对 CC_JSB 的判断来区别平台，在 H5 平台（web-mobile）就没有这部分内容。
 Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做一些适配工作。 这些工作包括：
@@ -73,7 +75,7 @@ Cocos Creator 为了实现跨平台，在 JavaScript 层需要对不同平台做
 在 jsb-adapter 目录下，主要包括以下两个目录结构：
 
  - builtin：适配原生平台的 runtime。
- - engine：适配和实现 cocos 引擎层面的一些 api，某些 api 在原生平台进行重新实现（比如 jsb-loader.js 中重新实现了 loader 的一些 api），如果游戏平台是适配 web 标准 api 的话就不用关注这个目录。
+ - engine：适配和实现 cocos 引擎层面的一些 api，某些 api 在原生平台进行重新实现（比如 jsb-loader.js 中重新实现了 loader 的一些 api，比如 editbox 重新实现（调用原生实现）），如果游戏平台是适配 web 标准 api 的话就不用关注这个目录。
 
 builtin 部分除了适配 BOM 和 DOM 运行环境，还包括了一些相关的 jsb 接口，如 openGL, audioEngine 等。
 cocos 把各种引擎编写的js代码转成标准js接口，jsb-adapter 完成这些标准接口到 cocos 运行时的调用。
