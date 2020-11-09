@@ -7,13 +7,25 @@ description: 介绍 Kotlin 的关键字
 date: 2019-12-6 10:00:00
 ---
 
+## 概述
+
 本文介绍一下 Kotlin 相对于 Java 来说一些特殊的关键字。
 
 先介绍一个技能，通过 Android Studio 的菜单 Tools -> Kotlin -> Show Kotlin Bytecode 可查看当前文件的字节码，这对于我们分析和加深理解 Kotlin 很有帮助。
 
+## 关键字
+
 ### open
 
-Kotlin 中的类和方法默认是final的，不能被继承和重写，可以使用 open 关键字修饰后，类可以被继承，方法可以被重写。
+Kotlin 中的类、方法和变量默认是final的，不能被继承和重写，可以使用 open 关键字修饰后，类可以被继承，方法和变量可以被重写。
+
+### override
+
+重写类的方法和变量。
+
+### fun
+
+kotlin 中用来定义函数。
 
 ### data
 
@@ -276,7 +288,21 @@ fun main(args: Array<String>) {
 
 ### lazy 、lateinit 
 
-用于延迟初始化，第一次使用时再实例化。
+ - lateinit：如果不想在定义变量的时候初始化，一种做法是 `var para4:String ?=null`，表示可为空。另外一种方法是使用lateinit `lateinit var para4:String`，表示在后面合适的时机进行初始化，如果在调用的时候还没有进行初始化，会抛出未初始化的异常。
+  - 只能修饰 var 变量，不能修饰 val 常量。
+  - 不能对可空类型使用，也就是说不能同时使用 lateinit 和 `para4:String ?=null`。
+  - 不能对java基本类型使用，例如Double，Int，Long等
+ - lazy 也是用于延迟初始化，第一次使用时再实例化。在类型后面加 `by lazy{}`即可，`{}` 中的最后一行要返回初始化的结果。使用方法如下：
+  - lazy 只能对常量 val 使用，不能修饰变量 var
+  - lazy 的加载时机为第一次调用常量的时候，而且只会加载一次。
+
+
+```
+    val para5:String by lazy {
+        "Hello"
+    }
+```
+
 
 ### suspend
 
@@ -302,6 +328,8 @@ o as HistoryFavItem
 
 Kotlin 中使用 inner 关键字来修饰内部类。具体介绍参考 [Kotlin -- 类和对象](http://www.heqiangfly.com/2019/12/10/kotlin-class-object/) 中关于内部类部分的介绍。
 
+
 ## 数据类型
+
 
 ### UInt
