@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/12/06/kotlin-keyword/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Kotlin 的关键字">
-<meta property="og:updated_time" content="2020-02-09T14:49:44.144Z">
+<meta property="og:updated_time" content="2020-11-09T07:03:39.089Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin -- 关键字">
 <meta name="twitter:description" content="介绍 Kotlin 的关键字">
@@ -400,9 +400,11 @@
       
 
       
-        <p>本文介绍一下 Kotlin 相对于 Java 来说一些特殊的关键字。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文介绍一下 Kotlin 相对于 Java 来说一些特殊的关键字。</p>
 <p>先介绍一个技能，通过 Android Studio 的菜单 Tools -&gt; Kotlin -&gt; Show Kotlin Bytecode 可查看当前文件的字节码，这对于我们分析和加深理解 Kotlin 很有帮助。</p>
-<h3 id="open"><a href="#open" class="headerlink" title="open"></a>open</h3><p>Kotlin 中的类和方法默认是final的，不能被继承和重写，可以使用 open 关键字修饰后，类可以被继承，方法可以被重写。</p>
+<h2 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h2><h3 id="open"><a href="#open" class="headerlink" title="open"></a>open</h3><p>Kotlin 中的类、方法和变量默认是final的，不能被继承和重写，可以使用 open 关键字修饰后，类可以被继承，方法和变量可以被重写。</p>
+<h3 id="override"><a href="#override" class="headerlink" title="override"></a>override</h3><p>重写类的方法和变量。</p>
+<h3 id="fun"><a href="#fun" class="headerlink" title="fun"></a>fun</h3><p>kotlin 中用来定义函数。</p>
 <h3 id="data"><a href="#data" class="headerlink" title="data"></a>data</h3><p>data 关键字用来修饰一个只包含数据的类，在 Kotlin 中，不需要自己动手去写一个 JavaBean，可以直接使用 data 类，编译器会自动的从主构造函数中根据所有声明的属性提取以下函数：</p>
 <ul>
 <li>equals() / hashCode() </li>
@@ -458,7 +460,20 @@
 <p>when 中使用 in 运算符来判断集合内是否包含某实例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fun main(args: Array&lt;String&gt;) &#123;</div><div class="line">    val items = setOf(&quot;apple&quot;, &quot;banana&quot;, &quot;kiwi&quot;)</div><div class="line">    when &#123;</div><div class="line">        &quot;orange&quot; in items -&gt; println(&quot;juicy&quot;)</div><div class="line">        &quot;apple&quot; in items -&gt; println(&quot;apple is fine too&quot;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="field"><a href="#field" class="headerlink" title="field"></a>field</h3><h3 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h3><p>用来修饰function，那么这个function就被称作inline function（内联函数）。<br>具体参考<a href="http://www.heqiangfly.com/2019/12/16/kotlin-lambda/" target="_blank" rel="external">Kotlin – Lambda 表达式</a> 中关于内联函数部分的说明。</p>
-<h3 id="lazy-、lateinit"><a href="#lazy-、lateinit" class="headerlink" title="lazy 、lateinit"></a>lazy 、lateinit</h3><p>用于延迟初始化，第一次使用时再实例化。</p>
+<h3 id="lazy-、lateinit"><a href="#lazy-、lateinit" class="headerlink" title="lazy 、lateinit"></a>lazy 、lateinit</h3><ul>
+<li>lateinit：如果不想在定义变量的时候初始化，一种做法是 <code>var para4:String ?=null</code>，表示可为空。另外一种方法是使用lateinit <code>lateinit var para4:String</code>，表示在后面合适的时机进行初始化，如果在调用的时候还没有进行初始化，会抛出未初始化的异常。<ul>
+<li>只能修饰 var 变量，不能修饰 val 常量。</li>
+<li>不能对可空类型使用，也就是说不能同时使用 lateinit 和 <code>para4:String ?=null</code>。</li>
+<li>不能对java基本类型使用，例如Double，Int，Long等</li>
+</ul>
+</li>
+<li>lazy 也是用于延迟初始化，第一次使用时再实例化。在类型后面加 <code>by lazy{}</code>即可，<code>{}</code> 中的最后一行要返回初始化的结果。使用方法如下：<ul>
+<li>lazy 只能对常量 val 使用，不能修饰变量 var</li>
+<li>lazy 的加载时机为第一次调用常量的时候，而且只会加载一次。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">val para5:String by lazy &#123;</div><div class="line">    &quot;Hello&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h3><h3 id="is"><a href="#is" class="headerlink" title="is"></a>is</h3><p><code>!is</code></p>
 <h3 id="as"><a href="#as" class="headerlink" title="as"></a>as</h3><p>类型转换</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">o as HistoryFavItem</div></pre></td></tr></table></figure>
@@ -660,7 +675,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#open"><span class="nav-number">1.</span> <span class="nav-text">open</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data"><span class="nav-number">2.</span> <span class="nav-text">data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#object"><span class="nav-number">3.</span> <span class="nav-text">object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#companion"><span class="nav-number">4.</span> <span class="nav-text">companion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#var-与-val"><span class="nav-number">5.</span> <span class="nav-text">var 与 val</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">6.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#when"><span class="nav-number">7.</span> <span class="nav-text">when</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#field"><span class="nav-number">8.</span> <span class="nav-text">field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inline"><span class="nav-number">9.</span> <span class="nav-text">inline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lazy-、lateinit"><span class="nav-number">10.</span> <span class="nav-text">lazy 、lateinit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend"><span class="nav-number">11.</span> <span class="nav-text">suspend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#is"><span class="nav-number">12.</span> <span class="nav-text">is</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#as"><span class="nav-number">13.</span> <span class="nav-text">as</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inner"><span class="nav-number">14.</span> <span class="nav-text">inner</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-number"></span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UInt"><span class="nav-number">1.</span> <span class="nav-text">UInt</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键字"><span class="nav-number">2.</span> <span class="nav-text">关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#open"><span class="nav-number">2.1.</span> <span class="nav-text">open</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#override"><span class="nav-number">2.2.</span> <span class="nav-text">override</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fun"><span class="nav-number">2.3.</span> <span class="nav-text">fun</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data"><span class="nav-number">2.4.</span> <span class="nav-text">data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#object"><span class="nav-number">2.5.</span> <span class="nav-text">object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#companion"><span class="nav-number">2.6.</span> <span class="nav-text">companion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#var-与-val"><span class="nav-number">2.7.</span> <span class="nav-text">var 与 val</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">2.8.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#when"><span class="nav-number">2.9.</span> <span class="nav-text">when</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#field"><span class="nav-number">2.10.</span> <span class="nav-text">field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inline"><span class="nav-number">2.11.</span> <span class="nav-text">inline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lazy-、lateinit"><span class="nav-number">2.12.</span> <span class="nav-text">lazy 、lateinit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend"><span class="nav-number">2.13.</span> <span class="nav-text">suspend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#is"><span class="nav-number">2.14.</span> <span class="nav-text">is</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#as"><span class="nav-number">2.15.</span> <span class="nav-text">as</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inner"><span class="nav-number">2.16.</span> <span class="nav-text">inner</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-number">3.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UInt"><span class="nav-number">3.1.</span> <span class="nav-text">UInt</span></a></li></ol></li></ol></div>
             
 
           </div>

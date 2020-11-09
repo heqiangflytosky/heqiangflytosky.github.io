@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2019/12/06/kotlin-keyword/</loc>
+    
+    <lastmod>2020-11-09T07:03:39.089Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/09/02/android-architecture-mvc-mvp-mvvm/</loc>
+    
+    <lastmod>2020-11-09T02:59:41.073Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2020/03/20/cocos-creator-web-render-process/</loc>
     
     <lastmod>2020-11-06T09:36:18.610Z</lastmod>
@@ -632,13 +646,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2019/12/06/kotlin-keyword/</loc>
-    
-    <lastmod>2020-02-09T14:49:44.144Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2019/12/22/kotlin-coroutines/</loc>
     
     <lastmod>2020-02-09T14:49:05.512Z</lastmod>
@@ -775,13 +782,6 @@
     <loc>http://yoursite.com/2017/12/02/android-architecture-components-room/</loc>
     
     <lastmod>2019-12-02T09:16:56.867Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/09/02/android-architecture-mvc-mvp-mvvm/</loc>
-    
-    <lastmod>2019-11-12T01:14:15.655Z</lastmod>
     
   </url>
   
@@ -1682,14 +1682,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1773,14 +1773,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
