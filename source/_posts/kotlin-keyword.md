@@ -243,6 +243,16 @@ public final class com/android/hq/gank/gankkotlin/data/GankApi {
 可见，在 object 中，val 对应 Java 的 private final static 属性，带有 public 的 get 方法，而 const val 对应 Java 的 public final static 属性。
 对于 val 和 var 的访问，我们都是通过其对应的 get 或者 set 方法来访问，因此，当定义常量时，出于效率考虑，我们应该使用 const val 方式，避免频繁函数调用。
 
+### sealed
+
+使用 sealed class 声明密封类。
+密封类可以解决 when 语句在编程中的问题。
+
+### init
+
+在类中声明一个初始化模块，初始化模块中的代码，在类被初始化时自动执行，它先于从构造函数执行，在主构造函数之后执行。
+初始化模块可以直接使用主构造函数中的参数，用来弥补主构造函数没有代码的不足。
+
 ### when
 
 when 类似其他语言的 switch 操作符，语法如下：
@@ -311,6 +321,17 @@ fun main(args: Array<String>) {
 ### is
 
 `!is`
+判断类型用，类似于 Java 中的 instanceof()。
+另外 is 可以对符合条件的类型进行智能转换，不必像 Java 那也进行显式的类型转换。
+
+```
+        var a = 5
+        if (a is Int) {
+            Log.e("Test", "${a*a}")
+        }
+```
+
+输出 25。
 
 ### as
 
@@ -328,8 +349,60 @@ o as HistoryFavItem
 
 Kotlin 中使用 inner 关键字来修饰内部类。具体介绍参考 [Kotlin -- 类和对象](http://www.heqiangfly.com/2019/12/10/kotlin-class-object/) 中关于内部类部分的介绍。
 
+### vararg
+
+可变参数
+
+
+### `$`
+
+字符串模板（取值）
+
 
 ## 数据类型
 
 
 ### UInt
+
+
+## 符号
+
+### `?.`
+
+安全调用符，`foo?.bar` 的意思就是如果 `foo != null`，就调用 `foo.bar`，如果 `foo == null`就返回 `null`。
+
+### `?:`
+
+`foo?:bar` 的意思就是如果 `foo != null`，就返回 `foo`，如果 `foo == null`就返回 `bar`。
+
+### `as?`
+
+`foo as? Type` 的意思就是如果 `foo is Type` 就相当于执行 `foo as Type`，如果 `foo !is Type` 就返回 `null`，并不抛出异常。
+
+### `!!`
+
+`foo !!` 的意思就是如果 `foo != null`，就执行 `foo`，如果 `foo == null`，就抛出 NullPointerException 异常。
+相当于非空断言。
+
+### 位运算符
+
+ - or：按位或
+ - and：按位与
+ - shl：有符号左移
+ - shr：有符号右移
+ - ushr：无符号右移
+ - xor：按位异或
+ - inv：按位取反
+
+### 区间运算符
+
+ - in：在某个范围中
+ - downTo：递减，循环时可用，每次减1
+ - step：步长，循环时可用，设置每次循环的增加或减少的量
+
+
+## 注解
+
+### JvmField
+
+### JvmStatic
