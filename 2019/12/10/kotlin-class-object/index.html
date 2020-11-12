@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/12/10/kotlin-class-object/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Kotlin 的类和对象">
-<meta property="og:updated_time" content="2020-02-09T09:14:17.194Z">
+<meta property="og:updated_time" content="2020-11-11T02:32:24.992Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin -- 类和对象">
 <meta name="twitter:description" content="介绍 Kotlin 的类和对象">
@@ -439,9 +439,12 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">abstract    // 抽象类  </div><div class="line">final       // 类不可继承，默认属性</div><div class="line">enum        // 枚举类</div><div class="line">open        // 类可继承，类默认是final的</div><div class="line">annotation  // 注解类</div></pre></td></tr></table></figure>
 </li>
 <li><p>accessModifier: 访问权限修饰符</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">private    // 仅在同一个文件中可见</div><div class="line">protected  // 同一个文件中或子类可见</div><div class="line">public     // 所有调用的地方都可见</div><div class="line">internal   // 同一个模块中可见</div></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">private    // 仅在同一个文件中可见</div><div class="line">protected  // 同一个文件中或子类可见</div><div class="line">public     // 所有调用的地方都可见</div><div class="line">internal   // 同一个模块中可见</div></pre></td></tr></table></figure>
+</li>
 </ul>
-
+<h2 id="委托"><a href="#委托" class="headerlink" title="委托"></a>委托</h2><p>在委托模式中，有两个对象参与处理同一个请求，接受请求的对象将请求委托给另一个对象来处理。<br>Kotlin 直接支持委托模式，更加优雅，简洁。当很多访问器的代码存在相同或者类似的逻辑时，可以将访问器的代码封装成一个特定的类，属性声明时使用委托将访问器的功能委托给该特定的类，借此可以省略重复的访问器代码的编写。<br>Kotlin 通过关键字 by 实现委托。</p>
+<h3 id="类委托"><a href="#类委托" class="headerlink" title="类委托"></a>类委托</h3><p><a href="https://www.runoob.com/kotlin/kotlin-delegated.html" target="_blank" rel="external">https://www.runoob.com/kotlin/kotlin-delegated.html</a></p>
+<h3 id="属性委托"><a href="#属性委托" class="headerlink" title="属性委托"></a>属性委托</h3>
       
     </div>
 
@@ -557,7 +560,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">255</span>
+                <span class="site-state-item-count">256</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -637,7 +640,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#构造方法"><span class="nav-number">1.</span> <span class="nav-text">构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主构造方法"><span class="nav-number">1.1.</span> <span class="nav-text">主构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#省略constructor"><span class="nav-number">1.1.1.</span> <span class="nav-text">省略constructor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#constructor-NaN"><span class="nav-number">1.1.2.</span> <span class="nav-text">constructor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接对属性进行赋值"><span class="nav-number">1.1.3.</span> <span class="nav-text">直接对属性进行赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不显式提供主构造函数"><span class="nav-number">1.1.4.</span> <span class="nav-text">不显式提供主构造函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#次构造函数"><span class="nav-number">1.2.</span> <span class="nav-text">次构造函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性"><span class="nav-number">2.</span> <span class="nav-text">属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#getter-和-setter"><span class="nav-number">2.1.</span> <span class="nav-text">getter 和 setter</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌套类"><span class="nav-number">3.</span> <span class="nav-text">嵌套类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类"><span class="nav-number">4.</span> <span class="nav-text">内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名内部类"><span class="nav-number">5.</span> <span class="nav-text">匿名内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的修饰符"><span class="nav-number">6.</span> <span class="nav-text">类的修饰符</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#构造方法"><span class="nav-number">1.</span> <span class="nav-text">构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主构造方法"><span class="nav-number">1.1.</span> <span class="nav-text">主构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#省略constructor"><span class="nav-number">1.1.1.</span> <span class="nav-text">省略constructor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#constructor-NaN"><span class="nav-number">1.1.2.</span> <span class="nav-text">constructor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接对属性进行赋值"><span class="nav-number">1.1.3.</span> <span class="nav-text">直接对属性进行赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不显式提供主构造函数"><span class="nav-number">1.1.4.</span> <span class="nav-text">不显式提供主构造函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#次构造函数"><span class="nav-number">1.2.</span> <span class="nav-text">次构造函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性"><span class="nav-number">2.</span> <span class="nav-text">属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#getter-和-setter"><span class="nav-number">2.1.</span> <span class="nav-text">getter 和 setter</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌套类"><span class="nav-number">3.</span> <span class="nav-text">嵌套类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类"><span class="nav-number">4.</span> <span class="nav-text">内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名内部类"><span class="nav-number">5.</span> <span class="nav-text">匿名内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的修饰符"><span class="nav-number">6.</span> <span class="nav-text">类的修饰符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#委托"><span class="nav-number">7.</span> <span class="nav-text">委托</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类委托"><span class="nav-number">7.1.</span> <span class="nav-text">类委托</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性委托"><span class="nav-number">7.2.</span> <span class="nav-text">属性委托</span></a></li></ol></li></ol></div>
             
 
           </div>
