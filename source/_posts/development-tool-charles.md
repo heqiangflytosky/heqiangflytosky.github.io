@@ -133,6 +133,22 @@ Help -> SSL Proxying -> Install Charles Root Certificate On a Mobile Device or a
 </network-security-config>
 ```
 
+或者：
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+    </base-config>
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>
+```
+
 ## 常见问题
 
 1. 配置好后无法打开APP
@@ -140,3 +156,7 @@ Help -> SSL Proxying -> Install Charles Root Certificate On a Mobile Device or a
 
 2. 抓取到的内容为乱码
 有的APP为了防止抓取，在返回的内容上做了层加密，所以从Charles上看到的内容是乱码。这种情况下也只能反编译APP,研究其加密解密算法进行解密。
+
+## 参考文档
+
+https://developer.android.com/training/articles/security-config

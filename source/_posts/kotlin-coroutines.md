@@ -127,7 +127,7 @@ async 返回的是 Deferred 类型，Deferred 继承自 Job 接口，增加了�
 
 #### runBlocking
 
-runBlocking 方法和 launch 方法的区别是 delay 方法是可以阻塞当前的线程的。
+runBlocking 方法和 launch 方法的区别是 runBlocking 是可以阻塞当前的线程的。
 
 ```
         runBlocking {
@@ -139,10 +139,15 @@ runBlocking 方法和 launch 方法的区别是 delay 方法是可以阻塞当�
 ```
 
 ```
-17:37:01.513 17388 17388 E Test    : Coroutine start Thread[main,5,main]
-17:37:02.516 17388 17388 E Test    : Coroutines end
-17:37:02.518 17388 17388 E Test    : continue 
+Test    : Coroutine start Thread[main,5,main]
+Test    : Coroutines end
+Test    : continue 
 ```
+
+#### withContext
+
+withContext {} 不会创建新的协程，在指定协程上运行挂起代码块，并挂起该协程直至代码块运行完成。
+多个 withContext 任务是串行的， 且 withContext 可直接返回任务执行的结果。
 
 ## 协程的特点
 
@@ -150,6 +155,6 @@ runBlocking 方法和 launch 方法的区别是 delay 方法是可以阻塞当�
 
  - 协程挂起：协程提供了一种使程序避免阻塞且更廉价可控的操作，叫作协程挂起（coroutines suspension），协程挂起不阻塞线程。
  - 简化代码：协程让原来使用“异步+回调”方式写出来的复杂代码，简化成可以用看似同步的方式表达。
- - 节约资源：唤醒一个线程需要巨大的资源开销。在一个现代化系统上，一个线程非常容易就能吃掉 1M 多的内存。在当前的上下文中，我们可以通过调用协程（根据文档）来作为“轻量级”的线程。通常，一个协程坐落在一个实际的线程池当中，专门用于后台任务的执行操作，这也就是协程为什么如此高效的原因。它只会在需要的时候才会使用系统资源。
+ - 节约资源：线程是由系统调度的，线程切换或线程阻塞的开销都比较大。而协程依赖于线程，但是协程挂起时不需要阻塞线程，几乎是无代价的。协程是由开发者控制的。所以协程也像用户态的线程，非常轻量级，一个线程中可以创建任意个协程。
 
 协程是一种轻量级线程，主要还是运行在线程中的，因此协程不能代替线程。
