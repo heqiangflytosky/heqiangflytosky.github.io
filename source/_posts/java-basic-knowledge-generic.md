@@ -384,6 +384,12 @@ List<String>[] stringList ;
 List<String>[] stringList = new ArrayList<String>[10];
 ```
 
+正确的写法应该是：
+
+```
+List<String>[] stringList = new ArrayList[10];
+```
+
 ### 基本类型不能做类型参数
 
 因此，`List<int>` 是非法的，我们必须使用包装类。
