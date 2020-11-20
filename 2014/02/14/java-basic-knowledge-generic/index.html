@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/02/14/java-basic-knowledge-generic/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 Java 范型的特点和使用方法">
-<meta property="og:updated_time" content="2018-11-12T01:16:30.018Z">
+<meta property="og:updated_time" content="2020-11-20T03:19:55.648Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 基础 -- 范型">
 <meta name="twitter:description" content="本文介绍 Java 范型的特点和使用方法">
@@ -482,6 +482,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public class Box&lt;T extends Number&gt; &#123;</div><div class="line"></div><div class="line">    private List&lt;T&gt; list = new ArrayList&lt;T&gt;();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>下面的代码，等号后面的代码是非法的：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt;[] stringList = new ArrayList&lt;String&gt;[10];</div></pre></td></tr></table></figure>
+<p>正确的写法应该是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt;[] stringList = new ArrayList[10];</div></pre></td></tr></table></figure>
 <h3 id="基本类型不能做类型参数"><a href="#基本类型不能做类型参数" class="headerlink" title="基本类型不能做类型参数"></a>基本类型不能做类型参数</h3><p>因此，<code>List&lt;int&gt;</code> 是非法的，我们必须使用包装类。</p>
 <h3 id="static-的语境不能引用类型变量"><a href="#static-的语境不能引用类型变量" class="headerlink" title="static 的语境不能引用类型变量"></a>static 的语境不能引用类型变量</h3><p>在一个范型类中，static 方法和 static 域均不可以引用类的类型变量，因为类型擦除后类型变量就不存在了。而且，static 域在该类的诸范型实例之间是共享的。因此，static 的语境不能引用类型变量。</p>
 
