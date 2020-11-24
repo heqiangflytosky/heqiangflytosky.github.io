@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/01/06/kotlin-generics/</loc>
+    
+    <lastmod>2020-11-24T10:01:16.586Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2014/02/14/java-basic-knowledge-generic/</loc>
     
-    <lastmod>2020-11-24T07:44:52.133Z</lastmod>
+    <lastmod>2020-11-24T08:44:14.583Z</lastmod>
     
   </url>
   
@@ -1647,14 +1654,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -1710,14 +1717,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1738,14 +1745,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1801,14 +1808,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
