@@ -168,6 +168,30 @@ repeat(5){Log.e("Test","test $it")}
 testLambda { _ ->  Log.e("Test","test")}
 ```
 
+#### 双冒号操作符
+
+Kotlin 中 双冒号操作符是代表函数引用，表示把一个方法当做一个参数，传递到另一个方法中进行使用，或者赋值给一个变量。加上双冒号，这个函数就编程了一个对象。
+Kotlin 如果一个函数左边添加了双冒号，那么它就不代表函数本身了，而是表示一个对象，或者说一个指向对象的引用。但是这个对象不是函数本身，而是一个和这个函数具有相同功能的对象。
+
+```
+    {
+        ......
+        testLambda(6,::para)
+        var b = ::para
+        b(8)
+    }
+
+    fun testLambda(type: Int,method: (Int) -> Int) {
+        method(type)
+        Log.e("Test","testLambda $type")
+    }
+
+    fun para(p:Int):Int{
+        Log.e("Test","para $p")
+        return p
+    }
+```
+
 ### Lambda 表达式作为返回值
 
 函数不仅可以作为参数使用，还可以作为返回值使用。
