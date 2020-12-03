@@ -27,11 +27,20 @@ date: 2019-12-22 10:00:00
  - 简化代码：协程让原来使用“异步+回调”方式写出来的复杂代码，简化成可以用看似同步的方式表达。也就是说用看似同步的方式写出异步的代码。
  - 节约资源：线程是由系统调度的，线程切换或线程阻塞的开销都比较大。而协程依赖于线程，但是协程挂起时不需要阻塞线程，几乎是无代价的。协程是由开发者控制的。所以协程也像用户态的线程，非常轻量级，一个线程中可以创建任意多个协程。
  - 支持取消：
+ - 协程是结构化的：也就是说在协程作用域内部创建的子协程，它们之间是有父子关系的。而线程是没有这种特性的。这种特性使得协程便于管理。
 
 Kotlin 协程是 Kotlin 的线程框架，是对线程的一种更友好的封装，主要特点是使用方便，方便在哪里？可以使用同步的方式写出异步的代码。这个我感觉是协程带给我们最大的收获。
 Kotlin 还是运行在线程中的，因此协程不能代替线程。
 协程的挂起其实就是这个协程从正在执行它的线程上脱离了，而不是暂停了。这个协程当前所在的线程从这行代码开始就不再运行这个协程了。当挂起的函数执行完毕后，会自动切回到当前的协程。
 
+## 协程作用域
+
+协程作用域定义新协程的范围。每个协程构建器都是CoroutineScope的扩展，并继承其coroutineContext以自动传播上下文元素和取消。
+每个协程构建器（如launch，async等）和每个作用域函数（如coroutineScope，withContext等）都会将自己的作用域实例提供给它运行的内部代码块。
+我们前面在构建协程时用的 `GlobalScope` 就是继承自 `CoroutineScope` 的作用域，另外 kotlin 还为我们提供了 MainScope 作用域来构建协程。
+
+coroutineScope 是继承外部 Job 的上下文创建作用域，在其内部的取消操作是双向传播的，子协程未捕获的异常也会向上传递给父协程。它更适合一系列对等的协程并发的完成一项工作，任何一个子协程异常退出，那么整体都将退出，简单来说就是”一损俱损“。这也是协程内部再启动子协程的默认作用域。
+supervisorScope 同样继承外部作用域的上下文，但其内部的取消操作是单向传播的，父协程向子协程传播，反过来则不然，这意味着子协程出了异常并不会影响父协程以及其他兄弟协程。它更适合一些独立不相干的任务，任何一个任务出问题，并不会影响其他任务的工作，简单来说就是”自作自受“，例如 UI，我点击一个按钮出了异常，其实并不会影响手机状态栏的刷新。需要注意的是，supervisorScope 内部启动的子协程内部再启动子协程，如无明确指出，则遵守默认作用域规则，也即 supervisorScope 只作用域其直接子协程。
 
 ## 协程的使用
 
@@ -319,6 +328,7 @@ welcome
 可见，协程取消成功。
 
 最后，我们对协程取消条件做一下总结：从某种角度上讲，是否能够取消是主动的；外部调用了cancel方法后，相当于是发起了一条取消信号；被取消协程内部如果自身检测到自身状态的变化，比如isActive的判断以及所有的kotlinx.coroutines包下挂起函数，都会检测协程自身的状态变化，如果检测到通知被取消，就会抛出一个CancellationException的异常。
+另外还可以使用 `ensureActive()` 方法来判断当前协程是否被取消。
 
 #### 取消异常
 
@@ -482,6 +492,76 @@ RuntimeException 会使程序发生crash。
 可以使用 withTimeout，withTimeoutOrNull。
 withTimeoutOrNull与withTimeout的区别在于，当发生超时取消后，withTimeoutOrNull的返回为null，而withTimeout会抛出一个TimeoutCancellationException。
 
+## 协程异常
+
+前面介绍协程取消的时候也介绍了一些关于协程异常的知识，这里再进行一些深入和扩展。
+首先，Kotlin 是没有像 Java 中的那样的 Checked Exception 机制的，具体请参考[浅谈Kotlin的Checked Exception机制](https://guolin.blog.csdn.net/article/details/108817286)一文。但是在 Kotlin 中也是可以对一些异常进行捕获的。
+
+### 异常捕获
+
+先看下面的代码：
+
+```
+        GlobalScope.launch {
+            try {
+                throw Exception("Test")
+            }catch (e:Exception) {
+                Log.e("Test","", e)
+            }
+        }
+```
+
+这种捕获异常的方式毫无疑义是正确的。
+那么，如果把 try catch 放到协程的外面呢？
+
+```
+        try {
+            GlobalScope.launch {
+                throw Exception("Test")
+            }
+        }catch (e:Exception) {
+            Log.e("Test","", e)
+        }
+```
+
+这种方式明显是不行的，因为 Kotlin 是异步的，lunch代码块中的方式并不是在 try catch 代码执行期间执行的，它是异步的，执行期间会超出 try catch 的作用域，这时在抛出异常的话肯定就捕获不到了。和以前我们介绍的 Java Thread 中的捕获机制类似的。
+
+现在再换一种方式：
+
+```
+    suspend fun testException() {
+        try {
+            val job = GlobalScope.async {
+                throw Exception("Test")
+            }
+            job.await()
+        }catch (e:Exception) {
+            Log.e("Test","", e)
+        }
+
+    }
+```
+
+这种情况会捕获到的，因为await会消费携程中抛出的异常，从而被catch到。
+在协程嵌套的情况下，协程会采取冒泡的行为来传递异常。如果是 supervisorScope，那么子协程的异常不会向上传递。
+
+
+### 全局异常处理
+
+我们可以为 Thread 设置全局异常处理回调，那么在 Kotlin 中，我们也可以为协程设置全局异常处理。
+
+```
+        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+            Log.e("Test","Throws an exception with message: ${throwable.message}")
+        }
+        GlobalScope.launch(exceptionHandler) {
+            throw Exception("Test")
+        }
+```
+
+上面的代码其实并不算是一个全局的异常捕获，因为它只能捕获对应协程内未捕获的异常，如果要做到真正的全局捕获，我们可以自己定义一个捕获类的实现，然后修改 META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler 文件来实现。
+
 ## 推荐文章
 
 https://kaixue.io/tag/kotlin-coroutines/
+[浅谈Kotlin的Checked Exception机制](https://guolin.blog.csdn.net/article/details/108817286)

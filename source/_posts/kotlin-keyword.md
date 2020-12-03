@@ -11,7 +11,7 @@ date: 2019-12-6 10:00:00
 
 本文介绍一下 Kotlin 相对于 Java 来说一些特殊的关键字。
 
-先介绍一个技能，通过 Android Studio 的菜单 Tools -> Kotlin -> Show Kotlin Bytecode 可查看当前文件的字节码，这对于我们分析和加深理解 Kotlin 很有帮助。
+先介绍一个技能，通过 Android Studio 的菜单 Tools -> Kotlin -> Show Kotlin Bytecode 可查看当前文件的字节码，如果想查看对应的 java 代码，可以点击 Kotlin Bytecode 窗口上面的 Decompile 按钮，就会出现 Kotlin 代码对应的 Java 代码。这对于我们分析和加深理解 Kotlin 很有帮助。
 
 ## 关键字
 
@@ -290,6 +290,63 @@ fun main(args: Array<String>) {
 ```
 
 ### field
+
+在 Kotlin 中，用 field 关键字表示幕后字段，幕后字段主要用于自定义getter和setter中，并且只能在getter 和setter中访问。
+那么我们为什么要使用幕后字段呢？它有什么作用呢？
+我们知道，kotlin中，会为类的非私有的属性生成getter或者setter方法，当我们调用属性或者为属性赋值时，实际会调用这些方法，而这些getter或者setter方法我们也是可以自定义的。
+我们先来看一下下面的自定义方法是否正确：
+
+```
+class TestClass{
+    var para1:String = ""
+    set(value) {
+        Log.e("Test","para1=$value")
+        para1 = value
+    }
+}
+```
+
+```
+        var test = TestClass()
+        test.para1 = "test"
+```
+
+运行上面的代码后会发生 crash：`Caused by: java.lang.StackOverflowError: stack size 8MB`，为什么会这样呢？我们看一下它反编译后的java代码：
+
+```
+public final class TestClass {
+   @NotNull
+   private String para1 = "";
+
+   @NotNull
+   public final String getPara1() {
+      return this.para1;
+   }
+
+   public final void setPara1(@NotNull String value) {
+      Intrinsics.checkParameterIsNotNull(value, "value");
+      Log.e("Test", "para1=" + value);
+      this.setPara1(value);
+   }
+}
+```
+
+可以看到，在我们自定义的 `setPara1` 方法内部嵌套调用了方法本身，因此导致溢出报错。
+把上面的方法改一下：
+
+```
+class TestClass{
+    var para1:String = ""
+    set(value) {
+        Log.e("Test","para1=$value")
+        field = value
+    }
+}
+```
+
+这下就正常了。可以看出，幕后字段field指的就是当前的这个属性，它不是一个关键字，只是在setter和getter的这个两个特殊作用域中有着特殊的含义，就像一个类中的this一样。幕后字段可以避免访问器的自递归而导致程序崩溃的 StackOverflowError异常。
+如果我们重写了这个变量的 getter 方法和 setter 方法，并且在 getter 方法和 setter 方法中都没有出现过 filed 这个关键字，则编译器会报错，提示 `Initializer is not allowed here because this property has no backing field`，除非显式写出 filed 关键字。
+
 
 ### inline
 
