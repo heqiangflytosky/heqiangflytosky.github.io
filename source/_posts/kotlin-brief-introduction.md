@@ -11,7 +11,7 @@ date: 2019-12-2 10:00:00
 
 Kotlin 是一种在 Java 虚拟机上运行的静态类型编程语言，Kotlin 可以编译成Java字节码，也可以编译成 JavaScript 字节码，方便在没有 JVM 的设备上运行。
 Kotlin 和 Java 之间之所以能无缝对接就是因为无论是 Java 还是 Kotlin，最后都会被编译成 dex 字节码（android虚拟键最终执行的就是dex字节码），java经历 .java源文件-> .class java可执行文件-> dex字节码； Kotlin 经历 .kt源文件->dex字节码。
-Kotlin 比 Java 语言更简洁、更安全、易扩展，能够静态检测常见陷阱，也可以应用于Android开发、JavaScript开发、服务器端开发的程序中。由于从实际使用效果来说，Kotlin语言比Java语言的开发效率高并且使用更安全，因此Kotlin语言的应用越来越广泛。
+Kotlin 比 Java 语言更简洁、更安全、易扩展，能够静态检测常见陷阱。Kotlin 可以应用在多种平台上，除了最为广泛应用的 Java 平台之外，还可以运行在浏览器，Node.js以及Native环境（macOS、Linux、Windows、iOS、Android Native）中，用于Android开发、JavaScript开发、服务器端开发的程序中。由于从实际使用效果来说，Kotlin语言比Java语言的开发效率高并且使用更安全，因此Kotlin语言的应用越来越广泛。
 Kotlin 第一个官方 1.0 版发布于 2016 年 2 月，2017年谷歌I/O大会上 Android 团队宣布 Kotlin 成为其官方头等支持语言，这一举措，更进一步推动了 Kotlin 的应用。
 
 
@@ -21,6 +21,7 @@ Kotlin 第一个官方 1.0 版发布于 2016 年 2 月，2017年谷歌I/O大会�
 [Kotlin中文官网文档：非常好的学习资料](http://www.kotlincn.net/docs/reference/)
 [Kotlin中文官网教程](http://www.kotlincn.net/docs/tutorials/)
 [Kotlin中文论坛](https://discuss.kotliner.cn/)
+[Kotlin 学习站](https://cn.kotlin.tips/)
 [菜鸟教程里面的Kotlin教程](https://www.runoob.com/kotlin/kotlin-tutorial.html)
 [Android 开发者网站对Kotlin的介绍](https://developer.android.com/kotlin)
 [JetBrains 中文博客](https://blog.jetbrains.com/zh-hans/)

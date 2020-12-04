@@ -347,6 +347,9 @@ class TestClass{
 这下就正常了。可以看出，幕后字段field指的就是当前的这个属性，它不是一个关键字，只是在setter和getter的这个两个特殊作用域中有着特殊的含义，就像一个类中的this一样。幕后字段可以避免访问器的自递归而导致程序崩溃的 StackOverflowError异常。
 如果我们重写了这个变量的 getter 方法和 setter 方法，并且在 getter 方法和 setter 方法中都没有出现过 filed 这个关键字，则编译器会报错，提示 `Initializer is not allowed here because this property has no backing field`，除非显式写出 filed 关键字。
 
+了解了 backing field 我们还可以接着了解一下 backing properties，通过一个公开的属性和一个私有的属性联合实现一个对外只读对内可读可写的属性。
+https://blog.csdn.net/willway_wang/article/details/100184784
+
 
 ### inline
 

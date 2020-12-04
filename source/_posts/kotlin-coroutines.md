@@ -170,8 +170,102 @@ Test    : continue
 
 #### withContext
 
-withContext {} 不会创建新的协程，在指定协程上运行挂起代码块，并挂起该协程直至代码块运行完成。
+withContext {} 在指定协程上运行挂起代码块，并挂起当前协程直至代码块运行完成再切回来运行。
 多个 withContext 任务是串行的， 且 withContext 可直接返回任务执行的结果。
+
+### withContext 和 async 的区别
+
+withContext 与 async 都可以返回耗时任务的执行结果。 
+多个 withContext 任务是串行的， 且 withContext 可直接返回任务执行的结果。
+多个 async 任务是并行的，async 返回的是一个 `Deferred<T>`，需要调用其 `await()` 方法获取结果。
+
+```
+        GlobalScope.launch (Dispatchers.Main){
+            var r1 = withContext(Dispatchers.IO) {
+                Log.e("Test","enter 1")
+                delay(1000)
+                Log.e("Test","exit 1")
+                100
+            }
+            var r2 = withContext(Dispatchers.IO) {
+                Log.e("Test","enter 2")
+                delay(1000)
+                Log.e("Test","exit 2")
+                200
+            }
+            Log.e("Test","r1=$r1,r2=$r2")
+        }
+```
+
+结果：
+
+```
+10:42:28.973 : enter 1
+10:42:29.977 : exit 1
+10:42:29.980 : enter 2
+10:42:30.991 : exit 2
+10:42:30.992 : r1=100,r2=200
+```
+
+```
+        GlobalScope.launch (Dispatchers.Main){
+            var r1 = async (Dispatchers.IO) {
+                Log.e("Test","enter 1")
+                delay(1000)
+                Log.e("Test","exit 1")
+                100
+            }
+            var r2 = async(Dispatchers.IO) {
+                Log.e("Test","enter 2")
+                delay(1000)
+                Log.e("Test","exit 2")
+                200
+            }
+            Log.e("Test","r1=${r1.await()},r2=${r2.await()}")
+        }
+```
+
+并行执行：
+
+```
+10:40:05.658 : enter 1
+10:40:05.662 : enter 2
+10:40:06.663 : exit 1
+10:40:06.665 : exit 2
+10:40:06.671 : r1=100,r2=200
+```
+
+如果我们把上面的程序修改一下，两个 async 也可以变为串行执行：
+
+```
+        GlobalScope.launch (Dispatchers.Main){
+            var r1 = async (Dispatchers.IO) {
+                Log.e("Test","enter 1")
+                delay(1000)
+                Log.e("Test","exit 1")
+                100
+            }
+            Log.e("Test","r1=${r1.await()}")
+            var r2 = async(Dispatchers.IO) {
+                Log.e("Test","enter 2")
+                delay(1000)
+                Log.e("Test","exit 2")
+                200
+            }
+            Log.e("Test","r1=${r1.await()},r2=${r2.await()}")
+        }
+```
+
+```
+2020-12-04 : enter 1
+2020-12-04 : exit 1
+2020-12-04 : r1=100
+2020-12-04 : enter 2
+2020-12-04 : exit 2
+2020-12-04 : r1=100,r2=200
+```
+
+因此，因此直接在async 后面使用 await() 就和 withContext 一样，程序运行到这里就会被挂起直到该函数执行完成才会继续执行下一个 async 。
 
 ### 取消协程
 
@@ -565,3 +659,7 @@ withTimeoutOrNull与withTimeout的区别在于，当发生超时取消后，with
 
 https://kaixue.io/tag/kotlin-coroutines/
 [浅谈Kotlin的Checked Exception机制](https://guolin.blog.csdn.net/article/details/108817286)
+
+## 推荐书籍
+
+《深入理解Kotlin协程》
