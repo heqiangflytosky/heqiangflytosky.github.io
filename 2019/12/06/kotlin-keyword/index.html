@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/12/06/kotlin-keyword/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Kotlin 的关键字">
-<meta property="og:updated_time" content="2020-12-03T01:36:28.459Z">
+<meta property="og:updated_time" content="2020-12-03T01:52:22.285Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin -- 关键字">
 <meta name="twitter:description" content="介绍 Kotlin 的关键字">
@@ -469,6 +469,7 @@
 <p>可以看到，在我们自定义的 <code>setPara1</code> 方法内部嵌套调用了方法本身，因此导致溢出报错。<br>把上面的方法改一下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">class TestClass&#123;</div><div class="line">    var para1:String = &quot;&quot;</div><div class="line">    set(value) &#123;</div><div class="line">        Log.e(&quot;Test&quot;,&quot;para1=$value&quot;)</div><div class="line">        field = value</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这下就正常了。可以看出，幕后字段field指的就是当前的这个属性，它不是一个关键字，只是在setter和getter的这个两个特殊作用域中有着特殊的含义，就像一个类中的this一样。幕后字段可以避免访问器的自递归而导致程序崩溃的 StackOverflowError异常。<br>如果我们重写了这个变量的 getter 方法和 setter 方法，并且在 getter 方法和 setter 方法中都没有出现过 filed 这个关键字，则编译器会报错，提示 <code>Initializer is not allowed here because this property has no backing field</code>，除非显式写出 filed 关键字。</p>
+<p>了解了 backing field 我们还可以接着了解一下 backing properties，通过一个公开的属性和一个私有的属性联合实现一个对外只读对内可读可写的属性。<br><a href="https://blog.csdn.net/willway_wang/article/details/100184784" target="_blank" rel="external">https://blog.csdn.net/willway_wang/article/details/100184784</a></p>
 <h3 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h3><p>用来修饰function，那么这个function就被称作inline function（内联函数）。<br>具体参考<a href="http://www.heqiangfly.com/2019/12/16/kotlin-lambda/" target="_blank" rel="external">Kotlin – Lambda 表达式</a> 中关于内联函数部分的说明。</p>
 <h3 id="lazy-、lateinit"><a href="#lazy-、lateinit" class="headerlink" title="lazy 、lateinit"></a>lazy 、lateinit</h3><ul>
 <li>lateinit：如果不想在定义变量的时候初始化，一种做法是 <code>var para4:String ?=null</code>，表示可为空。另外一种方法是使用lateinit <code>lateinit var para4:String</code>，表示在后面合适的时机进行初始化，如果在调用的时候还没有进行初始化，会抛出未初始化的异常。<ul>
