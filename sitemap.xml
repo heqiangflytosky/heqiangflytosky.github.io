@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2019/12/12/kotlin-interface/</loc>
+    
+    <lastmod>2020-12-07T09:14:00.829Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/12/10/kotlin-class-object/</loc>
+    
+    <lastmod>2020-12-07T08:53:59.847Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
+    
+    <lastmod>2020-12-04T06:53:25.475Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2019/12/22/kotlin-coroutines/</loc>
     
     <lastmod>2020-12-04T02:54:37.307Z</lastmod>
@@ -19,13 +40,6 @@
     <loc>http://yoursite.com/2019/12/06/kotlin-keyword/</loc>
     
     <lastmod>2020-12-03T01:52:22.285Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
-    
-    <lastmod>2020-11-27T10:27:26.418Z</lastmod>
     
   </url>
   
@@ -82,13 +96,6 @@
     <loc>http://yoursite.com/2020/03/23/cocos-creator-edit-box-source-code/</loc>
     
     <lastmod>2020-11-12T03:19:04.357Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2019/12/10/kotlin-class-object/</loc>
-    
-    <lastmod>2020-11-11T02:32:24.992Z</lastmod>
     
   </url>
   
@@ -1584,14 +1591,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
@@ -1717,7 +1724,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1731,7 +1738,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1745,14 +1752,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1794,13 +1801,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1809,6 +1809,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
