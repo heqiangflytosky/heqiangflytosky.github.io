@@ -192,6 +192,43 @@ fun main(args: Array<String>) {
 }
 ```
 
+嵌套类对应于Java的静态内部类（即有static关键字修饰的内部类），只要在一个类的内部定义了另外一个类，那么这个类就叫做嵌套类。相当于Java当中有static关键字修饰的内部类。
+这介绍一个知识点，如果一个类父类定义了嵌套类，那么我们可以像java那样只从这个类来调用这个嵌套类吗？代码说明一下：
+
+```
+open class TestClass{
+    open class Inner{
+
+    }
+}
+
+class Test1 : TestClass(){
+
+}
+
+class Test2 : TestClass.Inner(){
+
+}
+```
+
+在这里，只能写成 `TestClass.Inner()` 而不能从 `Test1.Inner()` 继承，Java 是可以这样来做的。
+
+```
+    public class TestClass{
+        public static class Inner{
+
+        }
+    }
+
+    public class Test1 extends TestClass{
+
+    }
+
+    public class Test2 extends Test1.Inner{
+
+    }
+```
+
 ## 内部类
 
 内部类使用 inner 关键字来表示。
@@ -220,6 +257,7 @@ fun main(args: Array<String>) {
 ```
 
 为了消除歧义，要访问来自外部作用域的 this，我们使用this@label，其中 @label 是一个 代指 this 来源的标签。
+内部类对应于Java中的非静态内部类（即没有static关键字修饰的内部类），使用inner关键字在一个类的内部定义另一个类就叫做内部类。相当于Java当中没有static关键字修饰的内部类。
 
 ## 匿名内部类
 

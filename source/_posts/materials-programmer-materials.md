@@ -198,6 +198,7 @@ date: 2016-12-1 10:00:00
  - [android-open-project](https://github.com/Trinea/android-open-project)：Android 开源项目分类汇总
  - [googlesamples](https://github.com/googlesamples)：Android系统每次推出一些新特性，Google都会写一些Demo放在Github上，对于想要了解新特性怎么玩的同学，肯定不能错过它。
  - [android-arsenal](https://android-arsenal.com/)：你是否还在为找不到合适的开源库而苦恼，Android Arsenal这个网站已经帮你做了一定的分类，可以帮你提高不少效率。
+ - [中国独立开发者项目列表](https://github.com/1c7/chinese-independent-developer)
 
 #### 知名互联网企业开源项目
 
@@ -462,6 +463,11 @@ date: 2016-12-1 10:00:00
  - [JetStream](http://browserbench.org/JetStream/)：JavaScript Benchmark
  - [StarUML](http://staruml.io/)：开源免费的UML工具
  - [1024程序员开发工具箱](https://1024tools.com/)： JSON格式化，Markdown 编辑转Html等工具
+
+### 工具软件
+
+ - Sketch：简单易用的绘图工具
+ - 墨刀：在线原型设计与协同工具
 
 ### 在线绘图
 
