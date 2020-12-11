@@ -42,6 +42,7 @@ javah -jni com.example.heqiang.testsomething.util.JniUtils
 ```
 
 就会在当前目录生成 com_example_heqiang_testsomething_util_JniUtils.h 头文件。当然这个头文件的文件名你也可以自定义成其他。
+另外，这个头文件也不是必须的，可以生成，也可以省去。
 
 ### JNI 开发
 
@@ -61,6 +62,8 @@ JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_g
     return (*env)->NewStringUTF(env,"abcdefghijklmn");
 }
 ```
+
+这介绍一个自动生成 jni 方法的窍门，光标定位到 Java 的native 方法上面，然后按快捷键，会有 `create funtion XXXX` 选项，选择后会在 c 文件里面自动生成对应的 jni 方法。
 
 ## 编译
 
@@ -120,14 +123,24 @@ android.useDeprecatedNdk=true
 // CMakeLists.txt
 cmake_minimum_required(VERSION 3.4.1)
 
-    add_library( # Specifies the name of the library.
-                 JniDemo
+# 添加头文件路径，demo中暂时不需要
+# include_directories(src/main/cpp/include)
 
-                 # Sets the library as a shared library.
-                 SHARED
+# 添加动态库
+add_library( # Specifies the name of the library.
+        JniDemo
 
-                 # Provides a relative path to your source file(s).
-                 src/main/jni/Constants.c )
+        # Sets the library as a shared library.
+        SHARED
+
+        # Provides a relative path to your source file(s).
+        src/main/jni/Constants.c )
+
+# 连接动态库，需要使用 log 库。
+target_link_libraries(
+        JniDemo
+        log
+)
 ```
 
 配置gradle：
@@ -221,3 +234,260 @@ public class JniUtils {
 
 然后就可以通过 `JniUtils.getString()` 
 
+## c 和 c++ 开发的异同
+
+使用 c++ 开发 jni 和使用 c 语言还是有些差别的。
+
+1.文件后缀改成 cpp
+2.在 jni.h 文件中有两套代码。一套是支持c的， 一套是支持c++的。
+
+比如，c++ 中 getString 方法要写成：
+
+```
+JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getString(JNIEnv *env, jobject obj) {
+    LOGD("call jni sucessfully");
+    return env->NewStringUTF("abcdefghijklmn");
+}
+```
+3.在方法上面加上 extern "C" 
+
+```
+extern "C" 
+JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getString(JNIEnv *env, jobject obj) {
+    LOGD("call jni sucessfully");
+   
+```
+
+## native 调用 Java
+
+前面我们讲了 Java 调用 c/c++，接下来讲一下如果用 c/c++ 调用 Java 方法。
+值得注意的是，在 native 的主线程和子线程调用 Java 的方法是不一样的。
+
+### 主线程调用
+
+要想通过 native 调用 Java，就需要有个 Java 的对象，获取这个对象也有两个方法：
+
+ - Java 层调用 native 方法时，会有个对象 jobject 参数，这个就是 Java 的当前对象。
+ - 通过C/C++创建java对象
+
+先来看第一种方法：
+
+```
+// JniUtils.java
+
+public class JniUtils {
+    static {
+        System.loadLibrary("JniDemo");
+    }
+    public static native String getString();
+    public native void setUp();
+    public native void callBack();
+}
+
+```
+
+```
+//Constants.c
+
+JavaVM* javaVM = NULL;
+jobject j_obj = NULL;
+jmethodID j_success = NULL;
+
+JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getString(JNIEnv *env, jobject obj) {
+    LOGD("call getString sucessfully");
+    return (*env)->NewStringUTF(env,"abcdefghijklmn1122");
+}
+
+JNIEXPORT void JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_setUp(JNIEnv *env, jobject obj) {
+    LOGD("call setUp sucessfully");
+    j_obj = (*env)->NewGlobalRef(env,obj);
+    jclass  jlz = (*env)->GetObjectClass(env,obj);
+
+    j_success = (*env)->GetMethodID(env,jlz, "onSucess", "(Ljava/lang/String;)V");
+}
+
+JNIEXPORT void JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_callBack(JNIEnv *env, jobject obj) {
+    LOGD("call callback sucessfully");
+    callJava(env, obj);
+}
+
+void callJava(JNIEnv *env,jobject obj) {
+    jstring para = (*env)->NewStringUTF(env, "Test");
+    (*env)->CallVoidMethod(env,obj, j_success, para);
+}
+
+```
+
+再来看第二种方法：
+创建一个 Java 类：
+
+```
+package com.example.heqiang.testsomething.util;
+
+import android.util.Log;
+
+public class JniClass {
+    public void onSuccess(String msg) {
+        Log.e("Test","msg2 = "+msg);
+    }
+}
+```
+
+```
+//Constants.c
+JavaVM* javaVM = NULL;
+
+jclass j_jniClass = NULL;
+jmethodID j_success2 = NULL;
+
+JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getString(JNIEnv *env, jobject obj) {
+    LOGD("call getString sucessfully");
+    return (*env)->NewStringUTF(env,"abcdefghijklmn1122");
+}
+
+JNIEXPORT void JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_setUp(JNIEnv *env, jobject obj) {
+    LOGD("call setUp sucessfully");
+
+    j_jniClass = (*env)->FindClass(env,"com/example/heqiang/testsomething/util/JniClass");
+    // findclass 返回的是一个 local reference，函数结束运行时会被销毁，不能赋值给一个全局变量
+    // 必须在这里转换一下，否则会有 JNI DETECTED ERROR IN APPLICATION: use of deleted local reference 崩溃
+    j_jniClass = (*env)->NewGlobalRef(env,j_jniClass);
+    j_success2 = (*env)->GetMethodID(env,j_jniClass,"onSuccess","(Ljava/lang/String;)V");
+}
+
+JNIEXPORT void JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_callBack(JNIEnv *env, jobject obj) {
+    LOGD("call callback sucessfully");
+    callJava(env, obj);
+}
+
+void callJava(JNIEnv *env,jobject obj) {
+    jstring para2 = (*env)->NewStringUTF(env, "Test2");
+    jmethodID init = (*env)->GetMethodID(env,j_jniClass,"<init>","()V");
+
+    // 创建对象，下面两种方式都可以
+    jobject jniObj = (*env)->NewObject(env,j_jniClass,init);
+    //jobject jniObj = (*env)->AllocObject(env,j_jniClass);
+
+    (*env)->CallVoidMethod(env,jniObj, j_success2, para2);
+}
+```
+
+### 子线程调用
+
+JavaVM是属于Java进程的，每个进程只有一个JavaVM，而这个JavaVM可以被多线程共享，但是JNIEnv和jobject是属于线程私有的，不能共享。
+要在子线程函数里使用AttachCurrentThread()和DetachCurrentThread()这两个函数，在这两个函数之间加入回调java方法所需要的代码。AttachCurrentThread方法用来获取到当前线程中的JNIEnv指针。
+
+```
+JavaVM* javaVM = NULL;
+//jobject j_obj = NULL;
+//jmethodID j_success = NULL;
+
+jclass j_jniClass = NULL;
+jmethodID j_success2 = NULL;
+
+pthread_t pt;
+
+//当动态库被加载时这个函数被系统调用
+jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    LOGD("JNI_OnLoad");
+    jint result = -1;
+    //保存全局JVM以便在子线程中使用
+    //javaVM = vm;
+    JNIEnv* env;
+
+    if ((*vm)->GetEnv(vm,(void**)&env, JNI_VERSION_1_4) != JNI_OK)
+    {
+        return result;
+    }
+    return JNI_VERSION_1_4;
+}
+
+JNIEXPORT jstring JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_getString(JNIEnv *env, jobject obj) {
+    LOGD("call getString sucessfully");
+    return (*env)->NewStringUTF(env,"abcdefghijklmn1122");
+}
+
+JNIEXPORT void JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_setUp(JNIEnv *env, jobject obj) {
+    LOGD("call setUp sucessfully");
+    //保存全局JVM以便在子线程中使用
+    // 在 JNI_OnLoad 中保存也行
+    (*env)->GetJavaVM(env,&javaVM);
+
+    j_jniClass = (*env)->FindClass(env,"com/example/heqiang/testsomething/util/JniClass");
+    // findclass 返回的是一个 local reference，函数结束运行时会被销毁，不能赋值给一个全局变量
+    // 必须在这里转换一下，否则会有 JNI DETECTED ERROR IN APPLICATION: use of deleted local reference 崩溃
+    j_jniClass = (*env)->NewGlobalRef(env,j_jniClass);
+    j_success2 = (*env)->GetMethodID(env,j_jniClass,"onSuccess","(Ljava/lang/String;)V");
+}
+
+void *thread_fun(void* arg){
+    LOGD("call thread_fun sucessfully");
+    JNIEnv *jniEnv;
+    if((*javaVM)->AttachCurrentThread(javaVM,&jniEnv, 0) != JNI_OK)
+    {
+        LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
+        return NULL;
+    }
+
+    callJava(jniEnv,NULL);
+
+    if((*javaVM)->DetachCurrentThread(javaVM) != JNI_OK)
+    {
+        LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
+    }
+    
+    pthread_exit(0);
+}
+
+JNIEXPORT void JNICALL Java_com_example_heqiang_testsomething_util_JniUtils_callBack(JNIEnv *env, jobject obj) {
+    LOGD("call callback sucessfully");
+    //callJava(env, obj);
+    pthread_create(&pt, NULL,thread_fun,NULL);
+}
+
+void callJava(JNIEnv *env,jobject obj) {
+    LOGD("call callJava sucessfully");
+
+    jstring para2 = (*env)->NewStringUTF(env, "Test2");
+    jmethodID init = (*env)->GetMethodID(env,j_jniClass,"<init>","()V");
+
+    // 创建对象，下面两种方式都可以
+    jobject jniObj = (*env)->NewObject(env,j_jniClass,init);
+    //jobject jniObj = (*env)->AllocObject(env,j_jniClass);
+
+    (*env)->CallVoidMethod(env,jniObj, j_success2, para2);
+}
+
+
+```
+
+
+### 获取签名参数
+
+进入 class 文件所在的目录，然后运行： `javap -s -p JniUtils.class `
+
+```
+Compiled from "JniUtils.java"
+public class com.example.heqiang.testsomething.util.JniUtils {
+  public com.example.heqiang.testsomething.util.JniUtils();
+    descriptor: ()V
+
+  public static native java.lang.String getString();
+    descriptor: ()Ljava/lang/String;
+
+  public native void setUp();
+    descriptor: ()V
+
+  public native void callBack();
+    descriptor: ()V
+
+  public void onSucess(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+
+  static {};
+    descriptor: ()V
+}
+
+```
+
+可以得到每个方法的签名参数。
