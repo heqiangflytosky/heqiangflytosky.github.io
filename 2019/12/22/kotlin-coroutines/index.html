@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/12/22/kotlin-coroutines/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Kotlin 协程的使用">
-<meta property="og:updated_time" content="2020-12-04T02:54:37.307Z">
+<meta property="og:updated_time" content="2020-12-07T11:15:13.853Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin -- 协程">
 <meta name="twitter:description" content="介绍 Kotlin 协程的使用">
@@ -411,7 +411,7 @@
 <li>支持取消：</li>
 <li>协程是结构化的：也就是说在协程作用域内部创建的子协程，它们之间是有父子关系的。而线程是没有这种特性的。这种特性使得协程便于管理。</li>
 </ul>
-<p>Kotlin 协程是 Kotlin 的线程框架，是对线程的一种更友好的封装，主要特点是使用方便，方便在哪里？可以使用同步的方式写出异步的代码。这个我感觉是协程带给我们最大的收获。<br>Kotlin 还是运行在线程中的，因此协程不能代替线程。<br>协程的挂起其实就是这个协程从正在执行它的线程上脱离了，而不是暂停了。这个协程当前所在的线程从这行代码开始就不再运行这个协程了。当挂起的函数执行完毕后，会自动切回到当前的协程。</p>
+<p>Kotlin 协程是 Kotlin 的线程框架，是对线程的一种更友好的封装，主要特点是使用方便，方便在哪里？可以使用同步的方式写出异步的代码。这个我感觉是协程带给我们最大的收获。<br>Kotlin 还是运行在线程中的，因此协程不能代替线程。<br>协程的挂起其实就是这个协程从正在执行它的线程上脱离了，而不是暂停了。这个协程当前所在的线程从这行代码开始就不再运行这个协程了。当挂起的函数执行完毕后，会自动切回到当前的协程。<br>协程与线程最大的区别在于，从任务的角度来看，线程一旦开始执行就不会暂停，直到任务结束，这个过程都是连续的。线程之间是抢占式的调度，因此不存在协作问题。<br>其实，Java 虽然没有实现协程，但开发者可以通过第三方框架提供协程的能力，例如Java的协程框架Quasar。</p>
 <h2 id="协程作用域"><a href="#协程作用域" class="headerlink" title="协程作用域"></a>协程作用域</h2><p>协程作用域定义新协程的范围。每个协程构建器都是CoroutineScope的扩展，并继承其coroutineContext以自动传播上下文元素和取消。<br>每个协程构建器（如launch，async等）和每个作用域函数（如coroutineScope，withContext等）都会将自己的作用域实例提供给它运行的内部代码块。<br>我们前面在构建协程时用的 <code>GlobalScope</code> 就是继承自 <code>CoroutineScope</code> 的作用域，另外 kotlin 还为我们提供了 MainScope 作用域来构建协程。</p>
 <p>coroutineScope 是继承外部 Job 的上下文创建作用域，在其内部的取消操作是双向传播的，子协程未捕获的异常也会向上传递给父协程。它更适合一系列对等的协程并发的完成一项工作，任何一个子协程异常退出，那么整体都将退出，简单来说就是”一损俱损“。这也是协程内部再启动子协程的默认作用域。<br>supervisorScope 同样继承外部作用域的上下文，但其内部的取消操作是单向传播的，父协程向子协程传播，反过来则不然，这意味着子协程出了异常并不会影响父协程以及其他兄弟协程。它更适合一些独立不相干的任务，任何一个任务出问题，并不会影响其他任务的工作，简单来说就是”自作自受“，例如 UI，我点击一个按钮出了异常，其实并不会影响手机状态栏的刷新。需要注意的是，supervisorScope 内部启动的子协程内部再启动子协程，如无明确指出，则遵守默认作用域规则，也即 supervisorScope 只作用域其直接子协程。</p>
 <h2 id="协程的使用"><a href="#协程的使用" class="headerlink" title="协程的使用"></a>协程的使用</h2><h3 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h3><p>先来介绍一下 suspend 关键字，用该关键字修饰的方法可以被协程挂起，如果在协程外部，只有在该关键字修饰的方法中才可以使用 <code>delay</code> <code>Deferred.await</code> 等方法。<br>被 suspend 修饰的方法执行运行在协程内部或者另一个 suspend 方法中，suspend 关键字其实不是真正的执行挂起动作，挂起动作是由 suspend 方法内部调用的kotlin自动的挂起函数来执行挂起动作的。suspend 关键字可以理解为只是一个标识，提醒调用者这是一个耗时的函数，需要用挂起的方式放在后台执行。</p>
