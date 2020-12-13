@@ -461,8 +461,51 @@ void callJava(JNIEnv *env,jobject obj) {
 
 ```
 
+## 使用 RegisterNatives 注册本地方法
 
-### 获取签名参数
+前面在jni中写本地方法时，我们使用了 Java_classpath_className_nativeMethodName 的形式，比如 Java_com_example_heqiang_testsomething_jni_JniUtils_getString，函数名很长，而且当类名变了的时候，函数名必须一个一个的改，挺麻烦的。
+实际上 jvm 也同时提供了直接RegisterNative方法手动的注册native方法，下面我们就把上面的 getString 方法的实现方式修改一下。
+
+```
+JNIEXPORT jstring JNICALL getString(JNIEnv *env, jobject obj) {
+    LOGD("call 11 getString sucessfully");
+    return (*env)->NewStringUTF(env,"abcdefghijklmn1122");
+}
+
+// 建立jni映射表，将c和java的函数关联起来
+const JNINativeMethod methods[]={
+        {"getString","()Ljava/lang/String;",(jobject *)getString},
+};
+
+//当动态库被加载时这个函数被系统调用
+jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    LOGD("JNI_OnLoad");
+    jint result = JNI_ERR;
+    //javaVM = vm;
+    JNIEnv* env;
+
+    if ((*vm)->GetEnv(vm,(void**)&env, JNI_VERSION_1_4) != JNI_OK)
+    {
+        return result;
+    }
+
+    // 获取对应的 Java class
+    jclass cls = (*env)->FindClass(env, "com/example/heqiang/testsomething/jni/JniUtils");
+    if (cls == NULL) {
+        return JNI_ERR;
+    }
+
+    //注册映射表
+    if((*env)->RegisterNatives(env,cls,methods,1)<0){
+        return JNI_ERR;
+    }
+
+    return JNI_VERSION_1_4;
+}
+```
+
+
+## 获取签名参数
 
 进入 class 文件所在的目录，然后运行： `javap -s -p JniUtils.class `
 
