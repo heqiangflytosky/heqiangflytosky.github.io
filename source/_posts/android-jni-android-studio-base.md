@@ -504,8 +504,9 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 }
 ```
 
+## 小技巧
 
-## 获取签名参数
+### 获取签名参数
 
 进入 class 文件所在的目录，然后运行： `javap -s -p JniUtils.class `
 
@@ -534,3 +535,35 @@ public class com.example.heqiang.testsomething.util.JniUtils {
 ```
 
 可以得到每个方法的签名参数。
+
+签名对照表：
+
+| Java 类型 | 符号 |
+|:-------------:|:-------------:|
+| boolean | Z |
+| byte | B |
+| char | C |
+| short | S |
+| int | I |
+| long | L |
+| float | F |
+| double | D |
+| void | V |
+| object 对象 | LClassName;L类名 |
+| Arrays | [array-type[数组类型 |
+| methods方法 | (argument-types)return-type(参数类型)返回类型 |
+
+### 类型转换
+
+jstring -> char* ：
+
+```
+    jstring r2 = static_cast<jstring>(env->CallObjectMethod(pObj, get2));
+
+    const char *r2c = env->GetStringUTFChars(r2, 0);
+    LOGD("call testObject2 sucessfully %s",r2c);
+```
+
+### 其他
+
+jni 里面没有 CallStringMethod 方法，我们可以调用 CallObjectMethod 方法，然后对返回值进行强制转换为 jstring 即可。
