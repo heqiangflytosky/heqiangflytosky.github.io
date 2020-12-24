@@ -22,8 +22,18 @@ date: 2020-4-15 10:00:00
 
 ## 环绕方式
 
-GL_CLAMP_TO_EDGE：纹理坐标会被约束在0到1之间，超出的部分会重复纹理坐标的边缘，产生一种边缘被拉伸的效果
+在纹理映射中，纹理坐标的范围为[0.0,1.0]。当纹理坐标超出这个值时，OpenGL会根据你设置的环绕模式来处理这种情况。我们可以分别为每个纹理坐标轴(s,t,r)设置一个环绕模式，通过glTexParameteri 第二个参数为GL_TEXTURE_WRAP_S，GL_TEXTURE_WRAP_T或者GL_TEXTURE_WRAP_R.环绕的模式有GL_REPEAT,GL_CLAMP,GL_CLAMP_TO_EDGE, GL_WRAP_TO_BORDER。
+
+GL_CLAMP_TO_EDGE：超出的部分会重复纹理坐标的边缘，产生一种边缘被拉伸的效果
 GL_REPEAT：对纹理的默认行为。重复纹理图像。
+GL_MIRRORED_REPEAT：重复纹理图像会产生镜像效果。
+
+通过下面代码设置 wrap mode：
+
+```
+GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+```
 
 ## 纹理过滤
 

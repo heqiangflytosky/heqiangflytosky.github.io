@@ -103,6 +103,21 @@ void modifyColor(vec4 color){
 
 <img src="/images/opengl-es-image-effect/11.png" width="342" height="239"/>
 
+## 水印效果
+
+将两个纹理进行混合。
+
+<img src="/images/opengl-es-image-effect/12.png" width="343" height="214"/>
+
+## 底片效果
+
+底片效果：
+R=255-R;
+G=255-G;
+B=255-B;
+
+<img src="/images/opengl-es-image-effect/13.png" width="341" height="212"/>
+
 ## 一半处理
 
 Demo 中对以上的效果有一个选项，叫处理一半的效果，这个其实很简单，就是当x坐标小于0时不加任何效果，x坐标大于0时再做对应的效果。

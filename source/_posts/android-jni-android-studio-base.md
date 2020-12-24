@@ -14,6 +14,7 @@ date: 2015-12-10 10:00:00
 [Android Developer:向您的项目添加 C 和 C++ 代码](https://developer.android.com/studio/projects/add-native-code) 
 [Android Developer:ndk-build](https://developer.android.com/ndk/guides/ndk-build)
 [Android Developer:CMake](https://developer.android.com/ndk/guides/cmake)
+[Android Developer:JNI 提示](https://developer.android.com/training/articles/perf-jni)
 
 ## 准备工作
 
@@ -472,9 +473,15 @@ JNIEXPORT jstring JNICALL getString(JNIEnv *env, jobject obj) {
     return (*env)->NewStringUTF(env,"abcdefghijklmn1122");
 }
 
+const JNINativeMethod methods[]={
+        {"getString","()Ljava/lang/String;",(jobject *)getString},
+        {"test","()V",(void *)test},
+};
+
 // 建立jni映射表，将c和java的函数关联起来
 const JNINativeMethod methods[]={
         {"getString","()Ljava/lang/String;",(jobject *)getString},
+        {"test","()V",(void *)test},
 };
 
 //当动态库被加载时这个函数被系统调用
@@ -496,7 +503,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     }
 
     //注册映射表
-    if((*env)->RegisterNatives(env,cls,methods,1)<0){
+    if((*env)->RegisterNatives(env,cls,methods,sizeof(methods)/sizeof(JNINativeMethod))<0){
         return JNI_ERR;
     }
 
