@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/05/06/opengl-es-image-effect/</loc>
+    
+    <lastmod>2020-12-24T09:49:02.303Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/04/15/opengl-es-texture/</loc>
+    
+    <lastmod>2020-12-22T01:56:57.086Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2015/12/10/android-jni-android-studio-base/</loc>
     
-    <lastmod>2020-12-14T04:45:51.644Z</lastmod>
+    <lastmod>2020-12-14T10:12:19.467Z</lastmod>
     
   </url>
   
@@ -401,13 +415,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/05/06/opengl-es-image-effect/</loc>
-    
-    <lastmod>2020-07-28T06:55:23.885Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2014/10/18/android-development-skills-props/</loc>
     
     <lastmod>2020-07-27T08:22:50.037Z</lastmod>
@@ -537,13 +544,6 @@
     <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
     
     <lastmod>2020-05-23T07:51:42.591Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/04/15/opengl-es-texture/</loc>
-    
-    <lastmod>2020-05-22T11:29:35.220Z</lastmod>
     
   </url>
   
@@ -1598,14 +1598,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
@@ -1731,6 +1731,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1739,13 +1746,6 @@
   
   <url>
     <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
