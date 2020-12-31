@@ -422,3 +422,22 @@ void main()
 效果图：
 
 <img src="/images/opengl-es-texture/blend.png" width="300" height="536"/>
+
+上面呈现的是两种图片混合的效果，如果想让第二个图片叠加在第一个图片上面，可以通过修改着色器代码：
+
+```
+precision mediump float;
+
+uniform sampler2D u_TextureUnit;
+varying vec2 v_TextureCoordinates;
+
+uniform sampler2D u_TextureUnit2;
+varying vec2 v_TextureCoordinates2;
+
+void main()
+{
+    vec4 color1 = texture2D(u_TextureUnit, v_TextureCoordinates);
+    vec4 color2 = texture2D(u_TextureUnit2, v_TextureCoordinates2);
+    gl_FragColor = mix(color1, color2, color2.a);
+}
+```
