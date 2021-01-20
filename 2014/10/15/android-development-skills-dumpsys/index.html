@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/10/15/android-development-skills-dumpsys/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍dumpsys的使用">
-<meta property="og:updated_time" content="2018-09-20T01:08:29.046Z">
+<meta property="og:updated_time" content="2021-01-06T07:05:21.671Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android实用技巧之adb命令：dumpsys命令的使用">
 <meta name="twitter:description" content="介绍dumpsys的使用">
@@ -410,8 +410,13 @@
 <p>这样就可以清楚每个命名的使用方法以及对应输出内容的信息查看方法。<br>以<code>window</code>为例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">$ adb shell dumpsys window -h</div><div class="line"></div><div class="line">Window manager dump options:</div><div class="line">  [-a] [-h] [cmd] ...</div><div class="line">  cmd may be one of:</div><div class="line">    i[input]: input subsystem state</div><div class="line">    p[policy]: policy state</div><div class="line">    s[essions]: active sessions</div><div class="line">    surfaces: active surfaces (debugging enabled only)</div><div class="line">    d[isplays]: active display contents</div><div class="line">    t[okens]: token list</div><div class="line">    w[indows]: window list</div><div class="line">  cmd may also be a NAME to dump windows.  NAME may</div><div class="line">    be a partial substring in a window name, a</div><div class="line">    Window hex object identifier, or</div><div class="line">    &quot;all&quot; for all windows, or</div><div class="line">    &quot;visible&quot; for the visible windows.</div><div class="line">  -a: include all available server state.</div><div class="line">  -d list                     list the all of debug zones</div><div class="line">  -d enable  &lt;zone zone ...&gt;  enable the debug zone</div><div class="line">  -d disable &lt;zone zone ...&gt;  disable the debug zone</div><div class="line">  zone usage : </div><div class="line">    0  : DEBUG</div><div class="line">    1  : DEBUG_FOCUS</div><div class="line">    2  : DEBUG_ANIM</div><div class="line">    3  : DEBUG_LAYOUT</div><div class="line">    4  : DEBUG_RESIZE</div><div class="line">    5  : DEBUG_LAYERS</div><div class="line">    6  : DEBUG_INPUT</div><div class="line">    7  : DEBUG_INPUT_METHOD</div><div class="line">    8  : DEBUG_VISIBILITY</div><div class="line">    9  : DEBUG_WINDOW_MOVEMENT</div><div class="line">    10 : DEBUG_ORIENTATION</div><div class="line">    11 : DEBUG_CONFIGURATION</div><div class="line">    12 : DEBUG_APP_TRANSITIONS</div><div class="line">    13 : DEBUG_STARTING_WINDOW</div><div class="line">    14 : DEBUG_REORDER</div><div class="line">    15 : DEBUG_WALLPAPER</div><div class="line">    16 : DEBUG_WALLPAPER_LIGHT</div><div class="line">    17 : SHOW_TRANSCATIONS</div><div class="line">    18 : HIDE_STACK_CRAWLS</div><div class="line">    19 : PROFILE_ORIENTATION</div><div class="line">    20 : DEBUG_TASK_MOVEMENT</div><div class="line">    21 : DEBUG_ADD_REMOVE</div><div class="line">    22 : DEBUG_TOKEN_MOVEMENT</div><div class="line">    23 : DEBUG_APP_ORIENTATION</div><div class="line">    24 : DEBUG_DRAG</div><div class="line">    25 : DEBUG_SCREEN_ON</div><div class="line">    26 : DEBUG_SCREENSHOT</div><div class="line">    27 : DEBUG_BOOT</div><div class="line">    28 : SHOW_SURFACE_ALLOC</div><div class="line">    29 : SHOW_LIGHT_TRANSACTIONS</div><div class="line">    30 : DEBUG_LAYOUT_REPEATS</div><div class="line">    31 : DEBUG_SURFACE_TRACE</div><div class="line">    32 : DEBUG_WINDOW_TRACE</div><div class="line">    33 : DEBUG_WINDOW</div><div class="line">    34 : DEBUG_STACK</div><div class="line">    35 : DEBUG_DIM_LAYER</div><div class="line">    36 : DEBUG_KEYGUARD</div></pre></td></tr></table></figure></p>
 <p>比如<code>adb shell dumpsys window -d enable 10</code>就是打开<code>DEBUG_ORIENTATION</code>，这样就把代码中的关于屏幕方向旋转相关的Log打印出来。</p>
 <h2 id="一些常用命令解释"><a href="#一些常用命令解释" class="headerlink" title="一些常用命令解释"></a>一些常用命令解释</h2><ul>
-<li>adb shell dumpsys activity： 显示activity的相关信息，包括任务栈等</li>
+<li>adb shell dumpsys activity： 显示activity的相关信息，包括任务栈等<ul>
+<li>adb shell dumpsys activity -h：帮助</li>
 <li>adb shell dumpsys activity top：查看当前应用的 activity 信息</li>
+<li>adb shell dumpsys activity a：只查看activity栈</li>
+<li>adb shell dumpsys activity r：最近任务activity状态</li>
+</ul>
+</li>
 <li>adb shell dumpsys meminfo：查看各个进程内存使用情况。（<code>meminfo $package_name or $pid</code> 使用程序的包名或者进程id显示内存信息比如浏览器：<code>adb shell dumpsys meminfo com.android.browser</code>）</li>
 <li>adb shell dumpsys SurfaceFlinger： 查看UI绘制的各个层级信息</li>
 <li>adb shell dumpsys window： 显示键盘，窗口和它们的关系</li>
@@ -645,7 +650,7 @@
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

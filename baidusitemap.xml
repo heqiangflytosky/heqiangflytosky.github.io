@@ -4,6 +4,116 @@
 
     
   <url>
+    <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
+    <lastmod>2021-01-20T07:13:57.038Z</lastmod>
+    <data>
+        <display>
+        <title>Android LaunchMode taskAffinity 与 Intent Flag 详解</title>
+        <pubTime>2015-12-08T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>LaunchMode</tag>
+         
+        <tag>Intent Flag</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
+    <lastmod>2021-01-19T07:16:50.266Z</lastmod>
+    <data>
+        <display>
+        <title>Gradle 使用指南 -- 基础配置</title>
+        <pubTime>2016-03-03T02:00:00.000Z</pubTime>
+        
+        <tag>开发工具</tag>
+         
+        <tag>Gradle</tag>
+         
+         
+           
+             
+              <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
+    <lastmod>2021-01-19T02:11:46.954Z</lastmod>
+    <data>
+        <display>
+        <title>程序员学习资料汇总</title>
+        <pubTime>2016-12-01T02:00:00.000Z</pubTime>
+        
+        <tag>学习资料</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习资料" url="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2014/10/15/android-development-skills-dumpsys/</loc>
+    <lastmod>2021-01-06T07:05:21.671Z</lastmod>
+    <data>
+        <display>
+        <title>Android实用技巧之adb命令：dumpsys命令的使用</title>
+        <pubTime>2014-10-15T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>dumpsys</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android实用技巧" url="http://yoursite.com/categories/Android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
+    <lastmod>2021-01-06T01:55:41.330Z</lastmod>
+    <data>
+        <display>
+        <title>Git 常用命令</title>
+        <pubTime>2015-03-07T02:00:00.000Z</pubTime>
+        
+        <tag>开发工具</tag>
+         
+        <tag>Git</tag>
+         
+         
+           
+             
+              <breadCrumb title="开发工具" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2020/04/15/opengl-es-texture/</loc>
     <lastmod>2020-12-31T10:30:20.344Z</lastmod>
     <data>
@@ -77,26 +187,6 @@
            
              
               <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
-    <lastmod>2020-12-08T07:27:12.160Z</lastmod>
-    <data>
-        <display>
-        <title>程序员学习资料汇总</title>
-        <pubTime>2016-12-01T02:00:00.000Z</pubTime>
-        
-        <tag>学习资料</tag>
-         
-         
-           
-             
-              <breadCrumb title="学习资料" url="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/"/>
           
         </display>
     </data>
@@ -599,28 +689,6 @@
            
              
               <breadCrumb title="cocos" url="http://yoursite.com/categories/cocos/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
-    <lastmod>2020-10-23T01:17:54.763Z</lastmod>
-    <data>
-        <display>
-        <title>Gradle 使用指南 -- 基础配置</title>
-        <pubTime>2016-03-03T02:00:00.000Z</pubTime>
-        
-        <tag>开发工具</tag>
-         
-        <tag>Gradle</tag>
-         
-         
-           
-             
-              <breadCrumb title="Gradle" url="http://yoursite.com/categories/Gradle/"/>
           
         </display>
     </data>
@@ -1555,52 +1623,6 @@
            
              
               <breadCrumb title="Android 组件" url="http://yoursite.com/categories/Android-%E7%BB%84%E4%BB%B6/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
-    <lastmod>2020-05-23T07:51:42.591Z</lastmod>
-    <data>
-        <display>
-        <title>Git 常用命令</title>
-        <pubTime>2015-03-07T02:00:00.000Z</pubTime>
-        
-        <tag>开发工具</tag>
-         
-        <tag>Git</tag>
-         
-         
-           
-             
-              <breadCrumb title="开发工具" url="http://yoursite.com/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
-    <lastmod>2020-05-21T10:27:07.367Z</lastmod>
-    <data>
-        <display>
-        <title>Android LaunchMode taskAffinity 与 Intent Flag 详解</title>
-        <pubTime>2015-12-08T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>LaunchMode</tag>
-         
-        <tag>Intent Flag</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android" url="http://yoursite.com/categories/Android/"/>
           
         </display>
     </data>
@@ -4260,28 +4282,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2014/10/15/android-development-skills-dumpsys/</loc>
-    <lastmod>2018-09-20T01:08:29.046Z</lastmod>
-    <data>
-        <display>
-        <title>Android实用技巧之adb命令：dumpsys命令的使用</title>
-        <pubTime>2014-10-15T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>dumpsys</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android实用技巧" url="http://yoursite.com/categories/Android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2018/05/02/block-chain-basic-questions/</loc>
     <lastmod>2018-09-14T14:27:47.781Z</lastmod>
     <data>
@@ -4656,12 +4656,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -4676,12 +4676,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -5127,12 +5127,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5147,12 +5147,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5315,12 +5315,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>React Native封装原生UI组件</title>
+        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5335,12 +5335,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native封装原生UI组件</title>
-        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
