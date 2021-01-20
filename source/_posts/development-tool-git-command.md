@@ -145,6 +145,11 @@ http://blog.chinaunix.net/uid-27714502-id-3479018.html
 
 ## git merge
 
+```
+git checkout master
+git merge --no-ff dev // merge dev 分支到 master 分支
+```
+
 ### git merge -s ours
 
 cherry pick 与 git merge

@@ -163,7 +163,10 @@ Window manager dump options:
 ## 一些常用命令解释
 
  - adb shell dumpsys activity： 显示activity的相关信息，包括任务栈等
- - adb shell dumpsys activity top：查看当前应用的 activity 信息
+  - adb shell dumpsys activity -h：帮助
+  - adb shell dumpsys activity top：查看当前应用的 activity 信息
+  - adb shell dumpsys activity a：只查看activity栈
+  - adb shell dumpsys activity r：最近任务activity状态
  - adb shell dumpsys meminfo：查看各个进程内存使用情况。（`meminfo $package_name or $pid` 使用程序的包名或者进程id显示内存信息比如浏览器：`adb shell dumpsys meminfo com.android.browser`）
  - adb shell dumpsys SurfaceFlinger： 查看UI绘制的各个层级信息
  - adb shell dumpsys window： 显示键盘，窗口和它们的关系

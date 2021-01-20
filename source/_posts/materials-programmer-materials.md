@@ -284,6 +284,10 @@ date: 2016-12-1 10:00:00
  - [Realm](https://realm.io/)：
  - [android-architecture](https://github.com/googlesamples/android-architecture)：
 
+#### 服务端
+
+ - [Discuz](https://gitee.com/Discuz/DiscuzX)：开源通用的社区论坛软件系统
+
 #### 资料汇总
 
  - [be-a-professional-programmer](https://github.com/stanzhai/be-a-professional-programmer)：汇集了一些程序员的资料，与本篇功能类似

@@ -184,6 +184,12 @@ android {
 	ndk { abiFilters 'armeabi-v7a', 'arm64-v8a' }
 	// 开启分包
 	multiDexEnabled true
+        packagingOptions {
+            exclude 'META-INF/rxjava.properties'
+            // 取消so压缩，https://www.jianshu.com/p/9a68989728f1
+            doNotStrip "*/armeabi/*.so"
+        }
+
     }
 
     //编译配置

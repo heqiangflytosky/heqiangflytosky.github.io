@@ -613,6 +613,16 @@ standard 模式：系统收到新的 Intent 时，如果 Task 中存在该 Activ
 
 当从手机任务管理器启动的Activity Intent 的 Flag 会带有这个属性，我们可以用它来区分是否从任务管理器里面启动的。
 
+### FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+
+只有当新启动一个任务栈或任务栈被切换到前台时才有用，也就意味着该标记只会加在任务栈的根 Activity 上，用这个标记来表明需要重置任务栈的状态。
+一般与FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET结合使用。
+
+### FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET
+
+设置此标签相当于在任务栈中标记一个位置，当任务栈被重置时，从该标记位置到栈顶的 Activity 全部被清除。所谓的任务栈重置，是指当程序从后台进入前台时（通常是用户从主屏重新点击启动图标，或者从 recent apps 重新进入程序），如果栈顶的 Activity 设置了 FLAG_ACTIVITY_RESET_TASK_IF_NEEDED 标记，那么从设置 FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET 标记到栈顶的 Activity 会全部被清除掉。
+举例：该标签可用于这种情况，用户在浏览邮件时，通过另外一个 Activity 来打开图片附件，这时用户可能会按 Home 键返回主屏，进行其它操作，一段时间后重新点击邮件的启动图标进入程序，这时应该显示邮件的内容而不是图片，因为用户可能是很长时间后返回邮件 App 的，也许已经忘记之前的操作，如果用户打开邮件后看到的是一张图片，可能会觉得很困惑。而设置 FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET 标记后，用户再次打开程序时，任务栈就会把图片 Activity 清除掉，显示邮件内容。
+
 ## LaunchMode 与 StartActivityForResult 的关系
 
 <!--   
