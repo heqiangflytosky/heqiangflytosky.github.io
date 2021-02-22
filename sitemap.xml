@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2016/06/12/android-usefull-class-function/</loc>
+    
+    <lastmod>2021-02-22T10:09:19.743Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/08/26/android-view-recycleview-staggeredgridlayoutmanager/</loc>
     
     <lastmod>2021-02-20T02:29:20.161Z</lastmod>
@@ -1738,6 +1745,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1746,34 +1760,6 @@
   
   <url>
     <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-begin-to-study/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1808,7 +1794,28 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-begin-to-study/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/12/16/open-source-andfix-source-code-analysis/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1822,7 +1829,7 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1836,14 +1843,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/12/16/open-source-andfix-source-code-analysis/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
