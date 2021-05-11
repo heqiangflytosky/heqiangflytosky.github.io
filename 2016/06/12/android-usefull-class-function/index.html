@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/06/12/android-usefull-class-function/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Android 一些有用的方法和类">
-<meta property="og:updated_time" content="2021-02-22T10:09:19.743Z">
+<meta property="og:updated_time" content="2021-04-29T07:56:36.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- 那些让你相见恨晚的方法、类或接口">
 <meta name="twitter:description" content="介绍 Android 一些有用的方法和类">
@@ -440,11 +440,13 @@
 <li>Android StatFs类：StatFs用于获取存储空间</li>
 <li>进程间通信获取调用方的包名：<code>int uid = Binder.getCallingUid();getPackageManager().getNameForUid(uid);</code>。或者是反射调用 <code>ActivityManagerNative</code> 的 <code>getLaunchedFromPackage</code> 方法。</li>
 <li>设置ListView的某个Item不可点击：重写Adapter的<code>isEnabled(int position)</code>方法。</li>
+<li><code>@ViewDebug.ExportedProperty(category = &quot;launcher&quot;)</code> 如果你想在查看布局列表时查看view某个属性，可以把上面的注解加上，<code>category = &quot;launcher&quot;</code> 可以把他们归结都某个组中。</li>
 </ol>
 <h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><ol>
 <li>FileFilter 和 FilenameFilter 文件搜索，过滤文件</li>
 <li>WeakHashMap，直接使用HashMap有时候会带来内存溢出的风险，使用WaekHashMap实例化Map。当使用者不再有对象引用的时候，WeakHashMap将自动被移除对应Key值的对象。</li>
 </ol>
+<h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><p><a href="https://www.zhihu.com/question/33636939/answer/57239990?group_id=612750833369153536" target="_blank" rel="external">https://www.zhihu.com/question/33636939/answer/57239990?group_id=612750833369153536</a></p>
 
       
     </div>
@@ -641,7 +643,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-number">1.</span> <span class="nav-text">Android</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-number">2.</span> <span class="nav-text">Java</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android"><span class="nav-number">1.</span> <span class="nav-text">Android</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-number">2.</span> <span class="nav-text">Java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐阅读"><span class="nav-number">3.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
             
 
           </div>

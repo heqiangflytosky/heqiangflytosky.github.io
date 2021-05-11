@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://yoursite.com/images/android-knowledge-about-bitmap-memory-management/image2.png">
 <meta property="og:image" content="http://yoursite.com/images/android-knowledge-about-bitmap-memory-management/image3.png">
 <meta property="og:image" content="http://yoursite.com/images/android-knowledge-about-bitmap-memory-management/image4.png">
-<meta property="og:updated_time" content="2020-09-11T08:48:44.835Z">
+<meta property="og:updated_time" content="2021-04-29T02:34:33.133Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- Bitmap 内存管理">
 <meta name="twitter:description" content="分析 Bitmap 内存管理">
@@ -415,7 +415,7 @@
 <p>现在，已经有很多的开源的图片处理框架，比如Fresco、Glide、Picasso等等，它们已经实现了图片获取、解码，显示和缓存等，推荐大家使用。<br>关于 Android App 的内存优化，我们就很有必要来关注 Bitmap 内存，因为，它一般是我们内存占用过的大户，管理不当很容易导致内存不足，也是很多 OOM 的元凶之一。<br>本文就来介绍一下 Bitmap 内存方法的知识。</p>
 <p><a href="https://developer.android.com/topic/performance/graphics" target="_blank" rel="external">Android 官方文档：Handling bitmaps</a><br><a href="https://developer.android.com/topic/performance/graphics/manage-memory" target="_blank" rel="external">Android 官方文档：Managing Bitmap Memory</a></p>
 <h2 id="Bitmap-的内存计算"><a href="#Bitmap-的内存计算" class="headerlink" title="Bitmap 的内存计算"></a>Bitmap 的内存计算</h2><p>比如我们构造 Bitmap 时设置宽200，高400，色彩模式为 <code>Bitmap.Config.ARGB_8888</code>，那么它的像素数据在内存中的大小就为 200x400x4 byte，色彩模式为 <code>Bitmap.Config.RGB_565</code>，那么大小就是200x400x2 byte，这些在内存中是固定大小的。</p>
-<h2 id="关于图片压缩"><a href="#关于图片压缩" class="headerlink" title="关于图片压缩"></a>关于图片压缩</h2><p>比如我们用 <code>bitmap.compress(Bitmap.CompressFormat.PNG,100,fos);</code> 转化为字节流以后发现获取的 <code>fos.toByteArray()</code> 变小了，这是因为进行了压缩的缘故，相同宽高，不同的 bitmap 对象，压缩以后大小是不一样的，因为不同的 bitmap 色彩丰富程度不一样，表达的信息不一样，最终能压缩的大小也不一样。<br><code>bitmap.compress</code> 压缩是质量压缩，是因为它不会减少图片的像素。它是在保持像素的前提下改变图片的位深及透明度等，来达到压缩图片的目的。进过它压缩的图片文件大小会有改变，但是导入成 bitmap 后占得内存是不变的。因为要保持像素不变，所以它就无法无限压缩，到达一个值之后就不会继续变小了。所以我们发现有时候设置 <code>compress(CompressFormat format, int quality, OutputStream stream)</code> quality参数不起作用。</p>
+<h2 id="关于图片压缩"><a href="#关于图片压缩" class="headerlink" title="关于图片压缩"></a>关于图片压缩</h2><p>比如我们用 <code>bitmap.compress(Bitmap.CompressFormat.PNG,100,fos);</code> 转化为字节流以后发现获取的 <code>fos.toByteArray()</code> 变小了，这是因为进行了压缩的缘故，相同宽高，不同的 bitmap 对象，压缩以后大小是不一样的，因为不同的 bitmap 色彩丰富程度不一样，表达的信息不一样，最终能压缩的大小也不一样。<br><code>bitmap.compress</code> 压缩是质量压缩，是因为它不会减少图片的像素。图片压缩可以分为尺寸压缩和质量压缩，它是在保持像素的前提下改变图片的宽高、位深及透明度等，来达到压缩图片的目的。进过它压缩的图片文件大小会有改变，但是导入成 bitmap 后占得内存是不变的。因为要保持像素不变，所以它就无法无限压缩，到达一个值之后就不会继续变小了。所以我们发现有时候设置 <code>compress(CompressFormat format, int quality, OutputStream stream)</code> quality参数不起作用。</p>
 <h2 id="Bitmap-内存管理"><a href="#Bitmap-内存管理" class="headerlink" title="Bitmap 内存管理"></a>Bitmap 内存管理</h2><p>关于 Bitmap 内存的管理，Android 各个版本也是不同的，现在我们来介绍一下这个演变过程：</p>
 <ul>
 <li>在Android 2.2 (API level 8)以及之前，当垃圾回收发生时，应用的线程是会被暂停的，这会导致一个延迟滞后，并降低系统效率。 从Android 2.3开始，添加了并发垃圾回收的机制， 这意味着在一个Bitmap不再被引用之后，它所占用的内存会被立即回收。</li>

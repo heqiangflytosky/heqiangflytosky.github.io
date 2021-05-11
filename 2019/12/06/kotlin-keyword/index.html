@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/12/06/kotlin-keyword/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Kotlin 的关键字">
-<meta property="og:updated_time" content="2020-12-03T01:52:22.285Z">
+<meta property="og:updated_time" content="2021-03-25T02:12:07.537Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin -- 关键字">
 <meta name="twitter:description" content="介绍 Kotlin 的关键字">
@@ -484,6 +484,7 @@
 </ul>
 </li>
 </ul>
+<p>判断一个被 lateinit 修饰的变量是否被初始化，需要使用 <code>this::provider.isInitialized</code>，不能使用 <code>provider == null</code>，因为都被初始化成了 kotlin.UninitializedPropertyAccessException 类型。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">val para5:String by lazy &#123;</div><div class="line">    &quot;Hello&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h3><h3 id="is"><a href="#is" class="headerlink" title="is"></a>is</h3><p><code>!is</code><br>判断类型用，类似于 Java 中的 instanceof()。<br>另外 is 可以对符合条件的类型进行智能转换，不必像 Java 那也进行显式的类型转换。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = 5</div><div class="line">if (a is Int) &#123;</div><div class="line">    Log.e(&quot;Test&quot;, &quot;$&#123;a*a&#125;&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
