@@ -1,6 +1,6 @@
 ---
 title: Android 代码优化工具篇 -- 静态代码检测工具
-categories: Android
+categories: Android性能优化
 comments: true
 tags: [Lint]
 description: 介绍使用 Lint 工具检测代码规范的使用方法

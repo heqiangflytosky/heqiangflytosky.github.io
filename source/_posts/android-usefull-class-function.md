@@ -49,9 +49,14 @@ date: 2016-6-12 10:00:00
  38. Android StatFs类：StatFs用于获取存储空间
  39. 进程间通信获取调用方的包名：`int uid = Binder.getCallingUid();getPackageManager().getNameForUid(uid);`。或者是反射调用 `ActivityManagerNative` 的 `getLaunchedFromPackage` 方法。
  40. 设置ListView的某个Item不可点击：重写Adapter的`isEnabled(int position)`方法。
+ 41. `@ViewDebug.ExportedProperty(category = "launcher")` 如果你想在查看布局列表时查看view某个属性，可以把上面的注解加上，`category = "launcher"` 可以把他们归结都某个组中。
 
 
 ## Java
 
  1. FileFilter 和 FilenameFilter 文件搜索，过滤文件
  2.  WeakHashMap，直接使用HashMap有时候会带来内存溢出的风险，使用WaekHashMap实例化Map。当使用者不再有对象引用的时候，WeakHashMap将自动被移除对应Key值的对象。
+
+## 推荐阅读
+
+https://www.zhihu.com/question/33636939/answer/57239990?group_id=612750833369153536

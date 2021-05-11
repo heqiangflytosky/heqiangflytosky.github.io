@@ -229,30 +229,37 @@ app:layout_constraintDimensionRatio="W,2:3"指的是 宽:高=2:3
 如果两个或以上控件通过约束属性约束在一起，就可以认为是他们是一条链，或为水平链，或为垂直链。
 
 ```
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/button2"/>
-
+        app:layout_constraintRight_toLeftOf="@id/button2"
+        app:layout_constraintTop_toTopOf="parent"/>
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button2"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/button1"
-        app:layout_constraintRight_toLeftOf="@+id/button3"
-        app:layout_constraintRight_toRightOf="parent"/>
-
+        app:layout_constraintRight_toLeftOf="@+id/button3"/>
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button2"
+        android:text="Button3"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/button2"
         app:layout_constraintRight_toRightOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
 <img src="/images/android-view-constraintlayout/chain.png" width="270" height="48"/>
@@ -263,12 +270,31 @@ app:layout_constraintDimensionRatio="W,2:3"指的是 宽:高=2:3
  - spread_inside：展开元素，链的两端贴近parent；
  - packed：链的元素收缩在中间
 
+如果你发现这些链的样式没有起作用，可能是组件之间的约束没写好，组件的左右约束都要写上。
 还可以通过下面的属性来设置链条的权重
 
  - layout_constraintHorizontal_weight
  - layout_constraintVertical_weight
 
 注意：设置权重时对应的 layout_width 或者 layout_height 要设置为 0dp，和 layout_weight 比较类似。
+
+如果我们想使一条水平链上的两个元素填充满一行，那么可以指定一个元素的大小，另外一个元素的宽度设置为0，并为这个元素指定左侧和右侧链来实现：
+
+```
+    <EditText
+        android:id="@+id/verify_code"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/phone_num"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/send_verify"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/send_verify"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/phone_num"
+        app:layout_constraintRight_toRightOf="parent"/>
+```
 
 ## 小技巧
 

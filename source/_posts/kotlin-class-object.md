@@ -261,7 +261,7 @@ fun main(args: Array<String>) {
 
 ## 匿名内部类
 
-使用对象表达式来创建匿名内部类：
+1.使用对象表达式来创建匿名内部类：
 
 ```
 class Test {
@@ -291,6 +291,33 @@ fun main(args: Array<String>) {
         }
     })
 }
+```
+
+2.lambda 表达式
+
+多个参数：
+
+```
+        hello.setOnEditorActionListener { v, actionId, event ->  
+            var id = v.id
+            true
+        }
+```
+
+单个参数情况，
+
+```
+        hello.setOnClickListener { view ->
+            var id = view.id
+        }
+```
+
+或者单个参数省略，用it替代参数：
+
+```
+        hello.setOnClickListener { 
+            var id = it.id
+        }
 ```
 
 ## 类的修饰符

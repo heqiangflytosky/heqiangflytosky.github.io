@@ -31,7 +31,7 @@ date: 2017-2-12 10:00:00
 ## 关于图片压缩
 
 比如我们用 `bitmap.compress(Bitmap.CompressFormat.PNG,100,fos);` 转化为字节流以后发现获取的 `fos.toByteArray()` 变小了，这是因为进行了压缩的缘故，相同宽高，不同的 bitmap 对象，压缩以后大小是不一样的，因为不同的 bitmap 色彩丰富程度不一样，表达的信息不一样，最终能压缩的大小也不一样。
-`bitmap.compress` 压缩是质量压缩，是因为它不会减少图片的像素。它是在保持像素的前提下改变图片的位深及透明度等，来达到压缩图片的目的。进过它压缩的图片文件大小会有改变，但是导入成 bitmap 后占得内存是不变的。因为要保持像素不变，所以它就无法无限压缩，到达一个值之后就不会继续变小了。所以我们发现有时候设置 `compress(CompressFormat format, int quality, OutputStream stream)` quality参数不起作用。
+`bitmap.compress` 压缩是质量压缩，是因为它不会减少图片的像素。图片压缩可以分为尺寸压缩和质量压缩，它是在保持像素的前提下改变图片的宽高、位深及透明度等，来达到压缩图片的目的。进过它压缩的图片文件大小会有改变，但是导入成 bitmap 后占得内存是不变的。因为要保持像素不变，所以它就无法无限压缩，到达一个值之后就不会继续变小了。所以我们发现有时候设置 `compress(CompressFormat format, int quality, OutputStream stream)` quality参数不起作用。
 
 ## Bitmap 内存管理
 

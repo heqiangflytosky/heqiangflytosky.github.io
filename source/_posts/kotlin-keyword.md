@@ -366,6 +366,7 @@ https://blog.csdn.net/willway_wang/article/details/100184784
   - lazy 只能对常量 val 使用，不能修饰变量 var
   - lazy 的加载时机为第一次调用常量的时候，而且只会加载一次。
 
+判断一个被 lateinit 修饰的变量是否被初始化，需要使用 `this::provider.isInitialized`，不能使用 `provider == null`，因为都被初始化成了 kotlin.UninitializedPropertyAccessException 类型。
 
 ```
     val para5:String by lazy {
