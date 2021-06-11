@@ -82,6 +82,34 @@ Baseline 表示的控件的基线，如下面代码表示：
 <img src="/images/android-view-constraintlayout/baseline.png" width="168" height="105"/>
 
 这样可以做到高度不同的两个的Button的文本是对齐的。
+可以使用下面的约束来使宽度不同的组件垂直中心对齐：
+
+```
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="32dp"
+        android:text="Button1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button2"
+        app:layout_constraintLeft_toLeftOf="@id/button1"
+        app:layout_constraintRight_toRightOf="@id/button1"
+        app:layout_constraintTop_toBottomOf="@id/button1"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
 
 ### 角度定位
 
@@ -106,6 +134,17 @@ ConstraintLayout 提供了利用角度和距离来约束定位的属性：
 效果图：
 
 <img src="/images/android-view-constraintlayout/angle.png" width="338" height="216"/>
+
+### 依赖组件为Gone的约束
+
+在ConstraintLayout中，如果设置了一个控件（A）依赖于另一个控件(B)，当控件B设置为GONE时，A控件的位置就会发生变化。为了保持适当的效果，需要设置此种情况下A控件相对于父控件的距离。可以通过如下属性设置依赖控件为GONE时相对父控件的距离：
+
+ - layout_goneMarginStart
+ - layout_goneMarginEnd
+ - layout_goneMarginLeft
+ - layout_goneMarginTop
+ - layout_goneMarginRight
+ - layout_goneMarginBottom
 
 ## 边距
 

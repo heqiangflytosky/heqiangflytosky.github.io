@@ -184,12 +184,37 @@ android {
 	ndk { abiFilters 'armeabi-v7a', 'arm64-v8a' }
 	// 开启分包
 	multiDexEnabled true
+	//将我们需要的类打包进主包
+	multiDexKeepFile file('multidex-config.txt')
         packagingOptions {
             exclude 'META-INF/rxjava.properties'
             // 取消so压缩，https://www.jianshu.com/p/9a68989728f1
             doNotStrip "*/armeabi/*.so"
         }
+	//会追加在上面 applicationId 字符串的后面，形成最终的包名。
+	//比如，如果applicationId为a.b.c，那么包名为a.b.c.test
+	applicationIdSuffix "test"
+	//当前的配置所属的 “风味维度”，在打多渠道包的时候详细介绍
+	dimension 'debug'
+	//仅适用于aar项目，
+	//和 proguardFiles 的区别在于，consumerProguardFiles 会被主App模块作为混淆文件使用导入，
+	//而 proguardFiles 则不会。
+	consumerProguardFiles 'consumer-rules.pro'
 
+	//配置编译时 java 的一些参数，例如我们使用 annotationProcessor 时所需要的参数。
+        javaCompileOptions {
+            annotationProcessorOptions{
+                arguments = []
+                classNames ''
+            }
+        }
+
+	//配置可以在 AndroidManifest.xml 中替换的参数，一般用于多渠道中使用，不会在 defaultConfig 中使用。
+	//这样配置完后就可以在AndroidManifest.xml中使用：android:icon="${APP_LOGO_ICON}"
+	//manifestPlaceholders = [APP_LOGO_ICON: "@mipmap/ic_logo"]
+
+	// 添加至 res/value，通过 R.string.age 获取
+	resValue('string', 'age', '12year')
     }
 
     //编译配置
@@ -253,16 +278,9 @@ android {
             debuggable true
             // 是否进行混淆
             minifyEnabled false
-            //去除没有用到的资源文件，要求minifyEnabled为true才生效
-            shrinkResources true
-            // 混淆文件的位置
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            signingConfig signingConfigs.debug
-            //ndk的一些相关配置，也可以放到defaultConfig里面。
-            //指定要ndk需要兼容的架构(这样其他依赖包里mips,x86,arm-v8之类的so会被过滤掉)
-            ndk {
-                abiFilter "armeabi"
-            }
+            ......
+	    //在 BuildConfig 类中添加值，具体介绍参考我的博客：Android BuildConfig的使用
+	    buildConfigField("boolean", "IS_DEBUG", "true")
         }
     }
     // lint配置 
@@ -737,88 +755,85 @@ http://www.jianshu.com/p/429733dbbc34
 
 ```
 android {
+    flavorDimensions "",""
     productFlavors{
     ……
     }
 }
 ```
 来实现。
-网上多是类似友盟的配置，copy过来：
-http://blog.csdn.net/maosidiaoxian/article/details/42000913
-https://segmentfault.com/a/1190000004050697
-在`AndroidManifest.xml`里面写上：
 
-```
-<meta-data
-    android:name="UMENG_CHANNEL"
-    android:value="Channel_ID" />
-```
-里面的`Channel_ID`就是渠道标示。我们的目标就是在编译的时候这个值能够自动变化。
+比如，添加下面的配置后：
 
 ```
 android {
+    flavorDimensions "app","module"
     productFlavors {
-        xiaomi {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+        A{
+            dimension "app"
         }
-        _360 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "_360"]
+        B{
+            dimension "app"
         }
-        baidu {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
+        C{
+            dimension "module"
         }
-        wandoujia {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+        D{
+            dimension "module"
         }
     }
-}
 ```
-或者批量修改
+
+编译任务就多出了assembleA，assembleB，assembleC，assembleD，assembleAC，assembleAD，assembleBC，assembleBD，这样就可以打包成不同的apk。
+flavorDimensions是Android Studio3.0添加的，如果想要多渠道打包，所有的风味必须属于一个已命名的风味维度，不同风味维度的风味可以结合使用，就像上面一样。
+我们能用它们来实现什么功能呢？
+1.实现不同的配置：
 
 ```
-android {
+    flavorDimensions "app","module"
     productFlavors {
-        xiaomi {}
-        _360 {}
-        baidu {}
-        wandoujia {}
-    }
-
-    productFlavors.all { 
-        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name] 
-    }
-}
-```
-然后用 `./gradlew assembleRelease` 这条命令会把Product Flavor下的所有渠道的Release版本都打出来。
-`assemble<Product Flavor Name>`： 允许构建指定flavor的所有APK，例如`assembleFlavor1`将会构建`Flavor1Debug`和`Flavor1Release`两个`Variant`版本。
-在上面当中，我们也可以指定一个默认的渠道名，如果需要的话。指定默认的值是在`defaultConfig`节点当中添加如下内容：
-```
-manifestPlaceholders = [ CHANNEL_NAME:"Unspecified"]
-```
-这里的`Unspecified`换成你实际上的默认的渠道名。 
-使用`manifestPlaceholders`的这种配置，同样适用于`manifest`的其他配置。比如你需要在不同渠道发布的apk里面，指定不同的启动`Activity`。比如在豌豆荚里面发布的，启动的`Activity`显示的是豌豆荚首发的界面，应用宝里面启动的是应用宝首发的界面（哈哈，有点坏），你就可以对你的`activity`的值使用 `{activity_name}`的方式，然后在`productFlavors`里面配置这个`{activity_name}`的值。
-
-另外这里记录一个 productFlavors 和 applicationId 关系的小知识。
-[参考文档](https://developer.android.com/studio/build/application-id.html)
-每个 Android 应用均有一个唯一的应用 ID，我们可以在通过 productFlavors 构建的应用变体中配置不同的应用 ID。
-
-```
-android {
-    defaultConfig {
-        applicationId "com.example.myapp"
-    }
-    productFlavors {
-        free {
-            applicationIdSuffix ".free"
+        A{
+            dimension "app"
+            applicationIdSuffix "a"
+            buildConfigField "String" , "channel" , "A"
+            manifestPlaceholders = [APP_LOGO_ICON: "@mipmap/ic_logo_a"]
         }
-        pro {
-            applicationIdSuffix ".pro"
+        B{
+            dimension "app"
+            applicationIdSuffix "b"
+            buildConfigField "String" , "channel" , "B"
+            manifestPlaceholders = [APP_LOGO_ICON: "@mipmap/ic_logo_a"]
+        }
+        C{
+            dimension "module"
+            applicationIdSuffix "c"
+
+        }
+        D{
+            dimension "module"
+
         }
     }
-}
 
+    sourceSets {
+        A{
+            res.srcDirs = ['A/res']
+            java.srcDirs = ['A/src']
+            manifest.srcFile "A/AndroidManifest.xml"
+        }
+
+        B{
+            res.srcDirs = ['B/res']
+            java.srcDirs = ['B/src']
+            manifest.srcFile "B/AndroidManifest.xml"
+        }
+    }
 ```
-这样，“免费”的 applicationId 就变为“com.example.myapp.free”。
+
+配置不同的包名，Config值，引用不同的资源和代码等等。
+assembleA的包名就是applicationId+".a"，assembleAC的包名就是applicationId+".a.c"。
+这里使用`manifestPlaceholders`为不同的渠道apk设置不同的图标，可以在AndroidManifest.xml中使用`android:icon="${APP_LOGO_ICON}`。
+使用`manifestPlaceholders`的这种配置，同样适用于`manifest`的其他配置。比如你需要在不同维度的apk里面，指定不同的启动`Activity`，可以对你的`<activity android:name`的值使用 `{activity_name}`的方式，然后在`productFlavors`里面配置这个`{activity_name}`的值。
 
 
 

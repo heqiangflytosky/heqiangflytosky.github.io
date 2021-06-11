@@ -39,6 +39,6 @@ date: 2018-8-6 10:00:00
 ## 结论
 
 调用顺序：
-Application 构造方法 --> Application.attachBaseContext --> ContentProvider.onCreate --> Application.onCreate --> Activity.onCreate
+Application 构造方法 --> Application.attachBaseContext --> ContentProvider 构造方法 --> ContentProvider.onCreate --> Application.onCreate --> Activity 构造方法 --> Activity attachBaseContext --> Activity.onCreate
 
 ContentProvider.onCreate 方法先于 Application.onCreate，因此在调用 ContentProvider.query 方法调用时，Application.onCreate 方法还没有调用导致变量未初始化从而发生崩溃。

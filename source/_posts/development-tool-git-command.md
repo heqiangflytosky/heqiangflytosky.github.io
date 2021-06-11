@@ -143,6 +143,29 @@ http://blog.chinaunix.net/uid-27714502-id-3479018.html
  - git remote rename <原名字> <新名字>：重命名远程库
  - git remote remove <name>：删除添加的远程库
 
+### push 一个仓库的代码到另外一个仓库，带提交记录
+
+比如，把Android aosp的Launcher3的android11-release分支连提交记录push到我自己的仓库android11分支。
+
+首先为本地仓库添加一个远程仓库：
+
+```
+git remote add aosp https://android.googlesource.com/platform/packages/apps/Launcher3
+```
+
+然后为远程仓库添加一个本地分支：
+
+```
+git pull aosp android11-release
+git checkout -b android11-release remotes/aosp/android11-release
+```
+
+把代码push到远程分支。
+
+```
+git push -f origin HEAD:android11
+```
+
 ## git merge
 
 ```
