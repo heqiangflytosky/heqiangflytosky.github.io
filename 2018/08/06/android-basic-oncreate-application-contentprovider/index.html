@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/08/06/android-basic-oncreate-application-contentprovider/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="Application 和 ContentProvider 的 onCreate() 方法的执行顺序">
-<meta property="og:updated_time" content="2019-05-20T08:10:44.126Z">
+<meta property="og:updated_time" content="2021-06-11T06:15:14.261Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- Application 和 ContentProvider 的 onCreate() 方法的执行顺序">
 <meta name="twitter:description" content="Application 和 ContentProvider 的 onCreate() 方法的执行顺序">
@@ -403,7 +403,7 @@
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在上个版本对客户端代码进行了一些重构，结果线上发现了一些 Crash 问题。<br>问题是 ContentProvider 里面用到的一些变量的空指针异常。<br>问题是这样的，ContentProvider 增删改查接口用到的一些数据在 Application 里面做了初始化，结果偶现空指针异常。<br>看到这个问题，首先想到的是初始化时机的问题，顺便看看源码，了解问题的真相。</p>
 <h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>这里先给出源码分析的结论：ContentProvider 的 onCreate() 方法先于 Application 的 onCreate() 方法执行。 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">├── ActivityThread.handleBindApplication</div><div class="line">    ├── LoadedApk.makeApplication</div><div class="line">        ├── Instrumentation.newApplication</div><div class="line">            ├── Instrumentation.newApplication</div><div class="line">                ├── (Application)clazz.newInstance() //调用构造方法</div><div class="line">                ├── Application.attach</div><div class="line">                    ├── Application.attachBaseContext //调用attachBaseContext方法</div><div class="line">    ├── ActivityThread.installContentProviders</div><div class="line">        ├── ActivityThread.installProvider</div><div class="line">            ├── ContentProvider.attachInfo</div><div class="line">                ├── ContentProvider.attachInfo</div><div class="line">                    ├── ContentProvider.onCreate  // 调用 ContentProvider的onCreate方法</div><div class="line">    ├── Instrumentation.callApplicationOnCreate</div><div class="line">        ├── Application.onCreate  //调用Application的onCreate方法</div></pre></td></tr></table></figure>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>调用顺序：<br>Application 构造方法 –&gt; Application.attachBaseContext –&gt; ContentProvider.onCreate –&gt; Application.onCreate –&gt; Activity.onCreate</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>调用顺序：<br>Application 构造方法 –&gt; Application.attachBaseContext –&gt; ContentProvider 构造方法 –&gt; ContentProvider.onCreate –&gt; Application.onCreate –&gt; Activity 构造方法 –&gt; Activity attachBaseContext –&gt; Activity.onCreate</p>
 <p>ContentProvider.onCreate 方法先于 Application.onCreate，因此在调用 ContentProvider.query 方法调用时，Application.onCreate 方法还没有调用导致变量未初始化从而发生崩溃。</p>
 
       

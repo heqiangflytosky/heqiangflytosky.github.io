@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
+    
+    <lastmod>2021-06-11T06:15:14.262Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2019/05/03/android-view-constraintlayout/</loc>
     
-    <lastmod>2021-05-11T01:49:11.099Z</lastmod>
+    <lastmod>2021-06-11T06:15:14.262Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
+    
+    <lastmod>2021-06-11T06:15:14.262Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/08/06/android-basic-oncreate-application-contentprovider/</loc>
+    
+    <lastmod>2021-06-11T06:15:14.261Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2014/10/15/android-development-skills-dumpsys/</loc>
+    
+    <lastmod>2021-06-11T06:15:14.261Z</lastmod>
     
   </url>
   
@@ -26,13 +54,6 @@
     <loc>http://yoursite.com/2018/08/18/android-code-optimization-tools-link/</loc>
     
     <lastmod>2021-04-29T02:21:23.981Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2014/10/15/android-development-skills-dumpsys/</loc>
-    
-    <lastmod>2021-04-26T05:51:04.255Z</lastmod>
     
   </url>
   
@@ -72,23 +93,9 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/03/03/development-tool-gradle-command-config/</loc>
-    
-    <lastmod>2021-01-19T07:16:50.266Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
     
     <lastmod>2021-01-19T02:11:46.954Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
-    
-    <lastmod>2021-01-06T01:55:41.330Z</lastmod>
     
   </url>
   
@@ -1073,13 +1080,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/08/06/android-basic-oncreate-application-contentprovider/</loc>
-    
-    <lastmod>2019-05-20T08:10:44.126Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2014/01/20/java-basic-knowledge-about-string/</loc>
     
     <lastmod>2019-05-17T07:21:26.019Z</lastmod>
@@ -1584,14 +1584,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/20/open-source-weex-android-component-module-register/</loc>
+    <loc>http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/</loc>
     
     <lastmod>2018-06-02T09:24:04.976Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/</loc>
+    <loc>http://yoursite.com/2018/03/20/open-source-weex-android-component-module-register/</loc>
     
     <lastmod>2018-06-02T09:24:04.976Z</lastmod>
     
@@ -1752,14 +1752,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1829,6 +1829,13 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1837,13 +1844,6 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
