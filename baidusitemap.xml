@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2021/02/12/android-launcher-recentsview-gesture/</loc>
+    <lastmod>2021-06-21T10:13:07.192Z</lastmod>
+    <data>
+        <display>
+        <title>Android -- 手势导航启动多任务</title>
+        <pubTime>2021-02-12T02:00:00.000Z</pubTime>
+        
+        <tag>Launcher3</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android Launcher" url="http://yoursite.com/categories/Android-Launcher/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2021/02/10/android-launcher-recentsview_navigationbar/</loc>
     <lastmod>2021-06-21T10:08:04.366Z</lastmod>
     <data>
@@ -5495,12 +5515,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5535,12 +5555,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
