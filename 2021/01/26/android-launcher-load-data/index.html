@@ -1,0 +1,953 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Launcher3," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 Launcher 的数据加载流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android -- 数据加载">
+<meta property="og:url" content="http://yoursite.com/2021/01/26/android-launcher-load-data/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 Launcher 的数据加载流程">
+<meta property="og:updated_time" content="2021-06-21T08:47:48.971Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android -- 数据加载">
+<meta name="twitter:description" content="介绍 Launcher 的数据加载流程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/01/26/android-launcher-load-data/"/>
+
+
+
+
+
+  <title> Android -- 数据加载 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/26/android-launcher-load-data/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android -- 数据加载
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-26T10:00:00+08:00">
+                2021-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-Launcher/" itemprop="url" rel="index">
+                    <span itemprop="name">Android Launcher</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2021/01/26/android-launcher-load-data/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2021/01/26/android-launcher-load-data/" class="leancloud_visitors" data-flag-title="Android -- 数据加载">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 Launcher 的数据加载流程
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文涉及的到几个重要的类：</p>
+<ul>
+<li>LauncherModel：Launcher 数据处理核心类</li>
+<li>LoaderTask:主要任务负责加载数据（workspace、all apps）和绑定数据（workspace、all apps）</li>
+<li>AutoInstallsLayout:</li>
+<li>InvariantDeviceProfile: 桌面的一些配置，比如默认布局文件</li>
+<li>BgDataModel: 用来放布局相关的集合</li>
+<li>WorkspaceItemInfo，FolderInfo，LauncherAppWidgetInfo：都是继承自ItemInfo，保存桌面图标的一些信息：图标位置，宽高，类型等信息</li>
+</ul>
+<h2 id="数据加载流程"><a href="#数据加载流程" class="headerlink" title="数据加载流程"></a>数据加载流程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">Launcher.onCreate</div><div class="line">    LauncherModel.startLoader</div><div class="line">        // 处理重新绑定逻辑，此时桌面数据已经加载，只执行重新绑定</div><div class="line">        LoaderResults.bindWorkspace</div><div class="line">            Launcher.bindScreens  // 绑定屏幕</div><div class="line">                Launcher.bindAddScreens //根据实际计算所得的屏幕个数，创建屏幕的View，launcher中每一屏对应的View是一个CellLayout。</div><div class="line">        LoaderResults.bindAllApps</div><div class="line">        LoaderResults.bindDeepShortcuts</div><div class="line">        LoaderResults.bindWidgets</div><div class="line">        // 处理首次加载逻辑</div><div class="line">        LauncherModel.startLoaderForResults</div><div class="line">            LoaderTask.run</div><div class="line">                LoaderTask.loadWorkspace()</div><div class="line">                    LauncherSettings.Settings.call(contentResolver,LauncherSettings.Settings.METHOD_LOAD_DEFAULT_FAVORITES);</div><div class="line">                        LauncherProvider.loadDefaultFavoritesIfNecessary()</div><div class="line">                mResults.bindWorkspace(); //绑定数据</div><div class="line">                    WorkspaceBinder.bind()</div><div class="line">                        WorkspaceBinder.bindWorkspaceItems</div><div class="line">                            Launcher.bindItems //创建对应快捷图标</div><div class="line">                                Workspace.addInScreenFromBind</div><div class="line">                                    Workspace.addInScreen</div><div class="line">                                        CellLayout.addViewToCellLayout //添加到CellLayout</div><div class="line">                        WorkspaceBinder.bindAppWidgets</div><div class="line">                sendFirstScreenActiveInstallsBroadcast()</div><div class="line">                waitForIdle()</div><div class="line">                loadAllApps()</div><div class="line">                mResults.bindAllApps()</div><div class="line">                updateHandler.updateIcons</div><div class="line">                waitForIdle()</div><div class="line">                loadDeepShortcuts()</div><div class="line">                mResults.bindDeepShortcuts()</div><div class="line">                waitForIdle()</div><div class="line">                mBgDataModel.widgetsModel.update</div><div class="line">                mResults.bindWidgets()</div><div class="line">                updateHandler.updateIcons</div></pre></td></tr></table></figure>
+<p>数据加载主要在 LoaderTask.run() 中进行，这部分代码注释非常清楚，主要分为下面5个步骤：</p>
+<ul>
+<li>step 1: workspace <ul>
+<li>step 1.1: loading workspace</li>
+<li>step 1.2: bind workspace</li>
+<li>step 1.3: send first screen broadcast</li>
+<li>step 1 completed, wait for idle</li>
+</ul>
+</li>
+<li>step 2: all apps<ul>
+<li>step 2.1: loading all apps</li>
+<li>step 2.2: Binding all apps</li>
+<li>step 2.3: Update icon cache</li>
+<li>step 2 completed, wait for idle</li>
+</ul>
+</li>
+<li>step 3: deep shortcuts<ul>
+<li>step 3.1: loading deep shortcuts</li>
+<li>step 3.2: bind deep shortcuts</li>
+<li>step 3 completed, wait for idle</li>
+</ul>
+</li>
+<li>step 4: widgets<ul>
+<li>step 4.1: loading widgets</li>
+<li>step 4.2: Binding widgets</li>
+<li>step 4.3: Update icon cache</li>
+</ul>
+</li>
+<li>step 5<ul>
+<li>step 5: Finish icon cache update</li>
+</ul>
+</li>
+</ul>
+<h2 id="Launcher"><a href="#Launcher" class="headerlink" title="Launcher"></a>Launcher</h2><p>Launcher实现了LauncherModel.Callbacks接口，用于回调界面显示更新。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public interface Callbacks &#123;</div><div class="line">    ......</div><div class="line">    //这边只列出了这边分析涉及的接口，便于查看</div><div class="line">    public void bindItems(List&lt;ItemInfo&gt; shortcuts, boolean forceAnimateIcons);//绑定items</div><div class="line">    public void bindScreens(ArrayList&lt;Long&gt; orderedScreenIds);//绑定screen</div><div class="line">    public void bindAllApplications(ArrayList&lt;AppInfo&gt; apps);//绑定所有应用</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="WorkSpace"><a href="#WorkSpace" class="headerlink" title="WorkSpace"></a>WorkSpace</h2><h3 id="loadWorkspace"><a href="#loadWorkspace" class="headerlink" title="loadWorkspace"></a>loadWorkspace</h3><p>先来分析一下 <code>LoaderTask.loadWorkspace()</code> 的几个关键步骤。<br>loadWorkspace 也可以分两小步，第1小步是获取数据库，如果有数据库则直接进入第2小步，如果数据库为空则从默认xml布局文件生成数据库。第2小步，从数据库读取信息存放到 <code>sBgDataModel</code> 中。loadWorkspace 方法的结果就是 <code>sBgDataModel</code>。<br>读取数据库的操作也比较简单，根据item的类别进行一些合法性的校验，如果不合法就标记删除，全部加载完毕后统计一些删除操作，保留数据库中的合法的数据。</p>
+<p>开始分析 loadWorkspace 源码。</p>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">// LoaderTask.loadWorkspace()</div><div class="line">    private void loadWorkspace() &#123;</div><div class="line">        final Context context = mApp.getContext();</div><div class="line">        final ContentResolver contentResolver = context.getContentResolver();</div><div class="line">        final PackageManagerHelper pmHelper = new PackageManagerHelper(context);</div><div class="line">        final boolean isSafeMode = pmHelper.isSafeMode();</div><div class="line">        final boolean isSdCardReady = Utilities.isBootCompleted();</div><div class="line">        final MultiHashMap&lt;UserHandle, String&gt; pendingPackages = new MultiHashMap&lt;&gt;();</div><div class="line"></div><div class="line">        SharedPreferences sp = Utilities.getPrefs(context);</div><div class="line">        if (sp.getBoolean(LOAD_WORKSPACE_FIRST, true)) &#123;</div><div class="line">            // 第一次启动时创建临时数据库，进行数据迁移</div><div class="line">            LauncherSettings.Settings.call(contentResolver, LauncherSettings.Settings.METHOD_CREATE_TEMP_FAVORITES_TABLE);</div><div class="line">            LauncherSettings.Settings.call(contentResolver, LauncherSettings.Settings.METHOD_DATA_TRANSFER);</div><div class="line">            sp.edit().putBoolean(LOAD_WORKSPACE_FIRST, false).commit();</div><div class="line">        &#125; else &#123;</div><div class="line">            Log.i(TAG, &quot;Not first load workspace&quot;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // 进行数据迁移</div><div class="line">        boolean clearDb = false;</div><div class="line">        try &#123;</div><div class="line">            ImportDataTask.performImportIfPossible(context);</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            // Migration failed. Clear workspace.</div><div class="line">            clearDb = true;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (!clearDb &amp;&amp; !GridSizeMigrationTask.migrateGridIfNeeded(context)) &#123;</div><div class="line">            // Migration failed. Clear workspace.</div><div class="line">            clearDb = true;</div><div class="line">        &#125;</div><div class="line">        // 清除数据库</div><div class="line">        if (clearDb) &#123;</div><div class="line">            Log.d(TAG, &quot;loadWorkspace: resetting launcher database&quot;);</div><div class="line">            LauncherSettings.Settings.call(contentResolver,</div><div class="line">                    LauncherSettings.Settings.METHOD_CREATE_EMPTY_DB);</div><div class="line">        &#125;</div><div class="line">        // 加载默认桌面布局</div><div class="line">        Log.d(TAG, &quot;loadWorkspace: loading default favorites&quot;);</div><div class="line">        LauncherSettings.Settings.call(contentResolver,</div><div class="line">                LauncherSettings.Settings.METHOD_LOAD_DEFAULT_FAVORITES);</div></pre></td></tr></table></figure>
+<p><code>LauncherSettings.Settings.call(contentResolver,LauncherSettings.Settings.METHOD_LOAD_DEFAULT_FAVORITES)</code> 会调用到 <code>LauncherProvider</code> 的 <code>loadDefaultFavoritesIfNecessary()</code> 方法。<br>这个方法来判断是否需要加载默认的布局，如果清除了桌面数据或者手机恢复了出厂设置，就会加载默认的布局。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">// LauncherProvider.loadDefaultFavoritesIfNecessary</div><div class="line">    synchronized private void loadDefaultFavoritesIfNecessary() &#123;</div><div class="line">        SharedPreferences sp = Utilities.getPrefs(getContext());</div><div class="line"></div><div class="line">        if (sp.getBoolean(EMPTY_DATABASE_CREATED, false)) &#123;</div><div class="line">            Log.d(TAG, &quot;loading default workspace&quot;);</div><div class="line"></div><div class="line">            AppWidgetHost widgetHost = mOpenHelper.newLauncherWidgetHost();</div><div class="line">            // 获取loader，下面介绍 AutoInstallsLayout</div><div class="line">            // 1. 尝试从系统配置的 launcher3.layout.provider 提供的 provider 里面获取布局资源</div><div class="line">            AutoInstallsLayout loader = createWorkspaceLoaderFromAppRestriction(widgetHost);</div><div class="line">            if (loader == null) &#123;</div><div class="line">                // 2. 尝试从带有 android.autoinstalls.config.action.PLAY_AUTO_INSTALL 的apk里面获取布局资源</div><div class="line">                loader = AutoInstallsLayout.get(getContext(),widgetHost, mOpenHelper);</div><div class="line">            &#125;</div><div class="line">            if (loader == null) &#123;</div><div class="line">                // 3. 尝试从系统内置的partner应用里获取workspace默认配置,</div><div class="line">                // 这个功能是提供给提供布局的第三方应用</div><div class="line">                final Partner partner = Partner.get(getContext().getPackageManager());</div><div class="line">                if (partner != null &amp;&amp; partner.hasDefaultLayout()) &#123;</div><div class="line">                    final Resources partnerRes = partner.getResources();</div><div class="line">                    int workspaceResId = partnerRes.getIdentifier(Partner.RES_DEFAULT_LAYOUT,</div><div class="line">                            &quot;xml&quot;, partner.getPackageName());</div><div class="line">                    if (workspaceResId != 0) &#123;</div><div class="line">                        loader = new DefaultLayoutParser(getContext(), widgetHost,</div><div class="line">                                mOpenHelper, partnerRes, workspaceResId);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            final boolean usingExternallyProvidedLayout = loader != null;</div><div class="line">            if (loader == null) &#123;</div><div class="line">                // 4. 尝试获取Launcher里的默认资源，比如@xml/default_workspace_5x5</div><div class="line">                // 看下面对这个方法的详细分析</div><div class="line">                loader = getDefaultLayoutParser(widgetHost);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            // There might be some partially restored DB items, due to buggy restore logic in</div><div class="line">            // previous versions of launcher.</div><div class="line">            mOpenHelper.createEmptyDB(mOpenHelper.getWritableDatabase());</div><div class="line"></div><div class="line">            // Populate favorites table with initial favorites</div><div class="line">            // 解析布局文件并写入数据库</div><div class="line">            // 首先时使用上面得到的loader获取，如果该loader提供的方式里面为空的布局</div><div class="line">            // 那么还是使用上面第四部的 loader。</div><div class="line">            if ((mOpenHelper.loadFavorites(mOpenHelper.getWritableDatabase(), loader) &lt;= 0)</div><div class="line">                    &amp;&amp; usingExternallyProvidedLayout) &#123;</div><div class="line">                // Unable to load external layout. Cleanup and load the internal layout.</div><div class="line">                mOpenHelper.createEmptyDB(mOpenHelper.getWritableDatabase());</div><div class="line">                mOpenHelper.loadFavorites(mOpenHelper.getWritableDatabase(),</div><div class="line">                        getDefaultLayoutParser(widgetHost));</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            clearFlagEmptyDbCreated();</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// LauncherProvider.getDefaultLayoutParser</div><div class="line">    private DefaultLayoutParser getDefaultLayoutParser(AppWidgetHost widgetHost) &#123;</div><div class="line">        // InvariantDeviceProfile 的配置文件在 R.xml.device_profiles</div><div class="line">        //  从 InvariantDeviceProfil.getPredefinedDeviceProfiles 中获取</div><div class="line">        InvariantDeviceProfile idp = LauncherAppState.getIDP(getContext());</div><div class="line">        // 获取布局资源id，比如：@xml/default_workspace_5x5</div><div class="line">        int defaultLayout = idp.defaultLayoutId;</div><div class="line"></div><div class="line">        UserManagerCompat um = UserManagerCompat.getInstance(getContext());</div><div class="line">        if (um.isDemoUser() &amp;&amp; idp.demoModeLayoutId != 0) &#123;</div><div class="line">            defaultLayout = idp.demoModeLayoutId;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return new DefaultLayoutParser(getContext(), widgetHost,</div><div class="line">                mOpenHelper, getContext().getResources(), defaultLayout);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>如果不是第一次开机，那么上面的这一步时不需要进行的，直接进行下一步。<br>接下来继续分析 <code>LoaderTask.loadWorkspace()</code>。<br>先来简单介绍一下 BgDataModel 这个类，用来放布局相关的集合：</p>
+<ul>
+<li>workspaceScreens是保存屏幕的</li>
+<li>workspaceItems是桌面的图标</li>
+<li>appWidgets是桌面的小部件</li>
+<li>Folders是文件夹</li>
+</ul>
+<p>下面开始读取数据库以及对从数据库里面读取的数据进行分析。</p>
+<h4 id="加载数据库"><a href="#加载数据库" class="headerlink" title="加载数据库"></a>加载数据库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">// LoaderTask.loadWorkspace()</div><div class="line">        synchronized (mBgDataModel) &#123;</div><div class="line">            mBgDataModel.clear();</div><div class="line"></div><div class="line">            final HashMap&lt;String, SessionInfo&gt; installingPkgs =</div><div class="line">                    mPackageInstaller.updateAndGetActiveSessionCache();</div><div class="line">            mFirstScreenBroadcast = new FirstScreenBroadcast(installingPkgs);</div><div class="line"></div><div class="line">            Map&lt;ShortcutKey, ShortcutInfo&gt; shortcutKeyToPinnedShortcuts = new HashMap&lt;&gt;();</div><div class="line">            // 查询数据库</div><div class="line">            final LoaderCursor c = new LoaderCursor(contentResolver.query(</div><div class="line">                    LauncherSettings.Favorites.CONTENT_URI, null, null, null, null), mApp);</div><div class="line"></div><div class="line">            HashMap&lt;ComponentKey, AppWidgetProviderInfo&gt; widgetProvidersMap = null;</div><div class="line"></div><div class="line">            try &#123;</div><div class="line">                ...... </div><div class="line">                for (UserHandle user : mUserManager.getUserProfiles()) &#123;</div><div class="line">                    long serialNo = mUserManager.getSerialNumberForUser(user);</div><div class="line">                    allUsers.put(serialNo, user);</div><div class="line">                    quietMode.put(serialNo, mUserManager.isQuietModeEnabled(user));</div><div class="line"></div><div class="line">                    boolean userUnlocked = mUserManager.isUserUnlocked(user);</div><div class="line"></div><div class="line">                    // We can only query for shortcuts when the user is unlocked.</div><div class="line">                    // 向 LauncherAppsService 获取 Pinned Shortcuts</div><div class="line">                    if (userUnlocked) &#123;</div><div class="line">                        List&lt;ShortcutInfo&gt; pinnedShortcuts =</div><div class="line">                                mShortcutManager.queryForPinnedShortcuts(null, user);</div><div class="line">                        if (mShortcutManager.wasLastCallSuccess()) &#123;</div><div class="line">                            for (ShortcutInfo shortcut : pinnedShortcuts) &#123;</div><div class="line">                                shortcutKeyToPinnedShortcuts.put(ShortcutKey.fromInfo(shortcut),</div><div class="line">                                        shortcut);</div><div class="line">                            &#125;</div><div class="line">                        &#125; else &#123;</div><div class="line">                            userUnlocked = false;</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    unlockedUsers.put(serialNo, userUnlocked);</div><div class="line">                &#125;</div><div class="line">                </div><div class="line">                WorkspaceItemInfo info;</div><div class="line">                LauncherAppWidgetInfo appWidgetInfo;</div><div class="line">                Intent intent;</div><div class="line">                String targetPkg;</div><div class="line">                // 开始遍历数据库，一次读取数据库内容</div><div class="line">                while (!mStopped &amp;&amp; c.moveToNext()) &#123;</div><div class="line">                    try &#123;</div><div class="line">                        ......</div><div class="line">                        switch (c.itemType) &#123;</div></pre></td></tr></table></figure>
+<p>下面开始对数据库每一条数据根据类型的不同进行不同的处理。</p>
+<h5 id="快捷方式数据"><a href="#快捷方式数据" class="headerlink" title="快捷方式数据"></a>快捷方式数据</h5><p>这里的快捷方式分为三种：</p>
+<ul>
+<li>ITEM_TYPE_APPLICATION：应用图标</li>
+<li>ITEM_TYPE_SHORTCUT：应用创建的快捷图标</li>
+<li>ITEM_TYPE_DEEP_SHORTCUT：Pinned Shortcuts，长按应用图标弹出菜单，从菜单里面拖出的快捷方式。</li>
+</ul>
+<p>这里会根据不同的类型生成不同的对象，保存在 BgDataModel 中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div></pre></td><td class="code"><pre><div class="line">case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:</div><div class="line">case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:</div><div class="line">case LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT:</div><div class="line">    // 解析出数据库中的 intent 字段</div><div class="line">    intent = c.parseIntent();</div><div class="line">    if (intent == null) &#123;</div><div class="line">        c.markDeleted(&quot;Invalid or null intent&quot;);</div><div class="line">        continue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    int disabledState = quietMode.get(c.serialNumber) ?</div><div class="line">            WorkspaceItemInfo.FLAG_DISABLED_QUIET_USER : 0;</div><div class="line">    ComponentName cn = intent.getComponent();</div><div class="line">    targetPkg = cn == null ? intent.getPackage() : cn.getPackageName();</div><div class="line"></div><div class="line">    if (allUsers.indexOfValue(c.user) &lt; 0) &#123;</div><div class="line">        if (c.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) &#123;</div><div class="line">            c.markDeleted(&quot;Legacy shortcuts are only allowed for current users&quot;);</div><div class="line">            continue;</div><div class="line">        &#125; else if (c.restoreFlag != 0) &#123;</div><div class="line">            // Don&apos;t restore items for other profiles.</div><div class="line">            c.markDeleted(&quot;Restore from other profiles not supported&quot;);</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    // 如果 targetPkg为空 且不是 ITEM_TYPE_SHORTCUT，则标记删除</div><div class="line">    if (TextUtils.isEmpty(targetPkg) &amp;&amp;</div><div class="line">            c.itemType != LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) &#123;</div><div class="line">        c.markDeleted(&quot;Only legacy shortcuts can have null package&quot;);</div><div class="line">        continue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // If there is no target package, its an implicit intent</div><div class="line">    // (legacy shortcut) which is always valid</div><div class="line">    boolean validTarget = TextUtils.isEmpty(targetPkg) ||</div><div class="line">            mLauncherApps.isPackageEnabledForProfile(targetPkg, c.user);</div><div class="line">    //检查对应的应用是否在系统中为disable状态，如果为disable状态，则不显示。</div><div class="line">    // 通过isActivityEnabledForProfile来判断。 </div><div class="line">    // 当用户在设置里面对某个应用设置为disable，回到Launcher的时候，</div><div class="line">    //Launcher的数据库里面还是保留着该应用。</div><div class="line">    // 这里会进行一个判断，当数据库有，但手机不支持的时候，不显示。</div><div class="line">    if (cn != null &amp;&amp; validTarget) &#123;</div><div class="line">        // If the apk is present and the shortcut points to a specific</div><div class="line">        // component.</div><div class="line"></div><div class="line">        // If the component is already present</div><div class="line">        if (mLauncherApps.isActivityEnabledForProfile(cn, c.user)) &#123;</div><div class="line">            // no special handling necessary for this item</div><div class="line">            c.markRestored();</div><div class="line">        &#125; else &#123;</div><div class="line">            // Gracefully try to find a fallback activity.</div><div class="line">            intent = pmHelper.getAppLaunchIntent(targetPkg, c.user);</div><div class="line">            if (intent != null) &#123;</div><div class="line">                c.restoreFlag = 0;</div><div class="line">                c.updater().put(</div><div class="line">                        LauncherSettings.Favorites.INTENT,</div><div class="line">                        intent.toUri(0)).commit();</div><div class="line">                cn = intent.getComponent();</div><div class="line">            &#125; else &#123;</div><div class="line">                c.markDeleted(&quot;Unable to find a launch target&quot;);</div><div class="line">                continue;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    // else if cn == null =&gt; can&apos;t infer much, leave it</div><div class="line">    // else if !validPkg =&gt; could be restored icon or missing sd-card</div><div class="line"></div><div class="line">    if (!TextUtils.isEmpty(targetPkg) &amp;&amp; !validTarget) &#123;</div><div class="line">        // Points to a valid app (superset of cn != null) but the apk</div><div class="line">        // is not available.</div><div class="line"></div><div class="line">        if (c.restoreFlag != 0) &#123;</div><div class="line">            // Package is not yet available but might be</div><div class="line">            // installed later.</div><div class="line">            FileLog.d(TAG, &quot;package not yet restored: &quot; + targetPkg);</div><div class="line"></div><div class="line">            if (c.hasRestoreFlag(WorkspaceItemInfo.FLAG_RESTORE_STARTED)) &#123;</div><div class="line">                // Restore has started once.</div><div class="line">            &#125; else if (installingPkgs.containsKey(targetPkg)) &#123;</div><div class="line">                // App restore has started. Update the flag</div><div class="line">                c.restoreFlag |= WorkspaceItemInfo.FLAG_RESTORE_STARTED;</div><div class="line">                c.updater().put(LauncherSettings.Favorites.RESTORED,</div><div class="line">                        c.restoreFlag).commit();</div><div class="line">            &#125; else &#123;</div><div class="line">                c.markDeleted(&quot;Unrestored app removed: &quot; + targetPkg);</div><div class="line">                continue;</div><div class="line">            &#125;</div><div class="line">        &#125; else if (pmHelper.isAppOnSdcard(targetPkg, c.user)) &#123;</div><div class="line">            // Package is present but not available.</div><div class="line">            disabledState |= WorkspaceItemInfo.FLAG_DISABLED_NOT_AVAILABLE;</div><div class="line">            // Add the icon on the workspace anyway.</div><div class="line">            allowMissingTarget = true;</div><div class="line">        &#125; else if (!isSdCardReady) &#123;</div><div class="line">            // SdCard is not ready yet. Package might get available,</div><div class="line">            // once it is ready.</div><div class="line">            Log.d(TAG, &quot;Missing pkg, will check later: &quot; + targetPkg);</div><div class="line">            pendingPackages.addToList(c.user, targetPkg);</div><div class="line">            // Add the icon on the workspace anyway.</div><div class="line">            allowMissingTarget = true;</div><div class="line">        &#125; else &#123;</div><div class="line">            // Do not wait for external media load anymore.</div><div class="line">            c.markDeleted(&quot;Invalid package removed: &quot; + targetPkg);</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if ((c.restoreFlag &amp; WorkspaceItemInfo.FLAG_SUPPORTS_WEB_UI) != 0) &#123;</div><div class="line">        validTarget = false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (validTarget) &#123;</div><div class="line">        // The shortcut points to a valid target (either no target</div><div class="line">        // or something which is ready to be used)</div><div class="line">        c.markRestored();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    boolean useLowResIcon = !c.isOnWorkspaceOrHotseat();</div><div class="line"></div><div class="line">    if (c.restoreFlag != 0) &#123;</div><div class="line">        // Already verified above that user is same as default user</div><div class="line">        info = c.getRestoredItemInfo(intent);</div><div class="line">    &#125; else if (c.itemType ==</div><div class="line">            LauncherSettings.Favorites.ITEM_TYPE_APPLICATION) &#123;</div><div class="line">        info = c.getAppShortcutInfo(</div><div class="line">                intent, allowMissingTarget, useLowResIcon);</div><div class="line">    &#125; else if (c.itemType ==</div><div class="line">            LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT) &#123;</div><div class="line"></div><div class="line">        ShortcutKey key = ShortcutKey.fromIntent(intent, c.user);</div><div class="line">        if (unlockedUsers.get(c.serialNumber)) &#123;</div><div class="line">            ShortcutInfo pinnedShortcut =</div><div class="line">                    shortcutKeyToPinnedShortcuts.get(key);</div><div class="line">            if (pinnedShortcut == null) &#123;</div><div class="line">                // The shortcut is no longer valid.</div><div class="line">                c.markDeleted(&quot;Pinned shortcut not found&quot;);</div><div class="line">                continue;</div><div class="line">            &#125;</div><div class="line">            // 根据pinnedShortcut生成 WorkspaceItemInfo </div><div class="line">            info = new WorkspaceItemInfo(pinnedShortcut, context);</div><div class="line">            final WorkspaceItemInfo finalInfo = info;</div><div class="line"></div><div class="line">            LauncherIcons li = LauncherIcons.obtain(context);</div><div class="line">            // If the pinned deep shortcut is no longer published,</div><div class="line">            // use the last saved icon instead of the default.</div><div class="line">            Supplier&lt;ItemInfoWithIcon&gt; fallbackIconProvider = () -&gt;</div><div class="line">                    c.loadIcon(finalInfo, li) ? finalInfo : null;</div><div class="line">            info.applyFrom(li.createShortcutIcon(pinnedShortcut,</div><div class="line">                    true /* badged */, fallbackIconProvider));</div><div class="line">            li.recycle();</div><div class="line">            if (pmHelper.isAppSuspended(</div><div class="line">                    pinnedShortcut.getPackage(), info.user)) &#123;</div><div class="line">                info.runtimeStatusFlags |= FLAG_DISABLED_SUSPENDED;</div><div class="line">            &#125;</div><div class="line">            intent = info.intent;</div><div class="line">        &#125; else &#123;</div><div class="line">            // Create a shortcut info in disabled mode for now.</div><div class="line">            info = c.loadSimpleWorkspaceItem();</div><div class="line">            info.runtimeStatusFlags |= FLAG_DISABLED_LOCKED_USER;</div><div class="line">        &#125;</div><div class="line">    &#125; else &#123; // item type == ITEM_TYPE_SHORTCUT</div><div class="line">        info = c.loadSimpleWorkspaceItem();</div><div class="line"></div><div class="line">        // Shortcuts are only available on the primary profile</div><div class="line">        if (!TextUtils.isEmpty(targetPkg)</div><div class="line">                &amp;&amp; pmHelper.isAppSuspended(targetPkg, c.user)) &#123;</div><div class="line">            disabledState |= FLAG_DISABLED_SUSPENDED;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // App shortcuts that used to be automatically added to Launcher</div><div class="line">        // didn&apos;t always have the correct intent flags set, so do that</div><div class="line">        // here</div><div class="line">        if (intent.getAction() != null &amp;&amp;</div><div class="line">            intent.getCategories() != null &amp;&amp;</div><div class="line">            intent.getAction().equals(Intent.ACTION_MAIN) &amp;&amp;</div><div class="line">            intent.getCategories().contains(Intent.CATEGORY_LAUNCHER)) &#123;</div><div class="line">            intent.addFlags(</div><div class="line">                Intent.FLAG_ACTIVITY_NEW_TASK |</div><div class="line">                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (info != null) &#123;</div><div class="line">        c.applyCommonProperties(info);</div><div class="line">        // 快捷方式的宽高都是1</div><div class="line">        info.intent = intent;</div><div class="line">        info.rank = c.getInt(rankIndex);</div><div class="line">        info.spanX = 1;</div><div class="line">        info.spanY = 1;</div><div class="line">        info.runtimeStatusFlags |= disabledState;</div><div class="line">        if (isSafeMode &amp;&amp; !Utilities.isSystemApp(context, intent)) &#123;</div><div class="line">            info.runtimeStatusFlags |= FLAG_DISABLED_SAFEMODE;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (c.restoreFlag != 0 &amp;&amp; !TextUtils.isEmpty(targetPkg)) &#123;</div><div class="line">            SessionInfo si = installingPkgs.get(targetPkg);</div><div class="line">            if (si == null) &#123;</div><div class="line">                info.status &amp;= ~WorkspaceItemInfo.FLAG_INSTALL_SESSION_ACTIVE;</div><div class="line">            &#125; else &#123;</div><div class="line">                info.setInstallProgress((int) (si.getProgress() * 100));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        // 将 WorkspaceItemInfo 添加到 mBgDataModel</div><div class="line">        c.checkAndAddItem(info, mBgDataModel);</div><div class="line">    &#125; else &#123;</div><div class="line">        throw new RuntimeException(&quot;Unexpected null WorkspaceItemInfo&quot;);</div><div class="line">    &#125;</div><div class="line">    break;</div></pre></td></tr></table></figure>
+<h5 id="文件夹类型数据"><a href="#文件夹类型数据" class="headerlink" title="文件夹类型数据"></a>文件夹类型数据</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">//LoaderTask.loadWorkspace()</div><div class="line">                        case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:</div><div class="line">                            FolderInfo folderInfo = mBgDataModel.findOrMakeFolder(c.id);</div><div class="line">                            c.applyCommonProperties(folderInfo);</div><div class="line"></div><div class="line">                            // Do not trim the folder label, as is was set by the user.</div><div class="line">                            folderInfo.title = c.getString(c.titleIndex);</div><div class="line">                            // 文件夹的宽高都是1</div><div class="line">                            folderInfo.spanX = 1;</div><div class="line">                            folderInfo.spanY = 1;</div><div class="line">                            folderInfo.options = c.getInt(optionsIndex);</div><div class="line"></div><div class="line">                            // no special handling required for restored folders</div><div class="line">                            c.markRestored();</div><div class="line">                            // 将 folderInfo 放入 mBgDataModel</div><div class="line">                            c.checkAndAddItem(folderInfo, mBgDataModel);</div><div class="line">                            break;</div></pre></td></tr></table></figure>
+<h5 id="桌面插件类型数据"><a href="#桌面插件类型数据" class="headerlink" title="桌面插件类型数据"></a>桌面插件类型数据</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">//LoaderTask.loadWorkspace()</div><div class="line">                        case LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET:</div><div class="line">                            if (FeatureFlags.GO_DISABLE_WIDGETS) &#123;</div><div class="line">                                c.markDeleted(&quot;Only legacy shortcuts can have null package&quot;);</div><div class="line">                                continue;</div><div class="line">                            &#125;</div><div class="line">                            // Follow through</div><div class="line">                        case LauncherSettings.Favorites.ITEM_TYPE_CUSTOM_APPWIDGET:</div><div class="line">                            ......</div><div class="line">                            final AppWidgetProviderInfo provider = widgetProvidersMap.get(</div><div class="line">                                    new ComponentKey(</div><div class="line">                                            ComponentName.unflattenFromString(savedProvider),</div><div class="line">                                            c.user));</div><div class="line">                            // 判断该 widget 是否存在 provider</div><div class="line">                            final boolean isProviderReady = isValidProvider(provider);</div><div class="line">                            ......</div><div class="line">                            break;</div><div class="line">                        &#125;</div><div class="line">                    &#125; catch (Exception e) &#123;</div><div class="line">                        Log.e(TAG, &quot;Desktop items loading interrupted&quot;, e);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125; finally &#123;</div><div class="line">                Utilities.closeSilently(c);</div><div class="line">            &#125;</div></pre></td></tr></table></figure>
+<h5 id="数据的最终处理"><a href="#数据的最终处理" class="headerlink" title="数据的最终处理"></a>数据的最终处理</h5><p>对数据进一步处理，如果前面标记了清除，那么这里就从数据库中进行删除对应数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">//LoaderTask.loadWorkspace()</div><div class="line">            // Break early if we&apos;ve stopped loading</div><div class="line">            if (mStopped) &#123;</div><div class="line">                mBgDataModel.clear();</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            // Remove dead items</div><div class="line">            // 删除前面标记delete的数据</div><div class="line">            if (c.commitDeleted()) &#123;</div><div class="line">                // Remove any empty folder</div><div class="line">                int[] deletedFolderIds = LauncherSettings.Settings</div><div class="line">                        .call(contentResolver,</div><div class="line">                                LauncherSettings.Settings.METHOD_DELETE_EMPTY_FOLDERS)</div><div class="line">                        .getIntArray(LauncherSettings.Settings.EXTRA_VALUE);</div><div class="line">                for (int folderId : deletedFolderIds) &#123;</div><div class="line">                    mBgDataModel.workspaceItems.remove(mBgDataModel.folders.get(folderId));</div><div class="line">                    mBgDataModel.folders.remove(folderId);</div><div class="line">                    mBgDataModel.itemsIdMap.remove(folderId);</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                // Remove any ghost widgets</div><div class="line">                LauncherSettings.Settings.call(contentResolver,</div><div class="line">                        LauncherSettings.Settings.METHOD_REMOVE_GHOST_WIDGETS);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            // Unpin shortcuts that don&apos;t exist on the workspace.</div><div class="line">            HashSet&lt;ShortcutKey&gt; pendingShortcuts =</div><div class="line">                    InstallShortcutReceiver.getPendingShortcuts(context);</div><div class="line">            for (ShortcutKey key : shortcutKeyToPinnedShortcuts.keySet()) &#123;</div><div class="line">                MutableInt numTimesPinned = mBgDataModel.pinnedShortcutCounts.get(key);</div><div class="line">                if ((numTimesPinned == null || numTimesPinned.value == 0)</div><div class="line">                        &amp;&amp; !pendingShortcuts.contains(key)) &#123;</div><div class="line">                    // Shortcut is pinned but doesn&apos;t exist on the workspace; unpin it.</div><div class="line">                    mShortcutManager.unpinShortcut(key);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            // Sort the folder items, update ranks, and make sure all preview items are high res.</div><div class="line">            FolderIconPreviewVerifier verifier =</div><div class="line">                    new FolderIconPreviewVerifier(mApp.getInvariantDeviceProfile());</div><div class="line">            for (FolderInfo folder : mBgDataModel.folders) &#123;</div><div class="line">                Collections.sort(folder.contents, Folder.ITEM_POS_COMPARATOR);</div><div class="line">                verifier.setFolderInfo(folder);</div><div class="line">                int size = folder.contents.size();</div><div class="line"></div><div class="line">                // Update ranks here to ensure there are no gaps caused by removed folder items.</div><div class="line">                // Ranks are the source of truth for folder items, so cellX and cellY can be ignored</div><div class="line">                // for now. Database will be updated once user manually modifies folder.</div><div class="line">                for (int rank = 0; rank &lt; size; ++rank) &#123;</div><div class="line">                    WorkspaceItemInfo info = folder.contents.get(rank);</div><div class="line">                    info.rank = rank;</div><div class="line"></div><div class="line">                    if (info.usingLowResIcon()</div><div class="line">                            &amp;&amp; info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION</div><div class="line">                            &amp;&amp; verifier.isItemInPreview(info.rank)) &#123;</div><div class="line">                        mIconCache.getTitleAndIcon(info, false);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            c.commitRestoredItems();</div><div class="line">            if (!isSdCardReady &amp;&amp; !pendingPackages.isEmpty()) &#123;</div><div class="line">                context.registerReceiver(</div><div class="line">                        new SdCardAvailableReceiver(mApp, pendingPackages),</div><div class="line">                        new IntentFilter(Intent.ACTION_BOOT_COMPLETED),</div><div class="line">                        null,</div><div class="line">                        new Handler(LauncherModel.getWorkerLooper()));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="bindWorkspace"><a href="#bindWorkspace" class="headerlink" title="bindWorkspace"></a>bindWorkspace</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div></pre></td><td class="code"><pre><div class="line">// BaseLoaderResults.java</div><div class="line"></div><div class="line">    public void bindWorkspace() &#123;</div><div class="line">        Callbacks callbacks = mCallbacks.get();</div><div class="line">        // Launcher 实现了 callback</div><div class="line">        if (callbacks == null) &#123;</div><div class="line">            // 如果没有callback，就没有bind的必要了</div><div class="line">            Log.w(TAG, &quot;LoaderTask running with no launcher&quot;);</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // Save a copy of all the bg-thread collections</div><div class="line">        ArrayList&lt;ItemInfo&gt; workspaceItems = new ArrayList&lt;&gt;();</div><div class="line">        ArrayList&lt;LauncherAppWidgetInfo&gt; appWidgets = new ArrayList&lt;&gt;();</div><div class="line">        final IntArray orderedScreenIds = new IntArray();</div><div class="line"></div><div class="line">        synchronized (mBgDataModel) &#123;</div><div class="line">            // 从 mBgDataModel 获取数据</div><div class="line">            workspaceItems.addAll(mBgDataModel.workspaceItems);</div><div class="line">            appWidgets.addAll(mBgDataModel.appWidgets);</div><div class="line">            orderedScreenIds.addAll(mBgDataModel.collectWorkspaceScreens());</div><div class="line">            mBgDataModel.lastBindId++;</div><div class="line">            mMyBindingId = mBgDataModel.lastBindId;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        final int currentScreen;</div><div class="line">        &#123;</div><div class="line">            int currScreen = mPageToBindFirst != PagedView.INVALID_RESTORE_PAGE</div><div class="line">                    ? mPageToBindFirst : callbacks.getCurrentWorkspaceScreen();</div><div class="line">            if (currScreen &gt;= orderedScreenIds.size()) &#123;</div><div class="line">                // There may be no workspace screens (just hotseat items and an empty page).</div><div class="line">                currScreen = PagedView.INVALID_RESTORE_PAGE;</div><div class="line">            &#125;</div><div class="line">            currentScreen = currScreen;</div><div class="line">        &#125;</div><div class="line">        final boolean validFirstPage = currentScreen &gt;= 0;</div><div class="line">        final int currentScreenId =</div><div class="line">                validFirstPage ? orderedScreenIds.get(currentScreen) : INVALID_SCREEN_ID;</div><div class="line"></div><div class="line">        // 过滤数据，将要绑定的内容分为当前屏幕的和非当前的数据</div><div class="line">        ArrayList&lt;ItemInfo&gt; currentWorkspaceItems = new ArrayList&lt;&gt;();</div><div class="line">        ArrayList&lt;ItemInfo&gt; otherWorkspaceItems = new ArrayList&lt;&gt;();</div><div class="line">        ArrayList&lt;LauncherAppWidgetInfo&gt; currentAppWidgets = new ArrayList&lt;&gt;();</div><div class="line">        ArrayList&lt;LauncherAppWidgetInfo&gt; otherAppWidgets = new ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">        filterCurrentWorkspaceItems(currentScreenId, workspaceItems, currentWorkspaceItems,</div><div class="line">                otherWorkspaceItems);</div><div class="line">        filterCurrentWorkspaceItems(currentScreenId, appWidgets, currentAppWidgets,</div><div class="line">                otherAppWidgets);</div><div class="line">        sortWorkspaceItemsSpatially(currentWorkspaceItems);</div><div class="line">        sortWorkspaceItemsSpatially(otherWorkspaceItems);</div><div class="line"></div><div class="line">        // 告诉 Launcher 开始 bind</div><div class="line">        executeCallbacksTask(c -&gt; &#123;</div><div class="line">            c.clearPendingBinds();</div><div class="line">            c.startBinding();</div><div class="line">        &#125;, mUiExecutor);</div><div class="line"></div><div class="line">        // 绑定 workspace screens</div><div class="line">        executeCallbacksTask(c -&gt; c.bindScreens(orderedScreenIds), mUiExecutor);</div><div class="line"></div><div class="line">        Executor mainExecutor = mUiExecutor;</div><div class="line">        // Load items on the current page.</div><div class="line">        bindWorkspaceItems(currentWorkspaceItems, mainExecutor);</div><div class="line">        bindAppWidgets(currentAppWidgets, mainExecutor);</div><div class="line">        // In case of validFirstPage, only bind the first screen, and defer binding the</div><div class="line">        // remaining screens after first onDraw (and an optional the fade animation whichever</div><div class="line">        // happens later).</div><div class="line">        // This ensures that the first screen is immediately visible (eg. during rotation)</div><div class="line">        // In case of !validFirstPage, bind all pages one after other.</div><div class="line">        // Launcher为了让默认页尽快显示，自定义了一个ViewOnDrawExecutor</div><div class="line">        // 绑定完第一页的元素并且第一次onDraw执行完之后才执行绑定其他页的操作</div><div class="line">        final Executor deferredExecutor =</div><div class="line">                validFirstPage ? new ViewOnDrawExecutor() : mainExecutor;</div><div class="line"></div><div class="line">        executeCallbacksTask(c -&gt; c.finishFirstPageBind(</div><div class="line">                validFirstPage ? (ViewOnDrawExecutor) deferredExecutor : null), mainExecutor);</div><div class="line"></div><div class="line">        bindWorkspaceItems(otherWorkspaceItems, deferredExecutor);</div><div class="line">        bindAppWidgets(otherAppWidgets, deferredExecutor);</div><div class="line">        // 通知 Launcher bind 工作已经完成</div><div class="line">        executeCallbacksTask(c -&gt; c.finishBindingItems(mPageToBindFirst), deferredExecutor);</div><div class="line"></div><div class="line">        if (validFirstPage) &#123;</div><div class="line">            executeCallbacksTask(c -&gt; &#123;</div><div class="line">                // We are loading synchronously, which means, some of the pages will be</div><div class="line">                // bound after first draw. Inform the callbacks that page binding is</div><div class="line">                // not complete, and schedule the remaining pages.</div><div class="line">                if (currentScreen != PagedView.INVALID_RESTORE_PAGE) &#123;</div><div class="line">                    c.onPageBoundSynchronously(currentScreen);</div><div class="line">                &#125;</div><div class="line">                c.executeOnNextDraw((ViewOnDrawExecutor) deferredExecutor);</div><div class="line"></div><div class="line">            &#125;, mUiExecutor);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>最终的数据绑定和快捷图标的生成在Launcher.bindItems中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div></pre></td><td class="code"><pre><div class="line">public void bindItems(final List&lt;ItemInfo&gt; items, final boolean forceAnimateIcons) &#123;</div><div class="line">    // Get the list of added items and intersect them with the set of items here</div><div class="line">    final Collection&lt;Animator&gt; bounceAnims = new ArrayList&lt;&gt;();</div><div class="line">    final boolean animateIcons = forceAnimateIcons &amp;&amp; canRunNewAppsAnimation();</div><div class="line">    Workspace workspace = mWorkspace;</div><div class="line">    int newItemsScreenId = -1;</div><div class="line">    int end = items.size();</div><div class="line"></div><div class="line">    for (int i = 0; i &lt; end; i++) &#123;</div><div class="line">        final ItemInfo item = items.get(i);</div><div class="line"></div><div class="line">        // Short circuit if we are loading dock items for a configuration which has no dock</div><div class="line">        if (item.container == LauncherSettings.Favorites.CONTAINER_HOTSEAT &amp;&amp;</div><div class="line">                mHotseat == null) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        final View view;</div><div class="line">        switch (item.itemType) &#123;</div><div class="line">            case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:</div><div class="line">            case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:</div><div class="line">            case LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT: &#123;</div><div class="line">                WorkspaceItemInfo info = (WorkspaceItemInfo) item;</div><div class="line">                view = createShortcut(info);</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">            case LauncherSettings.Favorites.ITEM_TYPE_FOLDER: &#123;</div><div class="line">                view = FolderIcon.inflateFolderAndIcon(R.layout.folder_icon, this,</div><div class="line">                        (ViewGroup) workspace.getChildAt(workspace.getCurrentPage()),</div><div class="line">                        (FolderInfo) item);</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">            case LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET:</div><div class="line">            case LauncherSettings.Favorites.ITEM_TYPE_CUSTOM_APPWIDGET: &#123;</div><div class="line">                view = inflateAppWidget((LauncherAppWidgetInfo) item);</div><div class="line">                if (view == null) &#123;</div><div class="line">                    continue;</div><div class="line">                &#125;</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">            default:</div><div class="line">                throw new RuntimeException(&quot;Invalid Item Type&quot;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        /*</div><div class="line">         * Remove colliding items.</div><div class="line">         */</div><div class="line">        if (item.container == LauncherSettings.Favorites.CONTAINER_DESKTOP) &#123;</div><div class="line">            CellLayout cl = mWorkspace.getScreenWithId(item.screenId);</div><div class="line">            if (cl != null &amp;&amp; cl.isOccupied(item.cellX, item.cellY)) &#123;</div><div class="line">                View v = cl.getChildAt(item.cellX, item.cellY);</div><div class="line">                Object tag = v.getTag();</div><div class="line">                String desc = &quot;Collision while binding workspace item: &quot; + item</div><div class="line">                        + &quot;. Collides with &quot; + tag;</div><div class="line">                if (FeatureFlags.IS_STUDIO_BUILD) &#123;</div><div class="line">                    throw (new RuntimeException(desc));</div><div class="line">                &#125; else &#123;</div><div class="line">                    getModelWriter().deleteItemFromDatabase(item);</div><div class="line">                    continue;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        workspace.addInScreenFromBind(view, item); // 添加到CellLayout中</div><div class="line">        if (animateIcons) &#123;</div><div class="line">            // Animate all the applications up now</div><div class="line">            view.setAlpha(0f);</div><div class="line">            view.setScaleX(0f);</div><div class="line">            view.setScaleY(0f);</div><div class="line">            bounceAnims.add(createNewAppBounceAnimation(view, i));</div><div class="line">            newItemsScreenId = item.screenId;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Animate to the correct page</div><div class="line">    if (animateIcons &amp;&amp; newItemsScreenId &gt; -1) &#123;</div><div class="line">        AnimatorSet anim = new AnimatorSet();</div><div class="line">        anim.playTogether(bounceAnims);</div><div class="line"></div><div class="line">        int currentScreenId = mWorkspace.getScreenIdForPageIndex(mWorkspace.getNextPage());</div><div class="line">        final int newScreenIndex = mWorkspace.getPageIndexForScreenId(newItemsScreenId);</div><div class="line">        final Runnable startBounceAnimRunnable = anim::start;</div><div class="line"></div><div class="line">        if (newItemsScreenId != currentScreenId) &#123;</div><div class="line">            // We post the animation slightly delayed to prevent slowdowns</div><div class="line">            // when we are loading right after we return to launcher.</div><div class="line">            mWorkspace.postDelayed(new Runnable() &#123;</div><div class="line">                public void run() &#123;</div><div class="line">                    if (mWorkspace != null) &#123;</div><div class="line">                        closeOpenViews(false);</div><div class="line">                        mWorkspace.snapToPage(newScreenIndex);</div><div class="line">                        mWorkspace.postDelayed(startBounceAnimRunnable,</div><div class="line">                                NEW_APPS_ANIMATION_DELAY);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;, NEW_APPS_PAGE_MOVE_DELAY);</div><div class="line">        &#125; else &#123;</div><div class="line">            mWorkspace.postDelayed(startBounceAnimRunnable, NEW_APPS_ANIMATION_DELAY);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    workspace.requestLayout();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="loadAllApps"><a href="#loadAllApps" class="headerlink" title="loadAllApps"></a>loadAllApps</h3><p>加载系统中已经安装的应用</p>
+<h3 id="bindAllApps"><a href="#bindAllApps" class="headerlink" title="bindAllApps"></a>bindAllApps</h3><h3 id="bindDeepShortcuts"><a href="#bindDeepShortcuts" class="headerlink" title="bindDeepShortcuts"></a>bindDeepShortcuts</h3>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Launcher3/" rel="tag"># Launcher3</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/android-launcher-ui-construction/" rel="next" title="Android -- 页面结构">
+                <i class="fa fa-chevron-left"></i> Android -- 页面结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/02/01/android-launcher-launcherappsservice/" rel="prev" title="Android -- LauncherAppsService">
+                Android -- LauncherAppsService <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">270</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">118</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据加载流程"><span class="nav-number">2.</span> <span class="nav-text">数据加载流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Launcher"><span class="nav-number">3.</span> <span class="nav-text">Launcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WorkSpace"><span class="nav-number">4.</span> <span class="nav-text">WorkSpace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#loadWorkspace"><span class="nav-number">4.1.</span> <span class="nav-text">loadWorkspace</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">4.1.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加载数据库"><span class="nav-number">4.1.2.</span> <span class="nav-text">加载数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#快捷方式数据"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">快捷方式数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件夹类型数据"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">文件夹类型数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#桌面插件类型数据"><span class="nav-number">4.1.2.3.</span> <span class="nav-text">桌面插件类型数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据的最终处理"><span class="nav-number">4.1.2.4.</span> <span class="nav-text">数据的最终处理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bindWorkspace"><span class="nav-number">4.2.</span> <span class="nav-text">bindWorkspace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#loadAllApps"><span class="nav-number">4.3.</span> <span class="nav-text">loadAllApps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bindAllApps"><span class="nav-number">4.4.</span> <span class="nav-text">bindAllApps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bindDeepShortcuts"><span class="nav-number">4.5.</span> <span class="nav-text">bindDeepShortcuts</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
