@@ -34,6 +34,7 @@ ViewRootImpl.performTraversals
 ## 测量
 
 measure 方法是 View 绘制流程的第一步，在测量过程中，measure() 方法被父 View 调用，在 measure() 中做一些优化工作后，就调用 onMeasure() 方法进行自我测量，根据自己的规格来测量出真实尺寸。
+measure()为View的final方法，不可重写。
 对于 onMeasure() 方法，View 和 ViewGroup 的实现会有所区别：
 
  - View：在 onMeasure() 根据自己的规格来计算自己的尺寸并保存。
@@ -47,7 +48,7 @@ View 的 onMeasure　方法传入的参数是　`onMeasure(int widthMeasureSpec,
 
  - 高2位：SpecMode，测量模式，有三种类型：
   - UNSPECIFIED：父 View 不对子 View 做任何限制，需要多大给多大，这种情况多用于系统内部，表示一种测量状态。
-  - EXACTLY：父 View 已经检测出子 View 所需要的精确大小，这个时候子 View 的最终大小就是 MeasureSpec 低30位指定的值。它对应于 LayoutParams 中给出具体大小值和 match_parent 这两种情况。
+  - EXACTLY：父 View 已经检测出子 View 所需要的精确大小，子View应该服从这个边界。这个时候子 View 的最终大小就是 MeasureSpec 低30位指定的值。它对应于 LayoutParams 中给出具体大小值和 match_parent 这两种情况。
   - AT_MOST：父 View 给出子 View 一个最大可用大小，子 View 自己去适应这个大小。它对应于 wrap_content 这种情况。
  - 低30位：SpecSize，在特定测量模式下的大小。
 
@@ -120,10 +121,15 @@ ViewGroup 提供了几个重要的基础方法来测量子 view，View 提供了
 #### getChildMeasureSpec(int spec, int padding, int childDimension)
 
 ```
+    //spec参数   表示父View的MeasureSpec
+    //padding参数    父View的Padding+子View的Margin，父View的大小减去这些边距，才能精确算出子View的MeasureSpec的size
+    //childDimension参数  表示该子View内部LayoutParams属性的值（lp.width或者lp.height）
+    //可以是wrap_content、match_parent、一个精确值，比如20dp
     public static int getChildMeasureSpec(int spec, int padding, int childDimension) {
-        int specMode = MeasureSpec.getMode(spec);
-        int specSize = MeasureSpec.getSize(spec);
+        int specMode = MeasureSpec.getMode(spec);//获得父View的mode 
+        int specSize = MeasureSpec.getSize(spec);//获得父View的大小
 
+        //父View的大小-自己的Padding+子View的Margin，得到值才是子View的大小。
         int size = Math.max(0, specSize - padding);
 
         int resultSize = 0;
@@ -185,7 +191,7 @@ ViewGroup 提供了几个重要的基础方法来测量子 view，View 提供了
             }
             break;
         }
-        //noinspection ResourceType
+        //根据上面逻辑条件获取的mode和size构建MeasureSpec对象
         return MeasureSpec.makeMeasureSpec(resultSize, resultMode);
     }
 ```
@@ -258,7 +264,7 @@ onMeasure 测量后，一定要记得调用 setMeasuredDimension 来保存测量
 
 ### 测量流程
 
-我们先来看一下 FrameLayout 的测量流程，它覆盖了 View 的 onMeasure 方法来实现自己的测量逻辑：
+在Andrond常用的几种布局中，FrameLayout 的测量流程是比较简单的，我们先来看一下 FrameLayout 的测量流程，它覆盖了 View 的 onMeasure 方法来实现自己的测量逻辑：
 
 ```
 ├── FrameLayout.onMeasure
@@ -269,6 +275,103 @@ onMeasure 测量后，一定要记得调用 setMeasuredDimension 来保存测量
     ├── MeasureSpec.makeMeasureSpec
     ├── ViewGroup.getChildMeasureSpec
     ├── View.measure(child.measure)
+```
+
+```
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int count = getChildCount();
+	// 有非EXACTLY mode的MeasureSpec（某个方向或者某两个方向尺寸不确定）
+        final boolean measureMatchParentChildren =
+                MeasureSpec.getMode(widthMeasureSpec) != MeasureSpec.EXACTLY ||
+                MeasureSpec.getMode(heightMeasureSpec) != MeasureSpec.EXACTLY;
+        mMatchParentChildren.clear();
+
+        int maxHeight = 0;
+        int maxWidth = 0;
+        int childState = 0;
+
+        for (int i = 0; i < count; i++) {
+            final View child = getChildAt(i);
+            if (mMeasureAllChildren || child.getVisibility() != GONE) {
+		//遍历自己的子View，只要不是GONE的都会参与测量
+                measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
+                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+		//根据测量后子view的大小，得出子view的最大宽高
+                maxWidth = Math.max(maxWidth,
+                        child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin);
+                maxHeight = Math.max(maxHeight,
+                        child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);
+                childState = combineMeasuredStates(childState, child.getMeasuredState());
+                if (measureMatchParentChildren) {
+                    // 保存设置了MATCH_PARENT的子view
+                    if (lp.width == LayoutParams.MATCH_PARENT ||
+                            lp.height == LayoutParams.MATCH_PARENT) {
+                        mMatchParentChildren.add(child);
+                    }
+                }
+            }
+        }
+
+        // Account for padding too
+        maxWidth += getPaddingLeftWithForeground() + getPaddingRightWithForeground();
+        maxHeight += getPaddingTopWithForeground() + getPaddingBottomWithForeground();
+
+        // Check against our minimum height and width
+        maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
+        maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
+
+        // Check against our foreground's minimum height and width
+        final Drawable drawable = getForeground();
+        if (drawable != null) {
+            maxHeight = Math.max(maxHeight, drawable.getMinimumHeight());
+            maxWidth = Math.max(maxWidth, drawable.getMinimumWidth());
+        }
+	//所有的孩子测量之后，经过一系类的计算之后通过setMeasuredDimension设置自己的宽高，
+	//对于FrameLayout 可能用最大的字View的大小
+        setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
+                resolveSizeAndState(maxHeight, heightMeasureSpec,
+                        childState << MEASURED_HEIGHT_STATE_SHIFT));
+	//如果有子view设置了MATCH_PARENT，重新测量子view
+        //因为前面的测量对于设置了MATCH_PARENT的View，无法给出确切的值，所以要再次调用子View的measure方法，传入正确的值。
+        count = mMatchParentChildren.size();
+        if (count > 1) {
+            for (int i = 0; i < count; i++) {
+                final View child = mMatchParentChildren.get(i);
+                final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
+
+                final int childWidthMeasureSpec;
+                if (lp.width == LayoutParams.MATCH_PARENT) {
+                    final int width = Math.max(0, getMeasuredWidth()
+                            - getPaddingLeftWithForeground() - getPaddingRightWithForeground()
+                            - lp.leftMargin - lp.rightMargin);
+                    childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
+                            width, MeasureSpec.EXACTLY);
+                } else {
+                    childWidthMeasureSpec = getChildMeasureSpec(widthMeasureSpec,
+                            getPaddingLeftWithForeground() + getPaddingRightWithForeground() +
+                            lp.leftMargin + lp.rightMargin,
+                            lp.width);
+                }
+
+                final int childHeightMeasureSpec;
+                if (lp.height == LayoutParams.MATCH_PARENT) {
+                    final int height = Math.max(0, getMeasuredHeight()
+                            - getPaddingTopWithForeground() - getPaddingBottomWithForeground()
+                            - lp.topMargin - lp.bottomMargin);
+                    childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                            height, MeasureSpec.EXACTLY);
+                } else {
+                    childHeightMeasureSpec = getChildMeasureSpec(heightMeasureSpec,
+                            getPaddingTopWithForeground() + getPaddingBottomWithForeground() +
+                            lp.topMargin + lp.bottomMargin,
+                            lp.height);
+                }
+
+                child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+            }
+        }
+    }
 ```
 
 再来看一下　TextView 的测量流程：
