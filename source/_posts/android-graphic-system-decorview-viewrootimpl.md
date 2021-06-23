@@ -1,9 +1,9 @@
 ---
-title: Android 图形系统 -- View 绘制流程
+title: Android 图形系统 --  DecorView 和 ViewRootImpl
 categories: Android 图形系统
 comments: true
 tags: [Android 图形系统]
-description: 介绍 View 绘制流程
+description: 介绍 Android 图形系统 --  DecorView 和 ViewRootImpl
 date: 2016-7-28 10:00:00
 ---
 
