@@ -88,13 +88,13 @@
 
 <meta name="description" content="介绍 Android 图形系统 --  DecorView 和 ViewRootImpl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 图形系统 --  DecorView 和 ViewRootImpl">
+<meta property="og:title" content="Android 图形系统 --  Window，DecorView 和 ViewRootImpl">
 <meta property="og:url" content="http://yoursite.com/2016/07/28/android-graphic-system-decorview-viewrootimpl/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Android 图形系统 --  DecorView 和 ViewRootImpl">
-<meta property="og:updated_time" content="2021-06-23T03:30:34.794Z">
+<meta property="og:updated_time" content="2021-06-24T07:09:15.278Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 图形系统 --  DecorView 和 ViewRootImpl">
+<meta name="twitter:title" content="Android 图形系统 --  Window，DecorView 和 ViewRootImpl">
 <meta name="twitter:description" content="介绍 Android 图形系统 --  DecorView 和 ViewRootImpl">
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title> Android 图形系统 --  DecorView 和 ViewRootImpl | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android 图形系统 --  Window，DecorView 和 ViewRootImpl | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -302,7 +302,7 @@
             
             
               
-                Android 图形系统 --  DecorView 和 ViewRootImpl
+                Android 图形系统 --  Window，DecorView 和 ViewRootImpl
               
             
           </h1>
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2016/07/28/android-graphic-system-decorview-viewrootimpl/" class="leancloud_visitors" data-flag-title="Android 图形系统 --  DecorView 和 ViewRootImpl">
+             <span id="/2016/07/28/android-graphic-system-decorview-viewrootimpl/" class="leancloud_visitors" data-flag-title="Android 图形系统 --  Window，DecorView 和 ViewRootImpl">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -400,15 +400,23 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文是了解View绘制流程前的一些预备知识，本文会介绍DecorView是如何添加到PhoneWindow中，以及ViewRootImpl是如何连接WindowManager和DecorView的。<br>DecorView 是一个顶层 View，是应用的整个界面。<br>ViewRootImpl 是实现 View 的绘制的类，里面有三个关键的方法来完成View的绘制流程。<br>在ActivityThread中，当Activity对象被创建完毕后，会将DecorView添加到Window中，同时会创建ViewRootImpl对象，并将ViewRootImpl对象和DecorView建立关联，然后从ViewRootImpl的performTraversals方法开始View的绘制流程。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文是了解View绘制流程前的一些预备知识，本文会介绍 DecorView 是如何添加到PhoneWindow中，以及 ViewRootImpl 是如何连接 WindowManager 和 DecorView 的。<br>Activity 控制生命周期和处理事件，Window是视图的承载器，内部有个 DecorView 作为视图的根布局。在 Activity 中持有的是 Window 的子类 PhoneWindow。<br>DecorView 是一个顶层 View，是应用的整个界面。<br>ViewRootImpl 是实现 View 的绘制的类，里面有三个关键的方法来完成 View 的绘制流程。它是 DecorView 对应的 mParent 。普通子 View (非根 View) 对应的 mParent 是子 View 的父 View (即 ViewGroup)。<br>在 ActivityThread 中，当 Activity 对象被创建完毕后，会将 DecorView 添加到 Window 中，同时会创建ViewRootImpl 对象，并将 ViewRootImpl 对象和 DecorView 建立关联，然后从 ViewRootImpl 的performTraversals 方法开始 View 的绘制流程。</p>
+<h2 id="PhoneWindow"><a href="#PhoneWindow" class="headerlink" title="PhoneWindow"></a>PhoneWindow</h2><p>PhoneWindow的初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//Activity.java</div><div class="line">    @UnsupportedAppUsage</div><div class="line">    final void attach(Context context, .....) &#123;</div><div class="line">        attachBaseContext(context);</div><div class="line"></div><div class="line">        mFragments.attachHost(null /*parent*/);</div><div class="line"></div><div class="line">        mWindow = new PhoneWindow(this, window, activityConfigCallback);</div><div class="line">        mWindow.setWindowControllerCallback(this);</div><div class="line">        mWindow.setCallback(this);</div><div class="line">        mWindow.setOnWindowDismissedCallback(this);</div><div class="line">        mWindow.getLayoutInflater().setPrivateFactory(this);</div><div class="line">        ......</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>Activity 中创建了 Window，并且每个 Activity 都有一个与之对应的 Window ，具体的实现类，其实是一个 PhoneWindow。</p>
 <h2 id="DecorView"><a href="#DecorView" class="headerlink" title="DecorView"></a>DecorView</h2><p>DecorView继承自FrameLayout，其作为顶级View被加载到window中，主要包含titlebar和contentParent两个子元素，其中titlebar可以通过系统属性指定其状态。</p>
 <p>我们来看一个应用的布局：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">DecorView</div><div class="line">    ActionBarOverlayLayout(R.id.decor_content_parent)</div><div class="line">        (R.id.content)</div><div class="line">        ActionBarContainer(R.id.action_bar_container)</div><div class="line">            Toolbar(R.id.action_bar)</div><div class="line">        View(R.id.statusBarBackground)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">DecorView</div><div class="line">    ActionBarOverlayLayout(R.id.decor_content_parent)</div><div class="line">        (R.id.content)</div><div class="line">        ActionBarContainer(R.id.action_bar_container)</div><div class="line">            Toolbar(R.id.action_bar)</div><div class="line">        View(R.id.statusBarBackground)</div><div class="line">        View(R.id.navigationBarBackground)</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Activity.setContentView</div><div class="line">    PhoneWindow.setContentView</div><div class="line">        PhoneWindow.installDecor()</div><div class="line">            PhoneWindow.generateDecor()</div><div class="line">                new DecorView()</div><div class="line">            PhoneWindow.generateLayout()</div><div class="line">                requestFeature(FEATURE_ACTION_BAR)//设置actionbar</div><div class="line">                contentParent=findViewById(ID_ANDROID_CONTENT)//获取R.id.content</div><div class="line">                DecorView.setWindowBackground()//设置背景</div><div class="line">    LayoutInflater.inflate(layoutResID, mContentParent)</div></pre></td></tr></table></figure>
-<p>PhoneWindow的初始化：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//Activity.java</div><div class="line">    @UnsupportedAppUsage</div><div class="line">    final void attach(Context context, .....) &#123;</div><div class="line">        attachBaseContext(context);</div><div class="line"></div><div class="line">        mFragments.attachHost(null /*parent*/);</div><div class="line"></div><div class="line">        mWindow = new PhoneWindow(this, window, activityConfigCallback);</div><div class="line">        mWindow.setWindowControllerCallback(this);</div><div class="line">        mWindow.setCallback(this);</div><div class="line">        mWindow.setOnWindowDismissedCallback(this);</div><div class="line">        mWindow.getLayoutInflater().setPrivateFactory(this);</div><div class="line">        ......</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h2 id="ViewRootImpl"><a href="#ViewRootImpl" class="headerlink" title="ViewRootImpl"></a>ViewRootImpl</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">ActivityThread.handleResumeActivity()</div><div class="line">　　Activity.getWindow() //获取activity的PhoneWindow</div><div class="line">    PhoneWindow.getDecorView()//获取PhoneWindow的DecorView</div><div class="line">    Activity.getWindowManager()//获取Activity的WindowManagerImpl</div><div class="line">    WindowManagerImpl.addView(decor, l)//通过WindowManagerImpl将DecorView添加到Activity</div><div class="line">        WindowManagerGlobal.addView(DecorView)</div><div class="line">            new ViewRootImpl()//创建ViewRootImpl对象</div><div class="line">            ViewRootImpl.setView()</div><div class="line">                ViewRootImpl.requestLayout()</div><div class="line">                    ViewRootImpl.scheduleTraversals()</div><div class="line">                        Choreographer.postCallback(mTraversalRunnable)</div><div class="line">                            ViewRootImpl.doTraversal()</div><div class="line">                                ViewRootImpl.performTraversals()</div><div class="line">                                    ViewRootImpl.performMeasure()</div><div class="line">                                        DecorView.measure()</div><div class="line">                                    ViewRootImpl.performLayout()</div><div class="line">                                        DecorView.layout()</div><div class="line">                                    ViewRootImpl.performDraw()</div><div class="line">                                        DecorView.draw()</div></pre></td></tr></table></figure>
-<p>然后，DecorView的绘制流程就从ViewRoot的performTraversals方法开始了，后面就是遍历子view完成整个界面的测量，布局和绘制。</p>
+<p>DecorView 是在 PhoneWindow 中生成的，然后把用户设置的布局添加到DecorView对应的子View上去。</p>
+<h2 id="ViewRootImpl"><a href="#ViewRootImpl" class="headerlink" title="ViewRootImpl"></a>ViewRootImpl</h2><p>ViewRootImpl 可以理解为一个 Window 中所有 View 的根 View 的管理者（但 ViewRootImpl 不是 View，只是实现了 ViewParent 接口），是 View 与 WindowManager 之间联系的桥梁，作用总结如下：</p>
+<ul>
+<li>将 DecorView 传递给 WindowManagerSerive</li>
+<li>完成 View 的绘制过程，包括 measure、layout、draw 过程</li>
+<li>向 DecorView 分发收到的用户发起的 event 事件，如按键，触屏等事件。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">ActivityThread.handleResumeActivity()</div><div class="line">　　Activity.getWindow() //获取activity的PhoneWindow</div><div class="line">    PhoneWindow.getDecorView()//获取PhoneWindow的DecorView</div><div class="line">    Activity.getWindowManager()//获取Activity的WindowManagerImpl</div><div class="line">    WindowManagerImpl.addView(decor, l)//通过WindowManagerImpl将DecorView添加到Activity</div><div class="line">        WindowManagerGlobal.addView(DecorView)</div><div class="line">            new ViewRootImpl()//创建ViewRootImpl对象</div><div class="line">            ViewRootImpl.setView()</div><div class="line">                ViewRootImpl.requestLayout()</div><div class="line">                    ViewRootImpl.scheduleTraversals()</div><div class="line">                        Choreographer.postCallback(mTraversalRunnable)</div><div class="line">                            ViewRootImpl.doTraversal()</div><div class="line">                                ViewRootImpl.performTraversals()</div><div class="line">                                    ViewRootImpl.performMeasure()</div><div class="line">                                        DecorView.measure()</div><div class="line">                                    ViewRootImpl.performLayout()</div><div class="line">                                        DecorView.layout()</div><div class="line">                                    ViewRootImpl.performDraw()</div><div class="line">                                        DecorView.draw()</div><div class="line">                WindowSession.addToDisplay()</div><div class="line">                new WindowInputEventReceiver()</div></pre></td></tr></table></figure>
+<p>然后，DecorView的绘制流程就从ViewRoot的performTraversals方法开始了，后面就是遍历子view完成整个界面的测量，布局和绘制。<br>performTraversals()可能并不会执行完整的measure、layout和draw流程，内部有很复杂的判断条件，比如执行requestLayout()可能只会执行measure和layout，执行invalidate()只会执行draw方法。这方面的知识点后面详细介绍。</p>
 
       
     </div>
@@ -525,7 +533,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">274</span>
+                <span class="site-state-item-count">275</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -605,7 +613,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DecorView"><span class="nav-number">2.</span> <span class="nav-text">DecorView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ViewRootImpl"><span class="nav-number">3.</span> <span class="nav-text">ViewRootImpl</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PhoneWindow"><span class="nav-number">2.</span> <span class="nav-text">PhoneWindow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DecorView"><span class="nav-number">3.</span> <span class="nav-text">DecorView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ViewRootImpl"><span class="nav-number">4.</span> <span class="nav-text">ViewRootImpl</span></a></li></ol></div>
             
 
           </div>
