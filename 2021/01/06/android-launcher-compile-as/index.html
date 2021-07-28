@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2021/01/06/android-launcher-compile-as/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍在 Android Studio 中独立编译 Android R Launcher3。">
-<meta property="og:updated_time" content="2021-06-21T07:46:28.286Z">
+<meta property="og:updated_time" content="2021-07-28T02:56:17.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- Launcher 独立编译">
 <meta name="twitter:description" content="介绍在 Android Studio 中独立编译 Android R Launcher3。">
@@ -418,12 +418,23 @@
 <p>5.</p>
 <p>错误: 程序包com.android.launcher3.logger.LauncherAtom不存在<br>在 build.gradle 中添加</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">option &quot;java_package=launcher_atom.proto|com.android.launcher3.logger&quot;</div></pre></td></tr></table></figure>
-<p>错误: 程序包com.android.launcher3.userevent.LauncherLogProto.Target不存在<br>错误: 程序包com.android.launcher3.userevent.LauncherLogProto不存在<br>修改包名com.android.launcher3.userevent.LauncherLogProto 为 com.android.launcher3.userevent.nano.LauncherLogProto<br>先这样改，后面这部分代码会注释掉。</p>
+<p>错误: 程序包com.android.launcher3.userevent.LauncherLogProto.Target不存在<br>错误: 程序包com.android.launcher3.userevent.LauncherLogProto不存在<br>修改包名com.android.launcher3.userevent.LauncherLogProto 为 com.android.launcher3.userevent.nano.LauncherLogProto<br>先这样改，后面这部分代码会注释掉。<br>或者修改 proto 包名配置。</p>
 <p>错误: 找不到符号com.google.protobuf.InvalidProtocolBufferException<br>修改成Exception</p>
 <p>/FolderInfo.java:86: 错误: 不兼容的类型: int无法转换为Attribute<br>mLogAttribute修改成int类型</p>
 <p>6.</p>
-<p>剩下的再找不到，那就注释掉吧，logger 和 userevent 这部分是打印日志和统计使用，没有太大作用。编译不通过的部分可删掉。<br>比如：<br>ItemInfo.java:34 错误: 找不到符号import static com.android.launcher3.logger.LauncherAtom.ContainerInfo.ContainerCase.CONTAINER_NOT_SET;</p>
-<p>把这部分代码注释掉。</p>
+<p>剩下的如果编译不过，比如：logger 和 userevent 这部分主要是包名不一致，<br>比如：<br>ItemInfo.java:34 错误: 找不到符号import static com.android.launcher3.logger.LauncherAtom.ContainerInfo.ContainerCase.CONTAINER_NOT_SET;</p>
+<p>可以通过修改proto配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">generateProtoTasks &#123;</div><div class="line">    all().each &#123; task -&gt;</div><div class="line">        task.builtins &#123;</div><div class="line">            remove java</div><div class="line">            javanano &#123;</div><div class="line">                option &quot;java_package=launcher_log_extension.proto|com.android.launcher3.userevent.nano&quot;</div><div class="line">                option &quot;java_package=launcher_log.proto|com.android.launcher3.userevent.nano&quot;</div><div class="line">                option &quot;java_package=launcher_dump.proto|com.android.launcher3.model.nano&quot;</div><div class="line">                option &quot;java_package=launcher_atom.proto|com.android.launcher3.logger&quot;</div><div class="line">                option &quot;enum_style=java&quot;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其他编译不通过的部分可先注释掉。</p>
+<!-- 
+
+剩下的再找不到，那就注释掉吧，logger 和 userevent 这部分是打印日志和统计使用，没有太大作用。编译不通过的部分可删掉。
+比如：
+ItemInfo.java:34 错误: 找不到符号import static com.android.launcher3.logger.LauncherAtom.ContainerInfo.ContainerCase.CONTAINER_NOT_SET;
+
+把这部分代码注释掉。
+
+-->
 <p>7.<br> 错误: 程序包com.google.protobuf.nano不存在<br> 错误: 程序包com.android.systemui.shared.system不存在<br> 错误: 程序包com.android.systemui.plugins.annotations不存在</p>
 <p>在maven上下载 protobuf-javanano jar包，修改名字launcher_protos.jar。<br>网上下载 plugin_core.jar。</p>
 <p>项目根目录下新建一个libs文件夹，将这2个jar放进去,并修改build.gradle，去引用这2个jar。</p>
