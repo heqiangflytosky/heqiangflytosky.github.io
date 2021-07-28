@@ -265,6 +265,7 @@ Total RAM: 5,863,228K (status normal)
  - adb shell dumpsys wifi： 显示wifi信息
  - adb shell dumpsys user：查看当前的用户情况
  - adb shell dumpsys dbinfo <包名>：查看指定包名应用的数据库存储信息（包括存储的SQL语句）
+ - adb shell dumpsys settings：可以查看settingsProvider里面的所有设置项以及最近修改过的设置项。用这个命令来查看设置中的设置项的字段名称非常快捷，设置中修改一下然后执行命令。或者对比一下两次的操作结果。
 
 ## 参考资料
 

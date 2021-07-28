@@ -95,6 +95,7 @@ option "java_package=launcher_atom.proto|com.android.launcher3.logger"
 错误: 程序包com.android.launcher3.userevent.LauncherLogProto不存在
 修改包名com.android.launcher3.userevent.LauncherLogProto 为 com.android.launcher3.userevent.nano.LauncherLogProto
 先这样改，后面这部分代码会注释掉。
+或者修改 proto 包名配置。
 
 错误: 找不到符号com.google.protobuf.InvalidProtocolBufferException
 修改成Exception
@@ -104,11 +105,40 @@ mLogAttribute修改成int类型
 
 6.
 
+剩下的如果编译不过，比如：logger 和 userevent 这部分主要是包名不一致，
+比如：
+ItemInfo.java:34 错误: 找不到符号import static com.android.launcher3.logger.LauncherAtom.ContainerInfo.ContainerCase.CONTAINER_NOT_SET;
+
+可以通过修改proto配置。
+
+```
+        generateProtoTasks {
+            all().each { task ->
+                task.builtins {
+                    remove java
+                    javanano {
+                        option "java_package=launcher_log_extension.proto|com.android.launcher3.userevent.nano"
+                        option "java_package=launcher_log.proto|com.android.launcher3.userevent.nano"
+                        option "java_package=launcher_dump.proto|com.android.launcher3.model.nano"
+                        option "java_package=launcher_atom.proto|com.android.launcher3.logger"
+                        option "enum_style=java"
+                    }
+                }
+            }
+        }
+```
+
+其他编译不通过的部分可先注释掉。
+
+<!-- 
+
 剩下的再找不到，那就注释掉吧，logger 和 userevent 这部分是打印日志和统计使用，没有太大作用。编译不通过的部分可删掉。
 比如：
 ItemInfo.java:34 错误: 找不到符号import static com.android.launcher3.logger.LauncherAtom.ContainerInfo.ContainerCase.CONTAINER_NOT_SET;
 
 把这部分代码注释掉。
+
+-->
 
 7.
  错误: 程序包com.google.protobuf.nano不存在
@@ -133,7 +163,6 @@ ItemInfo.java:34 错误: 找不到符号import static com.android.launcher3.logg
 编译成功，安装到手机，去应用管理里面把系统桌面的默认应用设置一下，桌面正常运行起来。
 
 源码请参考[GitHub](https://github.com/heqiangflytosky/QLauncher3/tree/android11)
-
 
 ## 参考文章
 
