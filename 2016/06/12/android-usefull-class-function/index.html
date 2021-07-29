@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/06/12/android-usefull-class-function/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Android 一些有用的方法和类">
-<meta property="og:updated_time" content="2021-04-29T07:56:36.369Z">
+<meta property="og:updated_time" content="2021-07-29T03:28:49.412Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- 那些让你相见恨晚的方法、类或接口">
 <meta name="twitter:description" content="介绍 Android 一些有用的方法和类">
@@ -441,6 +441,8 @@
 <li>进程间通信获取调用方的包名：<code>int uid = Binder.getCallingUid();getPackageManager().getNameForUid(uid);</code>。或者是反射调用 <code>ActivityManagerNative</code> 的 <code>getLaunchedFromPackage</code> 方法。</li>
 <li>设置ListView的某个Item不可点击：重写Adapter的<code>isEnabled(int position)</code>方法。</li>
 <li><code>@ViewDebug.ExportedProperty(category = &quot;launcher&quot;)</code> 如果你想在查看布局列表时查看view某个属性，可以把上面的注解加上，<code>category = &quot;launcher&quot;</code> 可以把他们归结都某个组中。</li>
+<li>Context类中的createPackageContext(packageName, flags)方法，可用来获取指定包名应用程序的Context对象，来访问该包的获取Resource资源（不需要相同的sharedUserId）、共享对方的data目录下的文件，包括SharePreference, file, lib等文件，动态加载class等（需要相同的sharedUserId）。</li>
+<li>自定义 View 时重写 hasOverlappingRendering 方法指定 View 是否有 Overlapping 的情况，提高渲染性能。</li>
 </ol>
 <h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><ol>
 <li>FileFilter 和 FilenameFilter 文件搜索，过滤文件</li>
