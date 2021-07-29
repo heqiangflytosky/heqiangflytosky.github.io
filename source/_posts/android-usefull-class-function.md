@@ -50,6 +50,8 @@ date: 2016-6-12 10:00:00
  39. 进程间通信获取调用方的包名：`int uid = Binder.getCallingUid();getPackageManager().getNameForUid(uid);`。或者是反射调用 `ActivityManagerNative` 的 `getLaunchedFromPackage` 方法。
  40. 设置ListView的某个Item不可点击：重写Adapter的`isEnabled(int position)`方法。
  41. `@ViewDebug.ExportedProperty(category = "launcher")` 如果你想在查看布局列表时查看view某个属性，可以把上面的注解加上，`category = "launcher"` 可以把他们归结都某个组中。
+ 42. Context类中的createPackageContext(packageName, flags)方法，可用来获取指定包名应用程序的Context对象，来访问该包的获取Resource资源（不需要相同的sharedUserId）、共享对方的data目录下的文件，包括SharePreference, file, lib等文件，动态加载class等（需要相同的sharedUserId）。
+ 43. 自定义 View 时重写 hasOverlappingRendering 方法指定 View 是否有 Overlapping 的情况，提高渲染性能。
 
 
 ## Java

@@ -313,3 +313,56 @@ E/Test: pid = 21818
 E/Test: Dynamic load class add = 14
 E/Test: This is TestDynamicLoad2
 ```
+
+## 使用 createPackageContext
+
+通过 createPackageContext 方法创建一个对应包名的上下文来访问该包的获取Resource资源（不需要相同的sharedUserId）、共享对方的data目录下的文件，包括SharePreference, file, lib等文件，动态加载class等（需要相同的sharedUserId）。
+
+```
+    private void testLoadClass() {
+        String pkg = "com.example.heqiang.myapplication";
+        String className = "com.example.heqiang.myapplication.TestDynamicLoad";
+        boolean ret = false;
+        try {
+            // 动态访问class必须添加 Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY
+            // 如果只是访问资源则不需要添加
+            Context appContext = this.createPackageContext(pkg,
+                    Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+
+            // 反射调用测试案例
+            Class<?> localClass = appContext.getClassLoader().loadClass(className);
+            Constructor<?> localConstructor = localClass.getConstructor(new Class[]{});
+            Object instance = localConstructor.newInstance(new Object[] {});
+            Log.e("Test", "instance = " + instance);
+            Method getString = localClass.getMethod("getString");
+            getString.setAccessible(true);
+            String str = (String) getString.invoke(instance);
+            Log.e("Test","Dynamic load class getString = "+str);
+            Method add = localClass.getMethod("add", int.class, int.class);
+            add.setAccessible(true);
+            int addResult = (int) add.invoke(instance, 6,8);
+            Log.e("Test","Dynamic load class add = "+addResult);
+            Method print = localClass.getMethod("testAnotherClass");
+            print.setAccessible(true);
+            print.invoke(instance);
+
+
+        } catch (Exception e) {
+            Log.e("Test","testLoadClass",e);
+        }
+
+        Log.e("Test","ret = "+ret);
+    }
+```
+
+结果：
+
+```
+Test: instance = com.example.heqiang.myapplication.TestDynamicLoad@fff4e05
+Test: pid = 14257
+Test: Dynamic load class getString = This is a test case
+Test: pid = 14257
+Test: Dynamic load class add = 14
+Test: This is TestDynamicLoad2
+Test: ret = false
+```
