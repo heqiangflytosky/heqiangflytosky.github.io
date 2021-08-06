@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/04/04/opengl-es-basic-knowledge/</loc>
+    
+    <lastmod>2021-08-06T02:40:34.499Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2014/10/15/android-development-skills-dumpsys/</loc>
+    
+    <lastmod>2021-08-05T02:15:15.564Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2016/06/12/android-usefull-class-function/</loc>
     
     <lastmod>2021-07-29T03:28:49.412Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>http://yoursite.com/2021/01/06/android-launcher-compile-as/</loc>
     
     <lastmod>2021-07-28T02:56:17.544Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2014/10/15/android-development-skills-dumpsys/</loc>
-    
-    <lastmod>2021-07-08T09:32:36.874Z</lastmod>
     
   </url>
   
@@ -677,13 +684,6 @@
     <loc>http://yoursite.com/2015/01/08/android-compnent-activitygroup/</loc>
     
     <lastmod>2020-06-10T07:09:42.089Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/04/04/opengl-es-basic-knowledge/</loc>
-    
-    <lastmod>2020-05-21T04:57:55.788Z</lastmod>
     
   </url>
   
@@ -1689,14 +1689,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
