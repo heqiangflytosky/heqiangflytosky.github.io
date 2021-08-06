@@ -103,3 +103,6 @@ GLUtils
 
 《OpenGL ES 应用开发实践指南 Android 卷》
 《OpenGL ES 2.0游戏开发》
+学习着色器：https://thebookofshaders.com/?lan=ch 
+一些特效：https://glslsandbox.com/
+GAPID：Graphics 调试工具：可以抓取一些opengl特效的shader

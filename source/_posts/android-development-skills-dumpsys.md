@@ -246,14 +246,34 @@ Total RAM: 5,863,228K (status normal)
 
 `meminfo $package_name or $pid` 使用程序的包名或者进程id显示内存信息比如浏览器：`adb shell dumpsys meminfo com.android.browser`
 
+### adb shell dumpsys activity
+
+用来显示ams的一些信息，包括任务栈，activity信息，进程信息等。
+
+ - adb shell dumpsys activity -h：帮助
+ - adb shell dumpsys activity <包名>：查看给定包名的activity信息，包括 View Hierarchy 等 
+ - adb shell dumpsys activity top：查看当前应用的 activity 信息
+ - adb shell dumpsys activity a[ctivities]：只查看activity栈
+ - adb shell dumpsys activity r[recents]：最近任务activity状态
+ - adb shell dumpsys activity package <包名>：查看该进程的所有信息，包括：`dumpsys activity settings`,`dumpsys activity allowed-associations`,`dumpsys activity intents`,`dumpsys activity broadcasts`,`dumpsys activity broadcast-stats`,`dumpsys activity providers`,`dumpsys activity services`,`dumpsys activity recents`,`dumpsys activity lastanr`,`dumpsys activity starter`,`dumpsys activity activities`,`dumpsys activity exit-info`,`dumpsys activity processes`,`dumpsys activity users`等信息内容
+ - adb shell dumpsys activity p[rocesses] <包名>：查看该包名的进程状态，包括进程间依赖等
+
+所有上面的命令还可以添加下面的参数来定制输出结果：
+
+  WHAT may also be a COMP_SPEC to dump activities.
+  COMP_SPEC may be a component name (com.foo/.myApp),
+    a partial substring in a component name, a
+    hex object identifier.
+  -a: include all available server state.
+  -c: include client state.
+  -p: limit output to given package.
+  --checkin: output checkin format, resetting data.
+  --C: output checkin format, not resetting data.
+  --proto: output dump in protocol buffer format.
+  --autofill: dump just the autofill-related state of an activity
+
 ### 其他
 
- - adb shell dumpsys activity： 显示activity的相关信息，包括任务栈等
-  - adb shell dumpsys activity -h：帮助
-  - adb shell dumpsys activity top：查看当前应用的 activity 信息
-  - adb shell dumpsys activity a：只查看activity栈
-  - adb shell dumpsys activity r：最近任务activity状态
-  - adb shell dumpsys activity <包名>：查看给定包名的activity信息，包括 View Hierarchy 等 
  - adb shell dumpsys SurfaceFlinger： 查看UI绘制的各个层级信息
  - adb shell dumpsys window： 显示键盘，窗口和它们的关系
  - adb shell dumpsys package <包名>： 查看该包的具体信息
