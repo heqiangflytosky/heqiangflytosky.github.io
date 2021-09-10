@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/01/08/android-performance-optimization-anr/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍一些关于处理 ANR 问题的理论知识">
-<meta property="og:updated_time" content="2020-10-20T10:13:59.382Z">
+<meta property="og:updated_time" content="2021-08-21T07:21:51.912Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化理论篇 -- ANR">
 <meta name="twitter:description" content="介绍一些关于处理 ANR 问题的理论知识">
@@ -522,7 +522,7 @@
 </ul>
 <p><strong>第四行</strong>：<code>| state=S schedstat=( 173407732 13795308 237 ) utm=14 stm=2 core=5 HZ=100</code><br>主要信息包括当前线程的上下文信息：</p>
 <ul>
-<li>分别是线程调度状态（state=S）</li>
+<li>分别是线程调度状态（state=S）S表示Sleeping，另外还有 R（Running），D（DEAD）</li>
 <li>schedstat=( 173407732 13795308 237 ) 从 /proc/[pid]/task/[tid]/schedstat读出，三个值分别表示线程在cpu上执行的时间、线程的等待时间和线程执行的时间片长度，有的android内核版本不支持这项信息，得到的三个值都是0</li>
 <li>线程用户态下使用的时间值(单位是jiffies）（utm=14） </li>
 <li>内核态下得调度时间值（stm=2）</li>

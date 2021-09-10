@@ -88,7 +88,7 @@
 
 <meta name="description" content="介绍使用 Android Profiler 分析内存泄漏">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 性能优化工具篇 -- Android Profiler 分析内存泄漏">
+<meta property="og:title" content="Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏">
 <meta property="og:url" content="http://yoursite.com/2018/10/12/android-performance-optimization-profiler-leak/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍使用 Android Profiler 分析内存泄漏">
@@ -100,9 +100,11 @@
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/result.png">
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/results-1.png">
 <meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/export-hprof.png">
-<meta property="og:updated_time" content="2019-12-17T08:08:22.791Z">
+<meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/1.png">
+<meta property="og:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/2.png">
+<meta property="og:updated_time" content="2021-09-10T08:58:21.184Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 性能优化工具篇 -- Android Profiler 分析内存泄漏">
+<meta name="twitter:title" content="Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏">
 <meta name="twitter:description" content="介绍使用 Android Profiler 分析内存泄漏">
 <meta name="twitter:image" content="http://yoursite.com/images/android-performance-optimization-profiler-leak/profiler-button.png">
 
@@ -138,7 +140,7 @@
 
 
 
-  <title> Android 性能优化工具篇 -- Android Profiler 分析内存泄漏 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -311,7 +313,7 @@
             
             
               
-                Android 性能优化工具篇 -- Android Profiler 分析内存泄漏
+                Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏
               
             
           </h1>
@@ -378,7 +380,7 @@
 
           
           
-             <span id="/2018/10/12/android-performance-optimization-profiler-leak/" class="leancloud_visitors" data-flag-title="Android 性能优化工具篇 -- Android Profiler 分析内存泄漏">
+             <span id="/2018/10/12/android-performance-optimization-profiler-leak/" class="leancloud_visitors" data-flag-title="Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -411,15 +413,15 @@
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>前面一篇文章 <a href="http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/" target="_blank" rel="external">Android 性能优化工具篇 – MAT分析内存泄漏 </a> 介绍了如何使用MAT来分析内存泄漏，但是 Android Studio 3.0 之后已经不再使用 Android Device Monitor了，取而代之的是 Android Profiler 工具，这是一款非常强大的工具，可以帮助我们了解应用的 CPU、内存、网络和电池资源使用情况。<br>本文着重介绍一下如何使用 Android Profiler 来解决 Android 内存泄漏的问题。</p>
 <p><a href="https://developer.android.com/studio/profile/android-profiler" target="_blank" rel="external">Android 官方文档：利用 Android Profiler 测量应用性能</a></p>
-<h2 id="发现内存泄漏"><a href="#发现内存泄漏" class="headerlink" title="发现内存泄漏"></a>发现内存泄漏</h2><p><a href="http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/" target="_blank" rel="external">Android 性能优化工具篇 – MAT分析内存泄漏 </a> 一文中介绍了如何使用 <code>adb shell dumpsys meminfo &lt;进程名称或者进程ID&gt;</code> 命令来分析进程中是否存在内存泄漏。</p>
-<h2 id="工具准备"><a href="#工具准备" class="headerlink" title="工具准备"></a>工具准备</h2><p>要打开 Profiler 窗口，请依次选择 View &gt; Tool Windows &gt; Profiler，或点击工具栏中的 Profile 图标 。</p>
+<h2 id="分析内存泄漏"><a href="#分析内存泄漏" class="headerlink" title="分析内存泄漏"></a>分析内存泄漏</h2><h3 id="发现内存泄漏"><a href="#发现内存泄漏" class="headerlink" title="发现内存泄漏"></a>发现内存泄漏</h3><p><a href="http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/" target="_blank" rel="external">Android 性能优化工具篇 – MAT分析内存泄漏 </a> 一文中介绍了如何使用 <code>adb shell dumpsys meminfo &lt;进程名称或者进程ID&gt;</code> 命令来分析进程中是否存在内存泄漏。</p>
+<h3 id="工具准备"><a href="#工具准备" class="headerlink" title="工具准备"></a>工具准备</h3><p>要打开 Profiler 窗口，请依次选择 View &gt; Tool Windows &gt; Profiler，或点击工具栏中的 Profile 图标 。</p>
 <p><img src="/images/android-performance-optimization-profiler-leak/profiler-button.png" width="528" height="74"></p>
 <p>点击 Profile 图标可以自动将待分析的应用安装到设备上，也可自行安装，然后在 Profiler 的会话窗口中连接进程。</p>
 <p><img src="/images/android-performance-optimization-profiler-leak/select-process.png" width="2876" height="752"></p>
 <p><img src="/images/android-performance-optimization-profiler-leak/info.png" width="2836" height="724"></p>
 <p>点击MEMORY进入内存详情，在这里可以实时查看内存的占用情况：</p>
 <p><img src="/images/android-performance-optimization-profiler-leak/memory-info.png" width="2834" height="748"></p>
-<h2 id="开始分析"><a href="#开始分析" class="headerlink" title="开始分析"></a>开始分析</h2><p>退出我们前面写的 Demo 的 Activity，然后再点击一下 Profiler 面板上面的垃圾桶图标，进行一次垃圾回收，然后再点击垃圾桶图标右侧的图标，这时候 Android Studio 就开始分析进程的内存泄漏情况，并把分析结果呈现出来：</p>
+<h3 id="开始分析"><a href="#开始分析" class="headerlink" title="开始分析"></a>开始分析</h3><p>退出我们前面写的 Demo 的 Activity，然后再点击一下 Profiler 面板上面的垃圾桶图标，进行一次垃圾回收，然后再点击垃圾桶图标右侧的图标，这时候 Android Studio 就开始分析进程的内存泄漏情况，并把分析结果呈现出来：</p>
 <p><img src="/images/android-performance-optimization-profiler-leak/arrange.png" width="1986" height="576"></p>
 <p>前面我们已经操作过了使 Activity 退出了，如果你要分析的对象在这种情况下应该是消失的，但却在这里出现了，就说明你的对象无法被垃圾回收器回收，就发生了内存泄漏。<br>默认情况下，左侧的分配列表按类名称排列。在列表顶部，您可以使用右侧的下拉列表在以下排列方式之间进行切换：</p>
 <ul>
@@ -432,12 +434,31 @@
 <p>点击 MainActivity 对象，在 Reference 窗口会出现对它的引用情况，你会发现会有好多对 MainActivity 的引用。<br>mInnerClassInstance 的引用显示在第一个，对其他的引用一层层的点击下去，最终都是由我们创造的泄漏场景 mInnerClassInstance 对象对一些对象的引用导致的。</p>
 <p><img src="/images/android-performance-optimization-profiler-leak/results-1.png" width="662" height="310"></p>
 <p>这样我们就最终发现了导致内存泄漏的元凶。</p>
-<h2 id="使用-Mat-分析内存泄漏"><a href="#使用-Mat-分析内存泄漏" class="headerlink" title="使用 Mat 分析内存泄漏"></a>使用 Mat 分析内存泄漏</h2><p>使用上面的方法可以分析一些简单的内存泄漏，但是对于一些复杂的情况，上面的方法由于对实例的引用很多，分析起来不太方便，这个时候我们可以借助 Mat(MemoryAnalyzer) 工具来分析。<br>首先我们要借助 Profiler 工具生成 hprof 文件，前面我们点击垃圾桶图标右侧的图标之后，会在内存中生成一份 Heap Dum 文件，这个文件是可以保存到磁盘上的。<br>点击面板上的保存按钮：</p>
+<h3 id="使用-Mat-分析内存泄漏"><a href="#使用-Mat-分析内存泄漏" class="headerlink" title="使用 Mat 分析内存泄漏"></a>使用 Mat 分析内存泄漏</h3><p>使用上面的方法可以分析一些简单的内存泄漏，但是对于一些复杂的情况，上面的方法由于对实例的引用很多，分析起来不太方便，这个时候我们可以借助 Mat(MemoryAnalyzer) 工具来分析。<br>首先我们要借助 Profiler 工具生成 hprof 文件，前面我们点击垃圾桶图标右侧的图标之后，会在内存中生成一份 Heap Dum 文件，这个文件是可以保存到磁盘上的。<br>点击面板上的保存按钮：</p>
 <p><img src="/images/android-performance-optimization-profiler-leak/export-hprof.png" width="466" height="342"></p>
 <p>文件就会被保存到磁盘上，然后通过下面的命令转换：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android-sdk/platform-tools/hprof-conv memory-xxxxx.hprof test.hprof</div></pre></td></tr></table></figure>
 <p>然后在通过 <a href="http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/" target="_blank" rel="external">Android 性能优化工具篇 – MAT分析内存泄漏 </a> 里面介绍的方法通过 Mat 来分析内存泄漏。</p>
-<h2 id="解决内存泄漏"><a href="#解决内存泄漏" class="headerlink" title="解决内存泄漏"></a>解决内存泄漏</h2>
+<h3 id="解决内存泄漏"><a href="#解决内存泄漏" class="headerlink" title="解决内存泄漏"></a>解决内存泄漏</h3><h2 id="分析内存使用情况"><a href="#分析内存使用情况" class="headerlink" title="分析内存使用情况"></a>分析内存使用情况</h2><p>Profiler 工具可以捕获堆转储信息帮助我们看应用中哪些对象正在使用内存，据此我们可以优化那些比较占用内存的对象。<br>捕获堆转储后，可以查看以下信息：</p>
+<ul>
+<li>您的应用分配了哪些类型的对象，以及每种对象有多少。</li>
+<li>每个对象当前使用多少内存。</li>
+<li>在代码中的什么位置保持着对每个对象的引用。</li>
+<li>对象所分配到的调用堆栈。</li>
+</ul>
+<p>捕获堆转储，请点击内存性能分析器工具栏中的 Dump Java heap 图标:</p>
+<p><img src="/images/android-performance-optimization-profiler-leak/1.png" width="863" height="203"></p>
+<p>然后就会在新的窗口中展示内存的使用情况：</p>
+<p><img src="/images/android-performance-optimization-profiler-leak/2.png" width="553" height="260"></p>
+<ul>
+<li>Allocations：堆中的分配数。</li>
+<li>Native Size：此对象类型使用的原生内存总量（以字节为单位）。只有在使用 Android 7.0 及更高版本时，才会看到此列。</li>
+<li>您会在此处看到采用 Java 分配的某些对象的内存，因为 Android 对某些框架类（如 Bitmap）使用原生内存。</li>
+<li>Shallow Size：此对象类型使用的 Java 内存总量（以字节为单位）。</li>
+<li>Retained Size：为此类的所有实例而保留的内存总大小（以字节为单位）。</li>
+</ul>
+<p>我们看到Bitmap占用了很多内存，点击Class Name栏里面的Bitmap后，在下面的窗口会展示所有的Bitmap对象，点击单个对象后，就可以看到该对象的详细情况，包括被谁引用等等，可以很好的确定该对象在代码中的位置。</p>
+
       
     </div>
 
@@ -633,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发现内存泄漏"><span class="nav-number">2.</span> <span class="nav-text">发现内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具准备"><span class="nav-number">3.</span> <span class="nav-text">工具准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始分析"><span class="nav-number">4.</span> <span class="nav-text">开始分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Mat-分析内存泄漏"><span class="nav-number">5.</span> <span class="nav-text">使用 Mat 分析内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决内存泄漏"><span class="nav-number">6.</span> <span class="nav-text">解决内存泄漏</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析内存泄漏"><span class="nav-number">2.</span> <span class="nav-text">分析内存泄漏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#发现内存泄漏"><span class="nav-number">2.1.</span> <span class="nav-text">发现内存泄漏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工具准备"><span class="nav-number">2.2.</span> <span class="nav-text">工具准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始分析"><span class="nav-number">2.3.</span> <span class="nav-text">开始分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Mat-分析内存泄漏"><span class="nav-number">2.4.</span> <span class="nav-text">使用 Mat 分析内存泄漏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决内存泄漏"><span class="nav-number">2.5.</span> <span class="nav-text">解决内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析内存使用情况"><span class="nav-number">3.</span> <span class="nav-text">分析内存使用情况</span></a></li></ol></div>
             
 
           </div>

@@ -4,6 +4,66 @@
 
     
   <url>
+    <loc>http://yoursite.com/2018/10/12/android-performance-optimization-profiler-leak/</loc>
+    <lastmod>2021-09-10T08:58:21.184Z</lastmod>
+    <data>
+        <display>
+        <title>Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏</title>
+        <pubTime>2018-10-12T02:00:00.000Z</pubTime>
+        
+        <tag>稳定性</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android性能优化" url="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2018/10/10/android-performance-optimization-tools-ram-analysis/</loc>
+    <lastmod>2021-09-02T07:50:41.215Z</lastmod>
+    <data>
+        <display>
+        <title>Android 性能优化工具篇 -- 内存查看和分析工具</title>
+        <pubTime>2018-10-10T02:00:00.000Z</pubTime>
+        
+        <tag>内存优化</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android性能优化" url="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2018/01/08/android-performance-optimization-anr/</loc>
+    <lastmod>2021-08-21T07:21:51.912Z</lastmod>
+    <data>
+        <display>
+        <title>Android 性能优化理论篇 -- ANR</title>
+        <pubTime>2018-01-08T02:00:00.000Z</pubTime>
+        
+        <tag>ANR</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android性能优化" url="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2020/04/04/opengl-es-basic-knowledge/</loc>
     <lastmod>2021-08-06T02:40:34.499Z</lastmod>
     <data>
@@ -1109,26 +1169,6 @@
            
              
               <breadCrumb title="cocos" url="http://yoursite.com/categories/cocos/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2018/01/08/android-performance-optimization-anr/</loc>
-    <lastmod>2020-10-20T10:13:59.382Z</lastmod>
-    <data>
-        <display>
-        <title>Android 性能优化理论篇 -- ANR</title>
-        <pubTime>2018-01-08T02:00:00.000Z</pubTime>
-        
-        <tag>ANR</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android性能优化" url="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
           
         </display>
     </data>
@@ -2314,26 +2354,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/10/10/android-performance-optimization-tools-ram-analysis/</loc>
-    <lastmod>2020-04-15T01:25:04.855Z</lastmod>
-    <data>
-        <display>
-        <title>Android 性能优化工具篇 -- 内存查看和分析工具</title>
-        <pubTime>2018-10-10T02:00:00.000Z</pubTime>
-        
-        <tag>内存优化</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android性能优化" url="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2016/09/18/android-graphic-system-glsurfaceview/</loc>
     <lastmod>2020-04-15T01:25:04.854Z</lastmod>
     <data>
@@ -2586,26 +2606,6 @@
         <display>
         <title>Android 性能优化理论篇 -- 内存泄漏的几种情形</title>
         <pubTime>2016-02-28T02:00:00.000Z</pubTime>
-        
-        <tag>稳定性</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android性能优化" url="http://yoursite.com/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2018/10/12/android-performance-optimization-profiler-leak/</loc>
-    <lastmod>2019-12-17T08:08:22.791Z</lastmod>
-    <data>
-        <display>
-        <title>Android 性能优化工具篇 -- Android Profiler 分析内存泄漏</title>
-        <pubTime>2018-10-12T02:00:00.000Z</pubTime>
         
         <tag>稳定性</tag>
          
@@ -5105,16 +5105,16 @@
     
     
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android BuildConfig的使用</title>
-        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
+        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
+        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>BuildConfig</tag>
+        <tag>buildType</tag>
          
          
            
@@ -5127,16 +5127,16 @@
 
     
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     <data>
         <display>
-        <title>Android 解决Lib Module 和 App Module 的 buildType 不一样的问题</title>
-        <pubTime>2016-02-05T02:00:00.000Z</pubTime>
+        <title>Android BuildConfig的使用</title>
+        <pubTime>2016-02-02T02:00:00.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>buildType</tag>
+        <tag>BuildConfig</tag>
          
          
            
@@ -5555,12 +5555,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5575,12 +5575,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
