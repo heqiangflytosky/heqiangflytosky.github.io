@@ -414,7 +414,7 @@ enum ThreadState {
 **第四行**：`  | state=S schedstat=( 173407732 13795308 237 ) utm=14 stm=2 core=5 HZ=100`
 主要信息包括当前线程的上下文信息：
 
- - 分别是线程调度状态（state=S）
+ - 分别是线程调度状态（state=S）S表示Sleeping，另外还有 R（Running），D（DEAD）
  - schedstat=( 173407732 13795308 237 ) 从 /proc/[pid]/task/[tid]/schedstat读出，三个值分别表示线程在cpu上执行的时间、线程的等待时间和线程执行的时间片长度，有的android内核版本不支持这项信息，得到的三个值都是0
  - 线程用户态下使用的时间值(单位是jiffies）（utm=14） 
  - 内核态下得调度时间值（stm=2）

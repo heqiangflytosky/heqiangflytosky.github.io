@@ -51,106 +51,7 @@ bogon:TestSomething heqiang$ adb shell procrank
  3880  2676696K  232392K  113036K  105568K  com.meizu.safe
  5198  1976632K  201196K   85256K   44832K  com.tencent.mm
  7982  1916864K  182152K   79986K   75428K  com.android.mms
- 9154  2282932K  185652K   70449K   64024K  com.meizu.flyme.launcher
- 6049  1909944K  175776K   65801K   26212K  com.tencent.mm:push
- 5034  1311876K  122188K   40598K   34560K  com.meizu.mstore
- 3211  1305292K  122488K   38756K   32440K  com.meizu.flyme.input
- 4051  1920588K  137356K   38402K   34620K  com.meizu.alphame
-10578  2240584K  146452K   36268K   30252K  com.android.hq.ganktoutiao
- 3373  2386504K  135396K   35837K   26664K  com.android.systemui:recents
- 3777  1830536K  137488K   35311K   31452K  com.flyme.systemuitools
- 7901  1276760K  110056K   35073K   29628K  com.meizu.media.music
- 3454  1842652K  132772K   33837K   28928K  com.android.phone
- 8179  1788376K  106376K   31661K   26564K  com.meizu.netcontactservice
-18024  2229044K  132416K   30948K   26108K  com.meizu.connectivitysettings
-12256  2351712K  133980K   28352K   20208K  com.example.heqiang.testsomething
- 8302    65608K   29980K   28222K   28196K  /data/local/tmp/perfd/perfd
-23169  1817152K  120388K   26505K   23308K  com.meizu.location
- 3766  1769968K  100584K   26504K   20976K  com.aricent.ims.service
- 2674  2220164K  135512K   26358K   13476K  zygote64
- 2675  1661988K  120100K   24547K    6932K  zygote
-13214  1805296K  122076K   24393K   20576K  com.meizu.flyme.weather
-18473    89192K   27524K   23947K   23188K  /data/app/com.android.browser-1/lib/arm/libweexjsb.so
- 8091  1815400K  117116K   23922K   20872K  com.android.settings
- 7973    88168K   26464K   23115K   22580K  /data/app/com.meizu.media.music-2/lib/arm/libweexjsb.so
- 4359  1819236K  116936K   22713K   19668K  com.meizu.dataservice
- 5666  1804476K  111588K   22225K   19512K  com.meizu.testdev.woody
- 5964  1824344K  113516K   21408K   18608K  com.android.providers.downloads
- 4901  1257932K   96244K   21112K   16716K  com.meizu.account
- 4751  1904100K  114672K   20689K   17728K  com.meizu.battery
- 4012  1883384K  107076K   20310K   17796K  com.zq.powerdoctor
- 4826  1237936K   97156K   19583K   14632K  com.meizu.flyme.service.find
- 3815  1816684K  111760K   19560K   16656K  com.meizu.pps
- 8031  1778064K   82436K   19298K   15800K  com.meizu.media.gallery
-23110  1798528K  111224K   18338K   15428K  com.meizu.mzsyncservice
- 2530   602168K   32796K   18308K   13616K  /system/bin/surfaceflinger
- 2677   136676K   30624K   16063K   10740K  /system/bin/cameraserver
-29320  1855236K  108244K   15492K   12644K  com.meizu.logreport
- 5918  1796792K  107920K   14689K   11768K  com.meizu.wifiadmin
- 5945  1236844K   92000K   14636K    9932K  com.meizu.net.pedometer
- 4070  1241304K   90588K   14061K    8376K  com.meizu.cloud
-29878  1791328K  101224K   13785K   11224K  com.meizu.flyme.update
- 4995  1226176K   85184K   12021K    6608K  com.meizu.cloud:mzservice_v1
- 4033  1775632K   84580K    9008K    6828K  com.android.incallui
- 6013  1786868K   83752K    8263K    6248K  com.meizu.mzbasestationsafe
- 2676    45476K   12336K    7147K    6760K  /system/bin/audioserver
- 3786  1768168K   83260K    6587K    4424K  android.ext.services
- 4092  1771200K   84608K    6359K    4188K  com.meizu.experiencedatasync
- 5089  1211960K   69776K    6176K    2664K  com.activate.activatephone
- 7885  1769652K   82556K    5920K    3864K  android.process.media
- 8737  1767884K   79344K    5332K    3352K  com.android.carrierconfig
- 3270  1772648K   80116K    5106K    3056K  com.meizu.facerecognition
- 2687    64804K   14556K    5059K    3484K  /system/bin/mediaserver
- 2468    28244K    7024K    4932K    4864K  /system/bin/logd
- 7932  1778632K   79032K    4702K    2724K  com.samsung.slsi.telephony.usbmodeswitch
- 4002  1768104K   76208K    4480K    2548K  com.goodix.fingerprint
- 4878  1772096K   79028K    4464K    2452K  com.sec.jniril
- 6041  1768856K   76504K    4355K    2384K  com.samsung.slsi.CtcSelfRegister
- 5832  1769012K   77868K    4346K    2352K  com.wolfsonmicro.ez2control:ez2control_service
- 4081  1767784K   77220K    4193K    2160K  com.wolfsonmicro.ez2control
- 2684    37532K   10632K    4116K    3512K  media.codec
- 2686    44948K   11684K    3522K    2688K  media.extractor
- 2690    49204K    8156K    3366K    3132K  /system/bin/rild_exynos
- 2672    26204K    7204K    3250K    3132K  /system/bin/glgps
- 2688    45504K    6540K    3132K    3032K  /system/bin/netd
- 3394    13472K    7056K    2681K    2540K  /system/bin/wpa_supplicant
- 2685    18204K    9196K    2370K    1512K  /system/bin/mediadrmserver
- 2471    53924K    6068K    1974K    1796K  /system/bin/vold
- 2669    22000K    7024K    1887K    1500K  /system/bin/ez2controld
- 2668    19120K    5056K    1648K    1568K  /system/bin/fingerprintd
- 2681    15512K    6624K    1566K    1284K  /system/bin/drmserver
- 8140    20524K    1664K    1518K    1500K  /sbin/adbd
-    1    10484K    2196K    1382K    1020K  /init
- 2683    12744K    5408K    1304K    1180K  /system/bin/keystore
- 2689    13324K    3712K    1281K    1236K  /sbin/rfsd
- 2671    14416K    4828K    1252K    1148K  /system/bin/lhd
- 2467    12260K    2952K    1050K    1020K  /system/vendor/bin/teei_daemon
- 8795     9500K    3000K    1049K    1012K  procrank
- 2696    12432K    4516K     912K     828K  /system/bin/gatekeeperd
- 2682     9728K    3712K     878K     796K  /system/bin/installd
- 1678     5972K    1580K     794K     436K  /sbin/ueventd
- 2692    19068K    3476K     771K     720K  /system/bin/vcd
- 2525     6724K     968K     734K     732K  /sbin/healthd
- 2836    10724K    3592K     702K     652K  /system/bin/ifaad
- 2528     9044K    3012K     702K     668K  /system/bin/lmkd
- 2837    10676K    3504K     667K     620K  /system/bin/fidod
- 2695    10676K    3616K     666K     616K  /system/vendor/bin/facerecod
- 2678    10884K    3488K     656K     608K  /sbin/cbd
- 2529     9100K    2916K     648K     608K  /system/bin/servicemanager
- 2697     8384K    2976K     635K     584K  /system/xbin/perfprofd
- 2526     7700K    2500K     629K     464K  /system/bin/sh
- 2670     9568K    3416K     616K     556K  /system/bin/autobingend
- 8300     7700K    2528K     598K     436K  /system/bin/sh
- 2694     8144K    2784K     558K     508K  /system/bin/mdevice_manager
- 8277     7988K    2700K     549K     508K  logcat
- 2693     8020K    2736K     525K     488K  /system/bin/mpower_manager
- 2680    17300K    2668K     508K     472K  /system/bin/dmd
- 2691     7628K    2332K     420K     388K  /system/bin/sced
- 2431     5640K     952K     409K     144K  /sbin/watchdogd
- 2470    10252K    3044K     367K      52K  /system/bin/debuggerd64
- 2469     5500K    2600K     349K      64K  /system/bin/debuggerd
- 2482     9868K    1168K     335K      52K  debuggerd64:signaller
- 2483     5116K     948K     272K      52K  debuggerd:signaller
+ ......
                            ------   ------  ------
                           2174242K  1731360K  TOTAL
 
@@ -168,7 +69,51 @@ USS 是针对某个进程开始有可疑内存泄露的情况，进行检测的�
 这些内存指标都是包含 Java 内存和 Native 内存的。
 一般来说内存占用大小有如下规律：VSS >= RSS >= PSS >= USS
 
+## showmap
+
+adb shell showmap <pid>  查看一个进程的showmap，这对于我们来说非常有用，可以确定进程中哪些库占用内存比较多。
+
+
 ## dumpsys meminfo
+
+可以使用 `adb shell dumpsys meminfo` 来看系统内所有进程的内存使用情况：
+
+```
+Applications Memory Usage (in Kilobytes):
+Uptime: 3915314 Realtime: 3950084
+
+
+Total RSS by process:
+    524,336K: system (pid 1117)
+    445,240K: com.android.systemui (pid 17043)
+    ......
+Total RSS by OOM adjustment:
+  3,059,892K: Native
+        179,708K: zygote64 (pid 760)
+        159,160K: zygote (pid 761)
+        ......
+Total RSS by category:
+  3,307,236K: .so mmap
+  1,637,356K: Native
+  1,605,492K: .jar mmap
+  ......
+Total PSS by process:
+    288,965K: com.android.systemui (pid 17043)
+    256,555K: system (pid 1117)
+    ......
+Total PSS by OOM adjustment:
+    819,647K: Native
+         79,490K: logd (pid 617)
+         61,451K: android.hardware.camera.provider@2.4-service_64 (pid 896)
+    .....
+Total RAM: 7,791,836K (status normal)
+ Free RAM: 3,359,799K (  209,011K cached pss + 2,498,404K cached kernel +   652,384K free)
+      ION:   183,008K (   18,008K mapped +   165,000K unmapped +         0K pools)
+ Used RAM: 4,059,695K (2,771,419K used pss + 1,288,276K kernel)
+ Lost RAM:   372,330K
+     ZRAM:        12K physical used for         0K in swap (4,194,300K total swap)
+   Tuning: 256 (large 512), oom   322,560K, restore limit   107,520K (high-end-gfx)
+```
 
 我们可以使用下面的命令来查看某个进程使用内存的情况：
 
@@ -280,7 +225,7 @@ Uptime: 638409159 Realtime: 1205461779
   - Native Heap：从 C 或 C++ 代码分配的对象内存。不受Java Object Heap大小限制，但受限于系统内存。当然如果 RAM 快耗尽，memory killer 就会杀进程释放 RAM。
   - Code：您的应用用于处理代码和资源（如 dex 字节码、已优化或已编译的 dex 码、.so 库和字体）的内存。
   - Stack：您的应用中的原生堆栈和 Java 堆栈使用的内存。 这通常与您的应用运行多少线程有关。
-  - Graphics：图形缓冲区队列向屏幕显示像素（包括 GL 表面、GL 纹理等等）所使用的内存。 （请注意，这是与 CPU 共享的内存，不是 GPU 专用内存。）
+  - Graphics：图形缓冲区队列向屏幕显示像素（包括 GL 表面、GL 纹理等等）所使用的内存。 （请注意，这是与 CPU 共享的内存，不是 GPU 专用内存。）看代码中有没有直接调用opengl，如果没有可以忽略，那就主要是framework创建的。
   - Private Other
   - System
  

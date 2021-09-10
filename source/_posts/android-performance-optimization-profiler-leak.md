@@ -1,5 +1,5 @@
 ---
-title: Android 性能优化工具篇 -- Android Profiler 分析内存泄漏
+title: Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏
 categories: Android性能优化
 comments: true
 tags: [稳定性]
@@ -14,11 +14,13 @@ date: 2018-10-12 10:00:00
 
 [Android 官方文档：利用 Android Profiler 测量应用性能](https://developer.android.com/studio/profile/android-profiler)
 
-## 发现内存泄漏
+## 分析内存泄漏
+
+### 发现内存泄漏
 
 [Android 性能优化工具篇 -- MAT分析内存泄漏 ](http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/) 一文中介绍了如何使用 `adb shell dumpsys meminfo <进程名称或者进程ID>` 命令来分析进程中是否存在内存泄漏。
 
-## 工具准备
+### 工具准备
 
 要打开 Profiler 窗口，请依次选择 View > Tool Windows > Profiler，或点击工具栏中的 Profile 图标 。
 
@@ -34,7 +36,7 @@ date: 2018-10-12 10:00:00
 
 <img src="/images/android-performance-optimization-profiler-leak/memory-info.png" width="2834" height="748"/>
 
-## 开始分析
+### 开始分析
 
 退出我们前面写的 Demo 的 Activity，然后再点击一下 Profiler 面板上面的垃圾桶图标，进行一次垃圾回收，然后再点击垃圾桶图标右侧的图标，这时候 Android Studio 就开始分析进程的内存泄漏情况，并把分析结果呈现出来：
 
@@ -59,7 +61,7 @@ mInnerClassInstance 的引用显示在第一个，对其他的引用一层层的
 
 这样我们就最终发现了导致内存泄漏的元凶。
 
-## 使用 Mat 分析内存泄漏
+### 使用 Mat 分析内存泄漏
 
 使用上面的方法可以分析一些简单的内存泄漏，但是对于一些复杂的情况，上面的方法由于对实例的引用很多，分析起来不太方便，这个时候我们可以借助 Mat(MemoryAnalyzer) 工具来分析。
 首先我们要借助 Profiler 工具生成 hprof 文件，前面我们点击垃圾桶图标右侧的图标之后，会在内存中生成一份 Heap Dum 文件，这个文件是可以保存到磁盘上的。
@@ -75,5 +77,32 @@ android-sdk/platform-tools/hprof-conv memory-xxxxx.hprof test.hprof
 
 然后在通过 [Android 性能优化工具篇 -- MAT分析内存泄漏 ](http://www.heqiangfly.com/2016/02/20/android-performance-optimization-use-mat-to-analyse-leak/) 里面介绍的方法通过 Mat 来分析内存泄漏。
 
-## 解决内存泄漏
+### 解决内存泄漏
 
+
+## 分析内存使用情况
+
+Profiler 工具可以捕获堆转储信息帮助我们看应用中哪些对象正在使用内存，据此我们可以优化那些比较占用内存的对象。
+捕获堆转储后，可以查看以下信息：
+
+ - 您的应用分配了哪些类型的对象，以及每种对象有多少。
+ - 每个对象当前使用多少内存。
+ - 在代码中的什么位置保持着对每个对象的引用。
+ - 对象所分配到的调用堆栈。
+
+捕获堆转储，请点击内存性能分析器工具栏中的 Dump Java heap 图标:
+
+<img src="/images/android-performance-optimization-profiler-leak/1.png" width="863" height="203"/>
+
+
+然后就会在新的窗口中展示内存的使用情况：
+
+<img src="/images/android-performance-optimization-profiler-leak/2.png" width="553" height="260"/>
+
+ - Allocations：堆中的分配数。
+ - Native Size：此对象类型使用的原生内存总量（以字节为单位）。只有在使用 Android 7.0 及更高版本时，才会看到此列。
+ - 您会在此处看到采用 Java 分配的某些对象的内存，因为 Android 对某些框架类（如 Bitmap）使用原生内存。
+ - Shallow Size：此对象类型使用的 Java 内存总量（以字节为单位）。
+ - Retained Size：为此类的所有实例而保留的内存总大小（以字节为单位）。
+
+我们看到Bitmap占用了很多内存，点击Class Name栏里面的Bitmap后，在下面的窗口会展示所有的Bitmap对象，点击单个对象后，就可以看到该对象的详细情况，包括被谁引用等等，可以很好的确定该对象在代码中的位置。
