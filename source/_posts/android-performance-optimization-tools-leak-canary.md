@@ -15,6 +15,7 @@ leakcanary是一个由著名的GitHub开源组织Square贡献的开源项目。
 [Github 地址](https://github.com/square/leakcanary)
 [LeakCanary 中文使用说明](http://www.liaohuqiu.net/cn/posts/leak-canary-read-me/)
 [demo](https://github.com/liaohuqiu/leakcanary-demo)
+LeakCanary 默认只会检测Activity的泄漏，如果需要检测其他类，可以使用LeakCanary.install返回的RefWatcher，调用RefWatcher.watch(obj)就可以观测obj对象是否出现泄漏。
 
 ## 接入方法
 

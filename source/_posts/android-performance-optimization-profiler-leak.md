@@ -100,8 +100,7 @@ Profiler 工具可以捕获堆转储信息帮助我们看应用中哪些对象�
 <img src="/images/android-performance-optimization-profiler-leak/2.png" width="553" height="260"/>
 
  - Allocations：堆中的分配数。
- - Native Size：此对象类型使用的原生内存总量（以字节为单位）。只有在使用 Android 7.0 及更高版本时，才会看到此列。
- - 您会在此处看到采用 Java 分配的某些对象的内存，因为 Android 对某些框架类（如 Bitmap）使用原生内存。
+ - Native Size：此对象类型使用的原生内存总量（以字节为单位）。只有在使用 Android 7.0 及更高版本时，才会看到此列。您会在此处看到采用 Java 分配的某些对象的内存，因为 Android 对某些框架类（如 Bitmap）使用原生内存。
  - Shallow Size：此对象类型使用的 Java 内存总量（以字节为单位）。
  - Retained Size：为此类的所有实例而保留的内存总大小（以字节为单位）。
 
