@@ -75,6 +75,17 @@ style 参数指代：Typeface.NORMAL、Typeface.BOLD、Typeface.ITALIC、Typefac
 
 Android 字体库文件在 Andoird 源码中放在 `framework/base/data/fonts/` 下面，设备中在 `/system/fonts` 下。
 
+## 关于字体sp dp px 
+
+px 设置后固定，不会根据显示大小和字体大小变动
+dp 跟随显示大小变动，根据density， 手机设置里面的设置显示大小修改了 mMetrics.density
+sp 跟随显示大小和字体大小变动，根据 scaledDensity， 手机设置里面的设置字体大小修改了 fontScale
+
+```
+                mMetrics.scaledDensity = mMetrics.density *
+                        (mConfiguration.fontScale != 0 ? mConfiguration.fontScale : 1.0f);
+```
+
 ## 相关推荐
 
 https://www.jianshu.com/p/36059c6bf958
