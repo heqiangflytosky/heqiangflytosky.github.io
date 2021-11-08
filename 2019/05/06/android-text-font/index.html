@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/05/06/android-text-font/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 Android 字体设置">
-<meta property="og:updated_time" content="2019-12-13T01:46:55.107Z">
+<meta property="og:updated_time" content="2021-11-08T09:02:24.923Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android -- 字体设置">
 <meta name="twitter:description" content="介绍 Android 字体设置">
@@ -426,6 +426,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Typeface fontMedium = Typeface.create(&quot;SFPRO-bold&quot;, Typeface.NORMAL);</div><div class="line">textView1.setTypeface(fontMedium);</div></pre></td></tr></table></figure>
 <p>这种情况如果字体库不存在，会使用系统默认的字体。</p>
 <h2 id="字体库的位置"><a href="#字体库的位置" class="headerlink" title="字体库的位置"></a>字体库的位置</h2><p>Android 字体库文件在 Andoird 源码中放在 <code>framework/base/data/fonts/</code> 下面，设备中在 <code>/system/fonts</code> 下。</p>
+<h2 id="关于字体sp-dp-px"><a href="#关于字体sp-dp-px" class="headerlink" title="关于字体sp dp px"></a>关于字体sp dp px</h2><p>px 设置后固定，不会根据显示大小和字体大小变动<br>dp 跟随显示大小变动，根据density， 手机设置里面的设置显示大小修改了 mMetrics.density<br>sp 跟随显示大小和字体大小变动，根据 scaledDensity， 手机设置里面的设置字体大小修改了 fontScale</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mMetrics.scaledDensity = mMetrics.density *</div><div class="line">        (mConfiguration.fontScale != 0 ? mConfiguration.fontScale : 1.0f);</div></pre></td></tr></table></figure>
 <h2 id="相关推荐"><a href="#相关推荐" class="headerlink" title="相关推荐"></a>相关推荐</h2><p><a href="https://www.jianshu.com/p/36059c6bf958" target="_blank" rel="external">https://www.jianshu.com/p/36059c6bf958</a><br><a href="https://blog.csdn.net/a282255307/article/details/76870441" target="_blank" rel="external">https://blog.csdn.net/a282255307/article/details/76870441</a></p>
 
       
@@ -623,7 +625,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改字体"><span class="nav-number">2.</span> <span class="nav-text">修改字体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改组件的属性"><span class="nav-number">2.1.</span> <span class="nav-text">修改组件的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用主题修改全局字体"><span class="nav-number">2.2.</span> <span class="nav-text">利用主题修改全局字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用自定义字体"><span class="nav-number">2.3.</span> <span class="nav-text">使用自定义字体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字体库的位置"><span class="nav-number">3.</span> <span class="nav-text">字体库的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关推荐"><span class="nav-number">4.</span> <span class="nav-text">相关推荐</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改字体"><span class="nav-number">2.</span> <span class="nav-text">修改字体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改组件的属性"><span class="nav-number">2.1.</span> <span class="nav-text">修改组件的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用主题修改全局字体"><span class="nav-number">2.2.</span> <span class="nav-text">利用主题修改全局字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用自定义字体"><span class="nav-number">2.3.</span> <span class="nav-text">使用自定义字体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字体库的位置"><span class="nav-number">3.</span> <span class="nav-text">字体库的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于字体sp-dp-px"><span class="nav-number">4.</span> <span class="nav-text">关于字体sp dp px</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关推荐"><span class="nav-number">5.</span> <span class="nav-text">相关推荐</span></a></li></ol></div>
             
 
           </div>
