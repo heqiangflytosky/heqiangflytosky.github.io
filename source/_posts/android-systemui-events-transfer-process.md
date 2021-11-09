@@ -1,6 +1,6 @@
 ---
-title: Android -- 下拉面板事件分发流程
-categories:  SystemUI
+title: SystemUI -- 下拉面板事件分发流程
+categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
 description: 介绍下拉面板事件分发流程

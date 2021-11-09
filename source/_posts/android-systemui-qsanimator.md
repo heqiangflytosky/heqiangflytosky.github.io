@@ -1,6 +1,6 @@
 ---
 title: SystemUI --  QSTile 动画实现之 QSAnimator
-categories:  SystemUI
+categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
 description: 介绍QSTile 动画实现原理

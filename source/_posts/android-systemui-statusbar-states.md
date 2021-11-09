@@ -1,6 +1,6 @@
 ---
 title: SystemUI -- SystemUI 的几种状态
-categories:  SystemUI
+categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
 description: 介绍 SystemUI 的几种状态

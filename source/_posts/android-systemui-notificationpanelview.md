@@ -1,6 +1,6 @@
 ---
-title: Android -- NotificationPanelView
-categories:  SystemUI
+title: SystemUI -- NotificationPanelView
+categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
 description: 介绍NotificationPanelView

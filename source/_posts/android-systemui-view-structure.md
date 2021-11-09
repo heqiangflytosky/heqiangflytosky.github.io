@@ -1,6 +1,6 @@
 ---
 title: SystemUI -- 下拉通知面板页面结构和重要的类
-categories:  SystemUI
+categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
 description: 介绍 SystemUI 下拉通知面板页面结构和重要的类
