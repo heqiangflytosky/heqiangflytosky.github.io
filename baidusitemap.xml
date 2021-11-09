@@ -4,6 +4,126 @@
 
     
   <url>
+    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
+    <lastmod>2021-11-09T06:39:49.900Z</lastmod>
+    <data>
+        <display>
+        <title>Android -- NotificationStackScrollLayout</title>
+        <pubTime>2021-11-08T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="SystemUI" url="http://yoursite.com/categories/SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
+    <lastmod>2021-11-09T06:39:37.674Z</lastmod>
+    <data>
+        <display>
+        <title>Android -- NotificationPanelView</title>
+        <pubTime>2021-11-07T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="SystemUI" url="http://yoursite.com/categories/SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
+    <lastmod>2021-11-09T06:39:22.312Z</lastmod>
+    <data>
+        <display>
+        <title>Android -- 下拉面板事件分发流程</title>
+        <pubTime>2021-11-06T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="SystemUI" url="http://yoursite.com/categories/SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
+    <lastmod>2021-11-09T06:39:01.023Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI -- 下拉通知面板页面结构和重要的类</title>
+        <pubTime>2021-11-05T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="SystemUI" url="http://yoursite.com/categories/SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/10/30/android-systemui-qsanimator/</loc>
+    <lastmod>2021-11-09T06:38:43.066Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI --  QSTile 动画实现之 QSAnimator</title>
+        <pubTime>2021-10-30T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="SystemUI" url="http://yoursite.com/categories/SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
+    <lastmod>2021-11-09T06:38:26.165Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI -- SystemUI 的几种状态</title>
+        <pubTime>2021-10-20T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="SystemUI" url="http://yoursite.com/categories/SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2019/05/06/android-text-font/</loc>
     <lastmod>2021-11-08T09:02:24.923Z</lastmod>
     <data>
@@ -4850,26 +4970,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/20/open-source-weex-android-component-module-register/</loc>
-    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
-    <data>
-        <display>
-        <title>Weex 源码研究 -- Component 和 DomObject 注册过程</title>
-        <pubTime>2018-03-20T02:00:00.000Z</pubTime>
-        
-        <tag>Weex</tag>
-         
-         
-           
-             
-              <breadCrumb title="Weex" url="http://yoursite.com/categories/Weex/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/10/18/open-source-rxjava-single-completable-maybe/</loc>
     <lastmod>2018-06-02T09:24:04.976Z</lastmod>
     <data>
@@ -4885,6 +4985,26 @@
            
              
               <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2018/03/20/open-source-weex-android-component-module-register/</loc>
+    <lastmod>2018-06-02T09:24:04.976Z</lastmod>
+    <data>
+        <display>
+        <title>Weex 源码研究 -- Component 和 DomObject 注册过程</title>
+        <pubTime>2018-03-20T02:00:00.000Z</pubTime>
+        
+        <tag>Weex</tag>
+         
+         
+           
+             
+              <breadCrumb title="Weex" url="http://yoursite.com/categories/Weex/"/>
           
         </display>
     </data>
@@ -5407,12 +5527,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5427,12 +5547,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
