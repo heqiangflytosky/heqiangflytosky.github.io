@@ -288,7 +288,7 @@ NotificationPanelView 的父类 PanelView 分别设置了事件拦截器和OnTou
     }
 ```
 
-#### NotificationStackScrollLayout
+### NotificationStackScrollLayout
 
 处理三种类型的事件：1.单个通知的展开和收缩手势，2.通知中心的滑动和滚动，3.左右滑动删除通知操作
 

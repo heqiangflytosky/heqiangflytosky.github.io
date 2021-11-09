@@ -52,12 +52,12 @@ mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计�
 
 ## 通知栏的滑动
 
-这部分主要是在显示 QQS 状态到通知中心完全隐藏状态之间的切换。这部分主要涉及到通知位置的计算和UI更新。
-这部分介绍的仅仅时在通知中心的通知区域的手势操作，比如滑动通知中心的空白处的操作，这部分是在 NotificationPanelViewController.handleQsTouch() 处理。
+这部分主要是在显示 QQS 状态到通知中心完全隐藏状态之间的切换，主要涉及到通知位置的计算和UI更新。
+介绍的仅仅是在通知中心的通知区域的手势操作，比如滑动通知中心的空白处的操作的这部分就是在 `NotificationPanelViewController.handleQsTouch()` 处理中处理了。
 
 ### 事件处理
 
-这部分事件处理主要在 NotificationStackScrollLayout.onScrollTouch() 中进行
+这部分事件处理主要在 NotificationStackScrollLayout.onScrollTouch() 中进行处理。
 
 ```
 // NotificationStackScrollLayout.java

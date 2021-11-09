@@ -83,9 +83,6 @@ makeExpandedVisible()
 
 ### QS
 
-1.NotificationShadeWindowView：承载锁屏和下拉通知的界面
-2.NotificationShadeWindowViewController：
-3.NotificationShadeWindowControllerImpl：
 5.ShadeControllerImpl：ShadeController 的实现类。Shade 可以理解为状态栏的概念，可以有多种状态，比如：dozing, locked, showing the bouncer, occluded 等。ShadeControllerImpl 被 StatusBar 类用来控制 shade 的状态，它提供了下面的集中方法。
 animateCollapsePanels()：以动画形式收起面板，如果在KEYGUARD状态就显示bouncer view，如果是在 SHADE 就隐藏shade view。
 collapsePanel()：收起面板。
