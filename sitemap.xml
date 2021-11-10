@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2021/06/01/android-statusbar-icon-color/</loc>
+    
+    <lastmod>2021-11-10T07:43:25.722Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/05/01/android-statusbar-and-navigationbar/</loc>
+    
+    <lastmod>2021-11-10T07:42:14.476Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
     
-    <lastmod>2021-11-09T06:44:51.605Z</lastmod>
+    <lastmod>2021-11-09T08:25:55.115Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
+    
+    <lastmod>2021-11-09T08:25:55.115Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
+    
+    <lastmod>2021-11-09T08:25:55.114Z</lastmod>
     
   </url>
   
@@ -23,13 +51,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
-    
-    <lastmod>2021-11-09T06:44:12.519Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
     
     <lastmod>2021-11-09T06:43:54.793Z</lastmod>
@@ -37,23 +58,9 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
-    
-    <lastmod>2021-11-09T06:43:32.389Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2019/05/06/android-text-font/</loc>
     
     <lastmod>2021-11-08T09:02:24.923Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2021/05/01/android-statusbar-and-navigationbar/</loc>
-    
-    <lastmod>2021-09-30T06:57:58.628Z</lastmod>
     
   </url>
   
@@ -1738,14 +1745,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
@@ -1808,14 +1815,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -1850,14 +1857,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
+    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/06/13/android-source-code-analysis-dumpsys/</loc>
+    <loc>http://yoursite.com/2016/05/18/android-source-code-analysis-package-manager-installd/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1878,14 +1885,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1962,14 +1969,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
