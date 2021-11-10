@@ -1,8 +1,8 @@
 ---
 title: Android -- 状态栏导航栏相关设置
-categories:  Android
+categories:  Android SystemUI
 comments: true
-tags: [Android]
+tags: [SystemUI]
 description: 介绍 Android 状态栏导航栏相关设置
 date: 2021-5-1 10:00:00
 ---
