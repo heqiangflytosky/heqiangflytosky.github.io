@@ -181,6 +181,12 @@ NotificationPanelViewController.setQsExpansion()
                 TouchAnimator.setPosition()
                     QSAnimator.onAnimationStarted()
                          QSAnimator.updateQQSVisibility() // 更新QQS的可见性
+        ScrimController.setQsPosition() //设置ScrimView，比如通知中心背景透明度等
+            ScrimController.applyAndDispatchState()
+                ScrimController.setOrAdaptCurrentAnimation(mScrimBehind)
+                    ScrimController.updateScrimColor()
+                        ScrimView.setTint()
+                        ScrimView.setViewAlpha()
         NotificationPanelViewController.setQSClippingBounds() // 设置QS的绘制区域，包括scrimView，QS 区域
             NotificationPanelViewController.applyQSClippingBounds()
                 NotificationPanelViewController.applyQSClippingImmediately()
@@ -238,4 +244,25 @@ NotificationPanelViewController.setQSClippingBounds()
             ScrimController.setScrimCornerRadius()
             KeyguardStatusBarView.setTopClipping()
             NotificationStackScrollLayoutController.setRoundedClippingBounds()
+```
+
+flingToHeight()：滚动到指定高度
+
+```
+NotificationPanelViewController.flingToHeight()
+    PanelViewController.flingToHeight()
+        PanelViewController.createHeightAnimator()
+            PanelViewController.createHeightAnimator.onAnimationUpdate
+                PanelViewController.setOverExpansionInternal()
+                PanelViewController.setExpandedHeightInternal() //设置QS展开的高度
+        PanelViewController.flingToHeight.onAnimationEnd()
+            PanelViewController.onFlingEnd()
+                PanelViewController.notifyBarPanelExpansionChanged()
+                    PhoneStatusBarView.panelExpansionChanged()
+                        PanelBar.panelExpansionChanged()
+                            PanelBar.go(STATE_OPEN)
+                            PhoneStatusBarView.onPanelFullyOpened() // 全部展开
+                            PanelBar.go(STATE_CLOSED)
+                            PhoneStatusBarView.onPanelCollapsed()
+                                post(mHideExpandedRunnable) // 隐藏面板，处理一些隐藏面板后的其他操作，比如解锁等
 ```

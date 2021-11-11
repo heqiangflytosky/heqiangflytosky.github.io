@@ -25,11 +25,14 @@ RUBBER_BAND_FACTOR_NORMAL:回弹系数
 RUBBER_BAND_FACTOR_AFTER_EXPAND
 RUBBER_BAND_FACTOR_ON_PANEL_EXPAND
 mScrolledToTopOnFirstDown：它表示Down事件是是否是个滑动事件，如果时在通知满屏时在显示QQS场景到通知中心全部显示之间切换，那么它就是false。
-mExpandedInThisMotion：是否是展开单个通知的事假
+mExpandedInThisMotion：是否是展开单个通知的事件
+mGoToFullShadeNeedsAnimation：是否以动画样式展开通知中心
+mNeedsAnimation:是否需要动画
 updateTopPadding():更新偏移量，来设置每条通知的位置。
 updateEmptyShadeView()
 updateFooterView()
 setDismissAllInProgress()
+goToFullShade() 切换到将通知全部展开的状态
 fling()：处理通知中心放手后的惯性滚动，注意：不是回弹效果。
 2.NotificationStackScrollLayoutController
 mSwipeHelper:处理滑动删除通知逻辑
@@ -326,7 +329,7 @@ NotificationStackScrollLayout.OnPreDrawListener.onPreDraw()
                     viewState.yTranslation = algorithmState.mCurrentYPosition;// 首先设置为累加的偏移量
                     StackScrollAlgorithm.setLocation()
                     viewState.yTranslation += ambientState.getStackY()// 再加上距通知中心距QS顶部的距离就是实际的偏移
-        NotificationStackScrollLayout.applyCurrentState()
+        NotificationStackScrollLayout.applyCurrentState() //将当前状态应用的视图上去
             ExpandableView.applyViewState()
                 ExpandableNotificationRow.NotificationViewState.applyToView()
                     ExpandableViewState.applyToView()
@@ -345,6 +348,12 @@ NotificationStackScrollLayout.OnPreDrawListener.onPreDraw()
                         expandableView.setTransformingInShelf()
                         expandableView.setInShelf()
                         expandableView.setHeadsUpIsVisible()
+        NotificationStackScrollLayout.startAnimationToState() //以动画的形式将视图更新到对应的状态
+            NotificationStackScrollLayout.generateAllAnimationEvents()
+                NotificationStackScrollLayout.generateAllAnimationEvents()//生成更新所有属性的动画，下面详细介绍
+            NotificationStackScrollLayout.setAnimationRunning(true) // 设置动画正在运行
+            NotificationStackScrollLayout.updateBackground() // 更新通知中心背景
+            NotificationStackScrollLayout.updateViewShadows()
 ```
 
 ```
@@ -426,6 +435,25 @@ NotificationStackScrollLayout.OnPreDrawListener.onPreDraw()
     }
 ```
 
+```
+// 生成各种动画
+    @ShadeViewRefactor(RefactorComponent.STATE_RESOLVER)
+    private void generateAllAnimationEvents() {
+        generateHeadsUpAnimationEvents();
+        generateChildRemovalEvents();
+        generateChildAdditionEvents();
+        generatePositionChangeEvents();
+        generateTopPaddingEvent();
+        generateActivateEvent();
+        generateDimmedEvent();
+        generateHideSensitiveEvent();
+        generateGoToFullShadeEvent();
+        generateViewResizeEvent();
+        generateGroupExpansionEvent();
+        generateAnimateEverythingEvent();
+    }
+```
+
 ## 通知栏滚动
 
 通知中心在显示QQS场景到满屏显示通知场景切换时。
@@ -451,3 +479,8 @@ NotificationStackScrollLayout.customOverScrollBy()
 ```
 
 上面的 state.scrollY 在滑动场景下时为0的，在滚动场景下为大于0的数值，那么就为 state.mCurrentYPosition 赋了一个负数的初始值，这样在绘制时所有的通知就会上移 scrollY 的距离。
+
+
+## AnimationEvent
+
+

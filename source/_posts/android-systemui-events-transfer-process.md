@@ -14,61 +14,16 @@ date: 2021-11-6 10:00:00
 
 ## 事件分发流程
 
-事件的处理主要分三部分：NotificationShadeWindowViewController，NotificationPanelViewController，NotificationStackScrollLayoutController
+事件的处理主要有下面几个类：
 
+PhoneStatusBarView 主要处理从通知栏下拉通知面板
+OverviewProxyService 主要操作桌面下拉通知面板
 NotificationShadeWindowViewController 主要操作锁屏切换下拉通知的操作。
 NotificationPanelViewController 主要处理QS Panel的整体操作，比如显示，隐藏和整体滑动等等。
 NotificationStackScrollLayoutController 主要处理通知中心的滑动，它处理事件时会通知 NotificationPanelViewController 更新 QS 高度。
 
 ### NotificationShadeWindowView
 
-在 NotificationShadeWindowView 中定义了一个 InteractionEventHandler，它的实现在 NotificationShadeWindowViewController，用于处理 NotificationShadeWindowView 对于事件的操作。
-
-NotificationShadeWindowView 通过 InteractionEventHandler.shouldInterceptTouchEvent 判断是否需要拦截，拦截事件的场景为锁屏界面滑动屏幕下拉（不是状态栏下拉），这时会拦截Move事件，那么接下来的Move事件和UP事件就交给它的onTouchEvent来处理。来处理面板的整体滑动操作。
-那么为什么从状态栏滑动时没有拦截呢？因为在 NotificationPanelViewController.onQsIntercept 处理Down事件时设置了 `mView.getParent().requestDisallowInterceptTouchEvent(true)`，后面的Move事件就不会走 NotificationShadeWindowView 的 onInterceptTouchEvent 了。来处理QS的滑动操作。
-详细流程后面介绍。
-
-```
-//如果 mInteractionEventHandler 处理了事件，那么就不会再继续分发
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        Boolean result = mInteractionEventHandler.handleDispatchTouchEvent(ev);
-
-        result = result != null ? result : super.dispatchTouchEvent(ev);
-
-        mInteractionEventHandler.dispatchTouchEventComplete();
-
-        return result;
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        boolean intercept = mInteractionEventHandler.shouldInterceptTouchEvent(ev);
-        if (!intercept) {
-            intercept = super.onInterceptTouchEvent(ev);
-        }
-        if (intercept) {
-            mInteractionEventHandler.didIntercept(ev);
-        }
-
-        return intercept;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        boolean handled = mInteractionEventHandler.handleTouchEvent(ev);
-
-        if (!handled) {
-            handled = super.onTouchEvent(ev);
-        }
-
-        if (!handled) {
-            mInteractionEventHandler.didNotHandleTouchEvent(ev);
-        }
-
-        return handled;
-    }
-```
 
 ### NotificationPanelView
 
@@ -822,6 +777,35 @@ OverviewProxyService.onStatusBarMotionEvent()
             NotificationPanelViewController.collapse()
             NotificationPanelViewController.fling()
             NotificationPanelViewController.onTrackingStopped()
+```
+
+## 状态栏下拉
+
+```
+StatusBarWindowView.dispatchTouchEvent()
+    PhoneStatusBarView.onTouchEvent()
+        PanelBar.onTouchEvent()
+            NotificationPanelView.dispatchTouchEvent()
+                NotificationPanelViewController.TouchHandler.onInterceptTouchEvent()
+                    PanelViewController.TouchHandler.onInterceptTouchEvent()
+                NotificationPanelViewController.TouchHandler.onTouch()
+                    PanelViewController.TouchHandler.onTouch()
+```
+
+## 锁屏上划通知栏解锁
+
+这个时候 NotificationShadeWindowView 没有拦截也没有处理事件，交给NotificationPanelView去处理面板整体操作
+
+```
+NotificationShadeWindowView.dispatchTouchEvent()
+    NotificationPanelViewController.TouchHandler.onTouch()
+        PanelViewController.TouchHandler.onTouch()
+            MotionEvent.ACTION_MOVE
+                PanelViewController.setExpandedHeightInternal() //设置QS展开的高度
+            MotionEvent.ACTION_UP
+                PanelViewController.fling()
+                    NotificationPanelViewController.flingToHeight() // 滚动到指定高度，后面文章详细介绍
+                
 ```
 
 ## 点击导航栏收起

@@ -12,7 +12,10 @@ date: 2021-11-5 10:00:00
 
 ```
 NotificationShadeWindowView //R.layout.super_notification_shade
-    ScrimView(R.id.scrim_notification) // 通知栏背景
+    ScrimView(R.id.scrim_behind)
+    ScrimView(R.id.scrim_notification) // 通知中心背景
+    FrameLayout(R.id.brightness_mirror_container) // 长按下拉通知顶部亮度条后，显示的调节亮度进度条
+        BrightnessSliderView
     NotificationPanelView(R.id.notification_panel) //R.layout.status_bar_expanded 下拉通知栏 
         NotificationsQuickSettingsContainer(R.id.notification_container_parent) //下拉通知栏快捷设置以及通知中心部分
             KeyguardStatusBarView  // 锁屏状态栏
