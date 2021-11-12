@@ -30,7 +30,6 @@ Clock.java 实现了 DarkReceiver，当收到 onDarkChanged() 回调的时候，
     @Override
     public void onDarkChanged(Rect area, float darkIntensity, int tint) {
         mNonAdaptedColor = DarkIconDispatcher.getTint(area, this, tint);
-        mNonAdaptedColor = 0xffff0000;
         if (!mUseWallpaperTextColor) {
             setTextColor(mNonAdaptedColor);
         }

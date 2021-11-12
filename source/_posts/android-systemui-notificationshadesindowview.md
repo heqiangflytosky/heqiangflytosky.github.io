@@ -1,5 +1,5 @@
 ---
-title: Android -- NotificationShadeWindowView
+title: SystemUI -- NotificationShadeWindowView
 categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
