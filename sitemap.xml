@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-notificationshadesindowview/</loc>
     
-    <lastmod>2021-11-11T08:46:01.732Z</lastmod>
+    <lastmod>2021-11-12T07:56:24.096Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2021/11/06/android-systemui-notificationshadesindowview/</loc>
+    <loc>http://yoursite.com/2021/06/01/android-statusbar-icon-color/</loc>
     
-    <lastmod>2021-11-11T08:46:01.732Z</lastmod>
+    <lastmod>2021-11-12T07:56:24.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
+    
+    <lastmod>2021-11-12T07:56:17.961Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
+    
+    <lastmod>2021-11-12T07:56:17.961Z</lastmod>
     
   </url>
   
@@ -26,20 +40,6 @@
     <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
     
     <lastmod>2021-11-11T08:46:01.731Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
-    
-    <lastmod>2021-11-11T08:46:01.730Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2021/06/01/android-statusbar-icon-color/</loc>
-    
-    <lastmod>2021-11-10T07:43:25.722Z</lastmod>
     
   </url>
   
@@ -1885,13 +1885,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1900,6 +1893,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1969,14 +1969,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     

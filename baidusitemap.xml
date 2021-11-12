@@ -4,8 +4,48 @@
 
     
   <url>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-notificationshadesindowview/</loc>
+    <lastmod>2021-11-12T07:56:24.096Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI -- NotificationShadeWindowView</title>
+        <pubTime>2021-11-06T04:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/06/01/android-statusbar-icon-color/</loc>
+    <lastmod>2021-11-12T07:56:24.095Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI -- 状态栏字体和图标颜色随背景而改变</title>
+        <pubTime>2021-06-01T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
-    <lastmod>2021-11-11T08:46:01.732Z</lastmod>
+    <lastmod>2021-11-12T07:56:17.961Z</lastmod>
     <data>
         <display>
         <title>SystemUI -- 下拉通知面板页面结构和重要的类</title>
@@ -24,12 +64,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2021/11/06/android-systemui-notificationshadesindowview/</loc>
-    <lastmod>2021-11-11T08:46:01.732Z</lastmod>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
+    <lastmod>2021-11-12T07:56:17.961Z</lastmod>
     <data>
         <display>
-        <title>Android -- NotificationShadeWindowView</title>
-        <pubTime>2021-11-06T04:00:00.000Z</pubTime>
+        <title>SystemUI -- 下拉面板事件分发流程</title>
+        <pubTime>2021-11-06T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -70,46 +110,6 @@
         <display>
         <title>SystemUI -- NotificationPanelView</title>
         <pubTime>2021-11-07T02:00:00.000Z</pubTime>
-        
-        <tag>SystemUI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
-    <lastmod>2021-11-11T08:46:01.730Z</lastmod>
-    <data>
-        <display>
-        <title>SystemUI -- 下拉面板事件分发流程</title>
-        <pubTime>2021-11-06T02:00:00.000Z</pubTime>
-        
-        <tag>SystemUI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2021/06/01/android-statusbar-icon-color/</loc>
-    <lastmod>2021-11-10T07:43:25.722Z</lastmod>
-    <data>
-        <display>
-        <title>SystemUI -- 状态栏字体和图标颜色随背景而改变</title>
-        <pubTime>2021-06-01T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -5481,28 +5481,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>开源项目- Lottie 简介</title>
-        <pubTime>2017-02-07T02:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>Lottie</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/08/07/open-source-j2v8-getting-started/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -5540,6 +5518,28 @@
            
              
               <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>开源项目- Lottie 简介</title>
+        <pubTime>2017-02-07T02:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>Lottie</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
           
         </display>
     </data>
@@ -5735,12 +5735,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5755,12 +5755,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
