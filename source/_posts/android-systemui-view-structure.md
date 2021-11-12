@@ -81,8 +81,12 @@ QSCustomer
 
 collapseShade()
 collapsePanel()
-makeExpandedInvisible()
-makeExpandedVisible()
+makeExpandedInvisible()  //设置下拉面板不可见
+makeExpandedVisible()    //设置下拉面板可见
+
+2.PhoneStatusBarView
+
+panelExpansionChanged()
 
 ### QS
 

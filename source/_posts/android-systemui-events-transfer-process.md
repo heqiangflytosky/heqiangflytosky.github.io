@@ -22,6 +22,44 @@ NotificationShadeWindowViewController 主要操作锁屏切换下拉通知的操
 NotificationPanelViewController 主要处理QS Panel的整体操作，比如显示，隐藏和整体滑动等等。
 NotificationStackScrollLayoutController 主要处理通知中心的滑动，它处理事件时会通知 NotificationPanelViewController 更新 QS 高度。
 
+### PhoneStatusBarView
+
+从通知栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。
+
+```
+//PanelBar.java
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Allow subclasses to implement enable/disable semantics
+        if (!panelEnabled()) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                Log.v(TAG, String.format("onTouch: all panels disabled, ignoring touch at (%d,%d)",
+                        (int) event.getX(), (int) event.getY()));
+            }
+            return false;
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            final PanelViewController panel = mPanel;
+            if (panel == null) {
+                return true;
+            }
+            boolean enabled = panel.isEnabled();
+            // 禁止下拉时，不再分发事件
+            if (!enabled) {
+                // panel is disabled, so we'll eat the gesture
+                return true;
+            }
+        }
+        // 给 NotificationPanelView 来处理事件
+        return mPanel == null || mPanel.getView().dispatchTouchEvent(event);
+    }
+```
+
+### OverviewProxyService
+
+看下面桌面下拉介绍
+
 ### NotificationShadeWindowView
 
 
@@ -67,7 +105,9 @@ NotificationPanelView 的父类 PanelView 分别设置了事件拦截器和OnTou
                 }
                 return super.onInterceptTouchEvent(event);
             }
-            
+```
+
+```            
             public boolean onTouch(View v, MotionEvent event) {
                 if (mBlockTouches || (mQsFullyExpanded && mQs != null
                         && mQs.disallowPanelTouches())) {
@@ -769,17 +809,44 @@ StatusBar.getStatusBarWindowTouchListener
 
 ## 桌面下拉
 
+首先设置shade view可见，然后接收事件开始处理动画。
+
 ```
 OverviewProxyService.onStatusBarMotionEvent()
-    PanelViewController.startExpandLatencyTracking()
-    StatusBar.onInputFocusTransfer()
-        NotificationPanelViewController.stopWaitingForOpenPanelGesture()
-            NotificationPanelViewController.collapse()
-            NotificationPanelViewController.fling()
-            NotificationPanelViewController.onTrackingStopped()
+    ACTION_DOWN
+        PanelViewController.startExpandLatencyTracking()
+        StatusBar.onInputFocusTransfer()
+            NotificationPanelViewController.startWaitingForOpenPanelGesture()
+                NotificationPanelViewController.onTrackingStarted()
+                    PanelViewController.onTrackingStarted()
+                        mTracking = true
+                        PanelViewController.notifyBarPanelExpansionChanged()
+                            PhoneStatusBarView.panelExpansionChanged()
+                                PanelBar.panelExpansionChanged()
+                                    PanelBar.updateVisibility()
+                                        NotificationPanelView.setVisibility()//设置 NotificationPanelView 可见
+                                    PhoneStatusBarView.onPanelPeeked()
+                                        StatusBar.makeExpandedVisible() //设置Shade可见，然后可以接收事件
+                                            NotificationShadeWindowControllerImpl.setPanelVisible()
+                                                NotificationShadeWindowControllerImpl.apply()
+                                                    NotificationShadeWindowControllerImpl.applyVisibility()
+                                                        NotificationShadeView.setVisibility() // 设置NotificationShadeView可见
+                NotificationPanelViewController.updatePanelExpanded()
+    ACTION_UP
+        StatusBar.onInputFocusTransfer()
+            NotificationPanelViewController.stopWaitingForOpenPanelGesture()
+                NotificationPanelViewController.collapse()
+                NotificationPanelViewController.fling()
+                NotificationPanelViewController.onTrackingStopped()
+                    PanelViewController.onTrackingStopped()
+                        mTracking = false
 ```
 
+接下来就是 NotificationPanelViewController 接收Down和Move事件来处理通知面板的整体滑动操作。具体看上面介绍。
+
 ## 状态栏下拉
+
+从通知栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。
 
 ```
 StatusBarWindowView.dispatchTouchEvent()
