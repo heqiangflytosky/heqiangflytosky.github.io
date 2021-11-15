@@ -26,14 +26,14 @@ NotificationShadeWindowView //R.layout.super_notification_shade
                         LinearLayout(R.id.quick_status_bar_date_privacy)
                         RelativeLayout
                             LinearLayout(R.id.quick_qs_status_icons)
-                            QuickQSPanel // 顶部常显示部分
+                            QuickQSPanel // QQS:顶部常显示部分
                                 QuickQSPanel.QQSSideLabelTileLayout
                                     QSTileViewImpl
                                     QSTileViewImpl
                                     QSTileViewImpl
                                     QSTileViewImpl
                     NonInterceptingScrollView(R.id.expanded_qs_scroll_view)
-                        QSPanel(R.id.quick_settings_panel) //顶部常显示按钮和下部的折叠部分快捷开关按钮
+                        QSPanel(R.id.quick_settings_panel) //QS:顶部常显示按钮和下部的折叠部分快捷开关按钮
                             BrightnessSliderView  // 顶部亮度条
                                 ToggleSeekBar
                             PagedTileLayout

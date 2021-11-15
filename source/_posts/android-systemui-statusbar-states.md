@@ -15,7 +15,7 @@ date: 2021-10-20 10:00:00
 
 StatusBarState 类定义了状态栏的几中状态：
 
- - SHADE：解锁进入桌面之后的状态。
+ - SHADE：解锁之后的状态。
  - KEYGUARD：位于锁屏时的状态。
  - SHADE_LOCKED：在锁屏上，下拉锁屏通知，将面板和通知栏下拉出来，此时会处于SHADE_LOCKED状态。
 但是如果手指下滑状态栏将面板和通知栏下拉出来 ，仍然属于KEYGUARD状态。
@@ -27,7 +27,7 @@ StatusBarStateController 如果状态有更新，向 StateListener 发送更新�
  - getState()：当前通知栏处的状态。
  - isDozing()：设备处于AOD或者睡眠状态。
  - isExpanded()：面板是否展开。
- - isPulsing()：
+ - isPulsing()：收到通知时把设备从睡眠状态唤醒
  - addCallback()：添加StateListener
 
 StatusBarStateControllerImpl：StatusBarStateController 的实现类，跟踪和报告 StatusBarState 的变化。
