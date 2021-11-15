@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2021/10/20/android-systemui-statusbar-states/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 SystemUI 的几种状态">
-<meta property="og:updated_time" content="2021-11-09T06:44:42.621Z">
+<meta property="og:updated_time" content="2021-11-15T08:46:05.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemUI -- SystemUI 的几种状态">
 <meta name="twitter:description" content="介绍 SystemUI 的几种状态">
@@ -403,7 +403,7 @@
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文来介绍 SystemUI 的几种状态，基于 Android S。</p>
 <h2 id="状态定义"><a href="#状态定义" class="headerlink" title="状态定义"></a>状态定义</h2><p>StatusBarState 类定义了状态栏的几中状态：</p>
 <ul>
-<li>SHADE：解锁进入桌面之后的状态。</li>
+<li>SHADE：解锁之后的状态。</li>
 <li>KEYGUARD：位于锁屏时的状态。</li>
 <li>SHADE_LOCKED：在锁屏上，下拉锁屏通知，将面板和通知栏下拉出来，此时会处于SHADE_LOCKED状态。<br>但是如果手指下滑状态栏将面板和通知栏下拉出来 ，仍然属于KEYGUARD状态。</li>
 <li>FULLSCREEN_USER_SWITCHER：用户选择界面，在手机上时通过 <code>config_enableFullscreenUserSwitcher</code> 来取消了这种状态的，比如在车机上，就有这种状态。可以通过 <code>UserSwitcherController.useFullscreenUserSwitcher()</code> 来获取是否使能这种状态。</li>
@@ -413,13 +413,14 @@
 <li>getState()：当前通知栏处的状态。</li>
 <li>isDozing()：设备处于AOD或者睡眠状态。</li>
 <li>isExpanded()：面板是否展开。</li>
-<li>isPulsing()：</li>
+<li>isPulsing()：收到通知时把设备从睡眠状态唤醒</li>
 <li>addCallback()：添加StateListener</li>
 </ul>
 <p>StatusBarStateControllerImpl：StatusBarStateController 的实现类，跟踪和报告 StatusBarState 的变化。</p>
 <h2 id="状态设置"><a href="#状态设置" class="headerlink" title="状态设置"></a>状态设置</h2><p>StatusBarStateControllerImpl.setState()</p>
 <h2 id="状态判断"><a href="#状态判断" class="headerlink" title="状态判断"></a>状态判断</h2><p>StatusBarStateControllerImpl.getState()</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Dependency.get(StatusBarStateController.class).getState()</div></pre></td></tr></table></figure>
+
       
     </div>
 

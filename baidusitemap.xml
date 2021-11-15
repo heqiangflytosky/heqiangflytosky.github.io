@@ -4,6 +4,86 @@
 
     
   <url>
+    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
+    <lastmod>2021-11-15T08:46:05.887Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI -- SystemUI 的几种状态</title>
+        <pubTime>2021-10-20T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
+    <lastmod>2021-11-15T08:46:05.887Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI -- 下拉通知面板页面结构和重要的类</title>
+        <pubTime>2021-11-05T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/10/30/android-systemui-qsanimator/</loc>
+    <lastmod>2021-11-15T08:46:05.886Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI --  QSTile 动画实现之 QSAnimator</title>
+        <pubTime>2021-10-30T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
+    <lastmod>2021-11-15T08:46:05.883Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI -- 下拉面板事件分发流程</title>
+        <pubTime>2021-11-06T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2021/11/06/android-systemui-notificationshadesindowview/</loc>
     <lastmod>2021-11-12T07:56:24.096Z</lastmod>
     <data>
@@ -30,46 +110,6 @@
         <display>
         <title>SystemUI -- 状态栏字体和图标颜色随背景而改变</title>
         <pubTime>2021-06-01T02:00:00.000Z</pubTime>
-        
-        <tag>SystemUI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
-    <lastmod>2021-11-12T07:56:17.961Z</lastmod>
-    <data>
-        <display>
-        <title>SystemUI -- 下拉通知面板页面结构和重要的类</title>
-        <pubTime>2021-11-05T02:00:00.000Z</pubTime>
-        
-        <tag>SystemUI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
-    <lastmod>2021-11-12T07:56:17.961Z</lastmod>
-    <data>
-        <display>
-        <title>SystemUI -- 下拉面板事件分发流程</title>
-        <pubTime>2021-11-06T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -130,46 +170,6 @@
         <display>
         <title>Android -- 状态栏导航栏相关设置</title>
         <pubTime>2021-05-01T02:00:00.000Z</pubTime>
-        
-        <tag>SystemUI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
-    <lastmod>2021-11-09T06:44:42.621Z</lastmod>
-    <data>
-        <display>
-        <title>SystemUI -- SystemUI 的几种状态</title>
-        <pubTime>2021-10-20T02:00:00.000Z</pubTime>
-        
-        <tag>SystemUI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2021/10/30/android-systemui-qsanimator/</loc>
-    <lastmod>2021-11-09T06:44:27.628Z</lastmod>
-    <data>
-        <display>
-        <title>SystemUI --  QSTile 动画实现之 QSAnimator</title>
-        <pubTime>2021-10-30T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -5096,12 +5096,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -5116,12 +5116,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -5503,28 +5503,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
-        
-        <tag>V8</tag>
-         
-        <tag>J2V8</tag>
-         
-         
-           
-             
-              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -5540,6 +5518,28 @@
            
              
               <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        
+        <tag>V8</tag>
+         
+        <tag>J2V8</tag>
+         
+         
+           
+             
+              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
           
         </display>
     </data>
@@ -5735,12 +5735,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native创建原生模块</title>
-        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5755,12 +5755,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native创建原生模块</title>
+        <pubTime>2017-01-14T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
