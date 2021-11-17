@@ -20,7 +20,7 @@ PhoneStatusBarView 主要处理从通知栏下拉通知面板
 OverviewProxyService 主要操作桌面下拉通知面板
 NotificationShadeWindowViewController 主要操作锁屏切换下拉通知的操作。
 NotificationPanelViewController 主要处理QS Panel的整体操作，比如显示，隐藏和整体滑动等等。
-NotificationStackScrollLayoutController 主要处理通知中心的滑动，它处理事件时会通知 NotificationPanelViewController 更新 QS 高度。
+NotificationStackScrollLayoutController 主要处理通知中心的滑动，它处理事件时会通知 NotificationPanelViewController 更新 QS 的可见高度。
 
 ### PhoneStatusBarView
 
@@ -591,6 +591,8 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 
 2->3 切换同样时由 NotificationStackScrollLayout 来处理 `MotionEvent.ACTION_MOVE` 和 `MotionEvent.ACTION_UP` 事件。
 
+3->2 切换，在QS上做上划动作，NotificationStackScrollLayout 不消费DOWN事件，事件再经过 NotificationPanelView 的 onTouch() 时被 NotificationPanelViewController.handleQsTouch()->onQsTouch() 处理，后面的 MOVE 和 UP事件也由 onQsTouch 处理。
+
 ## 滑动QS
 1.设置QS显示高度
 2.更新QQS的可见性
@@ -601,7 +603,7 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 ```
 PanelView.onTouchEvent()
     NotificationPanelViewController.TouchHandler.onTouch()
-        NotificationPanelViewController.handleQsTouch() // QS处理
+        NotificationPanelViewController.handleQsTouch() // QS处理，比如QS上面上划呼出通知中心
             NotificationPanelViewController.onQsExpansionStarted()
                 NotificationPanelViewController.setQsExpansion() // 设置QS显示高度，更新QQS的可见性, 设置QS的绘制区域,更新通知中心的偏移，后面详细介绍
                     NotificationPanelViewController.updateQsExpansion()
@@ -628,7 +630,7 @@ PanelView.onTouchEvent()
             MotionEvent.ACTION_UP:
             MotionEvent.ACTION_CANCEL:
                 PanelViewController.endMotionEvent()
-                    PanelViewController.flingExpands() //判断是否expand，决定qspanel时小时还是展开。
+                    PanelViewController.flingExpands() //判断是否expand，决定qspanel是消失还是展开。
                     PanelViewController.fling() // 开始 fling 动画
                         NotificationPanelViewController.flingToHeight()
                             PanelViewController.flingToHeight()

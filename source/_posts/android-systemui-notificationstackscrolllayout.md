@@ -18,7 +18,9 @@ NotificationStackScrollLayout 继承自 ViewGroup，它提供了一个动态添�
 1.NotificationStackScrollLayout
 mQsExpansionFraction：通知栏展开比例，如果是0表示全部展开，这时只显示QQS，1表示通知中心全部隐藏。
 mExpandHelper：处理通知的展开和收缩
-mTopPadding：通知中心距离顶部的偏移量
+mTopPadding：通知中心的最上面一条通知通知距离顶部的偏移量，显示QQS时就是QQS的高度，不显示QQS时为通知中心距离顶部的实时距离
+mIntrinsicContentHeight：通知中心各个通知累加的高度
+mContentHeight：mIntrinsicContentHeight 加上 mTopPadding 和 mBottomMargin 的高度。
 mOverScrolledTopPixels
 mOverScrolledBottomPixels
 RUBBER_BAND_FACTOR_NORMAL:回弹系数
@@ -37,8 +39,8 @@ fling()：处理通知中心放手后的惯性滚动，注意：不是回弹效�
 2.NotificationStackScrollLayoutController
 mSwipeHelper:处理滑动删除通知逻辑
 3.AmbientState: 为 StackScrollAlgorithm 保存一些全局状态。
-mStackY：通知中心顶部距屏幕顶部的距离。
-mTopPadding：通知中心距离顶部的偏移量
+mStackY：通知中心的最上面一条通知通知距离顶部的偏移量
+mTopPadding：NotificationStackScrollLayout.mTopPadding
 mScrollY:通知栏的滚动位置，通知中心由显示QQS到满屏显示通知场景过渡时来决定通知栏的位置
 mOverScrollTopAmount：通知中心顶部回弹量，向下滑动时设置
 mOverScrollBottomAmount：通知中心底部回弹量，通知中心满屏时向上滚动通知栏时设置
@@ -284,6 +286,8 @@ NotificationStackScrollLayout.updateTopPadding()
             AmbientState.setStackY() // 设置Y坐标，在绘制时计算子view的位置
             AmbientState.setStackEndHeight()
             AmbientState.setStackHeight()
+        NotificationStackScrollLayout.updateAlgorithmHeightAndPadding()
+            AmbientState.setTopPadding()
         NotificationStackScrollLayout.setStackTranslation()
             AmbientState.setStackTranslation()
 ```
