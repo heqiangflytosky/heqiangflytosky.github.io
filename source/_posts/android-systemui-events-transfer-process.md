@@ -30,7 +30,6 @@ NotificationStackScrollLayoutController 主要处理通知中心的滑动，它�
 //PanelBar.java
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Allow subclasses to implement enable/disable semantics
         if (!panelEnabled()) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 Log.v(TAG, String.format("onTouch: all panels disabled, ignoring touch at (%d,%d)",
@@ -45,7 +44,6 @@ NotificationStackScrollLayoutController 主要处理通知中心的滑动，它�
                 return true;
             }
             boolean enabled = panel.isEnabled();
-            // 禁止下拉时，就消费调down事件，后面的事件也不再往下分发事件。
             if (!enabled) {
                 // panel is disabled, so we'll eat the gesture
                 return true;
@@ -184,6 +182,7 @@ NotificationShadeWindowView.dispatchTouchEvent()
                 if (!mHeadsUpTouchHelper.isTrackingHeadsUp() && handleQsTouch(event)) {
                     return true;
                 }
+                // 如果是Down事件，而且在下来面板完全折叠的情况下，会返回true，表示消费掉down事件。那么后面的Move和UP事件也会在这里处理
                 if (event.getActionMasked() == MotionEvent.ACTION_DOWN && isFullyCollapsed()) {
                     mMetricsLogger.count(COUNTER_PANEL_OPEN, 1);
                     updateHorizontalPanelPosition(event.getX());
@@ -746,8 +745,13 @@ StatusBarWindowView.dispatchTouchEvent()
                 NotificationPanelViewController.TouchHandler.onInterceptTouchEvent()
                     PanelViewController.TouchHandler.onInterceptTouchEvent()
                 NotificationPanelViewController.TouchHandler.onTouch()
+                    Down事件时返回true
                     PanelViewController.TouchHandler.onTouch()
+                        处理Move和UP事件，执行整体下来操作。
+                        
 ```
+
+在这种情况下，NotificationPanelViewController.TouchHandler.onTouch()在Down事件时返回true，消费该事件，那么后面的Move和UP事件也会在这里处理。
 
 ## 锁屏下拉通知栏
 

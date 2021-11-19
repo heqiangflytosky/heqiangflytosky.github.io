@@ -9,7 +9,7 @@ date: 2021-11-6 12:00:00
 
 ## 概述
 
-NotificationShadeWindowView 是承载锁屏和下拉通知的界面，NotificationShadeWindowViewController 作为 NotificationShadeWindowView 控制器主要操作锁屏切换下拉通知(锁屏下滑)的操作。
+NotificationShadeWindowView 是承载锁屏和下拉通知的界面，NotificationShadeWindowViewController 作为 NotificationShadeWindowView 控制器主要是作为事件的分发以及执行锁屏切换下拉通知(锁屏下滑)的操作。
 事件处理大概逻辑在前面文章中已经有了介绍，本文主要介绍一些方法的实现细节。
 本文基于原生 Android S 代码。
 
