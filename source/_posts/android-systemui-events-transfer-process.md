@@ -592,7 +592,92 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 
 3->2 切换，在QS上做上划动作，NotificationStackScrollLayout 不消费DOWN事件，事件再经过 NotificationPanelView 的 onTouch() 时被 NotificationPanelViewController.handleQsTouch()->onQsTouch() 处理，后面的 MOVE 和 UP事件也由 onQsTouch 处理。
 
+
+## 状态栏下拉
+
+从通知栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。此时的事件不经过NotificationShadeWindowView分发。
+在这种情况下，NotificationPanelViewController.TouchHandler.onTouch()在Down事件时返回true，消费该事件，那么后面的Move和UP事件也会在这里或者父类的onTouch()中处理。
+
+```
+StatusBarWindowView.dispatchTouchEvent()
+    PhoneStatusBarView.onTouchEvent()
+        PanelBar.onTouchEvent()
+            NotificationPanelView.dispatchTouchEvent()
+                NotificationPanelViewController.TouchHandler.onInterceptTouchEvent()
+                    PanelViewController.TouchHandler.onInterceptTouchEvent()
+                        ACTION_MOVE
+                            return true 因为此时View并不可见。
+                NotificationPanelViewController.TouchHandler.onTouch()
+                    ACTION_DOWN
+                    Down事件时返回true
+                    PanelViewController.TouchHandler.onTouch()
+                        处理Move和UP事件，执行整体下来操作。
+                        ACTION_MOVE
+                            PanelViewController.setExpandedHeightInternal() //设置QS展开的高度，具体看后面文章介绍
+                        ACTION_UP
+                            PanelViewController.endMotionEvent()
+                                PanelViewController.fling()
+                                   NotificationPanelViewController.flingToHeight()//下拉面板整体fling到指定位置，具体看后面文章介绍
+                        
+```
+
+```
+// PanelViewController.java
+   public class TouchHandler implements View.OnTouchListener {
+        public boolean onInterceptTouchEvent(MotionEvent event) {
+            ......
+            return (mView.getVisibility() != View.VISIBLE);
+        }
+```
+
+## 桌面下拉
+
+桌面下拉事件处理逻辑分为两种情况，一种是 OverviewProxyService 自己处理，另外一种是 OverviewProxyService + NotificationPanelViewController 来处理。
+首先 OverviewProxyService 接收DOWN事件后，设置shade view可见。
+第一种情况是 OverviewProxyService 自己处理，这种情况下可能是在手势很快的情况下，事件没有分发到 NotificationPanelView，那么就OverviewProxyService自己处理。。
+
+```
+OverviewProxyService.onStatusBarMotionEvent()
+    ACTION_DOWN
+        PanelViewController.startExpandLatencyTracking()
+        StatusBar.onInputFocusTransfer()
+            NotificationPanelViewController.startWaitingForOpenPanelGesture()
+                NotificationPanelViewController.onTrackingStarted()
+                    PanelViewController.onTrackingStarted()
+                        mTracking = true
+                        PanelViewController.notifyExpandingStarted()
+                            NotificationPanelViewController.onExpandingStarted()
+                                NotificationStackScrollLayoutController.onExpansionStarted()
+                                mIsExpanding = true
+                                NotificationPanelViewController.onQsExpansionStarted()
+                        PanelViewController.notifyBarPanelExpansionChanged()
+                            PhoneStatusBarView.panelExpansionChanged()
+                                PanelBar.panelExpansionChanged()
+                                    PanelBar.updateVisibility()
+                                        NotificationPanelView.setVisibility()//设置 NotificationPanelView 可见
+                                    PhoneStatusBarView.onPanelPeeked()
+                                        StatusBar.makeExpandedVisible() //设置Shade可见，然后可以接收事件
+                                            NotificationShadeWindowControllerImpl.setPanelVisible()
+                                                NotificationShadeWindowControllerImpl.apply()
+                                                    NotificationShadeWindowControllerImpl.applyVisibility()
+                                                        NotificationShadeView.setVisibility() // 设置NotificationShadeView可见
+                NotificationPanelViewController.updatePanelExpanded()
+    ACTION_UP
+    ACTION_CANCEL
+        StatusBar.onInputFocusTransfer()
+            NotificationPanelViewController.stopWaitingForOpenPanelGesture()
+                 对 mExpectingSynthesizedDown 判断是否执行fling，如果PanelViewController处理down事件，这里收到cancel事件时就不会处理fling，否则在up事件时处理fling
+                 NotificationPanelViewController.fling() // 这里也可以处理fling动画
+```
+
+第二种情况是OverviewProxyService + NotificationPanelViewController 来处理。因为已经设置了shade view可见，然后它就可以接收事件开始处理动画了。此时的Down，Move，Up事件都由 shade view 处理了，那么它会OverviewProxyService 收到一个CANCEL事件。
+接下来就是 NotificationPanelViewController 接收Down和Move事件来处理通知面板的整体滑动操作。和状态栏下拉处理比较类似，具体看上面介绍。
+如果 OverviewProxyService 没有收到 CANCEL事件，表示 NotificationPanelViewController 没有来得及去处理事件，那么就在OverviewProxyService.ACTION_UP中处理下拉面板的状态，这就是第一种情况。
+因此，桌面下拉对 ACTION_UP 事件的处理也就会分为两种情况，一种是PanelViewController来处理，这种情况下会在 shouldGestureWaitForTouchSlop() 中设置 mExpectingSynthesizedDown = false，那么OverviewProxyService收到cancel事件时就不会处理fling。
+另外一种情况是 OverviewProxyService 自己处理ACTION_UP事件。
+
 ## 滑动QS
+
 1.设置QS显示高度
 2.更新QQS的可见性
 3.设置QS的绘制区域
@@ -695,63 +780,6 @@ NotificationShadeWindowView.dispatchTouchEvent()
                     NotificationStackScrollLayout.animateScroll() // 通知中心列表中通知的滚动
 ```
 
-## 桌面下拉
-
-首先接收DOWN事件后，设置shade view可见，然后就可以接收事件开始处理动画了。
-OverviewProxyService 处理完 ACTION_DOWN 后，剩下的事件就交给 shade view 处理了，那么它会收到一个CANCEL事件。
-
-```
-OverviewProxyService.onStatusBarMotionEvent()
-    ACTION_DOWN
-        PanelViewController.startExpandLatencyTracking()
-        StatusBar.onInputFocusTransfer()
-            NotificationPanelViewController.startWaitingForOpenPanelGesture()
-                NotificationPanelViewController.onTrackingStarted()
-                    PanelViewController.onTrackingStarted()
-                        mTracking = true
-                        PanelViewController.notifyExpandingStarted()
-                            NotificationPanelViewController.onExpandingStarted()
-                                NotificationStackScrollLayoutController.onExpansionStarted()
-                                mIsExpanding = true
-                                NotificationPanelViewController.onQsExpansionStarted()
-                        PanelViewController.notifyBarPanelExpansionChanged()
-                            PhoneStatusBarView.panelExpansionChanged()
-                                PanelBar.panelExpansionChanged()
-                                    PanelBar.updateVisibility()
-                                        NotificationPanelView.setVisibility()//设置 NotificationPanelView 可见
-                                    PhoneStatusBarView.onPanelPeeked()
-                                        StatusBar.makeExpandedVisible() //设置Shade可见，然后可以接收事件
-                                            NotificationShadeWindowControllerImpl.setPanelVisible()
-                                                NotificationShadeWindowControllerImpl.apply()
-                                                    NotificationShadeWindowControllerImpl.applyVisibility()
-                                                        NotificationShadeView.setVisibility() // 设置NotificationShadeView可见
-                NotificationPanelViewController.updatePanelExpanded()
-    ACTION_CANCEL
-        StatusBar.onInputFocusTransfer()
-            NotificationPanelViewController.stopWaitingForOpenPanelGesture()
-```
-
-接下来就是 NotificationPanelViewController 接收Down和Move事件来处理通知面板的整体滑动操作。具体看上面介绍。
-
-## 状态栏下拉
-
-从通知栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。此时的事件不经过NotificationShadeWindowView分发。
-
-```
-StatusBarWindowView.dispatchTouchEvent()
-    PhoneStatusBarView.onTouchEvent()
-        PanelBar.onTouchEvent()
-            NotificationPanelView.dispatchTouchEvent()
-                NotificationPanelViewController.TouchHandler.onInterceptTouchEvent()
-                    PanelViewController.TouchHandler.onInterceptTouchEvent()
-                NotificationPanelViewController.TouchHandler.onTouch()
-                    Down事件时返回true
-                    PanelViewController.TouchHandler.onTouch()
-                        处理Move和UP事件，执行整体下来操作。
-                        
-```
-
-在这种情况下，NotificationPanelViewController.TouchHandler.onTouch()在Down事件时返回true，消费该事件，那么后面的Move和UP事件也会在这里处理。
 
 ## 锁屏下拉通知栏
 

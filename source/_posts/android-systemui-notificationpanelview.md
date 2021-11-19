@@ -60,6 +60,7 @@ collapse():收起
 positionClockAndNotifications()：计算锁屏上时钟和通知中心的位置
 flingSettings()：做通知中心滑动松手后的动画，开始QS的展开或者收起动画，下面介绍。
 fling():释放手指后的动画。
+flingExpands():计算fling之后最终的状态，看是否时展开或者收起。下面介绍。
 flingToHeight()：下拉面板整体滚动到指定高度，下面介绍。
 
 ## 方法详解
@@ -291,3 +292,73 @@ NotificationPanelViewController.flingToHeight()
                             PhoneStatusBarView.onPanelCollapsed()
                                 post(mHideExpandedRunnable) // 隐藏面板，处理一些隐藏面板后的其他操作，比如解锁等
 ```
+
+### flingExpands()
+
+计算下拉面板fling之后最终的状态，看是否是展开或者收起。
+
+```
+//NotificationPanelViewController.java
+
+    protected boolean flingExpands(float vel, float vectorVel, float x, float y) {
+        // 去 PanelViewController 做判断
+        boolean expands = super.flingExpands(vel, vectorVel, x, y);
+
+        // 如果正在做QS的扩展动画，就要保持最终状态时扩展
+        if (mQsExpansionAnimator != null) {
+            expands = true;
+        }
+        return expands;
+    }
+```
+
+```
+// PanelViewController.java
+    protected boolean flingExpands(float vel, float vectorVel, float x, float y) {
+        if (mFalsingManager.isUnlockingDisabled()) {
+            return true;
+        }
+
+        @Classifier.InteractionType int interactionType = vel > 0
+                ? QUICK_SETTINGS : (
+                        mKeyguardStateController.canDismissLockScreen() ? UNLOCK : BOUNCER_UNLOCK);
+
+        if (isFalseTouch(x, y, interactionType)) {
+            return true;
+        }
+        //如果矢量速度来判断，如果小于某个定值，就再调用 shouldExpandWhenNotFlinging()
+        if (Math.abs(vectorVel) < mFlingAnimationUtils.getMinVelocityPxPerSecond()) {
+            return shouldExpandWhenNotFlinging();
+        } else {
+            // 此时判断Y方向滑动速度的方向，下划就是展开，上划收起
+            return vel > 0;
+        }
+    }
+
+```
+
+```
+//NotificationPanelViewController.java
+    @Override
+    protected boolean shouldExpandWhenNotFlinging() {
+        if (super.shouldExpandWhenNotFlinging()) {
+            return true;
+        }
+        if (mAllowExpandForSmallExpansion) {
+            // When we get a touch that came over from launcher, the velocity isn't always correct
+            // Let's err on expanding if the gesture has been reasonably slow
+            long timeSinceDown = SystemClock.uptimeMillis() - mDownTime;
+            return timeSinceDown <= MAX_TIME_TO_OPEN_WHEN_FLINGING_FROM_LAUNCHER;
+        }
+        return false;
+    }
+```
+
+```
+// PanelViewController.java
+    protected boolean shouldExpandWhenNotFlinging() {
+        return getExpandedFraction() > 0.5f;
+    }
+```
+
+
