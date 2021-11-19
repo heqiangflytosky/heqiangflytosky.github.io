@@ -9,7 +9,7 @@ date: 2021-6-1 10:00:00
 
 ## 概述
 
-App 端设置SystemUIVisibility的方式有两种。一是在任意一个已经显示在窗口上的控件调用View.setSystemUiVisibility(),二是直接在窗口的 LayoutParams.systemUiVisibility 上进行设置并通过WindowManager.updateViewLayout()方法使其生效。
+App 端设置SystemUIVisibility的方式几种。一是在任意一个已经显示在窗口上的控件调用View.setSystemUiVisibility(),二是直接在窗口的 LayoutParams.systemUiVisibility 上进行设置并通过WindowManager.updateViewLayout()方法使其生效，还有就是通过 `getWindow().getDecorView().getWindowInsetsController().setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)` 的方式。
 
 ## SystemUI 实现图标变色的方法
 
