@@ -1,9 +1,9 @@
 ---
-title: SystemUI -- 状态栏字体和图标颜色随背景而改变
+title: SystemUI -- 状态栏字体和图标变色原理
 categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
-description: 介绍状态栏字体和图标颜色随背景而改变的原理
+description: 介绍状态栏字体和图标变色原理
 date: 2021-6-1 10:00:00
 ---
 
