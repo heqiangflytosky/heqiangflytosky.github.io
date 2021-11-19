@@ -7,6 +7,10 @@ description: 介绍状态栏字体和图标颜色随背景而改变的原理
 date: 2021-6-1 10:00:00
 ---
 
+## 概述
+
+App 端设置SystemUIVisibility的方式有两种。一是在任意一个已经显示在窗口上的控件调用View.setSystemUiVisibility(),二是直接在窗口的 LayoutParams.systemUiVisibility 上进行设置并通过WindowManager.updateViewLayout()方法使其生效。
+
 ## SystemUI 实现图标变色的方法
 
 代码基于 Android R。
@@ -51,9 +55,221 @@ Clock.java 实现了 DarkReceiver，当收到 onDarkChanged() 回调的时候，
 
 那么什么时候会回调呢？下面我们就来介绍一下这个流程。
 
+## App
+
+首先要有 App 端设置当前应用的 StatusBar 类型，比如：View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 或者 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS。
+
+先看通过 View.setSystemUiVisibility() 来设置：
+
+```
+// View.java
+    @Deprecated
+    public void setSystemUiVisibility(int visibility) {
+        if (visibility != mSystemUiVisibility) {
+            // 更新View自己的属性值
+            mSystemUiVisibility = visibility;
+            if (mParent != null && mAttachInfo != null && !mAttachInfo.mRecomputeGlobalAttributes) {
+                //通知父控件这一变化
+                mParent.recomputeViewAttributes(this);
+            }
+        }
+    }
+```
+
+然后在addWindow时会调用 ViewRootImpl.collectViewAttributes() 方法收集控件树中每个 View 所保存的 SystemUIVisibility。 如下:
+
+```
+ActivityThread.handleResumeActivity()
+    WindowManagerImpl.addView()
+        WindowManagerGlobal.addView()
+            ViewRootImpl.setView()
+                ViewRootImpl.collectViewAttributes()
+                    ViewGroup.dispatchCollectViewAttributes
+                        View.dispatchCollectViewAttributes
+                            View.performCollectViewAttributes
+                ViewRootImpl.adjustLayoutParamsForCompatibility()
+                mWindowSession.addToDisplayAsUser
+```
+
+```
+    private boolean collectViewAttributes() {
+        if (mAttachInfo.mRecomputeGlobalAttributes) {
+            //Log.i(mTag, "Computing view hierarchy attributes!");
+            mAttachInfo.mRecomputeGlobalAttributes = false;
+            boolean oldScreenOn = mAttachInfo.mKeepScreenOn;
+            mAttachInfo.mKeepScreenOn = false;
+            //清空所保存的SystemUiVisibility
+            mAttachInfo.mSystemUiVisibility = 0;
+            mAttachInfo.mHasSystemUiListeners = false;
+            //遍历整个控件树
+            mView.dispatchCollectViewAttributes(mAttachInfo, 0);
+            //移除被禁用的SystemUiVisibility标记
+            mAttachInfo.mSystemUiVisibility &= ~mAttachInfo.mDisabledSystemUiVisibility;
+            WindowManager.LayoutParams params = mWindowAttributes;
+            mAttachInfo.mSystemUiVisibility |= getImpliedSystemUiVisibility(params);
+            mCompatibleVisibilityInfo.globalVisibility =
+                    (mCompatibleVisibilityInfo.globalVisibility & ~View.SYSTEM_UI_FLAG_LOW_PROFILE)
+                            | (mAttachInfo.mSystemUiVisibility & View.SYSTEM_UI_FLAG_LOW_PROFILE);
+            dispatchDispatchSystemUiVisibilityChanged(mCompatibleVisibilityInfo);
+            if (mAttachInfo.mKeepScreenOn != oldScreenOn
+                    || mAttachInfo.mSystemUiVisibility != params.subtreeSystemUiVisibility
+                    || mAttachInfo.mHasSystemUiListeners != params.hasSystemUiListeners) {
+                applyKeepScreenOnFlag(params);
+                //将SystemUiVisibility保存到窗口的LayoutParams
+                params.subtreeSystemUiVisibility = mAttachInfo.mSystemUiVisibility;
+                params.hasSystemUiListeners = mAttachInfo.mHasSystemUiListeners;
+                mView.dispatchWindowSystemUiVisiblityChanged(mAttachInfo.mSystemUiVisibility);
+                return true;
+            }
+        }
+```
+
+```
+View.java
+    void performCollectViewAttributes(AttachInfo attachInfo, int visibility) {
+        if ((visibility & VISIBILITY_MASK) == VISIBLE) {
+            if ((mViewFlags & KEEP_SCREEN_ON) == KEEP_SCREEN_ON) {
+                attachInfo.mKeepScreenOn = true;
+            }
+            // 这里进行或操作，把子View树的 mSystemUiVisibility 都保存在 AttachInfo 中
+            attachInfo.mSystemUiVisibility |= mSystemUiVisibility;
+            ListenerInfo li = mListenerInfo;
+            if (li != null && li.mOnSystemUiVisibilityChangeListener != null) {
+                attachInfo.mHasSystemUiListeners = true;
+            }
+        }
+    }
+```
+
+计算 insetsFlags.appearance
+
+```
+ViewRootImpl.java
+    public static void adjustLayoutParamsForCompatibility(WindowManager.LayoutParams inOutParams) {
+        if (sNewInsetsMode != NEW_INSETS_MODE_FULL) {
+            return;
+        }
+        final int sysUiVis = inOutParams.systemUiVisibility | inOutParams.subtreeSystemUiVisibility;
+        final int flags = inOutParams.flags;
+        final int type = inOutParams.type;
+        final int adjust = inOutParams.softInputMode & SOFT_INPUT_MASK_ADJUST;
+
+        // 更新 inOutParams.insetsFlags.appearance，这个值传递给WMS后计算状态栏颜色时需要用到
+        if ((inOutParams.privateFlags & PRIVATE_FLAG_APPEARANCE_CONTROLLED) == 0) {
+            inOutParams.insetsFlags.appearance = 0;
+            if ((sysUiVis & SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+                inOutParams.insetsFlags.appearance |= APPEARANCE_LOW_PROFILE_BARS;
+            }
+            if ((sysUiVis & SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) != 0) {
+                inOutParams.insetsFlags.appearance |= APPEARANCE_LIGHT_STATUS_BARS;
+            }
+            if ((sysUiVis & SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR) != 0) {
+                inOutParams.insetsFlags.appearance |= APPEARANCE_LIGHT_NAVIGATION_BARS;
+            }
+        }
+
+        if ((inOutParams.privateFlags & PRIVATE_FLAG_BEHAVIOR_CONTROLLED) == 0) {
+            if ((sysUiVis & SYSTEM_UI_FLAG_IMMERSIVE_STICKY) != 0
+                    || (flags & FLAG_FULLSCREEN) != 0) {
+                inOutParams.insetsFlags.behavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE;
+            } else if ((sysUiVis & SYSTEM_UI_FLAG_IMMERSIVE) != 0) {
+                inOutParams.insetsFlags.behavior = BEHAVIOR_SHOW_BARS_BY_SWIPE;
+            } else {
+                inOutParams.insetsFlags.behavior = BEHAVIOR_SHOW_BARS_BY_TOUCH;
+            }
+        }
+
+        inOutParams.privateFlags &= ~PRIVATE_FLAG_INSET_PARENT_FRAME_BY_IME;
+
+        if ((inOutParams.privateFlags & PRIVATE_FLAG_FIT_INSETS_CONTROLLED) != 0) {
+            return;
+        }
+
+        int types = inOutParams.getFitInsetsTypes();
+        boolean ignoreVis = inOutParams.isFitInsetsIgnoringVisibility();
+
+        if (((sysUiVis & SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) != 0
+                || (flags & FLAG_LAYOUT_IN_SCREEN) != 0)
+                || (flags & FLAG_TRANSLUCENT_STATUS) != 0) {
+            types &= ~Type.statusBars();
+        }
+        if ((sysUiVis & SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) != 0
+                || (flags & FLAG_TRANSLUCENT_NAVIGATION) != 0) {
+            types &= ~Type.systemBars();
+        }
+        if (type == TYPE_TOAST || type == TYPE_SYSTEM_ALERT) {
+            ignoreVis = true;
+        } else if ((types & Type.systemBars()) == Type.systemBars()) {
+            if (adjust == SOFT_INPUT_ADJUST_RESIZE) {
+                types |= Type.ime();
+            } else {
+                inOutParams.privateFlags |= PRIVATE_FLAG_INSET_PARENT_FRAME_BY_IME;
+            }
+        }
+        inOutParams.setFitInsetsTypes(types);
+        inOutParams.setFitInsetsIgnoringVisibility(ignoreVis);
+
+        // The fitting of insets are not really controlled by the clients, so we remove the flag.
+        inOutParams.privateFlags &= ~PRIVATE_FLAG_FIT_INSETS_CONTROLLED;
+    }
+```
+
+```
+ViewRootImpl.doTraversal()
+    ViewRootImpl.performTraversals()
+        ViewRootImpl.adjustLayoutParamsForCompatibility()
+        ViewRootImpl.relayoutWindow() 
+```
+
+将 WindowManager.LayoutParams 传递到 server 端。会把LayoutParams.subtreeSystemUiVisibility、insetsFlags.appearance 以及LayoutParams.sytemUiVisibility字段送入WMS.
+
+
 ## system_server
 
-主要是根据当前的top window的SystemUiVisibility得到SystemUiVisibility数组，然后传给SystemUI。
+```
+WindowManagerService.relayoutWindow()
+    WindowSurfacePlacer.performSurfacePlacement()
+        WindowSurfacePlacer.performSurfacePlacementLoop()
+            RootWindowContainer.performSurfacePlacement()
+                RootWindowContainer.performSurfacePlacementNoTrace()
+                   RootWindowContainer.applySurfaceChangesTransaction()
+                       DisplayContent.applySurfaceChangesTransaction()
+                           DisplayPolicy.finishPostLayoutPolicyLw()
+                               DisplayPolicy.updateSystemUiVisibilityLw()
+                                    DisplayPolicy.updateLightStatusBarAppearanceLw()
+```
+
+```
+WindowManagerService.java
+
+    public int relayoutWindow(Session session, IWindow client, int seq, LayoutParams attrs,
+            int requestedWidth, int requestedHeight, int viewVisibility, int flags,
+            long frameNumber, Rect outFrame, Rect outContentInsets,
+            Rect outVisibleInsets, Rect outStableInsets, Rect outBackdropFrame,
+            DisplayCutout.ParcelableWrapper outCutout, MergedConfiguration mergedConfiguration,
+            SurfaceControl outSurfaceControl, InsetsState outInsetsState,
+            InsetsSourceControl[] outActiveControls, Point outSurfaceSize,
+            SurfaceControl outBLASTSurfaceControl) {
+            
+            ......
+            if (attrs != null) {
+                displayPolicy.adjustWindowParamsLw(win, attrs, pid, uid);
+                win.mToken.adjustWindowParams(win, attrs);
+                // if they don't have the permission, mask out the status bar bits
+                if (seq == win.mSeq) {
+                    int systemUiVisibility = attrs.systemUiVisibility
+                            | attrs.subtreeSystemUiVisibility;
+                    if ((systemUiVisibility & DISABLE_MASK) != 0) {
+                        if (!hasStatusBarPermission(pid, uid)) {
+                            systemUiVisibility &= ~DISABLE_MASK;
+                        }
+                    }
+                    //保存到WindowState.mSystemUiVisibility
+                    win.mSystemUiVisibility = systemUiVisibility;
+                }
+```
+
+然后获取当前的top window的SystemUiVisibility得到SystemUiVisibility数组，然后传给SystemUI。
 
 ```
 DisplayPolicy.updateSystemUiVisibilityLw()
@@ -275,3 +491,4 @@ LightBarController.mAppearanceRegions[] -> LightBarTransitionsController.mDarkIn
 ## 参考文章
 
 https://blog.csdn.net/csdnxialei/article/details/95059041
+https://www.codeleading.com/article/3648999178/
