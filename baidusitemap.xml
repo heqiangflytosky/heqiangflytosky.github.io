@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2021/11/15/android-systemui-notificationshadedepthcontroller/</loc>
-    <lastmod>2021-11-19T05:52:31.545Z</lastmod>
+    <loc>http://yoursite.com/2021/06/01/android-statusbar-icon-color/</loc>
+    <lastmod>2021-11-19T05:57:31.657Z</lastmod>
     <data>
         <display>
-        <title>Android -- NotificationShadeDepthController</title>
-        <pubTime>2021-11-15T04:00:00.000Z</pubTime>
+        <title>SystemUI -- 状态栏字体和图标变色原理</title>
+        <pubTime>2021-06-01T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -24,12 +24,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2021/06/01/android-statusbar-icon-color/</loc>
-    <lastmod>2021-11-19T03:34:27.405Z</lastmod>
+    <loc>http://yoursite.com/2021/11/15/android-systemui-notificationshadedepthcontroller/</loc>
+    <lastmod>2021-11-19T05:52:31.545Z</lastmod>
     <data>
         <display>
-        <title>SystemUI -- 状态栏字体和图标颜色随背景而改变</title>
-        <pubTime>2021-06-01T02:00:00.000Z</pubTime>
+        <title>Android -- NotificationShadeDepthController</title>
+        <pubTime>2021-11-15T04:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -104,12 +104,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
+    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
     <lastmod>2021-11-15T08:46:05.887Z</lastmod>
     <data>
         <display>
-        <title>SystemUI -- 下拉通知面板页面结构和重要的类</title>
-        <pubTime>2021-11-05T02:00:00.000Z</pubTime>
+        <title>SystemUI -- SystemUI 的几种状态</title>
+        <pubTime>2021-10-20T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -124,12 +124,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
+    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
     <lastmod>2021-11-15T08:46:05.887Z</lastmod>
     <data>
         <display>
-        <title>SystemUI -- SystemUI 的几种状态</title>
-        <pubTime>2021-10-20T02:00:00.000Z</pubTime>
+        <title>SystemUI -- 下拉通知面板页面结构和重要的类</title>
+        <pubTime>2021-11-05T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -5116,12 +5116,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -5136,12 +5136,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -5523,28 +5523,6 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    <data>
-        <display>
-        <title>J2V8 -- 注册 Java 回调函数</title>
-        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
-        
-        <tag>V8</tag>
-         
-        <tag>J2V8</tag>
-         
-         
-           
-             
-              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
@@ -5560,6 +5538,28 @@
            
              
               <breadCrumb title="Android开源项目" url="http://yoursite.com/categories/Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>J2V8 -- 注册 Java 回调函数</title>
+        <pubTime>2017-08-10T02:00:00.000Z</pubTime>
+        
+        <tag>V8</tag>
+         
+        <tag>J2V8</tag>
+         
+         
+           
+             
+              <breadCrumb title="V8" url="http://yoursite.com/categories/V8/"/>
           
         </display>
     </data>
