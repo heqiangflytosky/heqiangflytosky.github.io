@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2021/11/06/android-systemui-notificationshadesindowview/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 NotificationShadeWindowView">
-<meta property="og:updated_time" content="2021-11-12T07:56:24.096Z">
+<meta property="og:updated_time" content="2021-11-19T07:33:07.703Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemUI -- NotificationShadeWindowView">
 <meta name="twitter:description" content="介绍 NotificationShadeWindowView">
@@ -400,7 +400,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>NotificationShadeWindowView 是承载锁屏和下拉通知的界面，NotificationShadeWindowViewController 作为 NotificationShadeWindowView 控制器主要操作锁屏切换下拉通知(锁屏下滑)的操作。<br>事件处理大概逻辑在前面文章中已经有了介绍，本文主要介绍一些方法的实现细节。<br>本文基于原生 Android S 代码。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>NotificationShadeWindowView 是承载锁屏和下拉通知的界面，NotificationShadeWindowViewController 作为 NotificationShadeWindowView 控制器主要是作为事件的分发以及执行锁屏切换下拉通知(锁屏下滑)的操作。<br>事件处理大概逻辑在前面文章中已经有了介绍，本文主要介绍一些方法的实现细节。<br>本文基于原生 Android S 代码。</p>
 <h2 id="相关类介绍"><a href="#相关类介绍" class="headerlink" title="相关类介绍"></a>相关类介绍</h2><p>DragDownHelper 一个工具类，处理锁屏时下拉通知栏区域展开通知中心的操作。</p>
 <h2 id="NotificationShadeWindowView"><a href="#NotificationShadeWindowView" class="headerlink" title="NotificationShadeWindowView"></a>NotificationShadeWindowView</h2><p>NotificationShadeWindowView 主要处理锁屏状态下的下拉(非状态栏下拉)事件的处理或者下拉面板可见情况下事件的传递。<br>在 NotificationShadeWindowView 中定义了一个 InteractionEventHandler，它的实现在 NotificationShadeWindowViewController，用于处理 NotificationShadeWindowView 对于事件的操作。</p>
 <h2 id="dispatchTouchEvent"><a href="#dispatchTouchEvent" class="headerlink" title="dispatchTouchEvent"></a>dispatchTouchEvent</h2><p>如果 mInteractionEventHandler 返回不为空，就返回 mInteractionEventHandler 的处理结果，true 表示处理该事件，中断分发，false 表示继续分发。如果 mInteractionEventHandler 为空，交给父类来处理。</p>
