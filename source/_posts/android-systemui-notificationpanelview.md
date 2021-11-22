@@ -167,11 +167,15 @@ PanelBar.collapsePanel()
 
 ```
 NotificationPanelViewController.handleQsTouch() // QS处理
-    NotificationPanelViewController.onQsExpansionStarted()
-        NotificationPanelViewController.setQsExpansion() // 设置QS显示高度，更新QQS的可见性, 设置QS的绘制区域,更新通知中心的偏移,后面详细介绍
+    ACTION_DOWN
+        mQsTracking = true
+        NotificationPanelViewController.onQsExpansionStarted()
+            NotificationPanelViewController.setQsExpansion() // 设置QS显示高度，更新QQS的可见性, 设置QS的绘制区域,更新通知中心的偏移,后面详细介绍
     NotificationPanelViewController.handleQsDown()
     NotificationPanelViewController.onQsTouch()
         MotionEvent.ACTION_DOWN
+            mQsTracking = true
+            NotificationPanelViewController.onQsExpansionStarted()
         MotionEvent.ACTION_MOVE
             NotificationPanelViewController.setQsExpansion() // 设置QS显示高度
         MotionEvent.ACTION_UP

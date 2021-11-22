@@ -596,7 +596,7 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 ## 状态栏下拉
 
 从通知栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。此时的事件不经过NotificationShadeWindowView分发。
-在这种情况下，NotificationPanelViewController.TouchHandler.onTouch()在Down事件时返回true，消费该事件，那么后面的Move和UP事件也会在这里或者父类的onTouch()中处理。
+在这种情况下，PanelViewController.TouchHandler.onInterceptTouchEvent() 和 NotificationPanelViewController.TouchHandler.onTouch()在Down事件时返回true，消费该事件，那么后面的Move和UP事件也会在这里或者父类的onTouch()中处理。
 
 ```
 StatusBarWindowView.dispatchTouchEvent()
@@ -670,11 +670,9 @@ OverviewProxyService.onStatusBarMotionEvent()
                  NotificationPanelViewController.fling() // 这里也可以处理fling动画
 ```
 
-第二种情况是OverviewProxyService + NotificationPanelViewController 来处理。因为已经设置了shade view可见，然后它就可以接收事件开始处理动画了。此时的Down，Move，Up事件都由 shade view 处理了，那么它会OverviewProxyService 收到一个CANCEL事件。
-接下来就是 NotificationPanelViewController 接收Down和Move事件来处理通知面板的整体滑动操作。和状态栏下拉处理比较类似，具体看上面介绍。
+第二种情况是OverviewProxyService + NotificationPanelViewController 来处理。因为已经设置了shade view可见，然后它就可以接收事件开始处理动画了。此时后面的Down，Move，Up事件都由 shade view 处理了，那么它会OverviewProxyService 收到一个CANCEL事件。
+接下来就是 NotificationPanelViewController 接收Down和Move事件来处理通知面板的整体滑动操作。和状态栏下拉处理比较类似，具体看上面介绍。这种情况下会在 shouldGestureWaitForTouchSlop() 中设置 mExpectingSynthesizedDown = false，那么OverviewProxyService收到cancel事件时就不会处理fling。
 如果 OverviewProxyService 没有收到 CANCEL事件，表示 NotificationPanelViewController 没有来得及去处理事件，那么就在OverviewProxyService.ACTION_UP中处理下拉面板的状态，这就是第一种情况。
-因此，桌面下拉对 ACTION_UP 事件的处理也就会分为两种情况，一种是PanelViewController来处理，这种情况下会在 shouldGestureWaitForTouchSlop() 中设置 mExpectingSynthesizedDown = false，那么OverviewProxyService收到cancel事件时就不会处理fling。
-另外一种情况是 OverviewProxyService 自己处理ACTION_UP事件。
 
 ## 滑动QS
 
@@ -687,11 +685,12 @@ OverviewProxyService.onStatusBarMotionEvent()
 ```
 PanelView.onTouchEvent()
     NotificationPanelViewController.TouchHandler.onTouch()
-        NotificationPanelViewController.handleQsTouch() // QS处理，比如QS上面上划呼出通知中心
-            NotificationPanelViewController.onQsExpansionStarted()
-                NotificationPanelViewController.setQsExpansion() // 设置QS显示高度，更新QQS的可见性, 设置QS的绘制区域,更新通知中心的偏移，后面详细介绍
-                    NotificationPanelViewController.updateQsExpansion()
-                    NotificationPanelViewController.requestScrollerTopPaddingUpdate() // 更新通知中心的位置
+        NotificationPanelViewController.handleQsTouch() // QS处理，比如QS上面上划呼出通知中心，看后面对该方法的纤细介绍
+            ACTION_DOWN
+                mQsTracking = true
+                NotificationPanelViewController.onQsExpansionStarted()
+                    NotificationPanelViewController.setQsExpansion() // 设置QS显示高度，更新QQS的可见性, 设置QS的绘制区域,更新通知中心的偏移，后面详细介绍
+            NotificationPanelViewController.onQsTouch()
         PanelViewController.TouchHandler.onTouch() // handleQsTouch 不处理，就走到这里，执行下拉通知整体操作
             MotionEvent.ACTION_MOVE
                 NotificationPanelViewController.onTrackingStarted()
@@ -745,6 +744,66 @@ PanelView.onTouchEvent()
 
 ## 滑动通知中心
 
+1.上滑
+2.下滑
+3.包含先上滑后再下滑：和第二种情况一样
+
+前面也讲过，滑动通知中心也分两种情况，一种是上划做下拉面板的整体操作，一种是下滑，隐藏通知中心显示QS操作。
+第一种情况时，DOWN事件分发到 NotificationStackScrollLayout 时，NotificationStackScrollLayout.onScrollTouch() 返回true。那么后面的事件还会向它做分发。
+但是 PanelViewController 在分发MOVE事件时，由于满足了下面的条件，对MOVE事件做了拦截。那么接下来就是由 PanelViewController 来处理事件进行下拉面板的整体操作。
+
+```
+PanelViewController.java
+    public class TouchHandler implements View.OnTouchListener {
+        public boolean onInterceptTouchEvent(MotionEvent event) {
+                ......
+                case MotionEvent.ACTION_MOVE:
+                    final float h = y - mInitialTouchY;
+                    addMovement(event);
+                    if (canCollapsePanel || mTouchStartedInEmptyArea || mAnimatingOnDown) {
+                        float hAbs = Math.abs(h);
+                        float touchSlop = getTouchSlop(event);
+                        if ((h < -touchSlop || (mAnimatingOnDown && hAbs > touchSlop))
+                                && hAbs > Math.abs(x - mInitialTouchX)) {
+                            cancelHeightAnimator();
+                            startExpandMotion(x, y, true /* startTracking */, mExpandedHeight);
+                            return true;
+                        }
+                    }
+                ......
+
+    }
+```
+
+这种情况下和上面介绍的 QS 滑动流程类似，就不再介绍。
+
+第二种情况时，NotificationStackScrollLayout 没有拦截也没有消费Down事件，但是，它的子View ExpandableNotificationRow 设置了 setOnClickListener，因此后面的事件会向ExpandableNotificationRow分发。
+但是在处理 ACTION_MOVE 事件时，由与满足了下面的条件，因此 NotificationStackScrollLayout 对Move事件做了拦截。而且这种情况下会设置 requestDisallowInterceptTouchEvent(true)，阻止父组件对事件的拦截。那么后面的Move和Up事件就由NotificationStackScrollLayout来处理通知中心的滑动。
+
+```
+NotificationStackScrollLayout.java
+
+    boolean onInterceptTouchEventScroll(MotionEvent ev) {
+        ....
+        switch (action & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_MOVE: {
+                ....
+                final int yDiff = Math.abs(y - mLastMotionY);
+                final int xDiff = Math.abs(x - mDownX);
+                if (yDiff > getTouchSlop(ev) && yDiff > xDiff) {
+                    setIsBeingDragged(true);
+                    mLastMotionY = y;
+                    mDownX = x;
+                    initVelocityTrackerIfNotExists();
+                    mVelocityTracker.addMovement(ev);
+                }
+                break;
+            }
+        return mIsBeingDragged;
+
+    }
+```
+
 ```
 NotificationShadeWindowView.dispatchTouchEvent()
     NotificationStackScrollLayout.onInterceptTouchEvent()
@@ -752,6 +811,7 @@ NotificationShadeWindowView.dispatchTouchEvent()
             NotificationStackScrollLayout.onInterceptTouchEventScroll()
                 MotionEvent.ACTION_MOVE
                     NotificationStackScrollLayout.setIsBeingDragged()
+                        mIsBeingDragged = isDragged
                         requestDisallowInterceptTouchEvent(true) // 阻止父组件拦截事件
     NotificationStackScrollLayout.onTouchEvent()
         NotificationStackScrollLayout.TouchHandler.onTouchEvent()
@@ -770,7 +830,7 @@ NotificationShadeWindowView.dispatchTouchEvent()
                     NotificationStackScrollLayout.shouldOverScrollFling()
                     NotificationStackScrollLayout.onOverScrollFling(true) // 通知中心弹开，全部展开QS
                         NotificationPanelViewController.OnOverscrollTopChangedListener.flingTopOverscroll()
-                            NotificationPanelViewController.flingSettings() // QS 或者 QQS的动画，看下面方法详解
+                            NotificationPanelViewController.flingSettings() // QS 或者 QQS的动画，可以处理面板折叠和展开的情况，看后面方法详解
                                 ValueAnimator.start()
                                     AnimatorUpdateListener.onAnimationUpdate()
                                         NotificationPanelViewController.setQsExpansion() // 设置QS可见高度以及通知中心位置
