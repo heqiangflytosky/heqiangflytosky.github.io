@@ -499,7 +499,8 @@ date: 2016-12-1 10:00:00
 
 #### Markdown 转 pdf
 
- - 用 leanote，客户端功能很强大
+ - VSCode 软件的 Markdown pdf 插件，免费，好用。邮件直接保存为pdf，如果有问题，可以右键先保存为html，然后用chrome等打开，使用ctrl+p（打印），保存成pdf，格式保留的非常好
+ - 用 leanote，客户端功能很强大，但是这个功能要收费
  - 用 Chrome 打开 md 文件，然后打印用 pdf 格式输出。
  - 用 StackEdit 保存为 pdf 格式，不过这种格式要收费才能使用，可以保存为html，然后用浏览器打开打印成 pdf。格式转化可能会有问题
  - 用 Dillinger 保存为 pdf 格式，但是中文转化有问题
