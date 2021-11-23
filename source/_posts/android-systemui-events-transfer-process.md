@@ -867,7 +867,7 @@ NotificationShadeWindowView.dispatchTouchEvent()
 
 ## 锁屏下拉通知栏
 
-### 状态栏滑动
+### 状态栏下滑
 这时的最终的状态可以是(3)显示QS，不显示通知中心。处理QS的滑动。
 
 NotificationPanelViewController 没有拦截事件，NotificationStackScrollLayout 也没有消费，那么Down事件还是给 NotificationPanelView 来消费，以及后面的 Move 事件也被NotificationPanelView 来消费。
@@ -930,18 +930,22 @@ NotificationShadeWindowView.dispatchTouchEvent()
 此时 NotificationPanelViewController.TouchHandler.onTouch() 中的 handleQsTouch 是返回 true 的。
 handleQsTouch() 方法来更新 QS 的显示高度以及更新通知中心的位置。
 
-### 通知栏滑动
+### 通知栏和其他区域下滑
 
 这时的最终的状态可以是(2)显示QQS和通知中心，处理面板的整体滑动。
 
-这个时候 NotificationShadeWindowView 会拦截 `ACTION_MOVE` 事件，那么由 NotificationShadeWindowView.onTouchEvent() 来处理 `ACTION_MOVE` 事件。
+这种场景下的Down事件依旧是由 NotificationStackScrollLayout 或者其子 View ExpandableNotificationRow 消费。
+但是 NotificationShadeWindowView 会拦截 `ACTION_MOVE` 事件，那么由 NotificationShadeWindowView.onTouchEvent() 来处理和消费 `ACTION_MOVE` 事件。
 
 ```
 NotificationShadeWindowView.onInterceptTouchEvent()
     NotificationShadeWindowViewController.InteractionEventHandler.shouldInterceptTouchEvent()
         LockscreenShadeTransitionController.DragDownHelper.onInterceptTouchEvent()
-            LockscreenShadeTransitionController.isDragDownAnywhereEnabled // 这里返回true，拦截事件
+            ACTION_MOVE
+                startingChild != null || LockscreenShadeTransitionController.isDragDownAnywhereEnabled // 这里返回true，拦截事件
 ```
+
+如果触电在通知上，或者 isDragDownAnywhereEnabled 为true的情况下，都是可以下拉的。
 
 ```
     internal val isDragDownAnywhereEnabled: Boolean
@@ -955,34 +959,37 @@ StatusBar.getStatusBarWindowTouchListener
     NotificationShadeWindowView.onTouchEvent()
         NotificationShadeWindowViewController.setupExpandedStatusBar().handleTouchEvent()
             LockscreenShadeTransitionController.DragDownHelper.onTouchEvent()
-                LockscreenShadeTransitionController.dragDownAmount
-                    NotificationPanelViewController.setTransitionToFullShadeAmount()
-                        NotificationPanelViewController.updateQsExpansion()
-                            QSFragment.setQsExpansion()
-                                QSContainerImpl.setTranslationY()
-                                QSFragment.updateQsBounds()
-                                    NonInterceptingScrollView.setClipBounds() // 设置绘制区域
-                    QSFragment.setTransitionToFullShadeAmount()
-                        QSFragment.updateShowCollapsedOnKeyguard()
-                            QSFragment.updateQsState()
-                                QuickStatusBarHeader.setVisibility()
-                                QuickStatusBarHeader.setExpanded()
-                                QSFooter.setVisibility()
-                                QSFooter.setExpanded()
-                                QSPanelController.setVisibility() // 设置QSPanel的可见性
-                LockscreenShadeTransitionController.onCrossedThreshold()
-                    NotificationStackScrollLayoutController.setDimmed() //设置通知中心透明度
-                        NotificationStackScrollLayout.setDimmed()
-                            NotificationStackScrollLayout.animateDimmed()
-                            NotificationStackScrollLayout.setDimAmount()
+                ACTION_MOVE
+                    LockscreenShadeTransitionController.dragDownAmount
+                        NotificationPanelViewController.setTransitionToFullShadeAmount()
+                            NotificationPanelViewController.updateQsExpansion()
+                                QSFragment.setQsExpansion()
+                                    QSContainerImpl.setTranslationY()
+                                    QSFragment.updateQsBounds()
+                                        NonInterceptingScrollView.setClipBounds() // 设置绘制区域
+                        QSFragment.setTransitionToFullShadeAmount()
+                            QSFragment.updateShowCollapsedOnKeyguard()
+                                QSFragment.updateQsState()
+                                    QuickStatusBarHeader.setVisibility()
+                                    QuickStatusBarHeader.setExpanded()
+                                    QSFooter.setVisibility()
+                                    QSFooter.setExpanded()
+                                    QSPanelController.setVisibility() // 设置QSPanel的可见性
+                    LockscreenShadeTransitionController.onCrossedThreshold()
+                        NotificationStackScrollLayoutController.setDimmed() //设置通知中心透明度
+                            NotificationStackScrollLayout.setDimmed()
+                                NotificationStackScrollLayout.animateDimmed()
+                                NotificationStackScrollLayout.setDimAmount()
+                ACTION_UP
+                    LockscreenShadeTransitionController.DragDownHelper.stopDragging()
 ```
 
 ## 锁屏上滑解锁
 
-### 滑动通知栏
+### 通知栏上滑
 
 这个场景其实和上面介绍的滑动通知中心场景下上滑收起下拉面板的流程是一样的。
-NotificationStackScrollLayout 消费了 DOWN 事件，但是PanelViewController 拦截并消费了 MOVE 事件，后面的 UP 事件也由它进行处理。
+NotificationStackScrollLayout 或其子 View 消费了 DOWN 事件，但是PanelViewController 拦截并消费了 MOVE 事件，后面的 UP 事件也由它进行处理。
 
 ```
 NotificationShadeWindowView.dispatchTouchEvent()
@@ -996,8 +1003,10 @@ NotificationShadeWindowView.dispatchTouchEvent()
                 
 ```
 
-### 其他区域
+### 其他区域上滑
 
+NotificationPanelView 的子 View 对 Down 事件都没有消费，那么最终是 NotificationPanelViewController.TouchHandler.onTouch() 消费了 Down 事件，PanelViewController 处理后面的 Move 和 Up 事件。
+这个场景和滑动 QS 的流程是一样的。
 
 ### 解锁
 
@@ -1011,4 +1020,7 @@ StatusBar.onReceive()
         ShadeControllerImpl.animateCollapsePanels()
             PanelBar.collapsePanel()
                 NotificationPanelViewController.collapse()
+                    PanelViewController.collapse()
+                        PanelViewController.fling()
+                            NotificationPanelViewController.flingToHeight()
 ```
