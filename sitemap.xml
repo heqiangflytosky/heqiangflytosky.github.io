@@ -2,23 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
+    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
     
-    <lastmod>2021-11-22T07:50:24.401Z</lastmod>
+    <lastmod>2021-11-23T02:36:41.227Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
     
-    <lastmod>2021-11-22T07:50:24.400Z</lastmod>
+    <lastmod>2021-11-23T02:36:32.646Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
     
-    <lastmod>2021-11-22T07:50:24.400Z</lastmod>
+    <lastmod>2021-11-23T02:36:32.645Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
+    
+    <lastmod>2021-11-22T07:50:24.401Z</lastmod>
     
   </url>
   
@@ -44,14 +51,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
+    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
     
     <lastmod>2021-11-15T08:46:05.887Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
+    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
     
     <lastmod>2021-11-15T08:46:05.887Z</lastmod>
     
@@ -292,13 +299,6 @@
     <loc>http://yoursite.com/2015/12/08/android-knowledge-point-launchmode-intent-flag/</loc>
     
     <lastmod>2021-01-20T07:13:57.038Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
-    
-    <lastmod>2021-01-19T02:11:46.954Z</lastmod>
     
   </url>
   
@@ -1976,13 +1976,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
-    
-    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
@@ -1991,6 +1984,13 @@
   
   <url>
     <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    
+    <lastmod>2017-12-01T15:59:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
