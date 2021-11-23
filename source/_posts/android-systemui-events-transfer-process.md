@@ -650,7 +650,7 @@ OverviewProxyService.onStatusBarMotionEvent()
                                 NotificationStackScrollLayoutController.onExpansionStarted()
                                 mIsExpanding = true
                                 NotificationPanelViewController.onQsExpansionStarted()
-                        PanelViewController.notifyBarPanelExpansionChanged()
+                        PanelViewController.notifyBarPanelExpansionChanged() // 可以看后面详细介绍
                             PhoneStatusBarView.panelExpansionChanged()
                                 PanelBar.panelExpansionChanged()
                                     PanelBar.updateVisibility()
@@ -676,6 +676,14 @@ OverviewProxyService.onStatusBarMotionEvent()
 
 ## 滑动QS
 
+这个场景表示在下面场景下的操作：
+1.显示QQS和通知中心的情况下滑动通知中心以外区域
+2.全部显示QS时在QS面板上面滑动。
+
+这两种情况下，对DONW事件都不做处理。NotificationPanelViewController 对 Move 事件拦截，然后 Move和Up事件由 NotificationPanelViewController 或者 PanelViewController 处理。
+有涉及到通知中心位移时就在 NotificationPanelViewController 中处理。处理下拉面板整体操作时就在 PanelViewController 中处理。
+
+主要进行一下的逻辑操作：
 1.设置QS显示高度
 2.更新QQS的可见性
 3.设置QS的绘制区域
@@ -685,7 +693,7 @@ OverviewProxyService.onStatusBarMotionEvent()
 ```
 PanelView.onTouchEvent()
     NotificationPanelViewController.TouchHandler.onTouch()
-        NotificationPanelViewController.handleQsTouch() // QS处理，比如QS上面上划呼出通知中心，看后面对该方法的纤细介绍
+        NotificationPanelViewController.handleQsTouch() // QS处理，用来更新 QS 的显示高度以及更新通知中心的位置。比如QS上面上划呼出通知中心，或者下滑隐藏通知中心。看后面对该方法的详细介绍
             ACTION_DOWN
                 mQsTracking = true
                 NotificationPanelViewController.onQsExpansionStarted()
@@ -695,7 +703,7 @@ PanelView.onTouchEvent()
             MotionEvent.ACTION_MOVE
                 NotificationPanelViewController.onTrackingStarted()
                     PanelViewController.onTrackingStarted()
-                        PanelViewController.notifyBarPanelExpansionChanged()
+                        PanelViewController.notifyBarPanelExpansionChanged() // 可以看后面详细介绍
                             PhoneStatusBarView.panelExpansionChanged()
                                 PanelBar.panelExpansionChanged()
                                     PhoneStatusBarView.onPanelPeeked()
@@ -722,23 +730,24 @@ PanelView.onTouchEvent()
                                         PanelViewController.setExpandedHeightInternal() // 设置最终QS展开的高度
                                 AnimatorListenerAdapter.onAnimationEnd()
                                     PanelViewController.onFlingEnd()
-                                        PanelViewController.notifyBarPanelExpansionChanged()// 流程参考下面。
+                                        PanelViewController.notifyBarPanelExpansionChanged()// 可以看后面详细介绍
                                 ValueAnimator.start()
                     NotificationPanelViewController.onTrackingStopped()
                         PanelViewController.onTrackingStopped()
                             PhoneStatusBarView.onTrackingStopped()
                                 PanelBar.onTrackingStopped()
                                     StatusBarKeyguardViewManager.showBouncer(false) // 设置BouncerView可见性
-                            PanelViewController.notifyBarPanelExpansionChanged()
+                            PanelViewController.notifyBarPanelExpansionChanged() // 可以看后面详细介绍
                                 PhoneStatusBarView.panelExpansionChanged()
-                                    PanelBar.onPanelCollapsed()
-                                        PhoneStatusBarView.onPanelCollapsed()
-                                            post(mHideExpandedRunnable)
-                                                StatusBar.makeExpandedInvisible()
-                                                    NotificationShadeWindowControllerImpl.setPanelVisible(false) // 隐藏面板
-                                                        NotificationShadeWindowControllerImpl.apply()
-                                                            NotificationShadeWindowControllerImpl.applyVisibility()
-                                                                NotificationShadeWindowView.setVisibility() // 更新面板可见性
+                                    PanelBar.panelExpansionChanged()
+                                        PanelBar.onPanelCollapsed()
+                                            PhoneStatusBarView.onPanelCollapsed()
+                                                post(mHideExpandedRunnable)
+                                                    StatusBar.makeExpandedInvisible()
+                                                        NotificationShadeWindowControllerImpl.setPanelVisible(false) // 隐藏面板
+                                                            NotificationShadeWindowControllerImpl.apply()
+                                                                NotificationShadeWindowControllerImpl.applyVisibility()
+                                                                    NotificationShadeWindowView.setVisibility() // 更新面板可见性
 ```
 
 
@@ -749,8 +758,23 @@ PanelView.onTouchEvent()
 3.包含先上滑后再下滑：和第二种情况一样
 
 前面也讲过，滑动通知中心也分两种情况，一种是上划做下拉面板的整体操作，一种是下滑，隐藏通知中心显示QS操作。
-第一种情况时，DOWN事件分发到 NotificationStackScrollLayout 时，NotificationStackScrollLayout.onScrollTouch() 返回true。那么后面的事件还会向它做分发。
-但是 PanelViewController 在分发MOVE事件时，由于满足了下面的条件，对MOVE事件做了拦截。那么接下来就是由 PanelViewController 来处理事件进行下拉面板的整体操作。
+这两种情况下的Down事件，要么被 ExpandableNotificationRow 消费，满足下面条件且设置了ExpandableNotificationRow 设置了 setOnClickListener。
+
+```
+// ExpandableNotificationRow.java
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getActionMasked() != MotionEvent.ACTION_DOWN
+                || !isChildInGroup() || isGroupExpanded()) {
+            return super.onTouchEvent(event);
+        } else {
+            return false;
+        }
+    }
+```
+
+要么ExpandableNotificationRow没消费，会被 NotificationStackScrollLayoutController.onTouchEvent() 消费。总之，NotificationStackScrollLayout 及其子View是可以消费Down事件的，那么后面的事件还会向它做分发。
+
+但是 PanelViewController 在分发MOVE事件时，由于满足了下面的条件，对MOVE事件做了拦截和消费。那么接下来就是由 PanelViewController 来处理事件进行下拉面板的整体操作。
 
 ```
 PanelViewController.java
@@ -777,8 +801,8 @@ PanelViewController.java
 
 这种情况下和上面介绍的 QS 滑动流程类似，就不再介绍。
 
-第二种情况时，NotificationStackScrollLayout 没有拦截也没有消费Down事件，但是，它的子View ExpandableNotificationRow 设置了 setOnClickListener，因此后面的事件会向ExpandableNotificationRow分发。
-但是在处理 ACTION_MOVE 事件时，由与满足了下面的条件，因此 NotificationStackScrollLayout 对Move事件做了拦截。而且这种情况下会设置 requestDisallowInterceptTouchEvent(true)，阻止父组件对事件的拦截。那么后面的Move和Up事件就由NotificationStackScrollLayout来处理通知中心的滑动。
+第二种情况时，NotificationStackScrollLayout 在处理 ACTION_MOVE 事件时，由于满足了下面的条件，因此 NotificationStackScrollLayout 对Move事件做了拦截。而且这种情况下会设置 requestDisallowInterceptTouchEvent(true)，阻止父组件对事件的拦截。那么后面的Move和Up事件就由NotificationStackScrollLayout来处理通知中心的滑动。
+由于阻止了父组件的事件拦截，因此如果我们先滑动通知下滑然后再上滑是无法收起下拉面板的。
 
 ```
 NotificationStackScrollLayout.java
@@ -953,9 +977,12 @@ StatusBar.getStatusBarWindowTouchListener
                             NotificationStackScrollLayout.setDimAmount()
 ```
 
-## 锁屏上划通知栏解锁
+## 锁屏上滑解锁
 
-这个时候 NotificationShadeWindowView 没有拦截也没有处理事件，交给NotificationPanelView去处理面板整体操作
+### 滑动通知栏
+
+这个场景其实和上面介绍的滑动通知中心场景下上滑收起下拉面板的流程是一样的。
+NotificationStackScrollLayout 消费了 DOWN 事件，但是PanelViewController 拦截并消费了 MOVE 事件，后面的 UP 事件也由它进行处理。
 
 ```
 NotificationShadeWindowView.dispatchTouchEvent()
@@ -968,6 +995,13 @@ NotificationShadeWindowView.dispatchTouchEvent()
                     NotificationPanelViewController.flingToHeight() // 滚动到指定高度，后面文章详细介绍
                 
 ```
+
+### 其他区域
+
+
+### 解锁
+
+
 
 ## 点击导航栏收起
 

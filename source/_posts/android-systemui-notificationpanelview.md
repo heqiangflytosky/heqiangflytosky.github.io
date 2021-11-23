@@ -234,16 +234,29 @@ PanelViewController.setExpandedHeightInternal()
         NotificationPanelViewController.updateHeader()
         NotificationPanelViewController.updateNotificationTranslucency()
         NotificationPanelViewController.updatePanelExpanded()
-    PanelViewController.notifyBarPanelExpansionChanged()
+    PanelViewController.notifyBarPanelExpansionChanged() // 通知 PhoneStatusBarView NotificationShadeDepthController StatusBarKeyguardViewManager 做对应更新，看下面介绍
         PhoneStatusBarView.panelExpansionChanged() // PhoneStatusBarView 更新状态
             PanelBar.panelExpansionChanged()
+                PanelBar.updateVisibility()
+                    NotificationPanelView.setVisibility()//设置 NotificationPanelView 可见
+                PanelBar.go(STATE_OPENING)
+                    StatusBar.makeExpandedVisible() //设置Shade可见，然后可以接收事件
+                        NotificationShadeWindowControllerImpl.setPanelVisible()
+                            NotificationShadeWindowControllerImpl.apply()
+                                NotificationShadeWindowControllerImpl.applyVisibility()
+                                    NotificationShadeView.setVisibility() // 设置NotificationShadeView可见
                 if fullyOpened
                 PanelBar.go(STATE_OPEN)
-                PhoneStatusBarView.onPanelFullyOpened()
+                PhoneStatusBarView.onPanelFullyOpened() // 全部展开
                 else if fullyClosed
                 PanelBar.go(STATE_CLOSED)
                 PhoneStatusBarView.onPanelCollapsed()
-                    post(mHideExpandedRunnable)
+                    post(mHideExpandedRunnable) // 隐藏面板，处理一些隐藏面板后的其他操作，比如解锁等
+                        StatusBar.makeExpandedInvisible()
+                            NotificationShadeWindowControllerImpl.setPanelVisible(false) // 隐藏面板
+                                NotificationShadeWindowControllerImpl.apply()
+                                    NotificationShadeWindowControllerImpl.applyVisibility()
+                                        NotificationShadeWindowView.setVisibility() // 更新面板可见性
         NotificationShadeDepthController.onPanelExpansionChanged() //更新毛玻璃背景
             NotificationShadeDepthController.updateShadeBlur()
         StatusBarKeyguardViewManager.onPanelExpansionChanged() // 在锁屏界面时更新 KeyguardBouncer View
@@ -287,14 +300,7 @@ NotificationPanelViewController.flingToHeight()
                 PanelViewController.setExpandedHeightInternal() //设置QS展开的高度
         PanelViewController.flingToHeight.onAnimationEnd()
             PanelViewController.onFlingEnd()
-                PanelViewController.notifyBarPanelExpansionChanged()
-                    PhoneStatusBarView.panelExpansionChanged()
-                        PanelBar.panelExpansionChanged()
-                            PanelBar.go(STATE_OPEN)
-                            PhoneStatusBarView.onPanelFullyOpened() // 全部展开
-                            PanelBar.go(STATE_CLOSED)
-                            PhoneStatusBarView.onPanelCollapsed()
-                                post(mHideExpandedRunnable) // 隐藏面板，处理一些隐藏面板后的其他操作，比如解锁等
+                PanelViewController.notifyBarPanelExpansionChanged()  // 参考上面 setExpandedHeightInternal() 的介绍
 ```
 
 ### flingExpands()
@@ -365,4 +371,38 @@ NotificationPanelViewController.flingToHeight()
     }
 ```
 
+### notifyBarPanelExpansionChanged()
 
+通知 PhoneStatusBarView NotificationShadeDepthController StatusBarKeyguardViewManager 做对应更新。
+
+```
+PanelViewController.notifyBarPanelExpansionChanged() 
+    PhoneStatusBarView.panelExpansionChanged() // PhoneStatusBarView 更新状态
+        PanelBar.panelExpansionChanged()
+            PanelBar.updateVisibility()
+                NotificationPanelView.setVisibility()//设置 NotificationPanelView 可见
+            PanelBar.go(STATE_OPENING) //设置正在打开状态
+            PhoneStatusBarView.onPanelPeeked()
+                StatusBar.makeExpandedVisible() //设置Shade可见，然后可以接收事件
+                    NotificationShadeWindowControllerImpl.setPanelVisible()
+                        NotificationShadeWindowControllerImpl.apply()
+                            NotificationShadeWindowControllerImpl.applyVisibility()
+                                NotificationShadeView.setVisibility() // 设置NotificationShadeView可见
+            if fullyOpened
+            PanelBar.go(STATE_OPEN)
+            PhoneStatusBarView.onPanelFullyOpened() // 全部展开
+            else if fullyClosed
+            PanelBar.go(STATE_CLOSED)
+            PhoneStatusBarView.onPanelCollapsed()
+                post(mHideExpandedRunnable) // 隐藏面板，处理一些隐藏面板后的其他操作，比如解锁等
+                    StatusBar.makeExpandedInvisible()
+                        NotificationShadeWindowControllerImpl.setPanelVisible(false) // 隐藏面板
+                            NotificationShadeWindowControllerImpl.apply()
+                                NotificationShadeWindowControllerImpl.applyVisibility()
+                                    NotificationShadeWindowView.setVisibility() // 更新面板可见性
+    NotificationShadeDepthController.onPanelExpansionChanged() //更新毛玻璃背景
+        NotificationShadeDepthController.updateShadeBlur()
+    StatusBarKeyguardViewManager.onPanelExpansionChanged() // 在锁屏界面时更新 KeyguardBouncer View
+        KeyguardBouncer.setExpansion()
+        KeyguardBouncer.show()
+```
