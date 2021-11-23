@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
+    <lastmod>2021-11-23T07:48:07.544Z</lastmod>
+    <data>
+        <display>
+        <title>SystemUI -- 下拉面板事件分发流程</title>
+        <pubTime>2021-11-06T02:00:00.000Z</pubTime>
+        
+        <tag>SystemUI</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2016/12/01/materials-programmer-materials/</loc>
     <lastmod>2021-11-23T02:36:41.227Z</lastmod>
     <data>
@@ -30,26 +50,6 @@
         <display>
         <title>SystemUI -- NotificationPanelView</title>
         <pubTime>2021-11-07T02:00:00.000Z</pubTime>
-        
-        <tag>SystemUI</tag>
-         
-         
-           
-             
-              <breadCrumb title="Android SystemUI" url="http://yoursite.com/categories/Android-SystemUI/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
-    <lastmod>2021-11-23T02:36:32.645Z</lastmod>
-    <data>
-        <display>
-        <title>SystemUI -- 下拉面板事件分发流程</title>
-        <pubTime>2021-11-06T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -144,12 +144,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
+    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
     <lastmod>2021-11-15T08:46:05.887Z</lastmod>
     <data>
         <display>
-        <title>SystemUI -- 下拉通知面板页面结构和重要的类</title>
-        <pubTime>2021-11-05T02:00:00.000Z</pubTime>
+        <title>SystemUI -- SystemUI 的几种状态</title>
+        <pubTime>2021-10-20T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -164,12 +164,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2021/10/20/android-systemui-statusbar-states/</loc>
+    <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
     <lastmod>2021-11-15T08:46:05.887Z</lastmod>
     <data>
         <display>
-        <title>SystemUI -- SystemUI 的几种状态</title>
-        <pubTime>2021-10-20T02:00:00.000Z</pubTime>
+        <title>SystemUI -- 下拉通知面板页面结构和重要的类</title>
+        <pubTime>2021-11-05T02:00:00.000Z</pubTime>
         
         <tag>SystemUI</tag>
          
@@ -5116,12 +5116,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 初始化过程</title>
-        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 序言</title>
+        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -5136,12 +5136,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     <data>
         <display>
-        <title>Weex 源码研究 -- 序言</title>
-        <pubTime>2018-03-02T02:00:00.000Z</pubTime>
+        <title>Weex 源码研究 -- 初始化过程</title>
+        <pubTime>2018-03-15T02:00:00.000Z</pubTime>
         
         <tag>Weex</tag>
          
@@ -5587,12 +5587,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-flexbox</title>
-        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
+        <title>React Native-Image控件</title>
+        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5607,12 +5607,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native-Image控件</title>
-        <pubTime>2017-01-13T02:00:00.000Z</pubTime>
+        <title>React Native-flexbox</title>
+        <pubTime>2017-01-13T04:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5775,12 +5775,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>React Native封装原生UI组件</title>
-        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
+        <title>Android项目中集成React Native</title>
+        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
@@ -5795,12 +5795,12 @@
 
     
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-integration-with-existing-apps/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     <data>
         <display>
-        <title>Android项目中集成React Native</title>
-        <pubTime>2017-01-14T02:00:00.000Z</pubTime>
+        <title>React Native封装原生UI组件</title>
+        <pubTime>2017-01-15T02:00:00.000Z</pubTime>
         
         <tag>React Native</tag>
          
