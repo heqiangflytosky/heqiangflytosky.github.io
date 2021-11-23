@@ -19,7 +19,7 @@ date: 2021-11-6 10:00:00
 PhoneStatusBarView 主要处理从通知栏下拉通知面板
 OverviewProxyService 主要操作桌面下拉通知面板
 NotificationShadeWindowViewController 主要操作锁屏切换下拉通知的操作。
-NotificationPanelViewController 主要处理QS Panel的整体操作，比如显示，隐藏和整体滑动等等。
+NotificationPanelViewController 主要处理 QS Panel 的整体操作，比如显示，隐藏和整体滑动等等。
 NotificationStackScrollLayoutController 主要处理通知中心的滑动，它处理事件时会通知 NotificationPanelViewController 更新 QS 的可见高度。
 
 ### PhoneStatusBarView
@@ -586,7 +586,7 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
     }
 ```
 
-0->2 切换时满足 expand 条件，就会去做 expand 动画。
+0->2 切换时也由PanelViewController处理，此时满足 expand 条件，就会去做 expand 动画。
 
 2->3 切换同样时由 NotificationStackScrollLayout 来处理 `MotionEvent.ACTION_MOVE` 和 `MotionEvent.ACTION_UP` 事件。
 

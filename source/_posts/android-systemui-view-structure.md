@@ -58,6 +58,11 @@ NotificationShadeWindowView //R.layout.super_notification_shade
                 SectionHeaderView
                 NotificationShelf // 通过过多时显示隐藏通知的界面
                 ......
+    FrameLayout
+        KeyguardHostView(R.id.keyguard_host_view)
+            KeyguardSecurityContainer(R.id.keyguard_security_container)
+                KeyguardSecurityViewFlipper(R.id.view_flipper)
+                    KeyguardPasswordView(R.id.keyguard_password_view)
 ```
 
 通知栏下拉，可以看到的UI有下面几部分：
