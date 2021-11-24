@@ -67,48 +67,9 @@ mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计�
 
 ```
 // NotificationStackScrollLayout.java
-    @ShadeViewRefactor(RefactorComponent.INPUT)
+
     boolean onScrollTouch(MotionEvent ev) {
-        if (!isScrollingEnabled()) {
-            return false;
-        }
-        if (isInsideQsContainer(ev) && !mIsBeingDragged) {
-            return false;
-        }
-        mForcedScroll = null;
-        initVelocityTrackerIfNotExists();
-        mVelocityTracker.addMovement(ev);
-
-        final int action = ev.getActionMasked();
-        if (ev.findPointerIndex(mActivePointerId) == -1 && action != MotionEvent.ACTION_DOWN) {
-            // Incomplete gesture, possibly due to window swap mid-gesture. Ignore until a new
-            // one starts.
-            Log.e(TAG, "Invalid pointerId=" + mActivePointerId + " in onTouchEvent "
-                    + MotionEvent.actionToString(ev.getActionMasked()));
-            return true;
-        }
-
-        switch (action) {
-            case MotionEvent.ACTION_DOWN: {
-                if (getChildCount() == 0 || !isInContentBounds(ev)) {
-                    return false;
-                }
-                boolean isBeingDragged = !mScroller.isFinished();
-                setIsBeingDragged(isBeingDragged);
-                /*
-                 * If being flinged and user touches, stop the fling. isFinished
-                 * will be false if being flinged.
-                 */
-                if (!mScroller.isFinished()) {
-                    mScroller.forceFinished(true);
-                }
-
-                // Remember where the motion event started
-                mLastMotionY = (int) ev.getY();
-                mDownX = (int) ev.getX();
-                mActivePointerId = ev.getPointerId(0);
-                break;
-            }
+        ......
             case MotionEvent.ACTION_MOVE:
                 final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
                 if (activePointerIndex == -1) {
@@ -160,9 +121,10 @@ mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计�
                     velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
                     int initialVelocity = (int) velocityTracker.getYVelocity(mActivePointerId);
                     // 看是否满足放手后全部展开QS的条件
-                    // 主要有几个判断条件，1.滑动速度大于mMinimumVelocity 或者 2.速度大于0,滑动距离大于mMinTopOverScrollToEscape
-                    // 3.mScrolledToTopOnFirstDown是否为true，它表示Down事件是是否是个滑动事件，如果时在通知满屏时在显示QQS场景到通知中心全部显示
-                    // 之间切换，那么它就是false。
+                    // 主要有几个判断条件，1.滑动速度大于mMinimumVelocity 或者 
+                    // 2.速度大于0,滑动距离大于mMinTopOverScrollToEscape
+                    // 3.mScrolledToTopOnFirstDown是否为true，它表示Down事件是是否是个滑动事件，
+                    // 如果时在通知满屏时在显示QQS场景到通知中心全部显示之间切换，那么它就是false。
                     // 4.mExpandedInThisMotion为false，表示这个事件不是展开单个通知的事件
                     if (shouldOverScrollFling(initialVelocity)) {
                         //通知中心滚动，最终状态时展开QS
@@ -198,30 +160,19 @@ mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计�
                 }
 
                 break;
-            case MotionEvent.ACTION_CANCEL:
-                if (mIsBeingDragged && getChildCount() > 0) {
-                    if (mScroller.springBack(mScrollX, mOwnScrollY, 0, 0, 0,
-                            getScrollRange())) {
-                        animateScroll();
-                    }
-                    mActivePointerId = INVALID_POINTER;
-                    endDrag();
-                }
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN: {
-                final int index = ev.getActionIndex();
-                mLastMotionY = (int) ev.getY(index);
-                mDownX = (int) ev.getX(index);
-                mActivePointerId = ev.getPointerId(index);
-                break;
-            }
-            case MotionEvent.ACTION_POINTER_UP:
-                onSecondaryPointerUp(ev);
-                mLastMotionY = (int) ev.getY(ev.findPointerIndex(mActivePointerId));
-                mDownX = (int) ev.getX(ev.findPointerIndex(mActivePointerId));
-                break;
+            ......
         }
         return true;
+    }
+```
+
+```
+    private boolean shouldOverScrollFling(int initialVelocity) {
+        float topOverScroll = getCurrentOverScrollAmount(true);
+        return mScrolledToTopOnFirstDown
+                && !mExpandedInThisMotion
+                && (initialVelocity > mMinimumVelocity
+                        || (topOverScroll > mMinTopOverScrollToEscape && initialVelocity > 0));
     }
 ```
 
@@ -246,6 +197,7 @@ mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计�
         // 原来的滚动距离加上滑动的距离得到新的滚动位置
         float newScrollY = mOwnScrollY + scrollAmount;
         // 如果新的滚动位置小于0，那么就是判断是个滑动操作
+        // 因为此时表示通知中心可滚动的距离已经滚动完，进入滑动区域
         if (newScrollY < 0) {
             // 距离通知中心顶部位置距离
             float currentTopPixels = getCurrentOverScrolledPixels(true);
@@ -461,7 +413,7 @@ NotificationStackScrollLayout.OnPreDrawListener.onPreDraw()
 
 ## 通知栏滚动
 
-通知中心在显示QQS场景到满屏显示通知场景切换时。
+通知中心在显示QQS场景到满屏显示通知场景切换时。滚动时通知中心的最终位置可以随意。
 这部分逻辑比较简单，就是为 AmbientState 设置一个 mScrollY，在 `NotificationStackScrollLayout.updateChildren()` 时为通知中心的偏移量加上这个滚动值。
 
 ```

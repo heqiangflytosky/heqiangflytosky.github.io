@@ -32,6 +32,9 @@ NotificationShadeWindowView //R.layout.super_notification_shade
                                     QSTileViewImpl
                                     QSTileViewImpl
                                     QSTileViewImpl
+                            UniqueObjectHostView
+                                FrameLayout
+                                    MediaScrollView(R.id.media_carousel_scroller) // 媒体控制面板
                     NonInterceptingScrollView(R.id.expanded_qs_scroll_view)
                         QSPanel(R.id.quick_settings_panel) //QS:顶部常显示按钮和下部的折叠部分快捷开关按钮
                             BrightnessSliderView  // 顶部亮度条
@@ -46,10 +49,16 @@ NotificationShadeWindowView //R.layout.super_notification_shade
                                     QSTileViewImpl
                                     ......
                             QSFooterView // 编辑，关机，管理等按钮
+                            UniqueObjectHostView
+                                FrameLayout
+                                    MediaScrollView(R.id.media_carousel_scroller) // 媒体控制面板
                     QSDetail
                     QSCustomer // 编辑
             NotificationStackScrollLayout(R.id.notification_stack_scroller) //通知栏面板
                 MediaHeaderView
+                    UniqueObjectHostView // 锁屏时才显示媒体控制器
+                        FrameLayout
+                            MediaScrollView(R.id.media_carousel_scroller) // 媒体控制面板
                 ExpandableNotificationRow  //通知
                     NotificationBackgroundView(R.id.backgroundNormal)
                     NotificationBackgroundView(R.id.backgroundDimmend)

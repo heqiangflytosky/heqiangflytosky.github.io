@@ -188,7 +188,9 @@ NotificationPanelViewController.handleQsTouch() // QS处理
 设置QS高度以及通知中心位置
 1.设置 QS 的绘制区域
 2.执行QSTile的动画
-3.设置通知中心的位置
+3.更新媒体控制器的位置
+4.更新通知中心背景
+5.设置通知中心的位置
 
 ```
 NotificationPanelViewController.setQsExpansion()
@@ -200,6 +202,7 @@ NotificationPanelViewController.setQsExpansion()
                 TouchAnimator.setPosition()
                     QSAnimator.onAnimationStarted()
                          QSAnimator.updateQQSVisibility() // 更新QQS的可见性
+        MediaHierarchyManager.setQsExpansion() //媒体控制器更新位置
         ScrimController.setQsPosition() //设置ScrimView，比如通知中心背景透明度等
             ScrimController.applyAndDispatchState()
                 ScrimController.setOrAdaptCurrentAnimation(mScrimBehind)
