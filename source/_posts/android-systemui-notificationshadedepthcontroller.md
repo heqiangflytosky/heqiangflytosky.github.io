@@ -1,5 +1,5 @@
 ---
-title: Android -- NotificationShadeDepthController
+title: SystemUI -- NotificationShadeDepthController
 categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
