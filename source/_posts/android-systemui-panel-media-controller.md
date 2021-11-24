@@ -14,10 +14,7 @@ date: 2021-11-16 12:00:00
 在 Android S上面分别有三个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。
 如图：
 
-<img src="/images/android-systemui-panel-media-controller/lockscreen.png" width="270" height="600"/>
-<img src="/images/android-systemui-panel-media-controller/qqs.png" width="270" height="600"/>
-<img src="/images/android-systemui-panel-media-controller/qs.png" width="270" height="600"/>
-<img src="/images/android-systemui-panel-media-controller/animation.png" width="270" height="600"/>
+<img src="/images/android-systemui-panel-media-controller/image.png" width="676" height="1134"/>
 
 媒体控制器容器布局在 R.layout.media_carousel，媒体控制器布局是 R.layout.media_view。
 
