@@ -67,7 +67,7 @@ NotificationShadeWindowView //R.layout.super_notification_shade
                 SectionHeaderView
                 NotificationShelf // 通过过多时显示隐藏通知的界面
                 ......
-    FrameLayout
+    FrameLayout //解锁界面
         KeyguardHostView(R.id.keyguard_host_view)
             KeyguardSecurityContainer(R.id.keyguard_security_container)
                 KeyguardSecurityViewFlipper(R.id.view_flipper)

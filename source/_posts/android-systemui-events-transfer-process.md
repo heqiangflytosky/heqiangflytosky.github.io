@@ -16,15 +16,15 @@ date: 2021-11-6 10:00:00
 
 事件的处理主要有下面几个类：
 
-PhoneStatusBarView 主要处理从通知栏下拉通知面板
+PhoneStatusBarView 主要处理从状态栏下拉通知面板
 OverviewProxyService 主要操作桌面下拉通知面板
-NotificationShadeWindowViewController 主要操作锁屏切换下拉通知的操作。
-NotificationPanelViewController 主要处理 QS Panel 的整体操作，比如显示，隐藏和整体滑动等等。
+NotificationShadeWindowViewController 主要处理锁屏切换下拉通知的操作。
+NotificationPanelViewController & PanelViewController 主要处理 QS Panel 的整体操作，比如显示，隐藏和整体滑动等等。
 NotificationStackScrollLayoutController 主要处理通知中心的滑动，它处理事件时会通知 NotificationPanelViewController 更新 QS 的可见高度。
 
 ### PhoneStatusBarView
 
-从通知栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。
+从状态栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。
 
 ```
 //PanelBar.java
@@ -65,8 +65,8 @@ NotificationShadeWindowView 处理当它可见时对所有事件的分发，以�
 
 ### NotificationPanelView
 
-NotificationPanelView 主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 
-NotificationPanelView 和它的父类 PanelView 分别设置了事件拦截器和OnTouchListener，事件的处理工作主要由 NotificationPanelViewController 创建的 TouchHandler() 来处理。
+NotificationPanelView 主要处理QS完全展开情况下的事件处理，PanelView 主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 
+NotificationPanelView 和它的父类 PanelView 分别设置了事件拦截器和OnTouchListener，事件的处理工作主要由 NotificationPanelViewController 和 PanelViewController 创建的 TouchHandler() 来处理。
 
 ```
     public void setOnTouchListener(PanelViewController.TouchHandler touchHandler) {
@@ -88,120 +88,39 @@ NotificationShadeWindowView.dispatchTouchEvent()
             PhoneStatusBarView.panelEnabled() // 是否允许显示通知面板
                 CommandQueue.panelsEnabled()
             NotificationPanelViewController.shouldQuickSettingsIntercept()
-            PanelViewController.isFullyExpanded()
-            NotificationPanelViewController.onQsIntercept() // QS 是否需要拦截，拦截后执行折叠动作
+            !PanelViewController.isFullyExpanded() &&       // 在QS展开的前提情况下(1,2,3场景之间的切换)，
+            NotificationPanelViewController.onQsIntercept() // QS 是否需要拦截，拦截后执行QS折叠动作
+                MotionEvent.ACTION_DOWN
+                    mKeyguardShowing && shouldQuickSettingsIntercept()//在锁屏界面而且时在锁屏的状态栏开始滑动时，
+                        requestDisallowInterceptTouchEvent(true)// 禁止父组件再拦截事件，保证move事件可以下发下来
+                        mQsTracking = true //开始跟踪事件
                 MotionEvent.ACTION_MOVE
-                    NotificationPanelViewController.setQsExpansion() // 设置QS显示高度
+                    if mQsTracking
+                        NotificationPanelViewController.setQsExpansion() // 更新QS的高度以及通知中心位置，详见后面方法介绍
+                        return true
                     NotificationPanelViewController.onQsExpansionStarted() // 开始跟踪手势，实现通知中心上下滑
+                    mQsTracking = true
                     NotificationPanelViewController.notifyExpandingFinished()
             PanelViewController.TouchHandler.onInterceptTouchEvent() // PanelViewController 是否拦截
                 NotificationPanelViewController.canCollapsePanelOnTouch() // 是否可以折叠 QSPanel
                     NotificationStackScrollLayoutController.isScrolledToBottom() // 通知中心有没有滑动到底部，滑动到底部表示不能滑动就拦截，不能再折叠了，move事件处理成QS整体操作
 ```
 
-如果 `NotificationPanelViewController.TouchHandler.onInterceptTouchEvent()` 这里拦截了，就处理QSPanel的整体操作，比如显示和隐藏等。不拦截了就向下分发，处理通知中心折叠操作等。
+在大部分场景下，Down 事件一般都不是 NotificationPanelView 消费的，如果 `NotificationPanelViewController.TouchHandler.onInterceptTouchEvent()` 这里拦截了，就处理QSPanel的整体操作，比如显示和隐藏等。不拦截了就向下分发，处理通知中心折叠操作等。
+
 
 ```
-            public boolean onInterceptTouchEvent(MotionEvent event) {
-                if (mBlockTouches || mQsFullyExpanded && mQs.disallowPanelTouches()) {
-                    return false;
-                }
-                initDownStates(event);
-                // Do not let touches go to shade or QS if the bouncer is visible,
-                // but still let user swipe down to expand the panel, dismissing the bouncer.
-                // bouncer view 显示时拦截处理事件
-                if (mStatusBar.isBouncerShowing()) {
-                    return true;
-                }
-                if (mBar.panelEnabled() && mHeadsUpTouchHelper.onInterceptTouchEvent(event)) {
-                    mMetricsLogger.count(COUNTER_PANEL_OPEN, 1);
-                    mMetricsLogger.count(COUNTER_PANEL_OPEN_PEEK, 1);
-                    return true;
-                }
-                if (!shouldQuickSettingsIntercept(mDownX, mDownY, 0)
-                        && mPulseExpansionHandler.onInterceptTouchEvent(event)) {
-                    return true;
-                }
-                // QS展开的情况下(1,2,3场景之间的切换)，onQsIntercept来判断是否需要拦截
-                if (!isFullyCollapsed() && onQsIntercept(event)) {
-                    return true;
-                }
-                return super.onInterceptTouchEvent(event);
-            }
+NotificationPanelViewController.TouchHandler.onTouch()
+    NotificationPanelViewController.handleQsTouch()// NotificationPanelView处理 touch事件，比如通知中心的空白区域的滑动，在QS上上划呼出通知中心，具体看后面介绍
+    ACTION_DOWN
+        event.getActionMasked() == MotionEvent.ACTION_DOWN && isFullyCollapsed() // 在QS完全折叠情况下，消费Down事件，那么后面的Move和UP事件也会在这里处理，比如状态栏下拉
+        handle = true
+    PanelViewController.TouchHandler.onTouch() // NotificationPanelView 不处理，就走到这里，执行下拉通知整体操作，看滑动QS部分介绍
+    
 ```
 
-```            
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mBlockTouches || (mQsFullyExpanded && mQs != null
-                        && mQs.disallowPanelTouches())) {
-                    return false;
-                }
+关于 onTouch 部分的操作，可以看下面QS滑动部分有详细介绍。
 
-                // Do not allow panel expansion if bouncer is scrimmed, otherwise user would be able
-                // to pull down QS or expand the shade.
-                if (mStatusBar.isBouncerShowingScrimmed()) {
-                    return false;
-                }
-
-                // Make sure the next touch won't the blocked after the current ends.
-                if (event.getAction() == MotionEvent.ACTION_UP
-                        || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    mBlockingExpansionForCurrentTouch = false;
-                }
-                // When touch focus transfer happens, ACTION_DOWN->ACTION_UP may happen immediately
-                // without any ACTION_MOVE event.
-                // In such case, simply expand the panel instead of being stuck at the bottom bar.
-                if (mLastEventSynthesizedDown && event.getAction() == MotionEvent.ACTION_UP) {
-                    expand(true /* animate */);
-                }
-                initDownStates(event);
-
-                // If pulse is expanding already, let's give it the touch. There are situations
-                // where the panel starts expanding even though we're also pulsing
-                boolean pulseShouldGetTouch = (!mIsExpanding
-                        && !shouldQuickSettingsIntercept(mDownX, mDownY, 0))
-                        || mPulseExpansionHandler.isExpanding();
-                if (pulseShouldGetTouch && mPulseExpansionHandler.onTouchEvent(event)) {
-                    // We're expanding all the other ones shouldn't get this anymore
-                    return true;
-                }
-                if (mListenForHeadsUp && !mHeadsUpTouchHelper.isTrackingHeadsUp()
-                        && mHeadsUpTouchHelper.onInterceptTouchEvent(event)) {
-                    mMetricsLogger.count(COUNTER_PANEL_OPEN_PEEK, 1);
-                }
-                boolean handled = false;
-                if ((!mIsExpanding || mHintAnimationRunning) && !mQsExpanded
-                        && mBarState != StatusBarState.SHADE && !mDozing) {
-                    handled |= mAffordanceHelper.onTouchEvent(event);
-                }
-                if (mOnlyAffordanceInThisMotion) {
-                    return true;
-                }
-                handled |= mHeadsUpTouchHelper.onTouchEvent(event);
-
-                if (!mHeadsUpTouchHelper.isTrackingHeadsUp() && handleQsTouch(event)) {
-                    return true;
-                }
-                // 如果是Down事件，而且在下来面板完全折叠的情况下，会返回true，表示消费掉down事件。那么后面的Move和UP事件也会在这里处理
-                if (event.getActionMasked() == MotionEvent.ACTION_DOWN && isFullyCollapsed()) {
-                    mMetricsLogger.count(COUNTER_PANEL_OPEN, 1);
-                    updateHorizontalPanelPosition(event.getX());
-                    handled = true;
-                }
-
-                if (event.getActionMasked() == MotionEvent.ACTION_DOWN && isFullyExpanded()
-                        && mStatusBarKeyguardViewManager.isShowing()) {
-                    mStatusBarKeyguardViewManager.updateKeyguardPosition(event.getX());
-                }
-
-                if (mLockIconViewController.onTouchEvent(event)) {
-                    return true;
-                }
-
-                handled |= super.onTouch(v, event);
-                return !mDozing || mPulsing || handled;
-            }
-```
 
 ```
     private boolean shouldQuickSettingsIntercept(float x, float y, float yDiff) {
@@ -230,82 +149,6 @@ NotificationShadeWindowView.dispatchTouchEvent()
     }
 ```
 
-```
-//onQsIntercept调用的前提时qs在展开状态
-    private boolean onQsIntercept(MotionEvent event) {
-        int pointerIndex = event.findPointerIndex(mTrackingPointer);
-        if (pointerIndex < 0) {
-            pointerIndex = 0;
-            mTrackingPointer = event.getPointerId(pointerIndex);
-        }
-        final float x = event.getX(pointerIndex);
-        final float y = event.getY(pointerIndex);
-
-        switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
-                mInitialTouchY = y;
-                mInitialTouchX = x;
-                initVelocityTracker();
-                trackMovement(event);
-                if (mKeyguardShowing
-                        && shouldQuickSettingsIntercept(mInitialTouchX, mInitialTouchY, 0)) {
-                    // 在锁屏界面而且时在锁屏的状态栏开始滑动时，禁止父组件再拦截事件，保证move事件可以下发下来
-                    mView.getParent().requestDisallowInterceptTouchEvent(true);
-                }
-                if (mQsExpansionAnimator != null) {
-                    mInitialHeightOnTouch = mQsExpansionHeight;
-                    // 开始跟踪事件
-                    mQsTracking = true;
-                    traceQsJank(true /* startTracing */, false /* wasCancelled */);
-                    mNotificationStackScrollLayoutController.cancelLongPress();
-                }
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                final int upPointer = event.getPointerId(event.getActionIndex());
-                if (mTrackingPointer == upPointer) {
-                    // gesture is ongoing, find a new pointer to track
-                    final int newIndex = event.getPointerId(0) != upPointer ? 0 : 1;
-                    mTrackingPointer = event.getPointerId(newIndex);
-                    mInitialTouchX = event.getX(newIndex);
-                    mInitialTouchY = event.getY(newIndex);
-                }
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                final float h = y - mInitialTouchY;
-                trackMovement(event);
-                if (mQsTracking) {
-                    // 更新QS的高度以及通知中心位置
-                    setQsExpansion(h + mInitialHeightOnTouch);
-                    trackMovement(event);
-                    // 开始处理Move事件
-                    return true;
-                }
-                if ((h > getTouchSlop(event) || (h < -getTouchSlop(event) && mQsExpanded))
-                        && Math.abs(h) > Math.abs(x - mInitialTouchX)
-                        && shouldQuickSettingsIntercept(mInitialTouchX, mInitialTouchY, h)) {
-                    mView.getParent().requestDisallowInterceptTouchEvent(true);
-                    mQsTracking = true;
-                    traceQsJank(true /* startTracing */, false /* wasCancelled */);
-                    onQsExpansionStarted();
-                    notifyExpandingFinished();
-                    mInitialHeightOnTouch = mQsExpansionHeight;
-                    mInitialTouchY = y;
-                    mInitialTouchX = x;
-                    mNotificationStackScrollLayoutController.cancelLongPress();
-                    return true;
-                }
-                break;
-
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
-                trackMovement(event);
-                mQsTracking = false;
-                break;
-        }
-        return false;
-    }
-```
 
 ### NotificationStackScrollLayout
 
@@ -595,7 +438,7 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 
 ## 状态栏下拉
 
-从通知栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。此时的事件不经过NotificationShadeWindowView分发。
+从状态栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。此时的事件不经过NotificationShadeWindowView分发。
 在这种情况下，PanelViewController.TouchHandler.onInterceptTouchEvent() 和 NotificationPanelViewController.TouchHandler.onTouch()在Down事件时返回true，消费该事件，那么后面的Move和UP事件也会在这里或者父类的onTouch()中处理。
 
 ```
@@ -613,7 +456,7 @@ StatusBarWindowView.dispatchTouchEvent()
                     PanelViewController.TouchHandler.onTouch()
                         处理Move和UP事件，执行整体下来操作。
                         ACTION_MOVE
-                            PanelViewController.setExpandedHeightInternal() //设置QS展开的高度，具体看后面文章介绍
+                            PanelViewController.setExpandedHeightInternal() //设置QS展开的高度，更新shaderview可见性，具体看后面文章介绍
                         ACTION_UP
                             PanelViewController.endMotionEvent()
                                 PanelViewController.fling()
