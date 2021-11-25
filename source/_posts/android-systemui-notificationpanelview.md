@@ -11,7 +11,7 @@ date: 2021-11-7 10:00:00
 ## 概述
 
 NotificationPanelView 是Panel的子类，它继承自 FrameLayout，提供了一个承载下拉通知面板的容器。NotificationPanelView 主要作用就是用 PanelViewController.TouchHandler 来进行一些事件处理。
-本文基于原生 Android S 代码。
+关于事件分发流程和下拉交互部分参考前面介绍，本文只介绍一些方法实现的细节。本文基于原生 Android S 代码。
 
 ## NotificationPanelView & PanelView 
 

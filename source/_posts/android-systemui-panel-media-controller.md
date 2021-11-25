@@ -1,5 +1,5 @@
 ---
-title: SystemUI -- 媒体控制器
+title: SystemUI -- 多媒体通知
 categories:  Android SystemUI
 comments: true
 tags: [SystemUI]
@@ -11,7 +11,7 @@ date: 2021-11-16 12:00:00
 
 ## 概述
 
-在 Android S上面分别有三个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。
+在 Android S上面分别有四个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。
 如图：
 
 <img src="/images/android-systemui-panel-media-controller/image.png" width="676" height="1134"/>
