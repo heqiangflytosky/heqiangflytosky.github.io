@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍NotificationPanelView">
-<meta property="og:updated_time" content="2021-11-24T09:32:04.428Z">
+<meta property="og:updated_time" content="2021-11-25T02:22:43.948Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemUI -- NotificationPanelView">
 <meta name="twitter:description" content="介绍NotificationPanelView">
@@ -400,7 +400,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>NotificationPanelView 是Panel的子类，它继承自 FrameLayout，提供了一个承载下拉通知面板的容器。NotificationPanelView 主要作用就是用 PanelViewController.TouchHandler 来进行一些事件处理。<br>本文基于原生 Android S 代码。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>NotificationPanelView 是Panel的子类，它继承自 FrameLayout，提供了一个承载下拉通知面板的容器。NotificationPanelView 主要作用就是用 PanelViewController.TouchHandler 来进行一些事件处理。<br>关于事件分发流程和下拉交互部分参考前面介绍，本文只介绍一些方法实现的细节。本文基于原生 Android S 代码。</p>
 <h2 id="NotificationPanelView-amp-PanelView"><a href="#NotificationPanelView-amp-PanelView" class="headerlink" title="NotificationPanelView &amp; PanelView"></a>NotificationPanelView &amp; PanelView</h2><p>TouchHandler 主要来处理 onInterceptTouchEvent() 和 onTouch()</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public abstract class PanelView extends FrameLayout &#123;</div><div class="line"></div><div class="line">    public void setOnTouchListener(PanelViewController.TouchHandler touchHandler) &#123;</div><div class="line">        super.setOnTouchListener(touchHandler);</div><div class="line">        mTouchHandler = touchHandler;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @Override</div><div class="line">    public boolean onInterceptTouchEvent(MotionEvent event) &#123;</div><div class="line">        return mTouchHandler.onInterceptTouchEvent(event);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>NotificationPanelViewController 和 PanelViewController 都生成了自己的 TouchHandler。</p>

@@ -88,14 +88,14 @@
 
 <meta name="description" content="介绍媒体控制器相关">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SystemUI -- 媒体控制器">
+<meta property="og:title" content="SystemUI -- 多媒体通知">
 <meta property="og:url" content="http://yoursite.com/2021/11/16/android-systemui-panel-media-controller/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍媒体控制器相关">
 <meta property="og:image" content="http://yoursite.com/images/android-systemui-panel-media-controller/image.png">
-<meta property="og:updated_time" content="2021-11-24T10:06:31.796Z">
+<meta property="og:updated_time" content="2021-11-25T02:23:50.184Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SystemUI -- 媒体控制器">
+<meta name="twitter:title" content="SystemUI -- 多媒体通知">
 <meta name="twitter:description" content="介绍媒体控制器相关">
 <meta name="twitter:image" content="http://yoursite.com/images/android-systemui-panel-media-controller/image.png">
 
@@ -131,7 +131,7 @@
 
 
 
-  <title> SystemUI -- 媒体控制器 | 孤舟蓑笠翁，独钓寒江雪 </title>
+  <title> SystemUI -- 多媒体通知 | 孤舟蓑笠翁，独钓寒江雪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -304,7 +304,7 @@
             
             
               
-                SystemUI -- 媒体控制器
+                SystemUI -- 多媒体通知
               
             
           </h1>
@@ -371,7 +371,7 @@
 
           
           
-             <span id="/2021/11/16/android-systemui-panel-media-controller/" class="leancloud_visitors" data-flag-title="SystemUI -- 媒体控制器">
+             <span id="/2021/11/16/android-systemui-panel-media-controller/" class="leancloud_visitors" data-flag-title="SystemUI -- 多媒体通知">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -402,7 +402,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 Android S上面分别有三个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。<br>如图：</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 Android S上面分别有四个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。<br>如图：</p>
 <p><img src="/images/android-systemui-panel-media-controller/image.png" width="676" height="1134"></p>
 <p>媒体控制器容器布局在 R.layout.media_carousel，媒体控制器布局是 R.layout.media_view。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">UniqueObjectHostView</div><div class="line">    FrameLayout</div><div class="line">        MediaScrollView(R.id.media_carousel_scroller)</div><div class="line">            LinearLayout(R.id.media_carousel)</div><div class="line">                TransitionLayout(R.id.qs_media_controls)</div><div class="line">                    Guideline(R.id.center_vertical_guideline)</div><div class="line">                    FrameLayout(R.id.notification_media_progress_time)</div><div class="line">                    TextView(R.id.media_elapsed_time)</div><div class="line">                    SeekBar(R.id.media_progress_bar)</div><div class="line">                    ......</div><div class="line">        PageIndicator()</div><div class="line">        ImageView(R.id.settings_cog)</div></pre></td></tr></table></figure>

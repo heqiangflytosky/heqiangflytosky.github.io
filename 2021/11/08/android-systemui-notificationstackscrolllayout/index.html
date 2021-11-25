@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍 NotificationStackScrollLayout">
-<meta property="og:updated_time" content="2021-11-24T09:32:04.430Z">
+<meta property="og:updated_time" content="2021-11-25T02:22:31.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemUI -- NotificationStackScrollLayout">
 <meta name="twitter:description" content="介绍 NotificationStackScrollLayout">
@@ -400,7 +400,7 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>NotificationStackScrollLayout 继承自 ViewGroup，它提供了一个动态添加和删除通知的可滚动的容器。<br>主要处理三种类型的事件：1.单个通知的展开和收缩手势，2.通知中心的滑动和滚动，3.左右滑动删除通知操作。<br>本文基于原生Android S代码。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>NotificationStackScrollLayout 继承自 ViewGroup，它提供了一个动态添加和删除通知的可滚动的容器。<br>主要处理三种类型的事件：1.单个通知的展开和收缩手势，2.通知中心的滑动和滚动，3.左右滑动删除通知操作。<br>关于事件分发流程和下拉交互部分参考前面介绍，本文只介绍一些方法实现的细节。<br>本文基于原生Android S代码。</p>
 <h2 id="常用变量和方法"><a href="#常用变量和方法" class="headerlink" title="常用变量和方法"></a>常用变量和方法</h2><p>1.NotificationStackScrollLayout<br>mIsBeingDragged:是否时拖动通知中心的操作，此时的拖动事件由 NotificationStackScrollLayout 来处理。一旦设置为true，就会调用 requestDisallowInterceptTouchEvent(true)，不允许父组件做事件拦截。<br>mQsExpansionFraction：通知栏展开比例，如果是0表示全部展开，这时只显示QQS，1表示通知中心全部隐藏。<br>mExpandHelper：处理通知的展开和收缩<br>mTopPadding：通知中心的最上面一条通知通知距离顶部的偏移量，显示QQS时就是QQS的高度，不显示QQS时为通知中心距离顶部的实时距离<br>mIntrinsicContentHeight：通知中心各个通知累加的高度<br>mContentHeight：mIntrinsicContentHeight 加上 mTopPadding 和 mBottomMargin 的高度。<br>mOverScrolledTopPixels<br>mOverScrolledBottomPixels<br>RUBBER_BAND_FACTOR_NORMAL:回弹系数<br>RUBBER_BAND_FACTOR_AFTER_EXPAND<br>RUBBER_BAND_FACTOR_ON_PANEL_EXPAND<br>mScrolledToTopOnFirstDown：它表示Down事件是是否是个滑动事件，如果时在通知满屏时在显示QQS场景到通知中心全部显示之间切换，那么它就是false。<br>mExpandedInThisMotion：是否是展开单个通知的事件<br>mGoToFullShadeNeedsAnimation：是否以动画样式展开通知中心<br>mNeedsAnimation:是否需要动画<br>updateTopPadding():更新偏移量，来设置每条通知的位置。<br>updateEmptyShadeView()<br>updateFooterView()<br>setDismissAllInProgress()<br>goToFullShade() 切换到将通知全部展开的状态<br>fling()：处理通知中心放手后的惯性滚动，注意：不是回弹效果。<br>2.NotificationStackScrollLayoutController<br>mSwipeHelper:处理滑动删除通知逻辑<br>3.AmbientState: 为 StackScrollAlgorithm 保存一些全局状态。<br>mStackY：通知中心的最上面一条通知通知距离顶部的偏移量<br>mTopPadding：NotificationStackScrollLayout.mTopPadding<br>mScrollY:通知栏的滚动位置，通知中心由显示QQS到满屏显示通知场景过渡时来决定通知栏的位置<br>mOverScrollTopAmount：通知中心顶部回弹量，向下滑动时设置<br>mOverScrollBottomAmount：通知中心底部回弹量，通知中心满屏时向上滚动通知栏时设置<br>3.StackScrollAlgorithm：用来使 NotificationStackScrollLayout可以查询或者更新当前的 StackScrollAlgorithmState 状态。<br>mExpansionFraction ：通知栏展开的比例，场景2 -&gt; 场景0 过渡时来决定通知的折叠比例，透明度和通知中心的位置。<br>mScrollY:AmbientState.mScrollY<br>4.ViewState：记录了一些View的属性值，translation，alpha，scale，visibility等。<br>5.ExpandableViewState：ViewState的子类，每个ExpandableView类都有个ExpandableViewState变量，记录该通知的一些属性信息。<br>yTranslation 通知的实际位置。</p>
 <p>StackScrollAlgorithmState<br>scrollY:AmbientState.mScrollY<br>mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计算各个通知的偏移。</p>
 <h2 id="通知栏的滑动"><a href="#通知栏的滑动" class="headerlink" title="通知栏的滑动"></a>通知栏的滑动</h2><p>这部分主要是在显示 QQS 状态到通知中心完全隐藏状态之间的切换，主要涉及到通知位置的计算和UI更新。<br>介绍的仅仅是在通知中心的通知区域的手势操作，比如滑动通知中心的空白处的操作的这部分就是在 <code>NotificationPanelViewController.handleQsTouch()</code> 处理中处理了。</p>

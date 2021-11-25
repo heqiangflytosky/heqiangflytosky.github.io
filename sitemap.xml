@@ -2,30 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2021/11/16/android-systemui-panel-media-controller/</loc>
-    
-    <lastmod>2021-11-24T10:06:31.796Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
     
-    <lastmod>2021-11-24T09:32:04.431Z</lastmod>
+    <lastmod>2021-11-25T06:42:30.170Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
+    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
     
-    <lastmod>2021-11-24T09:32:04.430Z</lastmod>
+    <lastmod>2021-11-25T06:42:30.168Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/16/android-systemui-panel-media-controller/</loc>
+    
+    <lastmod>2021-11-25T02:23:50.184Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
     
-    <lastmod>2021-11-24T09:32:04.428Z</lastmod>
+    <lastmod>2021-11-25T02:22:43.948Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
+    
+    <lastmod>2021-11-25T02:22:31.833Z</lastmod>
     
   </url>
   
@@ -33,13 +40,6 @@
     <loc>http://yoursite.com/2021/11/15/android-systemui-notificationshadedepthcontroller/</loc>
     
     <lastmod>2021-11-24T02:47:27.338Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
-    
-    <lastmod>2021-11-24T02:44:28.340Z</lastmod>
     
   </url>
   
@@ -1906,14 +1906,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
