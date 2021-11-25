@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍媒体控制器相关">
 <meta property="og:image" content="http://yoursite.com/images/android-systemui-panel-media-controller/image.png">
-<meta property="og:updated_time" content="2021-11-25T02:23:50.184Z">
+<meta property="og:updated_time" content="2021-11-25T10:38:10.258Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemUI -- 多媒体通知">
 <meta name="twitter:description" content="介绍媒体控制器相关">
@@ -408,11 +408,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">UniqueObjectHostView</div><div class="line">    FrameLayout</div><div class="line">        MediaScrollView(R.id.media_carousel_scroller)</div><div class="line">            LinearLayout(R.id.media_carousel)</div><div class="line">                TransitionLayout(R.id.qs_media_controls)</div><div class="line">                    Guideline(R.id.center_vertical_guideline)</div><div class="line">                    FrameLayout(R.id.notification_media_progress_time)</div><div class="line">                    TextView(R.id.media_elapsed_time)</div><div class="line">                    SeekBar(R.id.media_progress_bar)</div><div class="line">                    ......</div><div class="line">        PageIndicator()</div><div class="line">        ImageView(R.id.settings_cog)</div></pre></td></tr></table></figure>
 <p>相关的类：</p>
 <ul>
-<li>MediaHierarchyManager</li>
+<li>MediaHierarchyManager 管理媒体控制器在不同host view之间的切换已经它们之间的切换动画</li>
 <li>MediaHost</li>
 <li>UniqueObjectHostView 承载媒体控制器的容器，它是 MediaHost 的一个变量，一个 MediaHost 对应一个 UniqueObjectHostView</li>
 <li>MediaCarouselController</li>
-<li>MediaControlPanel</li>
+<li>MediaControlPanel 控制多媒体播放</li>
 </ul>
 <p>在 MediaHierarchyManager 中定义了媒体控制器的四个位置场景。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">// MediaHierarchyManager.kt</div><div class="line">    companion object &#123;</div><div class="line">        /**</div><div class="line">         * Attached in expanded quick settings</div><div class="line">         * 添加在QS面板下方</div><div class="line">         */</div><div class="line">        const val LOCATION_QS = 0</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Attached in the collapsed QS</div><div class="line">         * QS折叠时添加在QQS下方</div><div class="line">         */</div><div class="line">        const val LOCATION_QQS = 1</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Attached on the lock screen</div><div class="line">         * 锁屏时添加到通知面板上方</div><div class="line">         */</div><div class="line">        const val LOCATION_LOCKSCREEN = 2</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Attached at the root of the hierarchy in an overlay</div><div class="line">         * 媒体控制器在ViewGroupOverlay，这时正在做手势切换动画</div><div class="line">         */</div><div class="line">        const val IN_OVERLAY = -1000</div></pre></td></tr></table></figure>
