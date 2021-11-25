@@ -35,11 +35,11 @@ UniqueObjectHostView
 
 相关的类：
 
- - MediaHierarchyManager
+ - MediaHierarchyManager 管理媒体控制器在不同host view之间的切换已经它们之间的切换动画
  - MediaHost
  - UniqueObjectHostView 承载媒体控制器的容器，它是 MediaHost 的一个变量，一个 MediaHost 对应一个 UniqueObjectHostView
  - MediaCarouselController
- - MediaControlPanel
+ - MediaControlPanel 控制多媒体播放
 
 在 MediaHierarchyManager 中定义了媒体控制器的四个位置场景。
 

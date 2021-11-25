@@ -122,34 +122,6 @@ NotificationPanelViewController.TouchHandler.onTouch()
 关于 onTouch 部分的操作，可以看下面QS滑动部分有详细介绍。
 
 
-```
-    private boolean shouldQuickSettingsIntercept(float x, float y, float yDiff) {
-        if (!isQsExpansionEnabled() || mCollapsedOnDown || (mKeyguardShowing
-                && mKeyguardBypassController.getBypassEnabled())) {
-            return false;
-        }
-        // 如果时锁屏界面，那么header区域就是状态栏，否则就是QuickStatusBarHeader的区域。
-        View header = mKeyguardShowing || mQs == null ? mKeyguardStatusBar : mQs.getHeader();
-        // 根据header设置拦截区域
-        mQsInterceptRegion.set(
-                /* left= */ (int) mQsFrame.getX(),
-                /* top= */ header.getTop(),
-                /* right= */ (int) mQsFrame.getX() + mQsFrame.getWidth(),
-                /* bottom= */ header.getBottom());
-        // Also allow QS to intercept if the touch is near the notch.
-        mStatusBarTouchableRegionManager.updateRegionForNotch(mQsInterceptRegion);
-        //判读事件是否在header区域
-        final boolean onHeader = mQsInterceptRegion.contains((int) x, (int) y);
-
-        if (mQsExpanded) {
-            return onHeader || (yDiff < 0 && isInQsArea(x, y));
-        } else {
-            return onHeader;
-        }
-    }
-```
-
-
 ### NotificationStackScrollLayout
 
 处理三种类型的事件：1.单个通知的展开和收缩手势，2.通知中心的滑动和滚动（这里所说的滑动和滚动，意在区分不同场景下通知中心的滚动），3.左右滑动删除通知操作
@@ -433,7 +405,7 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 
 2->3 切换同样时由 NotificationStackScrollLayout 来处理 `MotionEvent.ACTION_MOVE` 和 `MotionEvent.ACTION_UP` 事件。
 
-3->2 切换，在QS上做上划动作，NotificationStackScrollLayout 不消费DOWN事件，事件再经过 NotificationPanelView 的 onTouch() 时被 NotificationPanelViewController.handleQsTouch()->onQsTouch() 处理，后面的 MOVE 和 UP事件也由 onQsTouch 处理。
+3->2 切换，在QS上做上划动作，NotificationStackScrollLayout 不消费DOWN事件，被NotificationPanelView子View消费，后续MOVE 和 UP事件事件再经过 NotificationPanelView 被拦截，被 NotificationPanelView.onTouch() -> NotificationPanelViewController.handleQsTouch()->onQsTouch() 处理。
 
 
 ## 状态栏下拉
@@ -477,7 +449,8 @@ StatusBarWindowView.dispatchTouchEvent()
 
 桌面下拉事件处理逻辑分为两种情况，一种是 OverviewProxyService 自己处理，另外一种是 OverviewProxyService + NotificationPanelViewController 来处理。
 首先 OverviewProxyService 接收DOWN事件后，设置shade view可见。
-第一种情况是 OverviewProxyService 自己处理，这种情况下可能是在手势很快的情况下，事件没有分发到 NotificationPanelView，那么就OverviewProxyService自己处理。。
+第一种情况是 OverviewProxyService 自己处理，这种情况下可能是在手势很快的情况下，事件没有分发到 NotificationPanelView，那么就OverviewProxyService自己处理。
+OverviewProxyService 只处理 DONW, UP和CANCEL事件。
 
 ```
 OverviewProxyService.onStatusBarMotionEvent()
@@ -523,7 +496,7 @@ OverviewProxyService.onStatusBarMotionEvent()
 1.显示QQS和通知中心的情况下滑动通知中心以外区域
 2.全部显示QS时在QS面板上面滑动。
 
-这两种情况下，对DONW事件都不做处理。NotificationPanelViewController 对 Move 事件拦截，然后 Move和Up事件由 NotificationPanelViewController 或者 PanelViewController 处理。
+这两种情况下，NotificationStackScrollLayout对DONW事件都不做处理。NotificationPanelViewController 对 Move 事件拦截，然后 Move和Up事件由 NotificationPanelViewController 或者 PanelViewController 处理。
 有涉及到通知中心位移时就在 NotificationPanelViewController 中处理。处理下拉面板整体操作时就在 PanelViewController 中处理。
 
 主要进行一下的逻辑操作：
@@ -536,7 +509,8 @@ OverviewProxyService.onStatusBarMotionEvent()
 ```
 PanelView.onTouchEvent()
     NotificationPanelViewController.TouchHandler.onTouch()
-        NotificationPanelViewController.handleQsTouch() // QS处理，用来更新 QS 的显示高度以及更新通知中心的位置。比如QS上面上划呼出通知中心，或者下滑隐藏通知中心。看后面对该方法的详细介绍
+        NotificationPanelViewController.handleQsTouch() // QS处理，用来更新 QS 的显示高度以及更新通知中心的位置。
+                                                        //比如QS上面上划呼出通知中心，或者下滑隐藏通知中心。看后面对该方法的详细介绍
             ACTION_DOWN
                 mQsTracking = true
                 NotificationPanelViewController.onQsExpansionStarted()
@@ -556,7 +530,7 @@ PanelView.onTouchEvent()
                                                 NotificationShadeWindowControllerImpl.apply()
                                                     NotificationShadeWindowControllerImpl.applyVisibility()
                                                         NotificationShadeWindowView.setVisibility() // 更新面板可见性
-                    PanelViewController.setExpandedHeightInternal()
+                    PanelViewController.setExpandedHeightInternal() // 看后面介绍
                         NotificationPanelViewController.onHeightUpdated()
                             NotificationPanelViewController.positionClockAndNotifications()
                                 NotificationPanelViewController.requestScrollerTopPaddingUpdate()

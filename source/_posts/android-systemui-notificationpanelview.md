@@ -228,6 +228,10 @@ NotificationPanelViewController.setQsExpansion()
 ```
 PanelViewController.setExpandedHeightInternal()
     NotificationPanelViewController.onHeightUpdated()
+        NotificationPanelViewController.positionClockAndNotifications()：计算时钟(锁屏时)和通知中心的位置
+            NotificationPanelViewController.requestScrollerTopPaddingUpdate()
+                NotificationStackScrollLayoutController.updateTopPadding()
+                    NotificationStackScrollLayout.updateTopPadding() // 更新通知中心的位置，后面详细介绍
         NotificationPanelViewController.updateExpandedHeight()
             NotificationStackScrollLayoutController.setExpandedHeight() // 更新通知栏高度
                 NotificationStackScrollLayout.setExpandedHeight()
