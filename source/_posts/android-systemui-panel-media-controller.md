@@ -11,6 +11,20 @@ date: 2021-11-16 12:00:00
 
 ## 概述
 
+在 Android 中可以把媒体通知显示在 QS 上，这个特性可以通过下面的开关来配置：
+
+```
+packages/SystemUI/src/com/android/systemui/util/Utils.java
+
+    public static boolean useQsMediaPlayer(Context context) {
+        int flag = Settings.Global.getInt(context.getContentResolver(),
+                Settings.Global.SHOW_MEDIA_ON_QUICK_SETTINGS, 1);
+        return flag > 0;
+    }
+```
+
+如果不显示在QS上，那么就显示在通知中心里面。
+
 在 Android S上面分别有四个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。
 如图：
 

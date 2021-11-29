@@ -145,7 +145,7 @@ mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计�
                                     // 处理通知中心放手后的惯性滚动，注意：不是回弹效果。
                                     fling(-initialVelocity);
                                 } else {
-                                    //通知中心滚动，最终状态时展开QS，最终状态时回到原位置
+                                    //通知中心滚动，最终状态是折叠QS，显示通知中心，回到原位置
                                     onOverScrollFling(false, initialVelocity);
                                 }
                             } else {

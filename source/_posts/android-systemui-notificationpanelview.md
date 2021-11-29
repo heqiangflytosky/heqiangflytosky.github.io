@@ -243,10 +243,12 @@ NotificationPanelViewController.setQsExpansion()
 
 ### setExpandedHeightInternal()
 
-设置QS展开的高度
+更新mExpandedHeight，整个下拉面板的高度
 
 ```
 PanelViewController.setExpandedHeightInternal()
+    mExpandedHeight = h
+    mExpandedFraction = mExpandedHeight/maxPanelHeight
     NotificationPanelViewController.onHeightUpdated()
         NotificationPanelViewController.positionClockAndNotifications()：在QS没有展开的情况下，计算时钟(锁屏时)和通知中心的位置
             NotificationPanelViewController.requestScrollerTopPaddingUpdate()
