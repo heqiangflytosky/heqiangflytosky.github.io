@@ -43,7 +43,7 @@ mOverExpansion:QS可以回弹下拉的高度
 mQsExpanded:QS是否可见，这时QS正在展开或者全部展开，此时展开高度大于 mQsMinExpansionHeight，也就是在只显示QQS到全部显示QS之间的状态变化时为true。
 mQsMinExpansionHeight:QS展开的最小高度：如果是锁屏模式，就是0，全部隐藏了。如果不是就是 QuickStatusBarHeader 的高度。
 mQsMaxExpansionHeight：QS展开的最大高度，通过 getDesiredHeight() 获取，一般是QSContainerImpl 的高度。
-mQsExpansionHeight：QS的当前实时高度，一般通过 setQsExpansion() 方法设置。
+mQsExpansionHeight：QS的当前实时高度，一般通过 setQsExpansion() 方法设置。一般为初始位置加手势移动的距离。
 mQsFullyExpanded：QS是否完全展开，展开高度等于mQsMaxExpansionHeight
 mExpanding：面板是否在展开
 mClosing：是否正在关闭面板
@@ -51,8 +51,10 @@ mQsTracking：是否在触摸快捷面板（展开、收起快捷面板部分逻
 mTracking：为true时表示 NotificationPanelViewController 正在做QS和通知中心的收起或者展示动画。
 mExpandedHeight:整个下拉面板的高度。为初始位置和手势滑动距离之和。原生用的时渐隐渐现动画。
 mExpandedFraction:下拉面板的幅度,展开高度除于整体高度。
+mQsExpandImmediate：下拉后是QS展开状态，用于双指操作
+mTwoFingerQsExpandPossible：表示当前状态可以用于双指操作
 
-getMaxPanelHeight():它的值有两种情况，一个是从只显示QQS到完全显示QS的状态，这个时候的值时经过calculatePanelHeightQsExpanded()计算，一般为mQsMaxExpansionHeight加上NotificationShelf的高度；其他状态时经过calculatePanelHeightShade()计算，其实时通知面板的高度;
+getMaxPanelHeight():它的值有两种情况，一个是从只显示QQS到完全显示QS的状态，或者双指从状态栏下拉时，这个时候的值时经过calculatePanelHeightQsExpanded()计算，一般为mQsMaxExpansionHeight加上NotificationShelf的高度，因为它们的最终状态是全部显示QS；其他状态时经过calculatePanelHeightShade()计算，其实时通知面板的高度;
 calculateNotificationsTopPadding()：计算通知中心的最上面的通知距离顶部的距离
 setQSClippingBounds()： 设置QS的绘制区域，下面介绍。
 expand()
@@ -186,14 +188,32 @@ NotificationPanelViewController.handleQsTouch() // QS处理
 ### setQsExpansion()
 
 设置QS高度以及通知中心位置
-1.设置 QS 的绘制区域
-2.执行QSTile的动画
-3.更新媒体控制器的位置
-4.更新通知中心背景
-5.设置通知中心的位置
+1.更新QS和QQS的可见性
+2.设置 QS 的绘制区域
+3.执行QSTile的动画
+4.更新媒体控制器的位置
+5.更新通知中心背景
+6.设置通知中心的位置
 
 ```
 NotificationPanelViewController.setQsExpansion()
+    NotificationPanelViewController.setQsExpanded() // 设置QS是否展开,调用各个控制器更新UI
+        NotificationPanelViewController.updateQsState()
+            QSFragment.setExpanded()
+                QSFragment.updateQsState()
+                   QuickStatusBarHeader.setVisibility()
+                   QuickStatusBarHeader.setExpanded()
+                   QSFooter.setVisibility()
+                   QSFooter.setExpanded()
+                   QSPanelController.setVisibility() // 设置QS的可见性
+                       QSPanel.setVisibility()
+        PanelViewController.requestPanelHeightUpdate()
+            PanelViewController.setExpandedHeight()
+                PanelViewController.setExpandedHeightInternal() // 下面详解
+        StatusBar.setQsExpanded()
+        KeyguardBypassController.setQSExpanded()
+        StatusBarKeyguardViewManager.setQsExpanded()
+        LockIconViewController.setQsExpanded()
     NotificationPanelViewController.updateQsExpansion() // 设置QS高度
         QSFragment.setQsExpansion()
             QSAnimator.startAlphaAnimation()
@@ -228,10 +248,11 @@ NotificationPanelViewController.setQsExpansion()
 ```
 PanelViewController.setExpandedHeightInternal()
     NotificationPanelViewController.onHeightUpdated()
-        NotificationPanelViewController.positionClockAndNotifications()：计算时钟(锁屏时)和通知中心的位置
+        NotificationPanelViewController.positionClockAndNotifications()：在QS没有展开的情况下，计算时钟(锁屏时)和通知中心的位置
             NotificationPanelViewController.requestScrollerTopPaddingUpdate()
                 NotificationStackScrollLayoutController.updateTopPadding()
                     NotificationStackScrollLayout.updateTopPadding() // 更新通知中心的位置，后面详细介绍
+        NotificationPanelViewController.setQsExpansion() // 计算QS展开高度，在
         NotificationPanelViewController.updateExpandedHeight()
             NotificationStackScrollLayoutController.setExpandedHeight() // 更新通知栏高度
                 NotificationStackScrollLayout.setExpandedHeight()
@@ -245,13 +266,13 @@ PanelViewController.setExpandedHeightInternal()
         PhoneStatusBarView.panelExpansionChanged() // PhoneStatusBarView 更新状态
             PanelBar.panelExpansionChanged()
                 PanelBar.updateVisibility()
-                    NotificationPanelView.setVisibility()//设置 NotificationPanelView 可见
+                    NotificationPanelView.setVisibility()//设置 NotificationPanelView 可见性
                 PanelBar.go(STATE_OPENING)
                     StatusBar.makeExpandedVisible() //设置Shade可见，然后可以接收事件
                         NotificationShadeWindowControllerImpl.setPanelVisible()
                             NotificationShadeWindowControllerImpl.apply()
                                 NotificationShadeWindowControllerImpl.applyVisibility()
-                                    NotificationShadeView.setVisibility() // 设置NotificationShadeView可见
+                                    NotificationShadeView.setVisibility() // 设置NotificationShadeView可见性
                 if fullyOpened
                 PanelBar.go(STATE_OPEN)
                 PhoneStatusBarView.onPanelFullyOpened() // 全部展开

@@ -410,6 +410,8 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 
 ## 状态栏下拉
 
+### 单指滑动
+
 从状态栏下拉时，事件由 PhoneStatusBarView 分发给 NotificationPanelView 来处理面板的整体滑动。此时的事件不经过NotificationShadeWindowView分发。
 在这种情况下，PanelViewController.TouchHandler.onInterceptTouchEvent() 和 NotificationPanelViewController.TouchHandler.onTouch()在Down事件时返回true，消费该事件，那么后面的Move和UP事件也会在这里或者父类的onTouch()中处理。
 
@@ -444,6 +446,136 @@ StatusBarWindowView.dispatchTouchEvent()
             return (mView.getVisibility() != View.VISIBLE);
         }
 ```
+
+### 双指滑动
+
+这个场景指的是双指从状态栏下拉，和单指下拉的区别是单指下拉后的状态是显示QQS和通知中心，双指下拉的最终状态时显示QS。
+具体的事件分发流程就和上面单指状态栏下拉是一样的，这里就不多介绍。只介绍一下双指下拉的不一样的流程。
+这个场景中应用的两个比较重要的变量是 mTwoFingerQsExpandPossible 和 mQsExpandImmediate。
+
+在下面的方法中进行赋值：
+
+```
+private boolean handleQsTouch(MotionEvent event) {
+        ......
+        if (action == MotionEvent.ACTION_DOWN && isFullyCollapsed() && isQsExpansionEnabled()) {
+            // mTwoFingerQsExpandPossible 赋值为true表示可以进行双指下拉操作
+            mTwoFingerQsExpandPossible = true;
+        }
+        if (mTwoFingerQsExpandPossible && isOpenQsEvent(event) && event.getY(event.getActionIndex())
+                < mStatusBarMinHeight) {
+            mMetricsLogger.count(COUNTER_PANEL_OPEN_QS, 1);
+            mQsExpandImmediate = true; //双指操作的情况下接收DONW事件时赋值 mQsExpandImmediate 为true。
+            mNotificationStackScrollLayoutController.setShouldShowShelfOnly(true);
+            requestPanelHeightUpdate();
+            ......
+        }
+
+}
+```
+
+```
+    private boolean isOpenQsEvent(MotionEvent event) {
+        final int pointerCount = event.getPointerCount();
+        final int action = event.getActionMasked();
+
+        final boolean
+                twoFingerDrag =
+                action == MotionEvent.ACTION_POINTER_DOWN && pointerCount == 2;
+
+        final boolean
+                stylusButtonClickDrag =
+                action == MotionEvent.ACTION_DOWN && (event.isButtonPressed(
+                        MotionEvent.BUTTON_STYLUS_PRIMARY) || event.isButtonPressed(
+                        MotionEvent.BUTTON_STYLUS_SECONDARY));
+
+        final boolean
+                mouseButtonClickDrag =
+                action == MotionEvent.ACTION_DOWN && (event.isButtonPressed(
+                        MotionEvent.BUTTON_SECONDARY) || event.isButtonPressed(
+                        MotionEvent.BUTTON_TERTIARY));
+
+        return twoFingerDrag || stylusButtonClickDrag || mouseButtonClickDrag;
+    }
+```
+
+
+
+滑动过程中
+move 的时候用getMaxPanelHeight()计算 panel 高度，双指滑动时计算最大高度是用 calculatePanelHeightQsExpanded()，单指滑动是用 calculatePanelHeightShade()。具体看后面文章介绍。
+onHeightUpdated 时双指滑动会同时调用 positionClockAndNotifications()  来更新通知中心位置以及setQsExpansion()来设置QS展开高度。单指滑动时在这里只调用positionClockAndNotifications()不调用setQsExpansion()。
+这里的 setQsExpansion() 就是用QQS高度加上展开进度乘以最大展开高度（完全展开QS）来计算的。
+
+而单指滑动这时因为最终状态是不显示QS的，因此没有主动调用的必要。也就是NotificationPanelViewController.在onLayoutChange()会附带的调用一下，设置的高度也是定值mQsMinExpansionHeight。
+```
+//NotificationPanelViewController.java
+    private boolean handleQsTouch(MotionEvent event) {
+        ....
+        if (!mQsExpandImmediate && mQsTracking) {
+            onQsTouch(event);
+            if (!mConflictingQsExpansionGesture) {
+                return true;
+            }
+        }
+```
+
+```
+//NotificationPanelViewController.java
+    protected void onHeightUpdated(float expandedHeight) {
+    
+        if (mQsExpandImmediate || mQsExpanded && !mQsTracking && mQsExpansionAnimator == null
+                && !mQsExpansionFromOverscroll) {
+            float t;
+            if (mKeyguardShowing) {
+
+                // On Keyguard, interpolate the QS expansion linearly to the panel expansion
+                t = expandedHeight / (getMaxPanelHeight());
+            } else {
+                // In Shade, interpolate linearly such that QS is closed whenever panel height is
+                // minimum QS expansion + minStackHeight
+                float
+                        panelHeightQsCollapsed =
+                        mNotificationStackScrollLayoutController.getIntrinsicPadding()
+                                + mNotificationStackScrollLayoutController.getLayoutMinHeight();
+                float panelHeightQsExpanded = calculatePanelHeightQsExpanded();
+                t =
+                        (expandedHeight - panelHeightQsCollapsed) / (panelHeightQsExpanded
+                                - panelHeightQsCollapsed);
+            }
+            float
+                    targetHeight =
+                    mQsMinExpansionHeight + t * (mQsMaxExpansionHeight - mQsMinExpansionHeight);
+            setQsExpansion(targetHeight);
+        }
+```
+
+```
+    @Override
+    protected int getMaxPanelHeight() {
+        int min = mStatusBarMinHeight;
+        if (!(mBarState == KEYGUARD)
+                && mNotificationStackScrollLayoutController.getNotGoneChildCount() == 0) {
+            int minHeight = mQsMinExpansionHeight;
+            min = Math.max(min, minHeight);
+        }
+        int maxHeight;
+        if (mQsExpandImmediate || mQsExpanded || mIsExpanding && mQsExpandedWhenExpandingStarted
+                || mPulsing) {
+            // 双指操作或者时显示QQS到显示QS场景变换时走这里
+            maxHeight = calculatePanelHeightQsExpanded();
+        } else {
+            // 其他场景走这里计算
+            maxHeight = calculatePanelHeightShade();
+        }
+        maxHeight = Math.max(min, maxHeight);
+        ....
+        return maxHeight;
+    }
+```
+
+fling 的时候用getMaxPanelHeight()计算 panel 高度，双指滑动时计算最大高度是用 calculatePanelHeightQsExpanded()，单指滑动是用 calculatePanelHeightShade()。具体看后面文章介绍。
+
+因此，我们可以看到，关键位置主要是根据 mQsExpandImmediate 在Move的时候额外调用了  setQsExpansion() 来设置QS展开，在Fling时计算 getMaxPanelHeight() 时根据 mQsExpandImmediate 做了处理。
 
 ## 桌面下拉
 
@@ -510,11 +642,12 @@ OverviewProxyService.onStatusBarMotionEvent()
 PanelView.onTouchEvent()
     NotificationPanelViewController.TouchHandler.onTouch()
         NotificationPanelViewController.handleQsTouch() // QS处理，用来更新 QS 的显示高度以及更新通知中心的位置。
+                                                        // 更新QQS和QS可见性
                                                         //比如QS上面上划呼出通知中心，或者下滑隐藏通知中心。看后面对该方法的详细介绍
             ACTION_DOWN
                 mQsTracking = true
                 NotificationPanelViewController.onQsExpansionStarted()
-                    NotificationPanelViewController.setQsExpansion() // 设置QS显示高度，更新QQS的可见性, 设置QS的绘制区域,更新通知中心的偏移，后面详细介绍
+                    NotificationPanelViewController.setQsExpansion() // 设置QS显示高度，更新QS和QQS的可见性, 设置QS的绘制区域,更新通知中心的偏移，后面详细介绍
             NotificationPanelViewController.onQsTouch()
         PanelViewController.TouchHandler.onTouch() // handleQsTouch 不处理，就走到这里，执行下拉通知整体操作
             MotionEvent.ACTION_MOVE
