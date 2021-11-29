@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍媒体控制器相关">
 <meta property="og:image" content="http://yoursite.com/images/android-systemui-panel-media-controller/image.png">
-<meta property="og:updated_time" content="2021-11-25T10:38:10.258Z">
+<meta property="og:updated_time" content="2021-11-29T09:01:39.239Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemUI -- 多媒体通知">
 <meta name="twitter:description" content="介绍媒体控制器相关">
@@ -402,7 +402,10 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 Android S上面分别有四个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。<br>如图：</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 Android 中可以把媒体通知显示在 QS 上，这个特性可以通过下面的开关来配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">packages/SystemUI/src/com/android/systemui/util/Utils.java</div><div class="line"></div><div class="line">    public static boolean useQsMediaPlayer(Context context) &#123;</div><div class="line">        int flag = Settings.Global.getInt(context.getContentResolver(),</div><div class="line">                Settings.Global.SHOW_MEDIA_ON_QUICK_SETTINGS, 1);</div><div class="line">        return flag &gt; 0;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>如果不显示在QS上，那么就显示在通知中心里面。</p>
+<p>在 Android S上面分别有四个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。<br>如图：</p>
 <p><img src="/images/android-systemui-panel-media-controller/image.png" width="676" height="1134"></p>
 <p>媒体控制器容器布局在 R.layout.media_carousel，媒体控制器布局是 R.layout.media_view。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">UniqueObjectHostView</div><div class="line">    FrameLayout</div><div class="line">        MediaScrollView(R.id.media_carousel_scroller)</div><div class="line">            LinearLayout(R.id.media_carousel)</div><div class="line">                TransitionLayout(R.id.qs_media_controls)</div><div class="line">                    Guideline(R.id.center_vertical_guideline)</div><div class="line">                    FrameLayout(R.id.notification_media_progress_time)</div><div class="line">                    TextView(R.id.media_elapsed_time)</div><div class="line">                    SeekBar(R.id.media_progress_bar)</div><div class="line">                    ......</div><div class="line">        PageIndicator()</div><div class="line">        ImageView(R.id.settings_cog)</div></pre></td></tr></table></figure>

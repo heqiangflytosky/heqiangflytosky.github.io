@@ -2,23 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2021/11/16/android-systemui-panel-media-controller/</loc>
+    <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
     
-    <lastmod>2021-11-25T10:38:10.258Z</lastmod>
+    <lastmod>2021-11-29T09:01:39.254Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
+    <loc>http://yoursite.com/2021/11/16/android-systemui-panel-media-controller/</loc>
     
-    <lastmod>2021-11-25T10:38:10.257Z</lastmod>
+    <lastmod>2021-11-29T09:01:39.239Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
+    
+    <lastmod>2021-11-29T09:01:39.239Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2021/11/06/android-systemui-events-transfer-process/</loc>
     
-    <lastmod>2021-11-25T10:38:10.254Z</lastmod>
+    <lastmod>2021-11-29T09:01:33.942Z</lastmod>
     
   </url>
   
@@ -26,13 +33,6 @@
     <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
     
     <lastmod>2021-11-25T06:42:30.170Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
-    
-    <lastmod>2021-11-25T02:22:31.833Z</lastmod>
     
   </url>
   
@@ -1766,14 +1766,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/03/15/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/open-source-weex-android-introduction/</loc>
     
     <lastmod>2018-05-29T02:28:24.838Z</lastmod>
     
@@ -1906,14 +1906,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
+    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/02/07/open-source-lottie-android-introduction/</loc>
+    <loc>http://yoursite.com/2017/08/10/open-source-j2v8-registerting-java-callback/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
