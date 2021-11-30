@@ -436,3 +436,48 @@ PanelViewController.notifyBarPanelExpansionChanged()
         KeyguardBouncer.setExpansion()
         KeyguardBouncer.show()
 ```
+
+### calculateNotificationsTopPadding()
+
+calculateNotificationsTopPadding() 方法比较简单，但是比较关键的方法，它是通过调用 requestScrollerTopPaddingUpdate() 方法来更新通知中心位置的时候调用的，用来计算通知中心距屏幕顶部的间距。
+
+```
+// NotificationPanelViewController.java
+    private float calculateNotificationsTopPadding() {
+        // 如果当前是QS和通知中心分割两列的情况（一般横屏时使用），而且不在锁屏的情况下
+        // 通知中心的top padding是个定值 mSplitShadeNotificationsTopPadding
+        if (mShouldUseSplitNotificationShade && !mKeyguardShowing) {
+            return mSplitShadeNotificationsTopPadding;
+        }
+        if (mKeyguardShowing && (mQsExpandImmediate
+                || mIsExpanding && mQsExpandedWhenExpandingStarted)) {
+
+            // Either QS pushes the notifications down when fully expanded, or QS is fully above the
+            // notifications (mostly on tablets). maxNotificationPadding denotes the normal top
+            // padding on Keyguard, maxQsPadding denotes the top padding from the quick settings
+            // panel. We need to take the maximum and linearly interpolate with the panel expansion
+            // for a nice motion.
+            int maxNotificationPadding = getKeyguardNotificationStaticPadding();
+            int maxQsPadding = mQsMaxExpansionHeight;
+            int max = mBarState == KEYGUARD ? Math.max(
+                    maxNotificationPadding, maxQsPadding) : maxQsPadding;
+            return (int) MathUtils.lerp((float) mQsMinExpansionHeight, (float) max,
+                    getExpandedFraction());
+        } else if (mQsSizeChangeAnimator != null) {
+            return Math.max(
+                    (int) mQsSizeChangeAnimator.getAnimatedValue(),
+                    getKeyguardNotificationStaticPadding());
+        } else if (mKeyguardShowing) {
+            // 在锁屏的情况下，通过 qs 的展开程度获取通知中心的静态padding到qs最大展开高度的差值
+            // 如果最终状态是显示QQS，那么 computeQsExpansionFraction() 为0，那么就返回静态padding
+            // 最终状态是显示QS，那么computeQsExpansionFraction() 为0到1之间的数，
+            // 此时返回静态padding到qs最大展开高度之间的数
+            return MathUtils.lerp((float) getKeyguardNotificationStaticPadding(),
+                    (float) (mQsMaxExpansionHeight),
+                    computeQsExpansionFraction());
+        } else {
+            // 其他情况就直接返回 mQsExpansionHeight 这个值通过 setQsExpansion 计算。
+            return mQsExpansionHeight;
+        }
+    }
+```
