@@ -53,6 +53,17 @@ Clock.java 实现了 DarkReceiver，当收到 onDarkChanged() 回调的时候，
     }
 ```
 
+前面我们介绍了数字时钟 Clock 的变色原理，现在再来介绍一下 StatusBarIconView 是如何变色的，其实原理是一样的。
+NotificationIconAreaController 也实现了 DarkReceiver 接口，当 SystemUIAppearance 变化时也会通知到它。
+
+```
+DarkIconDispatcherImpl.applyIconTint()
+    NotificationIconAreaController.onDarkChanged()
+        NotificationIconAreaController.applyNotificationIconsTint()
+            NotificationIconAreaController.updateTintForIcon()
+                StatusBarIconView.setStaticDrawableColor()
+```
+
 那么什么时候会回调呢？下面我们就来介绍一下这个流程。
 
 ## App
