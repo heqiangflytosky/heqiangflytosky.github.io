@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2021/06/01/android-statusbar-icon-color/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍状态栏字体和图标变色原理">
-<meta property="og:updated_time" content="2021-11-19T05:57:31.657Z">
+<meta property="og:updated_time" content="2021-12-07T01:24:51.244Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemUI -- 状态栏字体和图标变色原理">
 <meta name="twitter:description" content="介绍状态栏字体和图标变色原理">
@@ -408,6 +408,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void onDarkChanged(Rect area, float darkIntensity, int tint) &#123;</div><div class="line">    mNonAdaptedColor = DarkIconDispatcher.getTint(area, this, tint);</div><div class="line">    if (!mUseWallpaperTextColor) &#123;</div><div class="line">        setTextColor(mNonAdaptedColor);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后在 onAttachedToWindow() 中注册一下监听，那么当应用的变化时就会通过 DarkIconDispatcherImpl 来发送通知。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onAttachedToWindow() &#123;</div><div class="line">        ......</div><div class="line">        if (mShowDark) &#123;</div><div class="line">            Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);</div><div class="line">        &#125;</div><div class="line">        ......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>前面我们介绍了数字时钟 Clock 的变色原理，现在再来介绍一下 StatusBarIconView 是如何变色的，其实原理是一样的。<br>NotificationIconAreaController 也实现了 DarkReceiver 接口，当 SystemUIAppearance 变化时也会通知到它。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">DarkIconDispatcherImpl.applyIconTint()</div><div class="line">    NotificationIconAreaController.onDarkChanged()</div><div class="line">        NotificationIconAreaController.applyNotificationIconsTint()</div><div class="line">            NotificationIconAreaController.updateTintForIcon()</div><div class="line">                StatusBarIconView.setStaticDrawableColor()</div></pre></td></tr></table></figure>
 <p>那么什么时候会回调呢？下面我们就来介绍一下这个流程。</p>
 <h2 id="App"><a href="#App" class="headerlink" title="App"></a>App</h2><p>首先要有 App 端设置当前应用的 StatusBar 类型，比如：View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 或者 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS。</p>
 <p>先看通过 View.setSystemUiVisibility() 来设置：</p>
