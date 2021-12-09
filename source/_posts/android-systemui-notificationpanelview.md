@@ -37,7 +37,7 @@ NotificationPanelViewController 和 PanelViewController 都生成了自己的 To
 
 ## NotificationPanelViewController & PanelViewController
 
-NotificationPanelViewController主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 
+PanelViewController主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 NotificationPanelViewController 可以处理通知中心的移动操作，此时 mTracking 为 true。
 
 mOverExpansion:QS可以回弹下拉的高度
 mQsExpanded:QS是否可见，这时QS正在展开或者全部展开，此时展开高度大于 mQsMinExpansionHeight，也就是在只显示QQS到全部显示QS之间的状态变化时为true。

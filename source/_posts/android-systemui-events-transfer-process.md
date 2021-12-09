@@ -65,7 +65,7 @@ NotificationShadeWindowView 处理当它可见时对所有事件的分发，以�
 
 ### NotificationPanelView
 
-NotificationPanelView 主要处理QS完全展开情况下的事件处理，PanelView 主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 
+NotificationPanelView 主要处理QS完全展开与QS折叠之间状态下的事件处理，可以调用通知中心接口来移动通知中心。PanelView 主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 
 NotificationPanelView 和它的父类 PanelView 分别设置了事件拦截器和OnTouchListener，事件的处理工作主要由 NotificationPanelViewController 和 PanelViewController 创建的 TouchHandler() 来处理。
 
 ```
