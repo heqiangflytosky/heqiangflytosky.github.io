@@ -1,0 +1,1118 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SystemUI," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="介绍 SystemUI -- QS Tile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android -- SystemUI -- QS Tile">
+<meta property="og:url" content="http://yoursite.com/2021/11/20/android-systemui-quick-settings-tile/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 SystemUI -- QS Tile">
+<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/VP9FgnCn5CNt-HJXhKRa-VRYucdTF2Z8C4LncKckxSKq6PARaVfdfo0YwCvYDwxSYKX1n8gVnccNVWKpgQrZcRvDI3Y_UpWdoRaduIXCDHiXQU0d8zHm5-7HvikgUR7SB5VDukS9Or8Bx_aG3GWt53CRY8dIanEI-5RBYzqeVyAkyYgK6YNVGqa8bH84DwK4xx54ZJIxunIuBAcLWnfjyEtXIez5Nbn8Qn8w1chtMH_M1UuXJMu9-N3iR32gY--e0YAcX9iTzQijAeu6ATjMv1INew0r1Gc2mKIOCQWi7RYFQ-y86cf3t0OIgE_tvHkA4lJ0cWWOS9SsI6Wadh735xcOLZg-IkMmRkFKGdDfjHQL1yNFplXw_hbv-t7zQjwy-V3xn-iyBtvz-xHv_tmttxnSDAllwtTV8xYbeXZjB84aYAKhCFn1C3osLXh-ku7K_VhVCDUIr4RiVYL-u-dfQISk-xSza58JTb0i8OFWoKxnCUnDpi6e-B7_0000">
+<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/bLLTJXiz57ttAYo-b_0Ls02q8YHK825QEg7bhVBODubRZpsrxoH4bCUkegkeU4JgRX3Rg3rsfeu8FtsPZCyvzzztik-GMMmgHKOI5T2Dis8a5Tp_khtxSND_Stlty_S68L8Zs37ZG2DDhyWGa4dL5wps59q0hW2zJLAWbNeIc61HrC0zE3DIK9T1IONfd1GMnXRSj426qDlS9H5bGWoOKYNZNtlB5yhJYrSbqyhCu5zrBaGvAuwvqHybp2ctm112bk7O6nYDS8cKnz-K9LVIHzW_RPHYfGBQMixyewlJwmMpYy4pGcNqv3bDuy0MSubysfCQAM-i1Otd7ksYuObq2Dhti_Uk_08SGuPUj4LBOnGmJTLI4CR34C9qKfF9DM6bGyjQC-PS6lLnLIi_xjeQz1v1q56qhDgV31zBpPGtEZ8EQHMU3yWZZpCj55X2wgRq5TCkPdAhOHwYfgGo3vsmBNRQkeazophLYJgxN7vU2uR9TGhdmdEBfdOnwnkprhJ8cxkcczVvZdHtxehG_w8Nezju0-zj0gAN1T_CDLCpZslKnN0UoYKZCvaeo9rrqeVkEDClK_QrDetcK8763_2j0OTUxiri4KwUeIoJjFN6In8hyOM-eccYOOUez8_T32oQkbOIx5vWtxJq4ifbKcDCZhwcmyEt_VEJqUTYr1yTvgALj1GhGJtATXjuyfGihhN68JXkPOtIwCUaCRkN24N3L1jry9JpRZE5T67jnS7YlV7u8jUaRoHSramB47tEmJbPIYLnCGXJE6KLh1XuS9hkM7ZDkQ5byn29EYaWhCwWSMYg9Rmchgk1x_wT-47CE1_yQYapfXe8UfB-BFQ-x-naNvCb_F_sThm-6T3j3WbCqdJLHD3xysYU1ac7Z2xaH3ELkm-X8nShzjX3wfCSoxN4WMe0ZS7fMlRYeeNtGOkcKdy0">
+<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/XPBFJW8n4CRlynGJJhi6U049mMnYDF4WMUAzT0TixBQRjguIvEXJ-1I68ublGtWDjnJA7qFamao_txJVpCx0EcRSQobX99maR0tpEstTvdkr_bnkbglrrqyBG2X7Pi8uOP1n3jZyQYqAv5fALbbwP8gaJTA3Cj66KtPHrXMfarEF4dT2gzum7mb9VPoIyy597IkAZ4avPlmbsGV8Ty4HPwZKDVs7-kjpChNWPCDpXppvSvjNazmPeQReF5aHJm4M05moQp7uzYEQGsL4pHpXH2WcySOODdiGrZMztJBkj9driHpQ40koP_mMtNjko7reON7yFM9NSmX3LTjvPSzCJQb8qkjJFBxTyC4hSaFCNMWi84-2tY8MqYJJoj6xGnx-snZGRMqRnrfBOYhkHk5hKcy5TWlK--XsZwO5qLXGOdfVLXBW0E9LfnERFZ-FLJ0WLJHB_Gi0">
+<meta property="og:image" content="http://www.plantuml.com/plantuml/svg/bPB1RjD048Rl-nIhdWngymGSgbOz80Lewi1zufrO8yOprkviA0AEF0LFWNginDjKUGtin8aTAGVmnVx__vlPyTZNoI1QRjWjoHZznQAy1q7U_dv--VcqVNf--VNdmZaImxY62lsYN1BZ7BvgDl_DRPI2Jx31jv8CfCBImB2uoH8OVSVizAiz5p6PnlDetoECoLW48VGd5iDWjoeMbHdZ3IISzT43LXg3D-Bne4Ot-3zb9EPhj0_hTK9RQlklTIjLHX2Vsm3MHKbph30Lmo09RKx9K4Zgui3omRdq7-bkWs9phMkCFa_Ls3kXlIDvq2-fwCTizi-dEJpUAkT61kGenpdk7bkGH2h5cXNCuq5V-htHHcqrOLZ6pcUmBZhkvNrkFb6Y5VTBtRtU3zTT9p_3c--pcH_rcV0UQWmJmfq0LrU-fD3f5V84ElKcy69HdkFTd0GXJidXMxhXFfYPgi-7v1Yztk6JTjSe8JVy5m00">
+<meta property="og:updated_time" content="2021-12-13T06:18:25.612Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android -- SystemUI -- QS Tile">
+<meta name="twitter:description" content="介绍 SystemUI -- QS Tile">
+<meta name="twitter:image" content="http://www.plantuml.com/plantuml/svg/VP9FgnCn5CNt-HJXhKRa-VRYucdTF2Z8C4LncKckxSKq6PARaVfdfo0YwCvYDwxSYKX1n8gVnccNVWKpgQrZcRvDI3Y_UpWdoRaduIXCDHiXQU0d8zHm5-7HvikgUR7SB5VDukS9Or8Bx_aG3GWt53CRY8dIanEI-5RBYzqeVyAkyYgK6YNVGqa8bH84DwK4xx54ZJIxunIuBAcLWnfjyEtXIez5Nbn8Qn8w1chtMH_M1UuXJMu9-N3iR32gY--e0YAcX9iTzQijAeu6ATjMv1INew0r1Gc2mKIOCQWi7RYFQ-y86cf3t0OIgE_tvHkA4lJ0cWWOS9SsI6Wadh735xcOLZg-IkMmRkFKGdDfjHQL1yNFplXw_hbv-t7zQjwy-V3xn-iyBtvz-xHv_tmttxnSDAllwtTV8xYbeXZjB84aYAKhCFn1C3osLXh-ku7K_VhVCDUIr4RiVYL-u-dfQISk-xSza58JTb0i8OFWoKxnCUnDpi6e-B7_0000">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/11/20/android-systemui-quick-settings-tile/"/>
+
+
+
+
+
+  <title> Android -- SystemUI -- QS Tile | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/11/20/android-systemui-quick-settings-tile/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android -- SystemUI -- QS Tile
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-20T12:00:00+08:00">
+                2021-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-SystemUI/" itemprop="url" rel="index">
+                    <span itemprop="name">Android SystemUI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2021/11/20/android-systemui-quick-settings-tile/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2021/11/20/android-systemui-quick-settings-tile/" class="leancloud_visitors" data-flag-title="Android -- SystemUI -- QS Tile">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 SystemUI -- QS Tile
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文我们来介绍 SystemUI 下拉面板快捷开关的实现原理。<br>下拉面板中的 QQS 和 QS 分别可以承载 QS Tile ，进行一些快捷设置的功能。</p>
+<h2 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a>模块划分</h2><ul>
+<li>TileView：主要负责快捷开关的视图展示。<ul>
+<li>QSTileView：继承自 LinearLayout，实现 QS 视图的抽象类。</li>
+<li>QSTileViewImpl：继承自 QSTileView，</li>
+<li>CustomizeTileView：继承自 QSTileViewImpl，编辑页面中用到</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://www.plantuml.com/plantuml/svg/VP9FgnCn5CNt-HJXhKRa-VRYucdTF2Z8C4LncKckxSKq6PARaVfdfo0YwCvYDwxSYKX1n8gVnccNVWKpgQrZcRvDI3Y_UpWdoRaduIXCDHiXQU0d8zHm5-7HvikgUR7SB5VDukS9Or8Bx_aG3GWt53CRY8dIanEI-5RBYzqeVyAkyYgK6YNVGqa8bH84DwK4xx54ZJIxunIuBAcLWnfjyEtXIez5Nbn8Qn8w1chtMH_M1UuXJMu9-N3iR32gY--e0YAcX9iTzQijAeu6ATjMv1INew0r1Gc2mKIOCQWi7RYFQ-y86cf3t0OIgE_tvHkA4lJ0cWWOS9SsI6Wadh735xcOLZg-IkMmRkFKGdDfjHQL1yNFplXw_hbv-t7zQjwy-V3xn-iyBtvz-xHv_tmttxnSDAllwtTV8xYbeXZjB84aYAKhCFn1C3osLXh-ku7K_VhVCDUIr4RiVYL-u-dfQISk-xSza58JTb0i8OFWoKxnCUnDpi6e-B7_0000" alt="UML类图"></p>
+<ul>
+<li>QSTile：主要负责快捷开关的逻辑处理。<ul>
+<li>QSTile</li>
+<li>QSTileImpl</li>
+<li>CustomTile：编辑页面中需要用到</li>
+<li>WifiTile</li>
+<li>BluetoothTile</li>
+<li>State </li>
+<li>BooleanState</li>
+<li>SignalState</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://www.plantuml.com/plantuml/svg/bLLTJXiz57ttAYo-b_0Ls02q8YHK825QEg7bhVBODubRZpsrxoH4bCUkegkeU4JgRX3Rg3rsfeu8FtsPZCyvzzztik-GMMmgHKOI5T2Dis8a5Tp_khtxSND_Stlty_S68L8Zs37ZG2DDhyWGa4dL5wps59q0hW2zJLAWbNeIc61HrC0zE3DIK9T1IONfd1GMnXRSj426qDlS9H5bGWoOKYNZNtlB5yhJYrSbqyhCu5zrBaGvAuwvqHybp2ctm112bk7O6nYDS8cKnz-K9LVIHzW_RPHYfGBQMixyewlJwmMpYy4pGcNqv3bDuy0MSubysfCQAM-i1Otd7ksYuObq2Dhti_Uk_08SGuPUj4LBOnGmJTLI4CR34C9qKfF9DM6bGyjQC-PS6lLnLIi_xjeQz1v1q56qhDgV31zBpPGtEZ8EQHMU3yWZZpCj55X2wgRq5TCkPdAhOHwYfgGo3vsmBNRQkeazophLYJgxN7vU2uR9TGhdmdEBfdOnwnkprhJ8cxkcczVvZdHtxehG_w8Nezju0-zj0gAN1T_CDLCpZslKnN0UoYKZCvaeo9rrqeVkEDClK_QrDetcK8763_2j0OTUxiri4KwUeIoJjFN6In8hyOM-eccYOOUez8_T32oQkbOIx5vWtxJq4ifbKcDCZhwcmyEt_VEJqUTYr1yTvgALj1GhGJtATXjuyfGihhN68JXkPOtIwCUaCRkN24N3L1jry9JpRZE5T67jnS7YlV7u8jUaRoHSramB47tEmJbPIYLnCGXJE6KLh1XuS9hkM7ZDkQ5byn29EYaWhCwWSMYg9Rmchgk1x_wT-47CE1_yQYapfXe8UfB-BFQ-x-naNvCb_F_sThm-6T3j3WbCqdJLHD3xysYU1ac7Z2xaH3ELkm-X8nShzjX3wfCSoxN4WMe0ZS7fMlRYeeNtGOkcKdy0" alt="UML类图"></p>
+<ul>
+<li>QSHost<ul>
+<li>QSHost：主要负责快捷开关TileView和QSTile的构建，提供获取QSTile集合的接口，提供了展开和收起下拉面板的接口，是快捷开关对外沟通的桥梁。</li>
+<li>QSTileHost：</li>
+<li>QSFactory：</li>
+<li>QSFactoryImpl：继承自 QSFactory</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://www.plantuml.com/plantuml/svg/XPBFJW8n4CRlynGJJhi6U049mMnYDF4WMUAzT0TixBQRjguIvEXJ-1I68ublGtWDjnJA7qFamao_txJVpCx0EcRSQobX99maR0tpEstTvdkr_bnkbglrrqyBG2X7Pi8uOP1n3jZyQYqAv5fALbbwP8gaJTA3Cj66KtPHrXMfarEF4dT2gzum7mb9VPoIyy597IkAZ4avPlmbsGV8Ty4HPwZKDVs7-kjpChNWPCDpXppvSvjNazmPeQReF5aHJm4M05moQp7uzYEQGsL4pHpXH2WcySOODdiGrZMztJBkj9driHpQ40koP_mMtNjko7reON7yFM9NSmX3LTjvPSzCJQb8qkjJFBxTyC4hSaFCNMWi84-2tY8MqYJJoj6xGnx-snZGRMqRnrfBOYhkHk5hKcy5TWlK--XsZwO5qLXGOdfVLXBW0E9LfnERFZ-FLJ0WLJHB_Gi0" alt="UML类图"></p>
+<ul>
+<li>QSPanel：承载快捷开关的容器。<ul>
+<li>QuickQSPanel：继承自 QSPanel，显示 QQS 部分快捷开关。</li>
+<li>QSPanel：继承自 LinearLayout，显示 QS 快捷开关。</li>
+<li>QSTileLayout</li>
+<li>TileLayout</li>
+<li>PagedTileLayout</li>
+<li>SideLabelTileLayout</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://www.plantuml.com/plantuml/svg/bPB1RjD048Rl-nIhdWngymGSgbOz80Lewi1zufrO8yOprkviA0AEF0LFWNginDjKUGtin8aTAGVmnVx__vlPyTZNoI1QRjWjoHZznQAy1q7U_dv--VcqVNf--VNdmZaImxY62lsYN1BZ7BvgDl_DRPI2Jx31jv8CfCBImB2uoH8OVSVizAiz5p6PnlDetoECoLW48VGd5iDWjoeMbHdZ3IISzT43LXg3D-Bne4Ot-3zb9EPhj0_hTK9RQlklTIjLHX2Vsm3MHKbph30Lmo09RKx9K4Zgui3omRdq7-bkWs9phMkCFa_Ls3kXlIDvq2-fwCTizi-dEJpUAkT61kGenpdk7bkGH2h5cXNCuq5V-htHHcqrOLZ6pcUmBZhkvNrkFb6Y5VTBtRtU3zTT9p_3c--pcH_rcV0UQWmJmfq0LrU-fD3f5V84ElKcy69HdkFTd0GXJidXMxhXFfYPgi-7v1Yztk6JTjSe8JVy5m00" alt="UML类图"></p>
+<ul>
+<li>QS：QS面板的顶层容器,主要处理QS面板的展开/收起逻辑。<ul>
+<li>QSContainerImpl：下拉面板快捷开关部分的根布局，包含QQS，QS，QSDetail，QSCustomer 等。添加到 QSFragment。</li>
+<li>QSFragment：包含 QSContainerImpl 的 QSFragment。</li>
+<li>QS：主要定义了 QS 面板展开/收起相关的接口</li>
+</ul>
+</li>
+</ul>
+<h2 id="QS-Tile-的创建"><a href="#QS-Tile-的创建" class="headerlink" title="QS Tile 的创建"></a>QS Tile 的创建</h2><p>创建 QSTile，通过初始化 QsTileHost，进行 QsTile 的加载。在 QsTileHost 初始化的时候，增加 Tunable 监听。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">QSTileHost()</div><div class="line">    Settings.Secure.getStringForUser(&quot;sysui_qs_tiles&quot;) // 从 Secure.QS_TILES 获取QS配置</div><div class="line">    TunerServiceImpl.addTunable()</div><div class="line">        QSTileHost.onTuningChanged()</div><div class="line">            QSTileHost.loadTileSpecs()</div><div class="line">                QSTileHost.getDefaultSpecs() // 如果 Secure.QS_TILES 没有配置，就从R.string.quick_settings_tiles_default读取</div><div class="line">            QSTileHost.createTile()</div><div class="line">                QSFactoryImpl.createTile()</div><div class="line">                    QSFactoryImpl.createTileInternal()</div></pre></td></tr></table></figure>
+<p>TunerServiceImpl 中注册对字段”sysui_qs_tiles”的系统数据库监听，当编辑模式添加或者删除 Tile 时，会触发重新加载 Tile。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// TunerServiceImpl.java</div><div class="line">    private class Observer extends ContentObserver &#123;</div><div class="line">        ......</div><div class="line">        @Override</div><div class="line">        public void onChange(boolean selfChange, java.util.Collection&lt;Uri&gt; uris,</div><div class="line">                int flags, int userId) &#123;</div><div class="line">            if (userId == mUserTracker.getUserId()) &#123;</div><div class="line">                for (Uri u : uris) &#123;</div><div class="line">                    reloadSetting(u);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>根据配置文件生成对应的 QSTile。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// QSFactoryImpl.java</div><div class="line">    private QSTileImpl createTileInternal(String tileSpec) &#123;</div><div class="line">        // Stock tiles.</div><div class="line">        switch (tileSpec) &#123;</div><div class="line">            case &quot;wifi&quot;:</div><div class="line">                return mWifiTileProvider.get();</div><div class="line">            case &quot;internet&quot;:</div><div class="line">                return mInternetTileProvider.get();</div><div class="line">            case &quot;bt&quot;:</div><div class="line">                return mBluetoothTileProvider.get();</div><div class="line">            ......</div><div class="line">            case &quot;alarm&quot;:</div><div class="line">                return mAlarmTileProvider.get();</div><div class="line">            case &quot;wallet&quot;:</div><div class="line">                return mQuickAccessWalletTileProvider.get();</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<p>创建 QSTileView</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">QSFragment.onViewCreated()</div><div class="line">    QSPanelController.init()</div><div class="line">        OnAttachStateChangeListener.onViewAttachedToWindow()</div><div class="line">            QSPanelController.onViewAttached()</div><div class="line">                QSPanelControllerBase.onViewAttached()</div><div class="line">                    QSPanelControllerBase.setTiles()</div><div class="line">                        QSTileHost.getTiles()</div><div class="line">                        QSPanelControllerBase.setTiles()</div><div class="line">                            QSPanelControllerBase.addTile()</div><div class="line">                                QSTileHost.createTileView()</div><div class="line">                                    QSFactoryImpl.createTileView()</div><div class="line">                                        new QSTileViewImpl()</div><div class="line">                                QSPanel.addTile()</div><div class="line">                                    QSTile.addCallback() // 向QSTile注册回调</div><div class="line">                                        onStateChanged()</div><div class="line">                                            drawTile()</div><div class="line">                                    QSTileViewImpl.init() // 初始化点击事件</div><div class="line">                                        setOnClickListener()</div><div class="line">                                        setOnLongClickListener()</div><div class="line">                                    QSTile.refreshState()</div><div class="line">                                    TileLayout.addTile() // 添加到 TileLayout</div></pre></td></tr></table></figure>
+<p>从上面流程可以看出来，QSTileHost 对象在构建的时候就通过 QSFactoryImpl 创建好了各个开关的对应的 QSTile,而后 QSPanel 在初始化的过程中,再次利用 QSTileHost 去构建各个开关的视图对象 QSTileView。</p>
+<h2 id="编辑页面-QS-Tile-的创建"><a href="#编辑页面-QS-Tile-的创建" class="headerlink" title="编辑页面 QS Tile 的创建"></a>编辑页面 QS Tile 的创建</h2><p>进入 QS 编辑模式之后，会出现更多 Tile，并且可以拖动到上方供用户平时下拉后直接使用，或者将不常用的放到待选区域。这里从UI上可以看出待选区域由两部分组成，一部分是 SystemUI 内部的 Tile（StockTiles），另一部分则是第三应用自己注册的 Tile（PackageTiles）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">QSPanelController.showEdit()</div><div class="line">    QsCustomizerController.show()</div><div class="line">        TileQueryHelper.queryTiles()</div><div class="line">            TileQueryHelper.addCurrentAndStockTiles()</div><div class="line">                getString(R.string.quick_settings_tiles_stock)</div><div class="line">                QSTileHost.createTile()</div><div class="line">                    QSFactoryImpl.createTile()</div><div class="line">                        QSFactoryImpl.createTileInternal()</div></pre></td></tr></table></figure>
+<p>获取 R.string.quick_settings_tiles_stock 对应的就是SystemUI中可加载的所有Tile，如果希望客制化也可以在此处进行修改。</p>
+<p>接下来，再看一下如何加载第三方 Tile。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">TileQueryHelper.TileCollector.onStateChanged()</div><div class="line">    TileQueryHelper.TileCollector.finished()</div><div class="line">        TileAdapter.onTilesChanged()</div><div class="line">            TileAdapter.recalcSpecs()</div><div class="line">        TileQueryHelper.addPackageTiles() // 获取带有 TileService.ACTION_QS_TILE 的应用信息</div><div class="line">            TileQueryHelper.createStateAndAddTile()</div><div class="line">                TileQueryHelper.addTile()</div></pre></td></tr></table></figure>
+<h2 id="关联-QS-Tile-和-QS-View"><a href="#关联-QS-Tile-和-QS-View" class="headerlink" title="关联 QS Tile 和 QS View"></a>关联 QS Tile 和 QS View</h2><p>它们关联的建立主要时通过 QSTile.Callback 和 QSTile.State 来实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public interface Callback &#123;</div><div class="line">    public static final int VERSION = 1;</div><div class="line">    void onStateChanged(State state);</div><div class="line">    void onShowDetail(boolean show);</div><div class="line">    void onToggleStateChanged(boolean state);</div><div class="line">    void onScanStateChanged(boolean state);</div><div class="line">    void onAnnouncementRequested(CharSequence announcement);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在 QSPanelControllerBase.addTile() 中创建 QSTileView 时调用 QSPanel.addTile() 为它们建立联系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">// QSPanel.java</div><div class="line">    void addTile(QSPanelControllerBase.TileRecord tileRecord) &#123;</div><div class="line">        final QSTile.Callback callback = new QSTile.Callback() &#123;</div><div class="line">            @Override</div><div class="line">            public void onStateChanged(QSTile.State state) &#123;</div><div class="line">                drawTile(tileRecord, state);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onShowDetail(boolean show) &#123;</div><div class="line">                // Both the collapsed and full QS panels get this callback, this check determines</div><div class="line">                // which one should handle showing the detail.</div><div class="line">                if (shouldShowDetail()) &#123;</div><div class="line">                    QSPanel.this.showDetail(show, tileRecord);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onToggleStateChanged(boolean state) &#123;</div><div class="line">                if (mDetailRecord == tileRecord) &#123;</div><div class="line">                    fireToggleStateChanged(state);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onScanStateChanged(boolean state) &#123;</div><div class="line">                tileRecord.scanState = state;</div><div class="line">                if (mDetailRecord == tileRecord) &#123;</div><div class="line">                    fireScanStateChanged(tileRecord.scanState);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onAnnouncementRequested(CharSequence announcement) &#123;</div><div class="line">                if (announcement != null) &#123;</div><div class="line">                    mHandler.obtainMessage(H.ANNOUNCE_FOR_ACCESSIBILITY, announcement)</div><div class="line">                            .sendToTarget();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">        tileRecord.tile.addCallback(callback); // 向QSTile注册回调</div><div class="line">        tileRecord.callback = callback;</div><div class="line">        tileRecord.tileView.init(tileRecord.tile); // 初始化点击事件</div><div class="line">        tileRecord.tile.refreshState();</div><div class="line"></div><div class="line">        if (mTileLayout != null) &#123;</div><div class="line">            mTileLayout.addTile(tileRecord);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>下面一次点击事件来介绍一下它们之间的关联。<br>BluetoothTile 继承自 QSTileImpl，实现了抽象方法 handleClick(),handleUpdateState()<br>点击事件触发后，先把 State 发送给 QSTileImpl 来更新逻辑，然后再通过回调函数通知 QSTileView 更新 UI。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">QSTileViewImpl.onClick() // 在init()方法中注册</div><div class="line">    QSTileImpl.click()</div><div class="line">        Handler.obtainMessage(H.CLICK, view).sendToTarget()</div><div class="line">            QSTileImpl.H.handleMessage()</div><div class="line">                BluetoothTile.handleClick()</div><div class="line">                    QSTileImpl.refreshState()</div><div class="line">                        Handler.obtainMessage(H.REFRESH_STATE, arg).sendToTarget()</div><div class="line">                             QSTileImpl.H.handleMessage()</div><div class="line">                                QSTileImpl.handleRefreshState()</div><div class="line">                                    BluetoothTile.handleUpdateState()</div><div class="line">                                        BooleanState.value // 更新State</div><div class="line">                                    QSTileImpl.handleStateChanged()</div><div class="line">                                        QSTile.Callback().onStateChanged(mState) // 在 QSPanel.addTile() 中注册</div><div class="line">                                            QSPanel.drawTile()</div><div class="line">                                                QSTileViewImpl.onStateChanged()</div><div class="line">                                                    QSTileViewImpl.handleStateChanged() // 更新 UI</div><div class="line">                    BluetoothController.setBluetoothEnabled() // 更新蓝牙状态</div></pre></td></tr></table></figure>
+<!--
+@startuml
+Title "TileView类关系图"
+
+class LinearLayout
+abstract class QSTileView {
++ public abstract View updateAccessibilityOrder(View previousView)
++ public abstract QSIconView getIcon()
++ public abstract View getIconWithBackground()
++ public View getSecondaryIcon()
++ public abstract void init(QSTile tile)
++ public abstract void onStateChanged(State state)
++ public abstract int getDetailY()
++ public View getLabelContainer()
++ public View getSecondaryLabel()
+}
+class QSTileViewImpl {
+private val collapsed // 是否折叠，QQS中的TileView创建时是折叠的
+protected open fun handleStateChanged(state: QSTile.State)
+}
+LinearLayout <|-- QSTileView
+QSTileView <|-- QSTileViewImpl
+QSTileViewImpl <|-- CustomizeTileView
+@enduml
+-->
+<!--
+@startuml
+Title "QSTile类关系图"
+
+interface QSTile {
+DetailAdapter getDetailAdapter()
+String getTileSpec()
+void setTileSpec(String tileSpec)
+void refreshState();
+
+void addCallback(Callback callback);
+void removeCallback(Callback callback);
+void removeCallbacks();
+QSIconView createTileView(Context context)
+void click(@Nullable View view)
+void secondaryClick(@Nullable View view)
+void longClick(@Nullable View view)
+void userSwitch(int currentUser)
+void setListening(Object client, boolean listening)
+State getState()
+}
+abstract class QSTileImpl {
+protected TState mState
+protected final QSHost mHost
+protected final H mHandler
+
+public abstract TState newTileState()
+protected abstract void handleClick(View view)
+abstract protected void handleUpdateState(TState state, Object arg)
+protected void handleSetListening(boolean listening)
+}
+
+interface Callback {
+ # void onStateChanged(State state)
+ # void onShowDetail(boolean show)
+ # void onToggleStateChanged(boolean state)
+ # void onScanStateChanged(boolean state)
+ # void onAnnouncementRequested(CharSequence announcement)
+}
+
+class State {
+ + public Icon icon;
+ + public Supplier<Icon> iconSupplier;
+ + public int state = DEFAULT_STATE;
+ + public CharSequence label;
+ + public CharSequence secondaryLabel;
+ + public CharSequence contentDescription;
+ + public CharSequence stateDescription;
+ + public CharSequence dualLabelContentDescription;
+ + public boolean disabledByPolicy;
+ + public String expandedAccessibilityClassName;
+ + public SlashState slash;
+ + public Drawable sideViewCustomDrawable;
+ + public String spec;
+}
+
+class BooleanState {
+ + public boolean value
+}
+
+
+QSTile <|.. QSTileImpl
+QSTile *-- State
+QSTile *-- Callback
+State *-- SlashState
+State <|-- BooleanState
+BooleanState <|-- SignalState
+QSTileImpl <|-- CustomTile
+QSTileImpl <|-- WifiTile
+QSTileImpl <|-- BluetoothTile
+QSTileImpl <|-- XXTile
+@enduml
+-->
+<!-- 
+@startuml
+Title "QSHost类关系图"
+
+interface QSHost {
+    void collapsePanels()
+    void forceCollapsePanels()
+    void openPanels()
+    Collection<QSTile> getTiles()
+    void addCallback(Callback callback)
+    void removeCallback(Callback callback)
+    TileServices getTileServices()
+    void removeTile(String tileSpec)
+
+}
+
+class QSTileHost{
+private final ArrayList<QSFactory> mQsFactories
+private final List<Callback> mCallbacks
+}
+
+interface Callback {
+void onTilesChanged();
+}
+
+interface QSFactory {
+QSTile createTile(String tileSpec)
+QSTileView createTileView(Context context, QSTile tile, boolean collapsedView)
+}
+
+
+QSHost <|.. QSTileHost
+QSFactory <|.. QSFactoryImpl
+
+QSTileHost *-- Callback
+QSTileHost *-- QSFactory
+@enduml
+-->
+<!-- 
+@startuml
+Title "QSPanel类关系图"
+
+interface QSTileLayout {
+void saveInstanceState(Bundle outState)
+void restoreInstanceState(Bundle savedInstanceState)
+void addTile(QSPanelControllerBase.TileRecord tile)
+void removeTile(QSPanelControllerBase.TileRecord tile)
+int getOffsetTop(QSPanelControllerBase.TileRecord tile)
+boolean updateResources()
+void setListening(boolean listening, UiEventLogger uiEventLogger)
+boolean setMinRows(int minRows)
+boolean setMaxColumns(int maxColumns)
+void setExpansion(float expansion, float proposedTranslation)
+int getNumVisibleTiles()
+}
+
+
+
+QSTileLayout <|.. TileLayout
+QSTileLayout <|.. PagedTileLayout
+
+TileLayout <|-- SideLabelTileLayout
+SideLabelTileLayout <|-- QQSSideLabelTileLayout
+
+LinearLayout <|-- QSPanel
+QSPanel <|-- QuickQSPanel
+
+QSPanel *-- QSTileLayout
+@enduml
+-->
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SystemUI/" rel="tag"># SystemUI</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/11/16/android-systemui-panel-media-controller/" rel="next" title="SystemUI -- 多媒体通知">
+                <i class="fa fa-chevron-left"></i> SystemUI -- 多媒体通知
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.png"
+               alt="寒江蓑笠" />
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块划分"><span class="nav-number">2.</span> <span class="nav-text">模块划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QS-Tile-的创建"><span class="nav-number">3.</span> <span class="nav-text">QS Tile 的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编辑页面-QS-Tile-的创建"><span class="nav-number">4.</span> <span class="nav-text">编辑页面 QS Tile 的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联-QS-Tile-和-QS-View"><span class="nav-number">5.</span> <span class="nav-text">关联 QS Tile 和 QS View</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
