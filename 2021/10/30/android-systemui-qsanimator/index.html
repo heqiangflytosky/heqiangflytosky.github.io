@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2021/10/30/android-systemui-qsanimator/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍QSTile 动画实现原理">
-<meta property="og:updated_time" content="2021-11-15T08:46:05.886Z">
+<meta property="og:updated_time" content="2021-12-13T06:12:35.530Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SystemUI --  QSTile 动画实现之 QSAnimator">
 <meta name="twitter:description" content="介绍QSTile 动画实现原理">
@@ -400,7 +400,9 @@
       
 
       
-        <p>在上下滑动通知栏过程中，伴随着 QSTile 联动的一些动画，这些动画是由 QSAnimator 实现的。<br>QSAnimator 实现了 OnLayoutChangeListener 接口，并且在初始化时为 QSContainerImpl 添加了监听器。</p>
+        <p>在上下滑动通知栏过程中，伴随着 QSTile 联动的一些动画，这些动画是由 QSAnimator 实现的。<br>在QS做扩展或者收缩动画时，会调用  QSAnimator 的  <code>setPosition()</code> 方法来更新所有 View 的属性来实现相应动画效果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NotificationPanelViewController.setQsExpansion()</div><div class="line">    NotificationPanelViewController.updateQsExpansion()</div><div class="line">        QSFragment.setQsExpansion()</div><div class="line">            QSAnimator.setPosition()</div></pre></td></tr></table></figure>
+<p>另外，QSAnimator 实现了 OnLayoutChangeListener 接口，并且在初始化时为 QSContainerImpl 添加了监听器。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qs.getView().addOnLayoutChangeListener(this)</div></pre></td></tr></table></figure>
 <p>在 QSFragment 中有个 QSAnimator 对象，它会在 updateAnimators() 方法中构建所有的 <code>TouchAnimator.Builder()</code> 对象，并且绑定需要做动画的属性。当QS布局变化时，会调用 QSAnimator 的  <code>setPosition()</code> 方法来更新所有 View 的属性来实现相应动画效果。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">QSAnimator.onLayoutChange()</div><div class="line">    QSAnimator.updateAnimators()</div><div class="line">    QSAnimator.setCurrentPosition()</div><div class="line">        QSAnimator.setPosition()</div><div class="line">            TouchAnimator.setPosition()</div></pre></td></tr></table></figure>
