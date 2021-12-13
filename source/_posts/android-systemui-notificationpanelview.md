@@ -48,7 +48,7 @@ mQsFullyExpanded：QS是否完全展开，展开高度等于mQsMaxExpansionHeigh
 mExpanding：面板是否在展开
 mClosing：是否正在关闭面板
 mQsTracking：是否在触摸快捷面板（展开、收起快捷面板部分逻辑）
-mTracking：为true时表示 NotificationPanelViewController 正在做QS和通知中心的收起或者展示动画。
+mTracking：为true时表示 NotificationPanelViewController 来处理手势移动，此时可能正在做QS和通知中心的收起或者展示动画。false时表示NotificationPanelViewController不处理手势移动，可能交给 PanelViewController处理下面面板整体操作。
 mExpandedHeight:整个下拉面板的高度。为初始位置和手势滑动距离之和。原生用的时渐隐渐现动画。
 mExpandedFraction:下拉面板的幅度,展开高度除于整体高度。
 mQsExpandImmediate：下拉后是QS展开状态，用于双指操作
@@ -187,7 +187,7 @@ NotificationPanelViewController.handleQsTouch() // QS处理
 
 ### setQsExpansion()
 
-设置QS高度以及通知中心位置
+setQsExpansion() 是一个很关键的方法，用来设置QS高度以及通知中心位置
 1.更新QS和QQS的可见性
 2.设置 QS 的绘制区域
 3.执行QSTile的动画
@@ -214,6 +214,7 @@ NotificationPanelViewController.setQsExpansion()
         KeyguardBypassController.setQSExpanded()
         StatusBarKeyguardViewManager.setQsExpanded()
         LockIconViewController.setQsExpanded()
+    mQsExpansionHeight = height // 更新 mQsExpansionHeight 变量
     NotificationPanelViewController.updateQsExpansion() // 设置QS高度
         QSFragment.setQsExpansion()
             QSAnimator.startAlphaAnimation()
@@ -237,8 +238,50 @@ NotificationPanelViewController.setQsExpansion()
                             QSContainerImpl.updateClippingPath()
                                 View.invalidate()
     NotificationPanelViewController.requestScrollerTopPaddingUpdate() //更新通知中心的偏移
+        NotificationPanelViewController.calculateNotificationsTopPadding()
         NotificationStackScrollLayoutController.updateTopPadding()
             NotificationStackScrollLayout.updateTopPadding() // 更新通知中心的位置，后面详细介绍
+```
+
+调用的地方主要有下面几个场景：
+
+根据初始位置+手势滑动距离来设置：
+
+显示QQS时，
+
+```
+// NotificationPanelViewController.java
+        public void onLayoutChange(
+
+            } else if (!mQsExpanded && mQsExpansionAnimator == null) {
+                setQsExpansion(mQsMinExpansionHeight + mLastOverscroll);
+            }
+        }
+```
+
+QQS切换QS时
+
+```
+// NotificationPanelViewController.java
+            case MotionEvent.ACTION_MOVE:
+                setQsExpansion(h + mInitialHeightOnTouch);
+```
+
+
+双指滑动：
+
+```
+// NotificationPanelViewController.java
+    protected void onHeightUpdated(float expandedHeight) {
+        if (mQsExpandImmediate || mQsExpanded && !mQsTracking && mQsExpansionAnimator == null
+                && !mQsExpansionFromOverscroll) {
+            ......
+            float
+                    targetHeight =
+                    mQsMinExpansionHeight + t * (mQsMaxExpansionHeight - mQsMinExpansionHeight);
+            setQsExpansion(targetHeight);
+        }
+    }
 ```
 
 ### setExpandedHeightInternal()

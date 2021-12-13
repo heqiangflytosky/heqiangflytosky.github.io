@@ -9,7 +9,17 @@ date: 2021-10-30 10:00:00
 
 
 在上下滑动通知栏过程中，伴随着 QSTile 联动的一些动画，这些动画是由 QSAnimator 实现的。
-QSAnimator 实现了 OnLayoutChangeListener 接口，并且在初始化时为 QSContainerImpl 添加了监听器。
+在QS做扩展或者收缩动画时，会调用  QSAnimator 的  `setPosition()` 方法来更新所有 View 的属性来实现相应动画效果。
+
+```
+NotificationPanelViewController.setQsExpansion()
+    NotificationPanelViewController.updateQsExpansion()
+        QSFragment.setQsExpansion()
+            QSAnimator.setPosition()
+
+```
+
+另外，QSAnimator 实现了 OnLayoutChangeListener 接口，并且在初始化时为 QSContainerImpl 添加了监听器。
 
 ```
 qs.getView().addOnLayoutChangeListener(this)
@@ -23,6 +33,7 @@ QSAnimator.onLayoutChange()
     QSAnimator.setCurrentPosition()
         QSAnimator.setPosition()
             TouchAnimator.setPosition()
+                
 ```
 
 TouchAnimator是对动画类的封装，而其内建的Builder是对动画参数的配置，build方法直接返回了一个 TouchAnimator 对象。
