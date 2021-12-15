@@ -43,7 +43,7 @@ mOverExpansion:QS可以回弹下拉的高度
 mQsExpanded:QS是否可见，这时QS正在展开或者全部展开，此时展开高度大于 mQsMinExpansionHeight，也就是在只显示QQS到全部显示QS之间的状态变化时为true。
 mQsMinExpansionHeight:QS展开的最小高度：如果是锁屏模式，就是0，全部隐藏了。如果不是就是 QuickStatusBarHeader 的高度。
 mQsMaxExpansionHeight：QS展开的最大高度，通过 getDesiredHeight() 获取，一般是QSContainerImpl 的高度。
-mQsExpansionHeight：QS的当前实时高度，一般通过 setQsExpansion() 方法设置。一般为初始位置加手势移动的距离。
+mQsExpansionHeight：QS的当前实时高度，其实就是没有被通知中心覆盖住的QS部分。一般通过 setQsExpansion() 方法设置。一般为初始位置加手势移动的距离。
 mQsFullyExpanded：QS是否完全展开，展开高度等于mQsMaxExpansionHeight
 mExpanding：面板是否在展开
 mClosing：是否正在关闭面板
