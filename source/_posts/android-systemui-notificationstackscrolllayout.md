@@ -23,6 +23,7 @@ mExpandHelper：处理通知的展开和收缩
 mTopPadding：通知中心的最上面一条通知通知距离顶部的偏移量，显示QQS时就是QQS的高度，不显示QQS时为通知中心距离顶部的实时距离
 mIntrinsicContentHeight：通知中心各个通知累加的高度
 mContentHeight：mIntrinsicContentHeight 加上 mTopPadding 和 mBottomMargin 的高度。
+mExpandedHeight：PanelViewController.mExpandedHeight
 mOverScrolledTopPixels
 mOverScrolledBottomPixels
 RUBBER_BAND_FACTOR_NORMAL:回弹系数
@@ -43,11 +44,39 @@ mSwipeHelper:处理滑动删除通知逻辑
 3.AmbientState: 为 StackScrollAlgorithm 保存一些全局状态。
 mStackY：通知中心的最上面一条通知通知距离顶部的偏移量
 mTopPadding：NotificationStackScrollLayout.mTopPadding
+有同学可能有这样的疑问，mStackY 和 mTopPadding 有什么区别？我们先来看一下它们时如何设置的？
+
+```
+// NotificationStackScrollLayout.java
+        float endTopPosition = mTopPadding + mExtraTopInsetForFullShadeTransition
+                + mAmbientState.getOverExpansion()
+                - getCurrentOverScrollAmount(false /* top */);
+        final float fraction = mAmbientState.getExpansionFraction();
+        final float stackY = MathUtils.lerp(0, endTopPosition, fraction);
+        mAmbientState.setStackY(stackY);
+```
+
+```
+// NotificationStackScrollLayout.java
+mAmbientState.setTopPadding(mTopPadding);
+```
+
+可以发现，在 fraction 为 1 的情况下，mStackY 是等于 mTopPadding 的。
+
 mScrollY:通知栏的滚动位置，通知中心由显示QQS到满屏显示通知场景过渡时来决定通知栏的位置
 mOverScrollTopAmount：通知中心顶部回弹量，向下滑动时设置
 mOverScrollBottomAmount：通知中心底部回弹量，通知中心满屏时向上滚动通知栏时设置
 3.StackScrollAlgorithm：用来使 NotificationStackScrollLayout可以查询或者更新当前的 StackScrollAlgorithmState 状态。
 mExpansionFraction ：通知栏展开的比例，场景2 -> 场景0 过渡时来决定通知的折叠比例，透明度和通知中心的位置。
+
+```
+        final float shadeBottom = getHeight() - getEmptyBottomMargin();
+        final float expansionFraction = MathUtils.saturate(height / shadeBottom);// 当 height > shadeBottom 为1
+        mAmbientState.setExpansionFraction(expansionFraction);
+```
+
+因此，当显示QQS到QS场景过渡时为1，QQS从隐藏到显示过渡时为0->1。
+
 mScrollY:AmbientState.mScrollY
 4.ViewState：记录了一些View的属性值，translation，alpha，scale，visibility等。
 5.ExpandableViewState：ViewState的子类，每个ExpandableView类都有个ExpandableViewState变量，记录该通知的一些属性信息。
