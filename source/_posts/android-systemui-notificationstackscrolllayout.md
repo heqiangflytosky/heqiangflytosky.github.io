@@ -21,6 +21,7 @@ mIsBeingDragged:是否时拖动通知中心的操作，此时的拖动事件由 
 mQsExpansionFraction：通知栏展开比例，如果是0表示全部展开，这时只显示QQS，1表示通知中心全部隐藏。
 mExpandHelper：处理通知的展开和收缩
 mTopPadding：通知中心的最上面一条通知通知距离顶部的偏移量，显示QQS时就是QQS的高度，不显示QQS时为通知中心距离顶部的实时距离
+mIntrinsicPadding:通知中心本身距离顶部的距离，一般是HeaderView的高度。
 mIntrinsicContentHeight：通知中心各个通知累加的高度
 mContentHeight：mIntrinsicContentHeight 加上 mTopPadding 和 mBottomMargin 的高度。
 mExpandedHeight：PanelViewController.mExpandedHeight
