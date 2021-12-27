@@ -24,7 +24,11 @@ NotificationShadeWindowView //R.layout.super_notification_shade
                 QSContainerImpl(R.id.quick_settings_container)
                     QuickStatusBarHeader(R.id.header)//显示顶部的状态栏、时间和顶部常显示按钮
                         LinearLayout(R.id.quick_status_bar_date_privacy) //状态栏位置的日期
-                        RelativeLayout
+                            FrameLayout(R.id.data_container)
+                                DataView(R.id.data)
+                            Space(R.id.space)
+                            FrameLayout(R.id.privacy_container)
+                        RelativeLayout(R.id.qs_container)
                             LinearLayout(R.id.quick_qs_status_icons) // 时间、电量
                                 Clock(R.id.clock) // 时间
                                 QSCarrierGroup(R.id.carrier_group)
