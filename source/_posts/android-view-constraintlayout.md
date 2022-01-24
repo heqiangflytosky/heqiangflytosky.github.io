@@ -361,6 +361,14 @@ app:layout_constraintDimensionRatio="W,2:3"指的是 宽:高=2:3
 ### ConstraintSet
 
 ConstraintLayout 提供了 ConstraintSet 来动态修改约束条件，并且中间可以伴随动画实现过渡效果。
+提供了很多灵活好用的方法，主要方法如下：
+
+ - clone()：copy了整个布局的控件与属性
+ - connect()：设置两个组件的相对位置
+ - centerHorizontally()：设置水平居中
+ - constrainHeight()：设置某个布局的高度
+ - applyTo()：apply一下使设置生效。
+
 下面是官方提供的 Demo 来实现布局切换的代码：
 
 constraintset_example_main.xml
