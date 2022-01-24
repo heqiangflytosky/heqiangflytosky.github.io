@@ -46,6 +46,7 @@ Android 开发过程中避免不了的会引用 xml 资源，现在针对资源�
 比如：
 
  - `android:textColor="@android:color/black"`
+ - `layerDrawable.findDrawableByLayerId(android.R.id.progress)`
 
 #### 引用非 public 资源
 
