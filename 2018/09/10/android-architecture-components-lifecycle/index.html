@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/09/10/android-architecture-components-lifecycle/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="本文介绍 Android 生命周期架构组件 LifeCycle 的基本使用">
-<meta property="og:updated_time" content="2018-12-12T01:56:43.882Z">
+<meta property="og:updated_time" content="2022-01-24T07:35:09.315Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Architecture Components -- LifeCycle">
 <meta name="twitter:description" content="本文介绍 Android 生命周期架构组件 LifeCycle 的基本使用">
@@ -404,6 +404,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class TaskDetailFragment extends Fragment implements TaskDetailContract.View &#123;</div><div class="line">    ......</div><div class="line">    @Override</div><div class="line">    public void onResume() &#123;</div><div class="line">        super.onResume();</div><div class="line">        mPresenter.subscribe();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onPause() &#123;</div><div class="line">        super.onPause();</div><div class="line">        mPresenter.unsubscribe();</div><div class="line">    &#125;</div><div class="line">    ......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>LifeCycle 它可以有效避免内存泄漏和解决 Android 生命周期的常见难题。LifeCycle 已经更新到 2.0 版，现已纳入 Jetpack 并包含数据绑定库的新集成。<br>LifeCycle 组件也是 LiveData 和 ViewModel 的基础组件。LifeCycle 简单独立，可以单独使用，也可以配合上述组件使用。</p>
 <ul>
+<li>LifecycleRegistry：继承自 Lifecycle，实现生命周期的逻辑，LifeCycleOwner 通过持有它实现生命周期事件的分发。</li>
 <li>LifeCycleOwner：Lifecycle 持有者，LifecycleOwner 时一个接口，它仅有一个方法 <code>getLifecycle()</code> 用来表明它持有Lifecycle 对象。它一般是具有生命周期的 Activity 或者 Fragment 组件。</li>
 <li>LifecycleObserver：Lifecycle 的观察者，当它通过 Lifecycle 的 <code>addObserver</code> 方法注册后，它便可以观察 LifeCycleOwner 的生命周期事件。</li>
 <li>State：生命周期状态，当 LifeCycleOwner 生命周期状态改变时，LifecycleRegistry 通过 <code>markState</code> 方法标记 Lifecycle 进入的状态，并向 LifecycleObserver 分发消息。</li>
@@ -452,6 +453,7 @@
 <p>通过反射来调用注册的回调方法。</p>
 <h4 id="FullLifecycleObserverAdapter-onStateChanged"><a href="#FullLifecycleObserverAdapter-onStateChanged" class="headerlink" title="FullLifecycleObserverAdapter.onStateChanged"></a>FullLifecycleObserverAdapter.onStateChanged</h4><p>这个方法其实很简单，就是直接调用 FullLifecycleObserver 的几个生命周期回调方法。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public void onStateChanged(LifecycleOwner source, Lifecycle.Event event) &#123;</div><div class="line">    switch (event) &#123;</div><div class="line">        case ON_CREATE:</div><div class="line">            mObserver.onCreate(source);</div><div class="line">            break;</div><div class="line">        case ON_START:</div><div class="line">            mObserver.onStart(source);</div><div class="line">            break;</div><div class="line">        case ON_RESUME:</div><div class="line">            mObserver.onResume(source);</div><div class="line">            break;</div><div class="line">        case ON_PAUSE:</div><div class="line">            mObserver.onPause(source);</div><div class="line">            break;</div><div class="line">        case ON_STOP:</div><div class="line">            mObserver.onStop(source);</div><div class="line">            break;</div><div class="line">        case ON_DESTROY:</div><div class="line">            mObserver.onDestroy(source);</div><div class="line">            break;</div><div class="line">        case ON_ANY:</div><div class="line">            throw new IllegalArgumentException(&quot;ON_ANY must not been send by anybody&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -670,7 +672,7 @@
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

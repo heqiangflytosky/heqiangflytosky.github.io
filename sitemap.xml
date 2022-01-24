@@ -2,9 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2015/05/03/android-knowledge-using-resources/</loc>
+    
+    <lastmod>2022-01-24T07:35:14.430Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/05/03/android-view-constraintlayout/</loc>
+    
+    <lastmod>2022-01-24T07:35:09.318Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/06/12/android-usefull-class-function/</loc>
+    
+    <lastmod>2022-01-24T07:35:09.317Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
+    
+    <lastmod>2022-01-24T07:35:09.316Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/09/10/android-architecture-components-lifecycle/</loc>
+    
+    <lastmod>2022-01-24T07:35:09.315Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2021/11/05/android-systemui-view-structure/</loc>
     
-    <lastmod>2021-12-24T08:50:11.726Z</lastmod>
+    <lastmod>2021-12-31T10:25:12.000Z</lastmod>
     
   </url>
   
@@ -12,13 +47,6 @@
     <loc>http://yoursite.com/2021/11/08/android-systemui-notificationstackscrolllayout/</loc>
     
     <lastmod>2021-12-24T08:50:08.859Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2021/11/07/android-systemui-notificationpanelview/</loc>
-    
-    <lastmod>2021-12-16T03:32:31.852Z</lastmod>
     
   </url>
   
@@ -149,13 +177,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/06/12/android-usefull-class-function/</loc>
-    
-    <lastmod>2021-07-29T03:28:49.412Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2017/05/15/android-plugins-dynamic-load-demo/</loc>
     
     <lastmod>2021-07-29T02:17:15.162Z</lastmod>
@@ -248,13 +269,6 @@
   
   <url>
     <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
-    
-    <lastmod>2021-06-11T06:15:14.262Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2019/05/03/android-view-constraintlayout/</loc>
     
     <lastmod>2021-06-11T06:15:14.262Z</lastmod>
     
@@ -817,13 +831,6 @@
     <loc>http://yoursite.com/2015/05/10/android-knowledge-attr-style-theme/</loc>
     
     <lastmod>2020-05-18T01:20:02.790Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2015/05/03/android-knowledge-using-resources/</loc>
-    
-    <lastmod>2020-05-18T01:12:36.648Z</lastmod>
     
   </url>
   
@@ -1570,13 +1577,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2018/09/10/android-architecture-components-lifecycle/</loc>
-    
-    <lastmod>2018-12-12T01:56:43.882Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/2018/08/02/development-tool-gradle-plugin-debug/</loc>
     
     <lastmod>2018-12-12T01:56:07.194Z</lastmod>
@@ -1934,14 +1934,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/13/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/react-native-image/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1976,14 +1976,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1997,14 +1997,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
