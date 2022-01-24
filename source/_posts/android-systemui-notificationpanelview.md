@@ -362,7 +362,7 @@ NotificationPanelViewController.setQSClippingBounds()
 
 ### flingToHeight()
 
-flingToHeight()：下拉面板整体滚动到指定高度，一般是UP事件后下拉面板的滚动动画。
+flingToHeight()：下拉面板整体滚动到指定高度，一般是UP事件后下拉面板的滚动动画。可以是展开或者折叠下拉面板。
 
 ```
 NotificationPanelViewController.flingToHeight()

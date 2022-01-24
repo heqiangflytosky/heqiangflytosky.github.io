@@ -552,6 +552,26 @@ public class ConstraintSetExampleActivity extends AppCompatActivity {
 
 <img src="/images/android-view-constraintlayout/set-main.png" width="230" height="441"/><img src="/images/android-view-constraintlayout/set-big.png" width="231" height="423"/>
 
+上面的列子提供了两个布局来实现切换，实际我们还可以只使用一种布局，调用 ConstraintSet 提供的方法来实现布局的切换，这样就不用提供两种布局了。比如在横竖屏切换需要变化布局时也可以这样使用。
+
+```
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(mNotificationContainerParent);
+        if (mShouldUseSplitNotificationShade) {
+            constraintSet.connect(R.id.qs_frame, END, R.id.qs_edge_guideline, END);
+            constraintSet.connect(
+                    R.id.notification_stack_scroller, START,
+                    R.id.qs_edge_guideline, START);
+            constraintSet.connect(R.id.keyguard_status_view, END, R.id.qs_edge_guideline, END);
+        } else {
+            constraintSet.connect(R.id.qs_frame, END, PARENT_ID, END);
+            constraintSet.connect(R.id.notification_stack_scroller, START, PARENT_ID, START);
+            constraintSet.connect(R.id.keyguard_status_view, END, PARENT_ID, END);
+        }
+        constraintSet.getConstraint(R.id.notification_stack_scroller).layout.mWidth = panelWidth;
+        constraintSet.getConstraint(R.id.qs_frame).layout.mWidth = qsWidth;
+        constraintSet.applyTo(mNotificationContainerParent);
+```
 
 ### Optimizer
 

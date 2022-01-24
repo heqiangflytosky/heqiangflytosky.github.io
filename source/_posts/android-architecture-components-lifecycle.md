@@ -34,6 +34,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
 LifeCycle 它可以有效避免内存泄漏和解决 Android 生命周期的常见难题。LifeCycle 已经更新到 2.0 版，现已纳入 Jetpack 并包含数据绑定库的新集成。
 LifeCycle 组件也是 LiveData 和 ViewModel 的基础组件。LifeCycle 简单独立，可以单独使用，也可以配合上述组件使用。
 
+ - LifecycleRegistry：继承自 Lifecycle，实现生命周期的逻辑，LifeCycleOwner 通过持有它实现生命周期事件的分发。
  - LifeCycleOwner：Lifecycle 持有者，LifecycleOwner 时一个接口，它仅有一个方法 `getLifecycle()` 用来表明它持有Lifecycle 对象。它一般是具有生命周期的 Activity 或者 Fragment 组件。
  - LifecycleObserver：Lifecycle 的观察者，当它通过 Lifecycle 的 `addObserver` 方法注册后，它便可以观察 LifeCycleOwner 的生命周期事件。
  - State：生命周期状态，当 LifeCycleOwner 生命周期状态改变时，LifecycleRegistry 通过 `markState` 方法标记 Lifecycle 进入的状态，并向 LifecycleObserver 分发消息。
