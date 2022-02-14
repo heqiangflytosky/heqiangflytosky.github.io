@@ -180,6 +180,11 @@ MediaHierarchyManager.updateDesiredLocation()
                         UniqueObjectHostView.addView() // 动画完成添加到新的Host
 ```
 
+## 可见性更新流程
+
+MediaHost 提供了 addVisibilityChangeListener() 方法，当媒体通知的可见性发生变化时会通知监听者响应的变化。
+在 KeyguardMediaController 、 MediaHierarchyManager 和 QSPanelControllerBase 都创建了监听。QSPanelControllerBase 收到监听后会把变化通过 mMediaVisibilityChangedListener 通知到 QSFragment (setCollapsedMediaVisibilityChangedListener())，在通知到 NotificationPanelViewController (setMediaVisibilityChangedListener())。
+
 ## 切换动画流程
 
 切换动画是在 ViewGroupOverlay 上面做的，根据手势的移动位置来计算出 mediaFrame 的显示区域，然后通过不断更新显示区域来实现移动的动画效果。
