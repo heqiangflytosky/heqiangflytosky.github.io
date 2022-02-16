@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2015/05/03/android-knowledge-using-resources/</loc>
+    <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
     
-    <lastmod>2022-01-24T07:35:14.430Z</lastmod>
+    <lastmod>2022-02-16T03:20:09.168Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2019/05/03/android-view-constraintlayout/</loc>
     
-    <lastmod>2022-01-24T07:35:09.318Z</lastmod>
+    <lastmod>2022-02-16T03:20:09.167Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/11/16/android-systemui-panel-media-controller/</loc>
+    
+    <lastmod>2022-02-16T03:20:09.166Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2015/05/03/android-knowledge-using-resources/</loc>
+    
+    <lastmod>2022-01-24T07:35:14.430Z</lastmod>
     
   </url>
   
@@ -75,13 +89,6 @@
     <loc>http://yoursite.com/2021/06/01/android-statusbar-icon-color/</loc>
     
     <lastmod>2021-12-07T01:24:51.244Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2021/11/16/android-systemui-panel-media-controller/</loc>
-    
-    <lastmod>2021-11-29T09:01:39.239Z</lastmod>
     
   </url>
   
@@ -264,13 +271,6 @@
     <loc>http://yoursite.com/2021/01/02/android-launcher-introducation/</loc>
     
     <lastmod>2021-06-21T07:40:40.295Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2015/03/07/development-tool-git-command/</loc>
-    
-    <lastmod>2021-06-11T06:15:14.262Z</lastmod>
     
   </url>
   
@@ -1843,14 +1843,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
+    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2016/02/02/android-knowledge-point-buildconfig/</loc>
+    <loc>http://yoursite.com/2016/02/05/android-knowledge-point-app-lib-build-type/</loc>
     
     <lastmod>2018-03-11T13:47:48.000Z</lastmod>
     
@@ -1976,14 +1976,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
+    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/10/react-native-build-development-environment/</loc>
+    <loc>http://yoursite.com/2017/01/12/react-native-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
@@ -1997,14 +1997,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
+    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2017/01/14/react-native-native-modules/</loc>
+    <loc>http://yoursite.com/2017/01/15/react-native-native-ui-component/</loc>
     
     <lastmod>2017-12-01T15:59:47.000Z</lastmod>
     
