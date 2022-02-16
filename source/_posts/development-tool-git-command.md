@@ -24,6 +24,7 @@ date: 2015-3-7 10:00:00
  - `git log --abbrev-commit`：仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。
  - `git log --relative-date`：使用较短的相对时间显示（比如，"2 weeks ago"）。
  - `git log --graph`：显示 ASCII 图形表示的分支合并历史。
+ - `git log --oneline`：只显示一行的提交信息
 
 ## git checkout
 
@@ -176,6 +177,13 @@ git merge --no-ff dev // merge dev 分支到 master 分支
 ### git merge -s ours
 
 cherry pick 与 git merge
+
+## git cherry-pick
+
+`git cherry-pick <commitID>` 将commitID对应的本地变更pick到当前分支。
+cherry-pick 后可以加多个commitID用于批量提交，或者添加一个commitID列表：
+git cherry-pick 1234 2345 4567
+git cherry-pick 1234..4567
 
 ## git fetch
 
