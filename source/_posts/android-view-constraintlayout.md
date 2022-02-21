@@ -355,6 +355,37 @@ app:layout_constraintDimensionRatio="W,2:3"指的是 宽:高=2:3
 
 <img src="/images/android-view-constraintlayout/center.png" width="179" height="316"/>
 
+### 控件整体居中
+
+可以通过 'layout_constraintVertical_chainStyle' 来实现。
+
+```
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.circleviewpager.CircleViewPagerActivity">
+    <Button
+        android:id="@+id/view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/view1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <Button
+        android:id="@+id/view1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
 
 ## 辅助工具
 
