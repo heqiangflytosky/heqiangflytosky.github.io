@@ -237,6 +237,8 @@ NotificationPanelViewController.setQsExpansion()
                         QSContainerImpl.setFancyClipping()
                             QSContainerImpl.updateClippingPath()
                                 View.invalidate()
+        NotificationStackScrollLayoutController.setQsExpansionFraction() // 更新通知中心
+        NotificationShadeDepthController.setQsPanelExpansion()
     NotificationPanelViewController.requestScrollerTopPaddingUpdate() //更新通知中心的偏移
         NotificationPanelViewController.calculateNotificationsTopPadding()
         NotificationStackScrollLayoutController.updateTopPadding()
@@ -352,12 +354,12 @@ NotificationPanelViewController.setQSClippingBounds()
                 QSContainerImpl.setFancyClipping()
                     QSContainerImpl.updateClippingPath()
                         View.invalidate()
-            ScrimController.setNotificationsBounds()
-                mNotificationsScrim.setDrawableBounds() // 通知栏背景的剪切区域
+            ScrimController.setNotificationsBounds() // 设置通知中心的背景区域
+                mNotificationsScrim.setDrawableBounds() // 通知中心背景的剪切区域
                 mScrimBehind.setBottomEdgePosition()
             ScrimController.setScrimCornerRadius()
             KeyguardStatusBarView.setTopClipping()
-            NotificationStackScrollLayoutController.setRoundedClippingBounds()
+            NotificationStackScrollLayoutController.setRoundedClippingBounds() //更新通知中心的显示区域
 ```
 
 ### flingToHeight()

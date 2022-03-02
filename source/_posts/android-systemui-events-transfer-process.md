@@ -366,6 +366,8 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 ```
 
 然后事件就交给 `NotificationStackScrollLayoutController.TouchHandler.onTouchEvent() -> NotificationStackScrollLayout.onScrollTouch() -> NotificationStackScrollLayout.customOverScrollBy()` 处理上划滚动。
+
+
 2->3 通知中心下滑，这时 QSPanel不对 `MotionEvent.ACTION_MOVE` 做拦截，这时交给 NotificationStackScrollLayout 来处理向下滚动的 `MotionEvent.ACTION_MOVE` 和 `MotionEvent.ACTION_UP` 事件。
 
 
@@ -402,8 +404,6 @@ NotificationStackScrollLayout.onInterceptTouchEventScroll 收到 `MotionEvent.AC
 ```
 
 0->2 切换时也由PanelViewController处理，此时满足 expand 条件，就会去做 expand 动画。
-
-2->3 切换同样时由 NotificationStackScrollLayout 来处理 `MotionEvent.ACTION_MOVE` 和 `MotionEvent.ACTION_UP` 事件。
 
 3->2 切换，在QS上做上划动作，NotificationStackScrollLayout 不消费DOWN事件，被NotificationPanelView子View消费，后续MOVE 和 UP事件事件再经过 NotificationPanelView 被拦截，被 NotificationPanelView.onTouch() -> NotificationPanelViewController.handleQsTouch()->onQsTouch() 处理。
 

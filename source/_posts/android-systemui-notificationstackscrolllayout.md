@@ -40,6 +40,7 @@ updateFooterView()
 setDismissAllInProgress()
 goToFullShade() 切换到将通知全部展开的状态
 fling()：处理通知中心放手后的惯性滚动，注意：不是回弹效果。
+setQsExpansionFraction():更加QS的展开程度来更新通知中心
 2.NotificationStackScrollLayoutController
 mSwipeHelper:处理滑动删除通知逻辑
 3.AmbientState: 为 StackScrollAlgorithm 保存一些全局状态。
@@ -67,7 +68,6 @@ mAmbientState.setTopPadding(mTopPadding);
 mScrollY:通知栏的滚动位置，通知中心由显示QQS到满屏显示通知场景过渡时来决定通知栏的位置
 mOverScrollTopAmount：通知中心顶部回弹量，向下滑动时设置
 mOverScrollBottomAmount：通知中心底部回弹量，通知中心满屏时向上滚动通知栏时设置
-3.StackScrollAlgorithm：用来使 NotificationStackScrollLayout可以查询或者更新当前的 StackScrollAlgorithmState 状态。
 mExpansionFraction ：通知栏展开的比例，场景2 -> 场景0 过渡时来决定通知的折叠比例，透明度和通知中心的位置。
 
 ```
@@ -77,6 +77,9 @@ mExpansionFraction ：通知栏展开的比例，场景2 -> 场景0 过渡时来
 ```
 
 因此，当显示QQS到QS场景过渡时为1，QQS从隐藏到显示过渡时为0->1。
+mAppearFraction:
+3.StackScrollAlgorithm：用来使 NotificationStackScrollLayout可以查询或者更新当前的 StackScrollAlgorithmState 状态。
+
 
 mScrollY:AmbientState.mScrollY
 4.ViewState：记录了一些View的属性值，translation，alpha，scale，visibility等。
@@ -86,6 +89,9 @@ yTranslation 通知的实际位置。
 StackScrollAlgorithmState
 scrollY:AmbientState.mScrollY
 mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计算各个通知的偏移。
+
+6.ScrimController
+setNotificationsBounds() 设置通知中心的背景区域
 
 ## 通知栏的滑动
 
@@ -268,6 +274,12 @@ NotificationStackScrollLayout.updateTopPadding()
     NotificationStackScrollLayout.setExpandedHeight()
         NotificationStackScrollLayout.updateStackPosition() // 更新通知的位置
             AmbientState.setStackY() // 设置Y坐标，在绘制时计算子view的位置
+            mOnStackYChanged.accept() // 通知监听器，当通知中心位置改变时做一些更新，比如更新通知中心位置背景
+                NotificationPanelViewController.onStackYChanged()
+                    NotificationPanelViewController.setQSClippingBounds() //设置QS的绘制区域
+                        NotificationPanelViewController.applyQSClippingBounds()
+                            NotificationPanelViewController.applyQSClippingImmediately()
+                                ScrimController.setNotificationsBounds() // 设置通知中心背景的位置
             AmbientState.setStackEndHeight()
             AmbientState.setStackHeight()
         NotificationStackScrollLayout.updateAlgorithmHeightAndPadding()
@@ -472,3 +484,6 @@ NotificationStackScrollLayout.customOverScrollBy()
 ## AnimationEvent
 
 
+## ScrimView
+
+通知中心区域的背景是通过 ScrimView 来实现的，通过`ScrimController.setNotificationsBounds()` 来设置通知中心背景区域位置。

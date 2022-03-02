@@ -13,7 +13,7 @@ date: 2015-3-7 10:00:00
  - `git log -p`：显示每一次的提交的差异。
  - `git log -p -n` （n为次数，整数）：指定了显示差异的次数，用 -2 则仅显示最近的两次更新.
  - `git log --stat`：显示简要的增改行数统计，后面跟次数比如 -2 则仅显示最近的两次更新。
- - `git log --author=寒江蓑笠`：显示某个作者的提交记录。
+ - `git log --author=寒江蓑笠`：显示某个作者的提交记录。选择多个作者可以使用 `git log --author="AA\|BB"`
  - `git log --committer=寒江蓑笠`：显示某个提交者的提交记录。
  - `git log --since, --after`：仅显示指定时间之后的提交。
  - `git log --until, --before`：仅显示指定时间之前的提交。
@@ -112,6 +112,7 @@ $ git rebase origin
 
 ## git pull
  - `git pull --rebase`：表示把你的本地当前分支里的每个提交(commit)取消掉，并且把它们临时 保存为补丁(patch)(这些补丁放到`.git/rebase`目录中),然后把本地当前分支更新 为最新的`origin`分支，最后把保存的这些补丁应用到本地当前分支上。
+ - `git pull origin branchA`：只更新branchA分支
 
 ## git push
 
@@ -183,7 +184,10 @@ cherry pick 与 git merge
 `git cherry-pick <commitID>` 将commitID对应的本地变更pick到当前分支。
 cherry-pick 后可以加多个commitID用于批量提交，或者添加一个commitID列表：
 git cherry-pick 1234 2345 4567
+有冲突的话解决冲突，然后 git add <冲突文件>，然后 git cherry-pick --continue，最后 push 到分支再合入就行了。
+如果时连续的提交，可以写上首尾提交，然后中间加..，这样就可以把 1234直到4567前面的提交都pick过来。
 git cherry-pick 1234..4567
+
 
 ## git fetch
 
