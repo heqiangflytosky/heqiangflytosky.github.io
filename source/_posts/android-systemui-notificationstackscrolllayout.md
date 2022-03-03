@@ -18,7 +18,9 @@ NotificationStackScrollLayout 继承自 ViewGroup，它提供了一个动态添�
 
 1.NotificationStackScrollLayout
 mIsBeingDragged:是否时拖动通知中心的操作，此时的拖动事件由 NotificationStackScrollLayout 来处理。一旦设置为true，就会调用 requestDisallowInterceptTouchEvent(true)，不允许父组件做事件拦截。
-mQsExpansionFraction：通知栏展开比例，如果是0表示全部展开，这时只显示QQS，1表示通知中心全部隐藏。
+mQsExpansionFraction：QS展开比例，用来设置通知栏展开比例，如果是0表示全部展开，这时只显示QQS，1表示通知中心全部隐藏。
+mIsExpanded：通知中心是否展开，只要通知中心显示，它就是true。
+mQsExpanded：QS是否展开，此时面板处于QS状态。
 mExpandHelper：处理通知的展开和收缩
 mTopPadding：通知中心的最上面一条通知通知距离顶部的偏移量，显示QQS时就是QQS的高度，不显示QQS时为通知中心距离顶部的实时距离
 mIntrinsicPadding:通知中心本身距离顶部的距离，一般是HeaderView的高度。
@@ -41,8 +43,10 @@ setDismissAllInProgress()
 goToFullShade() 切换到将通知全部展开的状态
 fling()：处理通知中心放手后的惯性滚动，注意：不是回弹效果。
 setQsExpansionFraction():更加QS的展开程度来更新通知中心
+
 2.NotificationStackScrollLayoutController
 mSwipeHelper:处理滑动删除通知逻辑
+
 3.AmbientState: 为 StackScrollAlgorithm 保存一些全局状态。
 mStackY：通知中心的最上面一条通知通知距离顶部的偏移量
 mTopPadding：NotificationStackScrollLayout.mTopPadding
@@ -68,7 +72,7 @@ mAmbientState.setTopPadding(mTopPadding);
 mScrollY:通知栏的滚动位置，通知中心由显示QQS到满屏显示通知场景过渡时来决定通知栏的位置
 mOverScrollTopAmount：通知中心顶部回弹量，向下滑动时设置
 mOverScrollBottomAmount：通知中心底部回弹量，通知中心满屏时向上滚动通知栏时设置
-mExpansionFraction ：通知栏展开的比例，场景2 -> 场景0 过渡时来决定通知的折叠比例，透明度和通知中心的位置。
+mExpansionFraction ：通知栏展开的比例，场景2 -> 场景0 过渡时来决定通知的折叠比例，透明度和通知中心的位置。这个折叠指的时通知中心收起时，通知向上收起的一个动画。
 
 ```
         final float shadeBottom = getHeight() - getEmptyBottomMargin();
@@ -77,15 +81,33 @@ mExpansionFraction ：通知栏展开的比例，场景2 -> 场景0 过渡时来
 ```
 
 因此，当显示QQS到QS场景过渡时为1，QQS从隐藏到显示过渡时为0->1。
+具体设置通知的折叠位置在 
+
+```
+private void updateStackPosition(boolean listenerNeedsAnimation) {
+        ......
+        // 只有在 mQsExpansionFraction <= 0 才会根据 mAmbientState.getExpansionFraction() 来设置通知的折叠位置。
+        // 此时panel是处于QQS的状态
+        if (mQsExpansionFraction <= 0) {
+            final float stackEndHeight = Math.max(0f,
+                    getHeight() - getEmptyBottomMargin() - mTopPadding);
+            mAmbientState.setStackEndHeight(stackEndHeight);
+            mAmbientState.setStackHeight(
+                    MathUtils.lerp(stackEndHeight * StackScrollAlgorithm.START_FRACTION,
+                            stackEndHeight, fraction));
+        }
+    }
+```
+
 mAppearFraction:
+
 3.StackScrollAlgorithm：用来使 NotificationStackScrollLayout可以查询或者更新当前的 StackScrollAlgorithmState 状态。
-
-
 mScrollY:AmbientState.mScrollY
+
 4.ViewState：记录了一些View的属性值，translation，alpha，scale，visibility等。
+
 5.ExpandableViewState：ViewState的子类，每个ExpandableView类都有个ExpandableViewState变量，记录该通知的一些属性信息。
 yTranslation 通知的实际位置。
-
 StackScrollAlgorithmState
 scrollY:AmbientState.mScrollY
 mCurrentYPosition:当前正在计算的通知的位置，累加值，以此计算各个通知的偏移。
