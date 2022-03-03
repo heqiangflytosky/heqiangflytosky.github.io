@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/07/development-tool-git-command/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="列举一些常用的Git命令">
-<meta property="og:updated_time" content="2022-02-16T03:20:09.168Z">
+<meta property="og:updated_time" content="2022-03-03T01:45:11.485Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="列举一些常用的Git命令">
@@ -404,7 +404,7 @@
 <li><code>git log -p</code>：显示每一次的提交的差异。</li>
 <li><code>git log -p -n</code> （n为次数，整数）：指定了显示差异的次数，用 -2 则仅显示最近的两次更新.</li>
 <li><code>git log --stat</code>：显示简要的增改行数统计，后面跟次数比如 -2 则仅显示最近的两次更新。</li>
-<li><code>git log --author=寒江蓑笠</code>：显示某个作者的提交记录。</li>
+<li><code>git log --author=寒江蓑笠</code>：显示某个作者的提交记录。选择多个作者可以使用 <code>git log --author=&quot;AA\|BB&quot;</code></li>
 <li><code>git log --committer=寒江蓑笠</code>：显示某个提交者的提交记录。</li>
 <li><code>git log --since, --after</code>：仅显示指定时间之后的提交。</li>
 <li><code>git log --until, --before</code>：仅显示指定时间之前的提交。</li>
@@ -480,6 +480,7 @@
 <h3 id="合并提交"><a href="#合并提交" class="headerlink" title="合并提交"></a>合并提交</h3><p><code>git rebase -i HEAD~10</code>：将前10个提交合并为一个。<br>执行以后进入编辑模式，按提示操作，将第二个及以后的<code>pick</code>修改为<code>squash</code>或者<code>s</code>，然后再按提示操作保存退出。</p>
 <h2 id="git-pull"><a href="#git-pull" class="headerlink" title="git pull"></a>git pull</h2><ul>
 <li><code>git pull --rebase</code>：表示把你的本地当前分支里的每个提交(commit)取消掉，并且把它们临时 保存为补丁(patch)(这些补丁放到<code>.git/rebase</code>目录中),然后把本地当前分支更新 为最新的<code>origin</code>分支，最后把保存的这些补丁应用到本地当前分支上。</li>
+<li><code>git pull origin branchA</code>：只更新branchA分支</li>
 </ul>
 <h2 id="git-push"><a href="#git-push" class="headerlink" title="git push"></a>git push</h2><ul>
 <li><code>git push origin --delete &lt;branch_name&gt;</code>：删除远程分支</li>
@@ -503,7 +504,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push -f origin HEAD:android11</div></pre></td></tr></table></figure>
 <h2 id="git-merge"><a href="#git-merge" class="headerlink" title="git merge"></a>git merge</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git merge --no-ff dev // merge dev 分支到 master 分支</div></pre></td></tr></table></figure>
 <h3 id="git-merge-s-ours"><a href="#git-merge-s-ours" class="headerlink" title="git merge -s ours"></a>git merge -s ours</h3><p>cherry pick 与 git merge</p>
-<h2 id="git-cherry-pick"><a href="#git-cherry-pick" class="headerlink" title="git cherry-pick"></a>git cherry-pick</h2><p><code>git cherry-pick &lt;commitID&gt;</code> 将commitID对应的本地变更pick到当前分支。<br>cherry-pick 后可以加多个commitID用于批量提交，或者添加一个commitID列表：<br>git cherry-pick 1234 2345 4567<br>git cherry-pick 1234..4567</p>
+<h2 id="git-cherry-pick"><a href="#git-cherry-pick" class="headerlink" title="git cherry-pick"></a>git cherry-pick</h2><p><code>git cherry-pick &lt;commitID&gt;</code> 将commitID对应的本地变更pick到当前分支。<br>cherry-pick 后可以加多个commitID用于批量提交，或者添加一个commitID列表：<br>git cherry-pick 1234 2345 4567<br>有冲突的话解决冲突，然后 git add &lt;冲突文件&gt;，然后 git cherry-pick –continue，最后 push 到分支再合入就行了。<br>如果时连续的提交，可以写上首尾提交，然后中间加..，这样就可以把 1234直到4567前面的提交都pick过来。<br>git cherry-pick 1234..4567</p>
 <h2 id="git-fetch"><a href="#git-fetch" class="headerlink" title="git fetch"></a>git fetch</h2><h2 id="解-gerrit-冲突"><a href="#解-gerrit-冲突" class="headerlink" title="解 gerrit 冲突"></a>解 gerrit 冲突</h2><!--  https://www.cnblogs.com/xiaoerlang/p/3810206.html -->
 <h3 id="解决本地有提交记录的远程冲突"><a href="#解决本地有提交记录的远程冲突" class="headerlink" title="解决本地有提交记录的远程冲突"></a>解决本地有提交记录的远程冲突</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">git fetch origin</div><div class="line">git rebase origin/develop</div><div class="line">//修改冲突文件</div><div class="line">...</div><div class="line">git add .</div><div class="line">git rebase --continue</div><div class="line">git push origin HEAD:refs/changes/&lt;changeID&gt;</div><div class="line">//不会产生新的changes记录，将原changes记录重新review提交即可</div><div class="line">git pull</div></pre></td></tr></table></figure>
 <h3 id="解决本地没有提交记录的远程冲突"><a href="#解决本地没有提交记录的远程冲突" class="headerlink" title="解决本地没有提交记录的远程冲突"></a>解决本地没有提交记录的远程冲突</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// 下面的 url 指的是 pull request 对应的地址，比如： ssh://name@test.com:29418/app/ProjectName refs/changes/40/1000/3</div><div class="line">git fetch &lt;url&gt; &amp;&amp; git checkout FETCH_HEAD</div><div class="line">git checkout -b new_branch_name        // 新建一个本地分支用来解冲突</div><div class="line">git fetch origin                       //远程仓库的名称可以用  git remote -v 来查看</div><div class="line">git rebase origin/develop              //rebase 你冲突的代码分支，develop为当前提交代码所在的分支</div><div class="line">修改冲突文件</div><div class="line">git rebase --continue</div><div class="line">git push origin new_branch_name:refs/for/develop</div><div class="line">git checkout develop</div><div class="line">git branch -D new_branch_name</div><div class="line">//不会产生新的 changes 记录，将原 changes 记录重新 review 提交即可，这时在原冲突机器上直接pull会本地冲突，需要</div><div class="line">git reset --hard HEAD^</div><div class="line">//否则会出现cannot do a partial commit during a merge.最后更新下代码</div><div class="line">git pull</div></pre></td></tr></table></figure>
