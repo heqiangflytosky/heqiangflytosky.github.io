@@ -9,7 +9,7 @@ date: 2016-12-3 10:00:00
 ---
 Android 的源码代码量是非常大的，也有多种代码编辑器来供我们选择来去阅读Android源码，虽然在 Eclipse 和 SourceInsight 上阅读 Android 源码也能带来很好的体验，但习惯于用 Android Studio 来作为应用开发工具的大家肯定也希望用它来阅读源代码。本文将介绍如何将 Android 源码导入到 Android Studio 中来的技巧。
 <!-- more -->
-
+# 直接导入源码
 ## 导入源码
 ### 修改Android Studio的配置文件
 由于导入源码时需要消耗大量内存，所以建议修改`studio64.vmoptions`文件：
@@ -105,3 +105,56 @@ development/tools/idegen/idegen.sh
 ### Choose Process -> Nothing to show
 
 有时候遇到过点击调试按钮没有调试进程可以选择，打开`Project Structure`->`Project`，重新选择一下`Projct SDK`就可以了。
+
+# 通过软连接轻量导入
+
+由于上面的方法是把代码直接加载到 AS 中，由于 AOSP 代码数量庞大，这样无疑会吃掉大量内存，导致系统卡顿。
+再介绍一个通过给代码建立软连接的方法来打开AOSP源码。
+首先也需要 android.ipr和android.iml，生成的方式和上面是一样的。
+将下面的命令保存为脚本文件（如：create-linked-project.sh），保存到源码根目录，并在源码根目录运行。
+
+```
+#!/bin/bash
+######################################     Step 1    ##############################################
+PARENT_PATH=$(dirname $(pwd))
+
+# 获取源码目录的路径和文件夹名称. etc. "android-12.0.0_r13"
+REAL_PROJECT_PATH=$(cd `dirname $0`; pwd)
+REAL_PROJECT_NAME="${REAL_PROJECT_PATH##*/}"
+
+# 创建软链接目录. etc. "android-12.0.0_r13-ln"
+LINKED_PROJECT_NAME="${REAL_PROJECT_NAME}-ln"
+LINKED_PROJECT_PATH="${PARENT_PATH}/${LINKED_PROJECT_NAME}"
+mkdir -p ${LINKED_PROJECT_PATH}
+
+######################################     Step 2    ##############################################
+# 复制 android.ipr、android.iml 到软链接目录
+cp android.ipr ${LINKED_PROJECT_PATH}
+cp android.iml ${LINKED_PROJECT_PATH}
+
+######################################     Step 3    ##############################################
+# 链接 build、device 目录，常用于机型相关配置文件修改。
+ln -sf ${REAL_PROJECT_PATH}/build ${LINKED_PROJECT_PATH}
+ln -sf ${REAL_PROJECT_PATH}/device ${LINKED_PROJECT_PATH}
+
+# 链接 frameworks/base、frameworks/libs ，用于SystemUI、Framework开发。
+mkdir -p ${LINKED_PROJECT_PATH}/frameworks
+ln -sf ${REAL_PROJECT_PATH}/frameworks/base ${LINKED_PROJECT_PATH}/frameworks
+ln -sf ${REAL_PROJECT_PATH}/frameworks/libs ${LINKED_PROJECT_PATH}/frameworks
+
+# 链接 packages/apps/Launcher3 ，用于桌面应用的开发。
+mkdir -p ${LINKED_PROJECT_PATH}/packages/apps
+ln -sf ${REAL_PROJECT_PATH}/packages/apps/Launcher3 ${LINKED_PROJECT_PATH}/packages/apps
+
+# 链接 out ，用于给Android Studio添加依赖，解决代码报红的问题。
+mkdir -p ${LINKED_PROJECT_PATH}/out/target/common
+ln -sf ${REAL_PROJECT_PATH}/out/target/common/obj ${LINKED_PROJECT_PATH}/out/target/common/
+```
+如果要链接其他目录，则按需修改 Step 3下方的命令即可。
+然后会在源码目录的同级目录生成一个包含软连接的目录：`<dir name>-ln`。
+然后直接打开该目录的 android.ipr即可。
+
+如果遇到找不到符号的问题，可以把out目录中生成的中间文件添加进来，比如：
+`out/target/common/obj/APPS/SystemUI_intermediates/classes.jar`,
+`out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/classed-header.jar`,
+`out/target/common/obj/JAVA_LIBRARIES/services_intermediates/classes.jar`,
