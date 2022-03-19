@@ -99,6 +99,8 @@ private void updateStackPosition(boolean listenerNeedsAnimation) {
     }
 ```
 
+mStackHeight:所有通知的高度，当通知中心有收缩动画时，会改变这个值。它的设置也在上面的的一段代码中，根据stackEndHeight和fraction来计算。
+
 mAppearFraction:
 
 3.StackScrollAlgorithm：用来使 NotificationStackScrollLayout可以查询或者更新当前的 StackScrollAlgorithmState 状态。

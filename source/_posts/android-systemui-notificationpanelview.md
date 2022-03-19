@@ -10,7 +10,8 @@ date: 2021-11-7 10:00:00
 
 ## 概述
 
-NotificationPanelView 是Panel的子类，它继承自 FrameLayout，提供了一个承载下拉通知面板的容器。NotificationPanelView 主要作用就是用 PanelViewController.TouchHandler 来进行一些事件处理。
+NotificationPanelView 是 PanelView 的子类，它继承自 FrameLayout，提供了一个承载下拉通知面板的容器。NotificationPanelView 主要作用就是用 PanelViewController.TouchHandler 来进行一些事件处理。
+根据名称我们就可以看出来 NotificationPanelView 和 PanelView 的区别，PanelView 只处理和面板相关的，比如面板整体的显示和隐藏。NotificationPanelView 就需要处理面板中和通知中心相关的逻辑了。比如通知中心的滑动滚动，QQS 和 QS 状态的切换。
 关于事件分发流程和下拉交互部分参考前面介绍，本文只介绍一些方法实现的细节。本文基于原生 Android S 代码。
 
 ## NotificationPanelView & PanelView 
@@ -524,5 +525,22 @@ calculateNotificationsTopPadding() 方法比较简单，但是比较关键的方
             // 其他情况就直接返回 mQsExpansionHeight 这个值通过 setQsExpansion 计算。
             return mQsExpansionHeight;
         }
+    }
+```
+
+### computeQsExpansionFraction
+
+这个也是一个比较重要的方法，计算QS的展开程度，面板的许多状态都要通过它来进行设置。
+
+```
+    private float computeQsExpansionFraction() {
+        if (mQSAnimatingHiddenFromCollapsed) {
+            // When hiding QS from collapsed state, the expansion can sometimes temporarily
+            // be larger than 0 because of the timing, leading to flickers.
+            return 0.0f;
+        }
+        return Math.min(
+                1f, (mQsExpansionHeight - mQsMinExpansionHeight) / (mQsMaxExpansionHeight
+                        - mQsMinExpansionHeight));
     }
 ```
