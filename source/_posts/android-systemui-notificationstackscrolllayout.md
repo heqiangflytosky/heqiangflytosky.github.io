@@ -335,6 +335,21 @@ NotificationStackScrollLayout.updateTopPadding()
 
 ### 通知位置视图更新
 
+首先来看一下如何发起刷新请求。
+这个操作时通过 `NotificationStackScrollLayout.requestChildrenUpdate()` 来实现的。
+
+```
+    void requestChildrenUpdate() {
+        if (!mChildrenUpdateRequested) {
+            getViewTreeObserver().addOnPreDrawListener(mChildrenUpdater);
+            mChildrenUpdateRequested = true;
+            invalidate();
+        }
+    }
+```
+
+通过注册一个 `OnPreDrawListener`，然后通过 `invalidate()` 方法发起刷新，在 `OnPreDrawListener.onPreDraw()` 进行视图的更新操作。
+
 ```
 
 NotificationStackScrollLayout.OnPreDrawListener.onPreDraw()

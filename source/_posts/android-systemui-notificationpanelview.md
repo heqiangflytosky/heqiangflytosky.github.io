@@ -41,18 +41,18 @@ NotificationPanelViewController 和 PanelViewController 都生成了自己的 To
 PanelViewController主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 NotificationPanelViewController 可以处理通知中心的移动操作，此时 mTracking 为 true。
 
 mOverExpansion:QS可以回弹下拉的高度
-mQsExpanded:QS是否可见，这时QS正在展开或者全部展开，此时展开高度大于 mQsMinExpansionHeight，也就是在只显示QQS到全部显示QS之间的状态变化时为true。
+mQsExpanded:QS是否可见，这时QS正在展开或者全部展开，此时展开高度大于 mQsMinExpansionHeight，也就是在只显示QQS到全部显示QS之间的状态变化时为true。它和 mQsFullyExpanded 的区别是从QQS开始过度到QS这个事件点开始，就是 true，包含 mQsFullyExpanded 时，以及收缩QS动画时。
 mQsMinExpansionHeight:QS展开的最小高度：如果是锁屏模式，就是0，全部隐藏了。如果不是就是 QuickStatusBarHeader 的高度。
 mQsMaxExpansionHeight：QS展开的最大高度，通过 getDesiredHeight() 获取，一般是QSContainerImpl 的高度。
 mQsExpansionHeight：QS的当前实时高度，其实就是没有被通知中心覆盖住的QS部分。一般通过 setQsExpansion() 方法设置。一般为初始位置加手势移动的距离。
-mQsFullyExpanded：QS是否完全展开，展开高度等于mQsMaxExpansionHeight
+mQsFullyExpanded：QS是否完全展开，展开高度等于mQsMaxExpansionHeight。只有在全部展开这个状态才时 true。当收缩一开始就为false。
 mExpanding：面板是否在展开
 mClosing：是否正在关闭面板
 mQsTracking：是否在触摸快捷面板（展开、收起快捷面板部分逻辑）
 mTracking：为true时表示 NotificationPanelViewController 来处理手势移动，此时可能正在做QS和通知中心的收起或者展示动画。false时表示NotificationPanelViewController不处理手势移动，可能交给 PanelViewController处理下面面板整体操作。
 mExpandedHeight:整个下拉面板的高度。为初始位置和手势滑动距离之和。原生用的时渐隐渐现动画。
 mExpandedFraction:下拉面板的幅度,展开高度除于整体高度。
-mQsExpandImmediate：下拉后是QS展开状态，用于双指操作
+mQsExpandImmediate：下拉后是QS展开状态，用于下拉后直接展开 QS 的场景（去掉QQS状态），比如双指操作
 mTwoFingerQsExpandPossible：表示当前状态可以用于双指操作
 
 getMaxPanelHeight():它的值有两种情况，一个是从只显示QQS到完全显示QS的状态，或者双指从状态栏下拉时，这个时候的值时经过calculatePanelHeightQsExpanded()计算，一般为mQsMaxExpansionHeight加上NotificationShelf的高度，因为它们的最终状态是全部显示QS；其他状态时经过calculatePanelHeightShade()计算，其实时通知面板的高度;

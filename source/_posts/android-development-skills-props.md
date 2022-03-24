@@ -109,6 +109,18 @@ $ adb shell getprop | grep dalvik
 [ro.dalvik.vm.native.bridge]: [0]
 ```
 
+### 查询其他信息
+
+`usage: getprop [-TZ] [NAME [DEFAULT]]`
+
+```
+-T	Show property types instead of values
+-Z	Show property contexts instead of values
+
+-T 参数可以查询属性值的类型
+-Z 参数可以查看属性值需要的一些权限之类的
+```
+
 ## setprop
 
 `setprop`可以对手机一些配置进行设置，当然这些配置必须是可写的。
