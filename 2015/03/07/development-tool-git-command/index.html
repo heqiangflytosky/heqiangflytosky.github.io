@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/07/development-tool-git-command/index.html">
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="列举一些常用的Git命令">
-<meta property="og:updated_time" content="2022-03-03T01:45:11.485Z">
+<meta property="og:updated_time" content="2022-03-25T10:16:31.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 常用命令">
 <meta name="twitter:description" content="列举一些常用的Git命令">
@@ -478,6 +478,7 @@
 <li>丢弃：<code>rebase</code>的最后一个作用是丢弃提交。如果把一行删除而不是指定<code>pick</code>、<code>squash</code>和<code>edit</code>中的任何一个，git会从历史中移除该提交。</li>
 </ul>
 <h3 id="合并提交"><a href="#合并提交" class="headerlink" title="合并提交"></a>合并提交</h3><p><code>git rebase -i HEAD~10</code>：将前10个提交合并为一个。<br>执行以后进入编辑模式，按提示操作，将第二个及以后的<code>pick</code>修改为<code>squash</code>或者<code>s</code>，然后再按提示操作保存退出。</p>
+<p><code>git rebase -i a5ff73</code>: 编辑 a5ff73 前面的所有提交。</p>
 <h2 id="git-pull"><a href="#git-pull" class="headerlink" title="git pull"></a>git pull</h2><ul>
 <li><code>git pull --rebase</code>：表示把你的本地当前分支里的每个提交(commit)取消掉，并且把它们临时 保存为补丁(patch)(这些补丁放到<code>.git/rebase</code>目录中),然后把本地当前分支更新 为最新的<code>origin</code>分支，最后把保存的这些补丁应用到本地当前分支上。</li>
 <li><code>git pull origin branchA</code>：只更新branchA分支</li>
