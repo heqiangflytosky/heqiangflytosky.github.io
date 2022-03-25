@@ -110,6 +110,8 @@ $ git rebase origin
 `git rebase -i HEAD~10`：将前10个提交合并为一个。
 执行以后进入编辑模式，按提示操作，将第二个及以后的`pick`修改为`squash`或者`s`，然后再按提示操作保存退出。
 
+`git rebase -i a5ff73`: 编辑 a5ff73 前面的所有提交。
+
 ## git pull
  - `git pull --rebase`：表示把你的本地当前分支里的每个提交(commit)取消掉，并且把它们临时 保存为补丁(patch)(这些补丁放到`.git/rebase`目录中),然后把本地当前分支更新 为最新的`origin`分支，最后把保存的这些补丁应用到本地当前分支上。
  - `git pull origin branchA`：只更新branchA分支
