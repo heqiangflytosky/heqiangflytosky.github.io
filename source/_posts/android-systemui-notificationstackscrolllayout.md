@@ -36,6 +36,8 @@ mScrolledToTopOnFirstDown：它表示Down事件是是否是个滑动事件，如
 mExpandedInThisMotion：是否是展开单个通知的事件
 mGoToFullShadeNeedsAnimation：是否以动画样式展开通知中心
 mNeedsAnimation:是否需要动画
+mMaxDisplayedNotifications:当前可以显示的通知的最大数量，一般在锁屏时有限制个数，-1为不限制显示个数
+
 updateTopPadding():更新偏移量，来设置每条通知的位置。
 updateEmptyShadeView()
 updateFooterView()

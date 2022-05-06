@@ -38,7 +38,8 @@ NotificationPanelViewController 和 PanelViewController 都生成了自己的 To
 
 ## NotificationPanelViewController & PanelViewController
 
-PanelViewController主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 NotificationPanelViewController 可以处理通知中心的移动操作，此时 mTracking 为 true。
+PanelViewController主要是进行QS面板的整体操作，比如显示，隐藏和整体滑动等等。 
+NotificationPanelViewController 可以处理通知中心的移动操作，此时 mTracking 为 true。
 
 mOverExpansion:QS可以回弹下拉的高度
 mQsExpanded:QS是否可见，这时QS正在展开或者全部展开，此时展开高度大于 mQsMinExpansionHeight，也就是在只显示QQS到全部显示QS之间的状态变化时为true。它和 mQsFullyExpanded 的区别是从QQS开始过度到QS这个事件点开始，就是 true，包含 mQsFullyExpanded 时，以及收缩QS动画时。
@@ -54,6 +55,9 @@ mExpandedHeight:整个下拉面板的高度。为初始位置和手势滑动距�
 mExpandedFraction:下拉面板的幅度,展开高度除于整体高度。
 mQsExpandImmediate：下拉后是QS展开状态，用于下拉后直接展开 QS 的场景（去掉QQS状态），比如双指操作
 mTwoFingerQsExpandPossible：表示当前状态可以用于双指操作
+
+mMaxKeyguardNotifications：在锁屏上允许显示的通知的最大个数，保存在 keyguard_max_notification_count 配置中
+mMaxAllowedKeyguardNotifications：计算当前可以在锁屏上可以显示的通知的最大个数
 
 getMaxPanelHeight():它的值有两种情况，一个是从只显示QQS到完全显示QS的状态，或者双指从状态栏下拉时，这个时候的值时经过calculatePanelHeightQsExpanded()计算，一般为mQsMaxExpansionHeight加上NotificationShelf的高度，因为它们的最终状态是全部显示QS；其他状态时经过calculatePanelHeightShade()计算，其实时通知面板的高度;
 calculateNotificationsTopPadding()：计算通知中心的最上面的通知距离顶部的距离
