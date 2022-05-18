@@ -1,2 +1,4 @@
 .deploy_git/
 public/
+node_modules/
+db.json
