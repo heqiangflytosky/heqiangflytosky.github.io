@@ -418,6 +418,7 @@ date: 2016-12-1 10:00:00
  - [下载qt源码](ftp://ftp.qt-project.org/qt/source/)：
  - [下载jar包](http://www.findjar.com)：
  - [GrepCode](http://grepcode.com/)：第三方的源码网站，可以查看和下载Java，Android等的源码，还可以提供多不同版本的源码在线查看，下载，以及可以方便的对比各个版本的差异。
+ - [Android Code Search](https://cs.android.com/)：Android 开源项目 (AOSP) 的代码搜索工具
 
 #### 调试利器
 
@@ -472,6 +473,7 @@ date: 2016-12-1 10:00:00
 
  - Sketch：简单易用的绘图工具
  - 墨刀：在线原型设计与协同工具
+ - [蓝灯](https://github.com/getlantern/lantern)：一个免费的VPN工具，支持Android 、IOS、Windows、Ubuntu。
 
 ### 在线绘图
 
