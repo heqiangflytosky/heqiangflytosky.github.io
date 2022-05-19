@@ -1,4 +1,3 @@
-
 ---
 title: Java InvocationHandler 实现动态代理
 categories: Java

@@ -1,4 +1,3 @@
-
 ---
 title: Java 基础 -- 范型
 categories: Java
