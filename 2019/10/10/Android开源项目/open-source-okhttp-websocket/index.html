@@ -1,0 +1,904 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="OkHttp,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍 OkHttp 的缓存">
+<meta name="keywords" content="OkHttp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OkHttp 源码分析 -- WebSocket 实现原理">
+<meta property="og:url" content="http://yoursite.com/2019/10/10/Android开源项目/open-source-okhttp-websocket/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 OkHttp 的缓存">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-14T06:09:37.573Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OkHttp 源码分析 -- WebSocket 实现原理">
+<meta name="twitter:description" content="介绍 OkHttp 的缓存">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/10/Android开源项目/open-source-okhttp-websocket/">
+
+
+
+
+
+  <title> OkHttp 源码分析 -- WebSocket 实现原理 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/10/Android开源项目/open-source-okhttp-websocket/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OkHttp 源码分析 -- WebSocket 实现原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-10T10:00:00+08:00">
+                2019-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android开源项目/" itemprop="url" rel="index">
+                    <span itemprop="name">Android开源项目</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2019/10/10/Android开源项目/open-source-okhttp-websocket/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/10/10/Android开源项目/open-source-okhttp-websocket/" class="leancloud_visitors" data-flag-title="OkHttp 源码分析 -- WebSocket 实现原理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 OkHttp 的缓存
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>WebSocket 是在单个 TCP 连接上进行全双工通讯的协议。WebSocket 使得客户端和服务器之间的数据交换变得更加简单，允许服务端主动向客户端推送数据。在 WebSocket API 中，客户端和服务器只需要完成一次握手，两者之间就直接可以创建持久性的连接，并进行双向数据传输。<br>WebSocket 是真正意义上的全双工模式，也就是我们俗称的「长连接」。<br>WebSocket 是基于TCP/IP协议，独立于 HTTP 协议的通信协议。是应用层的通信协议。<br>协议标识符变成了 “ws” 或者 “wss”，分别表示明文和加密的 WebSocket 协议。<br>OkHttp 实现了对 WebSocket 的支持，本文简单介绍一下 OkHttp 实现 WebSocket 的基本原理。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="WebSocket-和-http-协议的-keep-alive"><a href="#WebSocket-和-http-协议的-keep-alive" class="headerlink" title="WebSocket 和 http 协议的 keep-alive"></a>WebSocket 和 http 协议的 keep-alive</h3><p>keep-alive 是 http 协议规定的一种连接模式，在非KeepAlive模式时，每个请求/应答客户和服务器都要新建一个连接，完成之后立即断开连接（HTTP协议为无连接的协议）；当使用Keep-Alive模式（又称持久连接、连接重用）时，Keep-Alive功能使客户端到服务器端的连接持续有效，当出现对服务器的后继请求时，Keep-Alive功能避免了建立或者重新建立连接。<br>http 1.0中默认是关闭的，需要在http头加入”Connection:Keep-Alive”，才能启用Keep-Alive；http 1.1中默认启用Keep-Alive，如果加入”Connection:close”，才关闭。目前大部分浏览器都是用http1.1协议，也就是说默认都会发起Keep-Alive的连接请求了，所以是否能完成一个完整的Keep- Alive连接就看服务器设置情况。<br>http keep-alive只是一种为了达到复用tcp连接的“协商”行为，双方并没有建立正真的连接会话，服务端也可以不认可，也可以随时（在任何一次请求完成后）关闭掉。它是指在一次 TCP 连接中完成多个 http请求，但是对每个请求仍然要单独发header，所以除了真正的数据部分外，服务器和客户端还要大量交换httpheader，信息交换效率很低，这样建立的“长连接”都是伪长连接。<br>websocket 不同，它本身就规定了是正真的、双工的长连接，两边都必须要维持住连接的状态。</p>
+<h3 id="断线重连机制"><a href="#断线重连机制" class="headerlink" title="断线重连机制"></a>断线重连机制</h3><p>造成WebSocket断线原因：</p>
+<ul>
+<li>网络状态不好（网络断开、网络信号差）。</li>
+<li>数据受各种阻塞（路由器、防火墙、代理服务器）。</li>
+<li>Web服务端故障。</li>
+</ul>
+<p>解决 websocket 断线方法：心跳重连。</p>
+<ol>
+<li>通过服务端实现 Pings / Pongs 方式实现心跳。<br>即通过服务端向浏览器（客户端）发送ping 0x9 消息，浏览器会自动返回pong 0xA消息。（基于session技术）<br>在经过握手之后的任意时刻里，无论客户端还是服务端都可以选择发送一个ping给另一方。 当ping消息收到的时候，接受的一方必须尽快回复一个pong消息。可以使用这种方式来确保客户端的连接状态。<br>一个ping或者pong都只是一个常规的帧，只是这个帧是一个控制帧。ping消息的opcode字段值为0x9，pong消息的opcode值为0xA。当你得到一个ping消息时，回复一个跟ping消息有相同载荷数据的pong消息。</li>
+<li>通过浏览器（客户端）自带的心跳机制。<br>即监听网络，浏览器（客户端）定时发送消息到服务端。<br>PS：这里消息指的websockect协议的数据帧，不需要通过代码实现。不同浏览器发送的消息时间间隔有所差异。</li>
+<li>通过代码在浏览器（客户端）实现心跳机制。</li>
+</ol>
+<p><strong>注意</strong>：心跳重连只能由服务端实现，不建议由客户端实现。</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>借助 <a href="https://www.websocket.org/echo.html" target="_blank" rel="noopener">https://www.websocket.org/</a>，该网站提供了一个测试接口wss://echo.websocket.org。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">private void websocket() &#123;</span><br><span class="line"></span><br><span class="line">    if (mWebsocket != null) &#123;</span><br><span class="line">        mWebsocket.send(&quot;test&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    okhttp3.Request okRequest = new okhttp3.Request.Builder()</span><br><span class="line">            .url(&quot;wss://echo.websocket.org&quot;)</span><br><span class="line">            .build();</span><br><span class="line">    mWebsocket = mOkHttpClient.newWebSocket(okRequest, new WebSocketListener() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onOpen(WebSocket webSocket, Response response) &#123;</span><br><span class="line">            super.onOpen(webSocket, response);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onMessage(WebSocket webSocket, String text) &#123;</span><br><span class="line">            super.onMessage(webSocket, text);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onMessage(WebSocket webSocket, ByteString bytes) &#123;</span><br><span class="line">            super.onMessage(webSocket, bytes);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onClosing(WebSocket webSocket, int code, String reason) &#123;</span><br><span class="line">            super.onClosing(webSocket, code, reason);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onClosed(WebSocket webSocket, int code, String reason) &#123;</span><br><span class="line">            super.onClosed(webSocket, code, reason);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onFailure(WebSocket webSocket, Throwable t, Response response) &#123;</span><br><span class="line">            super.onFailure(webSocket, t, response);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">protected void onDestroy() &#123;</span><br><span class="line">    super.onDestroy();</span><br><span class="line">    if (mWebsocket != null) &#123;</span><br><span class="line">        mWebsocket.close(1000,&quot;test&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>建立成功连接后会回调 <code>onOpen</code>，后面我们用 <code>mWebsocket.send</code> 向服务器发送一条消息，<a href="http://www.websocket.org" target="_blank" rel="noopener">www.websocket.org</a> 服务器马上会通过 <code>onMessage</code> 返回一条消息给我们。<br>而且每隔 30 秒，<a href="http://www.websocket.org" target="_blank" rel="noopener">www.websocket.org</a> 服务器会向客户端发送一条 ping 消息来确保连接的状态。<br>另外，我们在创建 OkHttpClient 对象时，可以调用 <code>pingInterval(long interval, TimeUnit unit)</code> 方法来配置客户端向服务端发送心跳包，可以定时向服务器发送 ping 消息。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>我们就从 <code>OkHttpClient.newWebSocket</code> 方法开始分析。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Override public WebSocket newWebSocket(Request request, WebSocketListener listener) &#123;</span><br><span class="line">  RealWebSocket webSocket = new RealWebSocket(request, listener, new Random(), pingInterval);</span><br><span class="line">  // 连接服务器</span><br><span class="line">  webSocket.connect(this);</span><br><span class="line">  return webSocket;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>RealWebSocket</code> 是 <code>WebSocket</code> 的实现类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public RealWebSocket(Request request, WebSocketListener listener, Random random,</span><br><span class="line">    long pingIntervalMillis) &#123;</span><br><span class="line">  if (!&quot;GET&quot;.equals(request.method())) &#123;</span><br><span class="line">    throw new IllegalArgumentException(&quot;Request must be GET: &quot; + request.method());</span><br><span class="line">  &#125;</span><br><span class="line">  this.originalRequest = request;</span><br><span class="line">  this.listener = listener;</span><br><span class="line">  this.random = random;</span><br><span class="line">  this.pingIntervalMillis = pingIntervalMillis;</span><br><span class="line"></span><br><span class="line">  byte[] nonce = new byte[16];</span><br><span class="line">  random.nextBytes(nonce);</span><br><span class="line">  this.key = ByteString.of(nonce).base64();</span><br><span class="line">  // 创建向服务器发送消息的线程</span><br><span class="line">  this.writerRunnable = new Runnable() &#123;</span><br><span class="line">    @Override public void run() &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        while (writeOneFrame()) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; catch (IOException e) &#123;</span><br><span class="line">        failWebSocket(e, null);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过调用 connect 方法，最终建立与服务器的连接：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">public void connect(OkHttpClient client) &#123;</span><br><span class="line">  client = client.newBuilder()</span><br><span class="line">      .eventListener(EventListener.NONE)</span><br><span class="line">      .protocols(ONLY_HTTP1)</span><br><span class="line">      .build();</span><br><span class="line">  // 添加 WebSocket 先关的一些头信息</span><br><span class="line">  final Request request = originalRequest.newBuilder()</span><br><span class="line">      .header(&quot;Upgrade&quot;, &quot;websocket&quot;)</span><br><span class="line">      .header(&quot;Connection&quot;, &quot;Upgrade&quot;)</span><br><span class="line">      .header(&quot;Sec-WebSocket-Key&quot;, key)</span><br><span class="line">      .header(&quot;Sec-WebSocket-Version&quot;, &quot;13&quot;)</span><br><span class="line">      .build();</span><br><span class="line">  // 创建一个 RealCall 对象</span><br><span class="line">  call = Internal.instance.newWebSocketCall(client, request);</span><br><span class="line">  // 加入到请求队列中，长连接会使线程在线程池里不会得到释放，所以使用异步请求</span><br><span class="line">  call.enqueue(new Callback() &#123;</span><br><span class="line">    @Override public void onResponse(Call call, Response response) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        // 有响应返回时，检查响应</span><br><span class="line">        checkResponse(response);</span><br><span class="line">      &#125; catch (ProtocolException e) &#123;</span><br><span class="line">        failWebSocket(e, response);</span><br><span class="line">        closeQuietly(response);</span><br><span class="line">        return;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      // Promote the HTTP streams into web socket streams.</span><br><span class="line">      StreamAllocation streamAllocation = Internal.instance.streamAllocation(call);</span><br><span class="line">      streamAllocation.noNewStreams(); // Prevent connection pooling!</span><br><span class="line">      Streams streams = streamAllocation.connection().newWebSocketStreams(streamAllocation);</span><br><span class="line"></span><br><span class="line">      // Process all web socket messages.</span><br><span class="line">      try &#123;</span><br><span class="line">        // 回调 onOpen 方法</span><br><span class="line">        listener.onOpen(RealWebSocket.this, response);</span><br><span class="line">        String name = &quot;OkHttp WebSocket &quot; + request.url().redact();</span><br><span class="line">        // 初始化消息读写器</span><br><span class="line">        initReaderAndWriter(name, streams);</span><br><span class="line">        streamAllocation.connection().socket().setSoTimeout(0);</span><br><span class="line">        // 进入while循环，开始轮询读取服务器发来的消息</span><br><span class="line">        loopReader();</span><br><span class="line">      &#125; catch (Exception e) &#123;</span><br><span class="line">        failWebSocket(e, null);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override public void onFailure(Call call, IOException e) &#123;</span><br><span class="line">      failWebSocket(e, null);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void loopReader() throws IOException &#123;</span><br><span class="line">  while (receivedCloseCode == -1) &#123;</span><br><span class="line">    // 处理消息</span><br><span class="line">    reader.processNextFrame();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void processNextFrame() throws IOException &#123;</span><br><span class="line">  // 读取服务器消息的头信息</span><br><span class="line">  readHeader();</span><br><span class="line">  // 判断是控制帧还是消息帧</span><br><span class="line">  if (isControlFrame) &#123;</span><br><span class="line">    readControlFrame();</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    readMessageFrame();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">private void readHeader() throws IOException &#123;</span><br><span class="line">  if (closed) throw new IOException(&quot;closed&quot;);</span><br><span class="line"></span><br><span class="line">  // Disable the timeout to read the first byte of a new frame.</span><br><span class="line">  int b0;</span><br><span class="line">  long timeoutBefore = source.timeout().timeoutNanos();</span><br><span class="line">  source.timeout().clearTimeout();</span><br><span class="line">  try &#123;</span><br><span class="line">    // 服务器没有消息时会阻塞在这里</span><br><span class="line">    b0 = source.readByte() &amp; 0xff;</span><br><span class="line">  &#125; finally &#123;</span><br><span class="line">    source.timeout().timeout(timeoutBefore, TimeUnit.NANOSECONDS);</span><br><span class="line">  &#125;</span><br><span class="line">  // 根据读取信息标记位判断消息的类别</span><br><span class="line">  opcode = b0 &amp; B0_MASK_OPCODE;</span><br><span class="line">  isFinalFrame = (b0 &amp; B0_FLAG_FIN) != 0;</span><br><span class="line">  isControlFrame = (b0 &amp; OPCODE_FLAG_CONTROL) != 0;</span><br><span class="line"></span><br><span class="line">  // Control frames must be final frames (cannot contain continuations).</span><br><span class="line">  if (isControlFrame &amp;&amp; !isFinalFrame) &#123;</span><br><span class="line">    throw new ProtocolException(&quot;Control frames must be final.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  boolean reservedFlag1 = (b0 &amp; B0_FLAG_RSV1) != 0;</span><br><span class="line">  boolean reservedFlag2 = (b0 &amp; B0_FLAG_RSV2) != 0;</span><br><span class="line">  boolean reservedFlag3 = (b0 &amp; B0_FLAG_RSV3) != 0;</span><br><span class="line">  if (reservedFlag1 || reservedFlag2 || reservedFlag3) &#123;</span><br><span class="line">    // Reserved flags are for extensions which we currently do not support.</span><br><span class="line">    throw new ProtocolException(&quot;Reserved flags are unsupported.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  int b1 = source.readByte() &amp; 0xff;</span><br><span class="line"></span><br><span class="line">  boolean isMasked = (b1 &amp; B1_FLAG_MASK) != 0;</span><br><span class="line">  if (isMasked == isClient) &#123;</span><br><span class="line">    // Masked payloads must be read on the server. Unmasked payloads must be read on the client.</span><br><span class="line">    throw new ProtocolException(isClient</span><br><span class="line">        ? &quot;Server-sent frames must not be masked.&quot;</span><br><span class="line">        : &quot;Client-sent frames must be masked.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Get frame length, optionally reading from follow-up bytes if indicated by special values.</span><br><span class="line">  frameLength = b1 &amp; B1_MASK_LENGTH;</span><br><span class="line">  if (frameLength == PAYLOAD_SHORT) &#123;</span><br><span class="line">    frameLength = source.readShort() &amp; 0xffffL; // Value is unsigned.</span><br><span class="line">  &#125; else if (frameLength == PAYLOAD_LONG) &#123;</span><br><span class="line">    frameLength = source.readLong();</span><br><span class="line">    if (frameLength &lt; 0) &#123;</span><br><span class="line">      throw new ProtocolException(</span><br><span class="line">          &quot;Frame length 0x&quot; + Long.toHexString(frameLength) + &quot; &gt; 0x7FFFFFFFFFFFFFFF&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (isControlFrame &amp;&amp; frameLength &gt; PAYLOAD_BYTE_MAX) &#123;</span><br><span class="line">    throw new ProtocolException(&quot;Control frame must be less than &quot; + PAYLOAD_BYTE_MAX + &quot;B.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (isMasked) &#123;</span><br><span class="line">    // Read the masking key as bytes so that they can be used directly for unmasking.</span><br><span class="line">    source.readFully(maskKey);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>处理服务器的消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">private void readControlFrame() throws IOException &#123;</span><br><span class="line">  if (frameLength &gt; 0) &#123;</span><br><span class="line">    source.readFully(controlFrameBuffer, frameLength);</span><br><span class="line"></span><br><span class="line">    if (!isClient) &#123;</span><br><span class="line">      controlFrameBuffer.readAndWriteUnsafe(maskCursor);</span><br><span class="line">      maskCursor.seek(0);</span><br><span class="line">      toggleMask(maskCursor, maskKey);</span><br><span class="line">      maskCursor.close();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  // 判断控制帧的类别</span><br><span class="line">  switch (opcode) &#123;</span><br><span class="line">    case OPCODE_CONTROL_PING:</span><br><span class="line">      // 处理ping消息，向服务器发送一条pong消息</span><br><span class="line">      frameCallback.onReadPing(controlFrameBuffer.readByteString());</span><br><span class="line">      break;</span><br><span class="line">    case OPCODE_CONTROL_PONG:</span><br><span class="line">      frameCallback.onReadPong(controlFrameBuffer.readByteString());</span><br><span class="line">      break;</span><br><span class="line">    case OPCODE_CONTROL_CLOSE:</span><br><span class="line">      int code = CLOSE_NO_STATUS_CODE;</span><br><span class="line">      String reason = &quot;&quot;;</span><br><span class="line">      long bufferSize = controlFrameBuffer.size();</span><br><span class="line">      if (bufferSize == 1) &#123;</span><br><span class="line">        throw new ProtocolException(&quot;Malformed close payload length of 1.&quot;);</span><br><span class="line">      &#125; else if (bufferSize != 0) &#123;</span><br><span class="line">        code = controlFrameBuffer.readShort();</span><br><span class="line">        reason = controlFrameBuffer.readUtf8();</span><br><span class="line">        String codeExceptionMessage = WebSocketProtocol.closeCodeExceptionMessage(code);</span><br><span class="line">        if (codeExceptionMessage != null) throw new ProtocolException(codeExceptionMessage);</span><br><span class="line">      &#125;</span><br><span class="line">      frameCallback.onReadClose(code, reason);</span><br><span class="line">      closed = true;</span><br><span class="line">      break;</span><br><span class="line">    default:</span><br><span class="line">      throw new ProtocolException(&quot;Unknown control opcode: &quot; + toHexString(opcode));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void readMessageFrame() throws IOException &#123;</span><br><span class="line">  int opcode = this.opcode;</span><br><span class="line">  if (opcode != OPCODE_TEXT &amp;&amp; opcode != OPCODE_BINARY) &#123;</span><br><span class="line">    throw new ProtocolException(&quot;Unknown opcode: &quot; + toHexString(opcode));</span><br><span class="line">  &#125;</span><br><span class="line">  // 读取消息体</span><br><span class="line">  readMessage();</span><br><span class="line">  // 调用客户端回调 onMessage</span><br><span class="line">  if (opcode == OPCODE_TEXT) &#123;</span><br><span class="line">    frameCallback.onReadMessage(messageFrameBuffer.readUtf8());</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    frameCallback.onReadMessage(messageFrameBuffer.readByteString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OkHttp/" rel="tag"># OkHttp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/28/Android开源项目/open-source-okhttp-cache/" rel="next" title="OkHttp 源码分析 -- 缓存">
+                <i class="fa fa-chevron-left"></i> OkHttp 源码分析 -- 缓存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/15/Android开源项目/open-source-okhttp-connect-pool/" rel="prev" title="OkHttp 源码分析 -- 连接池">
+                OkHttp 源码分析 -- 连接池 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket-和-http-协议的-keep-alive"><span class="nav-number">2.1.</span> <span class="nav-text">WebSocket 和 http 协议的 keep-alive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#断线重连机制"><span class="nav-number">2.2.</span> <span class="nav-text">断线重连机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">3.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现原理"><span class="nav-number">4.</span> <span class="nav-text">实现原理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

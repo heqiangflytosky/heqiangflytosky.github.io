@@ -1,0 +1,897 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android 事件分发体系,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍 TouchTarget">
+<meta name="keywords" content="Android 事件分发体系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android View 事件处理流程 -- TouchTarget">
+<meta property="og:url" content="http://yoursite.com/2015/11/10/Android 事件分发体系/android-knowledge-event-transfer-process-touchtarget/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 TouchTarget">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-09-27T01:34:34.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android View 事件处理流程 -- TouchTarget">
+<meta name="twitter:description" content="介绍 TouchTarget">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/11/10/Android 事件分发体系/android-knowledge-event-transfer-process-touchtarget/">
+
+
+
+
+
+  <title> Android View 事件处理流程 -- TouchTarget | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/11/10/Android 事件分发体系/android-knowledge-event-transfer-process-touchtarget/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android View 事件处理流程 -- TouchTarget
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-11-10T10:00:00+08:00">
+                2015-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-事件分发体系/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 事件分发体系</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/11/10/Android 事件分发体系/android-knowledge-event-transfer-process-touchtarget/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/11/10/Android 事件分发体系/android-knowledge-event-transfer-process-touchtarget/" class="leancloud_visitors" data-flag-title="Android View 事件处理流程 -- TouchTarget">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 TouchTarget
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在前面的Android 事件分发体系系列文章中大概分析了一下 Andriod 对事件的大概的分发流程，本文着重介绍一下在事件分发中扮演重要角色的 <code>TouchTarget</code> 类。<br>TouchTarget的作用场景在事件派发流程中，用于记录派发目标，即消费了事件的子view。在 <code>ViewGroup</code> 中有一个成员变量 <code>mFirstTouchTarget</code>，它会持有 <code>TouchTarget</code>，并且作为 <code>TouchTarget</code> 链表的头节点。<br>由于我们的手机屏幕都支持多点触控，那么当用户同时用多个手指触摸屏幕的时候，产生的TouchEvent中就包含了多个触摸点的信息，一般我们把单个的触摸点就叫pointer，每个pointer都有它的pointer id。<br>TouchTarget用于记录一个被触摸的View，以及它所捕获的全部pointer。就是一个能处理TouchEvent的View，加上它处理的TouchEvent所属pointer的id。一个View能处理多个pointer产生的TouchEvent。<br>同时，在有多个pointer的情况下，不同的pointer产生的TouchEvent可能需要给不同的View处理，因此需要多个TouchTarget来记录这些信息，这些TouchTarget以链表的形式组织，每个TouchTarget都有一个next变量，指向另一个TouchTarget，链表尾的指向null。而TouchTarget的child变量，就是处理TouchEvent的View。</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">private static final class TouchTarget &#123;</span><br><span class="line">    private static final int MAX_RECYCLED = 32;</span><br><span class="line">    private static final Object sRecycleLock = new Object[0];</span><br><span class="line">    private static TouchTarget sRecycleBin;</span><br><span class="line">    private static int sRecycledCount;</span><br><span class="line"></span><br><span class="line">    public static final int ALL_POINTER_IDS = -1; // all ones</span><br><span class="line"></span><br><span class="line">    // 消费事件的子view</span><br><span class="line">    public View child;</span><br><span class="line"></span><br><span class="line">    // child接收的触摸点的ID集合</span><br><span class="line">    public int pointerIdBits;</span><br><span class="line"></span><br><span class="line">    // 指向链表下一个节点</span><br><span class="line">    public TouchTarget next;</span><br><span class="line"></span><br><span class="line">    private TouchTarget() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static TouchTarget obtain(@NonNull View child, int pointerIdBits) &#123;</span><br><span class="line">        if (child == null) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;child must be non-null&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        final TouchTarget target;</span><br><span class="line">        synchronized (sRecycleLock) &#123;</span><br><span class="line">            if (sRecycleBin == null) &#123;</span><br><span class="line">                target = new TouchTarget();</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                target = sRecycleBin;</span><br><span class="line">                sRecycleBin = target.next;</span><br><span class="line">                 sRecycledCount--;</span><br><span class="line">                target.next = null;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        target.child = child;</span><br><span class="line">        target.pointerIdBits = pointerIdBits;</span><br><span class="line">        return target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void recycle() &#123;</span><br><span class="line">        if (child == null) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;already recycled once&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        synchronized (sRecycleLock) &#123;</span><br><span class="line">            if (sRecycledCount &lt; MAX_RECYCLED) &#123;</span><br><span class="line">                next = sRecycleBin;</span><br><span class="line">                sRecycleBin = this;</span><br><span class="line">                sRecycledCount += 1;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                next = null;</span><br><span class="line">            &#125;</span><br><span class="line">            child = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TouchTarget保存了响应触摸事件的子view和该子view上的触摸点ID集合，表示一个触摸事件派发目标。通过next成员可以看出，它支持作为一个链表节点储存。</p>
+<h3 id="触摸点ID存储"><a href="#触摸点ID存储" class="headerlink" title="触摸点ID存储"></a>触摸点ID存储</h3><p>成员pointerIdBits用于存储多点触摸的这些触摸点的ID。pointerIdBits为int型，有32bit位，每一bit位可以表示一个触摸点ID，最多可存储32个触摸点ID。<br>pointerIdBits是如何做到在bit位上存储ID呢？假设触摸点ID取值为x（x的范围可从0～31），存储时先将1左移x位，然后pointerIdBits与之执行|=操作，从而设置到pointerIdBits的对应bit位上。<br>pointerIdBits的存在意义是记录TouchTarget接收的触摸点ID，在这个TouchTarget上可能只落下一个触摸点，也可能同时落下多个。当所有触摸点都离开时，pointerIdBits就已被清0，那么TouchTarget自身也将被从mFirstTouchTarget中移除。</p>
+<h3 id="对象获取和回收"><a href="#对象获取和回收" class="headerlink" title="对象获取和回收"></a>对象获取和回收</h3><p>TouchTarget的构造函数为私有，不允许直接创建。因为应用在使用过程中会涉及到大量的TouchTarget创建和销毁，因此TouchTarget封装了一个对象缓存池，通过TouchTarget.obtain方法获取，TouchTarget.recycle方法回收。</p>
+<h3 id="ViewGroup-事件分发过程中对-TouchTarget-的操作"><a href="#ViewGroup-事件分发过程中对-TouchTarget-的操作" class="headerlink" title="ViewGroup 事件分发过程中对 TouchTarget 的操作"></a>ViewGroup 事件分发过程中对 TouchTarget 的操作</h3><p>具体调用流程参考前面文章。</p>
+<h4 id="查找-TouchTarget"><a href="#查找-TouchTarget" class="headerlink" title="查找 TouchTarget"></a>查找 TouchTarget</h4><p><code>getTouchTarget</code> 方法说根据child查找对应的 TouchTarget</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">private TouchTarget getTouchTarget(@NonNull View child) &#123;</span><br><span class="line">    // 遍历链表</span><br><span class="line">    for (TouchTarget target = mFirstTouchTarget; target != null; target = target.next) &#123;</span><br><span class="line">        // 比较child成员</span><br><span class="line">        if (target.child == child) &#123;</span><br><span class="line">            return target;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="添加-TouchTarget"><a href="#添加-TouchTarget" class="headerlink" title="添加 TouchTarget"></a>添加 TouchTarget</h4><p>在 <code>ViewGroup</code> 的 <code>dispatchTouchEvent</code> 方法中，会通过 <code>dispatchTransformedTouchEvent</code> 将调整后的<code>TouchEvent</code> 派发给子 <code>View</code>，如果子 <code>View</code> 感兴趣，会返回 true，此时就会把该子 <code>View</code> 和它感兴趣的<code>TouchEvent</code> 的 pointer 存储到 <code>TouchTarget</code> 中，加入链表作为表头存储，mFirstTouchTarget指向表头。这个添加操作时调用 <code>addTouchTarget</code> 实现的，它会将 child 和 pointerIdBits 保存到 TouchTarget 链表中，并且把新添加的 <code>TouchTarget</code> 作为表头。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private TouchTarget addTouchTarget(@NonNull View child, int pointerIdBits) &#123;</span><br><span class="line">    // 通过对象缓存池获取可用的TouchTarget实例，同时保存child和pointerIdBits。</span><br><span class="line">    final TouchTarget target = TouchTarget.obtain(child, pointerIdBits);</span><br><span class="line">    // 添加到链表中，并设置成新的头节点。</span><br><span class="line">    target.next = mFirstTouchTarget;</span><br><span class="line">    mFirstTouchTarget = target;</span><br><span class="line">    return target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="删除-TouchTarget"><a href="#删除-TouchTarget" class="headerlink" title="删除 TouchTarget"></a>删除 TouchTarget</h4><p>当一个 <code>TouchTarget</code> 不捕获任何 pointer 的时候，如按在该 <code>View</code> 上的所有手指抬起时，或者触发 ACTION_CANCEL 时，该 <code>TouchTarget</code> 就会从链表中删除，并且执行 recycle 操作。<br>当调用 <code>ViewGroup#removeView</code> 移除某个子 <code>View</code> 时，<code>ViewGroup</code> 会调用下面的方法，该方法不仅从链表中删除了 <code>TouchTarget</code>，调用其 recycle 方法，还给它保存的 <code>View</code> 发了一个 ACTION_CANCEL 事件，使得View能清理各类状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">private void cancelTouchTarget(View view) &#123;</span><br><span class="line">    TouchTarget predecessor = null;</span><br><span class="line">    TouchTarget target = mFirstTouchTarget;</span><br><span class="line">    while (target != null) &#123;</span><br><span class="line">        final TouchTarget next = target.next;</span><br><span class="line">        if (target.child == view) &#123;</span><br><span class="line">            if (predecessor == null) &#123;</span><br><span class="line">                mFirstTouchTarget = next;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                predecessor.next = next;</span><br><span class="line">            &#125;</span><br><span class="line">            target.recycle();</span><br><span class="line">            final long now = SystemClock.uptimeMillis();</span><br><span class="line">            // 发送 ACTION_CANCEL 事件</span><br><span class="line">            MotionEvent event = MotionEvent.obtain(now, now,</span><br><span class="line">                    MotionEvent.ACTION_CANCEL, 0.0f, 0.0f, 0);</span><br><span class="line">            event.setSource(InputDevice.SOURCE_TOUCHSCREEN);</span><br><span class="line">            view.dispatchTouchEvent(event);</span><br><span class="line">            event.recycle();</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        predecessor = target;</span><br><span class="line">        target = next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再有就是ViewGroup收到ACTION_CANCEL 事件，就会执行它的 TouchTarget 链表里面 TouchTarget 的 recycle 操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private void clearTouchTargets() &#123;</span><br><span class="line">    TouchTarget target = mFirstTouchTarget;</span><br><span class="line">    if (target != null) &#123;</span><br><span class="line">        do &#123;</span><br><span class="line">            TouchTarget next = target.next;</span><br><span class="line">            target.recycle();</span><br><span class="line">            target = next;</span><br><span class="line">        &#125; while (target != null);</span><br><span class="line">        mFirstTouchTarget = null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="关于-mFirstTouchTarget"><a href="#关于-mFirstTouchTarget" class="headerlink" title="关于 mFirstTouchTarget"></a>关于 mFirstTouchTarget</h4><p><code>ViewGroup</code> 不用单个 <code>TouchTarget</code> 保存消费了事件的 child，而是通过 <code>mFirstTouchTarget</code> 链表保存多个 <code>TouchTarget</code>，是因为存在多点触摸情况下，需要将事件拆分后派发给不同的child。<br>加入一个 <code>ViewGroup</code> 有两个子 <code>View</code> childA 和 childB，他们是兄弟 <code>View</code> 的关系，假设childA、childB都能响应事件：</p>
+<ul>
+<li>当触摸点1落于childA时，产生事件ACTION_DOWN，ViewGroup会为childA生成一个TouchTarget，后续滑动事件将派发给它。</li>
+<li>当触摸点2落于childA时，产生ACTION_POINTER_DOWN事件，此时可以复用TouchTarget，并给它添加触摸点2的ID。</li>
+<li>当触摸点3落于childB时，产生ACTION_POINTER_DOWN事件，ViewGroup会再生成一个TouchTarget，此时ViewGroup中有两个TouchTarget，后续产生滑动事件，将根据触摸点信息对事件进行拆分，之后再将拆分事件派发给对应的child。</li>
+</ul>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://juejin.im/post/6844904065613201421" target="_blank" rel="noopener">https://juejin.im/post/6844904065613201421</a><br><a href="https://www.jianshu.com/p/ab1fb00fcb90" target="_blank" rel="noopener">https://www.jianshu.com/p/ab1fb00fcb90</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-事件分发体系/" rel="tag"># Android 事件分发体系</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/07/Android 事件分发体系/android-knowledge-event-transfer-process-viewrootimpl/" rel="next" title="Android View 事件处理流程 -- ViewRootImpl">
+                <i class="fa fa-chevron-left"></i> Android View 事件处理流程 -- ViewRootImpl
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/15/Android 事件分发体系/android-knowledge-event-transfer-process-multi-point/" rel="prev" title="Android View 事件处理流程 -- 多点触控">
+                Android View 事件处理流程 -- 多点触控 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#触摸点ID存储"><span class="nav-number">2.1.</span> <span class="nav-text">触摸点ID存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象获取和回收"><span class="nav-number">2.2.</span> <span class="nav-text">对象获取和回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ViewGroup-事件分发过程中对-TouchTarget-的操作"><span class="nav-number">2.3.</span> <span class="nav-text">ViewGroup 事件分发过程中对 TouchTarget 的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查找-TouchTarget"><span class="nav-number">2.3.1.</span> <span class="nav-text">查找 TouchTarget</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加-TouchTarget"><span class="nav-number">2.3.2.</span> <span class="nav-text">添加 TouchTarget</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除-TouchTarget"><span class="nav-number">2.3.3.</span> <span class="nav-text">删除 TouchTarget</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于-mFirstTouchTarget"><span class="nav-number">2.3.4.</span> <span class="nav-text">关于 mFirstTouchTarget</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">3.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

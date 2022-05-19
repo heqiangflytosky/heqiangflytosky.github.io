@@ -1,0 +1,942 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android 架构,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="简单介绍 MVC、MVP 和 MVVP 架构三种架构设计">
+<meta name="keywords" content="Android 架构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 架构 -- MVC、MVP 和 MVVP 架构浅析">
+<meta property="og:url" content="http://yoursite.com/2017/09/02/Android 架构/android-architecture-mvc-mvp-mvvm/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="简单介绍 MVC、MVP 和 MVVP 架构三种架构设计">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/android-architecture-mvc-mvp-mvvm/mvc.png">
+<meta property="og:image" content="http://yoursite.com/images/android-architecture-mvc-mvp-mvvm/mvp.png">
+<meta property="og:image" content="http://yoursite.com/images/android-architecture-mvc-mvp-mvvm/mvvm.png">
+<meta property="og:updated_time" content="2020-11-09T02:59:41.073Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 架构 -- MVC、MVP 和 MVVP 架构浅析">
+<meta name="twitter:description" content="简单介绍 MVC、MVP 和 MVVP 架构三种架构设计">
+<meta name="twitter:image" content="http://yoursite.com/images/android-architecture-mvc-mvp-mvvm/mvc.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/02/Android 架构/android-architecture-mvc-mvp-mvvm/">
+
+
+
+
+
+  <title> Android 架构 -- MVC、MVP 和 MVVP 架构浅析 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/02/Android 架构/android-architecture-mvc-mvp-mvvm/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 架构 -- MVC、MVP 和 MVVP 架构浅析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-02T10:00:00+08:00">
+                2017-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-架构/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 架构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/09/02/Android 架构/android-architecture-mvc-mvp-mvvm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/09/02/Android 架构/android-architecture-mvc-mvp-mvvm/" class="leancloud_visitors" data-flag-title="Android 架构 -- MVC、MVP 和 MVVP 架构浅析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  简单介绍 MVC、MVP 和 MVVP 架构三种架构设计
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="关于架构设计"><a href="#关于架构设计" class="headerlink" title="关于架构设计"></a>关于架构设计</h2><p>架构设计的目的就是通过设计使程序模块化，做到模块内部的高聚合和模块之间的低耦合。只要做的好处是使得程序员在开发过程中提高开发效率，并且更容易进行后续的测试以及定位问题。但是，设计不能违背目的，对于不同量级的工程，具体架构的实现方式也是不同的，切记不能为了设计而设计，为了架构而架构。<br>架构设计没有严格意义上的好与坏，要以实用为目的，合适的才是最好的。<br>关于架构设计，我们一般遵守下面的原则：</p>
+<ul>
+<li>合适优于先进：适合当前业务的就好，不要总想搞世界领先的架构，先进的架构未必适合自己的业务。</li>
+<li>演进优于一步到位：架构设计优先解决当下的问题，至于后来的问题，到时候再对架构方案进行改进。</li>
+<li>简单优于复杂：越简单的架构越好。</li>
+</ul>
+<h2 id="MVC、MVP-和-MVVP-概述"><a href="#MVC、MVP-和-MVVP-概述" class="headerlink" title="MVC、MVP 和 MVVP 概述"></a>MVC、MVP 和 MVVP 概述</h2><p>架构模式有很多种，MVC（Model-View-Controller） 是其中一种，MVP （Model-View-Presenter）和 MVVM（Model-View-ViewModel）可以说是在 MVC 基础上发展而来的，它们是一种进化的关系：MVC –&gt; MVP –&gt; MVVM，这三种架构模式是我们在 Android 开发过程以及面试中经常涉及到的，本文对这三种架构模式做一些介绍。<br>MVP 隔离了MVC中的 M 与 V 的直接联系，靠 P 来中转，所以使用 MVP 时 P 是直接调用 V 的接口实现对视图的操作的，这些 View 接口比如：showLoading，updateView 等。M 与 V 已经隔离了，方便测试了，但是代码还是不够优雅简洁，所以出现了 MVVM 来弥补这些缺陷，MVVM 是 MVP 的进一步发展与规范，出现了 Data Binding 这个概念，意思就是 View 接口的showLoading，updateView不用再写了，直接数据绑定自动更新视图。<br>在不同的开发环境下，这三种模式的使用频率也是不一样的，在 Android 环境下，常用的是 MVC和MVP架构模式，但随着一些开源框架比如 Jetpack 的 databinding、live等的兴起，MVVM 在Android开发中也经常遇到。在iOS和HTML5的开发环境中，会经常使用 MVC和MVVM 架构模式，Java/PHP开发环境下常用到MVC架构模式等。<br>对于不同的开发环境相同的模式的使用也是略有差距的，本文仅这种介绍一下 Android 环境下的使用。</p>
+<h2 id="MVC-架构"><a href="#MVC-架构" class="headerlink" title="MVC 架构"></a>MVC 架构</h2><p>MVC分别是Model（模型）、View（视图）、Controller（控制器）三个模块。</p>
+<ul>
+<li>View：主要完成界面的展示，UI呈现</li>
+<li>Controller：对数据的接收处理和对用户触发事件的响应和传递</li>
+<li>Model：对数据的储存和提供，传递给视图层响应或者展示。</li>
+</ul>
+<p>下面我们通过一个图来展示 MVC 架构的设计：</p>
+<p><img src="/images/android-architecture-mvc-mvp-mvvm/mvc.png" width="495" height="318"></p>
+<p>上面的箭头描述数据的流向。比如和下面介绍的 MVP 和 MVVP 差异较大的 Model –&gt; View  的流向，我们可以设置 Model 层提供的方法的回调函数来监听数据的变化，直接更新 UI。<br>在 Android 开发中，View 层对应于 xml 布局文件或者java的动态 view 部分。<br>Controller 层主要是由 Activity 来承担的，因为在 Android 中，xml 的视图功能比较弱，因此，Activity 既要负责逻辑的控制，充当 Controller 的角色，又要负责视图的显示，承担的功能过多。<br>Model 层主要负责网络请求，数据库处理，I/O操作等。<br>由于 Activity 扮演了 View 和 Controller 的角色，所以，V 层和 C 层的解耦做得不够好。<br>这样就会导致一些问题，没有办法单独验证应用逻辑的正确性，当出了问题之后，因为各个模块耦合的原因，不能快速判断是哪个模块出现的问题。而且，也给单元测试造成了很大的困难。</p>
+<p>现在我们来总结一下 MVC 架构的特点：</p>
+<ul>
+<li>具有一定的分层设计，Model 层解耦比较彻底，但 Controller 和 View 并没有解耦。</li>
+<li>数据处理放在 Model 层，能够更好地复用和修改数据处理。</li>
+</ul>
+<h2 id="MVP-架构"><a href="#MVP-架构" class="headerlink" title="MVP 架构"></a>MVP 架构</h2><p>MVP（Model-View-Presenter）可以说是 MVC 架构的一种进化，可以分为下面三个模块：</p>
+<ul>
+<li>View：主要完成界面的展示，UI呈现。它持有 Presenter 的引用，当需要数据相关操作时，通知 Presenter 去处理，以及根据 Presenter 提供的内容来决定如何显示他们。</li>
+<li>Presenter：负责表现层逻辑处理，告诉 View 层该显示什么，以及响应界面事件，再通知 Model 层修改或者存储数据。Model 层提供好数据后，通知 View 层展示。</li>
+<li>Model：业务逻辑处理，对数据的储存和提供。</li>
+</ul>
+<p>在 MVP 模式中，Model 和 View 不能直接通信，Presenter 充当桥梁的作用，实现 Model 和 View 的通信。因此，View 层和 Presenter 层需要互相持有对方的引用，Presenter 需要持有 Model 的引用。</p>
+<p>MVP 架构的结构如下图设计：</p>
+<p><img src="/images/android-architecture-mvc-mvp-mvvm/mvp.png" width="489" height="320"></p>
+<p>MVP模式的主要优点是：</p>
+<ul>
+<li>分离了 Model 层和 View 层，分离了视图操作和业务逻辑，降低了耦合。方便功能扩展和代码变更和重构。</li>
+<li>Presenter 层和 View 层分离，几乎处理了所有的表现层逻辑，提高了可测试性，因为对视图控件的显示等等进行单元测试太难了，所以 View 是基本上没法进行单元测试的，但是 Presenter 是完全可以进行单元测试的。</li>
+</ul>
+<p>缺点是：</p>
+<ul>
+<li>View 层和 Presenter 层需要互相持有对方的引用，Presenter 需要持有 Model 的引用。</li>
+<li>还有就是可能需要写更多的类，不过这相对于它带给我们的优点和便利，是非常值得我们去做的。</li>
+</ul>
+<h2 id="MVVM-架构"><a href="#MVVM-架构" class="headerlink" title="MVVM 架构"></a>MVVM 架构</h2><p>MVVM（Model-View-ViewModel）可以说是 MVP 模式的一种进化，它也分为三个模块：</p>
+<ul>
+<li>View：主要完成界面的展示，UI呈现。它持有ViewModel层的引用，当需要进行业务逻辑处理时通知ViewModel层。</li>
+<li>ViewModel：负责表现层逻辑处理。ViewModel层不涉及任何的视图操作。View 层和 ViewModel 层中的数据可以实现绑定，ViewModel 层中数据的变化可以自动通知 View 层进行更新，因此 ViewModel 层不需要持有 View 层的引用。ViewModel 层可以看作是 View 层的数据模型和 Presenter 层的结合。</li>
+<li>Model：业务逻辑处理，对数据的储存和提供。</li>
+</ul>
+<p>可以看出，MVVM 像对于 MVP 的核心在于数据绑定。<br>它们的最大的区别在于：ViewModel 层不持有 View 层的引用。这样进一步降低了耦合，View 层代码的改变不会影响到 ViewModel 层。</p>
+<p>MVP 架构的结构如下图设计：</p>
+<p><img src="/images/android-architecture-mvc-mvp-mvvm/mvvm.png" width="501" height="314"></p>
+<p>总结一下 MVVM 像对于 MVP 的优点：</p>
+<ul>
+<li>进一步降低了耦合，ViewModel 层不持有 View 层的引用，当 View 层代码发生改变时，只要 View 层绑定的数据不变，那么 ViewModel 层代码就不需要改变。而在 MVP 模式下，当 View 层发生改变时，操作视图的接口就要进行相应的改变，那么 Presenter 层就需要修改了。</li>
+<li>不用再编写很多样板代码。通过 Data Binding 库，UI和数据之间可以实现绑定，不用再编写大量的findViewById()和操作视图的代码了。总之，Activity/Fragment 的代码可以做到相当简洁。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果你对上面对于 MVC、MVP和MVVM的区别还是比较模糊的话，下面通过一个简单的例子来介绍一下它们的区别。<br>比如：有个下拉刷新功能，用户下拉页面后，拉取数据，更新页面。</p>
+<p> 1.View 获取下拉事件，通知 Controller 、Presenter 或者 ViewModel。<br> 2.Controller 、Presenter 或者 ViewModel 向Model 发起数据请求，请求内容为下拉刷新。<br> 3.Model 层向网络请求刷新内容，服务器返回新的内容。<br> 4.后面的处理可能就不一样了：</p>
+<ul>
+<li>MVC：拿到UI节点，渲染展示新的数据。</li>
+<li>MVP：Presenter 拿到数据后，可能会做数据加工处理，然后通过 View 提供的接口更新数据，后面 View 渲染展示新的数据。</li>
+<li>MVVM：无需任何操作，只要 ViewModel 的数据发生变化，通过双向绑定，View 自动更新。View 上面有了更新，ViewModel 这边的数据也会自动更新。</li>
+</ul>
+<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><p><a href="https://mp.weixin.qq.com/s/RVKaXY349jSBLtAiQsmwCg" target="_blank" rel="noopener">关于MVC/MVP/MVVM的一些错误认识</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-架构/" rel="tag"># Android 架构</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/26/Android/android-view-recycleview-staggeredgridlayoutmanager/" rel="next" title="Android RecyclerView -- StaggeredGridLayoutManager 多样式布局">
+                <i class="fa fa-chevron-left"></i> Android RecyclerView -- StaggeredGridLayoutManager 多样式布局
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/05/Android 架构/android-architecture-google-samples/" rel="prev" title="Android 架构 android-architecture 简介">
+                Android 架构 android-architecture 简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于架构设计"><span class="nav-number">1.</span> <span class="nav-text">关于架构设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC、MVP-和-MVVP-概述"><span class="nav-number">2.</span> <span class="nav-text">MVC、MVP 和 MVVP 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC-架构"><span class="nav-number">3.</span> <span class="nav-text">MVC 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVP-架构"><span class="nav-number">4.</span> <span class="nav-text">MVP 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVVM-架构"><span class="nav-number">5.</span> <span class="nav-text">MVVM 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关文章"><span class="nav-number">7.</span> <span class="nav-text">相关文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

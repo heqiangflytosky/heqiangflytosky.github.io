@@ -1,0 +1,1007 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Kotlin,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍 Kotlin 协程的使用">
+<meta name="keywords" content="Kotlin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin -- 协程">
+<meta property="og:url" content="http://yoursite.com/2019/12/22/Kotlin/kotlin-coroutines/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 Kotlin 协程的使用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-12-07T11:15:13.853Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kotlin -- 协程">
+<meta name="twitter:description" content="介绍 Kotlin 协程的使用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/22/Kotlin/kotlin-coroutines/">
+
+
+
+
+
+  <title> Kotlin -- 协程 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Kotlin/kotlin-coroutines/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kotlin -- 协程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-22T10:00:00+08:00">
+                2019-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kotlin/" itemprop="url" rel="index">
+                    <span itemprop="name">Kotlin</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2019/12/22/Kotlin/kotlin-coroutines/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/12/22/Kotlin/kotlin-coroutines/" class="leancloud_visitors" data-flag-title="Kotlin -- 协程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 Kotlin 协程的使用
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>学习 Kotlin，就必须提一下协程，协程其实就是 Kotlin 里面的线程框架，它是 Kotlin 中非常重要的一部分，如果你不知道协程，那就说明你还没有学习过 Kotlin。<br>在 Kotlin 1.1 版本中引入了协程（Coroutines），目前协程还是实验性功能，因此使用前还要在 gradle 里面加上依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">implementation &quot;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2&quot;</span><br><span class="line">implementation &apos;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2&apos;</span><br></pre></td></tr></table></figure>
+<p>它是将复杂的异步操作放入底层库中，程序逻辑可以在协程中按照顺序来表达，以此简化异步编程，该底层库将用户代码包装为回调/订阅事件，在不同线程或者不同机器调度执行。</p>
+<h2 id="协程的特点"><a href="#协程的特点" class="headerlink" title="协程的特点"></a>协程的特点</h2><p>协程主要有以下特点：</p>
+<ul>
+<li>协程挂起：协程提供了一种使程序避免阻塞且更廉价可控的操作，叫作协程挂起（coroutines suspension），协程挂起是非阻塞式挂起，不阻塞线程。</li>
+<li>简化代码：协程让原来使用“异步+回调”方式写出来的复杂代码，简化成可以用看似同步的方式表达。也就是说用看似同步的方式写出异步的代码。</li>
+<li>节约资源：线程是由系统调度的，线程切换或线程阻塞的开销都比较大。而协程依赖于线程，但是协程挂起时不需要阻塞线程，几乎是无代价的。协程是由开发者控制的。所以协程也像用户态的线程，非常轻量级，一个线程中可以创建任意多个协程。</li>
+<li>支持取消：</li>
+<li>协程是结构化的：也就是说在协程作用域内部创建的子协程，它们之间是有父子关系的。而线程是没有这种特性的。这种特性使得协程便于管理。</li>
+</ul>
+<p>Kotlin 协程是 Kotlin 的线程框架，是对线程的一种更友好的封装，主要特点是使用方便，方便在哪里？可以使用同步的方式写出异步的代码。这个我感觉是协程带给我们最大的收获。<br>Kotlin 还是运行在线程中的，因此协程不能代替线程。<br>协程的挂起其实就是这个协程从正在执行它的线程上脱离了，而不是暂停了。这个协程当前所在的线程从这行代码开始就不再运行这个协程了。当挂起的函数执行完毕后，会自动切回到当前的协程。<br>协程与线程最大的区别在于，从任务的角度来看，线程一旦开始执行就不会暂停，直到任务结束，这个过程都是连续的。线程之间是抢占式的调度，因此不存在协作问题。<br>其实，Java 虽然没有实现协程，但开发者可以通过第三方框架提供协程的能力，例如Java的协程框架Quasar。</p>
+<h2 id="协程作用域"><a href="#协程作用域" class="headerlink" title="协程作用域"></a>协程作用域</h2><p>协程作用域定义新协程的范围。每个协程构建器都是CoroutineScope的扩展，并继承其coroutineContext以自动传播上下文元素和取消。<br>每个协程构建器（如launch，async等）和每个作用域函数（如coroutineScope，withContext等）都会将自己的作用域实例提供给它运行的内部代码块。<br>我们前面在构建协程时用的 <code>GlobalScope</code> 就是继承自 <code>CoroutineScope</code> 的作用域，另外 kotlin 还为我们提供了 MainScope 作用域来构建协程。</p>
+<p>coroutineScope 是继承外部 Job 的上下文创建作用域，在其内部的取消操作是双向传播的，子协程未捕获的异常也会向上传递给父协程。它更适合一系列对等的协程并发的完成一项工作，任何一个子协程异常退出，那么整体都将退出，简单来说就是”一损俱损“。这也是协程内部再启动子协程的默认作用域。<br>supervisorScope 同样继承外部作用域的上下文，但其内部的取消操作是单向传播的，父协程向子协程传播，反过来则不然，这意味着子协程出了异常并不会影响父协程以及其他兄弟协程。它更适合一些独立不相干的任务，任何一个任务出问题，并不会影响其他任务的工作，简单来说就是”自作自受“，例如 UI，我点击一个按钮出了异常，其实并不会影响手机状态栏的刷新。需要注意的是，supervisorScope 内部启动的子协程内部再启动子协程，如无明确指出，则遵守默认作用域规则，也即 supervisorScope 只作用域其直接子协程。</p>
+<h2 id="协程的使用"><a href="#协程的使用" class="headerlink" title="协程的使用"></a>协程的使用</h2><h3 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h3><p>先来介绍一下 suspend 关键字，用该关键字修饰的方法可以被协程挂起，如果在协程外部，只有在该关键字修饰的方法中才可以使用 <code>delay</code> <code>Deferred.await</code> 等方法。<br>被 suspend 修饰的方法执行运行在协程内部或者另一个 suspend 方法中，suspend 关键字其实不是真正的执行挂起动作，挂起动作是由 suspend 方法内部调用的kotlin自动的挂起函数来执行挂起动作的。suspend 关键字可以理解为只是一个标识，提醒调用者这是一个耗时的函数，需要用挂起的方式放在后台执行。</p>
+<h3 id="创建协程"><a href="#创建协程" class="headerlink" title="创建协程"></a>创建协程</h3><p>可以通过下面的方法创建一个协程</p>
+<ul>
+<li>GlobalScope.launch</li>
+<li>GlobalScope.async</li>
+<li>runBlocking</li>
+</ul>
+<h4 id="GlobalScope-launch"><a href="#GlobalScope-launch" class="headerlink" title="GlobalScope.launch"></a>GlobalScope.launch</h4><p>我们可以通过 <code>GlobalScope.launch</code> 启动一个协程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GlobalScope.launch &#123;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Coroutine start&quot;)</span><br><span class="line">    delay(1000)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</span><br><span class="line">&#125;</span><br><span class="line">Log.e(&quot;Test&quot;,&quot;continue&quot;)</span><br></pre></td></tr></table></figure>
+<p> <code>delay</code> 是一个特殊的挂起函数，它不会造成线程阻塞，但是会挂起协程，并且只能在协程或者 suspend 方法修饰的方法中使用。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> public fun CoroutineScope.launch(</span><br><span class="line">    context: CoroutineContext = EmptyCoroutineContext,</span><br><span class="line">    start: CoroutineStart = CoroutineStart.DEFAULT,</span><br><span class="line">    block: suspend CoroutineScope.() -&gt; Unit</span><br><span class="line">): Job &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>launch</code> 方法接受三个参数：</p>
+<ul>
+<li><p>context: CoroutineContext：协程的上下文，可以设置协程运行的线程调度器，有 4种模式可以选择：</p>
+<ul>
+<li>Dispatchers.Default：默认为子线程运行</li>
+<li>Dispatchers.IO：子线程运行</li>
+<li>Dispatchers.Main：主线程运行</li>
+<li>Dispatchers.Unconfined：没指定的情况下就是运行在当前创建协程的线程</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GlobalScope.launch(Dispatchers.Main) &#123;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Coroutine start $&#123;Thread.currentThread()&#125;&quot;)</span><br><span class="line">    delay(1000)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者我们可以自己创建线程池，通过 <code>newSingleThreadContext</code> 或者 <code>newFixedThreadPoolContext</code> 来创建。</p>
+</li>
+<li><p>start: CoroutineStart：启动模式，可以有下面四种模式：</p>
+<ul>
+<li>DEAFAULT：默认模式，也就是创建就启动</li>
+<li>ATOMIC：</li>
+<li>UNDISPATCHED：</li>
+<li>LAZY：懒加载模式，你需要它的时候再调用启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var job:Job = GlobalScope.launch( start = CoroutineStart.LAZY) &#123;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Coroutine start $&#123;Thread.currentThread()&#125;&quot;)</span><br><span class="line">    delay(1000)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</span><br><span class="line">&#125;</span><br><span class="line">Log.e(&quot;Test&quot;,&quot;continue&quot;)</span><br><span class="line">Thread.sleep(1000);</span><br><span class="line">job.start()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>block：闭包方法体，定义协程内需要执行的操作</p>
+</li>
+</ul>
+<p>launch 方法返回一个 Job 类型的对象，Job 类提供了下面的常用方法：</p>
+<ul>
+<li>start()：启动协程，除了 lazy 模式之外都不需要手动启动</li>
+<li>cancel()：取消协程</li>
+<li>join()：等待协程执行完毕</li>
+</ul>
+<h4 id="GlobalScope-async"><a href="#GlobalScope-async" class="headerlink" title="GlobalScope.async"></a>GlobalScope.async</h4><p><code>async</code> 方法和 <code>launch</code> 方法使用类似，唯一的区别就是返回值的类型不同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GlobalScope.launch &#123;</span><br><span class="line">    var deffer = GlobalScope.async &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;Coroutine start $&#123;Thread.currentThread()&#125;&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</span><br><span class="line">        return@async 200;</span><br><span class="line">    &#125;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;continue &quot;)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;result = $&#123;deffer.await()&#125; &quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">17:25:19.388 16973 17003 E Test    : continue </span><br><span class="line">17:25:19.388 16973 17004 E Test    : Coroutine start Thread[DefaultDispatcher-worker-4,5,main]</span><br><span class="line">17:25:20.393 16973 17002 E Test    : Coroutines end</span><br><span class="line">17:25:20.398 16973 17008 E Test    : result = 200</span><br></pre></td></tr></table></figure>
+<p>async 返回的是 Deferred 类型，Deferred 继承自 Job 接口，增加了一个 await 方法，这个方法只能在协程内部使用。async 的特点是不会阻塞当前线程，但会阻塞所在协程，也就是挂起。</p>
+<h4 id="runBlocking"><a href="#runBlocking" class="headerlink" title="runBlocking"></a>runBlocking</h4><p>runBlocking 方法和 launch 方法的区别是 runBlocking 是可以阻塞当前的线程的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">runBlocking &#123;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Coroutine start $&#123;Thread.currentThread()&#125;&quot;)</span><br><span class="line">    delay(1000)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Coroutines end&quot;)</span><br><span class="line">&#125;</span><br><span class="line">Log.e(&quot;Test&quot;,&quot;continue &quot;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Test    : Coroutine start Thread[main,5,main]</span><br><span class="line">Test    : Coroutines end</span><br><span class="line">Test    : continue</span><br></pre></td></tr></table></figure>
+<h4 id="withContext"><a href="#withContext" class="headerlink" title="withContext"></a>withContext</h4><p>withContext {} 在指定协程上运行挂起代码块，并挂起当前协程直至代码块运行完成再切回来运行。<br>多个 withContext 任务是串行的， 且 withContext 可直接返回任务执行的结果。</p>
+<h3 id="withContext-和-async-的区别"><a href="#withContext-和-async-的区别" class="headerlink" title="withContext 和 async 的区别"></a>withContext 和 async 的区别</h3><p>withContext 与 async 都可以返回耗时任务的执行结果。<br>多个 withContext 任务是串行的， 且 withContext 可直接返回任务执行的结果。<br>多个 async 任务是并行的，async 返回的是一个 <code>Deferred&lt;T&gt;</code>，需要调用其 <code>await()</code> 方法获取结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GlobalScope.launch (Dispatchers.Main)&#123;</span><br><span class="line">    var r1 = withContext(Dispatchers.IO) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;enter 1&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;exit 1&quot;)</span><br><span class="line">        100</span><br><span class="line">    &#125;</span><br><span class="line">    var r2 = withContext(Dispatchers.IO) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;enter 2&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;exit 2&quot;)</span><br><span class="line">        200</span><br><span class="line">    &#125;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;r1=$r1,r2=$r2&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">10:42:28.973 : enter 1</span><br><span class="line">10:42:29.977 : exit 1</span><br><span class="line">10:42:29.980 : enter 2</span><br><span class="line">10:42:30.991 : exit 2</span><br><span class="line">10:42:30.992 : r1=100,r2=200</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GlobalScope.launch (Dispatchers.Main)&#123;</span><br><span class="line">    var r1 = async (Dispatchers.IO) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;enter 1&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;exit 1&quot;)</span><br><span class="line">        100</span><br><span class="line">    &#125;</span><br><span class="line">    var r2 = async(Dispatchers.IO) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;enter 2&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;exit 2&quot;)</span><br><span class="line">        200</span><br><span class="line">    &#125;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;r1=$&#123;r1.await()&#125;,r2=$&#123;r2.await()&#125;&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并行执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">10:40:05.658 : enter 1</span><br><span class="line">10:40:05.662 : enter 2</span><br><span class="line">10:40:06.663 : exit 1</span><br><span class="line">10:40:06.665 : exit 2</span><br><span class="line">10:40:06.671 : r1=100,r2=200</span><br></pre></td></tr></table></figure>
+<p>如果我们把上面的程序修改一下，两个 async 也可以变为串行执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">GlobalScope.launch (Dispatchers.Main)&#123;</span><br><span class="line">    var r1 = async (Dispatchers.IO) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;enter 1&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;exit 1&quot;)</span><br><span class="line">        100</span><br><span class="line">    &#125;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;r1=$&#123;r1.await()&#125;&quot;)</span><br><span class="line">    var r2 = async(Dispatchers.IO) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;enter 2&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;exit 2&quot;)</span><br><span class="line">        200</span><br><span class="line">    &#125;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;r1=$&#123;r1.await()&#125;,r2=$&#123;r2.await()&#125;&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2020-12-04 : enter 1</span><br><span class="line">2020-12-04 : exit 1</span><br><span class="line">2020-12-04 : r1=100</span><br><span class="line">2020-12-04 : enter 2</span><br><span class="line">2020-12-04 : exit 2</span><br><span class="line">2020-12-04 : r1=100,r2=200</span><br></pre></td></tr></table></figure>
+<p>因此，因此直接在async 后面使用 await() 就和 withContext 一样，程序运行到这里就会被挂起直到该函数执行完成才会继续执行下一个 async 。</p>
+<h3 id="取消协程"><a href="#取消协程" class="headerlink" title="取消协程"></a>取消协程</h3><h4 id="如何取消协程"><a href="#如何取消协程" class="headerlink" title="如何取消协程"></a>如何取消协程</h4><p><code>launch</code> 方法有个 Job 类型的返回值，Job 提供了 cancel 方法来取消协程的执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public fun CoroutineScope.launch(</span><br><span class="line">    context: CoroutineContext = EmptyCoroutineContext,</span><br><span class="line">    start: CoroutineStart = CoroutineStart.DEFAULT,</span><br><span class="line">    block: suspend CoroutineScope.() -&gt; Unit</span><br><span class="line">): Job &#123;</span><br><span class="line">    val newContext = newCoroutineContext(context)</span><br><span class="line">    val coroutine = if (start.isLazy)</span><br><span class="line">        LazyStandaloneCoroutine(newContext, block) else</span><br><span class="line">        StandaloneCoroutine(newContext, active = true)</span><br><span class="line">    coroutine.start(start, coroutine, block)</span><br><span class="line">    return coroutine</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">fun testCancel() = runBlocking&#123;</span><br><span class="line">    var job = GlobalScope.launch &#123;</span><br><span class="line">        repeat(5) &#123;</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;hello : $it&quot;)</span><br><span class="line">            delay(500)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    delay(1100)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;world&quot;)</span><br><span class="line"></span><br><span class="line">    job.cancel()</span><br><span class="line">    job.join()</span><br><span class="line"></span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;welcome&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hello : 0</span><br><span class="line">hello : 1</span><br><span class="line">hello : 2</span><br><span class="line">world</span><br><span class="line">welcome</span><br></pre></td></tr></table></figure>
+<p>在delay 1100毫秒之后，由于在runBlocking协程（姑且称之）中调用了job.cancel()之后，launch协程（姑且称之）中原本会repeat 5次的执行，如今只计数到了2，说明的的确确被取消了。cancel()一般会和join()方法一起使用，因为cancel可能不会立马取消对应的协程（下面我们会提到，协程能够被取消，是需要一定条件的），所以会需要join()来协调两个协程。故而有个更加简便的方法：Job.cancelAndJoin()，可以用来替换上面的两行代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public suspend fun Job.cancelAndJoin() &#123;</span><br><span class="line">    cancel()</span><br><span class="line">    return join()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="能够取消的条件"><a href="#能够取消的条件" class="headerlink" title="能够取消的条件"></a>能够取消的条件</h4><p>协程的取消是有条件的，只有当前协程代码是可取消的，cancel()才能起作用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">fun testCancel() = runBlocking&#123;</span><br><span class="line">    val job = launch(context = Dispatchers.Default) &#123;</span><br><span class="line"></span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;Current Thread : $&#123;Thread.currentThread()&#125;&quot;)</span><br><span class="line">        var nextActionTime = System.currentTimeMillis()</span><br><span class="line">        var i = 0</span><br><span class="line"></span><br><span class="line">        while (i &lt; 10) &#123;</span><br><span class="line">            if (System.currentTimeMillis() &gt;= nextActionTime) &#123;</span><br><span class="line">                Log.e(&quot;Test&quot;,&quot;Job: $&#123;i++&#125;&quot;)</span><br><span class="line">                nextActionTime += 500</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    delay(1300)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;hello&quot;)</span><br><span class="line"></span><br><span class="line">    job.cancelAndJoin()</span><br><span class="line"></span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;welcome&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Current Thread : Thread[DefaultDispatcher-worker-1,5,main]</span><br><span class="line">Job: 0</span><br><span class="line">Job: 1</span><br><span class="line">Job: 2</span><br><span class="line">hello</span><br><span class="line">Job: 3</span><br><span class="line">Job: 4</span><br><span class="line">Job: 5</span><br><span class="line">Job: 6</span><br><span class="line">Job: 7</span><br><span class="line">Job: 8</span><br><span class="line">Job: 9</span><br><span class="line">welcome</span><br></pre></td></tr></table></figure>
+<p>在delay 1300毫秒之后，我们调用了cancelAndJoin方法，但是协程没有取消成功，协程一直在运行，知道达到设置的循环次数。<br>为什么会这样呢？在空等500毫秒中，实际上可以看做是死循环了500毫秒，并且一直占用着cpu。而我们也没有检测协程的状态，因此它就没有自动取消。这个特点和Java线程的取消有点类似。</p>
+<p>这个示例中的launch协程的代码是不可取消的。那么什么样的代码才可以视为可取消的呢？<br>kotlinx.coroutines包下的所有挂起函数都是可取消的。这些挂起函数会检查协程的取消状态，当取消时就会抛出CancellationException异常。如果协程正在处于某个计算过程当中，并且没有检查取消状态，那么它就是无法被取消的。</p>
+<p>下面我们改进一下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">fun testCancel() = runBlocking&#123;</span><br><span class="line">    val job = launch(context = Dispatchers.Default) &#123;</span><br><span class="line"></span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;Current Thread : $&#123;Thread.currentThread()&#125;&quot;)</span><br><span class="line">        var nextActionTime = System.currentTimeMillis()</span><br><span class="line">        var i = 0</span><br><span class="line"></span><br><span class="line">        while (isActive) &#123;</span><br><span class="line">            if (System.currentTimeMillis() &gt;= nextActionTime) &#123;</span><br><span class="line">                Log.e(&quot;Test&quot;,&quot;Job: $&#123;i++&#125;&quot;)</span><br><span class="line">                nextActionTime += 500</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    delay(1300)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;hello&quot;)</span><br><span class="line"></span><br><span class="line">    job.cancelAndJoin()</span><br><span class="line"></span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;welcome&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Current Thread : Thread[DefaultDispatcher-worker-1,5,main]</span><br><span class="line">Job: 0</span><br><span class="line">Job: 1</span><br><span class="line">Job: 2</span><br><span class="line">hello</span><br><span class="line">welcome</span><br></pre></td></tr></table></figure>
+<p>可见，协程取消成功。</p>
+<p>最后，我们对协程取消条件做一下总结：从某种角度上讲，是否能够取消是主动的；外部调用了cancel方法后，相当于是发起了一条取消信号；被取消协程内部如果自身检测到自身状态的变化，比如isActive的判断以及所有的kotlinx.coroutines包下挂起函数，都会检测协程自身的状态变化，如果检测到通知被取消，就会抛出一个CancellationException的异常。<br>另外还可以使用 <code>ensureActive()</code> 方法来判断当前协程是否被取消。</p>
+<h4 id="取消异常"><a href="#取消异常" class="headerlink" title="取消异常"></a>取消异常</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">fun testCancel() = runBlocking&#123;</span><br><span class="line">    var job = GlobalScope.launch &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            repeat(5) &#123;</span><br><span class="line">                Log.e(&quot;Test&quot;,&quot;hello : $it&quot;)</span><br><span class="line">                delay(500)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (e : CancellationException)&#123;</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;CancellationException&quot;)</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;finally&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    delay(1100)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;world&quot;)</span><br><span class="line"></span><br><span class="line">    job.cancel()</span><br><span class="line">    job.join()</span><br><span class="line"></span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;welcome&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hello : 0</span><br><span class="line">hello : 1</span><br><span class="line">hello : 2</span><br><span class="line">world</span><br><span class="line">CancellationException</span><br><span class="line">finally</span><br><span class="line">welcome</span><br></pre></td></tr></table></figure>
+<p>我们使用 catch 块捕获了因取消协程而抛出的 CancellationException 异常，另外，可以再 finally 中做一些资源的关闭和回收工作。<br>这里有个问题，加入程序抛出了 CancellationException，那么为什么没有在输出终端见到它的身影呢？因为kotlin的协程是这样规定的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">That is because inside a cancelled coroutine CancellationException is considered to be a normal reason for coroutine completion.</span><br></pre></td></tr></table></figure>
+<p>也就是说，CancellationException这个异常是被视为正常现象的取消。</p>
+<h4 id="父子协程的取消"><a href="#父子协程的取消" class="headerlink" title="父子协程的取消"></a>父子协程的取消</h4><p>如果父协程取消，对子协程有什么影响呢？同样地，子协程的取消，会对父协程有什么影响呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/* Jobs can be arranged into parent-child hierarchies where cancellation</span><br><span class="line">* of a parent leads to immediate cancellation of all its [children]. Failure or cancellation of a child</span><br><span class="line">* with an exception other than [CancellationException] immediately cancels its parent. This way, a parent</span><br><span class="line">* can [cancel] its own children (including all their children recursively) without cancelling itself.</span><br><span class="line">*</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p>这一段是Job这个接口的文档注释，我截取了一部分出来。我们一起来看下这段文档说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Job可以被组织在父子层次结构下，当父协程被取消后，会导致它的子协程立即被取消。一个子协程失败或取消的异常（除了CancellationException），它也会立即导致父协程的取消。</span><br></pre></td></tr></table></figure>
+<p>下面我们就通过代码来测试一下：<br>先看一下父协程取消对于子协程的影响：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">fun testCancel() = runBlocking&#123;</span><br><span class="line">    val parentJob = launch &#123;</span><br><span class="line">        launch &#123;</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;child Job: before delay&quot;)</span><br><span class="line">            delay(2000)</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;child Job: after delay&quot;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;parent Job: before delay&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;parent Job: after delay&quot;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    delay(500)</span><br><span class="line">    parentJob.cancelAndJoin()</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;hello&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">parent Job: before delay</span><br><span class="line">child Job: before delay</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们一旦取消父协程对应的Job之后，子协程的执行也被取消了，那么也就验证父协程的取消对于子协程的影响。</p>
+<p>子协程正常的CancellationException取消：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">val parentJob = launch &#123;</span><br><span class="line">    val childJob = launch &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;child Job: before delay&quot;)</span><br><span class="line">        delay(2000)</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;child Job: after delay&quot;)</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;parent Job: before delay&quot;)</span><br><span class="line">    delay(1000)</span><br><span class="line">    childJob.cancelAndJoin()</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;parent Job: after delay&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">delay(500)</span><br><span class="line">Log.e(&quot;Test&quot;,&quot;hello&quot;)</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">parent Job: before delay</span><br><span class="line">child Job: before delay</span><br><span class="line">hello</span><br><span class="line">parent Job: after delay</span><br><span class="line">button1 click end</span><br></pre></td></tr></table></figure>
+<p>可见，如果子协程是正常的取消（即CancellationException），那么对于父协程是没有影响的。</p>
+<p>子协程的非CancellationException取消：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">fun testCancel() = runBlocking&#123;</span><br><span class="line">    val parentJob = launch &#123;</span><br><span class="line">        val childJob = launch &#123;</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;child Job: before delay&quot;)</span><br><span class="line">            delay(800)</span><br><span class="line">            throw RuntimeException(&quot;cause to cancel child job&quot;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;parent Job: before delay&quot;)</span><br><span class="line">        delay(1000)</span><br><span class="line">        childJob.cancelAndJoin()</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;parent Job: after delay&quot;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    delay(500)</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;hello&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>RuntimeException 会使程序发生crash。</p>
+<h4 id="协程的超时取消"><a href="#协程的超时取消" class="headerlink" title="协程的超时取消"></a>协程的超时取消</h4><p>可以使用 withTimeout，withTimeoutOrNull。<br>withTimeoutOrNull与withTimeout的区别在于，当发生超时取消后，withTimeoutOrNull的返回为null，而withTimeout会抛出一个TimeoutCancellationException。</p>
+<h2 id="协程异常"><a href="#协程异常" class="headerlink" title="协程异常"></a>协程异常</h2><p>前面介绍协程取消的时候也介绍了一些关于协程异常的知识，这里再进行一些深入和扩展。<br>首先，Kotlin 是没有像 Java 中的那样的 Checked Exception 机制的，具体请参考<a href="https://guolin.blog.csdn.net/article/details/108817286" target="_blank" rel="noopener">浅谈Kotlin的Checked Exception机制</a>一文。但是在 Kotlin 中也是可以对一些异常进行捕获的。</p>
+<h3 id="异常捕获"><a href="#异常捕获" class="headerlink" title="异常捕获"></a>异常捕获</h3><p>先看下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GlobalScope.launch &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        throw Exception(&quot;Test&quot;)</span><br><span class="line">    &#125;catch (e:Exception) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;&quot;, e)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种捕获异常的方式毫无疑义是正确的。<br>那么，如果把 try catch 放到协程的外面呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">    GlobalScope.launch &#123;</span><br><span class="line">        throw Exception(&quot;Test&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;catch (e:Exception) &#123;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;&quot;, e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方式明显是不行的，因为 Kotlin 是异步的，lunch代码块中的方式并不是在 try catch 代码执行期间执行的，它是异步的，执行期间会超出 try catch 的作用域，这时在抛出异常的话肯定就捕获不到了。和以前我们介绍的 Java Thread 中的捕获机制类似的。</p>
+<p>现在再换一种方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">suspend fun testException() &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        val job = GlobalScope.async &#123;</span><br><span class="line">            throw Exception(&quot;Test&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">        job.await()</span><br><span class="line">    &#125;catch (e:Exception) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;&quot;, e)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种情况会捕获到的，因为await会消费携程中抛出的异常，从而被catch到。<br>在协程嵌套的情况下，协程会采取冒泡的行为来传递异常。如果是 supervisorScope，那么子协程的异常不会向上传递。</p>
+<h3 id="全局异常处理"><a href="#全局异常处理" class="headerlink" title="全局异常处理"></a>全局异常处理</h3><p>我们可以为 Thread 设置全局异常处理回调，那么在 Kotlin 中，我们也可以为协程设置全局异常处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">val exceptionHandler = CoroutineExceptionHandler &#123; coroutineContext, throwable -&gt;</span><br><span class="line">    Log.e(&quot;Test&quot;,&quot;Throws an exception with message: $&#123;throwable.message&#125;&quot;)</span><br><span class="line">&#125;</span><br><span class="line">GlobalScope.launch(exceptionHandler) &#123;</span><br><span class="line">    throw Exception(&quot;Test&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码其实并不算是一个全局的异常捕获，因为它只能捕获对应协程内未捕获的异常，如果要做到真正的全局捕获，我们可以自己定义一个捕获类的实现，然后修改 META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler 文件来实现。</p>
+<h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p><a href="https://kaixue.io/tag/kotlin-coroutines/" target="_blank" rel="noopener">https://kaixue.io/tag/kotlin-coroutines/</a><br><a href="https://guolin.blog.csdn.net/article/details/108817286" target="_blank" rel="noopener">浅谈Kotlin的Checked Exception机制</a></p>
+<h2 id="推荐书籍"><a href="#推荐书籍" class="headerlink" title="推荐书籍"></a>推荐书籍</h2><p>《深入理解Kotlin协程》</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/18/Kotlin/kotlin-advance-function/" rel="next" title="Kotlin -- 高阶函数">
+                <i class="fa fa-chevron-left"></i> Kotlin -- 高阶函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/28/Kotlin/kotlin-coroutines-async/" rel="prev" title="Kotlin -- 异步操作">
+                Kotlin -- 异步操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协程的特点"><span class="nav-number">2.</span> <span class="nav-text">协程的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协程作用域"><span class="nav-number">3.</span> <span class="nav-text">协程作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协程的使用"><span class="nav-number">4.</span> <span class="nav-text">协程的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend"><span class="nav-number">4.1.</span> <span class="nav-text">suspend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建协程"><span class="nav-number">4.2.</span> <span class="nav-text">创建协程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GlobalScope-launch"><span class="nav-number">4.2.1.</span> <span class="nav-text">GlobalScope.launch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GlobalScope-async"><span class="nav-number">4.2.2.</span> <span class="nav-text">GlobalScope.async</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runBlocking"><span class="nav-number">4.2.3.</span> <span class="nav-text">runBlocking</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#withContext"><span class="nav-number">4.2.4.</span> <span class="nav-text">withContext</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#withContext-和-async-的区别"><span class="nav-number">4.3.</span> <span class="nav-text">withContext 和 async 的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消协程"><span class="nav-number">4.4.</span> <span class="nav-text">取消协程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何取消协程"><span class="nav-number">4.4.1.</span> <span class="nav-text">如何取消协程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#能够取消的条件"><span class="nav-number">4.4.2.</span> <span class="nav-text">能够取消的条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取消异常"><span class="nav-number">4.4.3.</span> <span class="nav-text">取消异常</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#父子协程的取消"><span class="nav-number">4.4.4.</span> <span class="nav-text">父子协程的取消</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协程的超时取消"><span class="nav-number">4.4.5.</span> <span class="nav-text">协程的超时取消</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协程异常"><span class="nav-number">5.</span> <span class="nav-text">协程异常</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#异常捕获"><span class="nav-number">5.1.</span> <span class="nav-text">异常捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全局异常处理"><span class="nav-number">5.2.</span> <span class="nav-text">全局异常处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐文章"><span class="nav-number">6.</span> <span class="nav-text">推荐文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐书籍"><span class="nav-number">7.</span> <span class="nav-text">推荐书籍</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

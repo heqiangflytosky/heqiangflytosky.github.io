@@ -1,0 +1,982 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍广播的一些基础知识">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 组件 -- 广播">
+<meta property="og:url" content="http://yoursite.com/2015/01/10/Android 组件/android-knowledge-about-broadcast/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍广播的一些基础知识">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-06-10T07:14:37.599Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 组件 -- 广播">
+<meta name="twitter:description" content="介绍广播的一些基础知识">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/01/10/Android 组件/android-knowledge-about-broadcast/">
+
+
+
+
+
+  <title> Android 组件 -- 广播 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/10/Android 组件/android-knowledge-about-broadcast/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 组件 -- 广播
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-01-10T10:00:00+08:00">
+                2015-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-组件/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/01/10/Android 组件/android-knowledge-about-broadcast/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/01/10/Android 组件/android-knowledge-about-broadcast/" class="leancloud_visitors" data-flag-title="Android 组件 -- 广播">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍广播的一些基础知识
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="广播的类型"><a href="#广播的类型" class="headerlink" title="广播的类型"></a>广播的类型</h2><p>广播从发送方式上分可以分为下面三类：</p>
+<ol>
+<li>普通广播</li>
+<li>有序广播</li>
+<li>粘性广播</li>
+</ol>
+<p>从广播接收器的注册方式上分可以分为两类：</p>
+<ol>
+<li>静态广播：通过 AndroidManifest.xml 的标签来申明的 BroadcastReceiver。</li>
+<li>动态广播：通过 registerReceiver() 方式注册的 BroadcastReceiver，动态注册更为灵活，可在不需要时通过 unregisterReceiver() 取消注册。</li>
+</ol>
+<p>从发送广播的 Intent 类型上面可以分为：</p>
+<ul>
+<li>显式广播：通过显式 Intent （指明接收Intent的组件）发送的广播。</li>
+<li>隐式广播：通过隐式 Intent （不指明接收Intent的组件，而是通过 Action、Data、Category等设置，让系统根据所有的<code>&lt;intent-filter&gt;</code>进行筛选）发送的广播。可以通过 <code>setClassName</code> 或者 <code>setPackage</code> + <code>setAction</code>将隐式广播转为显式广播。</li>
+</ul>
+<p>从发送广播的广播队列的不同可以分为：</p>
+<ul>
+<li>前台广播</li>
+<li>后台广播</li>
+</ul>
+<h3 id="普通广播"><a href="#普通广播" class="headerlink" title="普通广播"></a>普通广播</h3><p>这类广播我们经常使用，是一种无序的广播机制，理论上，所有的接受者几乎同时会获得该 intent 的消息，接受者之间不存在先后顺序，不能截断和修改 intent 的数据。<br>发送方式：<code>sendBroadcast(Intent intent)</code>、<code>sendBroadcast(Intent intent, String receiverPermission)</code>、<code>sendBroadcastMultiplePermissions(Intent intent,String[] receiverPermissions)</code> 等。</p>
+<h3 id="有序广播"><a href="#有序广播" class="headerlink" title="有序广播"></a>有序广播</h3><p>所有接受者都可以设置 priority ， 按照 priority 的先后顺序进行传递， 上一个优先级的接受者，可以截断（abortBroadcast()）和修改 intent 里面的数据。 同时，也可以设置一个最后接收者（总是在最后一个接收到这个 intent，用来做一些特定的功能）。<br>发送方式：<code>sendOrderedBroadcast(intent)</code><br>对于接收同一个广播，在相同优先级的情况下，动态注册优先级别高于静态注册。在动态注册中，最早动态注册优先级别最高；在静态注册中，最早安装的程序，静态注册优先级别最高（安装 APK 会解析 manifest.xml,把其加入队列）。</p>
+<h3 id="粘性广播"><a href="#粘性广播" class="headerlink" title="粘性广播"></a>粘性广播</h3><p>粘性广播没有周期限制， 一般的 intent 只能发送给当前已经注册了这个监听的 receiver，一旦发送完毕就会失去作用周期，而粘性广播没有这个限制，即便后来注册的 intent 也可以收到这个广播。 需要注意的一点是 这种发送方式不会导致 ANR， 因为它没有发送时间的限制。<br>发送方式：<code>sendStickyBroadcast(intent)</code></p>
+<h3 id="前台广播和后台广播"><a href="#前台广播和后台广播" class="headerlink" title="前台广播和后台广播"></a>前台广播和后台广播</h3><p>Android系统关于广播有两个广播队列——前台广播队列mFgBroadcastQueue和后台广播队列mBgBroadcastQueue。在发送方发送广播时，默认是放置在后台广播队列的。但是发送方在给intent设置FLAG_RECEIVER_FOREGROUND标记后，发送的广播就会被放置在前台广播队列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = new Intent(); </span><br><span class="line">intent.setAction(&quot;xxxxxx&quot;); </span><br><span class="line">intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);//前台广播（默认是后台广播） </span><br><span class="line">sendBroadcast(intent);</span><br></pre></td></tr></table></figure>
+<p>前台广播和后台广播的区别在于它们的超时时间不同：</p>
+<ul>
+<li>前台广播超时时间为10秒</li>
+<li>后台广播超时时间为60秒</li>
+</ul>
+<p>一旦出现超时，就会出现我们熟知的 ANR。</p>
+<h2 id="应用内广播"><a href="#应用内广播" class="headerlink" title="应用内广播"></a>应用内广播</h2><p>App应用内广播可以理解成一种局部广播的形式，广播的发送者和接收者都同属于一个App。实际的业务需求中，App应用内广播确实可能需要用到。同时，之所以使用应用内广播时，而不是使用全局广播的形式，更多的考虑到的是Android广播机制中的安全性问题以及效率问题。<br>确切地说，应该叫进程内广播，它的发送和接收只能在同一个进程内进行。如果一个应用是多进程的应用，那么进程间也是无法使用的。<br>相比于全局广播，App应用内广播优势体现在：</p>
+<ol>
+<li>安全性更高；</li>
+<li>更加高效。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//注册应用内广播接收器</span><br><span class="line">localBroadcastManager = LocalBroadcastManager.getInstance(this);</span><br><span class="line">localBroadcastManager.registerReceiver(mBroadcastReceiver, intentFilter);</span><br><span class="line">        </span><br><span class="line">//取消注册应用内广播接收器</span><br><span class="line">localBroadcastManager.unregisterReceiver(mBroadcastReceiver);</span><br><span class="line"></span><br><span class="line">//发送应用内广播</span><br><span class="line">localBroadcastManager.sendBroadcast(intent);</span><br></pre></td></tr></table></figure>
+<h2 id="sendBroadcastAsUser"><a href="#sendBroadcastAsUser" class="headerlink" title="sendBroadcastAsUser"></a>sendBroadcastAsUser</h2><p>android 4.2 之后加入了多用户:</p>
+<ul>
+<li>UserHandle.ALL</li>
+<li>UserHandle.CURRENT</li>
+<li>UserHandle.CURRENT_OR_SELF</li>
+<li>UserHandle.OWNER</li>
+</ul>
+<p>这就造就了另外一个发送函数 <code>sendBroadcastAsUser()</code> 用来区分不同的用户。</p>
+<h2 id="FLAG-INCLUDE-STOPPED-PACKAGES-和-FLAG-EXCLUDE-STOPPED-PACKAGES"><a href="#FLAG-INCLUDE-STOPPED-PACKAGES-和-FLAG-EXCLUDE-STOPPED-PACKAGES" class="headerlink" title="FLAG_INCLUDE_STOPPED_PACKAGES 和 FLAG_EXCLUDE_STOPPED_PACKAGES"></a>FLAG_INCLUDE_STOPPED_PACKAGES 和 FLAG_EXCLUDE_STOPPED_PACKAGES</h2><p>从Android 3.1开始，给Intent定义了两个新的Flag，分别为FLAG_INCLUDE_STOPPED_PACKAGES和FLAG_EXCLUDE_STOPPED_PACKAGES，用来控制Intent是否要对处于停止状态的App起作用，顾名思义：</p>
+<ul>
+<li>FLAG_INCLUDE_STOPPED_PACKAGES：表示包含未启动的App</li>
+<li>FLAG_EXCLUDE_STOPPED_PACKAGES：表示不包含未启动的App</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = new Intent(&quot;android.hq.action.TEST&quot;);</span><br><span class="line">intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);</span><br><span class="line">intent.putExtra(&quot;test&quot;, &quot;TEST&quot;);</span><br><span class="line">sendBroadcast(intent);</span><br></pre></td></tr></table></figure>
+<p>值得注意的是，Android 3.1开始，系统向所有Intent的广播添加了 <code>FLAG_EXCLUDE_STOPPED_PACKAGES</code> 标志。这样做是为了防止广播无意或不必要地开启未启动App的后台服务。如果要强制调起未启动的App，后台服务或应用程序可以通过向广播Intent添加 <code>FLAG_INCLUDE_STOPPED_PACKAGES</code> 标志来唤醒。<br>还需要注意的是，在一些手机厂商的ROM中需要设置允许应用后台允许这个设置才能生效。</p>
+<h2 id="广播安全和限制"><a href="#广播安全和限制" class="headerlink" title="广播安全和限制"></a>广播安全和限制</h2><p>在不加限制的情况下，只要BroadcaseReceiver指定的action和sendBroadcast action 一致就可以接收广播。但是在有些场景情况下，我们不允许所有的应用都可以接收广播。那么我们可以采用下的方法。</p>
+<h3 id="局部广播"><a href="#局部广播" class="headerlink" title="局部广播"></a>局部广播</h3><p>上面已经介绍。<br>优点：</p>
+<ul>
+<li>数据在进程内传播，不用担心数据泄漏</li>
+<li>相比全局广播，更加高效</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>只能动态注册和取消</li>
+<li>无法满足跨进程传播的场景</li>
+</ul>
+<h3 id="指定某个应用允许接收"><a href="#指定某个应用允许接收" class="headerlink" title="指定某个应用允许接收"></a>指定某个应用允许接收</h3><p>可以通过 intent 指定包名 Intent.setPackage 设置广播仅对相同包名的有效。</p>
+<p>优点：</p>
+<ul>
+<li>支持跨进程</li>
+<li>接收器可以静态注册也可以动态注册</li>
+<li>指定包名的应用才能接收到数据，安全性高</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>只能满足一个应用接收场景，不能够同时指定多个</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = new Intent();</span><br><span class="line">intent.setPackage(&quot;包名&quot;);</span><br><span class="line">intent.setAction(&quot;Action&quot;);</span><br><span class="line">sendBroadcast(intent);</span><br></pre></td></tr></table></figure>
+<h3 id="指定某个接收器"><a href="#指定某个接收器" class="headerlink" title="指定某个接收器"></a>指定某个接收器</h3><p>优点：</p>
+<ul>
+<li>可以指定到具体某个接收器，安全性更高</li>
+<li>接收器可以动态注册，也可以静态注册</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>只能指定一个接收器，局限性较大</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = new Intent();</span><br><span class="line">intent. setComponent(new ComponentName(&quot;包名&quot;, &quot;Receiver类名&quot;));</span><br><span class="line">intent.setAction(&quot;Action&quot;);</span><br><span class="line">sendBroadcast(intent);</span><br></pre></td></tr></table></figure>
+<h3 id="指定接收权限"><a href="#指定接收权限" class="headerlink" title="指定接收权限"></a>指定接收权限</h3><p>通过 <code>sendBroadcast(Intent intent, String receiverPermission)</code>、<code>sendBroadcastMultiplePermissions(Intent intent,String[] receiverPermissions)</code> 发送的广播，它的接收者必须具备指定的权限才可以接收。</p>
+<h2 id="Android-O-上对广播的限制"><a href="#Android-O-上对广播的限制" class="headerlink" title="Android O 上对广播的限制"></a>Android O 上对广播的限制</h2><h3 id="限制内容"><a href="#限制内容" class="headerlink" title="限制内容"></a>限制内容</h3><p><a href="https://developer.android.google.cn/guide/components/broadcast-exceptions" target="_blank" rel="noopener">Android 官网对广播限制的解释</a><br>先来了解一下显式广播和隐式广播。<br>显式广播就是通过显式 Intent 发送的广播。<br>隐式广播是通过隐式 Intent 发送的广播。<br>在  Android O 以后，除了有限的例外之外（比如开机广播），应用无法使用清单注册（静态注册）的方式来接收隐式广播。但对于这些隐式广播，可以通过运行时注册（动态注册）的方式注册。对于显式广播，则依然可以通过清单注册（静态注册）的方式监听。<br>为什么要做这个限制呢？对于一个隐式广播的接收，手机中可能存在很多这样的App都静态注册了接收，如果发出了这样一个广播，不管这些应用是否在运行，都会被唤醒并执行任务。这样会有耗电等问题出现。<br>因为动态注册的广播只有在动态注册的代码执行了之后才会注册，这样就保证了只有活跃的应用才会收到广播。避免了前面提到的拉起一大片应用的问题。<br>那么如果我们注册了静态广播接收器，在进程已经启动但是仍然在后台的情况下是否可以收到广播隐式呢？答案是不行的，系统会提示下面的日志：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BroadcastQueue: Background execution not allowed</span><br></pre></td></tr></table></figure>
+<p>如果在进程已经启动后注册了动态广播接收器，那么虽然进程在后台，仍然是可以接收到隐式广播的。</p>
+<p><strong>注意</strong>上面说的显式广播可以唤起静态广播接收器的情况，在有些手机上需要设置应用“允许后台运行”，否则也拉不起进程。因为这些手机处于功耗考虑，禁止了进程间的互相通信，会把这些应用间的通信拦截掉。</p>
+<p>系统对下面的广播做了例外，允许静态注册的广播接收隐式广播：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line">// Android 8.0 上不限制的隐式广播</span><br><span class="line">/**</span><br><span class="line">开机广播</span><br><span class="line"> Intent.ACTION_LOCKED_BOOT_COMPLETED</span><br><span class="line"> Intent.ACTION_BOOT_COMPLETED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：这些广播只在首次启动时发送一次，并且许多应用都需要接收此广播以便进行作业、闹铃等事项的安排。&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">增删用户</span><br><span class="line">Intent.ACTION_USER_INITIALIZE</span><br><span class="line">&quot;android.intent.action.USER_ADDED&quot;</span><br><span class="line">&quot;android.intent.action.USER_REMOVED&quot;</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：这些广播只有拥有特定系统权限的app才能监听，因此大多数正常应用都无法接收它们。&quot;</span><br><span class="line">    </span><br><span class="line">/**</span><br><span class="line">时区、ALARM变化</span><br><span class="line">&quot;android.intent.action.TIME_SET&quot;</span><br><span class="line">Intent.ACTION_TIMEZONE_CHANGED</span><br><span class="line">AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：时钟应用可能需要接收这些广播，以便在时间或时区变化时更新闹铃&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">语言区域变化</span><br><span class="line">Intent.ACTION_LOCALE_CHANGED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：只在语言区域发生变化时发送，并不频繁。 应用可能需要在语言区域发生变化时更新其数据。&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">Usb相关</span><br><span class="line">UsbManager.ACTION_USB_ACCESSORY_ATTACHED</span><br><span class="line">UsbManager.ACTION_USB_ACCESSORY_DETACHED</span><br><span class="line">UsbManager.ACTION_USB_DEVICE_ATTACHED</span><br><span class="line">UsbManager.ACTION_USB_DEVICE_DETACHED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：如果应用需要了解这些 USB 相关事件的信息，目前尚未找到能够替代注册广播的可行方案&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">蓝牙状态相关</span><br><span class="line">BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED</span><br><span class="line">BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED</span><br><span class="line">BluetoothDevice.ACTION_ACL_CONNECTED</span><br><span class="line">BluetoothDevice.ACTION_ACL_DISCONNECTED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：应用接收这些蓝牙事件的广播时不太可能会影响用户体验&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">Telephony相关</span><br><span class="line">CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED</span><br><span class="line">TelephonyIntents.ACTION_*_SUBSCRIPTION_CHANGED</span><br><span class="line">TelephonyIntents.SECRET_CODE_ACTION</span><br><span class="line">TelephonyManager.ACTION_PHONE_STATE_CHANGED</span><br><span class="line">TelecomManager.ACTION_PHONE_ACCOUNT_REGISTERED</span><br><span class="line">TelecomManager.ACTION_PHONE_ACCOUNT_UNREGISTERED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：设备制造商 (OEM) 电话应用可能需要接收这些广播&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">账号相关</span><br><span class="line">AccountManager.LOGIN_ACCOUNTS_CHANGED_ACTION</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：一些应用需要了解登录帐号的变化，以便为新帐号和变化的帐号设置计划操作&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">应用数据清除</span><br><span class="line">Intent.ACTION_PACKAGE_DATA_CLEARED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：只在用户显式地从 Settings 清除其数据时发送，因此广播接收器不太可能严重影响用户体验&quot;</span><br><span class="line">    </span><br><span class="line">/**</span><br><span class="line">软件包被移除</span><br><span class="line">Intent.ACTION_PACKAGE_FULLY_REMOVED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：一些应用可能需要在另一软件包被移除时更新其存储的数据；对于这些应用，尚未找到能够替代注册此广播的可行方案&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">外拨电话</span><br><span class="line">Intent.ACTION_NEW_OUTGOING_CALL</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：执行操作来响应用户打电话行为的应用需要接收此广播&quot;</span><br><span class="line">    </span><br><span class="line">/**</span><br><span class="line">当设备所有者被设置、改变或清除时发出</span><br><span class="line">DevicePolicyManager.ACTION_DEVICE_OWNER_CHANGED</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：此广播发送得不是很频繁；一些应用需要接收它，以便知晓设备的安全状态发生了变化&quot;</span><br><span class="line">    </span><br><span class="line">/**</span><br><span class="line">日历相关</span><br><span class="line">CalendarContract.ACTION_EVENT_REMINDER</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：由日历provider发送，用于向日历应用发布事件提醒。因为日历provider不清楚日历应用是什么，所以此广播必须是隐式广播。&quot;</span><br><span class="line">    </span><br><span class="line">/**</span><br><span class="line">安装或移除存储相关广播</span><br><span class="line">Intent.ACTION_MEDIA_MOUNTED</span><br><span class="line">Intent.ACTION_MEDIA_CHECKING</span><br><span class="line">Intent.ACTION_MEDIA_EJECT</span><br><span class="line">Intent.ACTION_MEDIA_UNMOUNTED</span><br><span class="line">Intent.ACTION_MEDIA_UNMOUNTABLE</span><br><span class="line">Intent.ACTION_MEDIA_REMOVED</span><br><span class="line">Intent.ACTION_MEDIA_BAD_REMOVAL</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：这些广播是作为用户与设备进行物理交互的结果：安装或移除存储卷或当启动初始化时（当可用卷被装载）的一部分发送的，因此它们不是很常见，并且通常是在用户的掌控下&quot;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">短信、WAP PUSH相关</span><br><span class="line">Telephony.Sms.Intents.SMS_RECEIVED_ACTION</span><br><span class="line">Telephony.Sms.Intents.WAP_PUSH_RECEIVED_ACTION</span><br><span class="line"></span><br><span class="line">注意：需要申请以下权限才可以接收</span><br><span class="line">&quot;android.permission.RECEIVE_SMS&quot;</span><br><span class="line">&quot;android.permission.RECEIVE_WAP_PUSH&quot;</span><br><span class="line">*/</span><br><span class="line">&quot;保留原因：SMS短信应用需要接收这些广播&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="如何应对"><a href="#如何应对" class="headerlink" title="如何应对"></a>如何应对</h3><p>对于应对这些受限制的广播来满足我们各种奇葩的需求呢？</p>
+<p> 1.将静态注册修改为动态注册<br> 2.将隐式广播改为显式广播<br> 3.通过queryBroadcastReceivers检索接收intent的接收者，然后通过显式广播一一发送。<br> 4.这里的Android O并不是运行的Android版本，而是在AndroidManifest文件中定义的targetSdkVersion的值，因此如果我们不强依赖Android O，也可以把项目文件中的targetSdkVersion设置为25及以下的版本号。<br> 5.如果必须以一对多的方式发送广播，并且接收者无法动态注册的话，可以给Intent增加一个FLAG_RECEIVER_INCLUDE_BACKGROUND的Flag，不过这个标志位在源码中被hide掉了，直接用他的属性值，这样也是有效的，intent.addFlags(0x01000000)，谨慎使用，如果Android后面版本策略变更，这个也许会失效。</p>
+<h2 id="一些广播"><a href="#一些广播" class="headerlink" title="一些广播"></a>一些广播</h2><ul>
+<li>android.intent.action.PACKAGE_ADDED、android.intent.action.PACKAGE_REPLACED、android.intent.action.PACKAGE_CHANGED、android.intent.action.PACKAGE_REMOVED、android.intent.action.PACKAGE_FULLY_REMOVED：当有应用被安装、更新、改变、卸载时系统会发出这些广播。这些广播都是隐式广播，符合Android O的限制条件。只有动态注册的应用启动后才能收到。</li>
+<li>android.intent.action.MY_PACKAGE_REPLACED：本应用更新时系统会发出这个广播，这个是显式广播，静态注册也可以把自身拉起并收到广播。</li>
+<li>Intent.ACTION_LOCKED_BOOT_COMPLETED 和 Intent.ACTION_BOOT_COMPLETED：<a href="https://www.jianshu.com/p/6198568d56a7" target="_blank" rel="noopener">https://www.jianshu.com/p/6198568d56a7</a></li>
+</ul>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在《阿里巴巴Android开发手册》中对广播的使用提到：</p>
+<p>1.避免在 <code>BroadcastReceiver#onReceive()</code> 中执行耗时操作，如果有耗时工作， 应该创建 <code>IntentService</code> 完成，而不应该在 <code>BroadcastReceiver</code> 内创建子线程去做。<br>说明:<br>由于该方法是在主线程执行，如果执行耗时操作会导致 UI不流畅。可以使用 <code>IntentService</code> 、 创 建 <code>HandlerThread</code> 或 者 调 用 <code>Context#registerReceiver(BroadcastReceiver, IntentFilter, String, Handler)</code> 方法等方式，在其他 Wroker 线程执行 <code>onReceive</code> 方法。<code>BroadcastReceiver#onReceive()</code> 方法耗时超过 10 秒钟，可能会被系统杀死。</p>
+<p>2.避免使用隐式 <code>Intent</code> 广播敏感信息，信息可能被其他注册了对应 <code>BroadcastReceiver 的 App</code> 接收。<br>说明:<br>通过 <code>Context#sendBroadcast()</code> 发送的隐式广播会被所有感兴趣的 receiver 接收，恶 意应用注册监听该广播的 receiver 可能会获取到 Intent 中传递的敏感信息，并进行其他危险操作。如果发送的广播为使用<code>Context#sendOrderedBroadcast()</code> 方法发送的有序广播，优先级较高的恶意 receiver 可能直接丢弃该广播，造成服务不可用，或者向广播结果塞入恶意数据。<br>如果广播仅限于应用内，则可以使用<code>LocalBroadcastManager#sendBroadcast()</code> 实现，避免敏感信息外泄和 Intent 拦截的风险。</p>
+<!--  
+https://www.cnblogs.com/lwbqqyumidi/p/4168017.html
+-->
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/08/Android 组件/android-compnent-activitygroup/" rel="next" title="Android 组件 --  ActivityGroup 简介">
+                <i class="fa fa-chevron-left"></i> Android 组件 --  ActivityGroup 简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/01/16/Android 图形系统/android-graphic-system-canvas-sample/" rel="prev" title="Android 图形系统 -- Canvas使用">
+                Android 图形系统 -- Canvas使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#广播的类型"><span class="nav-number">1.</span> <span class="nav-text">广播的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通广播"><span class="nav-number">1.1.</span> <span class="nav-text">普通广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序广播"><span class="nav-number">1.2.</span> <span class="nav-text">有序广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#粘性广播"><span class="nav-number">1.3.</span> <span class="nav-text">粘性广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前台广播和后台广播"><span class="nav-number">1.4.</span> <span class="nav-text">前台广播和后台广播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用内广播"><span class="nav-number">2.</span> <span class="nav-text">应用内广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sendBroadcastAsUser"><span class="nav-number">3.</span> <span class="nav-text">sendBroadcastAsUser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FLAG-INCLUDE-STOPPED-PACKAGES-和-FLAG-EXCLUDE-STOPPED-PACKAGES"><span class="nav-number">4.</span> <span class="nav-text">FLAG_INCLUDE_STOPPED_PACKAGES 和 FLAG_EXCLUDE_STOPPED_PACKAGES</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播安全和限制"><span class="nav-number">5.</span> <span class="nav-text">广播安全和限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局部广播"><span class="nav-number">5.1.</span> <span class="nav-text">局部广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定某个应用允许接收"><span class="nav-number">5.2.</span> <span class="nav-text">指定某个应用允许接收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定某个接收器"><span class="nav-number">5.3.</span> <span class="nav-text">指定某个接收器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指定接收权限"><span class="nav-number">5.4.</span> <span class="nav-text">指定接收权限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-O-上对广播的限制"><span class="nav-number">6.</span> <span class="nav-text">Android O 上对广播的限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#限制内容"><span class="nav-number">6.1.</span> <span class="nav-text">限制内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何应对"><span class="nav-number">6.2.</span> <span class="nav-text">如何应对</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些广播"><span class="nav-number">7.</span> <span class="nav-text">一些广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">8.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

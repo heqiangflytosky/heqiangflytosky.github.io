@@ -1,0 +1,926 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="开发工具,Charles,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍 Charles 的使用">
+<meta name="keywords" content="开发工具,Charles">
+<meta property="og:type" content="article">
+<meta property="og:title" content="抓包工具 Charles 的使用">
+<meta property="og:url" content="http://yoursite.com/2019/11/02/开发工具/development-tool-charles/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 Charles 的使用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-charles/1.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-charles/2.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-charles/3.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-charles/4.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-charles/5.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-charles/6.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-charles/7.png">
+<meta property="og:image" content="http://yoursite.com/images/development-tool-charles/8.png">
+<meta property="og:updated_time" content="2020-11-18T10:06:13.205Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="抓包工具 Charles 的使用">
+<meta name="twitter:description" content="介绍 Charles 的使用">
+<meta name="twitter:image" content="http://yoursite.com/images/development-tool-charles/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/02/开发工具/development-tool-charles/">
+
+
+
+
+
+  <title> 抓包工具 Charles 的使用 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/02/开发工具/development-tool-charles/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                抓包工具 Charles 的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-02T10:00:00+08:00">
+                2019-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开发工具/" itemprop="url" rel="index">
+                    <span itemprop="name">开发工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2019/11/02/开发工具/development-tool-charles/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/11/02/开发工具/development-tool-charles/" class="leancloud_visitors" data-flag-title="抓包工具 Charles 的使用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 Charles 的使用
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Charles是一款代理服务器，通过成为电脑或者浏览器的代理，然后截取请求和请求结果达到分析抓包的目的。<br>本文就介绍一下在 Mac 上面安装和配置 Charles 的方法，以及在 Android 手机上对应的配置。<br>并且介绍了在 Android 7 以上手机上默认无法抓包的解决办法。<br>本文是基于 Charles 4.2.5 的版本进行介绍。</p>
+<h2 id="安装和破解"><a href="#安装和破解" class="headerlink" title="安装和破解"></a>安装和破解</h2><p>这部分可以搜索网络上的资料，这里就不再介绍。</p>
+<h2 id="Mac-配置"><a href="#Mac-配置" class="headerlink" title="Mac 配置"></a>Mac 配置</h2><h3 id="配置-PC-端根证书"><a href="#配置-PC-端根证书" class="headerlink" title="配置 PC 端根证书"></a>配置 PC 端根证书</h3><p>Help -&gt; SSL Proxying -&gt; Install Charles Root Certificate，安装后会弹出钥匙串访问界面，如图：</p>
+<p><img src="/images/development-tool-charles/1.png" width="438" height="298"></p>
+<p>双击 Charles 证书，弹出证书详细界面，点击『信任』选项，然后将所有设置为始终信任，如图:</p>
+<p><img src="/images/development-tool-charles/2.png" width="331" height="228"></p>
+<h3 id="配置手机端根证书"><a href="#配置手机端根证书" class="headerlink" title="配置手机端根证书"></a>配置手机端根证书</h3><p>Help -&gt; SSL Proxying -&gt; Install Charles Root Certificate On a Mobile Device or a Remote Browser，弹出如下界面：</p>
+<p><img src="/images/development-tool-charles/3.png" width="519" height="106"></p>
+<p>然后根据提示在手机端设置Http代理，下面以魅族手机为例来介绍一下设置方法：</p>
+<p>设置 -&gt; 无线网络 -&gt; 点击当前连接网络后面的高级选项 -&gt; 代理设置界面 -&gt; 手动设置代理，然后在代理设置界面输入上对话框显示的服务器地址和端口号。<br>输入后点击保存，Charles 会弹出下面对话框：</p>
+<p><img src="/images/development-tool-charles/4.png" width="520" height="106"></p>
+<p>然后点击 Allow。<br>然后打开手机浏览器，访问chls.pro/ssl，下载证书并安装(证书名任意)。下面介绍安装方法：<br>设置 -&gt; 指纹、面部和安全 -&gt; 设备管理与凭证 -&gt; 从存储设备安装，打开刚才下载的 charles-proxy-ssl-proxying-certificate.pem，随意为证书命名后点击确定。</p>
+<p><img src="/images/development-tool-charles/5.png" width="270" height="558"></p>
+<p>魅族手机还要求必须设置安全锁屏功能才能使用凭据存储。<br>手机端配置完毕。点击 Charles 上面 刚才弹出的 OK 按钮，就可以使用了。</p>
+<h3 id="配置抓取规则"><a href="#配置抓取规则" class="headerlink" title="配置抓取规则"></a>配置抓取规则</h3><p>进入Charles的SSL代理设置，Proxy -&gt; SSL Proxying Settigs…，</p>
+<p><img src="/images/development-tool-charles/6.png" width="398" height="296"></p>
+<p>可以点击 Add 添加规则：</p>
+<p><img src="/images/development-tool-charles/7.png" width="293" height="123"></p>
+<p>然后打开手机，开始网络相关请求，就可以在 Charles 看到网络请求的数据了。</p>
+<h2 id="解决-Android-7-0-以上无法抓包问题"><a href="#解决-Android-7-0-以上无法抓包问题" class="headerlink" title="解决 Android 7.0 以上无法抓包问题"></a>解决 Android 7.0 以上无法抓包问题</h2><p>上面配置好以后，我们开始网络请求，在 Android 7以上手机上可能会请求失败，原因是因为从 Android 7.0 开始，默认的网络安全性配置修改了，具体请阅读<a href="https://developer.android.com/training/articles/security-config" target="_blank" rel="noopener">官方文档网络安全性配置</a>。<br>在 Charles 上看到：</p>
+<p><img src="/images/development-tool-charles/8.png" width="613" height="76"></p>
+<p>添加 <code>res/xmlnetwork_security_config.xml</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;network-security-config&gt;</span><br><span class="line">    &lt;base-config cleartextTrafficPermitted=&quot;true&quot;&gt;</span><br><span class="line">        &lt;trust-anchors&gt;</span><br><span class="line">            &lt;certificates src=&quot;system&quot; /&gt;</span><br><span class="line">            &lt;certificates src=&quot;user&quot; /&gt;</span><br><span class="line">        &lt;/trust-anchors&gt;</span><br><span class="line">    &lt;/base-config&gt;</span><br><span class="line">&lt;/network-security-config&gt;</span><br></pre></td></tr></table></figure>
+<p>在 AndroidManifest.xml 中配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;application</span><br><span class="line">    ......</span><br><span class="line">    android:networkSecurityConfig=&quot;@xml/network_security_config&quot;</span><br><span class="line">    ......&gt;</span><br></pre></td></tr></table></figure>
+<p>然后就可以用 Charles 代理进行正常网络请求和抓包了。</p>
+<p>这种解决方式有一个安全风险：Release版的应用会有被他人抓包的风险。<br>我们可以使用只在debug模式下允许抓包来规避这个风险：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;network-security-config&gt;</span><br><span class="line">    &lt;!-- 支持 Android 7.0 以上调试时，信任 Charles 和 Fiddler 等用户信任的证书 --&gt;</span><br><span class="line">    &lt;debug-overrides&gt;</span><br><span class="line">        &lt;trust-anchors&gt;</span><br><span class="line">            &lt;certificates src=&quot;system&quot; /&gt;</span><br><span class="line">            &lt;certificates src=&quot;user&quot; /&gt;</span><br><span class="line">        &lt;/trust-anchors&gt;</span><br><span class="line">    &lt;/debug-overrides&gt;</span><br><span class="line">&lt;/network-security-config&gt;</span><br></pre></td></tr></table></figure>
+<p>在 Android 9.0（API 28）以上允许部分 http 请求，最佳的解决方式肯定是全部使用 https 请求，安全性更高，如果有些请求或测试环境下还是需要使用 http 请求，需要在网络安全性配置添加白名单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;network-security-config&gt;</span><br><span class="line">    &lt;!-- 支持 Android 9.0 以上使用部分域名时使用 http --&gt;</span><br><span class="line">    &lt;domain-config cleartextTrafficPermitted=&quot;true&quot;&gt;</span><br><span class="line">        &lt;domain includeSubdomains=&quot;true&quot;&gt;sample.domain&lt;/domain&gt;</span><br><span class="line">    &lt;/domain-config&gt;</span><br><span class="line">    &lt;!-- 支持 Android 7.0 以上调试时，信任 Charles 和 Fiddler 等用户信任的证书 --&gt;</span><br><span class="line">    &lt;debug-overrides&gt;</span><br><span class="line">        &lt;trust-anchors&gt;</span><br><span class="line">            &lt;certificates src=&quot;system&quot; /&gt;</span><br><span class="line">            &lt;certificates src=&quot;user&quot; /&gt;</span><br><span class="line">        &lt;/trust-anchors&gt;</span><br><span class="line">    &lt;/debug-overrides&gt;</span><br><span class="line">&lt;/network-security-config&gt;</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;network-security-config&gt;</span><br><span class="line">    &lt;base-config cleartextTrafficPermitted=&quot;true&quot;&gt;</span><br><span class="line">    &lt;/base-config&gt;</span><br><span class="line">    &lt;debug-overrides&gt;</span><br><span class="line">        &lt;trust-anchors&gt;</span><br><span class="line">            &lt;certificates src=&quot;system&quot; /&gt;</span><br><span class="line">            &lt;certificates src=&quot;user&quot; /&gt;</span><br><span class="line">        &lt;/trust-anchors&gt;</span><br><span class="line">    &lt;/debug-overrides&gt;</span><br><span class="line">&lt;/network-security-config&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><ol>
+<li><p>配置好后无法打开APP<br>在我们抓取时碰到个别APP在配置代理后无法打开，这个主要是因为该APP做了防止抓取处理，比如校验https的证书是否合法等，这种解决方法可以通过反编译APP，查看源码解决，难度较大。</p>
+</li>
+<li><p>抓取到的内容为乱码<br>有的APP为了防止抓取，在返回的内容上做了层加密，所以从Charles上看到的内容是乱码。这种情况下也只能反编译APP,研究其加密解密算法进行解密。</p>
+</li>
+</ol>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="https://developer.android.com/training/articles/security-config" target="_blank" rel="noopener">https://developer.android.com/training/articles/security-config</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/开发工具/" rel="tag"># 开发工具</a>
+          
+            <a href="/tags/Charles/" rel="tag"># Charles</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/15/Android开源项目/open-source-okhttp-connect-pool/" rel="next" title="OkHttp 源码分析 -- 连接池">
+                <i class="fa fa-chevron-left"></i> OkHttp 源码分析 -- 连接池
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/02/Kotlin/kotlin-brief-introduction/" rel="prev" title="Kotlin -- 简介">
+                Kotlin -- 简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装和破解"><span class="nav-number">2.</span> <span class="nav-text">安装和破解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mac-配置"><span class="nav-number">3.</span> <span class="nav-text">Mac 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-PC-端根证书"><span class="nav-number">3.1.</span> <span class="nav-text">配置 PC 端根证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置手机端根证书"><span class="nav-number">3.2.</span> <span class="nav-text">配置手机端根证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置抓取规则"><span class="nav-number">3.3.</span> <span class="nav-text">配置抓取规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决-Android-7-0-以上无法抓包问题"><span class="nav-number">4.</span> <span class="nav-text">解决 Android 7.0 以上无法抓包问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题"><span class="nav-number">5.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

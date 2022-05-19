@@ -1,0 +1,911 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="String,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="深入理解 String">
+<meta name="keywords" content="String">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 基础 -- 深入理解 String">
+<meta property="og:url" content="http://yoursite.com/2014/01/20/Java/java-basic-knowledge-about-string/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="深入理解 String">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-17T07:21:26.019Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 基础 -- 深入理解 String">
+<meta name="twitter:description" content="深入理解 String">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/01/20/Java/java-basic-knowledge-about-string/">
+
+
+
+
+
+  <title> Java 基础 -- 深入理解 String | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/01/20/Java/java-basic-knowledge-about-string/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java 基础 -- 深入理解 String
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-01-20T10:00:00+08:00">
+                2014-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2014/01/20/Java/java-basic-knowledge-about-string/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2014/01/20/Java/java-basic-knowledge-about-string/" class="leancloud_visitors" data-flag-title="Java 基础 -- 深入理解 String">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  深入理解 String
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>String</code> 类是我们在编程过程中经常用到的类，也是面试过程中经常涉及到的类。本文就我们平时遇到的关于 <code>String</code> 类的知识点做个归纳整理。<br><a href="https://code.csdn.net/hty1053240123/jdk-source/tree/master/java/lang/String.java" target="_blank" rel="noopener">String 源码</a></p>
+<h2 id="final-类型"><a href="#final-类型" class="headerlink" title="final 类型"></a>final 类型</h2><p>通过查看 <code>String</code> 源码我们可以看到，该类是 final 类型的，也即意味着 <code>String</code> 类不能被继承。</p>
+<h2 id="不可变性"><a href="#不可变性" class="headerlink" title="不可变性"></a>不可变性</h2><p><code>String</code> 对象一旦被创建就是固定不变的了，对 <code>String</code> 对象的任何改变都不影响到原对象。<br><code>String</code> 对象是使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/** The value is used for character storage. */</span><br><span class="line">private final char value[];</span><br></pre></td></tr></table></figure>
+<p>来存储字符串的，而 <code>value[]</code> 是 <code>final</code> 类型的，一旦赋值后是无法改变的。我们通过查看源码可以发现，<code>String</code> 的 <code>substring</code>、<code>concat</code>、<code>replace</code> 等操作都不是在原有的字符串上进行的，而是重新生成了一个新的字符串对象。也就是说进行这些操作后，最原始的字符串并没有被改变。</p>
+<h2 id="字符串常量池"><a href="#字符串常量池" class="headerlink" title="字符串常量池"></a>字符串常量池</h2><p>JVM 为了减少字符串对象的重复创建,其维护了一个特殊的内存,这段内存被成为字符串常量池。<br>可以通过下面的方法使用到常量池：</p>
+<ul>
+<li>当使用双引号声明 <code>String</code> 对象时，JVM 首先会对这个字面量进行检查，如果字符串常量池中存在相同内容的字符串对象的引用，则将这个引用返回，否则新的字符串对象被创建，然后将这个引用放入字符串常量池，并返回该引用。</li>
+<li>当使用 <code>String.intern()</code> 方法时，会从字符串常量池中查询当前字符串是否存在，如果存在， 就会直接返回当前字符串。如果常量池中没有此字符串， 会将此字符串放入常量池中后，再返回该常量池中的字符串。</li>
+</ul>
+<p>在 Jdk6 以及以前的版本中，字符串的常量池是放在堆的Perm区的，Perm区是一个类静态的区域，主要存储一些加载类的信息，常量池，方法片段等内容，默认大小只有4m，一旦常量池中大量使用 <code>intern</code>  是会直接产生 <code>java.lang.OutOfMemoryError:PermGen space</code> 错误的。<br>在 jdk7 的版本中，字符串常量池已经从 Perm 区移到正常的 Java Heap 区域了。和普通的对象在同一个存储区域中。<br>下面来看哥例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = &quot;abc&quot;;</span><br><span class="line">String str2 = &quot;abc&quot;;</span><br><span class="line">System.out.println(str1 == str2);</span><br></pre></td></tr></table></figure>
+<p>结果是打印了 true。<br>str1 和 str2 指向了同一个字符串常量池中的对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = new String(&quot;abc&quot;);</span><br><span class="line">String str2 = new String(&quot;abc&quot;);</span><br><span class="line">System.out.println(str1 == str2);</span><br></pre></td></tr></table></figure>
+<p>上面的结果时打印了 false。<br>当使用 new 操作符时，总是会创建新的字符串对象。</p>
+<h2 id="号操作符"><a href="#号操作符" class="headerlink" title="+ 号操作符"></a>+ 号操作符</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = &quot;abcdef&quot;;</span><br><span class="line">String str2 = &quot;abc&quot; + &quot;def&quot;;</span><br><span class="line">System.out.println(str1 == str2);</span><br></pre></td></tr></table></figure>
+<p>结果是打印了 true。<br>为什么是这个结果呢？<br>我们先通过 <code>javap -c Test.class</code> 来看一下字节码信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Code:</span><br><span class="line">   0: ldc           #2                  // String abcdef</span><br><span class="line">   2: astore_1</span><br><span class="line">   3: ldc           #2                  // String abcdef</span><br><span class="line">   5: astore_2</span><br><span class="line">   6: getstatic     #3                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">   9: aload_1</span><br><span class="line">  10: aload_2</span><br></pre></td></tr></table></figure>
+<p>可以看到 str2 在编译期优化成了 <code>str2 = &quot;abcdef&quot;</code>。因此和 str1 是字符串常量池中的同一对象。<br>再来看下面一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str1 = &quot;abcdef&quot;;</span><br><span class="line">String abc = &quot;abc&quot;;</span><br><span class="line">String def = &quot;def&quot;;</span><br><span class="line">String str2 = abc + def;</span><br><span class="line">System.out.println(str1 == str2);</span><br></pre></td></tr></table></figure>
+<p>结果是打印了 false。<br>可见，字符串对象的相加和字符串常量的相加是不一样的。<br>如果想输出true，把abc和def变量用final修饰就行了，编译器编译时会执行宏替换。<br>先来看一下字节码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Code:</span><br><span class="line">   0: ldc           #2                  // String abcdef</span><br><span class="line">   2: astore_1</span><br><span class="line">   3: ldc           #3                  // String abc</span><br><span class="line">   5: astore_2</span><br><span class="line">   6: ldc           #4                  // String def</span><br><span class="line">   8: astore_3</span><br><span class="line">   9: new           #5                  // class java/lang/StringBuilder</span><br><span class="line">  12: dup</span><br><span class="line">  13: invokespecial #6                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  16: aload_2</span><br><span class="line">  17: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  20: aload_3</span><br><span class="line">  21: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  24: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br></pre></td></tr></table></figure>
+<p>可见，字符串对象的相加实际上也是通过 <code>StringBuilder</code> 对象来完成的，首先以最左边的字符串为参数创建 <code>StringBuilder</code> 对象，然后依次对右边进行 <code>append</code> 操作，最后将 <code>StringBuilder</code> 对象通过 <code>toString()</code> 方法转换成 <code>String</code> 对象。<br><code>String str2 = abc + def</code> 其实等价于 <code>String str2 = new StringBuilder().append(abc).append(def).toString()</code>。<br>再来看下面的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String e = &quot;e&quot;;</span><br><span class="line">String str2 = &quot;abc&quot;+&quot;def&quot;+e+&quot;h&quot;+&quot;g&quot;;</span><br></pre></td></tr></table></figure>
+<p>对应字节码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Code:</span><br><span class="line">   0: ldc           #11                 // String e</span><br><span class="line">   2: astore_1</span><br><span class="line">   3: new           #5                  // class java/lang/StringBuilder</span><br><span class="line">   6: dup</span><br><span class="line">   7: invokespecial #6                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  10: ldc           #2                  // String abcdef</span><br><span class="line">  12: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  15: aload_1</span><br><span class="line">  16: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  19: ldc           #12                 // String hg</span><br><span class="line">  21: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  24: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br></pre></td></tr></table></figure>
+<p>这也是编译器进行优化的结果，等价于 <code>String str2 = new StringBuilder().append(&quot;abcdef&quot;).append(e).append(&quot;hg&quot;).toString()</code>。<br>每次这样的赋值操作，编译器都会创建一个 <code>StringBuilder</code> 对象来进行操作。<br>再来看下面一种情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s = null;</span><br><span class="line">for(int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">    s += &quot;a&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种情况下会创建几个 <code>StringBuilder</code> 对象呢？<br>看字节码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Code:</span><br><span class="line">   0: aconst_null</span><br><span class="line">   1: astore_1</span><br><span class="line">   2: iconst_0</span><br><span class="line">   3: istore_2</span><br><span class="line">   4: iload_2</span><br><span class="line">   5: iconst_5</span><br><span class="line">   6: if_icmpge     35</span><br><span class="line">   9: new           #5                  // class java/lang/StringBuilder</span><br><span class="line">  12: dup</span><br><span class="line">  13: invokespecial #6                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  16: aload_1</span><br><span class="line">  17: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  20: ldc           #11                 // String a</span><br><span class="line">  22: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  25: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br><span class="line">  28: astore_1</span><br><span class="line">  29: iinc          2, 1</span><br><span class="line">  32: goto          4</span><br><span class="line">  35: return</span><br></pre></td></tr></table></figure>
+<p>每做一次 + 就产生个 <code>StringBuilder</code> 对象，然后 <code>append</code> 后就扔掉。下次循环再到达时重新产生个 <code>StringBuilder</code> 对象，然后 <code>append</code> 字符串，如此循环直至结束。一共创建了 5 个<code>StringBuilder</code> 对象。<br>如果我们直接采用 <code>StringBuilder</code> 对象进行 <code>append</code> 的话，我们可以节省 4 次创建和销毁对象的时间。<br>所以对于在循环中要进行字符串连接的应用，一般都是用 <code>StringBuffer</code> 或 <code>StringBulider</code> 对象来进行 <code>append</code> 操作。 </p>
+<h2 id="intern-方法"><a href="#intern-方法" class="headerlink" title="intern() 方法"></a>intern() 方法</h2><p>前面也介绍过：当使用 <code>String.intern()</code> 方法时，会从字符串常量池中查询当前字符串是否存在，如果存在， 就会直接返回当前字符串。如果常量池中没有此字符串， 会将此字符串放入常量池中后，再返回该常量池中的字符串。<br>我们把前面的例子做一下修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str1 = new String(&quot;abc&quot;).intern();</span><br><span class="line">String str2 = new String(&quot;abc&quot;).intern();</span><br><span class="line">System.out.println(str1 == str2);</span><br></pre></td></tr></table></figure>
+<p>打印结果为：true。<br>他们返回的都是字符串常量池中对象的引用。<br>字符串常量池内部是用 Hashtable 来维护的，如果存放的字符串过多，就会造成Hash冲突严重，从而导致链表会很长，而链表长了后直接会造成的影响就是当调用 <code>String.intern</code> 时性能会大幅下降。因此，在一些数据量很大切易变的字符串场景中要谨慎使用，否则会适得其反。</p>
+<h2 id="StringBulider-和-StringBuffer"><a href="#StringBulider-和-StringBuffer" class="headerlink" title="StringBulider 和 StringBuffer"></a>StringBulider 和 StringBuffer</h2><p>他们的使用场景前面我们都由介绍，两者的方法基本相同。区别就是 <code>StringBulider</code> 是非线程安全的，<code>StringBuffer</code> 是线程安全的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/String/" rel="tag"># String</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/06/30/Java/java-basic-linkedhashmap/" rel="next" title="Java 基础 -- LinkedHashMap 的使用和原理">
+                <i class="fa fa-chevron-left"></i> Java 基础 -- LinkedHashMap 的使用和原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/01/22/Java/java-basic-stringbuilder-stringbuffer/" rel="prev" title="Java 基础 -- StringBuilder 和 StringBuffer">
+                Java 基础 -- StringBuilder 和 StringBuffer <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final-类型"><span class="nav-number">2.</span> <span class="nav-text">final 类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不可变性"><span class="nav-number">3.</span> <span class="nav-text">不可变性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串常量池"><span class="nav-number">4.</span> <span class="nav-text">字符串常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#号操作符"><span class="nav-number">5.</span> <span class="nav-text">+ 号操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#intern-方法"><span class="nav-number">6.</span> <span class="nav-text">intern() 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StringBulider-和-StringBuffer"><span class="nav-number">7.</span> <span class="nav-text">StringBulider 和 StringBuffer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

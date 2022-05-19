@@ -1,0 +1,1018 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="ContentProvider,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="本文介绍 ContentProvider 的基本使用">
+<meta name="keywords" content="ContentProvider">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 组件 --  ContentProvider 使用以及源码分析">
+<meta property="og:url" content="http://yoursite.com/2015/01/26/Android 组件/android-knowledge-about-contentprovider/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="本文介绍 ContentProvider 的基本使用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-12T08:10:22.853Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 组件 --  ContentProvider 使用以及源码分析">
+<meta name="twitter:description" content="本文介绍 ContentProvider 的基本使用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/01/26/Android 组件/android-knowledge-about-contentprovider/">
+
+
+
+
+
+  <title> Android 组件 --  ContentProvider 使用以及源码分析 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/26/Android 组件/android-knowledge-about-contentprovider/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 组件 --  ContentProvider 使用以及源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-01-26T10:00:00+08:00">
+                2015-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-组件/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/01/26/Android 组件/android-knowledge-about-contentprovider/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/01/26/Android 组件/android-knowledge-about-contentprovider/" class="leancloud_visitors" data-flag-title="Android 组件 --  ContentProvider 使用以及源码分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  本文介绍 ContentProvider 的基本使用
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/heqiangflytosky/AndroidDBDemo" target="_blank" rel="noopener">ContentProvider + SQLite 使用Demo GitHub 源码</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ContentProvider 内容提供者，作为 Android 的四大组件之一，我们会经常使用到。它是 Android 中提供的用于数据共享的组件，你可以跨进城、跨应用来访问这些数据。除了跨进程访问数据，ContentProvider 还可以进行跨进程方法调用。<br>ContentProvider 只是提供了一种跨加成访问数据的能力，和我们本地对于如何操作数据是没有联系的。<br>对于数据的存储，Android 提供了多种方式供我们选择：SQLite 数据库、Shared Preferences、文件存储等。如果在同一个应用中我们可以直接共享使用这些数据，但是如果时不同的应用需要共享这些数据，那么就需要借助于 ContentProvider。我们平时最常见的是 ContentProvider + SQLite 数据库的组合，当然 ContentProvider 也可以和其他的数据存储方式相结合。<br>当外部应用需要对 ContentProvider 里面的数据进行增删改查操作时就需要用到 ContentResolver，Andriod 的 Context 提供了 getContentResolver() 方法来获取 ContentResolver 对象。<br>如果我们使用比如 ContentProvider + Shared Preferences 的组合时，你可能需要将数据转换为 Cursor 返回给 ContentProvider 提供给其他应用查询，那么本文也将介绍如果创建一个 Cursor，通常我们使用 MatrixCursor。<br>我们也可以使用 ContentProvider + File 的方式来直接操作文件，其他的应用可以通过该方式读写当前应用的私有文件。 这时我们要重写 openFile 等方法来实现。<br>另外，我们也可以使用 ContentProvider 进行跨进程方法调用。这时我们需要重写 call 方法。根据该方法的参数来调用相对应地方法。</p>
+<h2 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h2><h3 id="注册-ContentProvider"><a href="#注册-ContentProvider" class="headerlink" title="注册 ContentProvider"></a>注册 ContentProvider</h3><p>创建我们自己的 ContentProvider 需要在 AndroidManifest.xml 中对 ContentProvider 进行注册</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;provider</span><br><span class="line">    android:authorities=&quot;hq.testprovider&quot;</span><br><span class="line">    android:name=&quot;.contentprovider.MyContentProvider&quot;</span><br><span class="line">    android:exported=&quot;true&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>android:authorities：ContentProvider 的唯一标识符，外部应用可以通过URI中的此属性值来找到想要访问的 ContentProvider，建议用包名来标示，当然你也可以随意指定，但要有唯一性。</li>
+<li>android:name： ContentProvider 的类名</li>
+<li>android:exported：是否允许其他应用访问该 ContentProvider，true为允许，false为禁止。</li>
+<li>android:multiProcess：是否允许在调用者进程启动 ContentProvider。一般情况下，ContentProvider 都是在创建者的进程启动的，如果该进程没有启动，那么会把该进程启动。如果设置了这个属性，就可以在调用者进程启动。但前提是调用者和创建者的 android:sharedUserId 相同才行，否则还是不能在调用者进程启动 ContentProvider。</li>
+<li>android:initOrder：当前 ContentProvider 相对于其他 ContentProvider 的初始化顺序，数值越大，优先级越高。</li>
+</ul>
+<h3 id="封装数据库或者-Shared-Preferences"><a href="#封装数据库或者-Shared-Preferences" class="headerlink" title="封装数据库或者 Shared Preferences"></a>封装数据库或者 Shared Preferences</h3><p>创建我们自己的 ContentProvider 通常需要继承 ContentProvider 类并实现它的六个抽象方法。<br>ContentProvider 提供了下面的四个抽象方法进行增删改查操作，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public abstract @Nullable Uri insert(@NonNull Uri uri, @Nullable ContentValues values);</span><br><span class="line">public abstract int delete(@NonNull Uri uri, @Nullable String selection,</span><br><span class="line">            @Nullable String[] selectionArgs);</span><br><span class="line">public abstract int update(@NonNull Uri uri, @Nullable ContentValues values,</span><br><span class="line">            @Nullable String selection, @Nullable String[] selectionArgs);</span><br><span class="line">public abstract @Nullable Cursor query(@NonNull Uri uri, @Nullable String[] projection,</span><br><span class="line">            @Nullable String selection, @Nullable String[] selectionArgs,</span><br><span class="line">            @Nullable String sortOrder);</span><br></pre></td></tr></table></figure>
+<p>还有下面两个抽象方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public abstract boolean onCreate();</span><br><span class="line">public abstract @Nullable String getType(@NonNull Uri uri);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>insert：添加数据。</li>
+<li>delete：删除数据。</li>
+<li>update：更新数据。</li>
+<li>query：查询数据。</li>
+<li>onCreate：ContentProvider 初始化时调用，一般做一些初始化操作。</li>
+<li>getType：返回参数中 uri 对应的 MIME 类型，格式比较固定：单条记录为 vnd.android.cursor.item/ 开头的字符串，多条记录为 vnd.android.cursor.dir/ 开头的字符串。一般情况下可以不用去关注，返回null即可。在使用 Intent 时有用。</li>
+</ul>
+<p>增删改查方法参数说明：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数名字</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">是否可以为空</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">uri</td>
+<td style="text-align:left">为数据资源的位置，比如想查询某个表的数据或者想执行某个操作：content://hq.testprovider/table1/</td>
+<td style="text-align:left">不能为空</td>
+</tr>
+<tr>
+<td style="text-align:left">values</td>
+<td style="text-align:left">想要增加或更新的数据实体</td>
+<td style="text-align:left">是</td>
+</tr>
+<tr>
+<td style="text-align:left">projection</td>
+<td style="text-align:left">相当于 SQL 语法中 SELECT 后面的语句。来表示查询数据时要返回数据的列。比如获取 Student 表中的数据时我们只想要 Student 的名字和地址，那么 projection参数就可以如下表示：<code>new String []{DBOpenHelper.StudentTAB.NAME,DBOpenHelper.StudentTAB.ADDR}</code>，那么返回的 Cursor 中的数据就只有名字和地址两列。</td>
+<td style="text-align:left">可以为空，表示查询所有列</td>
+</tr>
+<tr>
+<td style="text-align:left">selection</td>
+<td style="text-align:left">相当于 SQL 语法中 WHERE 后面的语句。设置的筛选条件，表示接下来的删改查操作只针对符合条件的行进行。这里可以写一些 SQL 语句。<code>DBOpenHelper.StudentTAB.COUNTRY + &quot;=? AND &quot; + DBOpenHelper.StudentTAB.GENDER + &quot;=?&quot;</code> 表示指操作指定国家或者性别的行。或者 <code>DBOpenHelper.StudentTAB.COUNTRY + &quot;=&#39;China&#39; AND &quot; + DBOpenHelper.StudentTAB.GENDER + &quot;=&#39;male&#39;&quot;</code>，或者 <code>id BETWEEN 10 AND 20</code> 用 between 子句查询某个区间的值。</td>
+<td style="text-align:left">可以为空，表示，不进行筛选，查询所有列</td>
+</tr>
+<tr>
+<td style="text-align:left">selectionArgs</td>
+<td style="text-align:left">配合 selection 使用的参数，将会替换掉 selection 参数中的 <code>?</code>：<code>new String []{&quot;China&quot;, &quot;male&quot;}</code> 。当然也可以写在 selection，效果也是一样的。</td>
+<td style="text-align:left">可以为空</td>
+</tr>
+<tr>
+<td style="text-align:left">sortOrder</td>
+<td style="text-align:left">相当于 SQL 语法中 ORDER BY 后面的语句。为返回数据的排序方式，比如是升序还是降序，还可以添加一些其他的 SQL 字句，比如 <code>updateTime DESC LIMIT 1 OFFSET 1</code>，这个下面会具体介绍</td>
+<td style="text-align:left">可以为空</td>
+</tr>
+</tbody>
+</table>
+<p>依据这些参数，方法的调用后面基本都可以翻译成下的 SQL 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, column2....columnN</span><br><span class="line">FROM   table_name</span><br><span class="line">WHERE  column_name BETWEEN val-1 AND val-2 LIMIT [no of rows] OFFSET [row num]</span><br><span class="line">ORDER BY column_name &#123;ASC|DESC&#125; LIMIT [no of rows] OFFSET [row num];</span><br></pre></td></tr></table></figure>
+<p>等等。</p>
+<h3 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h3><p>ContentProvider 提供了下面的方法来实现文件共享功能：</p>
+<ul>
+<li><code>openAssetFile(@NonNull Uri uri, @NonNull String mode)</code></li>
+<li><code>openFile(@NonNull Uri uri, @NonNull String mode)</code></li>
+</ul>
+<h3 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h3><p>ContentProvider 提供了下面的方法来跨进程方法调用，当然，不是快进程也是可以的：</p>
+<ul>
+<li><code>call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras)</code></li>
+</ul>
+<h2 id="ContentResolver"><a href="#ContentResolver" class="headerlink" title="ContentResolver"></a>ContentResolver</h2><p>我们使用 ContentResolver 来对 ContentProvider 的数据进行增删改查的操作。<br>ContentResolver 对象可以通过 <code>Context.getContentResolver()</code> 来获取，它提供了一系列针对 ContentProvider 操作的方法，和 ContentProvider 里面的方法一一对应。<br>ContentResolver 提供了 openOutputStream 和 openInputStream 等方法来实现对共享文件的读写。<br>ContentResolver 提供了 call 方法来对 ContentProvider 提供的方法进行跨进程调用。</p>
+<h3 id="openInputStream"><a href="#openInputStream" class="headerlink" title="openInputStream"></a>openInputStream</h3><p>Android系统中所有资源都可以用Uri来表示。在获取到资源的Uri后可以通过ContentResolver将其解析成InputStream对象。<br>这里先对 openInputStream 的源码做简要分析，看看它是如何获取数据的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public static final String SCHEME_CONTENT = &quot;content&quot;;</span><br><span class="line">public static final String SCHEME_ANDROID_RESOURCE = &quot;android.resource&quot;;</span><br><span class="line">public static final String SCHEME_FILE = &quot;file&quot;;</span><br><span class="line"></span><br><span class="line">public final @Nullable InputStream openInputStream(@NonNull Uri uri)</span><br><span class="line">        throws FileNotFoundException &#123;</span><br><span class="line">    Preconditions.checkNotNull(uri, &quot;uri&quot;);</span><br><span class="line">    String scheme = uri.getScheme();</span><br><span class="line">    if (SCHEME_ANDROID_RESOURCE.equals(scheme)) &#123;</span><br><span class="line">        // Note: left here to avoid breaking compatibility.  May be removed</span><br><span class="line">        // with sufficient testing.</span><br><span class="line">        OpenResourceIdResult r = getResourceId(uri);</span><br><span class="line">        try &#123;</span><br><span class="line">            InputStream stream = r.r.openRawResource(r.id);</span><br><span class="line">            return stream;</span><br><span class="line">        &#125; catch (Resources.NotFoundException ex) &#123;</span><br><span class="line">            throw new FileNotFoundException(&quot;Resource does not exist: &quot; + uri);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else if (SCHEME_FILE.equals(scheme)) &#123;</span><br><span class="line">        // Note: left here to avoid breaking compatibility.  May be removed</span><br><span class="line">        // with sufficient testing.</span><br><span class="line">        return new FileInputStream(uri.getPath());</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        AssetFileDescriptor fd = openAssetFileDescriptor(uri, &quot;r&quot;, null);</span><br><span class="line">        try &#123;</span><br><span class="line">            return fd != null ? fd.createInputStream() : null;</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            throw new FileNotFoundException(&quot;Unable to create stream&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里会先判断Uri的scheme类型，如果是SCHEME_ANDROID_RESOURCE类型，就先调用getResourceId得到该Uri对应的资源id，然后调用 openRawResource 读取文件到InputStream对象。<br>如果是SCHEME_FILE类型，就调用uri.getPath()获得文件路径，然后读取文件到FileInputStream对象。<br>如果是其他类型（比如 assets类型或其他自定义的类型），就调用openAssetFileDescriptor得到一个AssetFileDescriptor对象，然后再得到一个 InputStream对象。</p>
+<p>下面举例来介绍一下跨进程实现图片共享的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">InputStream inputStream = null;</span><br><span class="line">try &#123;</span><br><span class="line">    inputStream = getContentResolver().openInputStream(Uri.parse(&quot;content://hq.testprovider/getIcon/testPng.png/&quot;));</span><br><span class="line">    final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);</span><br><span class="line"></span><br><span class="line">&#125; catch (FileNotFoundException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">    if (inputStream != null) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            inputStream.close();</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>getIcon 用来标识这是一个获取图片的方法，testPng.png用来标识名称。</p>
+<p>在ContentProvider需要重写openTypedAssetFile、openAssetFile或者openFile方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Nullable</span><br><span class="line">@Override</span><br><span class="line">public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException &#123;</span><br><span class="line">    if (uri != null) &#123;</span><br><span class="line">        if (&quot;content&quot;.equals(uri.getScheme())) &#123;</span><br><span class="line">            List&lt;String&gt; list = uri.getPathSegments();</span><br><span class="line">            if (list != null &amp;&amp; list.size() ==2) &#123;</span><br><span class="line">                String method = list.get(0);</span><br><span class="line">                if (&quot;getQuickAppIcon&quot;.equals(method))&#123;</span><br><span class="line">                    String name = list.get(1);</span><br><span class="line">                    return ParcelFileDescriptor.open(new File(getFilePath(name)), ParcelFileDescriptor.parseMode(mode));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return super.openFile(uri, mode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ParcelFileDescriptor是android提供的一个数据结构。是可以用于进程间Binder通信的FileDescriptor。支持stream 写入和stream 读出.<br>我们可以使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static ParcelFileDescriptor open(File file, int mode)</span><br></pre></td></tr></table></figure>
+<p>方法实现将PacecelFileDescriptor 与File对应起来，以实现进程间的文件共享。</p>
+<h3 id="call"><a href="#call" class="headerlink" title="call"></a>call</h3><p>call方法实现通过ContentProvider实现方法调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Uri uri = Uri.parse(&quot;content://hq.testprovider/&quot;);</span><br><span class="line">Bundle b = new Bundle();</span><br><span class="line">ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">list.add(&quot;test1.png&quot;);</span><br><span class="line">list.add(&quot;test2.png&quot;);</span><br><span class="line">b.putStringArrayList(&quot;iconList&quot;,list);</span><br><span class="line">Bundle bundle = getContentResolver().call(uri, &quot;getIconsInfo&quot;,null, b);</span><br><span class="line">String result = bundle.getString(&quot;iconInfoList&quot;);</span><br><span class="line">Log.e(&quot;Test&quot;,&quot;list = &quot;+result);</span><br></pre></td></tr></table></figure>
+<p>ContentProvider 重写 call 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Nullable</span><br><span class="line">@Override</span><br><span class="line">public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) &#123;</span><br><span class="line">    if (&quot;getIconsInfo&quot;.equals(method)) &#123;</span><br><span class="line">        ArrayList&lt;String&gt; list = extras.getStringArrayList(&quot;iconList&quot;);</span><br><span class="line">        ArrayMap&lt;String, IconBean&gt; map = new ArrayMap&lt;&gt;();</span><br><span class="line">            for (String name : list) &#123;</span><br><span class="line">                IconBean bean = new IconBean();</span><br><span class="line">                IconBean info = getIconInfo(name);</span><br><span class="line">                map.put(name,bean);</span><br><span class="line">            &#125;</span><br><span class="line">        Bundle bundle = new Bundle();</span><br><span class="line">        bundle.putString(&quot;iconInfoList&quot;, JSON.toJSONString(map));</span><br><span class="line">        return bundle;</span><br><span class="line">    &#125;</span><br><span class="line">    return super.call(method, arg, extras);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="SQLite-语法"><a href="#SQLite-语法" class="headerlink" title="SQLite 语法"></a>SQLite 语法</h3><p><a href="http://www.runoob.com/sqlite/sqlite-tutorial.html" target="_blank" rel="noopener">SQLite 教程</a></p>
+<h4 id="LIMIT-和-OFFSET-字句"><a href="#LIMIT-和-OFFSET-字句" class="headerlink" title="LIMIT 和 OFFSET 字句"></a>LIMIT 和 OFFSET 字句</h4><p><a href="http://www.runoob.com/sqlite/sqlite-limit-clause.html" target="_blank" rel="noopener">SQLite Limit 子句</a></p>
+<p><code>LIMIT &lt;skip&gt;, &lt;count&gt;</code><br>等价于<br><code>LIMIT &lt;count&gt; OFFSET &lt;skip&gt;</code></p>
+<p><code>LIMIT &lt;跳过的数据数目&gt;, &lt;取数据数目&gt;</code><br>等价于<br><code>LIMIT &lt;取数据数目&gt; OFFSET &lt;跳过的数据数目&gt;</code></p>
+<p>其实可以通过 orderby 作假来加上limit offset，反正最后其实也是由db的query去拼接的sql的，如orderby变为 <code>updateTime DESC LIMIT 10 OFFSET 5</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getContentResolver().query(uri,null,null,null,&quot;updateTime DESC LIMIT 10 OFFSET 5&quot;);</span><br></pre></td></tr></table></figure>
+<p>等价于 <code>select * from &lt;table&gt; order by updateTime DESC LIMIT 10 OFFSET 5</code></p>
+<p>LIMIT 和 OFFSET 字句也可以添加在 WHERE 子句后面。</p>
+<h4 id="BETWEEN-字句"><a href="#BETWEEN-字句" class="headerlink" title="BETWEEN 字句"></a>BETWEEN 字句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, column2....columnN</span><br><span class="line">FROM   table_name</span><br><span class="line">WHERE  column_name BETWEEN val-1 AND val-2;</span><br></pre></td></tr></table></figure>
+<h4 id="IN-字句"><a href="#IN-字句" class="headerlink" title="IN 字句"></a>IN 字句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, column2....columnN</span><br><span class="line">FROM   table_name</span><br><span class="line">WHERE  column_name IN (val-1, val-2,...val-N);</span><br></pre></td></tr></table></figure>
+<h2 id="SQLiteOpenHelper"><a href="#SQLiteOpenHelper" class="headerlink" title="SQLiteOpenHelper"></a>SQLiteOpenHelper</h2><p>数据库操作帮助类，如果我们的 ContentProvider 时结合 SQLite 数据库来实现，那么就会用到这个类。</p>
+<h2 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h2><p>上面介绍的几个 ContentProvider 几个方法中，大多都有一个 URI 的参数，它表示我们想操作的数据资源的位置。比如：<code>content://hq.testprovider/table1/</code>。<br>完整的 URI 一般由下面三部分组成：<br><code>&lt;standard_prefix&gt;://&lt;authority&gt;/&lt;data_path&gt;/</code></p>
+<ul>
+<li>standard_prefix：URI 的前缀，ContentProvider 的前缀为 content://</li>
+<li>authority：URI 的标识，用于唯一标识这个 ContentProvider。指的是我们在 AndroidManifest.xml 定义的 android:authorities 属性。</li>
+<li>data_path：路径。一般为要执行的操作的名称或者数据库中的表的名字，也可以自己定义，只要在使用时保持一致就行了。</li>
+</ul>
+<p>因此，URI 中的数据包含了需要操作哪个 ContentProvider、以及对 ContentProvider 中哪些数据进行操作的信息。<br>如果我们是使用 SQLite 来存储数据，那么我们数据库中可能包含多个表，那么 URI 就既要包含操作哪个数据库，也要包含操作数据库中的哪个表。<br>我们需要执行的一些动作或者调用的方法也可以包含在 URI 中。<br>那么如何确定一个 UIR 是要执行哪项操作呢？这里需要用到 UriMatcher 来帮忙了。</p>
+<h2 id="MatrixCursor"><a href="#MatrixCursor" class="headerlink" title="MatrixCursor"></a>MatrixCursor</h2><p>如果我们数据存储用的不是数据库，我们就需要把数据封装成 Cursor 来提供给 ContentProvider。<br>当我们需要自己创建 Cursor 时，可以使用 Android 为我们提供的 MatrixCursor 类。<br>下面的例子演示了如何创建一个 MatrixCursor 实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MatrixCursor cursor = new MatrixCursor(new String[]&#123;&quot;NAME&quot;, &quot;COUNTRY&quot;, &quot;TELEPHONE&quot;&#125;);</span><br><span class="line">cursor.addRow(new Object[] &#123;&quot;ZhangSan&quot;,&quot;China&quot;,13800000000L&#125;);</span><br><span class="line">cursor.addRow(new Object[] &#123;&quot;James&quot;,&quot;USA&quot;,13900000000L&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="UriMatcher"><a href="#UriMatcher" class="headerlink" title="UriMatcher"></a>UriMatcher</h2><p>UriMatcher 就是用来匹配 URI 的，我们可以在 ContentProvider 中使用 UriMatcher 来注册URI，然后使用 UriMatcher 来匹配 URI 对应的执行动作或者数据表。<br>UriMatcher 只有两个方法：</p>
+<ul>
+<li>addURI(String authority, String path, int code)</li>
+<li><p>match(Uri uri)</p>
+<p>比如用下面的方法注册 URI：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);</span><br><span class="line">static &#123;</span><br><span class="line">    final UriMatcher matcher = URI_MATCHER;</span><br><span class="line">    matcher.addURI(&quot;hq.testprovider&quot;, &quot;students&quot;, 0x0001);</span><br><span class="line">    matcher.addURI(&quot;hq.testprovider&quot;, &quot;teachers&quot;, 0x0002);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，根据 URI 来执行对应的动作或者获取对应的数据表进行操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int match = URI_MATCHER.match(uri);</span><br></pre></td></tr></table></figure>
+<h2 id="ContentProviderOperation"><a href="#ContentProviderOperation" class="headerlink" title="ContentProviderOperation"></a>ContentProviderOperation</h2><p>为了使批量更新、插入、删除数据更加方便，android系统引入了 ContentProviderOperation类。<br>在官方开发文档中推荐使用ContentProviderOperations，有以下原因：</p>
+<ul>
+<li>所有的操作都在一个事务中执行，这样可以保证数据完整性</li>
+<li>由于批量操作在一个事务中执行，只需要打开和关闭一个事务，比多次打开关闭多个事务性能要好些</li>
+<li>使用批量操作和多次单个操作相比，减少了应用和ContentProvider之间的上下文切换，这样也会提升应用的性能，并且减少占用CPU的时间，当然也会减少电量的消耗。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;ContentProviderOperation&gt; ops = new ArrayList&lt;ContentProviderOperation&gt;();</span><br><span class="line">ContentProviderOperation operation = ContentProviderOperation.newDelete(uri)</span><br><span class="line">        .withSelection(&quot;name=?&quot;,new String[]&#123;&quot;James&quot;&#125;)</span><br><span class="line">        .build();</span><br><span class="line">ops.add(operation);</span><br><span class="line">ContentProviderOperation operation2 = ContentProviderOperation.newDelete(uri)</span><br><span class="line">        .withSelection(&quot;name=?&quot;,new String[]&#123;&quot;Wade&quot;&#125;)</span><br><span class="line">        .build();</span><br><span class="line">ops.add(operation2);</span><br><span class="line"></span><br><span class="line">try &#123;</span><br><span class="line">    getContentResolver().applyBatch(uri.getAuthority(), ops);</span><br><span class="line">&#125; catch (RemoteException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; catch (OperationApplicationException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关于Exception"><a href="#关于Exception" class="headerlink" title="关于Exception"></a>关于Exception</h2><p>我们在操作数据库时有必要关系当URI不存在时的一些异常处理，如何处理我们就从源码看一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">   public final @Nullable Uri insert(@RequiresPermission.Write @NonNull Uri url,</span><br><span class="line">               @Nullable ContentValues values) &#123;</span><br><span class="line">       Preconditions.checkNotNull(url, &quot;url&quot;);</span><br><span class="line">       IContentProvider provider = acquireProvider(url);</span><br><span class="line">       if (provider == null) &#123;</span><br><span class="line">           throw new IllegalArgumentException(&quot;Unknown URL &quot; + url);</span><br><span class="line">       &#125;</span><br><span class="line">...</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   public final int delete(@RequiresPermission.Write @NonNull Uri url, @Nullable String where,</span><br><span class="line">           @Nullable String[] selectionArgs) &#123;</span><br><span class="line">       Preconditions.checkNotNull(url, &quot;url&quot;);</span><br><span class="line">       IContentProvider provider = acquireProvider(url);</span><br><span class="line">       if (provider == null) &#123;</span><br><span class="line">           throw new IllegalArgumentException(&quot;Unknown URL &quot; + url);</span><br><span class="line">       &#125;</span><br><span class="line">...</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public final int update(@RequiresPermission.Write @NonNull Uri uri,</span><br><span class="line">           @Nullable ContentValues values, @Nullable String where,</span><br><span class="line">           @Nullable String[] selectionArgs) &#123;</span><br><span class="line">       Preconditions.checkNotNull(uri, &quot;uri&quot;);</span><br><span class="line">       IContentProvider provider = acquireProvider(uri);</span><br><span class="line">       if (provider == null) &#123;</span><br><span class="line">           throw new IllegalArgumentException(&quot;Unknown URI &quot; + uri);</span><br><span class="line">       &#125;</span><br><span class="line">...</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public final @Nullable Cursor query(final @RequiresPermission.Read @NonNull Uri uri,</span><br><span class="line">           @Nullable String[] projection, @Nullable String selection,</span><br><span class="line">           @Nullable String[] selectionArgs, @Nullable String sortOrder,</span><br><span class="line">           @Nullable CancellationSignal cancellationSignal) &#123;</span><br><span class="line">       Preconditions.checkNotNull(uri, &quot;uri&quot;);</span><br><span class="line">       IContentProvider unstableProvider = acquireUnstableProvider(uri);</span><br><span class="line">       if (unstableProvider == null) &#123;</span><br><span class="line">           return null;</span><br><span class="line">       &#125;</span><br><span class="line">...</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public final @Nullable Bundle call(@NonNull Uri uri, @NonNull String method,</span><br><span class="line">           @Nullable String arg, @Nullable Bundle extras) &#123;</span><br><span class="line">       Preconditions.checkNotNull(uri, &quot;uri&quot;);</span><br><span class="line">       Preconditions.checkNotNull(method, &quot;method&quot;);</span><br><span class="line">       IContentProvider provider = acquireProvider(uri);</span><br><span class="line">       if (provider == null) &#123;</span><br><span class="line">           throw new IllegalArgumentException(&quot;Unknown URI &quot; + uri);</span><br><span class="line">       &#125;</span><br><span class="line">...</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>上面列出了增删改查以及 call 方法，发现增删改如果在Uri不存在的情况下都会报 <code>IllegalArgumentException</code> 异常，查询接口在Uri不存在情况下会返回null。因此，我们只需要做相应的异常处理就行了。</p>
+<h2 id="ContentProvider-源码分析"><a href="#ContentProvider-源码分析" class="headerlink" title="ContentProvider 源码分析"></a>ContentProvider 源码分析</h2><!--  
+
+
+https://www.baidu.com/s?word=android++contentprovider&tn=50000021_hao_pg&ie=utf-8&sc=UWd1pgw-pA7EnHc1FMfqnHRYn1bLrjTYnW0knBuW5y99U1Dznzu9m1YznWR4nWDvPH61&ssl_sample=s_11%2Cs_109&srcqid=2634579022130942498&H123Tmp=nu
+https://blog.csdn.net/zhang_jun_ling/article/details/51288441
+https://blog.csdn.net/f2006116/article/details/78386870
+https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&mid=2653579366&idx=1&sn=49361b16d275db8e7f18af44c894e2e8&chksm=84b3ba61b3c4337789c87a7249eb6185765b1fbe80846661965c44c9084976b7e26bdea607ec&mpshare=1&scene=23&srcid=10134b55yuq4SR3vfPyzdGuI#rd
+
+-->
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ContentProvider/" rel="tag"># ContentProvider</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/16/Android 图形系统/android-graphic-system-canvas-sample/" rel="next" title="Android 图形系统 -- Canvas使用">
+                <i class="fa fa-chevron-left"></i> Android 图形系统 -- Canvas使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/01/Android/android-ipc-aidl/" rel="prev" title="Android IPC 之 AIDL">
+                Android IPC 之 AIDL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentProvider"><span class="nav-number">2.</span> <span class="nav-text">ContentProvider</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注册-ContentProvider"><span class="nav-number">2.1.</span> <span class="nav-text">注册 ContentProvider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装数据库或者-Shared-Preferences"><span class="nav-number">2.2.</span> <span class="nav-text">封装数据库或者 Shared Preferences</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件读写"><span class="nav-number">2.3.</span> <span class="nav-text">文件读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法调用"><span class="nav-number">2.4.</span> <span class="nav-text">方法调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentResolver"><span class="nav-number">3.</span> <span class="nav-text">ContentResolver</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openInputStream"><span class="nav-number">3.1.</span> <span class="nav-text">openInputStream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call"><span class="nav-number">3.2.</span> <span class="nav-text">call</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQLite-语法"><span class="nav-number">3.3.</span> <span class="nav-text">SQLite 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LIMIT-和-OFFSET-字句"><span class="nav-number">3.3.1.</span> <span class="nav-text">LIMIT 和 OFFSET 字句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BETWEEN-字句"><span class="nav-number">3.3.2.</span> <span class="nav-text">BETWEEN 字句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IN-字句"><span class="nav-number">3.3.3.</span> <span class="nav-text">IN 字句</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQLiteOpenHelper"><span class="nav-number">4.</span> <span class="nav-text">SQLiteOpenHelper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URI"><span class="nav-number">5.</span> <span class="nav-text">URI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MatrixCursor"><span class="nav-number">6.</span> <span class="nav-text">MatrixCursor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UriMatcher"><span class="nav-number">7.</span> <span class="nav-text">UriMatcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentProviderOperation"><span class="nav-number">8.</span> <span class="nav-text">ContentProviderOperation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于Exception"><span class="nav-number">9.</span> <span class="nav-text">关于Exception</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentProvider-源码分析"><span class="nav-number">10.</span> <span class="nav-text">ContentProvider 源码分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,966 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="cocos,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="资源文件加载流程">
+<meta name="keywords" content="cocos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cocos Creator --  资源文件加载流程">
+<meta property="og:url" content="http://yoursite.com/2020/03/10/cocos/cocos-creator-res-load/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="资源文件加载流程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-11-06T09:00:25.206Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cocos Creator --  资源文件加载流程">
+<meta name="twitter:description" content="资源文件加载流程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/10/cocos/cocos-creator-res-load/">
+
+
+
+
+
+  <title> Cocos Creator --  资源文件加载流程 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/10/cocos/cocos-creator-res-load/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Cocos Creator --  资源文件加载流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-10T10:00:00+08:00">
+                2020-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cocos/" itemprop="url" rel="index">
+                    <span itemprop="name">cocos</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2020/03/10/cocos/cocos-creator-res-load/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2020/03/10/cocos/cocos-creator-res-load/" class="leancloud_visitors" data-flag-title="Cocos Creator --  资源文件加载流程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  资源文件加载流程
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>资源的加载主要包含游戏包内的 src/project.dev.js 、res目录下的文件以及一些网络的资源。<br>engine 部分资源文件的管理主要在 cocos2d/core/assets/CCAsset.js 和 cocos2d/core/platform/CCAssetLibrary.js。<br>engine 部分资源文件的加载和释放代码在 cocos2d/core/load-pipeline 目录下面，主要有 CCloader.js、pipeline.js、loader.js、loading-items.js、downloader.js、text-download.js、asset-loader.js<br>如果是原生平台，runtiem 部分资源文件的加载相关代码在 HttpClient-android.cpp、jsb_xmlhttprequest.cpp、Cocos2dxHttpURLConnection.java，主要是文件下载的实现部分。<br>如果是原生平台，还包括 jsb-adapter/engine/jsb-loader.js，这部分包括对原生平台对 Downloader 和 Loader 的重新实现。</p>
+<p>AssetLibrary 初始化在 main.js 中进行，配置资源文件的路径：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// init assets</span><br><span class="line">cc.AssetLibrary.init(&#123;</span><br><span class="line">    libraryPath: &apos;res/import&apos;,</span><br><span class="line">    rawAssetsBase: &apos;res/raw-&apos;,</span><br><span class="line">    rawAssets: settings.rawAssets,</span><br><span class="line">    packedAssets: settings.packedAssets,</span><br><span class="line">    md5AssetsMap: settings.md5AssetsMap,</span><br><span class="line">    subpackages: settings.subpackages</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="框架简介"><a href="#框架简介" class="headerlink" title="框架简介"></a>框架简介</h2><ul>
+<li>CCLoader：继承于 Pipeline，CCLoader提供了友好的资源管理接口（加载、获取、释放）以及一些辅助接口（如自动释放、对Pipeline的修改）。</li>
+<li>Pipeline：包含了多个Pipe和多个LoadingItems，这里实现了一个Pipe到Pipe衔接流转的过程，以及Pipe和LoadingItems的管理接口。pipeline 自身实现的是资源缓存和让资源依次流过管道，即<strong>每个资源依次经过每个 pipe 的处理</strong>。</li>
+<li>Pipe：这里的 pipe 是指实现了加载资源的单位（如 loader，assetLoader，downloader），pipeline 对资源的处理最终是调用 pipe.handle 实现的。每一种Pipe都会对资源进行特定的加工。</li>
+<li>LoadingItems：LoadingItems 是一个加载对象队列，可以用来输送加载对象到加载管线中。它继承于CallbackInvoker，管理着LoadingItem，一个 LoadingItem 就是资源从开始加载到加载完成的上下文。这里说的上下文，指的是与加载该资源相关的变量的集合，比如当前加载的状态、url、依赖哪些资源、以及加载完成后的对象等等。LoadingItems 配合 pipeline，实现了加载状态维护、依赖资源入队等内容。</li>
+</ul>
+<h2 id="资源加载"><a href="#资源加载" class="headerlink" title="资源加载"></a>资源加载</h2><p>资源加载采用了 PipeLine 模式。<br>一次资源的加载流程底层的调用函数如下：</p>
+<ol>
+<li>cc.loader.loadRes()</li>
+<li>CCLoader.load()</li>
+<li>loading-items.append</li>
+<li>pipeline.flowIn</li>
+<li>pipeline.flow</li>
+<li>pipe.handle（pipe 对应于 asset-loader、downloader、loader）</li>
+<li>加载完成，进行回调</li>
+</ol>
+<p>加载流程中其实还有一种情况需要注意：loader 其实会根据资源类型将加载任务分发给不同的类，如 uuid 类型会交给 uuid-loader。uuid-loader 加载时会加载该资源的依赖资源，其过程为：</p>
+<ol>
+<li>uuid-loader.loadUuid</li>
+<li>uuid-loader.loadDepends</li>
+<li>pipeline.flowInDeps</li>
+<li>loading-items.append</li>
+<li>后续流程和正常流程一致</li>
+</ol>
+<h3 id="加载流程"><a href="#加载流程" class="headerlink" title="加载流程"></a>加载流程</h3><h3 id="CCLoader"><a href="#CCLoader" class="headerlink" title="CCLoader"></a>CCLoader</h3><p>CCLoader 继承自 pipeline：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// engine CCLoader.js</span><br><span class="line">js.extend(CCLoader, Pipeline);</span><br></pre></td></tr></table></figure>
+<p>创建 CCLoader 时，会把三个 Pipe 提供给 PipeLine：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Pipeline.call(this, [</span><br><span class="line">    assetLoader,</span><br><span class="line">    downloader,</span><br><span class="line">    loader</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+<p>CCLoader 是用户可以直接调用来加载、释放资源的类，它对 pipeline、loading-items、loader 进行了整合封装，并提供了 <code>load</code>、<code>loadRes</code>、<code>loadResDir</code>、<code>release</code>、<code>releaseRes</code> 等方法供用户使用。资源加载相关的便是 <code>load</code>、<code>loadRes</code> 等方法，而所有方法最终是调用 <code>load</code> 方法来进行资源加载的。<br><code>load</code> 和其它接口的最大区别在于，<code>load</code> 可以用于加载绝对路径的资源（比如一个sd卡的绝对路径、或者网络上的一个url），而 <code>loadRes</code> 等只能加载 res 目录下的资源。</p>
+<p>先来看一下 <code>loadRes</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">// engine CCLoader.js</span><br><span class="line">proto.loadRes = function (url, type, mount, progressCallback, completeCallback) &#123;</span><br><span class="line">    if (arguments.length !== 5) &#123;</span><br><span class="line">        completeCallback = progressCallback;</span><br><span class="line">        progressCallback = mount;</span><br><span class="line">        mount = &apos;assets&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    var args = this._parseLoadResArgs(type, progressCallback, completeCallback);</span><br><span class="line">    type = args.type;</span><br><span class="line">    progressCallback = args.onProgress;</span><br><span class="line">    completeCallback = args.onComplete;</span><br><span class="line"></span><br><span class="line">    var self = this;</span><br><span class="line">    var uuid = self._getResUuid(url, type, mount);</span><br><span class="line">    if (uuid) &#123;</span><br><span class="line">        this.load(</span><br><span class="line">            &#123;</span><br><span class="line">                type: &apos;uuid&apos;,</span><br><span class="line">                uuid: uuid</span><br><span class="line">            &#125;,</span><br><span class="line">            progressCallback,</span><br><span class="line">            function (err, asset) &#123;</span><br><span class="line">                if (asset) &#123;</span><br><span class="line">                    // should not release these assets, even if they are static referenced in the scene.</span><br><span class="line">                    self.setAutoReleaseRecursively(uuid, false);</span><br><span class="line">                &#125;</span><br><span class="line">                if (completeCallback) &#123;</span><br><span class="line">                    completeCallback(err, asset);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        self._urlNotFound(url, type, completeCallback);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>loadRes 工作流程如下：</p>
+<ul>
+<li>调用_getResUuid查询uuid，该方法会调用AssetTable的getUuid方法查询资源的uuid。从网络上加载的资源以及SD卡中我们存储的资源，Creator并没有为它们生成uuid。所以这些不是在Creator项目中生成的资源不能使用loadRes来加载。</li>
+<li>调用this.load方法加载资源。</li>
+<li>在回调方法中设置加载完成后的处理，在加载完成后，该资源以及其引用的资源都会被标记为禁止自动释放（在场景切换的时候，Creator会自动释放下个场景不使用的资源）。</li>
+</ul>
+<p>load 方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">// engine CCLoader.js</span><br><span class="line">roto.load = function(resources, progressCallback, completeCallback) &#123;</span><br><span class="line">    if (CC_DEV &amp;&amp; !resources) &#123;</span><br><span class="line">        return cc.error(&quot;[cc.loader.load] resources must be non-nil.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (completeCallback === undefined) &#123;</span><br><span class="line">        completeCallback = progressCallback;</span><br><span class="line">        progressCallback = this.onProgress || null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    var self = this;</span><br><span class="line">    var singleRes = false;</span><br><span class="line">    var res;</span><br><span class="line">    if (!(resources instanceof Array)) &#123;</span><br><span class="line">        if (resources) &#123;</span><br><span class="line">            singleRes = true;</span><br><span class="line">            resources = [resources];</span><br><span class="line">        &#125; else &#123; </span><br><span class="line">            resources = [];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    _sharedResources.length = 0;</span><br><span class="line">    for (var i = 0; i &lt; resources.length; ++i) &#123;</span><br><span class="line">        var resource = resources[i];</span><br><span class="line">        // Backward compatibility</span><br><span class="line">        if (resource &amp;&amp; resource.id) &#123;</span><br><span class="line">            cc.warnID(4920, resource.id);</span><br><span class="line">            if (!resource.uuid &amp;&amp; !resource.url) &#123;</span><br><span class="line">                resource.url = resource.id;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        // 获取资源对应的 url</span><br><span class="line">        res = getResWithUrl(resource);</span><br><span class="line">        if (!res.url &amp;&amp; !res.uuid)</span><br><span class="line">            continue;</span><br><span class="line">        var item = this._cache[res.url];</span><br><span class="line">        console.log(&quot;TestRes CCLoader cc.load url = &quot;+res.url)</span><br><span class="line">        _sharedResources.push(item || res);</span><br><span class="line">    &#125;</span><br><span class="line">    // 创建一个 LoadingItems</span><br><span class="line">    var queue = LoadingItems.create(this, progressCallback, function (errors, items) &#123;</span><br><span class="line">        callInNextTick(function () &#123;</span><br><span class="line">            if (completeCallback) &#123;</span><br><span class="line">                if (singleRes) &#123;</span><br><span class="line">                    let id = res.url;</span><br><span class="line">                    completeCallback.call(self, errors, items.getContent(id));</span><br><span class="line">                &#125;</span><br><span class="line">                else &#123;</span><br><span class="line">                    completeCallback.call(self, errors, items);</span><br><span class="line">                &#125;</span><br><span class="line">                completeCallback = null;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (CC_EDITOR) &#123;</span><br><span class="line">                for (let id in self._cache) &#123;</span><br><span class="line">                    if (self._cache[id].complete) &#123;</span><br><span class="line">                        self.removeItem(id);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            items.destroy();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    LoadingItems.initQueueDeps(queue);</span><br><span class="line">    queue.append(_sharedResources);</span><br><span class="line">    _sharedResources.length = 0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>load 方法中，所做的就是创建一个 LoadingItem，然后对其进行初始化，之后调用其 append 方法，把一个加载项 LoadingItems 队列。这里 LoadingItem 简单来看就是对待加载资源的一层封装。<br>所有要加载的资源最后会被添加到_sharedResources中（不论该资源是否已加载，如果已加载会push它的item，未加载会push它的res对象，res对象是通过 <code>getResWithUrl</code> 方法从 <code>AssetLibrary</code> 中查询出来的）。</p>
+<h3 id="loading-tiems"><a href="#loading-tiems" class="headerlink" title="loading-tiems"></a>loading-tiems</h3><p>loading-items 主要是完善了每个资源对象的属性，包括资源内容、url 地址等，同时维护每个资源的加载状态、依赖关系等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">// engine  loading-tiems.js</span><br><span class="line">roto.append = function (urlList, owner) &#123;</span><br><span class="line">    if (!this.active) &#123;</span><br><span class="line">        return [];</span><br><span class="line">    &#125;</span><br><span class="line">    if (owner &amp;&amp; !owner.deps) &#123;</span><br><span class="line">        owner.deps = [];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    this._appending = true;</span><br><span class="line">    var accepted = [], i, url, item;</span><br><span class="line">    for (i = 0; i &lt; urlList.length; ++i) &#123;</span><br><span class="line">        url = urlList[i];</span><br><span class="line"></span><br><span class="line">        // Already queued in another items queue, url is actually the item</span><br><span class="line">        if (url.queueId &amp;&amp; !this.map[url.id]) &#123;</span><br><span class="line">            this.map[url.id] = url;</span><br><span class="line">            // Register item deps for circle reference check</span><br><span class="line">            owner &amp;&amp; owner.deps.push(url);</span><br><span class="line">            // Queued and completed or Owner circle referenced by dependency</span><br><span class="line">            if (url.complete || checkCircleReference(owner, url)) &#123;</span><br><span class="line">                this.totalCount++;</span><br><span class="line">                // console.log(&apos;----- Completed already or circle referenced &apos; + url.id + &apos;, rest: &apos; + (this.totalCount - this.completedCount-1));</span><br><span class="line">                this.itemComplete(url.id);</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line">            // Not completed yet, should wait it</span><br><span class="line">            else &#123;</span><br><span class="line">                var self = this;</span><br><span class="line">                var queue = _queues[url.queueId];</span><br><span class="line">                if (queue) &#123;</span><br><span class="line">                    this.totalCount++;</span><br><span class="line">                    LoadingItems.registerQueueDep(owner || this._id, url.id);</span><br><span class="line">                    // console.log(&apos;+++++ Waited &apos; + url.id);</span><br><span class="line">                    queue.addListener(url.id, function (item) &#123;</span><br><span class="line">                        // console.log(&apos;----- Completed by waiting &apos; + item.id + &apos;, rest: &apos; + (self.totalCount - self.completedCount-1));</span><br><span class="line">                        self.itemComplete(item.id);</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        // Queue new items</span><br><span class="line">        if (isIdValid(url)) &#123;</span><br><span class="line">            item = createItem(url, this._id);</span><br><span class="line">            var key = item.id;</span><br><span class="line">            // No duplicated url</span><br><span class="line">            if (!this.map[key]) &#123;</span><br><span class="line">                this.map[key] = item;</span><br><span class="line">                this.totalCount++;</span><br><span class="line">                // Register item deps for circle reference check</span><br><span class="line">                owner &amp;&amp; owner.deps.push(item);</span><br><span class="line">                LoadingItems.registerQueueDep(owner || this._id, key);</span><br><span class="line">                accepted.push(item);</span><br><span class="line">                // console.log(&apos;+++++ Appended &apos; + item.id);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    this._appending = false;</span><br><span class="line"></span><br><span class="line">    // Manually complete</span><br><span class="line">    if (this.completedCount === this.totalCount) &#123;</span><br><span class="line">        // console.log(&apos;===== All Completed &apos;);</span><br><span class="line">        this.allComplete();</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        this._pipeline.flowIn(accepted);</span><br><span class="line">    &#125;</span><br><span class="line">    return accepted;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>append 所做的是：先对资源列表 urlList 里每一个元素做字段完善（create）、依赖处理（registerQueueDep），然后调用 pipeline.flowIn 将所有未加载完成的资源放入 pipeline 之中。</p>
+<h3 id="pipeline"><a href="#pipeline" class="headerlink" title="pipeline"></a>pipeline</h3><p>pipeline 包含多个 pipe，pipe 存储在 _pipes 数组中，而且数组中的 nextPipe 赋值给了 lastPipe.next，以此将 pipe 链接成单向链表结构。这里的 pipe 是指实现了加载资源的单位（如 loader），pipeline 对资源的处理最终是调用 pipe.handle 实现的，pipeline 自身实现的是资源缓存和让资源依次流过管道，即每个资源依次经过每个 pipe 的处理。在 CCLoader 初始化 pipeline 时，为它添加了 AssetLoader、Downloader、Loader 三个 pipe，每个资源都会依次经过这三个 pipe 的处理。pipeline 中的 _cache 数组是对每个资源的缓存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// asset-loader pipeline.js</span><br><span class="line">proto.flowIn = function (items) &#123;</span><br><span class="line">    var i, pipe = this._pipes[0], item;</span><br><span class="line">    if (pipe) &#123;</span><br><span class="line">        // Cache all items first, in case synchronous loading flow same item repeatly</span><br><span class="line">        for (i = 0; i &lt; items.length; i++) &#123;</span><br><span class="line">            item = items[i];</span><br><span class="line">            this._cache[item.id] = item;</span><br><span class="line">        &#125;</span><br><span class="line">        for (i = 0; i &lt; items.length; i++) &#123;</span><br><span class="line">            item = items[i];</span><br><span class="line">            flow(pipe, item);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        for (i = 0; i &lt; items.length; i++) &#123;</span><br><span class="line">            //flowOut方法流出资源</span><br><span class="line">            this.flowOut(items[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>lowIn 方法所做其实就是：先将每个资源 item 缓存到 _cache 中，然后对每个 item 调用 flow 方法。这里要注意的是 flow 的 pipe 参数为 _pipes[0]，即先将资源交给 pipeline 的第一个 pipe。以下是 flow 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">function flow (pipe, item) &#123;</span><br><span class="line">    var pipeId = pipe.id;</span><br><span class="line">    var itemState = item.states[pipeId];</span><br><span class="line">    var next = pipe.next;</span><br><span class="line">    var pipeline = pipe.pipeline;</span><br><span class="line"></span><br><span class="line">    if (item.error || itemState === ItemState.WORKING || itemState === ItemState.ERROR) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (itemState === ItemState.COMPLETE) &#123;</span><br><span class="line">        if (next) &#123;</span><br><span class="line">            flow(next, item);</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            // flowOut方法流出资源</span><br><span class="line">            pipeline.flowOut(item);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        item.states[pipeId] = ItemState.WORKING;</span><br><span class="line">        // Pass async callback in case it&apos;s a async call</span><br><span class="line">        var result = pipe.handle(item, function (err, result) &#123;</span><br><span class="line">            if (err) &#123;</span><br><span class="line">                item.error = err;</span><br><span class="line">                item.states[pipeId] = ItemState.ERROR;</span><br><span class="line">                pipeline.flowOut(item);</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                // Result can be null, then it means no result for this pipe</span><br><span class="line">                if (result) &#123;</span><br><span class="line">                    item.content = result;</span><br><span class="line">                &#125;</span><br><span class="line">                item.states[pipeId] = ItemState.COMPLETE;</span><br><span class="line">                if (next) &#123;</span><br><span class="line">                    flow(next, item);</span><br><span class="line">                &#125;</span><br><span class="line">                else &#123;</span><br><span class="line">                    pipeline.flowOut(item);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        // If result exists (not undefined, null is ok), then we go with sync call flow</span><br><span class="line">        if (result instanceof Error) &#123;</span><br><span class="line">            item.error = result;</span><br><span class="line">            item.states[pipeId] = ItemState.ERROR;</span><br><span class="line">            pipeline.flowOut(item);</span><br><span class="line">        &#125;</span><br><span class="line">        else if (result !== undefined) &#123;</span><br><span class="line">            // Result can be null, then it means no result for this pipe</span><br><span class="line">            if (result !== null) &#123;</span><br><span class="line">                item.content = result;</span><br><span class="line">            &#125;</span><br><span class="line">            item.states[pipeId] = ItemState.COMPLETE;</span><br><span class="line">            if (next) &#123;</span><br><span class="line">                flow(next, item);</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                pipeline.flowOut(item);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>flow 方法中对资源的处理分为三部分：</p>
+<ul>
+<li>如果资源状态为 ERROR，则直接返回</li>
+<li>如果资源状态为 COMPLETE 已完成，如果后续还有 pipe 就将其交给下一个 pipe 处理</li>
+<li>如果资源状态为其他状态，则调用 pipe.handle 方法对其进行加载。加载完成后，先将加载结果交给 item，即item.content = result，然后会对其加载状态 states 进行修改，最后如果后续还有 pipe 就将其交给后续 pipe 处理。</li>
+</ul>
+<h3 id="Pipe"><a href="#Pipe" class="headerlink" title="Pipe"></a>Pipe</h3><p>加下来介绍一下 pipe 对资源的处理，pipe-line 中包含了三个 pipe：assetLoader、downloader 和 loader。</p>
+<h4 id="asset-loader"><a href="#asset-loader" class="headerlink" title="asset-loader"></a>asset-loader</h4><p>asset-loader 是Pipeline的第一个Pipe，这个Pipe的职责是进行初始化，从cc.AssetLibrary中取出该资源的完整信息，获取该资源的类型，对rawAsset类型进行设置type，方便后面的pipe执行不同的处理，而非rawAsset则执行callback进入下一个Pipe处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">// engine asset-loader.js</span><br><span class="line">AssetLoader.prototype.handle = function (item, callback) &#123;</span><br><span class="line">    var uuid = item.uuid;</span><br><span class="line">    if (!uuid) &#123;</span><br><span class="line">        return item.content || null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    var self = this;</span><br><span class="line">    cc.AssetLibrary.queryAssetInfo(uuid, function (error, url, isRawAsset) &#123;</span><br><span class="line">        if (error) &#123;</span><br><span class="line">            callback(error);</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            item.url = item.rawUrl = url;</span><br><span class="line">            item.isRawAsset = isRawAsset;</span><br><span class="line">            if (isRawAsset) &#123;</span><br><span class="line">                var ext = cc.path.extname(url).toLowerCase();</span><br><span class="line">                if (!ext) &#123;</span><br><span class="line">                    callback(new Error(debug.getError(4931, uuid, url)));</span><br><span class="line">                    return;</span><br><span class="line">                &#125;</span><br><span class="line">                ext = ext.substr(1);</span><br><span class="line">                var queue = LoadingItems.getQueue(item);</span><br><span class="line">                reusedArray[0] = &#123;</span><br><span class="line">                    queueId: item.queueId,</span><br><span class="line">                    id: url,</span><br><span class="line">                    url: url,</span><br><span class="line">                    type: ext,</span><br><span class="line">                    error: null,</span><br><span class="line">                    alias: item,</span><br><span class="line">                    complete: true</span><br><span class="line">                &#125;;</span><br><span class="line">                if (CC_EDITOR) &#123;</span><br><span class="line">                    self.pipeline._cache[url] = reusedArray[0];</span><br><span class="line">                &#125;</span><br><span class="line">                queue.append(reusedArray);</span><br><span class="line">                // Dispatch to other raw type downloader</span><br><span class="line">                item.type = ext;</span><br><span class="line">                callback(null, item.content);</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                item.type = &apos;uuid&apos;;</span><br><span class="line">                callback(null, item.content);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="downloader"><a href="#downloader" class="headerlink" title="downloader"></a>downloader</h4><p>downloader 是对资源处理的第二道工序，负责对资源的下载，比如从磁盘读取，从网络读取等。<br>不同类型的资源在不同的平台下有不同的获取方式：</p>
+<ul>
+<li>比如脚本在原生平台使用 require 方法获取，而在H5平台则使用动态添加的<code>&lt;script&gt;</code> HTML标签，指定src进行加载。</li>
+<li>又比如json在原生平台使用 jsb.fileutils 进行加载，而在H5平台则使用XMLHttpRequest从网络下载。</li>
+</ul>
+<p>关于 jsb.fileutils 的实现，参考前面的《游戏文件加载流程》一文。<br>原生平台在 jsb-adapter/engine/jsb-loader.js 对 Downloader 的方法进行了重新实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">// engine downloader.js</span><br><span class="line">Downloader.prototype.handle = function (item, callback) &#123;</span><br><span class="line">    var self = this;</span><br><span class="line">    // 根据不同的type 获取不同的 downloadFunc</span><br><span class="line">    var downloadFunc = this.extMap[item.type] || this.extMap[&apos;default&apos;];</span><br><span class="line">    var syncRet = undefined;</span><br><span class="line">    // 并发限制，默认最多同时下载64个资源，超过的会进入队列，等待前面的资源加载完成后再依次进行加载</span><br><span class="line">    if (this._curConcurrent &lt; cc.macro.DOWNLOAD_MAX_CONCURRENT) &#123;</span><br><span class="line">        this._curConcurrent++;</span><br><span class="line">        // 交由对应的 downloadFunc 处理</span><br><span class="line">        syncRet = downloadFunc.call(this, item, function (err, result) &#123;</span><br><span class="line">            self._curConcurrent = Math.max(0, self._curConcurrent - 1);</span><br><span class="line">            self._handleLoadQueue();</span><br><span class="line">            callback &amp;&amp; callback(err, result);</span><br><span class="line">        &#125;);</span><br><span class="line">        if (syncRet !== undefined) &#123;</span><br><span class="line">            this._curConcurrent = Math.max(0, this._curConcurrent - 1);</span><br><span class="line">            this._handleLoadQueue();</span><br><span class="line">            return syncRet;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (item.ignoreMaxConcurrency) &#123;</span><br><span class="line">        // 如果item的ignoreMaxConcurrency为true则无视该并发限制</span><br><span class="line">        syncRet = downloadFunc.call(this, item, callback);</span><br><span class="line">        if (syncRet !== undefined) &#123;</span><br><span class="line">            return syncRet;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        // 放到队列中</span><br><span class="line">        this._loadQueue.push(&#123;</span><br><span class="line">            item: item,</span><br><span class="line">            callback: callback</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在 handle 方法中根据资源类型选择不同的方法加载。Downloader的 this.extMap 记录了各种资源类型的下载方式，在 Web 平台所有的类型最终都对应 downloader.js 提供的这6个下载方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">// engine downloader.js</span><br><span class="line">var defaultMap = &#123;</span><br><span class="line">    // JS</span><br><span class="line">    &apos;js&apos; : downloadScript,</span><br><span class="line"></span><br><span class="line">    // Images</span><br><span class="line">    &apos;png&apos; : downloadImage,</span><br><span class="line">    &apos;jpg&apos; : downloadImage,</span><br><span class="line">    &apos;bmp&apos; : downloadImage,</span><br><span class="line">    &apos;jpeg&apos; : downloadImage,</span><br><span class="line">    &apos;gif&apos; : downloadImage,</span><br><span class="line">    &apos;ico&apos; : downloadImage,</span><br><span class="line">    &apos;tiff&apos; : downloadImage,</span><br><span class="line">    &apos;webp&apos; : downloadImage,</span><br><span class="line">    &apos;image&apos; : downloadImage,</span><br><span class="line">    &apos;pvr&apos;: downloadBinary,</span><br><span class="line">    &apos;pkm&apos;: downloadBinary,</span><br><span class="line"></span><br><span class="line">    // Audio</span><br><span class="line">    &apos;mp3&apos; : downloadAudio,</span><br><span class="line">    &apos;ogg&apos; : downloadAudio,</span><br><span class="line">    &apos;wav&apos; : downloadAudio,</span><br><span class="line">    &apos;m4a&apos; : downloadAudio,</span><br><span class="line"></span><br><span class="line">    // Txt</span><br><span class="line">    &apos;txt&apos; : downloadText,</span><br><span class="line">    &apos;xml&apos; : downloadText,</span><br><span class="line">    &apos;vsh&apos; : downloadText,</span><br><span class="line">    &apos;fsh&apos; : downloadText,</span><br><span class="line">    &apos;atlas&apos; : downloadText,</span><br><span class="line"></span><br><span class="line">    &apos;tmx&apos; : downloadText,</span><br><span class="line">    &apos;tsx&apos; : downloadText,</span><br><span class="line"></span><br><span class="line">    &apos;json&apos; : downloadText,</span><br><span class="line">    &apos;ExportJson&apos; : downloadText,</span><br><span class="line">    &apos;plist&apos; : downloadText,</span><br><span class="line"></span><br><span class="line">    &apos;fnt&apos; : downloadText,</span><br><span class="line"></span><br><span class="line">    // Font</span><br><span class="line">    &apos;font&apos; : skip,</span><br><span class="line">    &apos;eot&apos; : skip,</span><br><span class="line">    &apos;ttf&apos; : skip,</span><br><span class="line">    &apos;woff&apos; : skip,</span><br><span class="line">    &apos;svg&apos; : skip,</span><br><span class="line">    &apos;ttc&apos; : skip,</span><br><span class="line"></span><br><span class="line">    // Deserializer</span><br><span class="line">    &apos;uuid&apos; : downloadUuid,</span><br><span class="line"></span><br><span class="line">    // Binary</span><br><span class="line">    &apos;binary&apos; : downloadBinary,</span><br><span class="line">    &apos;bin&apos; : downloadBinary,</span><br><span class="line">    &apos;dbbin&apos; : downloadBinary,</span><br><span class="line">    &apos;skel&apos;: downloadBinary,</span><br><span class="line"></span><br><span class="line">    &apos;default&apos; : downloadText</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在初始化 Downloader 时加到 extMap：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">this.extMap = js.mixin(extMap, defaultMap);</span><br></pre></td></tr></table></figure>
+<p>在原生平台：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">// jsb-adapter jsb-loader.js</span><br><span class="line">cc.loader.addDownloadHandlers(&#123;</span><br><span class="line">    // JS</span><br><span class="line">    &apos;js&apos; : downloadScript,</span><br><span class="line">    &apos;jsc&apos; : downloadScript,</span><br><span class="line"></span><br><span class="line">    // Images</span><br><span class="line">    &apos;png&apos; : downloadImage,</span><br><span class="line">    &apos;jpg&apos; : downloadImage,</span><br><span class="line">    &apos;bmp&apos; : downloadImage,</span><br><span class="line">    &apos;jpeg&apos; : downloadImage,</span><br><span class="line">    &apos;gif&apos; : downloadImage,</span><br><span class="line">    &apos;ico&apos; : downloadImage,</span><br><span class="line">    &apos;tiff&apos; : downloadImage,</span><br><span class="line">    &apos;webp&apos; : downloadImage,</span><br><span class="line">    &apos;image&apos; : downloadImage,</span><br><span class="line">    &apos;pvr&apos; : downloadImage,</span><br><span class="line">    &apos;pkm&apos; : downloadImage,</span><br><span class="line"></span><br><span class="line">    // Audio</span><br><span class="line">    &apos;mp3&apos; : downloadAudio,</span><br><span class="line">    &apos;ogg&apos; : downloadAudio,</span><br><span class="line">    &apos;wav&apos; : downloadAudio,</span><br><span class="line">    &apos;mp4&apos; : downloadAudio,</span><br><span class="line">    &apos;m4a&apos; : downloadAudio,</span><br><span class="line"></span><br><span class="line">    // Text</span><br><span class="line">    &apos;txt&apos; : downloadText,</span><br><span class="line">    &apos;xml&apos; : downloadText,</span><br><span class="line">    &apos;vsh&apos; : downloadText,</span><br><span class="line">    &apos;fsh&apos; : downloadText,</span><br><span class="line">    &apos;atlas&apos; : downloadText,</span><br><span class="line"></span><br><span class="line">    &apos;tmx&apos; : downloadText,</span><br><span class="line">    &apos;tsx&apos; : downloadText,</span><br><span class="line"></span><br><span class="line">    &apos;json&apos; : downloadText,</span><br><span class="line">    &apos;ExportJson&apos; : downloadText,</span><br><span class="line">    &apos;plist&apos; : downloadText,</span><br><span class="line"></span><br><span class="line">    &apos;fnt&apos; : downloadText,</span><br><span class="line"></span><br><span class="line">    &apos;binary&apos; : downloadBinary,</span><br><span class="line">    &apos;bin&apos; : downloadBinary,</span><br><span class="line">    &apos;dbbin&apos;: downloadBinary,</span><br><span class="line">    &apos;skel&apos;: downloadBinary,</span><br><span class="line"></span><br><span class="line">    &apos;default&apos; : downloadText</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h5 id="downloadScript"><a href="#downloadScript" class="headerlink" title="downloadScript"></a>downloadScript</h5><p>如果是微信或者原生平台，只是对脚本进行require（CommonJS模块化规范），这里主要是web平台的处理，原生平台的处理在后面统一介绍，web平台是通过创建一个script的HTML标签，指定标签的src，添加事件监听，通过这种HTML的方式下载脚本，使其生效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// jsb-adapter jsb-loader.js</span><br><span class="line">function downloadScript (item, callback) &#123;</span><br><span class="line">    require(item.url);</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// engine downloader.js</span><br><span class="line">function downloadScript (item, callback, isAsync) &#123;</span><br><span class="line">    var url = item.url,</span><br><span class="line">        d = document,</span><br><span class="line">        s = document.createElement(&apos;script&apos;);</span><br><span class="line"></span><br><span class="line">    if (window.location.protocol !== &apos;file:&apos;) &#123;</span><br><span class="line">        s.crossOrigin = &apos;anonymous&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    s.async = isAsync;</span><br><span class="line">    s.src = urlAppendTimestamp(url);</span><br><span class="line">    function loadHandler () &#123;</span><br><span class="line">        s.parentNode.removeChild(s);</span><br><span class="line">        s.removeEventListener(&apos;load&apos;, loadHandler, false);</span><br><span class="line">        s.removeEventListener(&apos;error&apos;, errorHandler, false);</span><br><span class="line">        callback(null, url);</span><br><span class="line">    &#125;</span><br><span class="line">    function errorHandler() &#123;</span><br><span class="line">        s.parentNode.removeChild(s);</span><br><span class="line">        s.removeEventListener(&apos;load&apos;, loadHandler, false);</span><br><span class="line">        s.removeEventListener(&apos;error&apos;, errorHandler, false);</span><br><span class="line">        callback(new Error(debug.getError(4928, url)));</span><br><span class="line">    &#125;</span><br><span class="line">    s.addEventListener(&apos;load&apos;, loadHandler, false);</span><br><span class="line">    s.addEventListener(&apos;error&apos;, errorHandler, false);</span><br><span class="line">    d.body.appendChild(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="downloadImage"><a href="#downloadImage" class="headerlink" title="downloadImage"></a>downloadImage</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// jsb-adapter jsb-loader.js</span><br><span class="line">function downloadImage(item, callback) &#123;</span><br><span class="line">    let img = new Image();</span><br><span class="line">    img.src = item.url;</span><br><span class="line">    img.onload = function (info) &#123;</span><br><span class="line">        callback(null, img);</span><br><span class="line">    &#125;;</span><br><span class="line">    img.onerror = function (event) &#123;</span><br><span class="line">        callback(new Error(&apos;load image fail:&apos; + img.src), null);</span><br><span class="line">    &#125;;</span><br><span class="line">    // Don&apos;t return anything to use async loading.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 Web 平台下载图片的方法，注意对于跨域的处理。<br>由于浏览器同源策略，凡是发送请求url的协议、域名、端口三者之间任意一与当前页面地址不同即为跨域，以下为跨域的详细描述表格。在web端，使用webgl模式无法直接使用跨域图片，需要服务器配合设置Access-Control-Allow-Origin（Canvas模式允许使用跨域图片）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">// engine downloader.js</span><br><span class="line"></span><br><span class="line">function downloadImage (item, callback, isCrossOrigin, img) &#123;</span><br><span class="line">    if (isCrossOrigin === undefined) &#123;</span><br><span class="line">        isCrossOrigin = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    var url = urlAppendTimestamp(item.url);</span><br><span class="line">    console.log(&quot;TestRes download.js downloadImage url=&quot;+url)</span><br><span class="line">    img = img || new Image();</span><br><span class="line">    // 对跨域的处理</span><br><span class="line">    if (isCrossOrigin &amp;&amp; window.location.protocol !== &apos;file:&apos;) &#123;</span><br><span class="line">        img.crossOrigin = &apos;anonymous&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        img.crossOrigin = null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (img.complete &amp;&amp; img.naturalWidth &gt; 0 &amp;&amp; img.src === url) &#123;</span><br><span class="line">        return img;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        function loadCallback () &#123;</span><br><span class="line">            img.removeEventListener(&apos;load&apos;, loadCallback);</span><br><span class="line">            img.removeEventListener(&apos;error&apos;, errorCallback);</span><br><span class="line"></span><br><span class="line">            img.id = item.id;</span><br><span class="line">            callback(null, img);</span><br><span class="line">        &#125;</span><br><span class="line">        function errorCallback () &#123;</span><br><span class="line">            img.removeEventListener(&apos;load&apos;, loadCallback);</span><br><span class="line">            img.removeEventListener(&apos;error&apos;, errorCallback);</span><br><span class="line">            // 在加载失败的情况下，如果是https就不重试了，因为就算加载了到了图片也无法渲染</span><br><span class="line">            // 如果是开启跨域支持，则将crossOrigin设置为null再重试一次</span><br><span class="line">            if (window.location.protocol !== &apos;https:&apos; &amp;&amp; img.crossOrigin &amp;&amp; img.crossOrigin.toLowerCase() === &apos;anonymous&apos;) &#123;</span><br><span class="line">                downloadImage(item, callback, false, img);</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                callback(new Error(debug.getError(4930, url)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        img.addEventListener(&apos;load&apos;, loadCallback);</span><br><span class="line">        img.addEventListener(&apos;error&apos;, errorCallback);</span><br><span class="line">        // 赋值 src 开始加载</span><br><span class="line">        img.src = url;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="downloadText"><a href="#downloadText" class="headerlink" title="downloadText"></a>downloadText</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// jsb-adapter jsb-loader.js</span><br><span class="line">function downloadText (item) &#123;</span><br><span class="line">    var url = item.url;</span><br><span class="line">    // 用 fileUtils 来实现</span><br><span class="line">    var result = cc_jsb.fileUtils.getStringFromFile(url);</span><br><span class="line">    if (typeof result === &apos;string&apos; &amp;&amp; result) &#123;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        return new Error(&apos;Download text failed: &apos; + url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">// engine text-downloader.js</span><br><span class="line"></span><br><span class="line">module.exports = function (item, callback) &#123;</span><br><span class="line">    var url = item.url;</span><br><span class="line">    url = urlAppendTimestamp(url);</span><br><span class="line">    var xhr = cc.loader.getXMLHttpRequest(),</span><br><span class="line">        errInfo = &apos;Load text file failed: &apos; + url;</span><br><span class="line">    xhr.open(&apos;GET&apos;, url, true);</span><br><span class="line">    if (xhr.overrideMimeType) xhr.overrideMimeType(&apos;text\/plain; charset=utf-8&apos;);</span><br><span class="line">    xhr.onload = function () &#123;</span><br><span class="line">        if (xhr.readyState === 4) &#123;</span><br><span class="line">            if (xhr.status === 200 || xhr.status === 0) &#123;</span><br><span class="line">                callback(null, xhr.responseText);</span><br><span class="line">            &#125;</span><br><span class="line">            else &#123;</span><br><span class="line">                callback(&#123;status:xhr.status, errorMessage:errInfo + &apos;(wrong status)&apos;&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            callback(&#123;status:xhr.status, errorMessage:errInfo + &apos;(wrong readyState)&apos;&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    xhr.onerror = function()&#123;</span><br><span class="line">        callback(&#123;status:xhr.status, errorMessage:errInfo + &apos;(error)&apos;&#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">    xhr.ontimeout = function()&#123;</span><br><span class="line">        callback(&#123;status:xhr.status, errorMessage:errInfo + &apos;(time out)&apos;&#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">    // 发起下载请求</span><br><span class="line">    xhr.send(null);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="资源下载"><a href="#资源下载" class="headerlink" title="资源下载"></a>资源下载</h5><p>对于原生平台不论是图片还是文本的加载最终会调用 runtime 中的 HttpClient-android 的相关 api 来进行下载。<br>在 jsb_xmlhttprequest.cpp 中实现 js 中 <code>XMLHttpRequest</code> 的方法，资源的下载就靠它们来完成。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// jsb_xmlhttprequest.cpp</span><br><span class="line">bool register_all_xmlhttprequest(se::Object* global)</span><br><span class="line">&#123;</span><br><span class="line">    se::Class* cls = se::Class::create(&quot;XMLHttpRequest&quot;, global, nullptr, _SE(XMLHttpRequest_constructor));</span><br><span class="line">    cls-&gt;defineFinalizeFunction(_SE(XMLHttpRequest_finalize));</span><br><span class="line"></span><br><span class="line">    cls-&gt;defineFunction(&quot;open&quot;, _SE(XMLHttpRequest_open));</span><br><span class="line">    cls-&gt;defineFunction(&quot;abort&quot;, _SE(XMLHttpRequest_abort));</span><br><span class="line">    cls-&gt;defineFunction(&quot;send&quot;, _SE(XMLHttpRequest_send));</span><br><span class="line">    cls-&gt;defineFunction(&quot;setRequestHeader&quot;, _SE(XMLHttpRequest_setRequestHeader));</span><br><span class="line">    cls-&gt;defineFunction(&quot;getAllResponseHeaders&quot;, _SE(XMLHttpRequest_getAllResponseHeaders));</span><br><span class="line">    cls-&gt;defineFunction(&quot;getResponseHeader&quot;, _SE(XMLHttpRequest_getResonpseHeader));</span><br><span class="line">    cls-&gt;defineFunction(&quot;overrideMimeType&quot;, _SE(XMLHttpRequest_overrideMimeType));</span><br><span class="line">    cls-&gt;defineProperty(&quot;__mimeType&quot;, _SE(XMLHttpRequest_getMIMEType), nullptr);</span><br><span class="line"></span><br><span class="line">    cls-&gt;defineProperty(&quot;readyState&quot;, _SE(XMLHttpRequest_getReadyState), nullptr);</span><br><span class="line">    cls-&gt;defineProperty(&quot;status&quot;, _SE(XMLHttpRequest_getStatus), nullptr);</span><br><span class="line">    cls-&gt;defineProperty(&quot;statusText&quot;, _SE(XMLHttpRequest_getStatusText), nullptr);</span><br><span class="line">    cls-&gt;defineProperty(&quot;responseText&quot;, _SE(XMLHttpRequest_getResponseText), nullptr);</span><br><span class="line">    cls-&gt;defineProperty(&quot;responseXML&quot;, _SE(XMLHttpRequest_getResponseXML), nullptr);</span><br><span class="line">    cls-&gt;defineProperty(&quot;response&quot;, _SE(XMLHttpRequest_getResponse), nullptr);</span><br><span class="line">    cls-&gt;defineProperty(&quot;timeout&quot;, _SE(XMLHttpRequest_getTimeout), _SE(XMLHttpRequest_setTimeout));</span><br><span class="line">    cls-&gt;defineProperty(&quot;responseType&quot;, _SE(XMLHttpRequest_getResponseType), _SE(XMLHttpRequest_setResponseType));</span><br><span class="line">    cls-&gt;defineProperty(&quot;withCredentials&quot;, _SE(XMLHttpRequest_getWithCredentials), nullptr);</span><br><span class="line"></span><br><span class="line">    cls-&gt;install();</span><br><span class="line"></span><br><span class="line">    JSBClassType::registerClass&lt;XMLHttpRequest&gt;(cls);</span><br><span class="line"></span><br><span class="line">    __jsb_XMLHttpRequest_class = cls;</span><br><span class="line"></span><br><span class="line">    se::ScriptEngine::getInstance()-&gt;clearException();</span><br><span class="line"></span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="loader"><a href="#loader" class="headerlink" title="loader"></a>loader</h4><p>loader 一般是对资源最后的一道处理工序，比如对下载完之后的图片进行处理等。<br>这部分在不同平台的处理也是不一样的。<br>原生平台在 jsb-adapter/engine/jsb-loader.js 对 Downloader 的方法进行了重新实现。<br>Web 平台的实现在 load-pipeline/loader.js。</p>
+<p>Web 平台：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// engine loader.js</span><br><span class="line">Loader.prototype.handle = function (item, callback) &#123;</span><br><span class="line">    var loadFunc = this.extMap[item.type] || this.extMap[&apos;default&apos;];</span><br><span class="line">    return loadFunc.call(this, item, callback);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">// engine loader.js</span><br><span class="line">var defaultMap = &#123;</span><br><span class="line">    // Images</span><br><span class="line">    &apos;png&apos; : loadImage,</span><br><span class="line">    &apos;jpg&apos; : loadImage,</span><br><span class="line">    &apos;bmp&apos; : loadImage,</span><br><span class="line">    &apos;jpeg&apos; : loadImage,</span><br><span class="line">    &apos;gif&apos; : loadImage,</span><br><span class="line">    &apos;ico&apos; : loadImage,</span><br><span class="line">    &apos;tiff&apos; : loadImage,</span><br><span class="line">    &apos;webp&apos; : loadImage,</span><br><span class="line">    &apos;image&apos; : loadImage,</span><br><span class="line">    &apos;pvr&apos; : loadPVRTex,</span><br><span class="line">    &apos;pkm&apos; : loadPKMTex,</span><br><span class="line"></span><br><span class="line">    // Audio</span><br><span class="line">    &apos;mp3&apos; : loadAudioAsAsset,</span><br><span class="line">    &apos;ogg&apos; : loadAudioAsAsset,</span><br><span class="line">    &apos;wav&apos; : loadAudioAsAsset,</span><br><span class="line">    &apos;m4a&apos; : loadAudioAsAsset,</span><br><span class="line"></span><br><span class="line">    // json</span><br><span class="line">    &apos;json&apos; : loadJSON,</span><br><span class="line">    &apos;ExportJson&apos; : loadJSON,</span><br><span class="line"></span><br><span class="line">    // plist</span><br><span class="line">    &apos;plist&apos; : loadPlist,</span><br><span class="line"></span><br><span class="line">    // asset</span><br><span class="line">    &apos;uuid&apos; : loadUuid,</span><br><span class="line">    &apos;prefab&apos; : loadUuid,</span><br><span class="line">    &apos;fire&apos; : loadUuid,</span><br><span class="line">    &apos;scene&apos; : loadUuid,</span><br><span class="line"></span><br><span class="line">    // binary</span><br><span class="line">    &apos;binary&apos; : loadBinary,</span><br><span class="line">    &apos;dbbin&apos; : loadBinary,</span><br><span class="line">    &apos;bin&apos; : loadBinary,</span><br><span class="line">    &apos;skel&apos; : loadBinary,</span><br><span class="line"></span><br><span class="line">    // Font</span><br><span class="line">    &apos;font&apos; : fontLoader.loadFont,</span><br><span class="line">    &apos;eot&apos; : fontLoader.loadFont,</span><br><span class="line">    &apos;ttf&apos; : fontLoader.loadFont,</span><br><span class="line">    &apos;woff&apos; : fontLoader.loadFont,</span><br><span class="line">    &apos;svg&apos; : fontLoader.loadFont,</span><br><span class="line">    &apos;ttc&apos; : fontLoader.loadFont,</span><br><span class="line"></span><br><span class="line">    &apos;default&apos; : loadNothing</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>原生Android平台</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// jsb-adapter jsb-loader.js</span><br><span class="line">cc.loader.addLoadHandlers(&#123;</span><br><span class="line">    // Font</span><br><span class="line">    &apos;font&apos; : loadFont,</span><br><span class="line">    &apos;eot&apos; : loadFont,</span><br><span class="line">    &apos;ttf&apos; : loadFont,</span><br><span class="line">    &apos;woff&apos; : loadFont,</span><br><span class="line">    &apos;svg&apos; : loadFont,</span><br><span class="line">    &apos;ttc&apos; : loadFont,</span><br><span class="line"></span><br><span class="line">    // Audio</span><br><span class="line">    &apos;mp3&apos; : loadAudio,</span><br><span class="line">    &apos;ogg&apos; : loadAudio,</span><br><span class="line">    &apos;wav&apos; : loadAudio,</span><br><span class="line">    &apos;mp4&apos; : loadAudio,</span><br><span class="line">    &apos;m4a&apos; : loadAudio,</span><br><span class="line"></span><br><span class="line">    // compressed texture</span><br><span class="line">    &apos;pvr&apos;: loadCompressedTex,</span><br><span class="line">    &apos;pkm&apos;: loadCompressedTex,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="资源释放"><a href="#资源释放" class="headerlink" title="资源释放"></a>资源释放</h2><p>CCLoader 对于资源释放提供了 release、releaseRes、releaseAsset、releaseResDir、releaseAll 方法，但实际上所有方法最终是调用 release 方法来实现资源释放的，在 release 调用之前所做的就是获取资源对应的 uuid，然后调用 release 方法。</p>
+<h2 id="相关文章："><a href="#相关文章：" class="headerlink" title="相关文章："></a>相关文章：</h2><p><a href="https://blog.csdn.net/u013647453/article/details/88564966" target="_blank" rel="noopener">https://blog.csdn.net/u013647453/article/details/88564966</a><br><a href="https://www.cnblogs.com/ybgame/p/10576884.html" target="_blank" rel="noopener">https://www.cnblogs.com/ybgame/p/10576884.html</a><br><a href="https://www.cnblogs.com/ybgame/p/10576986.html" target="_blank" rel="noopener">https://www.cnblogs.com/ybgame/p/10576986.html</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cocos/" rel="tag"># cocos</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/05/cocos/cocos-creator-native-game-start-process/" rel="next" title="Cocos Creator -- JSB 游戏启动运行流程">
+                <i class="fa fa-chevron-left"></i> Cocos Creator -- JSB 游戏启动运行流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/15/cocos/cocos-creator-native-render-process/" rel="prev" title="Cocos Creator -- JSB 游戏渲染流程">
+                Cocos Creator -- JSB 游戏渲染流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#框架简介"><span class="nav-number">2.</span> <span class="nav-text">框架简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源加载"><span class="nav-number">3.</span> <span class="nav-text">资源加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载流程"><span class="nav-number">3.1.</span> <span class="nav-text">加载流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CCLoader"><span class="nav-number">3.2.</span> <span class="nav-text">CCLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#loading-tiems"><span class="nav-number">3.3.</span> <span class="nav-text">loading-tiems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline"><span class="nav-number">3.4.</span> <span class="nav-text">pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pipe"><span class="nav-number">3.5.</span> <span class="nav-text">Pipe</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#asset-loader"><span class="nav-number">3.5.1.</span> <span class="nav-text">asset-loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#downloader"><span class="nav-number">3.5.2.</span> <span class="nav-text">downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#downloadScript"><span class="nav-number">3.5.2.1.</span> <span class="nav-text">downloadScript</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#downloadImage"><span class="nav-number">3.5.2.2.</span> <span class="nav-text">downloadImage</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#downloadText"><span class="nav-number">3.5.2.3.</span> <span class="nav-text">downloadText</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#资源下载"><span class="nav-number">3.5.2.4.</span> <span class="nav-text">资源下载</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#loader"><span class="nav-number">3.5.3.</span> <span class="nav-text">loader</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源释放"><span class="nav-number">4.</span> <span class="nav-text">资源释放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关文章："><span class="nav-number">5.</span> <span class="nav-text">相关文章：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

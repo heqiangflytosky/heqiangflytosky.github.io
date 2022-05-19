@@ -1,0 +1,900 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="OpenGL ES,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍 OpenGL ES 如何实现平滑着色">
+<meta name="keywords" content="OpenGL ES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL ES -- 平滑着色">
+<meta property="og:url" content="http://yoursite.com/2020/04/20/OpenGL/opengl-es-smoonth-shade/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 OpenGL ES 如何实现平滑着色">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/opengl-es-smoonth-shade/triangle.png">
+<meta property="og:image" content="http://yoursite.com/images/opengl-es-smoonth-shade/smoonth.png">
+<meta property="og:updated_time" content="2020-04-30T06:35:38.724Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGL ES -- 平滑着色">
+<meta name="twitter:description" content="介绍 OpenGL ES 如何实现平滑着色">
+<meta name="twitter:image" content="http://yoursite.com/images/opengl-es-smoonth-shade/triangle.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/20/OpenGL/opengl-es-smoonth-shade/">
+
+
+
+
+
+  <title> OpenGL ES -- 平滑着色 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/20/OpenGL/opengl-es-smoonth-shade/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenGL ES -- 平滑着色
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-20T10:00:00+08:00">
+                2020-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenGL/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenGL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2020/04/20/OpenGL/opengl-es-smoonth-shade/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2020/04/20/OpenGL/opengl-es-smoonth-shade/" class="leancloud_visitors" data-flag-title="OpenGL ES -- 平滑着色">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 OpenGL ES 如何实现平滑着色
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在前面一章我们介绍了使用使用 uniform 用单一的颜色绘制一种物体，本章我们将会引人 varying 类型的变量介绍如何实现平滑着色。</p>
+<h2 id="三角形扇"><a href="#三角形扇" class="headerlink" title="三角形扇"></a>三角形扇</h2><p>我们在介绍平滑着色以前，我们先来介绍一下三角形扇。然后我们将会实现一个中间亮色，然后沿对角线逐渐变色的效果。</p>
+<p><img src="/images/opengl-es-smoonth-shade/triangle.png" width="270" height="260"></p>
+<p>我们在桌子中间加入一个新的点（0，0），最终看拿到了四个三角形，而不是原来的两个。我们修改一下正方形的顶点数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private float[] tableVerticesWithTriangles = &#123;</span><br><span class="line">        // 矩形</span><br><span class="line">        0f,   0f, </span><br><span class="line">        -0.5f, -0.5f, </span><br><span class="line">        0.5f, -0.5f, </span><br><span class="line">        0.5f, 0.5f, </span><br><span class="line">        -0.5f, 0.5f, </span><br><span class="line">        -0.5f, -0.5f,</span><br></pre></td></tr></table></figure>
+<p>然后在 <code>onDrawFrame</code> 中将绘制的模式改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0 , 6);</span><br></pre></td></tr></table></figure>
+<p>这样就可以绘制三角形扇了。</p>
+<h2 id="平滑着色"><a href="#平滑着色" class="headerlink" title="平滑着色"></a>平滑着色</h2><p>下面我们开始介绍平滑着色。<br>在前面的基础知识一文中我们介绍过，可以在顶点中添加其他属性，那么我们就再添加一个颜色来作为第二个属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">private float[] tableVerticesWithTriangles = &#123;</span><br><span class="line">        // Order of coordinates: X,Y,R,G,B</span><br><span class="line">        // 矩形</span><br><span class="line">        0f,   0f, 1f, 1f, 1f,</span><br><span class="line">        -0.5f, -0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line">        0.5f, -0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line">        0.5f, 0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line">        -0.5f, 0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line">        -0.5f, -0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line"></span><br><span class="line">        // 直线</span><br><span class="line">        -0.5f, 0f, 1f,0f,0f,</span><br><span class="line">        0.5f, 0f,1f,0f,0f,</span><br><span class="line"></span><br><span class="line">        // 两个点</span><br><span class="line">        0f, -0.25f,0f,0f,1f,</span><br><span class="line">        0f, 0.25f,1f,0f,0f</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们为顶点增加了颜色分量，现在来需要修改顶点着色器的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">uniform mat4 u_Matrix;</span><br><span class="line"></span><br><span class="line">attribute vec4 a_Position;</span><br><span class="line">attribute vec4 a_Color;</span><br><span class="line"></span><br><span class="line">varying vec4 v_Color;</span><br><span class="line"></span><br><span class="line">void main()&#123;</span><br><span class="line">    v_Color = a_Color;</span><br><span class="line"></span><br><span class="line">    gl_Position =  a_Position;</span><br><span class="line">    gl_PointSize = 10.0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们加入了一个新的属性 <code>a_Color</code>,也加入了一个叫做 <code>v_Color</code> 的新 <code>varying</code>。前面已经讲过 <code>varying</code> 是一个特殊的变量类型，它把给它的值进行混合并把这些混合的值发送给片段着色器。</p>
+<p>我们把varying也加入片段着色器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">precision mediump float;</span><br><span class="line">varying vec4 v_Color;</span><br><span class="line"></span><br><span class="line">void main() &#123;</span><br><span class="line">    gl_FragColor = v_Color;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们用varying变量v_Color替换了原来代码中的uniform。如果这个片段属于一条直线，那个OpenGL就会用构成那条直线的两个顶点计算其混合后的颜色。</p>
+<p>下面来看一下全部的 Render 代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">public class SecondRender implements GLSurfaceView.Renderer &#123;</span><br><span class="line">    private Context mContext;</span><br><span class="line">    private static final int POSITOIN_COMPONENT_COUNT = 2;</span><br><span class="line">    private static final int COLOR_COMPONENT_COUNT = 3;</span><br><span class="line">    private static final int BYTES_PER_FLOAT = 4;</span><br><span class="line">    private static final int STRIDE = (POSITOIN_COMPONENT_COUNT + COLOR_COMPONENT_COUNT) * BYTES_PER_FLOAT;</span><br><span class="line">    private static final String A_COLOR = &quot;a_Color&quot;;</span><br><span class="line">    private static final String U_COLOR = &quot;u_Color&quot;;</span><br><span class="line">    private static final String A_POSITION = &quot;a_Position&quot;;</span><br><span class="line"></span><br><span class="line">    private float[] tableVerticesWithTriangles = &#123;</span><br><span class="line">            // Order of coordinates: X,Y,R,G,B</span><br><span class="line">            // 矩形</span><br><span class="line">            0f,   0f, 1f, 1f, 1f,</span><br><span class="line">            -0.5f, -0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line">            0.5f, -0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line">            0.5f, 0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line">            -0.5f, 0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line">            -0.5f, -0.5f, 0.7f,0.7f,0.7f,</span><br><span class="line"></span><br><span class="line">            // 直线</span><br><span class="line">            -0.5f, 0f, 1f,0f,0f,</span><br><span class="line">            0.5f, 0f,1f,0f,0f,</span><br><span class="line"></span><br><span class="line">            // 两个点</span><br><span class="line">            0f, -0.25f,0f,0f,1f,</span><br><span class="line">            0f, 0.25f,1f,0f,0f</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    private FloatBuffer vertexData;</span><br><span class="line">    private int mPrograme;</span><br><span class="line">    private int uColorLocation;</span><br><span class="line">    private int aPosition;</span><br><span class="line">    private int aColorLocation;</span><br><span class="line"></span><br><span class="line">    public SecondRender(Context context) &#123;</span><br><span class="line">        mContext = context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onSurfaceCreated(GL10 gl, EGLConfig config) &#123;</span><br><span class="line">        GLES20.glClearColor(0.0f,0,0,0);</span><br><span class="line"></span><br><span class="line">        vertexData = ByteBuffer.allocateDirect(tableVerticesWithTriangles.length * BYTES_PER_FLOAT)</span><br><span class="line">                .order(ByteOrder.nativeOrder())</span><br><span class="line">                .asFloatBuffer();</span><br><span class="line"></span><br><span class="line">        vertexData.put(tableVerticesWithTriangles);</span><br><span class="line"></span><br><span class="line">        String vertexShaderCode = Utils.fileLoader(mContext, R.raw.sample_airhoockey_vertex_shader);</span><br><span class="line">        String fragmentShaderCode = Utils.fileLoader(mContext, R.raw.sample_airhoockey_fragment_shader);</span><br><span class="line">        int vertexShader = ShaderHelper.compileVertexShader(vertexShaderCode);</span><br><span class="line">        int fragmentShader = ShaderHelper.compileFragmentShader(fragmentShaderCode);</span><br><span class="line">        mPrograme = ShaderHelper.linkPrograme(vertexShader, fragmentShader);</span><br><span class="line"></span><br><span class="line">        ShaderHelper.validatePrograme(mPrograme);</span><br><span class="line">        GLES20.glUseProgram(mPrograme);</span><br><span class="line"></span><br><span class="line">        aPosition = GLES20.glGetAttribLocation(mPrograme, A_POSITION);</span><br><span class="line">        aColorLocation = GLES20.glGetAttribLocation(mPrograme, A_COLOR);</span><br><span class="line"></span><br><span class="line">        vertexData.position(0);</span><br><span class="line">        GLES20.glVertexAttribPointer(aPosition, POSITOIN_COMPONENT_COUNT, GLES20.GL_FLOAT,</span><br><span class="line">                false, STRIDE, vertexData);</span><br><span class="line"></span><br><span class="line">        GLES20.glEnableVertexAttribArray(aPosition);</span><br><span class="line"></span><br><span class="line">        vertexData.position(POSITOIN_COMPONENT_COUNT);</span><br><span class="line">        GLES20.glVertexAttribPointer(aColorLocation, COLOR_COMPONENT_COUNT, GLES20.GL_FLOAT,</span><br><span class="line">                false, STRIDE, vertexData);</span><br><span class="line">        GLES20.glEnableVertexAttribArray(aColorLocation);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onSurfaceChanged(GL10 gl, int width, int height) &#123;</span><br><span class="line">        GLES20.glViewport(0,0,width,height);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onDrawFrame(GL10 gl) &#123;</span><br><span class="line">        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);</span><br><span class="line"></span><br><span class="line">        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0 , 6);</span><br><span class="line"></span><br><span class="line">        GLES20.glDrawArrays(GLES20.GL_LINES, 6 , 2);</span><br><span class="line"></span><br><span class="line">        GLES20.glDrawArrays(GLES20.GL_POINTS, 8 , 1);</span><br><span class="line"></span><br><span class="line">        GLES20.glDrawArrays(GLES20.GL_POINTS, 9 , 1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">public class ShaderHelper &#123;</span><br><span class="line">    public static int compileVertexShader(String shaderCode)&#123;</span><br><span class="line">        // 编译顶点着色器</span><br><span class="line">        return compileShader(GLES20.GL_VERTEX_SHADER, shaderCode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int compileFragmentShader(String shaderCode) &#123;</span><br><span class="line">        // 编译片元着色器</span><br><span class="line">        return compileShader(GLES20.GL_FRAGMENT_SHADER, shaderCode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int compileShader(int type, String shaderCode) &#123;</span><br><span class="line">        // 创建一个新的着色器对象</span><br><span class="line">        final int sharderObjectId = GLES20.glCreateShader(type);</span><br><span class="line">        // 检查是否创建成功</span><br><span class="line">        if (sharderObjectId == 0) &#123;</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;create shader error&quot;);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line">        // 上传着色器源码</span><br><span class="line">        GLES20.glShaderSource(sharderObjectId, shaderCode);</span><br><span class="line">        // 编译着色器源码</span><br><span class="line">        GLES20.glCompileShader(sharderObjectId);</span><br><span class="line"></span><br><span class="line">        // 获取编译状态</span><br><span class="line">        final int[] compileStatus = new int[2];</span><br><span class="line">        GLES20.glGetShaderiv(sharderObjectId, GLES20.GL_COMPILE_STATUS, compileStatus,0);</span><br><span class="line">        // 取出日志信息</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;compile: &quot;+GLES20.glGetShaderInfoLog(sharderObjectId));</span><br><span class="line"></span><br><span class="line">        if (compileStatus[0] == 0) &#123;</span><br><span class="line">            // 编译失败时删除该着色器对象</span><br><span class="line">            GLES20.glDeleteShader(sharderObjectId);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line">        // 返回着色器id</span><br><span class="line">        return sharderObjectId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static int linkPrograme(int vertexShaderId,int fragmentShaderId) &#123;</span><br><span class="line">        // 创建一个 OpenGL 程序对象</span><br><span class="line">        final int programeObjectId = GLES20.glCreateProgram();</span><br><span class="line">        if (programeObjectId == 0) &#123;</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;create programe error&quot;);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 把顶点着色器和片段着色器附加到程序对象上</span><br><span class="line">        GLES20.glAttachShader(programeObjectId, vertexShaderId);</span><br><span class="line">        GLES20.glAttachShader(programeObjectId, fragmentShaderId);</span><br><span class="line"></span><br><span class="line">        // 链接程序</span><br><span class="line">        GLES20.glLinkProgram(programeObjectId);</span><br><span class="line"></span><br><span class="line">        // 验证链接的状态</span><br><span class="line">        final int[] linkStatus = new int[2];</span><br><span class="line">        GLES20.glGetProgramiv(programeObjectId, GLES20.GL_LINK_STATUS, linkStatus,0);</span><br><span class="line">        // 打印链接信息</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;link programe: &quot;+GLES20.glGetProgramInfoLog(programeObjectId));</span><br><span class="line"></span><br><span class="line">        if (linkStatus[0] == 0) &#123;</span><br><span class="line">            GLES20.glDeleteProgram(programeObjectId);</span><br><span class="line">            Log.e(&quot;Test&quot;,&quot;lint programe error&quot;);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return programeObjectId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static boolean validatePrograme(int programeObjectId) &#123;</span><br><span class="line">        GLES20.glValidateProgram(programeObjectId);</span><br><span class="line">        final int[] validateStatus = new int[2];</span><br><span class="line">        GLES20.glGetProgramiv(programeObjectId, GLES20.GL_VALIDATE_STATUS, validateStatus,0);</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;validate programe: &quot;+GLES20.glGetProgramInfoLog(programeObjectId));</span><br><span class="line">        return validateStatus[0] != 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>新增了 <code>STRIDE</code> 常量，这个被称为跨距的常量告诉 OpenGL 每个位置之间有多少个字节，这样它就知道需要跳过多少了。<br>新增 <code>aColorLocation</code> 变量，把它和顶点着色器中的 <code>a_Color</code> 关联起来。<br>在 <code>onDrawFrame</code> 方法中把 <code>GLES20.glUniform4f</code> 方法去掉，因为我们已经把顶点数据和<code>a_Color</code> 关联起来了，就不再需要它们来设置颜色了。只需要调用 <code>GLES20.glDrawArrays</code> 即可，OpenGL 会自动从顶点数据里面读入颜色属性。</p>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/images/opengl-es-smoonth-shade/smoonth.png" width="337" height="599"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenGL-ES/" rel="tag"># OpenGL ES</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/15/OpenGL/opengl-es-texture/" rel="next" title="OpenGL ES -- 纹理">
+                <i class="fa fa-chevron-left"></i> OpenGL ES -- 纹理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/25/OpenGL/opengl-es-view-port-resize/" rel="prev" title="OpenGL ES -- 调整屏幕宽高比">
+                OpenGL ES -- 调整屏幕宽高比 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三角形扇"><span class="nav-number">2.</span> <span class="nav-text">三角形扇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平滑着色"><span class="nav-number">3.</span> <span class="nav-text">平滑着色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#效果"><span class="nav-number">4.</span> <span class="nav-text">效果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

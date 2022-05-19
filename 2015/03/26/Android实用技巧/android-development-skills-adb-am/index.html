@@ -1,0 +1,995 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android,am,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍 am 的使用">
+<meta name="keywords" content="Android,am">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android实用技巧之adb命令：am 命令的使用">
+<meta property="og:url" content="http://yoursite.com/2015/03/26/Android实用技巧/android-development-skills-adb-am/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 am 的使用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-11T12:08:47.867Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android实用技巧之adb命令：am 命令的使用">
+<meta name="twitter:description" content="介绍 am 的使用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/03/26/Android实用技巧/android-development-skills-adb-am/">
+
+
+
+
+
+  <title> Android实用技巧之adb命令：am 命令的使用 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/03/26/Android实用技巧/android-development-skills-adb-am/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android实用技巧之adb命令：am 命令的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-03-26T10:00:00+08:00">
+                2015-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android实用技巧/" itemprop="url" rel="index">
+                    <span itemprop="name">Android实用技巧</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/03/26/Android实用技巧/android-development-skills-adb-am/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/03/26/Android实用技巧/android-development-skills-adb-am/" class="leancloud_visitors" data-flag-title="Android实用技巧之adb命令：am 命令的使用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 am 的使用
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 adb shell 中，您可以使用 Activity Manager (am) 工具发出命令以执行各种系统操作，如启动 Activity、强行停止进程、广播 intent、修改设备屏幕属性及其他操作。在 shell 中，此语法为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am &lt;command&gt;</span><br></pre></td></tr></table></figure>
+<p>您也可以直接从 adb 发出 Activity Manager 命令，无需进入远程 shell。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -a android.intent.action.VIEW</span><br></pre></td></tr></table></figure>
+<p>可用的 am 命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br></pre></td><td class="code"><pre><span class="line">usage: am [subcommand] [options]</span><br><span class="line">usage: am start [-D] [-N] [-W] [-P &lt;FILE&gt;] [--start-profiler &lt;FILE&gt;]</span><br><span class="line">               [--sampling INTERVAL] [-R COUNT] [-S]</span><br><span class="line">               [--track-allocation] [--user &lt;USER_ID&gt; | current] &lt;INTENT&gt;</span><br><span class="line">       am startservice [--user &lt;USER_ID&gt; | current] &lt;INTENT&gt;</span><br><span class="line">       am stopservice [--user &lt;USER_ID&gt; | current] &lt;INTENT&gt;</span><br><span class="line">       am force-stop [--user &lt;USER_ID&gt; | all | current] &lt;PACKAGE&gt;</span><br><span class="line">       am kill [--user &lt;USER_ID&gt; | all | current] &lt;PACKAGE&gt;</span><br><span class="line">       am kill-all</span><br><span class="line">       am broadcast [--user &lt;USER_ID&gt; | all | current] &lt;INTENT&gt;</span><br><span class="line">       am instrument [-r] [-e &lt;NAME&gt; &lt;VALUE&gt;] [-p &lt;FILE&gt;] [-w]</span><br><span class="line">               [--user &lt;USER_ID&gt; | current]</span><br><span class="line">               [--no-window-animation] [--abi &lt;ABI&gt;] &lt;COMPONENT&gt;</span><br><span class="line">       am profile start [--user &lt;USER_ID&gt; current] [--sampling INTERVAL] &lt;PROCESS&gt; &lt;FILE&gt;</span><br><span class="line">       am profile stop [--user &lt;USER_ID&gt; current] [&lt;PROCESS&gt;]</span><br><span class="line">       am dumpheap [--user &lt;USER_ID&gt; current] [-n] &lt;PROCESS&gt; &lt;FILE&gt;</span><br><span class="line">       am set-debug-app [-w] [--persistent] &lt;PACKAGE&gt;</span><br><span class="line">       am clear-debug-app</span><br><span class="line">       am set-watch-heap &lt;PROCESS&gt; &lt;MEM-LIMIT&gt;</span><br><span class="line">       am clear-watch-heap</span><br><span class="line">       am bug-report [--progress]</span><br><span class="line">       am monitor [--gdb &lt;port&gt;]</span><br><span class="line">       am hang [--allow-restart]</span><br><span class="line">       am restart</span><br><span class="line">       am idle-maintenance</span><br><span class="line">       am screen-compat [on|off] &lt;PACKAGE&gt;</span><br><span class="line">       am package-importance &lt;PACKAGE&gt;</span><br><span class="line">       am to-uri [INTENT]</span><br><span class="line">       am to-intent-uri [INTENT]</span><br><span class="line">       am to-app-uri [INTENT]</span><br><span class="line">       am switch-user &lt;USER_ID&gt;</span><br><span class="line">       am start-user &lt;USER_ID&gt;</span><br><span class="line">       am unlock-user &lt;USER_ID&gt; [TOKEN_HEX]</span><br><span class="line">       am stop-user [-w] [-f] &lt;USER_ID&gt;</span><br><span class="line">       am stack start &lt;DISPLAY_ID&gt; &lt;INTENT&gt;</span><br><span class="line">       am stack movetask &lt;TASK_ID&gt; &lt;STACK_ID&gt; [true|false]</span><br><span class="line">       am stack resize &lt;STACK_ID&gt; &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</span><br><span class="line">       am stack resize-animated &lt;STACK_ID&gt; &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</span><br><span class="line">       am stack resize-docked-stack &lt;LEFT,TOP,RIGHT,BOTTOM&gt; [&lt;TASK_LEFT,TASK_TOP,TASK_RIGHT,TASK_BOTTOM&gt;]</span><br><span class="line">       am stack size-docked-stack-test: &lt;STEP_SIZE&gt; &lt;l|t|r|b&gt; [DELAY_MS]</span><br><span class="line">       am stack move-top-activity-to-pinned-stack: &lt;STACK_ID&gt; &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</span><br><span class="line">       am stack positiontask &lt;TASK_ID&gt; &lt;STACK_ID&gt; &lt;POSITION&gt;</span><br><span class="line">       am stack list</span><br><span class="line">       am stack info &lt;STACK_ID&gt;</span><br><span class="line">       am stack remove &lt;STACK_ID&gt;</span><br><span class="line">       am task lock &lt;TASK_ID&gt;</span><br><span class="line">       am task lock stop</span><br><span class="line">       am task resizeable &lt;TASK_ID&gt; [0 (unresizeable) | 1 (crop_windows) | 2 (resizeable) | 3 (resizeable_and_pipable)]</span><br><span class="line">       am task resize &lt;TASK_ID&gt; &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</span><br><span class="line">       am task drag-task-test &lt;TASK_ID&gt; &lt;STEP_SIZE&gt; [DELAY_MS] </span><br><span class="line">       am task size-task-test &lt;TASK_ID&gt; &lt;STEP_SIZE&gt; [DELAY_MS] </span><br><span class="line">       am get-config</span><br><span class="line">       am suppress-resize-config-changes &lt;true|false&gt;</span><br><span class="line">       am set-inactive [--user &lt;USER_ID&gt;] &lt;PACKAGE&gt; true|false</span><br><span class="line">       am get-inactive [--user &lt;USER_ID&gt;] &lt;PACKAGE&gt;</span><br><span class="line">       am send-trim-memory [--user &lt;USER_ID&gt;] &lt;PROCESS&gt;</span><br><span class="line">               [HIDDEN|RUNNING_MODERATE|BACKGROUND|RUNNING_LOW|MODERATE|RUNNING_CRITICAL|COMPLETE]</span><br><span class="line">       am get-current-user</span><br><span class="line"></span><br><span class="line">am start: start an Activity.  Options are:</span><br><span class="line">    -D: enable debugging</span><br><span class="line">    -N: enable native debugging</span><br><span class="line">    -W: wait for launch to complete</span><br><span class="line">    --start-profiler &lt;FILE&gt;: start profiler and send results to &lt;FILE&gt;</span><br><span class="line">    --sampling INTERVAL: use sample profiling with INTERVAL microseconds</span><br><span class="line">        between samples (use with --start-profiler)</span><br><span class="line">    -P &lt;FILE&gt;: like above, but profiling stops when app goes idle</span><br><span class="line">    -R: repeat the activity launch &lt;COUNT&gt; times.  Prior to each repeat,</span><br><span class="line">        the top activity will be finished.</span><br><span class="line">    -S: force stop the target app before starting the activity</span><br><span class="line">    --track-allocation: enable tracking of object allocations</span><br><span class="line">    --user &lt;USER_ID&gt; | current: Specify which user to run as; if not</span><br><span class="line">        specified then run as the current user.</span><br><span class="line">    --stack &lt;STACK_ID&gt;: Specify into which stack should the activity be put.</span><br><span class="line">am startservice: start a Service.  Options are:</span><br><span class="line">    --user &lt;USER_ID&gt; | current: Specify which user to run as; if not</span><br><span class="line">        specified then run as the current user.</span><br><span class="line"></span><br><span class="line">am stopservice: stop a Service.  Options are:</span><br><span class="line">    --user &lt;USER_ID&gt; | current: Specify which user to run as; if not</span><br><span class="line">        specified then run as the current user.</span><br><span class="line"></span><br><span class="line">am force-stop: force stop everything associated with &lt;PACKAGE&gt;.</span><br><span class="line">    --user &lt;USER_ID&gt; | all | current: Specify user to force stop;</span><br><span class="line">        all users if not specified.</span><br><span class="line"></span><br><span class="line">am kill: Kill all processes associated with &lt;PACKAGE&gt;.  Only kills.</span><br><span class="line">  processes that are safe to kill -- that is, will not impact the user</span><br><span class="line">  experience.</span><br><span class="line">    --user &lt;USER_ID&gt; | all | current: Specify user whose processes to kill;</span><br><span class="line">        all users if not specified.</span><br><span class="line"></span><br><span class="line">am kill-all: Kill all background processes.</span><br><span class="line"></span><br><span class="line">am broadcast: send a broadcast Intent.  Options are:</span><br><span class="line">    --user &lt;USER_ID&gt; | all | current: Specify which user to send to; if not</span><br><span class="line">        specified then send to all users.</span><br><span class="line">    --receiver-permission &lt;PERMISSION&gt;: Require receiver to hold permission.</span><br><span class="line"></span><br><span class="line">am instrument: start an Instrumentation.  Typically this target &lt;COMPONENT&gt;</span><br><span class="line">  is the form &lt;TEST_PACKAGE&gt;/&lt;RUNNER_CLASS&gt; or only &lt;TEST_PACKAGE&gt; if there </span><br><span class="line">  is only one instrumentation.  Options are:</span><br><span class="line">    -r: print raw results (otherwise decode REPORT_KEY_STREAMRESULT).  Use with</span><br><span class="line">        [-e perf true] to generate raw output for performance measurements.</span><br><span class="line">    -e &lt;NAME&gt; &lt;VALUE&gt;: set argument &lt;NAME&gt; to &lt;VALUE&gt;.  For test runners a</span><br><span class="line">        common form is [-e &lt;testrunner_flag&gt; &lt;value&gt;[,&lt;value&gt;...]].</span><br><span class="line">    -p &lt;FILE&gt;: write profiling data to &lt;FILE&gt;</span><br><span class="line">    -w: wait for instrumentation to finish before returning.  Required for</span><br><span class="line">        test runners.</span><br><span class="line">    --user &lt;USER_ID&gt; | current: Specify user instrumentation runs in;</span><br><span class="line">        current user if not specified.</span><br><span class="line">    --no-window-animation: turn off window animations while running.</span><br><span class="line">    --abi &lt;ABI&gt;: Launch the instrumented process with the selected ABI.</span><br><span class="line">        This assumes that the process supports the selected ABI.</span><br><span class="line"></span><br><span class="line">am trace-ipc: Trace IPC transactions.</span><br><span class="line">  start: start tracing IPC transactions.</span><br><span class="line">  stop: stop tracing IPC transactions and dump the results to file.</span><br><span class="line">    --dump-file &lt;FILE&gt;: Specify the file the trace should be dumped to.</span><br><span class="line"></span><br><span class="line">am profile: start and stop profiler on a process.  The given &lt;PROCESS&gt; argument</span><br><span class="line">  may be either a process name or pid.  Options are:</span><br><span class="line">    --user &lt;USER_ID&gt; | current: When supplying a process name,</span><br><span class="line">        specify user of process to profile; uses current user if not specified.</span><br><span class="line"></span><br><span class="line">am dumpheap: dump the heap of a process.  The given &lt;PROCESS&gt; argument may</span><br><span class="line">  be either a process name or pid.  Options are:</span><br><span class="line">    -n: dump native heap instead of managed heap</span><br><span class="line">    --user &lt;USER_ID&gt; | current: When supplying a process name,</span><br><span class="line">        specify user of process to dump; uses current user if not specified.</span><br><span class="line"></span><br><span class="line">am set-debug-app: set application &lt;PACKAGE&gt; to debug.  Options are:</span><br><span class="line">    -w: wait for debugger when application starts</span><br><span class="line">    --persistent: retain this value</span><br><span class="line"></span><br><span class="line">am clear-debug-app: clear the previously set-debug-app.</span><br><span class="line"></span><br><span class="line">am set-watch-heap: start monitoring pss size of &lt;PROCESS&gt;, if it is at or</span><br><span class="line">    above &lt;HEAP-LIMIT&gt; then a heap dump is collected for the user to report</span><br><span class="line"></span><br><span class="line">am clear-watch-heap: clear the previously set-watch-heap.</span><br><span class="line"></span><br><span class="line">am bug-report: request bug report generation; will launch a notification</span><br><span class="line">    when done to select where it should be delivered. Options are: </span><br><span class="line">   --progress: will launch a notification right away to show its progress.</span><br><span class="line"></span><br><span class="line">am monitor: start monitoring for crashes or ANRs.</span><br><span class="line">    --gdb: start gdbserv on the given port at crash/ANR</span><br><span class="line"></span><br><span class="line">am hang: hang the system.</span><br><span class="line">    --allow-restart: allow watchdog to perform normal system restart</span><br><span class="line"></span><br><span class="line">am restart: restart the user-space system.</span><br><span class="line"></span><br><span class="line">am idle-maintenance: perform idle maintenance now.</span><br><span class="line"></span><br><span class="line">am screen-compat: control screen compatibility mode of &lt;PACKAGE&gt;.</span><br><span class="line"></span><br><span class="line">am package-importance: print current importance of &lt;PACKAGE&gt;.</span><br><span class="line"></span><br><span class="line">am to-uri: print the given Intent specification as a URI.</span><br><span class="line"></span><br><span class="line">am to-intent-uri: print the given Intent specification as an intent: URI.</span><br><span class="line"></span><br><span class="line">am to-app-uri: print the given Intent specification as an android-app: URI.</span><br><span class="line"></span><br><span class="line">am switch-user: switch to put USER_ID in the foreground, starting</span><br><span class="line">  execution of that user if it is currently stopped.</span><br><span class="line"></span><br><span class="line">am start-user: start USER_ID in background if it is currently stopped,</span><br><span class="line">  use switch-user if you want to start the user in foreground.</span><br><span class="line"></span><br><span class="line">am stop-user: stop execution of USER_ID, not allowing it to run any</span><br><span class="line">  code until a later explicit start or switch to it.</span><br><span class="line">  -w: wait for stop-user to complete.</span><br><span class="line">  -f: force stop even if there are related users that cannot be stopped.</span><br><span class="line"></span><br><span class="line">am stack start: start a new activity on &lt;DISPLAY_ID&gt; using &lt;INTENT&gt;.</span><br><span class="line"></span><br><span class="line">am stack movetask: move &lt;TASK_ID&gt; from its current stack to the top (true) or   bottom (false) of &lt;STACK_ID&gt;.</span><br><span class="line"></span><br><span class="line">am stack resize: change &lt;STACK_ID&gt; size and position to &lt;LEFT,TOP,RIGHT,BOTTOM&gt;.</span><br><span class="line"></span><br><span class="line">am stack resize-docked-stack: change docked stack to &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</span><br><span class="line">   and supplying temporary different task bounds indicated by</span><br><span class="line">   &lt;TASK_LEFT,TOP,RIGHT,BOTTOM&gt;</span><br><span class="line"></span><br><span class="line">am stack size-docked-stack-test: test command for sizing docked stack by</span><br><span class="line">   &lt;STEP_SIZE&gt; increments from the side &lt;l&gt;eft, &lt;t&gt;op, &lt;r&gt;ight, or &lt;b&gt;ottom</span><br><span class="line">   applying the optional [DELAY_MS] between each step.</span><br><span class="line"></span><br><span class="line">am stack move-top-activity-to-pinned-stack: moves the top activity from</span><br><span class="line">   &lt;STACK_ID&gt; to the pinned stack using &lt;LEFT,TOP,RIGHT,BOTTOM&gt; for the</span><br><span class="line">   bounds of the pinned stack.</span><br><span class="line"></span><br><span class="line">am stack positiontask: place &lt;TASK_ID&gt; in &lt;STACK_ID&gt; at &lt;POSITION&gt;</span><br><span class="line">am stack list: list all of the activity stacks and their sizes.</span><br><span class="line"></span><br><span class="line">am stack info: display the information about activity stack &lt;STACK_ID&gt;.</span><br><span class="line"></span><br><span class="line">am stack remove: remove stack &lt;STACK_ID&gt;.</span><br><span class="line"></span><br><span class="line">am task lock: bring &lt;TASK_ID&gt; to the front and don&apos;t allow other tasks to run.</span><br><span class="line"></span><br><span class="line">am task lock stop: end the current task lock.</span><br><span class="line"></span><br><span class="line">am task resizeable: change resizeable mode of &lt;TASK_ID&gt;.</span><br><span class="line">   0 (unresizeable) | 1 (crop_windows) | 2 (resizeable) | 3 (resizeable_and_pipable)</span><br><span class="line"></span><br><span class="line">am task resize: makes sure &lt;TASK_ID&gt; is in a stack with the specified bounds.</span><br><span class="line">   Forces the task to be resizeable and creates a stack if no existing stack</span><br><span class="line">   has the specified bounds.</span><br><span class="line"></span><br><span class="line">am task drag-task-test: test command for dragging/moving &lt;TASK_ID&gt; by</span><br><span class="line">   &lt;STEP_SIZE&gt; increments around the screen applying the optional [DELAY_MS]</span><br><span class="line">   between each step.</span><br><span class="line"></span><br><span class="line">am task size-task-test: test command for sizing &lt;TASK_ID&gt; by &lt;STEP_SIZE&gt;   increments within the screen applying the optional [DELAY_MS] between</span><br><span class="line">   each step.</span><br><span class="line"></span><br><span class="line">am get-config: retrieve the configuration and any recent configurations</span><br><span class="line">  of the device.</span><br><span class="line">am suppress-resize-config-changes: suppresses configuration changes due to</span><br><span class="line">  user resizing an activity/task.</span><br><span class="line"></span><br><span class="line">am set-inactive: sets the inactive state of an app.</span><br><span class="line"></span><br><span class="line">am get-inactive: returns the inactive state of an app.</span><br><span class="line"></span><br><span class="line">am send-trim-memory: send a memory trim event to a &lt;PROCESS&gt;.</span><br><span class="line"></span><br><span class="line">am get-current-user: returns id of the current foreground user.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;INTENT&gt; specifications include these flags and arguments:</span><br><span class="line">    [-a &lt;ACTION&gt;] [-d &lt;DATA_URI&gt;] [-t &lt;MIME_TYPE&gt;]</span><br><span class="line">    [-c &lt;CATEGORY&gt; [-c &lt;CATEGORY&gt;] ...]</span><br><span class="line">    [-e|--es &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt; ...]</span><br><span class="line">    [--esn &lt;EXTRA_KEY&gt; ...]</span><br><span class="line">    [--ez &lt;EXTRA_KEY&gt; &lt;EXTRA_BOOLEAN_VALUE&gt; ...]</span><br><span class="line">    [--ei &lt;EXTRA_KEY&gt; &lt;EXTRA_INT_VALUE&gt; ...]</span><br><span class="line">    [--el &lt;EXTRA_KEY&gt; &lt;EXTRA_LONG_VALUE&gt; ...]</span><br><span class="line">    [--ef &lt;EXTRA_KEY&gt; &lt;EXTRA_FLOAT_VALUE&gt; ...]</span><br><span class="line">    [--eu &lt;EXTRA_KEY&gt; &lt;EXTRA_URI_VALUE&gt; ...]</span><br><span class="line">    [--ecn &lt;EXTRA_KEY&gt; &lt;EXTRA_COMPONENT_NAME_VALUE&gt;]</span><br><span class="line">    [--eia &lt;EXTRA_KEY&gt; &lt;EXTRA_INT_VALUE&gt;[,&lt;EXTRA_INT_VALUE...]]</span><br><span class="line">        (mutiple extras passed as Integer[])</span><br><span class="line">    [--eial &lt;EXTRA_KEY&gt; &lt;EXTRA_INT_VALUE&gt;[,&lt;EXTRA_INT_VALUE...]]</span><br><span class="line">        (mutiple extras passed as List&lt;Integer&gt;)</span><br><span class="line">    [--ela &lt;EXTRA_KEY&gt; &lt;EXTRA_LONG_VALUE&gt;[,&lt;EXTRA_LONG_VALUE...]]</span><br><span class="line">        (mutiple extras passed as Long[])</span><br><span class="line">    [--elal &lt;EXTRA_KEY&gt; &lt;EXTRA_LONG_VALUE&gt;[,&lt;EXTRA_LONG_VALUE...]]</span><br><span class="line">        (mutiple extras passed as List&lt;Long&gt;)</span><br><span class="line">    [--efa &lt;EXTRA_KEY&gt; &lt;EXTRA_FLOAT_VALUE&gt;[,&lt;EXTRA_FLOAT_VALUE...]]</span><br><span class="line">        (mutiple extras passed as Float[])</span><br><span class="line">    [--efal &lt;EXTRA_KEY&gt; &lt;EXTRA_FLOAT_VALUE&gt;[,&lt;EXTRA_FLOAT_VALUE...]]</span><br><span class="line">        (mutiple extras passed as List&lt;Float&gt;)</span><br><span class="line">    [--esa &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt;[,&lt;EXTRA_STRING_VALUE...]]</span><br><span class="line">        (mutiple extras passed as String[]; to embed a comma into a string,</span><br><span class="line">         escape it using &quot;\,&quot;)</span><br><span class="line">    [--esal &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt;[,&lt;EXTRA_STRING_VALUE...]]</span><br><span class="line">        (mutiple extras passed as List&lt;String&gt;; to embed a comma into a string,</span><br><span class="line">         escape it using &quot;\,&quot;)</span><br><span class="line">    [--f &lt;FLAG&gt;]</span><br><span class="line">    [--grant-read-uri-permission] [--grant-write-uri-permission]</span><br><span class="line">    [--grant-persistable-uri-permission] [--grant-prefix-uri-permission]</span><br><span class="line">    [--debug-log-resolution] [--exclude-stopped-packages]</span><br><span class="line">    [--include-stopped-packages]</span><br><span class="line">    [--activity-brought-to-front] [--activity-clear-top]</span><br><span class="line">    [--activity-clear-when-task-reset] [--activity-exclude-from-recents]</span><br><span class="line">    [--activity-launched-from-history] [--activity-multiple-task]</span><br><span class="line">    [--activity-no-animation] [--activity-no-history]</span><br><span class="line">    [--activity-no-user-action] [--activity-previous-is-top]</span><br><span class="line">    [--activity-reorder-to-front] [--activity-reset-task-if-needed]</span><br><span class="line">    [--activity-single-top] [--activity-clear-task]</span><br><span class="line">    [--activity-task-on-home]</span><br><span class="line">    [--receiver-registered-only] [--receiver-replace-pending]</span><br><span class="line">    [--receiver-foreground]</span><br><span class="line">    [--selector]</span><br><span class="line">    [&lt;URI&gt; | &lt;PACKAGE&gt; | &lt;COMPONENT&gt;]</span><br></pre></td></tr></table></figure>
+<h2 id="Intent-参数规范"><a href="#Intent-参数规范" class="headerlink" title="Intent 参数规范"></a>Intent 参数规范</h2><p>由于好几个 <code>am</code> 命令都可以带 <code>Intent</code> 参数，比如 <code>am start</code>、<code>am broadcast</code> 等，这里就先介绍一下 Intent 参数规范。<br><a href="https://developer.android.com/studio/command-line/adb#IntentSpec" target="_blank" rel="noopener">可以参考官方文档</a></p>
+<ul>
+<li><code>[-a &lt;ACTION&gt;]</code>：指定 intent 的 Action（setAction()方法），如“android.intent.action.VIEW”。此指定只能声明一次。 <code>am start -a android.intent.action.hq.TEST_AM</code></li>
+<li><code>[-d &lt;DATA_URI&gt;]</code>：指定 intent 的 Data（setData()方法），如“content://contacts/people/1”。此指定只能声明一次。</li>
+<li><code>[-t &lt;MIME_TYPE&gt;]</code>：指定 intent MIME 类型，如“image/png”。此指定只能声明一次。 </li>
+<li><code>[-c &lt;CATEGORY&gt; [-c &lt;CATEGORY&gt;] ...]</code>：指定 intent 类别（addCategory(String category)），如“android.intent.category.APP_CONTACTS”。 </li>
+<li><code>[-n &lt;COMPONENT&gt;]</code>：指定带有包名前缀的组件名称以创建显式 intent，如“com.example.heqiang.testsomething/.commontest.OtherTestActivity”。 </li>
+<li><code>[--f &lt;FLAG&gt;]</code>：将标志添加到intent</li>
+<li><code>[-e|--es &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt; ...]</code>：添加一个 null extra。URI intent 不支持此选项。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test</code>，如果有多个参数：<code>adb shell am start -a android.intent.action.hq.TEST_AM --es TEST test --es TEST1 test1</code></li>
+<li><code>[--esn &lt;EXTRA_KEY&gt; ...]</code>：添加字符串数据作为键值对。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --esn TEST</code></li>
+<li><code>[--ez &lt;EXTRA_KEY&gt; &lt;EXTRA_BOOLEAN_VALUE&gt; ...]</code>：添加布尔型数据作为键值对。 <code>adb shell am start -a android.intent.action.hq.TEST_AM --ez TEST true</code></li>
+<li><code>[--ei &lt;EXTRA_KEY&gt; &lt;EXTRA_INT_VALUE&gt; ...]</code>：添加整数型数据作为键值对。 </li>
+<li><code>[--el &lt;EXTRA_KEY&gt; &lt;EXTRA_LONG_VALUE&gt; ...]</code>：添加长整型数据作为键值对。 </li>
+<li><code>[--ef &lt;EXTRA_KEY&gt; &lt;EXTRA_FLOAT_VALUE&gt; ...]</code>：添加浮点型数据作为键值对。 </li>
+<li><code>[--eu &lt;EXTRA_KEY&gt; &lt;EXTRA_URI_VALUE&gt; ...]</code>：添加 URI 数据作为键值对。 </li>
+<li><code>[--ecn &lt;EXTRA_KEY&gt; &lt;EXTRA_COMPONENT_NAME_VALUE&gt;]</code>：添加组件名称，将其作为 ComponentName 对象进行转换和传递。</li>
+<li><code>[--eia &lt;EXTRA_KEY&gt; &lt;EXTRA_INT_VALUE&gt;[,&lt;EXTRA_INT_VALUE...]]</code>：添加整数数组， 转换成Integer[]进行传递</li>
+<li><code>[--eial &lt;EXTRA_KEY&gt; &lt;EXTRA_INT_VALUE&gt;[,&lt;EXTRA_INT_VALUE...]]</code>：添加整数数组，转换成List<integer>进行传递</integer></li>
+<li><code>[--ela &lt;EXTRA_KEY&gt; &lt;EXTRA_LONG_VALUE&gt;[,&lt;EXTRA_LONG_VALUE...]]</code>：添加长整型数组，转换成Long[]进行传递</li>
+<li><code>[--elal &lt;EXTRA_KEY&gt; &lt;EXTRA_LONG_VALUE&gt;[,&lt;EXTRA_LONG_VALUE...]]</code>：添加长整型数组，转换成List<long>进行传递</long></li>
+<li><code>[--efa &lt;EXTRA_KEY&gt; &lt;EXTRA_FLOAT_VALUE&gt;[,&lt;EXTRA_FLOAT_VALUE...]]</code>：添加浮点型数组，转换成Float[]进行传递</li>
+<li><code>[--efal &lt;EXTRA_KEY&gt; &lt;EXTRA_FLOAT_VALUE&gt;[,&lt;EXTRA_FLOAT_VALUE...]]</code>：添加浮点型数组，转换成List<float>进行传递</float></li>
+<li><code>[--esa &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt;[,&lt;EXTRA_STRING_VALUE...]]</code>：添加字符串数组，转换成String[]进行传递<code>adb shell am start -a android.intent.action.hq.TEST_AM --esa TEST a,b,c</code></li>
+<li><code>[--esal &lt;EXTRA_KEY&gt; &lt;EXTRA_STRING_VALUE&gt;[,&lt;EXTRA_STRING_VALUE...]]</code>：添加字符串数组，转换成List<string>进行传递</string></li>
+<li><code>[--grant-read-uri-permission]</code> ：包含标志 FLAG_GRANT_READ_URI_PERMISSION。 </li>
+<li><code>[--grant-write-uri-permission]</code>：包含标志 FLAG_GRANT_WRITE_URI_PERMISSION。 </li>
+<li><code>[--grant-persistable-uri-permission]</code>：</li>
+<li><code>[--grant-prefix-uri-permission]</code>：</li>
+<li><code>[--debug-log-resolution]</code>：</li>
+<li><code>[--exclude-stopped-packages]</code>：</li>
+<li><code>[--include-stopped-packages]</code>：</li>
+<li><code>[--activity-brought-to-front]</code>：</li>
+<li><code>[--activity-clear-top]</code>：</li>
+<li><code>[--activity-clear-when-task-reset]</code>：</li>
+<li><code>[--activity-exclude-from-recents]</code>：</li>
+<li><code>[--activity-launched-from-history]</code>：</li>
+<li><code>[--activity-multiple-task]</code>：</li>
+<li><code>[--activity-no-animation]</code>：</li>
+<li><code>[--activity-no-history]</code>：</li>
+<li><code>[--activity-no-user-action]</code>：</li>
+<li><code>[--activity-previous-is-top]</code>：</li>
+<li><code>[--activity-reorder-to-front]</code>：</li>
+<li><code>[--activity-reset-task-if-needed]</code>：</li>
+<li><code>[--activity-single-top]</code>：</li>
+<li><code>[--activity-clear-task]</code>：</li>
+<li><code>[--activity-task-on-home]</code>：</li>
+<li><code>[--receiver-registered-only]</code>：</li>
+<li><code>[--receiver-replace-pending]</code>：</li>
+<li><code>[--receiver-foreground]</code>：</li>
+<li><code>[--selector]</code>：</li>
+<li><code>[&lt;URI&gt; | &lt;PACKAGE&gt; | &lt;COMPONENT&gt;]</code>：如果不受上述某一选项的限制，那么就认为是直接指定 URI、包名和组件名称。当参数不受限制时，如果参数包含一个“:”（冒号），则认为参数是一个 URI；如果参数包含一个“/”（正斜杠），则认为参数是一个组件名称；否则认为参数是一个包名。 </li>
+</ul>
+<h2 id="am-start"><a href="#am-start" class="headerlink" title="am start"></a>am start</h2><p>启动 intent 指定的 Activity：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">am start [-D] [-N] [-W] [-P &lt;FILE&gt;] [--start-profiler &lt;FILE&gt;]</span><br><span class="line">               [--sampling INTERVAL] [-R COUNT] [-S]</span><br><span class="line">               [--track-allocation] [--user &lt;USER_ID&gt; | current] &lt;INTENT&gt;</span><br></pre></td></tr></table></figure>
+<p>可以使用一下选项：</p>
+<ul>
+<li>-D：启用调试。</li>
+<li>-N：启用 Natvie 调试。</li>
+<li><p>-W：等待启动完成。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Status: ok</span><br><span class="line">Activity: com.example.heqiang.testsomething/.commontest.OtherTestActivity</span><br><span class="line">ThisTime: 131</span><br><span class="line">TotalTime: 131</span><br><span class="line">WaitTime: 157</span><br><span class="line">Complete</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>–start-profiler <file>：启动分析器并将结果发送到 file。 </file></p>
+</li>
+<li>–sampling INTERVAL：制定采样率</li>
+<li>-P <file>：类似于 –start-profiler，但当应用进入空闲状态时分析停止。 </file></li>
+<li>-R <count>：重复 Activity 启动 count 次数。在每次重复前，将完成顶部 Activity。 </count></li>
+<li>-S：启动 Activity 前强行停止目标应用。 </li>
+<li>–track-allocation：打开Allocation Tracker用来跟踪内存分配</li>
+<li>–user &lt;USER_ID&gt; | current：指定要作为哪个用户运行；如果未指定，则作为当前用户运行。 </li>
+<li>–stack &lt;STACK_ID&gt;：指定将Activity放入的栈</li>
+</ul>
+<h2 id="am-startservice"><a href="#am-startservice" class="headerlink" title="am startservice"></a>am startservice</h2><p>启动 intent 指定的 Service：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am startservice [--user &lt;USER_ID&gt; | current] &lt;INTENT&gt;</span><br></pre></td></tr></table></figure>
+<p>可以使用一下选项：</p>
+<ul>
+<li>–user &lt;USER_ID&gt; | current：指定要作为哪个用户运行；如果未指定，则作为当前用户运行。 </li>
+</ul>
+<h2 id="am-stopservice"><a href="#am-stopservice" class="headerlink" title="am stopservice"></a>am stopservice</h2><p>停止一个 Service</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am stopservice [--user &lt;USER_ID&gt; | current] &lt;INTENT&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>–user &lt;USER_ID&gt; | current：指定要作为哪个用户运行；如果未指定，则作为当前用户运行。 </li>
+</ul>
+<h2 id="am-force-stop"><a href="#am-force-stop" class="headerlink" title="am force-stop"></a>am force-stop</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am force-stop [--user &lt;USER_ID&gt; | all | current] &lt;PACKAGE&gt;</span><br></pre></td></tr></table></figure>
+<p>强行停止与 package（应用的包名称）关联的所有应用。 </p>
+<h2 id="am-kill"><a href="#am-kill" class="headerlink" title="am kill"></a>am kill</h2><p>终止与 package（应用的包名称）关联的所有进程。此命令仅终止可安全终止且不会影响用户体验的进程。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am kill [--user &lt;USER_ID&gt; | all | current] &lt;PACKAGE&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="am-kill-all"><a href="#am-kill-all" class="headerlink" title="am kill-all"></a>am kill-all</h2><p>终止所有后台进程。 </p>
+<h2 id="am-broadcast"><a href="#am-broadcast" class="headerlink" title="am broadcast"></a>am broadcast</h2><p>发出广播 intent。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am broadcast [--user &lt;USER_ID&gt; | all | current] &lt;INTENT&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="am-stack"><a href="#am-stack" class="headerlink" title="am stack"></a>am stack</h2><ul>
+<li><code>am stack start &lt;DISPLAY_ID&gt; &lt;INTENT&gt;</code>：</li>
+<li><code>am stack movetask &lt;TASK_ID&gt; &lt;STACK_ID&gt; [true|false]</code>：</li>
+<li><code>am stack resize &lt;STACK_ID&gt; &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</code>：</li>
+<li><code>am stack resize-animated &lt;STACK_ID&gt; &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</code>：</li>
+<li><code>am stack resize-docked-stack &lt;LEFT,TOP,RIGHT,BOTTOM&gt; [&lt;TASK_LEFT,TASK_TOP,TASK_RIGHT,TASK_BOTTOM&gt;]</code>：</li>
+<li><code>am stack size-docked-stack-test: &lt;STEP_SIZE&gt; &lt;l|t|r|b&gt; [DELAY_MS]</code>：</li>
+<li><code>am stack move-top-activity-to-pinned-stack: &lt;STACK_ID&gt; &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</code>：</li>
+<li><code>am stack positiontask &lt;TASK_ID&gt; &lt;STACK_ID&gt; &lt;POSITION&gt;</code>：</li>
+<li><code>am stack list</code>：</li>
+<li><code>am stack info &lt;STACK_ID&gt;</code>：</li>
+<li><code>am stack remove &lt;STACK_ID&gt;</code>：</li>
+<li><code>am task lock &lt;TASK_ID&gt;</code>：</li>
+<li><code>am task lock stop</code>：</li>
+<li><code>am task resizeable &lt;TASK_ID&gt; [0 (unresizeable) | 1 (crop_windows) | 2 (resizeable) | 3 (resizeable_and_pipable)]</code>：</li>
+<li><code>am task resize &lt;TASK_ID&gt; &lt;LEFT,TOP,RIGHT,BOTTOM&gt;</code>：</li>
+<li><code>am task drag-task-test &lt;TASK_ID&gt; &lt;STEP_SIZE&gt; [DELAY_MS]</code>：</li>
+<li><code>am task size-task-test &lt;TASK_ID&gt; &lt;STEP_SIZE&gt; [DELAY_MS]</code>：</li>
+</ul>
+<h2 id="am-get-config"><a href="#am-get-config" class="headerlink" title="am get-config"></a>am get-config</h2><h2 id="am-send-trim-memory"><a href="#am-send-trim-memory" class="headerlink" title="am send-trim-memory"></a>am send-trim-memory</h2><p>发送回收内存的命令，会调用 Application 和 Activity 的 <code>onTrimMemory(int level)</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> am send-trim-memory [--user &lt;USER_ID&gt;] &lt;PROCESS&gt;</span><br><span class="line">[HIDDEN|RUNNING_MODERATE|BACKGROUND|RUNNING_LOW|MODERATE|RUNNING_CRITICAL|COMPLETE]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am send-trim-memory com.example.heqiang.testsomething RUNNING_CRITICAL</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/am/" rel="tag"># am</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/03/20/Android/android-get-dir-path/" rel="next" title="Android 文件存储以及获取目录路径方法汇总">
+                <i class="fa fa-chevron-left"></i> Android 文件存储以及获取目录路径方法汇总
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/28/Android实用技巧/android-development-skills-adb-wm/" rel="prev" title="Android实用技巧之adb命令：wm 命令的使用">
+                Android实用技巧之adb命令：wm 命令的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Intent-参数规范"><span class="nav-number">2.</span> <span class="nav-text">Intent 参数规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-start"><span class="nav-number">3.</span> <span class="nav-text">am start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-startservice"><span class="nav-number">4.</span> <span class="nav-text">am startservice</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-stopservice"><span class="nav-number">5.</span> <span class="nav-text">am stopservice</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-force-stop"><span class="nav-number">6.</span> <span class="nav-text">am force-stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-kill"><span class="nav-number">7.</span> <span class="nav-text">am kill</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-kill-all"><span class="nav-number">8.</span> <span class="nav-text">am kill-all</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-broadcast"><span class="nav-number">9.</span> <span class="nav-text">am broadcast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-stack"><span class="nav-number">10.</span> <span class="nav-text">am stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-get-config"><span class="nav-number">11.</span> <span class="nav-text">am get-config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#am-send-trim-memory"><span class="nav-number">12.</span> <span class="nav-text">am send-trim-memory</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

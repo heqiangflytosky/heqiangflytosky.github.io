@@ -1,0 +1,924 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Launcher3,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍手势导航启动多任务的流程">
+<meta name="keywords" content="Launcher3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android -- 手势导航启动多任务">
+<meta property="og:url" content="http://yoursite.com/2021/02/12/Android Launcher/android-launcher-recentsview-gesture/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍手势导航启动多任务的流程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-06-21T10:13:07.192Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android -- 手势导航启动多任务">
+<meta name="twitter:description" content="介绍手势导航启动多任务的流程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/02/12/Android Launcher/android-launcher-recentsview-gesture/">
+
+
+
+
+
+  <title> Android -- 手势导航启动多任务 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/12/Android Launcher/android-launcher-recentsview-gesture/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android -- 手势导航启动多任务
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-02-12T10:00:00+08:00">
+                2021-02-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-Launcher/" itemprop="url" rel="index">
+                    <span itemprop="name">Android Launcher</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2021/02/12/Android Launcher/android-launcher-recentsview-gesture/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2021/02/12/Android Launcher/android-launcher-recentsview-gesture/" class="leancloud_visitors" data-flag-title="Android -- 手势导航启动多任务">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍手势导航启动多任务的流程
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="相关类"><a href="#相关类" class="headerlink" title="相关类"></a>相关类</h2><ul>
+<li><code>LauncherSwipeHandlerV2 &lt;- BaseSwipeUpHandlerV2</code> 一个和手势相关的重要的类，它主要处理手势导航相关的操作，后面有一篇文章来专门介绍这个类。maybeUpdateRecentsAttachedState()方法判断显示或者隐藏多任务</li>
+<li>ShelfPeekAnim 用来处理多任务 HIDE, PEEK, and OVERVIEW 状态之间切换时的动画</li>
+<li>InputConsumer 事件消费者，有多种实现类，会根据系统处于不同的状态而生成不同的事件处理器，后面代码会详细介绍。</li>
+<li>RecentsView RecentsView 有两个子类，一个是 LauncherRecentsView，一个是 FallbackRecentsView，FallbackRecentsView 显示在 RecentsActivity 中，用在多任务作为一个单独的 Activity 运行的场景，比如简易模式情况下。</li>
+<li><code>QuickstepAppTransitionManagerImpl &lt;- LauncherAppTransitionManager</code> 管理打开和关闭App时切换操作，比如设置切换动画等。</li>
+<li>TaskViewSimulator 一个模拟TaskView 和 RecentsView 的工具类，当我们在应用界面上划启动多任务时，有一个跟随手指移动的卡片，这个卡片就是这个类模拟出来的TaskView。</li>
+<li>TaskView 多任务里面的一个卡片</li>
+<li>TaskThumbnailView 任务卡片里面的界面截图</li>
+<li>MotionPauseDetector 检测手势暂停</li>
+</ul>
+<h2 id="手势启动流程"><a href="#手势启动流程" class="headerlink" title="手势启动流程"></a>手势启动流程</h2><p>通过手势启动多任务时，SystemUI会把触摸事件传递给<code>TouchInteractionService.onInputEvent</code>来处理，<code>TouchInteractionService</code>会交由合适的<code>InputConsumer</code>来处理，我们这里就介绍由其他应用界面启动时的<code>OtherActivityInputConsumer</code>。然后，事件将有两个比较重要的处理节点，一个是通过<code>PagedView.onTouchEvent</code>来处理，然后再由<code>OtherActivityInputConsumer</code>自己来处理。<br>从应用界面启动多任务，首先是处理当前window做位移和缩放，然后在合适的时机显示多任务卡片。</p>
+<p>下面是事件的一个简单处理流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">TouchInteractionService.onInputEvent</span><br><span class="line">　RecentsAnimationDeviceState.isInSwipeUpTouchRegion //判断是否在手势区域</span><br><span class="line">  mConsumer = newConsumer //初始化事件消费者</span><br><span class="line">    TouchInteractionService.newBaseConsumer //根据不同的场景来生成不同的事件，我们就以在其他应用界面启动多任务情况来分析，这时会初始化　OtherActivityInputConsumer</span><br><span class="line">      createOtherActivityInputConsumer</span><br><span class="line">        new OtherActivityInputConsumer</span><br><span class="line">          </span><br><span class="line">  new AssistantInputConsumer　// 如果点击语音助手区域，就实例化　AssistantInputConsumer</span><br><span class="line">  OtherActivityInputConsumer.onMotionEvent</span><br><span class="line">    CachedEventDispatcher.dispatchEvent</span><br><span class="line">      RecentsView.getEventDispatcher.accept // 多任务界面进行事件处理</span><br><span class="line">        PagedView.onTouchEvent //后面详细介绍</span><br><span class="line">    ACTION_DOWN</span><br><span class="line">      OtherActivityInputConsumer.startTouchTrackingForWindowAnimation</span><br><span class="line">        createLauncherSwipeHandler</span><br><span class="line">          new LauncherSwipeHandlerV2</span><br><span class="line">            BaseSwipeUpHandlerV2()</span><br><span class="line">              BaseSwipeUpHandlerV2.initStateCallbacks() // 注册一些Launcher状态切换时的回调，后面代码介绍</span><br><span class="line">            SwipeUpAnimationLogic()</span><br><span class="line">              new TaskViewSimulator</span><br><span class="line">                new RecentsOrientedState</span><br><span class="line">                  RecentsOrientedState.initFlags();</span><br><span class="line">                    RecentsOrientedState.updateHomeRotationSetting()</span><br><span class="line">              TaskViewSimulator.setLayoutRotation()</span><br><span class="line">                RecentsOrientedState.update() // 更新 PagedOrientationHandler（横竖屏），处理屏幕旋转</span><br><span class="line">                  new PagedOrientationHandler.LANDSCAPE</span><br><span class="line">                  new PagedOrientationHandler.PORTRAIT</span><br><span class="line">        MotionPauseDetector.setOnMotionPauseListener //注册手势停顿时的回调，这个回调在介绍BaseSwipeUpHandlerV2时会详细介绍，主要处理一些多任务的状态切换</span><br><span class="line">        BaseSwipeUpHandler.initWhenReady</span><br><span class="line">          RecentsModel.getTasks</span><br><span class="line">          ActivityInitListener.register</span><br><span class="line">              BaseSwipeUpHandlerV2.onActivityInit</span><br><span class="line">                BaseDraggingActivity.runOnceOnStart(callback=BaseSwipeUpHandlerV2.onLauncherStart)</span><br><span class="line">        TaskAnimationManager.startRecentsAnimation // 开始多任务动画</span><br><span class="line">          new RecentsAnimationCallbacks</span><br><span class="line">          ActivityManagerWrapper.getInstance().startRecentsActivity（intent, null, mCallbacks）//启动多任务activity</span><br><span class="line">    ACTION_MOVE</span><br><span class="line">      BaseSwipeUpHandler.updateDisplacement</span><br><span class="line">        AnimatedFloat.updateValue</span><br><span class="line">          BaseSwipeUpHandlerV2.updateFinalShift()</span><br><span class="line">            BaseSwipeUpHandler.applyWindowTransform() // 处理当前拖动的多任务卡片的缩放和位移</span><br><span class="line">              TaskViewSimulator.apply()</span><br><span class="line">                TransformParams.applySurfaceParams() // 应用位移和缩放的参数</span><br><span class="line">            BaseSwipeUpHandlerV2.updateLauncherTransitionProgress // 设置多任务的缩放</span><br><span class="line">              LauncherAnimUtils.SCALE_PROPERTY.setValue(mRecentsView, scale) // 设置多任务的缩放值</span><br><span class="line">              RecentsView.FULLSCREEN_PROGRESS.setValue</span><br><span class="line">                RecentsView.setFullscreenProgress() // 设置缩放和全屏之间的一些参数：TaskView透明度,可见性，缩放</span><br><span class="line">                  TaskView.setFullscreenProgress()</span><br><span class="line">                    TaskView.updateCurrentFullscreenParams</span><br><span class="line">                      TaskView.FullscreenDrawParams.setProgress // 设置TaskView参数</span><br><span class="line">                    TaskThumbnailView.setFullscreenParams()</span><br><span class="line">                      TaskThumbnailView.setFullscreenParams()</span><br><span class="line">            BaseSwipeUpHandler.forceHideOverView() //滑动过程中判断上划多少后需要强制隐藏多任务</span><br><span class="line">              BaseSwipeUpHandlerV2.setShelfState(HIDE,,)</span><br><span class="line">                BaseSwipeUpHandlerV2.maybeUpdateRecentsAttachedState() // 滑动过程中可能会切换小窗模式，这时就要判断是否隐藏或这显示多任务</span><br><span class="line">                  BaseActivityInterface.DefaultAnimationFactory.setRecentsAttachedToAppWindow</span><br><span class="line">                    BaseActivityInterface.DefaultAnimationFactory.updatePageAnimation</span><br><span class="line">      RecentsAnimationDeviceState.isFullyGesturalNavMode</span><br><span class="line">      MotionPauseDetector.setDisallowPause() // 设置是否允许暂停标志位</span><br><span class="line">      MotionPauseDetector.addPosition()</span><br><span class="line">        MotionPauseDetector.checkMotionPaused() // 判断手势是否暂停</span><br><span class="line">          MotionPauseDetector.updatePaused()</span><br><span class="line">    ACTION_UP</span><br><span class="line">      OtherActivityInputConsumer.finishTouchTracking</span><br><span class="line">        BaseSwipeUpHandlerV2.onGestureEnded</span><br><span class="line">          BaseSwipeUpHandlerV2.handleNormalGestureEnd</span><br><span class="line">            BaseSwipeUpHandlerV2.setShelfState(ShelfAnimState.OVERVIEW,,) // 多任务切换到浏览状态</span><br><span class="line">              AnimationFactory.setShelfState -&gt; LauncherActivityInterface.prepareRecentsUI.DefaultAnimationFactory.setShelfState</span><br><span class="line">                ShelfPeekAnim.setShelfState</span><br><span class="line">              BaseSwipeUpHandlerV2.maybeUpdateRecentsAttachedState</span><br><span class="line">                BaseActivityInterface.DefaultAnimationFactory.setRecentsAttachedToAppWindow</span><br><span class="line">            BaseSwipeUpHandlerV2.animateToProgress // 多任务从当前手势位置恢复到默认位置</span><br><span class="line">              BaseSwipeUpHandlerV2.animateToProgressInternal</span><br><span class="line">                BaseSwipeUpHandlerV2.maybeUpdateRecentsAttachedState</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">// TouchInteractionService.java</span><br><span class="line">    private void onInputEvent(InputEvent ev) &#123;</span><br><span class="line">        if (!(ev instanceof MotionEvent)) &#123;</span><br><span class="line">            Log.e(TAG, &quot;Unknown event &quot; + ev);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        MotionEvent event = (MotionEvent) ev;</span><br><span class="line"></span><br><span class="line">        TestLogging.recordMotionEvent(</span><br><span class="line">                TestProtocol.SEQUENCE_TIS, &quot;TouchInteractionService.onInputEvent&quot;, event);</span><br><span class="line"></span><br><span class="line">        if (!mDeviceState.isUserUnlocked()) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Object traceToken = TraceHelper.INSTANCE.beginFlagsOverride(</span><br><span class="line">                TraceHelper.FLAG_ALLOW_BINDER_TRACKING);</span><br><span class="line"></span><br><span class="line">        final int action = event.getAction();</span><br><span class="line">        if (action == ACTION_DOWN) &#123;</span><br><span class="line">            // 对　ACTION_DOWN　事件的处理</span><br><span class="line">            mDeviceState.setOrientationTransformIfNeeded(event);</span><br><span class="line">            if (mDeviceState.isInSwipeUpTouchRegion(event)) &#123;</span><br><span class="line">            　　//判断点击是否在mSwipeSharedState的矩形区域中</span><br><span class="line">                ......</span><br><span class="line">                //如果在这个区域中那么就会执行newConsumer的来创建一个事件消费者</span><br><span class="line">                mConsumer = newConsumer(prevGestureState, mGestureState, event);</span><br><span class="line">                mUncheckedConsumer = mConsumer;</span><br><span class="line">            &#125; else if (mDeviceState.isUserUnlocked() &amp;&amp; mDeviceState.isFullyGesturalNavMode()) &#123;</span><br><span class="line">                mGestureState = createGestureState(mGestureState);</span><br><span class="line">                ActivityManager.RunningTaskInfo runningTask = mGestureState.getRunningTask();</span><br><span class="line">                if (mDeviceState.canTriggerAssistantAction(event, runningTask)) &#123;</span><br><span class="line">                    // 判断此处是不是点击Google的语音助手的窗口，如果存在就给语音助手。</span><br><span class="line">                    mUncheckedConsumer = new AssistantInputConsumer(</span><br><span class="line">                            this,</span><br><span class="line">                            mGestureState,</span><br><span class="line">                            InputConsumer.NO_OP, mInputMonitorCompat,</span><br><span class="line">                            mOverviewComponentObserver.assistantGestureIsConstrained());</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    mUncheckedConsumer = InputConsumer.NO_OP;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                mUncheckedConsumer = InputConsumer.NO_OP;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            //其他事件</span><br><span class="line">            if (mUncheckedConsumer != InputConsumer.NO_OP) &#123;</span><br><span class="line">                mDeviceState.setOrientationTransformIfNeeded(event);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (mUncheckedConsumer != InputConsumer.NO_OP) &#123;</span><br><span class="line">            switch (event.getActionMasked()) &#123;</span><br><span class="line">                case ACTION_DOWN:</span><br><span class="line">                case ACTION_UP:</span><br><span class="line">                    break;</span><br><span class="line">                default:</span><br><span class="line">                    ActiveGestureLog.INSTANCE.addLog(&quot;onMotionEvent&quot;, event.getActionMasked());</span><br><span class="line">                    break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        boolean cleanUpConsumer = (action == ACTION_UP || action == ACTION_CANCEL)</span><br><span class="line">                &amp;&amp; mConsumer != null</span><br><span class="line">                &amp;&amp; !mConsumer.getActiveConsumerInHierarchy().isConsumerDetachedFromGesture();</span><br><span class="line">        mUncheckedConsumer.onMotionEvent(event);</span><br><span class="line"></span><br><span class="line">        if (cleanUpConsumer) &#123;</span><br><span class="line">            reset();</span><br><span class="line">        &#125;</span><br><span class="line">        TraceHelper.INSTANCE.endFlagsOverride(traceToken);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在 TouchInteractionService.onInputEvent 中会初始化 InputConsumer 事件消费者，有多种实现类，会根据系统处于不同的状态而生成不同的事件处理器。</p>
+<ul>
+<li>DelegateInputConsumer：抽象类</li>
+<li>AssistantInputConsumer：语音助手消费事件</li>
+<li>OverscrollInputConsumer：</li>
+<li>DeviceLockedInputConsumer：</li>
+<li>OtherActivityInputConsumer：非桌面情况下启动多任务的事件消费者</li>
+<li>OverviewInputConsumer：在桌面或者最近任务界面处理事件的消费者</li>
+<li>OverviewWithoutFocusInputConsumer：</li>
+<li>ResetGestureInputConsumer：</li>
+<li>ScreenPinnedInputConsumer：</li>
+<li>SysUiOverlayInputConsumer：</li>
+</ul>
+<h3 id="启动桌面"><a href="#启动桌面" class="headerlink" title="启动桌面"></a>启动桌面</h3><p>调用 ActivityManagerWrapper.getInstance().startRecentsActivity 去启动多任务activity，这里也就是桌面activity</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">mCallbacks = new RecentsAnimationCallbacks(activityInterface.allowMinimizeSplitScreen());</span><br><span class="line">mCallbacks.addListener(new RecentsAnimationCallbacks.RecentsAnimationListener() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onRecentsAnimationStart(RecentsAnimationController controller,</span><br><span class="line">            RecentsAnimationTargets targets) &#123;</span><br><span class="line">        if (mCallbacks == null) &#123;</span><br><span class="line">            // It&apos;s possible for the recents animation to have finished and be cleaned up</span><br><span class="line">            // by the time we process the start callback, and in that case, just we can skip</span><br><span class="line">            // handling this call entirely</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        mController = controller;</span><br><span class="line">        mTargets = targets;</span><br><span class="line">        mLastAppearedTaskTarget = mTargets.findTask(mLastGestureState.getRunningTaskId());</span><br><span class="line">        mLastGestureState.updateLastAppearedTaskTarget(mLastAppearedTaskTarget);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onRecentsAnimationCanceled(ThumbnailData thumbnailData) &#123;</span><br><span class="line">        if (thumbnailData != null) &#123;</span><br><span class="line">            // If a screenshot is provided, switch to the screenshot before cleaning up</span><br><span class="line">            activityInterface.switchRunningTaskViewToScreenshot(thumbnailData,</span><br><span class="line">                    () -&gt; cleanUpRecentsAnimation(thumbnailData));</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            cleanUpRecentsAnimation(null /* canceledThumbnail */);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onRecentsAnimationFinished(RecentsAnimationController controller) &#123;</span><br><span class="line">        cleanUpRecentsAnimation(null /* canceledThumbnail */);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onTaskAppeared(RemoteAnimationTargetCompat appearedTaskTarget) &#123;</span><br><span class="line">        if (mController != null) &#123;</span><br><span class="line">            if (mLastAppearedTaskTarget == null</span><br><span class="line">                    || appearedTaskTarget.taskId != mLastAppearedTaskTarget.taskId) &#123;</span><br><span class="line">                if (mLastAppearedTaskTarget != null) &#123;</span><br><span class="line">                    mController.removeTaskTarget(mLastAppearedTaskTarget);</span><br><span class="line">                &#125;</span><br><span class="line">                mLastAppearedTaskTarget = appearedTaskTarget;</span><br><span class="line">                mLastGestureState.updateLastAppearedTaskTarget(mLastAppearedTaskTarget);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Launcher.onStart</span><br><span class="line">  BaseDraggingActivity.onStart</span><br><span class="line">    BaseSwipeUpHandlerV2.onLauncherStart //前面初始化时 BaseDraggingActivity.runOnceOnStart 注册</span><br><span class="line">    　initAnimFactory.run()　// 当不是从桌面启动时走这里</span><br><span class="line">      　　mAnimationFactory = LauncherActivityInterface.prepareRecentsUI //返回AnimationFactory，提供显示多任务的动画，并显示多任务，后面有专门对这个方法的详细介绍</span><br><span class="line">        　　LauncherActivityInterface.notifyRecentsOfOrientation</span><br><span class="line">        　　    BaseActivityInterface.DefaultAnimationFactory.initUI</span><br><span class="line">                StateManager().goToState</span><br><span class="line">                    RecentsViewStateController.setState</span><br><span class="line">                        getContentAlphaProperty().set()</span><br><span class="line">                            RecentsView.CONTENT_ALPHA.setValue</span><br><span class="line">                                LauncherRecentsView.setContentAlpha</span><br><span class="line">                                    RecentsView.setContentAlpha</span><br><span class="line">                                        RecentsView.setVisibility</span><br><span class="line">      　　BaseSwipeUpHandlerV2.maybeUpdateRecentsAttachedState // 显示或者隐藏多任务</span><br><span class="line">        　　BaseActivityInterface.DefaultAnimationFactory.setRecentsAttachedToAppWindow</span><br><span class="line">          　　BaseActivityInterface.DefaultAnimationFactory.updatePageAnimation //定义多任务其他卡片进入和退出的动画效果</span><br></pre></td></tr></table></figure>
+<p>多任务的显示：<br>Launcher.onStart-&gt;WindowTransformSwipeHandler.onLauncherStart-&gt;LauncherActivityControllerHelper.prepareRecentsUI-&gt;LauncherStateManager.goToState-&gt;RecentsViewStateController.setState-&gt;BaseRecentsViewStateController.setState-&gt;RecentsView.CONTENT_ALPHA.setValue -&gt; RecentsView.setContentAlpha -&gt; setVisibility</p>
+<p>##　注册状态回调</p>
+<p>当调用　mStateCallback.setState　切换状态时会执行相关的回调函数，这部分在BaseSwipeUpHandlerV2中详细介绍。</p>
+<h2 id="准备多任务UI"><a href="#准备多任务UI" class="headerlink" title="准备多任务UI"></a>准备多任务UI</h2><p>prepareRecentsUI() 返回AnimationFactory，提供显示多任务的动画，并显示多任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">// LauncherActivityInterface.java</span><br><span class="line">    public AnimationFactory prepareRecentsUI(RecentsAnimationDeviceState deviceState,</span><br><span class="line">            boolean activityVisible, Consumer&lt;AnimatorPlaybackController&gt; callback) &#123;</span><br><span class="line">        notifyRecentsOfOrientation(deviceState);</span><br><span class="line">        DefaultAnimationFactory factory = new DefaultAnimationFactory(callback) &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void setShelfState(ShelfAnimState shelfState, Interpolator interpolator,</span><br><span class="line">                    long duration) &#123;</span><br><span class="line">                mActivity.getShelfPeekAnim().setShelfState(shelfState, interpolator, duration);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            protected void createBackgroundToOverviewAnim(BaseQuickstepLauncher activity,</span><br><span class="line">                    PendingAnimation pa) &#123;</span><br><span class="line">                //Flyme.zhangxin modify &#123;@</span><br><span class="line">                if (activity.getDeviceProfile().isMultiWindowMode || SysUINavigationMode.getMode(activity) != SysUINavigationMode.Mode.NO_BUTTON) &#123;</span><br><span class="line">                    super.createBackgroundToOverviewAnim(activity, pa);</span><br><span class="line">                &#125;</span><br><span class="line">                //@&#125;</span><br><span class="line"></span><br><span class="line">                if (!activity.getDeviceProfile().isVerticalBarLayout()</span><br><span class="line">                        &amp;&amp; SysUINavigationMode.getMode(activity) != Mode.NO_BUTTON) &#123;</span><br><span class="line">                    // Don&apos;t animate the shelf when the mode is NO_BUTTON, because we</span><br><span class="line">                    // update it atomically.</span><br><span class="line">                    pa.add(activity.getStateManager().createStateElementAnimation(</span><br><span class="line">                            INDEX_SHELF_ANIM,</span><br><span class="line">                            BACKGROUND_APP.getVerticalProgress(activity),</span><br><span class="line">                            OVERVIEW.getVerticalProgress(activity)));</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                // Animate the blur and wallpaper zoom</span><br><span class="line">                float fromDepthRatio = BACKGROUND_APP.getDepth(activity);</span><br><span class="line">                float toDepthRatio = OVERVIEW.getDepth(activity);</span><br><span class="line">                pa.addFloat(getDepthController(),</span><br><span class="line">                        new ClampedDepthProperty(fromDepthRatio, toDepthRatio),</span><br><span class="line">                        fromDepthRatio, toDepthRatio, LINEAR);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        BaseQuickstepLauncher launcher = factory.initUI();</span><br><span class="line">        // Since all apps is not visible, we can safely reset the scroll position.</span><br><span class="line">        // This ensures then the next swipe up to all-apps starts from scroll 0.</span><br><span class="line">        launcher.getAppsView().reset(false /* animate */);</span><br><span class="line">        return factory;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">LauncherActivityInterface.prepareRecentsUI  // 返回AnimationFactory，提供显示多任务的动画</span><br><span class="line">    BaseActivityInterface.DefaultAnimationFactory.initUI</span><br><span class="line">        StateManager().goToState</span><br><span class="line">            RecentsViewStateController.setState</span><br><span class="line">                getContentAlphaProperty().set()</span><br><span class="line">                    RecentsView.CONTENT_ALPHA.setValue</span><br><span class="line">                        LauncherRecentsView.setContentAlpha</span><br><span class="line">                            RecentsView.setContentAlpha</span><br><span class="line">                                RecentsView.setVisibility</span><br></pre></td></tr></table></figure>
+<h2 id="多任务显示和隐藏的动画"><a href="#多任务显示和隐藏的动画" class="headerlink" title="多任务显示和隐藏的动画"></a>多任务显示和隐藏的动画</h2><p>多任务显示和隐藏的时机一个是调用maybeUpdateRecentsAttachedState来实现，它有两个重载的方法，它决定何时隐藏或者显示RecentsView，滑动过程中，会根据滑动的距离和速度来决定是只显示当前滑动图片或者是显示多任务，而且显示和隐藏多任务过程中可能要有切换动画，在滑动过程中，可能会切换小窗模式，这些时候都就要判断是否隐藏或者显示多任务。<br>另外一个是在滑动卡片结束时或者在桌面界面上划手势结束时会启动显示多任务的逻辑。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">BaseSwipeUpHandlerV2.maybeUpdateRecentsAttachedState // 显示或者隐藏多任务</span><br><span class="line">  BaseActivityInterface.DefaultAnimationFactory.setRecentsAttachedToAppWindow</span><br><span class="line">    BaseActivityInterface.DefaultAnimationFactory.updatePageAnimation //定义多任务其他卡片进入和退出的动画效果</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">// BaseSwipeUpHandlerV2.java</span><br><span class="line"></span><br><span class="line">    private void maybeUpdateRecentsAttachedState(boolean animate) &#123;</span><br><span class="line">        if (!mDeviceState.isFullyGesturalNavMode() || mRecentsView == null) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        RemoteAnimationTargetCompat runningTaskTarget = mRecentsAnimationTargets != null</span><br><span class="line">                ? mRecentsAnimationTargets.findTask(mGestureState.getRunningTaskId())</span><br><span class="line">                : null;</span><br><span class="line">        boolean recentsAttachedToAppWindow;</span><br><span class="line">        if (mGestureState.getEndTarget() != null) &#123;</span><br><span class="line">            recentsAttachedToAppWindow = mGestureState.getEndTarget().recentsAttachedToAppWindow;</span><br><span class="line">            //Flyme.zhangxin add&#123;@ 从当前卡片回退到应用并且其他卡片没有显示情况下没必要再让多任务显示</span><br><span class="line">            if (enableCustomScale() &amp;&amp; mGestureState.getEndTarget() == LAST_TASK &amp;&amp; !mIsShelfPeeking &amp;&amp; !mIsLikelyToStartNewTask) &#123;</span><br><span class="line">                recentsAttachedToAppWindow = false;</span><br><span class="line">            &#125;</span><br><span class="line">            //@&#125;</span><br><span class="line">        &#125; else if (mContinuingLastGesture</span><br><span class="line">                &amp;&amp; mRecentsView.getRunningTaskIndex() != mRecentsView.getNextPage()) &#123;</span><br><span class="line">            recentsAttachedToAppWindow = true;</span><br><span class="line">        &#125; else if (runningTaskTarget != null &amp;&amp; isNotInRecents(runningTaskTarget)) &#123;</span><br><span class="line">            // The window is going away so make sure recents is always visible in this case.</span><br><span class="line">            recentsAttachedToAppWindow = true;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            recentsAttachedToAppWindow = mIsShelfPeeking || mIsLikelyToStartNewTask;</span><br><span class="line">            //Flyme.zhangxin add&#123;@</span><br><span class="line">            if (enableCustomScale() &amp;&amp; mShelfState == OVERVIEW &amp;&amp; !recentsAttachedToAppWindow) &#123;</span><br><span class="line">                recentsAttachedToAppWindow = true;</span><br><span class="line">            &#125;</span><br><span class="line">            //@&#125;</span><br><span class="line">        &#125;</span><br><span class="line">        //Flyme.zhangxin add&#123;@</span><br><span class="line">        mAnimationFactory.setGestureTarget(mShelfState, !mReadyGoToOverView || isQuickStartNewTask());</span><br><span class="line">        //@&#125;</span><br><span class="line">        mAnimationFactory.setRecentsAttachedToAppWindow(recentsAttachedToAppWindow, animate);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">// BaseActivityInterface.java</span><br><span class="line">        @Override</span><br><span class="line">        public void setRecentsAttachedToAppWindow(boolean attached, boolean animate) &#123;</span><br><span class="line">            //Flyme.zhangxin add&#123;@</span><br><span class="line">            if (updatePageAnimation(attached, animate)) &#123;</span><br><span class="line">                // 如果是滑动过程中切换小窗时需要做的多任务的动画，这里直接返回</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            //@&#125;</span><br><span class="line">            // 后面就做进入多任务时的动画</span><br><span class="line">            if (mIsAttachedToWindow == attached &amp;&amp; animate) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            mIsAttachedToWindow = attached;</span><br><span class="line">            RecentsView recentsView = mActivity.getOverviewPanel();</span><br><span class="line">            Animator fadeAnim = mActivity.getStateManager()</span><br><span class="line">                    .createStateElementAnimation(INDEX_RECENTS_FADE_ANIM, attached ? 1 : 0);</span><br><span class="line"></span><br><span class="line">            float fromTranslation = attached ? 1 : 0;</span><br><span class="line">            float toTranslation = attached ? 0 : 1;</span><br><span class="line">            mActivity.getStateManager()</span><br><span class="line">                    .cancelStateElementAnimation(INDEX_RECENTS_TRANSLATE_X_ANIM);</span><br><span class="line">            if (!recentsView.isShown() &amp;&amp; animate) &#123;</span><br><span class="line">                ADJACENT_PAGE_OFFSET.set(recentsView, fromTranslation);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                fromTranslation = ADJACENT_PAGE_OFFSET.get(recentsView);</span><br><span class="line">            &#125;</span><br><span class="line">            if (!animate) &#123;</span><br><span class="line">                ADJACENT_PAGE_OFFSET.set(recentsView, toTranslation);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                mActivity.getStateManager().createStateElementAnimation(</span><br><span class="line">                        INDEX_RECENTS_TRANSLATE_X_ANIM,</span><br><span class="line">                        fromTranslation, toTranslation).start();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            fadeAnim.setInterpolator(attached ? INSTANT : ACCEL_2);</span><br><span class="line">            fadeAnim.setDuration(animate ? RECENTS_ATTACH_DURATION : 0).start();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>在其他应用界面，滑动手势结束时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AnimationSuccessListener.onAnimationEnd()</span><br><span class="line">    AnimatorPlaybackController.OnAnimationEndDispatcher.onAnimationSuccess()</span><br><span class="line">        BaseActivityInterface.createActivityInterface.setEndAction().StateManager().goToState(OVERVIEW)</span><br><span class="line">            StateManager.onStateTransitionEnd()</span><br><span class="line">                LauncherRecentsView.onStateTransitionComplete()</span><br><span class="line">                    LauncherRecentsView.setFreezeViewVisibility()</span><br><span class="line">                        RecentsView.setVisibility()</span><br></pre></td></tr></table></figure>
+<p>在桌面时滑动手势结束时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FlingAndHoldTouchController.goToOverviewOnDragEnd.onAnimationEnd()</span><br><span class="line">    AnimationSuccessListener.onAnimationEnd</span><br><span class="line">        FlingAndHoldTouchController.goToOverviewOnDragEnd.onAnimationSuccess(OVERVIEW)</span><br><span class="line">            PortraitStatesTouchController.onSwipeInteractionCompleted()</span><br><span class="line">                AbstractStateChangeTouchController.onSwipeInteractionCompleted()</span><br><span class="line">                    FlingAndHoldTouchController.goToTargetState()</span><br><span class="line">                        AbstractStateChangeTouchController.goToTargetState()</span><br><span class="line">                            StateManager.goToState()</span><br><span class="line">                                StateManager.onStateTransitionEnd()</span><br><span class="line">                                    LauncherRecentsView.onStateTransitionComplete()</span><br><span class="line">                                        LauncherRecentsView.setFreezeViewVisibility()</span><br><span class="line">                                            RecentsView.setVisibility()</span><br></pre></td></tr></table></figure>
+<h2 id="多任务缩放和位置"><a href="#多任务缩放和位置" class="headerlink" title="多任务缩放和位置"></a>多任务缩放和位置</h2><p>手势在滑动过程中多任务的缩放和位置由 <code>BaseSwipeUpHandlerV2.updateFinalShift()</code> 进行，具体介绍在　BaseSwipeUpHandlerV2。</p>
+<h2 id="快切"><a href="#快切" class="headerlink" title="快切"></a>快切</h2><p>在滑动屏幕下方的一块区域时，会快速切换应用，其实这个还是多任务 RecentsView 的全屏切换，切换完成后再启动对应的应用。<br>快切操作主要时通过RecentsView的切换来完成的，然后在启动目标TaskView，事件的处理通过　CachedEventDispatcher.dispatchEvent　分发到　PagedView.onTouchEvent 处理。<br>  OtherActivityInputConsumer.onMotionEvent -&gt; CachedEventDispatcher.dispatchEvent -&gt;  RecentsView.getEventDispatcher.accept -&gt; PagedView.onTouchEvent -&gt;MotionEvent.ACTION_MOVE -&gt; PortraitPagedViewHandler.set -&gt; View::scrollBy</p>
+<h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p>Android R中虚拟按键的详细设计与实现　<a href="https://blog.csdn.net/chen364567628/article/details/107525744" target="_blank" rel="noopener">https://blog.csdn.net/chen364567628/article/details/107525744</a><br>走近Android -R 11 手势的详细设计与实现源码分析　<a href="https://blog.csdn.net/chen364567628/article/details/109126604" target="_blank" rel="noopener">https://blog.csdn.net/chen364567628/article/details/109126604</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Launcher3/" rel="tag"># Launcher3</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/10/Android Launcher/android-launcher-recentsview_navigationbar/" rel="next" title="Android -- 导航栏启动多任务">
+                <i class="fa fa-chevron-left"></i> Android -- 导航栏启动多任务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/05/01/Android SystemUI/android-statusbar-and-navigationbar/" rel="prev" title="Android -- 状态栏导航栏相关设置">
+                Android -- 状态栏导航栏相关设置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关类"><span class="nav-number">1.</span> <span class="nav-text">相关类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手势启动流程"><span class="nav-number">2.</span> <span class="nav-text">手势启动流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动桌面"><span class="nav-number">2.1.</span> <span class="nav-text">启动桌面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备多任务UI"><span class="nav-number">3.</span> <span class="nav-text">准备多任务UI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多任务显示和隐藏的动画"><span class="nav-number">4.</span> <span class="nav-text">多任务显示和隐藏的动画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多任务缩放和位置"><span class="nav-number">5.</span> <span class="nav-text">多任务缩放和位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快切"><span class="nav-number">6.</span> <span class="nav-text">快切</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐文章"><span class="nav-number">7.</span> <span class="nav-text">推荐文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

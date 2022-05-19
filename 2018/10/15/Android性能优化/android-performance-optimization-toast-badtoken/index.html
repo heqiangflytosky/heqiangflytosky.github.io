@@ -1,0 +1,900 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="崩溃优化,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="解决 Toast BadTokenException 异常">
+<meta name="keywords" content="崩溃优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 性能优化实战篇 -- 解决 Toast BadTokenException 异常">
+<meta property="og:url" content="http://yoursite.com/2018/10/15/Android性能优化/android-performance-optimization-toast-badtoken/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="解决 Toast BadTokenException 异常">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-02-20T06:26:15.715Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 性能优化实战篇 -- 解决 Toast BadTokenException 异常">
+<meta name="twitter:description" content="解决 Toast BadTokenException 异常">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/15/Android性能优化/android-performance-optimization-toast-badtoken/">
+
+
+
+
+
+  <title> Android 性能优化实战篇 -- 解决 Toast BadTokenException 异常 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/15/Android性能优化/android-performance-optimization-toast-badtoken/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 性能优化实战篇 -- 解决 Toast BadTokenException 异常
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-15T10:00:00+08:00">
+                2018-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
+                    <span itemprop="name">Android性能优化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2018/10/15/Android性能优化/android-performance-optimization-toast-badtoken/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/10/15/Android性能优化/android-performance-optimization-toast-badtoken/" class="leancloud_visitors" data-flag-title="Android 性能优化实战篇 -- 解决 Toast BadTokenException 异常">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  解决 Toast BadTokenException 异常
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Toast 以其简单的交互和便捷的使用深受大家的喜爱，那么我们在使用过程中肯定也经常碰到下面的崩溃异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2b6ef40 is not valid; is your activity running?</span><br><span class="line">	at android.view.ViewRootImpl.setView(ViewRootImpl.java:714)</span><br><span class="line">	at android.view.WindowManagerGlobal.addView(WindowManagerGlobal.java:353)</span><br><span class="line">	at android.view.WindowManagerImpl.addView(WindowManagerImpl.java:94)</span><br><span class="line">	at android.widget.Toast$TN.handleShow(Toast.java:509)</span><br><span class="line">	at android.widget.Toast$TN$2.handleMessage(Toast.java:374)</span><br><span class="line">	at android.os.Handler.dispatchMessage(Handler.java:102)</span><br><span class="line">	at android.os.Looper.loop(Looper.java:154)</span><br><span class="line">	at android.app.ActivityThread.main(ActivityThread.java:6435)</span><br><span class="line">	at java.lang.reflect.Method.invoke(Native Method)</span><br><span class="line">	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:939)</span><br><span class="line">	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:829)</span><br></pre></td></tr></table></figure>
+<p>而且奇怪的是该问题集中出现在 Android 的某些版本上面，基于该问题的分析，需要我们通读一下 Android Toast 的源码，具体请参考我的博客<a href>Toast 源码分析</a>。<br>本文只简单分析该问题的原因和解决方法。</p>
+<h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>这个问题目前只在Android 7以及以下的版本中出现，为什么会这样呢？我们从源码中一探究竟。<br>先来看一下Android 7中 <code>TN.handleShow</code> 这个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void handleShow(IBinder windowToken) &#123;</span><br><span class="line">    if (mView != mNextView) &#123;</span><br><span class="line">        ......</span><br><span class="line">        mWM = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);</span><br><span class="line">        ......</span><br><span class="line">        mParams.token = windowToken;</span><br><span class="line">        ......</span><br><span class="line">        mWM.addView(mView, mParams);</span><br><span class="line">        trySendAccessibilityEvent();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再来看一下 Android 8 版本中的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public void handleShow(IBinder windowToken) &#123;</span><br><span class="line">    if (mView != mNextView) &#123;</span><br><span class="line">        ......</span><br><span class="line">        mWM = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);</span><br><span class="line">        ......</span><br><span class="line">        mParams.token = windowToken;</span><br><span class="line">        ......</span><br><span class="line">        try &#123;</span><br><span class="line">            mWM.addView(mView, mParams);</span><br><span class="line">            trySendAccessibilityEvent();</span><br><span class="line">        &#125; catch (WindowManager.BadTokenException e) &#123;</span><br><span class="line">            /* ignore */</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看到没有，在 Android 8以及以上的版本中，在 <code>mWM.addView()</code> 代码添加了try catch 代码块，把可能抛出的 <code>WindowManager.BadTokenException</code> 捕获了，因此，当出现异常时，仅仅是 Toast 不会显示出来，而不会导致应用崩溃。<br>那么为什么会出现 <code>WindowManager.BadTokenException</code> 的异常呢？</p>
+<p>我们知道，Toast 显示的时序控制是由 NotificationManagerService 来控制的，在显示 Toast 部分的代码中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void showNextToastLocked() &#123;</span><br><span class="line">        ...</span><br><span class="line">        try &#123;</span><br><span class="line">            record.callback.show();//通知进程显示</span><br><span class="line">            scheduleTimeoutLocked(record);//超时监听消息</span><br><span class="line">            return;</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            ....</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有个超时监听的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private void scheduleTimeoutLocked(ToastRecord r)</span><br><span class="line">&#123;</span><br><span class="line">    mHandler.removeCallbacksAndMessages(r);</span><br><span class="line">    Message m = Message.obtain(mHandler, MESSAGE_TIMEOUT, r);</span><br><span class="line">    long delay = r.duration == Toast.LENGTH_LONG ? LONG_DELAY : SHORT_DELAY;</span><br><span class="line">    mHandler.sendMessageDelayed(m, delay);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当某个 Toast 通知显示进程显示后，就会发一个超时监听的消息，在规定时间到达后就会隐藏 Toast，并且把窗口 token 删除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//NotificationManagerService.java</span><br><span class="line">    void cancelToastLocked(int index) &#123;</span><br><span class="line">        ToastRecord record = mToastQueue.get(index);</span><br><span class="line">        try &#123;</span><br><span class="line">            record.callback.hide();</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            Slog.w(TAG, &quot;Object died trying to hide notification &quot; + record.callback</span><br><span class="line">                    + &quot; in package &quot; + record.pkg);</span><br><span class="line">            // don&apos;t worry about this, we&apos;re about to remove it from</span><br><span class="line">            // the list anyway</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ToastRecord lastToast = mToastQueue.remove(index);</span><br><span class="line">        mWindowManagerInternal.removeWindowToken(lastToast.token, true);</span><br><span class="line"></span><br><span class="line">        keepProcessAliveIfNeededLocked(record.pid);</span><br><span class="line">        if (mToastQueue.size() &gt; 0) &#123;</span><br><span class="line">            // Show the next one. If the callback fails, this will remove</span><br><span class="line">            // it from the list, so don&apos;t assume that the list hasn&apos;t changed</span><br><span class="line">            // after this point.</span><br><span class="line">            showNextToastLocked();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>如果这是碰巧 UI 系统比较卡顿，在 WMS 进程删除 token 后，显示进程才去显示，那么就会抛出 BadTokenException 异常，只不过 Android 8以及以上系统会把这个异常捕获。</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>我们通过下面的代码来验证一下这个问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Toast.makeText(this，&quot;test&quot;，Toast.LENGTH_SHORT).show();</span><br><span class="line">try &#123;</span><br><span class="line">    Thread.sleep(10000);</span><br><span class="line">&#125; catch (InterruptedException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Android 7和以下的版本版本中会出现崩溃，而在 Android 7 以上版本中，Toast 没有显示，但是没有出现崩溃。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>如果我们在 <code>Toast.show</code> 调用的地方加个 try catch 模块可以解决这个问题吗？因为 <code>Toast.show</code> 仅仅是发了个通知消息给 NotificationManagerService，真正需要显示时是 NotificationManagerService 通知 TN 对象来显示的。因此这个方法是不起作用的。<br><code>TN.mHandler</code> 对象来处理 NotificationManagerService 发出的消失消息并且调用 <code>handleShow(token)</code> 方法来显示。<br>根据 <a href="http://www.heqiangfly.com/2016/10/10/android-knowledge-message-system-source-code/" target="_blank" rel="noopener">Android 消息机制 – 源码分析 </a> 的分析我们知道，<code>Hanlder</code> 处理消息的方法 <code>handleMessage</code> 也是在 <code>dispatchMessage</code> 方法中执行的，因此，我们只需要在 <code>Hanlder</code> 方法的 <code>dispatchMessage</code> 加上 try catch 块即可。<br>因此我们定义一个 <code>Handler</code> 装饰器，参考[Android  Toast问题深度剖析(二)] (<a href="https://cloud.tencent.com/developer/article/1034223" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1034223</a>) 给出的解决方案。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">public class ToastUtils &#123;</span><br><span class="line">    private static Field sField_TN ;</span><br><span class="line">    private static Field sField_TN_Handler ;</span><br><span class="line">    static &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            sField_TN = Toast.class.getDeclaredField(&quot;mTN&quot;);</span><br><span class="line">            sField_TN.setAccessible(true);</span><br><span class="line">            sField_TN_Handler = sField_TN.getType().getDeclaredField(&quot;mHandler&quot;);</span><br><span class="line">            sField_TN_Handler.setAccessible(true);</span><br><span class="line">        &#125; catch (Exception e) &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void hook(Toast toast) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Object tn = sField_TN.get(toast);</span><br><span class="line">            Handler preHandler = (Handler)sField_TN_Handler.get(tn);</span><br><span class="line">            sField_TN_Handler.set(tn,new SafelyHandlerWarpper(preHandler));</span><br><span class="line">        &#125; catch (Exception e) &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void showToast(Context context, CharSequence cs, int length) &#123;</span><br><span class="line">        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O) &#123;</span><br><span class="line">            Toast.makeText(context,cs,length).show();</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            Toast toast = Toast.makeText(context, cs, length);</span><br><span class="line">            hook(toast);</span><br><span class="line">            toast.show();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static class SafelyHandlerWarpper extends Handler &#123;</span><br><span class="line"></span><br><span class="line">        private Handler impl;</span><br><span class="line"></span><br><span class="line">        public SafelyHandlerWarpper(Handler impl) &#123;</span><br><span class="line">            this.impl = impl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void dispatchMessage(Message msg) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                super.dispatchMessage(msg);</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void handleMessage(Message msg) &#123;</span><br><span class="line">            impl.handleMessage(msg);//需要委托给原Handler执行</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行一下测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ToastUtils.showToast(this,&quot;hello&quot;, Toast.LENGTH_LONG);</span><br><span class="line">try &#123;</span><br><span class="line">    Thread.sleep(10000);</span><br><span class="line">&#125; catch (InterruptedException e) &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Android 7 版本中也没有出现崩溃。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p>[Android] Toast问题深度剖析(一)：<a href="https://cloud.tencent.com/developer/article/1034225" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1034225</a><br>[Android] Toast问题深度剖析(二)：<a href="https://cloud.tencent.com/developer/article/1034223" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1034223</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/崩溃优化/" rel="tag"># 崩溃优化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/12/Android性能优化/android-performance-optimization-profiler-leak/" rel="next" title="Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏">
+                <i class="fa fa-chevron-left"></i> Android 性能优化工具篇 -- Android Profiler 分析内存使用和内存泄漏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/18/Android源码分析/android-source-code-analysis-toast/" rel="prev" title="Android Toast 源码分析">
+                Android Toast 源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题原因"><span class="nav-number">2.</span> <span class="nav-text">问题原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-number">3.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">4.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

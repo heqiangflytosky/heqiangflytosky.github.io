@@ -1,0 +1,942 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android,LaunchMode,Intent Flag,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍 Android LaunchMode 与 Intent Flag">
+<meta name="keywords" content="Android,LaunchMode,Intent Flag">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android LaunchMode taskAffinity 与 Intent Flag 详解">
+<meta property="og:url" content="http://yoursite.com/2015/12/08/Android/android-knowledge-point-launchmode-intent-flag/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 Android LaunchMode 与 Intent Flag">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-01-20T07:13:57.038Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android LaunchMode taskAffinity 与 Intent Flag 详解">
+<meta name="twitter:description" content="介绍 Android LaunchMode 与 Intent Flag">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/12/08/Android/android-knowledge-point-launchmode-intent-flag/">
+
+
+
+
+
+  <title> Android LaunchMode taskAffinity 与 Intent Flag 详解 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/12/08/Android/android-knowledge-point-launchmode-intent-flag/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android LaunchMode taskAffinity 与 Intent Flag 详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-12-08T10:00:00+08:00">
+                2015-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/12/08/Android/android-knowledge-point-launchmode-intent-flag/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/12/08/Android/android-knowledge-point-launchmode-intent-flag/" class="leancloud_visitors" data-flag-title="Android LaunchMode taskAffinity 与 Intent Flag 详解">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 Android LaunchMode 与 Intent Flag
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="taskAffinity"><a href="#taskAffinity" class="headerlink" title="taskAffinity"></a>taskAffinity</h2><p>我们可以在 AndroidManifest.xml 中通过 <code>android:taskAffinity</code> 属性为 Activity 指定 taskAffinity。<br>那么什么是 taskAffinity 呢？<br>taskAffinity 可以为 Activity 指定归属于那个 Task。<br>一般情况下，如果应用中的 Activity 都没有特殊的显式指定 taskAffinity，那么它的这个属性就等于 Application 指明的 taskAffinity，如果 Application 也没有指明，那么该 taskAffinity 的值就等于应用的包名。<br>taskAffinity 可以为任意字符串，但是非空的话必须至少包含一个“.”，否则会编译报错。但是你可以指定taskAffinity为空字符串，这时它就不属于任何 Task。<br>那么是不是我指定了一个 Activity 的 taskAffinity 值（跟包名不同），运行该 Activity 时，是否就会新开这个 task栈呢？<br>答案是否定的，一个 Activity 运行时所归属的task，是由 StackId 来决定的，默认是启动它的那个Activity 所在的 task。即使有时我们配置了 taskAffinity，但是它是在特定情况下才会生效的。<br>taskAffinit 单独使用并不会生效，要想其生效，需要配合其他属性使用，或者在 standard 模式下配合 Intent.FLAG_ACTIVITY_NEW_TASK，或者配合<br>allowTaskReparenting。或者配合 singleTask 使用。</p>
+<h2 id="LaunchMode"><a href="#LaunchMode" class="headerlink" title="LaunchMode"></a>LaunchMode</h2><h3 id="standard"><a href="#standard" class="headerlink" title="standard"></a>standard</h3><p>标准模式。如果不显式的指定 launchMode，Activity都会按照此种模式启动。这种模式下的 Activity 可以有多个实例，不同任务中可以有不同的 Activity 实例，同一个任务中也可以有多个 Activity 实例。这种模式下启动Activity总是会重新创建Activity，对应调用 <code>onCreate()</code> 方法。<br>Android L(Android 5.0)前后对这种启动模式的处理方式是不同的：</p>
+<ul>
+<li>Android L之前：每次以该模式启动的 Activity 都会被压入当前任务的顶部，启动 N 次，在当前任务就会出现 N 个 Activity 的实例，每次Back键就会销毁一个，直到按了 N 次Back键。</li>
+<li>Android L之后：如果要以该模式启动 Activity 都是来自同一应用，那么还是会像之前一样，压入当前任务的顶部; 如果是来自不同应用，那么将会创建一个新的任务，然后将 Activity 的实例压入新的任务中。Android L做的优化主要是针对多任务的显示。</li>
+</ul>
+<h3 id="singleTop"><a href="#singleTop" class="headerlink" title="singleTop"></a>singleTop</h3><p>栈顶复用模式。这种模式下栈顶仅有一个 Activity 实例，也就是说不会有多个相同的 Activity 叠加在栈顶。如果当前任务的顶部就是待启动的 Activity 实例，那么并不会再创建一个新的 Activity 实例，而是仅仅调用已有实例的 <code>onNewIntent()</code> 方法，所以对于要以 singleTop 启动的Activity，需要处理 <code>onCreate()</code> 和 <code>onNewIntent()</code> 这两种情况下的启动参数。<br>但是如果任务中已经有这个 Activity 实例，但是不在栈顶，还是会重新创建一个新的 Activity 实例。</p>
+<h3 id="singleTask"><a href="#singleTask" class="headerlink" title="singleTask"></a>singleTask</h3><p>栈内复用模式，也是单实例模式。该模式下该 Activity 实例仅有一个 Task 存在。但是该 Task 中可能会有多个 Activity。<br>系统在该类型的 Task 不存在时创建一个新的 Task，并将该 Activity 放入 Task 底部。具体启动 singleTask 会不会新建一个 Task，则和 TaskAffinity 有关。在我们不设置 <code>android:taskAffinity</code> 的情况下，同一个应用的 Activity 默认具有相同的 TaskAffinity，除非你自己设置了 Activity 的 <code>android:taskAffinity</code>。<br>以 A 启动 B（singleTask）为例，下面我们分集中情况来介绍：</p>
+<ul>
+<li>A 和 B 的 TaskAffinity 相同，该 Task 里面没有 B：那么就直接在 A 的 Task 里面启动 B。</li>
+<li>A 和 B 的 TaskAffinity 相同，该 Task 里面存在 B：清除该 Activity 上面的所有对象，把该 Activity 推到前台。</li>
+<li>A 和 B 的 TaskAffinity 不同，且 B 不存在：则创建一个新的 Task，并将该 Activity 放入 Task 底部。</li>
+<li>A 和 B 的 TaskAffinity 不同，且 B 存在：在该 Task 中启动该 Activity，并把该 Task 拉回前台，如果该 Activity 上面有其他的对象，则清除该 Activity 上面的所有对象，把该 Activity 推到前台。</li>
+</ul>
+<p>也就是说，启动模式为 singleTask 的 Activity 在系统中只会存在一个实例。<br>如果在栈中已经有该Activity的实例，就重用该实例(会调用实例的 <code>onNewIntent()</code>)。重用时，会让该实例回到栈顶，因此在它上面的实例将会被移除栈。<br>但是要注意，系统可能会随时杀掉后台运行的 Activity，如果这一切发生，那么系统就会调用 <code>onCreate()</code> 方法，而不调用 <code>onNewIntent()</code> 方法。，因此，如果有需要在 <code>Activity</code> 启动时处理的方法最好在 <code>onCreate()</code>和 <code>onNewIntent()</code> 方法中都要调用一下。<br>我们其实也注意到，Intent Flag 中 有 FLAG_ACTIVITY_NEW_TASK，singleTask 的作用相当于 FLAG_ACTIVITY_CLEAR_TOP + FLAG_ACTIVITY_NEW_TASK。</p>
+<h3 id="singleInstance"><a href="#singleInstance" class="headerlink" title="singleInstance"></a>singleInstance</h3><p>单实例模式，也是增强型 singleTask 模式。该模式下，系统中只允许有一个存在该 Activity 的 Task 存在，而且该 Task 中只允许有该 Activity 一个实例存在。</p>
+<ul>
+<li>Activity 不存在：总是新建一个 Task，并且创建一个 Activity。</li>
+<li>Activity 存在：则会重用该 Activity。</li>
+</ul>
+<p>这里可能会有个疑问，如果 A 和 B （singleInstance）的 TaskAffinity 相同，A 启动 B 时的情况是怎么样的呢？我们来做一个测试：<br>看一下 <code>adb shell dumpsys activity</code> 的打印：<br>启动 B 前：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Task id #356</span><br><span class="line">  TaskRecord&#123;bbe4f0d #356 A=com.example.heqiang.testsomething U=0 sz=2&#125;</span><br><span class="line">  Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">    Hist #1: ActivityRecord&#123;eeae154 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t356&#125;</span><br><span class="line">      Intent &#123; cmp=com.example.heqiang.testsomething/.launchFlag.ActivityA &#125;</span><br><span class="line">      ProcessRecord&#123;66c150e 15760:com.example.heqiang.testsomething/u0a36&#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;d6950cc u0 com.example.heqiang.testsomething/.MainActivity t356&#125;</span><br><span class="line">      Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">      ProcessRecord&#123;66c150e 15760:com.example.heqiang.testsomething/u0a36&#125;</span><br></pre></td></tr></table></figure>
+<p>该 Task 里面有 MainActivity 和 A。<br>A 启动 B：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Task id #361</span><br><span class="line">  TaskRecord&#123;378cfdb #361 A=com.example.heqiang.testsomething U=0 sz=1&#125;</span><br><span class="line">  Intent &#123; flg=0x10000000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityB &#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;9e32cdf u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t361&#125;</span><br><span class="line">      Intent &#123; flg=0x10000000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityB &#125;</span><br><span class="line">      ProcessRecord&#123;f103a35 16820:com.example.heqiang.testsomething/u0a36&#125;</span><br><span class="line">Task id #360</span><br><span class="line">  TaskRecord&#123;99a446c #360 A=com.example.heqiang.testsomething U=0 sz=2&#125;</span><br><span class="line">  Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">    Hist #1: ActivityRecord&#123;c51aa5 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t360&#125;</span><br><span class="line">      Intent &#123; cmp=com.example.heqiang.testsomething/.launchFlag.ActivityA &#125;</span><br><span class="line">      ProcessRecord&#123;f103a35 16820:com.example.heqiang.testsomething/u0a36&#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;d2364a7 u0 com.example.heqiang.testsomething/.MainActivity t360&#125;</span><br><span class="line">      Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">      ProcessRecord&#123;f103a35 16820:com.example.heqiang.testsomething/u0a36&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，新建了一个 Task 用来管理 ActivityB。印证了上面的总结，Activity 不存在时总是新建一个 Task，并且创建一个 Activity。</p>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><ul>
+<li>standard 和 singleTop：这两种模式下 Activity 在系统中可以有多个实例。如果栈顶已经存在待启动 Activity 的实例，singleTop 会利用已有的实例，而 standard 仍然会新建一个。 然而，singleTop 只对当前应用启动有效，对于跨应用启动的情况，singleTop 与 standard 模式没有区别。在跨应用启动这种情况下，Intent 并不会去寻找已有任务的 Activity，而是直接创建一个新的 Activity 实例：在 Android L 之前，将 Activity 实例置于发起者的任务顶，在 Android L 之后，将 Activity 实例置于新任务的根部。</li>
+<li>singleTask 和 singleInstance 模式的 Activity 在系统中都只有一个实例（当然也就只有一个该 Activity 的Task），但是 singleTask 模式的 Task 中允许有别的 Activity 存在，而 singleInstance 模式的 Task 中只有该 Activity 一个实例，不允许有其他 Activity 存在。</li>
+</ul>
+<h2 id="LaunchMode-和-taskAffinity-的关系"><a href="#LaunchMode-和-taskAffinity-的关系" class="headerlink" title="LaunchMode 和 taskAffinity 的关系"></a>LaunchMode 和 taskAffinity 的关系</h2><h3 id="standard-模式下指定-taskAffinity"><a href="#standard-模式下指定-taskAffinity" class="headerlink" title="standard 模式下指定 taskAffinity"></a>standard 模式下指定 taskAffinity</h3><p>A (MainActivity) 以 standard 模式启动 B(OtherTestActivity)，为 B 指定一个不同于 A 的 taskAffinity。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Task id #21330</span><br><span class="line">mFullscreen=true</span><br><span class="line">mBounds=null</span><br><span class="line">mMinWidth=-1</span><br><span class="line">mMinHeight=-1</span><br><span class="line">mLastNonFullscreenBounds=null</span><br><span class="line">  TaskRecord&#123;ff958fa #21330 A=com.example.heqiang.testsomething U=0 StackId=1 sz=2&#125;</span><br><span class="line">  Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">    Hist #1: ActivityRecord&#123;967b73e u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t21330&#125;</span><br><span class="line">      Intent &#123; cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity &#125;</span><br><span class="line">      ProcessRecord&#123;1a33eab 14060:com.example.heqiang.testsomething/u0a172&#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;daf4dea u0 com.example.heqiang.testsomething/.MainActivity t21330&#125;</span><br><span class="line">      Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">      ProcessRecord&#123;1a33eab 14060:com.example.heqiang.testsomething/u0a172&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，他们仍然在同一个 Task 中，这个 Task 为 A Activity 所在的 Task。<br>因此在 standard 模式下设置 taskAffinity 没什么作用，正如上面介绍，可以配合 FLAG_ACTIVITY_NEW_TASK 使用。</p>
+<h3 id="singleTask-模式下指定-taskAffinity"><a href="#singleTask-模式下指定-taskAffinity" class="headerlink" title="singleTask 模式下指定 taskAffinity"></a>singleTask 模式下指定 taskAffinity</h3><p>这种模式下启动和 taskAffinity 的关系上面已经介绍了一些普通的情况，这里不再介绍。<br>下面来看一个不同的 Activity 指定同一个 taskAffinity 的情况。<br>我们先来看一下同一个应用中的情况。首先，这两个 Activity 没有指定特殊进程，他们运行在一个进程中。<br>在 A（MainActivity） 中以 singleTask 启动同一个 taskAffinity （但不同于A）的 B（OtherTestActivity） 和 C（EventActivity） 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Task id #21332</span><br><span class="line">mFullscreen=true</span><br><span class="line">mBounds=null</span><br><span class="line">mMinWidth=-1</span><br><span class="line">mMinHeight=-1</span><br><span class="line">mLastNonFullscreenBounds=null</span><br><span class="line">  TaskRecord&#123;a989fd7 #21332 A=com.hq.test U=0 StackId=1 sz=2&#125;</span><br><span class="line">  Intent &#123; flg=0x10000000 cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity &#125;</span><br><span class="line">    Hist #1: ActivityRecord&#123;6c49b46 u0 com.example.heqiang.testsomething/.event.EventActivity t21332&#125;</span><br><span class="line">      Intent &#123; flg=0x10400000 cmp=com.example.heqiang.testsomething/.event.EventActivity &#125;</span><br><span class="line">      ProcessRecord&#123;64a0ee2 22782:com.example.heqiang.testsomething/u0a172&#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;ce7925e u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t21332&#125;</span><br><span class="line">      Intent &#123; flg=0x10000000 cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity &#125;</span><br><span class="line">      ProcessRecord&#123;64a0ee2 22782:com.example.heqiang.testsomething/u0a172&#125;</span><br><span class="line">Task id #21331</span><br><span class="line">mFullscreen=true</span><br><span class="line">mBounds=null</span><br><span class="line">mMinWidth=-1</span><br><span class="line">mMinHeight=-1</span><br><span class="line">mLastNonFullscreenBounds=null</span><br><span class="line">  TaskRecord&#123;aafbad #21331 A=com.example.heqiang.testsomething U=0 StackId=1 sz=1&#125;</span><br><span class="line">  Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;f944c08 u0 com.example.heqiang.testsomething/.MainActivity t21331&#125;</span><br><span class="line">      Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">      ProcessRecord&#123;64a0ee2 22782:com.example.heqiang.testsomething/u0a172&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，这种情况下，B 和 C 在同一个 Task中，而且在同一个进程中。<br>不在同一个进程的情况这里就不再测试了， B 和 C 这时候仍在 在同一个 Task 中。也就是说 Task 和 进程没有联系。</p>
+<p>下面来说明一种情况，就是 A 应用和 B 应用依赖了SDK包，他们以 singleTask 模式启动 SDK 中的同一个 Activity C，这又该什么情况呢？<br>其实这种情况只要你理解了下面的事实，那么 LaunchMode 、taskAffinity 以及 Task 的关系就很容易理解了。<br>也就是虽然 SDK 中的 C 从代码层面上讲是同一个，但是对于A 应用和 B 应用来说，调用的确实两个不同的 Activity ，因为它们的包名不同，比如：</p>
+<ul>
+<li><code>com.hq.test.sdkdemo/com.hq.sdk.TestActivity</code></li>
+<li><code>com.example.heqiang.testsomething/com.hq.sdk.TestActivity</code></li>
+</ul>
+<p>可以下面的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Task id #21313</span><br><span class="line">mFullscreen=true</span><br><span class="line">mBounds=null</span><br><span class="line">mMinWidth=-1</span><br><span class="line">mMinHeight=-1</span><br><span class="line">mLastNonFullscreenBounds=null</span><br><span class="line">  TaskRecord&#123;6cf314a #21313 A=com.hq.test U=0 StackId=1 sz=2&#125;</span><br><span class="line">  Intent &#123; flg=0x10000000 cmp=com.example.heqiang.testsomething/com.hq.sdk.TestActivity &#125;</span><br><span class="line">    Hist #1: ActivityRecord&#123;88936eb u0 com.hq.test.sdkdemo/com.hq.sdk.TestActivity t21313&#125;</span><br><span class="line">      Intent &#123; flg=0x10400000 cmp=com.hq.test.sdkdemo/com.hq.sdk.TestActivity &#125;</span><br><span class="line">      ProcessRecord&#123;7571816 5028:com.hq.test.sdkdemo/u0a137&#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;dc4f387 u0 com.example.heqiang.testsomething/com.hq.sdk.TestActivity t21313&#125;</span><br><span class="line">      Intent &#123; flg=0x10000000 cmp=com.example.heqiang.testsomething/com.hq.sdk.TestActivity &#125;</span><br><span class="line">      ProcessRecord&#123;702597 3847:com.example.heqiang.testsomething/u0a172&#125;</span><br><span class="line">Task id #21315</span><br><span class="line">mFullscreen=true</span><br><span class="line">mBounds=null</span><br><span class="line">mMinWidth=-1</span><br><span class="line">mMinHeight=-1</span><br><span class="line">mLastNonFullscreenBounds=null</span><br><span class="line">  TaskRecord&#123;751d1d8 #21315 A=com.hq.test.sdkdemo U=0 StackId=1 sz=1&#125;</span><br><span class="line">  Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.hq.test.sdkdemo/.MainActivity &#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;7b3c6a6 u0 com.hq.test.sdkdemo/.MainActivity t21315&#125;</span><br><span class="line">      Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.hq.test.sdkdemo/.MainActivity &#125;</span><br><span class="line">      ProcessRecord&#123;7571816 5028:com.hq.test.sdkdemo/u0a137&#125;</span><br><span class="line">Task id #21312</span><br><span class="line">mFullscreen=true</span><br><span class="line">mBounds=null</span><br><span class="line">mMinWidth=-1</span><br><span class="line">mMinHeight=-1</span><br><span class="line">mLastNonFullscreenBounds=null</span><br><span class="line">  TaskRecord&#123;d65931 #21312 A=com.example.heqiang.testsomething U=0 StackId=1 sz=1&#125;</span><br><span class="line">  Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">    Hist #0: ActivityRecord&#123;85b37c0 u0 com.example.heqiang.testsomething/.MainActivity t21312&#125;</span><br><span class="line">      Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.heqiang.testsomething/.MainActivity &#125;</span><br><span class="line">      ProcessRecord&#123;702597 3847:com.example.heqiang.testsomething/u0a172&#125;</span><br></pre></td></tr></table></figure>
+<p>在 com.hq.test Task中，有两个 <code>TestActivity</code>，他们属于不同进程。</p>
+<h2 id="Intent-Flag"><a href="#Intent-Flag" class="headerlink" title="Intent Flag"></a>Intent Flag</h2><h3 id="FLAG-ACTIVITY-NEW-TASK"><a href="#FLAG-ACTIVITY-NEW-TASK" class="headerlink" title="FLAG_ACTIVITY_NEW_TASK"></a>FLAG_ACTIVITY_NEW_TASK</h3><p>设置 FLAG_ACTIVITY_NEW_TASK 标志位时，当有 task 运行了你要运行的 activity，这个task会到前台并，并且这个activity会回调 onNewIntent()，而不是创建新的。 如果没有就会去创建新的 activity。<br>设置 FLAG_ACTIVITY_NEW_TASK 标志位是，具体是新建 stask 启动还是在当前 stask 中启动 activity，就和 activity 的 taskAffinity 有关系了。<br>FLAG_ACTIVITY_NEW_TASK 只会去关心该 <code>Activity</code> 的 Task 的个数，如果不存在就新建，存在就直接推到前台。而不去关心 <code>Activity</code> 的个数（和启动模式有关），也就是说该 Task 中可以有多个 Activity 存在，这个要和 <code>singleTask</code> 做区别。<br>下来来介绍一下需要注意的几个点：<br>第一种情况：OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinity）、ActivityB（默认 taskAffinity）。OtherTestActivity 启动ActivityA，ActivityA启动ActivityB时都加上 FLAG_ACTIVITY_NEW_TASK。<br>来看一下栈的情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">Stack #1571: type=standard mode=fullscreen</span><br><span class="line">isSleeping=false</span><br><span class="line">mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  Task id #3345</span><br><span class="line">  mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  mMinWidth=-1</span><br><span class="line">  mMinHeight=-1</span><br><span class="line">  mLastNonFullscreenBounds=null</span><br><span class="line">  * TaskRecord&#123;a4848a0 #3345 A=com.example.heqiang.testsomething U=0 StackId=1571 sz=3&#125;</span><br><span class="line">    userId=0 effectiveUid=u0a37 mCallingUid=u0a33 mUserSetupComplete=true mCallingPackage=com.android.systemui</span><br><span class="line">    affinity=com.example.heqiang.testsomething</span><br><span class="line">    intent=&#123;act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.heqiang.testsomething/.MainActivity&#125;</span><br><span class="line">    realActivity=com.example.heqiang.testsomething/.MainActivity</span><br><span class="line">    autoRemoveRecents=false isPersistable=true numFullscreen=3 activityType=1</span><br><span class="line">    rootWasReset=true mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE</span><br><span class="line">    Activities=[ActivityRecord&#123;1111663 u0 com.example.heqiang.testsomething/.MainActivity t3345&#125;, ActivityRecord&#123;df6006f u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3345&#125;, ActivityRecord&#123;bfaaa40 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3345&#125;]</span><br><span class="line">    askedCompatMode=false inRecents=true isAvailable=true mLaunchedFromMultiWindow=false</span><br><span class="line">    mRootProcess=ProcessRecord&#123;2a7dc59 26550:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">    stackId=1571</span><br><span class="line">    hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true lastActiveTime=2918370622 (inactive for 4s)</span><br><span class="line">    * Hist #2: ActivityRecord&#123;bfaaa40 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3345&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;2a7dc59 26550:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; flg=0x10400000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityB &#125;</span><br><span class="line">        frontOfTask=false task=TaskRecord&#123;a4848a0 #3345 A=com.example.heqiang.testsomething U=0 StackId=1571 sz=3&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityB</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-zzSgCbKisHaYs61sWCNFHw==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line">    * Hist #1: ActivityRecord&#123;df6006f u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3345&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;2a7dc59 26550:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity (has extras) &#125;</span><br><span class="line">        frontOfTask=false task=TaskRecord&#123;a4848a0 #3345 A=com.example.heqiang.testsomething U=0 StackId=1571 sz=3&#125;</span><br><span class="line">        taskAffinity=com.hq.test.task</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.commontest.OtherTestActivity</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-zzSgCbKisHaYs61sWCNFHw==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line">    * Hist #0: ActivityRecord&#123;1111663 u0 com.example.heqiang.testsomething/.MainActivity t3345&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10033 launchedFromPackage=com.android.systemui userId=0</span><br><span class="line">        app=ProcessRecord&#123;2a7dc59 26550:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.heqiang.testsomething/.MainActivity bnds=[540,1235][792,1510] (has extras) &#125;</span><br><span class="line">        frontOfTask=true task=TaskRecord&#123;a4848a0 #3345 A=com.example.heqiang.testsomething U=0 StackId=1571 sz=3&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.MainActivity</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-zzSgCbKisHaYs61sWCNFHw==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f100006</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line"></span><br><span class="line">  Running activities (most recent first):</span><br><span class="line">    TaskRecord&#123;a4848a0 #3345 A=com.example.heqiang.testsomething U=0 StackId=1571 sz=3&#125;</span><br><span class="line">      Run #2: ActivityRecord&#123;bfaaa40 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3345&#125;</span><br><span class="line">      Run #1: ActivityRecord&#123;df6006f u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3345&#125;</span><br><span class="line">      Run #0: ActivityRecord&#123;1111663 u0 com.example.heqiang.testsomething/.MainActivity t3345&#125;</span><br><span class="line"></span><br><span class="line">  mResumedActivity: ActivityRecord&#123;bfaaa40 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3345&#125;</span><br><span class="line"></span><br><span class="line">Stack #1572: type=standard mode=fullscreen</span><br><span class="line">isSleeping=false</span><br><span class="line">mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line"></span><br><span class="line">  Task id #3346</span><br><span class="line">  mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  mMinWidth=-1</span><br><span class="line">  mMinHeight=-1</span><br><span class="line">  mLastNonFullscreenBounds=null</span><br><span class="line">  * TaskRecord&#123;c72201e #3346 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1572 sz=1&#125;</span><br><span class="line">    userId=0 effectiveUid=u0a37 mCallingUid=u0a37 mUserSetupComplete=true mCallingPackage=com.example.heqiang.testsomething</span><br><span class="line">    affinity=com.example.heqiang.testsomething:ActivityA</span><br><span class="line">    intent=&#123;act=Tests flg=0x10000000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityA&#125;</span><br><span class="line">    realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityA</span><br><span class="line">    autoRemoveRecents=false isPersistable=true numFullscreen=1 activityType=1</span><br><span class="line">    rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE</span><br><span class="line">    Activities=[ActivityRecord&#123;12a072d u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3346&#125;]</span><br><span class="line">    askedCompatMode=false inRecents=true isAvailable=true mLaunchedFromMultiWindow=false</span><br><span class="line">    mRootProcess=ProcessRecord&#123;2a7dc59 26550:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">    stackId=1572</span><br><span class="line">    hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true lastActiveTime=2918370481 (inactive for 4s)</span><br><span class="line">    * Hist #0: ActivityRecord&#123;12a072d u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3346&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;2a7dc59 26550:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; act=Tests flg=0x10000000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityA &#125;</span><br><span class="line">        frontOfTask=true task=TaskRecord&#123;c72201e #3346 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1572 sz=1&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething:ActivityA</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityA</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-zzSgCbKisHaYs61sWCNFHw==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line"></span><br><span class="line">  Running activities (most recent first):</span><br><span class="line">    TaskRecord&#123;c72201e #3346 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1572 sz=1&#125;</span><br><span class="line">      Run #0: ActivityRecord&#123;12a072d u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3346&#125;</span><br><span class="line"></span><br><span class="line">  mLastPausedActivity: ActivityRecord&#123;12a072d u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3346&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，OtherTestActivity 启动ActivityA时，在新的栈上创建 ActivityA，ActivityA启动ActivityB时会在 OtherTestActivity 所在的栈中添加 ActivityB。</p>
+<p>再看另外一种情况：</p>
+<p>OtherTestActivity（默认 taskAffinity），ActivityA（设置新的taskAffinity）、ActivityB（默认 taskAffinity）。OtherTestActivity 启动ActivityA时加上 FLAG_ACTIVITY_NEW_TASK，ActivityA启动ActivityB时不加。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line">Stack #1578: type=standard mode=fullscreen</span><br><span class="line">isSleeping=false</span><br><span class="line">mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  Task id #3352</span><br><span class="line">  mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  mMinWidth=-1</span><br><span class="line">  mMinHeight=-1</span><br><span class="line">  mLastNonFullscreenBounds=null</span><br><span class="line">  * TaskRecord&#123;b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2&#125;</span><br><span class="line">    userId=0 effectiveUid=u0a37 mCallingUid=u0a37 mUserSetupComplete=true mCallingPackage=com.example.heqiang.testsomething</span><br><span class="line">    affinity=com.example.heqiang.testsomething:ActivityA</span><br><span class="line">    intent=&#123;act=Tests flg=0x10000000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityA&#125;</span><br><span class="line">    realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityA</span><br><span class="line">    autoRemoveRecents=false isPersistable=true numFullscreen=2 activityType=1</span><br><span class="line">    rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE</span><br><span class="line">    Activities=[ActivityRecord&#123;83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352&#125;, ActivityRecord&#123;66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352&#125;]</span><br><span class="line">    askedCompatMode=false inRecents=true isAvailable=true mLaunchedFromMultiWindow=false</span><br><span class="line">    mRootProcess=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">    stackId=1578</span><br><span class="line">    hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true lastActiveTime=2919082443 (inactive for 1s)</span><br><span class="line">    * Hist #1: ActivityRecord&#123;66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; cmp=com.example.heqiang.testsomething/.launchFlag.ActivityB &#125;</span><br><span class="line">        frontOfTask=false task=TaskRecord&#123;b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityB</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-dhnrkpKFABfE8N6-eIbVjA==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line">    * Hist #0: ActivityRecord&#123;83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; act=Tests flg=0x10000000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityA &#125;</span><br><span class="line">        frontOfTask=true task=TaskRecord&#123;b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething:ActivityA</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityA</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-dhnrkpKFABfE8N6-eIbVjA==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line"></span><br><span class="line">  Running activities (most recent first):</span><br><span class="line">    TaskRecord&#123;b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2&#125;</span><br><span class="line">      Run #1: ActivityRecord&#123;66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352&#125;</span><br><span class="line">      Run #0: ActivityRecord&#123;83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352&#125;</span><br><span class="line"></span><br><span class="line">  mResumedActivity: ActivityRecord&#123;66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352&#125;</span><br><span class="line">  mLastPausedActivity: ActivityRecord&#123;83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352&#125;</span><br><span class="line"></span><br><span class="line">Stack #1577: type=standard mode=fullscreen</span><br><span class="line">isSleeping=false</span><br><span class="line">mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line"></span><br><span class="line">  Task id #3351</span><br><span class="line">  mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  mMinWidth=-1</span><br><span class="line">  mMinHeight=-1</span><br><span class="line">  mLastNonFullscreenBounds=null</span><br><span class="line">  * TaskRecord&#123;f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2&#125;</span><br><span class="line">    userId=0 effectiveUid=u0a37 mCallingUid=u0a33 mUserSetupComplete=true mCallingPackage=com.android.systemui</span><br><span class="line">    affinity=com.example.heqiang.testsomething</span><br><span class="line">    intent=&#123;act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.heqiang.testsomething/.MainActivity&#125;</span><br><span class="line">    realActivity=com.example.heqiang.testsomething/.MainActivity</span><br><span class="line">    autoRemoveRecents=false isPersistable=true numFullscreen=2 activityType=1</span><br><span class="line">    rootWasReset=true mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE</span><br><span class="line">    Activities=[ActivityRecord&#123;731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351&#125;, ActivityRecord&#123;75b69db u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3351&#125;]</span><br><span class="line">    askedCompatMode=false inRecents=true isAvailable=true mLaunchedFromMultiWindow=false</span><br><span class="line">    mRootProcess=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">    stackId=1577</span><br><span class="line">    hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true lastActiveTime=2919081400 (inactive for 2s)</span><br><span class="line">    * Hist #1: ActivityRecord&#123;75b69db u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3351&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity (has extras) &#125;</span><br><span class="line">        frontOfTask=false task=TaskRecord&#123;f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2&#125;</span><br><span class="line">        taskAffinity=com.hq.test.task</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.commontest.OtherTestActivity</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-dhnrkpKFABfE8N6-eIbVjA==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line">    * Hist #0: ActivityRecord&#123;731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10033 launchedFromPackage=com.android.systemui userId=0</span><br><span class="line">        app=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.heqiang.testsomething/.MainActivity bnds=[540,1235][792,1510] (has extras) &#125;</span><br><span class="line">        frontOfTask=true task=TaskRecord&#123;f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.MainActivity</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-dhnrkpKFABfE8N6-eIbVjA==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f100006</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line"></span><br><span class="line">  Running activities (most recent first):</span><br><span class="line">    TaskRecord&#123;f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2&#125;</span><br><span class="line">      Run #1: ActivityRecord&#123;75b69db u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3351&#125;</span><br><span class="line">      Run #0: ActivityRecord&#123;731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351&#125;</span><br><span class="line"></span><br><span class="line">  mLastPausedActivity: ActivityRecord&#123;75b69db u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3351&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，OtherTestActivity 启动ActivityA时，在新的栈上创建 ActivityA，ActivityA启动 ActivityB时会在 ActivityA 所在的栈中添加 ActivityB。<br>这是我们进行下面一步测试，从多任务中打开 OtherTestActivity，从新点击按钮启动 ActivityA：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">Stack #1578: type=standard mode=fullscreen</span><br><span class="line">isSleeping=false</span><br><span class="line">mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  Task id #3352</span><br><span class="line">  mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  mMinWidth=-1</span><br><span class="line">  mMinHeight=-1</span><br><span class="line">  mLastNonFullscreenBounds=null</span><br><span class="line">  * TaskRecord&#123;b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2&#125;</span><br><span class="line">    userId=0 effectiveUid=u0a37 mCallingUid=u0a37 mUserSetupComplete=true mCallingPackage=com.example.heqiang.testsomething</span><br><span class="line">    affinity=com.example.heqiang.testsomething:ActivityA</span><br><span class="line">    intent=&#123;act=Tests flg=0x10000000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityA&#125;</span><br><span class="line">    realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityA</span><br><span class="line">    autoRemoveRecents=false isPersistable=true numFullscreen=2 activityType=1</span><br><span class="line">    rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE</span><br><span class="line">    Activities=[ActivityRecord&#123;83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352&#125;, ActivityRecord&#123;66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352&#125;]</span><br><span class="line">    askedCompatMode=false inRecents=true isAvailable=true mLaunchedFromMultiWindow=false</span><br><span class="line">    mRootProcess=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">    stackId=1578</span><br><span class="line">    hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true lastActiveTime=2919312473 (inactive for 2s)</span><br><span class="line">    * Hist #1: ActivityRecord&#123;66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; cmp=com.example.heqiang.testsomething/.launchFlag.ActivityB &#125;</span><br><span class="line">        frontOfTask=false task=TaskRecord&#123;b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityB</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-dhnrkpKFABfE8N6-eIbVjA==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line">    * Hist #0: ActivityRecord&#123;83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; act=Tests flg=0x10000000 cmp=com.example.heqiang.testsomething/.launchFlag.ActivityA &#125;</span><br><span class="line">        frontOfTask=true task=TaskRecord&#123;b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething:ActivityA</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.launchFlag.ActivityA</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-dhnrkpKFABfE8N6-eIbVjA==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line"></span><br><span class="line">  Running activities (most recent first):</span><br><span class="line">    TaskRecord&#123;b632e5f #3352 A=com.example.heqiang.testsomething:ActivityA U=0 StackId=1578 sz=2&#125;</span><br><span class="line">      Run #1: ActivityRecord&#123;66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352&#125;</span><br><span class="line">      Run #0: ActivityRecord&#123;83b2f2 u0 com.example.heqiang.testsomething/.launchFlag.ActivityA t3352&#125;</span><br><span class="line"></span><br><span class="line">  mResumedActivity: ActivityRecord&#123;66d3402 u0 com.example.heqiang.testsomething/.launchFlag.ActivityB t3352&#125;</span><br><span class="line"></span><br><span class="line">Stack #1577: type=standard mode=fullscreen</span><br><span class="line">isSleeping=false</span><br><span class="line">mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line"></span><br><span class="line">  Task id #3351</span><br><span class="line">  mBounds=Rect(0, 0 - 0, 0)</span><br><span class="line">  mMinWidth=-1</span><br><span class="line">  mMinHeight=-1</span><br><span class="line">  mLastNonFullscreenBounds=null</span><br><span class="line">  * TaskRecord&#123;f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2&#125;</span><br><span class="line">    userId=0 effectiveUid=u0a37 mCallingUid=u0a33 mUserSetupComplete=true mCallingPackage=com.android.systemui</span><br><span class="line">    affinity=com.example.heqiang.testsomething</span><br><span class="line">    intent=&#123;act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.heqiang.testsomething/.MainActivity&#125;</span><br><span class="line">    realActivity=com.example.heqiang.testsomething/.MainActivity</span><br><span class="line">    autoRemoveRecents=false isPersistable=true numFullscreen=2 activityType=1</span><br><span class="line">    rootWasReset=true mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE</span><br><span class="line">    Activities=[ActivityRecord&#123;731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351&#125;, ActivityRecord&#123;75b69db u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3351&#125;]</span><br><span class="line">    askedCompatMode=false inRecents=true isAvailable=true mLaunchedFromMultiWindow=false</span><br><span class="line">    mRootProcess=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">    stackId=1577</span><br><span class="line">    hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true lastActiveTime=2919312337 (inactive for 3s)</span><br><span class="line">    * Hist #1: ActivityRecord&#123;75b69db u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3351&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10037 launchedFromPackage=com.example.heqiang.testsomething userId=0</span><br><span class="line">        app=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; cmp=com.example.heqiang.testsomething/.commontest.OtherTestActivity (has extras) &#125;</span><br><span class="line">        frontOfTask=false task=TaskRecord&#123;f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2&#125;</span><br><span class="line">        taskAffinity=com.hq.test.task</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.commontest.OtherTestActivity</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-dhnrkpKFABfE8N6-eIbVjA==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f1000d2</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line">    * Hist #0: ActivityRecord&#123;731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351&#125;</span><br><span class="line">        packageName=com.example.heqiang.testsomething processName=com.example.heqiang.testsomething</span><br><span class="line">        launchedFromUid=10033 launchedFromPackage=com.android.systemui userId=0</span><br><span class="line">        app=ProcessRecord&#123;dd5e0ac 27117:com.example.heqiang.testsomething/u0a37&#125;</span><br><span class="line">        Intent &#123; act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.heqiang.testsomething/.MainActivity bnds=[540,1235][792,1510] (has extras) &#125;</span><br><span class="line">        frontOfTask=true task=TaskRecord&#123;f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2&#125;</span><br><span class="line">        taskAffinity=com.example.heqiang.testsomething</span><br><span class="line">        realActivity=com.example.heqiang.testsomething/.MainActivity</span><br><span class="line">        baseDir=/data/app/com.example.heqiang.testsomething-dhnrkpKFABfE8N6-eIbVjA==/base.apk</span><br><span class="line">        dataDir=/data/user/0/com.example.heqiang.testsomething</span><br><span class="line">        stateNotNeeded=false componentSpecified=true mActivityType=standard</span><br><span class="line">        compat=&#123;480dpi&#125; labelRes=0x7f0f0020 icon=0x7f0d0000 theme=0x7f100006</span><br><span class="line">        mLastReportedConfigurations:</span><br><span class="line">         ......</span><br><span class="line"></span><br><span class="line">  Running activities (most recent first):</span><br><span class="line">    TaskRecord&#123;f8d4175 #3351 A=com.example.heqiang.testsomething U=0 StackId=1577 sz=2&#125;</span><br><span class="line">      Run #1: ActivityRecord&#123;75b69db u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3351&#125;</span><br><span class="line">      Run #0: ActivityRecord&#123;731edb3 u0 com.example.heqiang.testsomething/.MainActivity t3351&#125;</span><br><span class="line"></span><br><span class="line">  mLastPausedActivity: ActivityRecord&#123;75b69db u0 com.example.heqiang.testsomething/.commontest.OtherTestActivity t3351&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，这时并没有新建 ActivityA，而是把 ActivityA 和 ActivityB所在的栈推到了前台，ActivityB 仍然在 ActivityA 上面。<br>基于此再做一个测试：从ActivityB再启动ActivityA。<br>发现，在这种情况下，栈的情况都没有变化，和上面的情况是一样的。因为当前栈本来就在前台。要注意，从两个 activity 情况下启动同一个activiyt只是推栈到前台，必须要保证启动的 Intent 一样才行。</p>
+<h3 id="FLAG-ACTIVITY-CLEAR-TOP"><a href="#FLAG-ACTIVITY-CLEAR-TOP" class="headerlink" title="FLAG_ACTIVITY_CLEAR_TOP"></a>FLAG_ACTIVITY_CLEAR_TOP</h3><p>启动模式不同，具体操作也不一样。但是都会清除该 Activity 上面的所有对象。<br>standard 模式：系统收到新的 Intent 时，如果 Task 中存在该 Activity 则弹出 Activity 和 Activity 上面的所有对象，并重新初始化一个新的 Activity 对象放入栈顶，以处理 Intent 请求。因为 standard 总是初始化新的 Activity 来处理 Intent请求。<br>其他模式：则会将 Activity 上面的对象弹出，使该 Activity 在栈顶部，以处理 Intent请求。</p>
+<h3 id="FLAG-ACTIVITY-CLEAR-TASK"><a href="#FLAG-ACTIVITY-CLEAR-TASK" class="headerlink" title="FLAG_ACTIVITY_CLEAR_TASK"></a>FLAG_ACTIVITY_CLEAR_TASK</h3><p>启动 Activity 时如果加入了这个标志，那么如果存放该 Activity 的 Task 已经存在，会先把该 Task 里面所有的 Activity 清空，然后再启动该 Activity。那么该 Activity 就成了该 Task 里面唯一的一个 Activity。<br>应用场景：如果在同一 Task 里面 A 启动 B，B 启动 C，但是在 C 里面后退的话会默认返回 B，然后再返回 A，如果不想返回 B 和 A，那么就可以用该 Flag，启动 C 时把 A 和 B 清除掉，比如在登陆界面跳转到到主界面。从主界面后退肯定不想返回登陆界面的。</p>
+<h3 id="FLAG-ACTIVITY-EXCLUDE-FROM-RECENTS"><a href="#FLAG-ACTIVITY-EXCLUDE-FROM-RECENTS" class="headerlink" title="FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS"></a>FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS</h3><p>通过这个 Flag 启动的 Activity 将不会添加到最近使用应用列表中，我们从任务管理器中无法找到这个 Activity。</p>
+<h3 id="FLAG-ACTIVITY-NO-HISTORY"><a href="#FLAG-ACTIVITY-NO-HISTORY" class="headerlink" title="FLAG_ACTIVITY_NO_HISTORY"></a>FLAG_ACTIVITY_NO_HISTORY</h3><p>通过这个 Flag 启动的 Activity 一旦退出后，就不会存在栈中。比如 A 添加这个 Flag 启动 B，B启动 C，这是栈中就只有 A、C。</p>
+<h3 id="FLAG-ACTIVITY-LAUNCHED-FROM-HISTORY"><a href="#FLAG-ACTIVITY-LAUNCHED-FROM-HISTORY" class="headerlink" title="FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY"></a>FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY</h3><p>当从手机任务管理器启动的Activity Intent 的 Flag 会带有这个属性，我们可以用它来区分是否从任务管理器里面启动的。</p>
+<h3 id="FLAG-ACTIVITY-RESET-TASK-IF-NEEDED"><a href="#FLAG-ACTIVITY-RESET-TASK-IF-NEEDED" class="headerlink" title="FLAG_ACTIVITY_RESET_TASK_IF_NEEDED"></a>FLAG_ACTIVITY_RESET_TASK_IF_NEEDED</h3><p>只有当新启动一个任务栈或任务栈被切换到前台时才有用，也就意味着该标记只会加在任务栈的根 Activity 上，用这个标记来表明需要重置任务栈的状态。<br>一般与FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET结合使用。</p>
+<h3 id="FLAG-ACTIVITY-CLEAR-WHEN-TASK-RESET"><a href="#FLAG-ACTIVITY-CLEAR-WHEN-TASK-RESET" class="headerlink" title="FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET"></a>FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET</h3><p>设置此标签相当于在任务栈中标记一个位置，当任务栈被重置时，从该标记位置到栈顶的 Activity 全部被清除。所谓的任务栈重置，是指当程序从后台进入前台时（通常是用户从主屏重新点击启动图标，或者从 recent apps 重新进入程序），如果栈顶的 Activity 设置了 FLAG_ACTIVITY_RESET_TASK_IF_NEEDED 标记，那么从设置 FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET 标记到栈顶的 Activity 会全部被清除掉。<br>举例：该标签可用于这种情况，用户在浏览邮件时，通过另外一个 Activity 来打开图片附件，这时用户可能会按 Home 键返回主屏，进行其它操作，一段时间后重新点击邮件的启动图标进入程序，这时应该显示邮件的内容而不是图片，因为用户可能是很长时间后返回邮件 App 的，也许已经忘记之前的操作，如果用户打开邮件后看到的是一张图片，可能会觉得很困惑。而设置 FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET 标记后，用户再次打开程序时，任务栈就会把图片 Activity 清除掉，显示邮件内容。</p>
+<h2 id="LaunchMode-与-StartActivityForResult-的关系"><a href="#LaunchMode-与-StartActivityForResult-的关系" class="headerlink" title="LaunchMode 与 StartActivityForResult 的关系"></a>LaunchMode 与 StartActivityForResult 的关系</h2><!--   
+
+-->
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/LaunchMode/" rel="tag"># LaunchMode</a>
+          
+            <a href="/tags/Intent-Flag/" rel="tag"># Intent Flag</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/15/Android 事件分发体系/android-knowledge-event-transfer-process-multi-point/" rel="next" title="Android View 事件处理流程 -- 多点触控">
+                <i class="fa fa-chevron-left"></i> Android View 事件处理流程 -- 多点触控
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/10/Android/android-jni-android-studio-base/" rel="prev" title="Android JNI -- Android Studio JNI 开发基础">
+                Android JNI -- Android Studio JNI 开发基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#taskAffinity"><span class="nav-number">1.</span> <span class="nav-text">taskAffinity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LaunchMode"><span class="nav-number">2.</span> <span class="nav-text">LaunchMode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#standard"><span class="nav-number">2.1.</span> <span class="nav-text">standard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singleTop"><span class="nav-number">2.2.</span> <span class="nav-text">singleTop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singleTask"><span class="nav-number">2.3.</span> <span class="nav-text">singleTask</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singleInstance"><span class="nav-number">2.4.</span> <span class="nav-text">singleInstance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#区别"><span class="nav-number">2.5.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LaunchMode-和-taskAffinity-的关系"><span class="nav-number">3.</span> <span class="nav-text">LaunchMode 和 taskAffinity 的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#standard-模式下指定-taskAffinity"><span class="nav-number">3.1.</span> <span class="nav-text">standard 模式下指定 taskAffinity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#singleTask-模式下指定-taskAffinity"><span class="nav-number">3.2.</span> <span class="nav-text">singleTask 模式下指定 taskAffinity</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Intent-Flag"><span class="nav-number">4.</span> <span class="nav-text">Intent Flag</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FLAG-ACTIVITY-NEW-TASK"><span class="nav-number">4.1.</span> <span class="nav-text">FLAG_ACTIVITY_NEW_TASK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLAG-ACTIVITY-CLEAR-TOP"><span class="nav-number">4.2.</span> <span class="nav-text">FLAG_ACTIVITY_CLEAR_TOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLAG-ACTIVITY-CLEAR-TASK"><span class="nav-number">4.3.</span> <span class="nav-text">FLAG_ACTIVITY_CLEAR_TASK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLAG-ACTIVITY-EXCLUDE-FROM-RECENTS"><span class="nav-number">4.4.</span> <span class="nav-text">FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLAG-ACTIVITY-NO-HISTORY"><span class="nav-number">4.5.</span> <span class="nav-text">FLAG_ACTIVITY_NO_HISTORY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLAG-ACTIVITY-LAUNCHED-FROM-HISTORY"><span class="nav-number">4.6.</span> <span class="nav-text">FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLAG-ACTIVITY-RESET-TASK-IF-NEEDED"><span class="nav-number">4.7.</span> <span class="nav-text">FLAG_ACTIVITY_RESET_TASK_IF_NEEDED</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FLAG-ACTIVITY-CLEAR-WHEN-TASK-RESET"><span class="nav-number">4.8.</span> <span class="nav-text">FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LaunchMode-与-StartActivityForResult-的关系"><span class="nav-number">5.</span> <span class="nav-text">LaunchMode 与 StartActivityForResult 的关系</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,906 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android 线程,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍 IntentService 使用及源码分析">
+<meta name="keywords" content="Android 线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 线程 -- IntentService 使用及源码分析">
+<meta property="og:url" content="http://yoursite.com/2016/09/02/Android 线程/android-knowledge-intent-service-source-code/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍 IntentService 使用及源码分析">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-14T03:52:56.603Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 线程 -- IntentService 使用及源码分析">
+<meta name="twitter:description" content="介绍 IntentService 使用及源码分析">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/02/Android 线程/android-knowledge-intent-service-source-code/">
+
+
+
+
+
+  <title> Android 线程 -- IntentService 使用及源码分析 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/02/Android 线程/android-knowledge-intent-service-source-code/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 线程 -- IntentService 使用及源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-02T10:00:00+08:00">
+                2016-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-线程/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/09/02/Android 线程/android-knowledge-intent-service-source-code/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/09/02/Android 线程/android-knowledge-intent-service-source-code/" class="leancloud_visitors" data-flag-title="Android 线程 -- IntentService 使用及源码分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍 IntentService 使用及源码分析
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文来介绍一下 <code>IntentService</code>，但从名字上看，应该是和 <code>Service</code> 有关，的确是这样，<code>IntentService</code> 是一种特殊的 <code>Service</code>，它继承了 <code>Service</code> 并且是一个抽象类，因此必须是它的子类才能使用 <code>IntentService</code>，<code>IntentService</code> 可用于执行后台耗时的任务，当任务执行完后它会自动停止，同时，由于 <code>IntentService</code> 是服务的原因，它的优先级比单纯的线程要高，因此可以用于执行一些高优先级的后台任务。</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>在实现上，<code>IntentService</code> 封装了 <code>HandlerThread</code> 和 <code>Handler</code>。<br>我们先来看一下它的构造函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public IntentService(String name) &#123;</span><br><span class="line">    super();</span><br><span class="line">    mName = name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>构造函数很简单，调用父类的构造函数，name 参数是赋给工作线程的名字。<br>我们再来看一下它的 <code>onCreate()</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void onCreate() &#123;</span><br><span class="line">    startService(Context, Intent)</span><br><span class="line"></span><br><span class="line">    super.onCreate();</span><br><span class="line">    HandlerThread thread = new HandlerThread(&quot;IntentService[&quot; + mName + &quot;]&quot;);</span><br><span class="line">    thread.start();</span><br><span class="line"></span><br><span class="line">    mServiceLooper = thread.getLooper();</span><br><span class="line">    mServiceHandler = new ServiceHandler(mServiceLooper);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>onCreate()</code> 方法会在 <code>IntentService</code> 第一次启动时被调用。<br>首先会构造一个 <code>HandlerThread</code>，并且根据构造函数的 name 参数线程命名。<br>然后获取 <code>HandlerThread</code> 的 <code>Looper</code> 对象构造一个 <code>Handler</code> 对象。<br>再来看一下 <code>onStartCommand</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void setIntentRedelivery(boolean enabled) &#123;</span><br><span class="line">    mRedelivery = enabled;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public void onStart(@Nullable Intent intent, int startId) &#123;</span><br><span class="line">    Message msg = mServiceHandler.obtainMessage();</span><br><span class="line">    msg.arg1 = startId;</span><br><span class="line">    msg.obj = intent;</span><br><span class="line">    mServiceHandler.sendMessage(msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public int onStartCommand(@Nullable Intent intent, int flags, int startId) &#123;</span><br><span class="line">    onStart(intent, startId);</span><br><span class="line">    return mRedelivery ? START_REDELIVER_INTENT : START_NOT_STICKY;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每次启动 <code>IntentService</code> ，它的 <code>onStartCommand</code> 方法就会被调用一次，<code>onStartCommand</code> 调用 <code>onStart</code> 来处理 <code>Intent</code>，然后根据 <code>mRedelivery</code> 变量来返回 <code>START_REDELIVER_INTENT</code> 或者 <code>START_NOT_STICKY</code>，<code>mRedelivery</code> 变量是通过 <code>setIntentRedelivery</code> 方法来赋值的。<br>下面来温习一下 <code>Service</code> 中 <code>onStartCommand</code> 方法4种返回值所代表的意义：</p>
+<ol>
+<li>START_STICKY：如果service进程被kill掉，保留service的状态为开始状态，但不保留递送的intent对象。随后系统会尝试重新创建service，由于服务状态为开始状态，所以创建服务后一定会调用onStartCommand(Intent,int,int)方法。如果在此期间没有任何启动命令被传递到service，那么参数Intent将为null。</li>
+<li>START_NOT_STICKY：“非粘性的”。使用这个返回值时，如果在执行完onStartCommand后，服务被异常kill掉，系统将会把它置为started状态，系统不会自动重启该服务，直到startService(Intent intent)方法再次被调用。</li>
+<li>START_REDELIVER_INTENT：重传Intent。使用这个返回值时，如果在执行完onStartCommand后，服务被异常kill掉，系统会自动重启该服务，并将Intent的值传入。</li>
+<li>START_STICKY_COMPATIBILITY：START_STICKY的兼容版本，但不保证服务被kill后一定能重启。</li>
+</ol>
+<p><code>onStart</code> 方法对 <code>Intent</code> 的处理其实也就是通过 <code>mServiceHandler</code> 发送消息，然后在 <code>Handler</code> 中对消息进行处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private final class ServiceHandler extends Handler &#123;</span><br><span class="line">    public ServiceHandler(Looper looper) &#123;</span><br><span class="line">        super(looper);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void handleMessage(Message msg) &#123;</span><br><span class="line">        onHandleIntent((Intent)msg.obj);</span><br><span class="line">        stopSelf(msg.arg1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Handler</code> 首先会在工作线程调用 <code>onHandleIntent</code> 来处理 <code>Intent</code>，这个方法是我们在继承 <code>IntentService</code> 时需要实现的方法。<br>在 <code>onHandleIntent</code> 方法执行结束后，会调用 <code>stopSelf(int startId)</code> 来尝试停止服务。这里之所以调用这个方法而不是 <code>stopSelf()</code> 方法是因为 <code>stopSelf()</code> 会立刻停止服务，而这个时候消息队列中可能还有其它消息未处理完。<code>stopSelf(int startId)</code> 则会等待所有的消息都处理完才会终止服务。<br><code>stopSelf(int startId)</code> 方法会在尝试停止服务的时候判断最近启动服务的次数是否和 <code>startId</code> 相等，如果相等就立即停止，如果不相等则不停止服务。<br>因此，如果目前只存在一个后台任务，那么该任务一旦执行完，<code>IntentService</code> 就会停止，如果存在多个后台任务，那么当 <code>onHandleIntent</code> 执行完最后一个任务时才会停止服务。<br>如果 <code>IntentService</code> 停止后再次发送任务请求，那么就会创建新的 <code>IntentService</code> 对象来执行任务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    @Override</span><br><span class="line">    public void onDestroy() &#123;</span><br><span class="line">        mServiceLooper.quit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    @Nullable</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @WorkerThread</span><br><span class="line">    protected abstract void onHandleIntent(@Nullable Intent intent);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>IntentService</code> 销毁的时候会退出 <code>Looper</code> 循环。</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>那么下面我们就带着上面分析源码的一些结论来验证一下：<br>因为 <code>IntentService</code> 是一个 <code>Service</code> ，那么就不要忘记在 AndriodManifest 里面添加声明。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">public void clickTestIntentService1(View view) &#123;</span><br><span class="line">    Intent intent = new Intent(this, MyIntentService.class);</span><br><span class="line">    intent.putExtra(&quot;action&quot;,&quot;ACTION_ONE&quot;);</span><br><span class="line">    startService(intent);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void clickTestIntentService2(View view) &#123;</span><br><span class="line">    Intent intent = new Intent(this, MyIntentService.class);</span><br><span class="line">    intent.putExtra(&quot;action&quot;,&quot;ACTION_TWO&quot;);</span><br><span class="line">    startService(intent);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void clickTestStopIntentService(View view) &#123;</span><br><span class="line">    Intent intent = new Intent(this, MyIntentService.class);</span><br><span class="line">    stopService(intent);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static class MyIntentService extends IntentService&#123;</span><br><span class="line"></span><br><span class="line">    public MyIntentService() &#123;</span><br><span class="line">        super(&quot;MyIntentService&quot;);</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;MyIntentService Constructor &quot; +this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;MyIntentService onCreate &quot;);</span><br><span class="line">        super.onCreate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onStart(@Nullable Intent intent, int startId) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;MyIntentService onStart &quot;);</span><br><span class="line">        super.onStart(intent, startId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int onStartCommand(@Nullable Intent intent, int flags, int startId) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;MyIntentService onStartCommand &quot;);</span><br><span class="line">        return super.onStartCommand(intent, flags, startId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onDestroy() &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;MyIntentService onDestroy &quot;);</span><br><span class="line">        super.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onHandleIntent(@Nullable Intent intent) &#123;</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;MyIntentService onHandleIntent &quot; +Thread.currentThread());</span><br><span class="line">        String action = intent.getStringExtra(&quot;action&quot;);</span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;MyIntentService onHandleIntent action &quot; +action+&quot; start&quot;);</span><br><span class="line">        switch (action) &#123;</span><br><span class="line">            case &quot;ACTION_ONE&quot;:</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(5000);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                break;</span><br><span class="line">            case &quot;ACTION_TWO&quot;:</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(2000);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Log.e(&quot;Test&quot;,&quot;MyIntentService onHandleIntent action &quot; +action+&quot; end&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="正常执行一个任务"><a href="#正常执行一个任务" class="headerlink" title="正常执行一个任务"></a>正常执行一个任务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Test: MyIntentService Constructor com.example.heqiang.testsomething.MainActivity$MyIntentService@5020dde</span><br><span class="line">Test: MyIntentService onCreate </span><br><span class="line">Test: MyIntentService onStartCommand </span><br><span class="line">Test: MyIntentService onStart </span><br><span class="line">Test: MyIntentService onHandleIntent Thread[IntentService[MyIntentService],5,main]</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE start</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE end</span><br><span class="line">Test: MyIntentService onDestroy</span><br></pre></td></tr></table></figure>
+<h3 id="第一个任务执行结束后启动第二个任务"><a href="#第一个任务执行结束后启动第二个任务" class="headerlink" title="第一个任务执行结束后启动第二个任务"></a>第一个任务执行结束后启动第二个任务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Test: MyIntentService Constructor com.example.heqiang.testsomething.MainActivity$MyIntentService@90cfdd5</span><br><span class="line">Test: MyIntentService onCreate </span><br><span class="line">Test: MyIntentService onStartCommand </span><br><span class="line">Test: MyIntentService onStart </span><br><span class="line">Test: MyIntentService onHandleIntent Thread[IntentService[MyIntentService],5,main]</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE start</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE end</span><br><span class="line">Test: MyIntentService onDestroy </span><br><span class="line"></span><br><span class="line">Test: MyIntentService Constructor com.example.heqiang.testsomething.MainActivity$MyIntentService@89d0b78</span><br><span class="line">Test: MyIntentService onCreate </span><br><span class="line">Test: MyIntentService onStartCommand </span><br><span class="line">Test: MyIntentService onStart </span><br><span class="line">Test: MyIntentService onHandleIntent Thread[IntentService[MyIntentService],5,main]</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_TWO start</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_TWO end</span><br><span class="line">Test: MyIntentService onDestroy</span><br></pre></td></tr></table></figure>
+<p>和上面的分析一致，第一个任务执行完后启动第二个任务，会重新创建了一个 <code>IntentService</code> 对象。</p>
+<h3 id="第一个任务正在执行时启动第二个任务"><a href="#第一个任务正在执行时启动第二个任务" class="headerlink" title="第一个任务正在执行时启动第二个任务"></a>第一个任务正在执行时启动第二个任务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Test: MyIntentService Constructor com.example.heqiang.testsomething.MainActivity$MyIntentService@c1163b7</span><br><span class="line">Test: MyIntentService onCreate </span><br><span class="line">Test: MyIntentService onStartCommand </span><br><span class="line">Test: MyIntentService onStart </span><br><span class="line">Test: MyIntentService onHandleIntent Thread[IntentService[MyIntentService],5,main]</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE start</span><br><span class="line"></span><br><span class="line">Test: MyIntentService onStartCommand </span><br><span class="line">Test: MyIntentService onStart </span><br><span class="line"></span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE end</span><br><span class="line"></span><br><span class="line">Test: MyIntentService onHandleIntent Thread[IntentService[MyIntentService],5,main]</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_TWO start</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_TWO end</span><br><span class="line"></span><br><span class="line">Test: MyIntentService onDestroy</span><br></pre></td></tr></table></figure>
+<p>和上面的分析一致，启动第二个任务时，调用了 <code>IntentService</code> 的 <code>IntentService</code>，两个任务执行完毕后，<code>IntentService</code> 退出。</p>
+<h3 id="第一个任务正在执行的时候停止服务"><a href="#第一个任务正在执行的时候停止服务" class="headerlink" title="第一个任务正在执行的时候停止服务"></a>第一个任务正在执行的时候停止服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Test: MyIntentService Constructor com.example.heqiang.testsomething.MainActivity$MyIntentService@90cfdd5</span><br><span class="line">Test: MyIntentService onCreate </span><br><span class="line">Test: MyIntentService onStartCommand </span><br><span class="line">Test: MyIntentService onStart </span><br><span class="line">Test: MyIntentService onHandleIntent Thread[IntentService[MyIntentService],5,main]</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE start</span><br><span class="line"></span><br><span class="line">Test: MyIntentService onDestroy </span><br><span class="line"></span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE end</span><br></pre></td></tr></table></figure>
+<p>任务执行过程中停止服务，正在执行的任务还是可以继续执行完的。</p>
+<h3 id="第一个任务正在执行的时候停止服务，再启动第二个任务"><a href="#第一个任务正在执行的时候停止服务，再启动第二个任务" class="headerlink" title="第一个任务正在执行的时候停止服务，再启动第二个任务"></a>第一个任务正在执行的时候停止服务，再启动第二个任务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Test: MyIntentService Constructor com.example.heqiang.testsomething.MainActivity$MyIntentService@b2ca251</span><br><span class="line">Test: MyIntentService onCreate </span><br><span class="line">Test: MyIntentService onStartCommand </span><br><span class="line">Test: MyIntentService onStart </span><br><span class="line">Test: MyIntentService onHandleIntent Thread[IntentService[MyIntentService],5,main]</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE start</span><br><span class="line"></span><br><span class="line">Test: MyIntentService onDestroy </span><br><span class="line"></span><br><span class="line">Test: MyIntentService Constructor com.example.heqiang.testsomething.MainActivity$MyIntentService@4c8128d</span><br><span class="line">Test: MyIntentService onCreate </span><br><span class="line">Test: MyIntentService onStartCommand </span><br><span class="line">Test: MyIntentService onStart </span><br><span class="line">Test: MyIntentService onHandleIntent Thread[IntentService[MyIntentService],5,main]</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_TWO start</span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_TWO end</span><br><span class="line">Test: MyIntentService onDestroy </span><br><span class="line"></span><br><span class="line">Test: MyIntentService onHandleIntent action ACTION_ONE end</span><br></pre></td></tr></table></figure>
+<p>启动第二个任务时，会立即创建一个新的服务，两个任务在两个线程中运行，所以其执行完的先后顺序不确定。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-线程/" rel="tag"># Android 线程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/02/Android 图形系统/android-graphic-system-view-drawing/" rel="next" title="Android 图形系统 -- View 绘制流程">
+                <i class="fa fa-chevron-left"></i> Android 图形系统 -- View 绘制流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/05/Android 图形系统/android-graphic-system-hardwareaccelerated/" rel="prev" title="Android 图形系统 -- 硬件加速渲染">
+                Android 图形系统 -- 硬件加速渲染 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">3.</span> <span class="nav-text">使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#正常执行一个任务"><span class="nav-number">3.1.</span> <span class="nav-text">正常执行一个任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第一个任务执行结束后启动第二个任务"><span class="nav-number">3.2.</span> <span class="nav-text">第一个任务执行结束后启动第二个任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第一个任务正在执行时启动第二个任务"><span class="nav-number">3.3.</span> <span class="nav-text">第一个任务正在执行时启动第二个任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第一个任务正在执行的时候停止服务"><span class="nav-number">3.4.</span> <span class="nav-text">第一个任务正在执行的时候停止服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第一个任务正在执行的时候停止服务，再启动第二个任务"><span class="nav-number">3.5.</span> <span class="nav-text">第一个任务正在执行的时候停止服务，再启动第二个任务</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

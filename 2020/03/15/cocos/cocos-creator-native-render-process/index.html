@@ -1,0 +1,913 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="cocos,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="游戏渲染流程">
+<meta name="keywords" content="cocos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cocos Creator -- JSB 游戏渲染流程">
+<meta property="og:url" content="http://yoursite.com/2020/03/15/cocos/cocos-creator-native-render-process/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="游戏渲染流程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-11-06T09:24:49.619Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cocos Creator -- JSB 游戏渲染流程">
+<meta name="twitter:description" content="游戏渲染流程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/15/cocos/cocos-creator-native-render-process/">
+
+
+
+
+
+  <title> Cocos Creator -- JSB 游戏渲染流程 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/15/cocos/cocos-creator-native-render-process/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Cocos Creator -- JSB 游戏渲染流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-15T10:00:00+08:00">
+                2020-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cocos/" itemprop="url" rel="index">
+                    <span itemprop="name">cocos</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2020/03/15/cocos/cocos-creator-native-render-process/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2020/03/15/cocos/cocos-creator-native-render-process/" class="leancloud_visitors" data-flag-title="Cocos Creator -- JSB 游戏渲染流程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  游戏渲染流程
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文主要介绍在 Android 原生平台的渲染流程。</p>
+<h2 id="渲染初始化"><a href="#渲染初始化" class="headerlink" title="渲染初始化"></a>渲染初始化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">├──  _initRenderer  // engine CCGame.js</span><br><span class="line">    ├── renderer.initWebGL  // engine core/renderer/index.js</span><br><span class="line">        ├── new renderer.Scene()  // native cocos/renderer/renderer/Scene.cpp</span><br><span class="line">        ├── _initBuiltins  // </span><br><span class="line">        ├── new renderer.ForwardRenderer // </span><br><span class="line">            ├── js_renderer_ForwardRenderer_init // native jsb_renderer_auto.cpp</span><br><span class="line">                ├── ForwardRenderer::init // native ForwardRenderer.cpp</span><br><span class="line">                ├── registerStage  // native ForwardRenderer.cpp</span><br><span class="line">        ├── new renderer.RenderFlow  // </span><br><span class="line">            ├── js_renderer_RenderFlow_constructor // native jsb_renderer_auto.cpp</span><br><span class="line">                ├── RenderFlow::RenderFlow // native RenderFlow.cpp</span><br><span class="line">                    ├── _batcher = new ModelBatcher(this)</span><br><span class="line">                    ├── ParallelTask.init</span><br><span class="line">        ├── RenderFlow.init // jsb-adapter engine/scene/render-flow.js</span><br><span class="line">            ├── EventTarget.call // engien</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">_initRenderer () &#123;</span><br><span class="line">    // Avoid setup to be called twice.</span><br><span class="line">    if (this._rendererInitialized) return;</span><br><span class="line"></span><br><span class="line">    let el = this.config.id,</span><br><span class="line">        width, height,</span><br><span class="line">        localCanvas, localContainer;</span><br><span class="line"></span><br><span class="line">    if (CC_JSB || CC_RUNTIME) &#123;</span><br><span class="line">        this.container = localContainer = document.createElement(&quot;DIV&quot;);</span><br><span class="line">        this.frame = localContainer.parentNode === document.body ? document.documentElement : localContainer.parentNode;</span><br><span class="line">        localCanvas = window.__canvas;</span><br><span class="line">        this.canvas = localCanvas;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        var element = (el instanceof HTMLElement) ? el : (document.querySelector(el) || document.querySelector(&apos;#&apos; + el));</span><br><span class="line"></span><br><span class="line">        if (element.tagName === &quot;CANVAS&quot;) &#123;</span><br><span class="line">            width = element.width;</span><br><span class="line">            height = element.height;</span><br><span class="line"></span><br><span class="line">            //it is already a canvas, we wrap it around with a div</span><br><span class="line">            this.canvas = localCanvas = element;</span><br><span class="line">            this.container = localContainer = document.createElement(&quot;DIV&quot;);</span><br><span class="line">            if (localCanvas.parentNode)</span><br><span class="line">                localCanvas.parentNode.insertBefore(localContainer, localCanvas);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            //we must make a new canvas and place into this element</span><br><span class="line">            if (element.tagName !== &quot;DIV&quot;) &#123;</span><br><span class="line">                cc.warnID(3819);</span><br><span class="line">            &#125;</span><br><span class="line">            width = element.clientWidth;</span><br><span class="line">            height = element.clientHeight;</span><br><span class="line">            this.canvas = localCanvas = document.createElement(&quot;CANVAS&quot;);</span><br><span class="line">            this.container = localContainer = document.createElement(&quot;DIV&quot;);</span><br><span class="line">            element.appendChild(localContainer);</span><br><span class="line">        &#125;</span><br><span class="line">        localContainer.setAttribute(&apos;id&apos;, &apos;Cocos2dGameContainer&apos;);</span><br><span class="line">        localContainer.appendChild(localCanvas);</span><br><span class="line">        this.frame = (localContainer.parentNode === document.body) ? document.documentElement : localContainer.parentNode;</span><br><span class="line"></span><br><span class="line">        function addClass (element, name) &#123;</span><br><span class="line">            var hasClass = (&apos; &apos; + element.className + &apos; &apos;).indexOf(&apos; &apos; + name + &apos; &apos;) &gt; -1;</span><br><span class="line">            if (!hasClass) &#123;</span><br><span class="line">                if (element.className) &#123;</span><br><span class="line">                    element.className += &quot; &quot;;</span><br><span class="line">                &#125;</span><br><span class="line">                element.className += name;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        addClass(localCanvas, &quot;gameCanvas&quot;);</span><br><span class="line">        localCanvas.setAttribute(&quot;width&quot;, width || 480);</span><br><span class="line">        localCanvas.setAttribute(&quot;height&quot;, height || 320);</span><br><span class="line">        localCanvas.setAttribute(&quot;tabindex&quot;, 99);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    this._determineRenderType();</span><br><span class="line">    // WebGL context created successfully</span><br><span class="line">    if (this.renderType === this.RENDER_TYPE_WEBGL) &#123;</span><br><span class="line">        var opts = &#123;</span><br><span class="line">            &apos;stencil&apos;: true,</span><br><span class="line">            // MSAA is causing serious performance dropdown on some browsers.</span><br><span class="line">            &apos;antialias&apos;: cc.macro.ENABLE_WEBGL_ANTIALIAS,</span><br><span class="line">            &apos;alpha&apos;: cc.macro.ENABLE_TRANSPARENT_CANVAS</span><br><span class="line">        &#125;;</span><br><span class="line">        // 初始化WebGL，不同的平台渲染模式是不一样的</span><br><span class="line">        renderer.initWebGL(localCanvas, opts);</span><br><span class="line">        this._renderContext = renderer.device._gl;</span><br><span class="line">        </span><br><span class="line">        // Enable dynamic atlas manager by default</span><br><span class="line">        if (!cc.macro.CLEANUP_IMAGE_CACHE &amp;&amp; dynamicAtlasManager) &#123;</span><br><span class="line">            dynamicAtlasManager.enabled = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!this._renderContext) &#123;</span><br><span class="line">        this.renderType = this.RENDER_TYPE_CANVAS;</span><br><span class="line">        // Could be ignored by module settings</span><br><span class="line">        // 初始化 Canvas，一般不会走这里</span><br><span class="line">        renderer.initCanvas(localCanvas);</span><br><span class="line">        this._renderContext = renderer.device._ctx;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    this.canvas.oncontextmenu = function () &#123;</span><br><span class="line">        if (!cc._isContextMenuEnable) return false;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    this._rendererInitialized = true;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>渲染环境的初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">// engine core/renderer/index.js</span><br><span class="line"></span><br><span class="line">    initWebGL (canvas, opts) &#123;</span><br><span class="line">        console.log(&quot;TestStart engine core/renderer/index.js initWebGL&quot;)</span><br><span class="line"></span><br><span class="line">        require(&apos;./webgl/assemblers&apos;);</span><br><span class="line">        const ModelBatcher = require(&apos;./webgl/model-batcher&apos;);</span><br><span class="line"></span><br><span class="line">        this.Texture2D = gfx.Texture2D;</span><br><span class="line">        this.canvas = canvas;</span><br><span class="line">        this._flow = cc.RenderFlow;</span><br><span class="line">        </span><br><span class="line">        if (CC_JSB &amp;&amp; CC_NATIVERENDERER) &#123;</span><br><span class="line">            // 原生平台走这里，目前使用Android 平台 native 渲染</span><br><span class="line">            // native codes will create an instance of Device, so just use the global instance.</span><br><span class="line">            this.device = gfx.Device.getInstance();</span><br><span class="line">            this.scene = new renderer.Scene();</span><br><span class="line">            let builtins = _initBuiltins(this.device);</span><br><span class="line">            // 初始化 ForwardRenderer 和 RenderFlow，这里两个类都在c++ 实现</span><br><span class="line">            // 因此，原生平台的渲染流程都在 c++ 实现</span><br><span class="line">            this._forward = new renderer.ForwardRenderer(this.device, builtins);</span><br><span class="line">            let nativeFlow = new renderer.RenderFlow(this.device, this.scene, this._forward);</span><br><span class="line">            this._flow.init(nativeFlow);</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            // 浏览器环境走这里，默认走 webgl渲染</span><br><span class="line">            let Scene = require(&apos;../../renderer/scene/scene&apos;);</span><br><span class="line">            let ForwardRenderer = require(&apos;../../renderer/renderers/forward-renderer&apos;);</span><br><span class="line">            this.device = new gfx.Device(canvas, opts);</span><br><span class="line">            this.scene = new Scene();</span><br><span class="line">            let builtins = _initBuiltins(this.device);</span><br><span class="line">            this._forward = new ForwardRenderer(this.device, builtins);</span><br><span class="line">            this._handle = new ModelBatcher(this.device, this.scene);</span><br><span class="line">            this._flow.init(this._handle, this._forward);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// jsb-adapter engine/scene/render-flow.js</span><br><span class="line"></span><br><span class="line">RenderFlow.init = function (nativeFlow) &#123; engine/scene/render-flow.js&quot;)</span><br><span class="line">    cc.EventTarget.call(this);</span><br><span class="line">    // 赋值 _nativeFlow</span><br><span class="line">    this._nativeFlow = nativeFlow;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>绑定 Stage 操作的相关方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">bool ForwardRenderer::init(DeviceGraphics* device, std::vector&lt;ProgramLib::Template&gt;&amp; programTemplates, Texture2D* defaultTexture, int width, int height)</span><br><span class="line">&#123;</span><br><span class="line">    BaseRenderer::init(device, programTemplates, defaultTexture);</span><br><span class="line">    registerStage(&quot;opaque&quot;, std::bind(&amp;ForwardRenderer::opaqueStage, this, std::placeholders::_1, std::placeholders::_2));</span><br><span class="line">    registerStage(&quot;shadowcast&quot;, std::bind(&amp;ForwardRenderer::shadowStage, this, std::placeholders::_1, std::placeholders::_2));</span><br><span class="line">    registerStage(&quot;transparent&quot;, std::bind(&amp;ForwardRenderer::transparentStage, this, std::placeholders::_1, std::placeholders::_2));</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="绘制流程"><a href="#绘制流程" class="headerlink" title="绘制流程"></a>绘制流程</h2><p>关于绘制，大体可以分为两类，图标绘制和字体绘制。<br>关于字体的绘制流程参考下一节。<br>绘制过程一个关键的方法就是 <code>CCTexture2D.handleLoadedTexture</code>，这个是贴图加载事件处理器。用于加载图片或者已经绘制好的字体的纹理数据。</p>
+<p>当我们在代码中为 CCTexture2D 设置好 _nativeAsset 后，就开始进行绘制纹理流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">├── _nativeAsset.set</span><br><span class="line">    ├── initWithElement</span><br><span class="line">        ├── handleLoadedTexture</span><br><span class="line">            ├── new Texture2D.Texture2D</span><br><span class="line">            ├── Texture2D.update // jsb-adapter renderer/jsb-gfx.js</span><br><span class="line">                ├── Texture2D.updateNative </span><br><span class="line">                    ├── js_gfx_Texture2D_update // cocos2d-x-lite jsb-gfx-auto.cpp</span><br><span class="line">                        ├── seval_to_TextureOptions</span><br><span class="line">                        ├── Texture2D::update // cocos2d-x-lite Texture2D.cpp</span><br><span class="line">                            ├── glActiveTexture</span><br><span class="line">                            ├── glBindTexture</span><br><span class="line">                            ├── Texture2D::setMipmap</span><br><span class="line">                                ├── Texture2D::setImage</span><br><span class="line">                                    ├── glCompressedTexImage2D</span><br><span class="line">                                    ├── glTexImage2D</span><br><span class="line">                            ├── Texture2D::setTexInfo</span><br><span class="line">                            ├── DeviceGraphics::restoreTexture // cocos2d-x-lite DeviceGraphics.cpp</span><br><span class="line">                                ├── glBindTexture</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">void Texture2D::update(const Options&amp; options)</span><br><span class="line">&#123;</span><br><span class="line">    RENDERER_LOGD(&quot;TestRender TestLabel Texture2D::update: %p&quot;, this);</span><br><span class="line">    bool genMipmap = _hasMipmap;</span><br><span class="line"></span><br><span class="line">    _width = options.width;</span><br><span class="line">    _height = options.height;</span><br><span class="line">    _anisotropy = options.anisotropy;</span><br><span class="line">    _minFilter = options.minFilter;</span><br><span class="line">    _magFilter = options.magFilter;</span><br><span class="line">    _mipFilter = options.mipFilter;</span><br><span class="line">    _wrapS = options.wrapS;</span><br><span class="line">    _wrapT = options.wrapT;</span><br><span class="line">    _glFormat = options.glFormat;</span><br><span class="line">    _glInternalFormat = options.glInternalFormat;</span><br><span class="line">    _glType = options.glType;</span><br><span class="line">    _compressed = options.compressed;</span><br><span class="line">    _bpp = options.bpp;</span><br><span class="line"></span><br><span class="line">    // check if generate mipmap</span><br><span class="line">    _hasMipmap = options.hasMipmap;</span><br><span class="line">    genMipmap = options.hasMipmap;</span><br><span class="line"></span><br><span class="line">    if (options.images.size() &gt; 1)</span><br><span class="line">    &#123;</span><br><span class="line">        genMipmap = false; //REFINE: is it true here?</span><br><span class="line">        uint16_t maxLength = options.width &gt; options.height ? options.width : options.height;</span><br><span class="line">        if (maxLength &gt;&gt; (options.images.size() - 1) != 1)</span><br><span class="line">            RENDERER_LOGE(&quot;texture-2d mipmap is invalid, should have a 1x1 mipmap.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // NOTE: get pot after _width, _height has been assigned.</span><br><span class="line">    bool pot = isPow2(_width) &amp;&amp; isPow2(_height);</span><br><span class="line">    if (!pot)</span><br><span class="line">        genMipmap = false;</span><br><span class="line">    //将纹理与GL_TEXTURE0关联起来。</span><br><span class="line">    GL_CHECK(glActiveTexture(GL_TEXTURE0));</span><br><span class="line">    //绑定当前纹理，后续对纹理的操作都将作用在此纹理上。</span><br><span class="line">    GL_CHECK(glBindTexture(GL_TEXTURE_2D, _glID));</span><br><span class="line">    //调用 glTexImage2D 将内存中的数据拷贝到OpenGL纹理单元（显存）中</span><br><span class="line">    if (!options.images.empty())</span><br><span class="line">        setMipmap(options.images, options.flipY, options.premultiplyAlpha);</span><br><span class="line"></span><br><span class="line">    setTexInfo();</span><br><span class="line"></span><br><span class="line">    if (genMipmap)</span><br><span class="line">    &#123;</span><br><span class="line">        GL_CHECK(glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST));</span><br><span class="line">        GL_CHECK(glGenerateMipmap(GL_TEXTURE_2D));</span><br><span class="line">    &#125;</span><br><span class="line">    //重置纹理</span><br><span class="line">    _device-&gt;restoreTexture(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">void DeviceGraphics::restoreTexture(uint32_t index)</span><br><span class="line">&#123;</span><br><span class="line">    RENDERER_LOGW(&quot;TestRender TestLabel DeviceGraphics::restoreTexture&quot;);</span><br><span class="line">    // 获取当前 State 保存的对应需要更新的纹理</span><br><span class="line">    auto texture = _currentState-&gt;getTexture(index);</span><br><span class="line">    // 绑定当前纹理，后续对纹理的操作都将作用在此纹理上。</span><br><span class="line">    if (texture)</span><br><span class="line">    &#123;</span><br><span class="line">        GL_CHECK(glBindTexture(texture-&gt;getTarget(), texture-&gt;getHandle()));</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        GL_CHECK(glBindTexture(GL_TEXTURE_2D, 0));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="渲染流程"><a href="#渲染流程" class="headerlink" title="渲染流程"></a>渲染流程</h2><p>前面章节我们介绍过，启动流程结束后，引擎会按帧率刷新，调用 CCDirector.mainLoop 来执行渲染流程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">├── CCDirector.mainLoop // engine core/CCDirector.js</span><br><span class="line">    ├── renderer.renderer // engine core/renderer/index.js</span><br><span class="line">        ├── RenderFlow.render // jsb-adapter engine/scene/render-flow.js</span><br><span class="line">            ├── RenderFlow.validateRenderers() // engine core/renderer/render-flow.js</span><br><span class="line">            ├── assembler._updateRenderData()</span><br><span class="line">            ├── _nativeFlow.render(js_renderer_RenderFlow_render) //cocos2d-x-lit jsb-renderer_auto.cpp </span><br><span class="line">                ├── RenderFlow::render // cocos2d-x-lit RenderFlow.cpp</span><br><span class="line">                    ├── ModelBatcher::startBatch()</span><br><span class="line">                    ├── ModelBatcher::terminateBatch // cocos2d-x-lit ModelBatcher.cpp</span><br><span class="line">                        ├── ModelBatcher::flush()</span><br><span class="line">                        ├── ModelBatcher::flushIA()</span><br><span class="line">                    ├── ForwardRenderer::render // cocos2d-x-lit ForwardRenderer.cpp</span><br><span class="line">                        ├── BaseRenderer::render //cocos2d-x-lit BaseRenderer.cpp </span><br><span class="line">                            ├── ForwardRenderer::opaqueStage //cocos2d-x-lit BaseRenderer.cpp</span><br><span class="line">                                ├── ForwardRenderer::drawItems //cocos2d-x-lit ForwardRenderer.cpp</span><br><span class="line">                                    ├── BaseRenderer::draw // cocos2d-x-lit BaseRenderer.cpp</span><br><span class="line">                                        ├── ProgramLib::switchProgram</span><br><span class="line">                                            ├── Program::link()</span><br><span class="line">                                                ├── _createShader</span><br><span class="line">                                                    ├── glCreateShader</span><br><span class="line">                                                ├── glCreateProgram</span><br><span class="line">                                        ├── DeviceGraphics::draw // cocos2d-x-lit DeviceGraphics.cpp</span><br><span class="line">                                            ├── glDrawElements</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">RenderFlow.render = function (scene) &#123;</span><br><span class="line">    _rendering = true;</span><br><span class="line">    // 渲染前，确认需要重新渲染的组件，具体介绍在下面</span><br><span class="line">    RenderFlow.validateRenderers();</span><br><span class="line">    </span><br><span class="line">    for (let i = 0, l = _dirtyTargets.length; i &lt; l; i++) &#123;</span><br><span class="line">        let node = _dirtyTargets[i];</span><br><span class="line">        node._inJsbDirtyList = false;</span><br><span class="line"></span><br><span class="line">        let comp = node._renderComponent;</span><br><span class="line">        if (!comp) continue;</span><br><span class="line">        let assembler = comp._assembler;</span><br><span class="line">        if (!assembler) continue;</span><br><span class="line"></span><br><span class="line">        let flag = node._dirtyPtr[0];</span><br><span class="line">        // 通过Flag来更新相关渲染数据</span><br><span class="line">        // 该 Flag 为渲染流的某个状态</span><br><span class="line">        // 该 Flag 通过在组件中设置 _renderFlag 得到</span><br><span class="line">        if (flag &amp; RenderFlow.FLAG_UPDATE_RENDER_DATA) &#123;</span><br><span class="line">            // 通过 assembler 更新各级渲染对象的顶点信息</span><br><span class="line">            node._dirtyPtr[0] &amp;= ~RenderFlow.FLAG_UPDATE_RENDER_DATA;</span><br><span class="line">            assembler._updateRenderData &amp;&amp; assembler._updateRenderData();</span><br><span class="line">        &#125;</span><br><span class="line">        if (flag &amp; RenderFlow.FLAG_COLOR) &#123;</span><br><span class="line">            node._dirtyPtr[0] &amp;= ~RenderFlow.FLAG_COLOR;</span><br><span class="line">            comp._updateColor &amp;&amp; comp._updateColor();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    _dirtyTargets.length = 0;</span><br><span class="line">    // 调用 native 方法 RenderFlow::render</span><br><span class="line">    this._nativeFlow.render(scene._proxy, director._deltaTime);</span><br><span class="line"></span><br><span class="line">    _dirtyTargets = _dirtyWaiting.slice(0);</span><br><span class="line">    _dirtyWaiting.length = 0;</span><br><span class="line">    // 更新渲染标志位</span><br><span class="line">    _rendering = false;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">RenderFlow.validateRenderers = function () &#123;</span><br><span class="line">    // 遍历所有添加的组件，然后调用这些组件的 _validateRender 方法，确认是否需要渲染</span><br><span class="line">    // _validateList 的添加在 RenderFlow.registerValidate</span><br><span class="line">    for (let i = 0, l = _validateList.length; i &lt; l; i++) &#123;</span><br><span class="line">        let renderComp = _validateList[i];</span><br><span class="line">        if (!renderComp.isValid) continue;</span><br><span class="line">        if (!renderComp.enabledInHierarchy) &#123;</span><br><span class="line">            renderComp.disableRender();</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            renderComp._validateRender();</span><br><span class="line">        &#125;</span><br><span class="line">        renderComp._inValidateList = false;</span><br><span class="line">    &#125;</span><br><span class="line">    _validateList.length = 0;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// validate whether render component is ready to be rendered.</span><br><span class="line">let _validateList = [];</span><br><span class="line">RenderFlow.registerValidate = function (renderComp) &#123;</span><br><span class="line">    if (renderComp._inValidateList) return;</span><br><span class="line">    _validateList.push(renderComp);</span><br><span class="line">    renderComp._inValidateList =  true;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>RenderFlow.registerValidate</code> 的调用流程如下，在各个子组件自行调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">├── RenderComponent.markForRender</span><br><span class="line">    ├──RenderComponent.markForValidate</span><br><span class="line">       ├── RenderFlow.registerValidate</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">void RenderFlow::render(NodeProxy* scene, float deltaTime)</span><br><span class="line">&#123;</span><br><span class="line">    //__android_log_print(ANDROID_LOG_DEBUG, &quot;TestStart&quot;, &quot;TestStart cocos2d-x-lite RenderFlow::render renderer/scene/RenderFlow.cpp&quot;);</span><br><span class="line">    if (scene != nullptr)</span><br><span class="line">    &#123;</span><br><span class="line">        </span><br><span class="line">#if USE_MIDDLEWARE</span><br><span class="line">        // udpate middleware before render</span><br><span class="line">        middleware::MiddlewareManager::getInstance()-&gt;update(deltaTime);</span><br><span class="line">#endif</span><br><span class="line">        </span><br><span class="line">#if SUB_RENDER_THREAD_COUNT &gt; 0</span><br><span class="line"></span><br><span class="line">        int mainThreadTid = RENDER_THREAD_COUNT - 1;</span><br><span class="line"></span><br><span class="line">        NodeMemPool* instance = NodeMemPool::getInstance();</span><br><span class="line">        auto&amp; commonList = instance-&gt;getCommonList();</span><br><span class="line">        if (commonList.size() &lt; LocalMat_Use_Thread_Unit_Count)</span><br><span class="line">        &#123;</span><br><span class="line">            _parallelStage = ParallelStage::NONE;</span><br><span class="line">            calculateLocalMatrix();</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            _parallelStage = ParallelStage::LOCAL_MAT;</span><br><span class="line">            _paralleTask-&gt;beginAllThreads();</span><br><span class="line">            calculateLocalMatrix(mainThreadTid);</span><br><span class="line">            _paralleTask-&gt;waitAllThreads();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        _curLevel = 0;</span><br><span class="line">        for(auto count = _levelInfoArr.size(); _curLevel &lt; count; _curLevel++)</span><br><span class="line">        &#123;</span><br><span class="line">            auto&amp; levelInfos = _levelInfoArr[_curLevel];</span><br><span class="line">            if (levelInfos.size() &lt; WorldMat_Use_Thread_Node_count)</span><br><span class="line">            &#123;</span><br><span class="line">                _parallelStage = ParallelStage::NONE;</span><br><span class="line">                calculateLevelWorldMatrix();</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                _parallelStage = ParallelStage::WORLD_MAT;</span><br><span class="line">                _paralleTask-&gt;beginAllThreads();</span><br><span class="line">                calculateLevelWorldMatrix(mainThreadTid);</span><br><span class="line">                _paralleTask-&gt;waitAllThreads();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">#else</span><br><span class="line">        calculateLocalMatrix();</span><br><span class="line">        calculateWorldMatrix();</span><br><span class="line">#endif</span><br><span class="line">        </span><br><span class="line">        _batcher-&gt;startBatch();</span><br><span class="line"></span><br><span class="line">#if USE_MIDDLEWARE</span><br><span class="line">        // render middleware</span><br><span class="line">        middleware::MiddlewareManager::getInstance()-&gt;render(deltaTime);</span><br><span class="line">#endif</span><br><span class="line">        scene-&gt;resetGlobalRenderOrder();</span><br><span class="line">        </span><br><span class="line">        auto traverseHandle = scene-&gt;traverseHandle;</span><br><span class="line">        traverseHandle(scene, _batcher, _scene);</span><br><span class="line">        _batcher-&gt;terminateBatch();</span><br><span class="line"></span><br><span class="line">        _forward-&gt;render(_scene);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void ForwardRenderer::render(Scene* scene)</span><br><span class="line">&#123;</span><br><span class="line">    __android_log_print(ANDROID_LOG_DEBUG, &quot;TestStart&quot;, &quot;TestStart TestRender cocos2d-x-lite ForwardRenderer::render renderer/renderer/ForwardRenderer.cpp&quot;);</span><br><span class="line">    resetData();</span><br><span class="line">    updateLights(scene);</span><br><span class="line">    scene-&gt;sortCameras();</span><br><span class="line">    auto&amp; cameras = scene-&gt;getCameras();</span><br><span class="line">    auto &amp;viewSize = Application::getInstance()-&gt;getViewSize();</span><br><span class="line">    for (auto&amp; camera : cameras)</span><br><span class="line">    &#123;</span><br><span class="line">        View* view = requestView();</span><br><span class="line">        camera-&gt;extractView(*view, viewSize.x, viewSize.y);</span><br><span class="line">    &#125;</span><br><span class="line">    __android_log_print(ANDROID_LOG_DEBUG, &quot;TestStart&quot;, &quot;TestRender ForwardRenderer::render %i&quot;, _views-&gt;getLength());</span><br><span class="line">    for (size_t i = 0, len = _views-&gt;getLength(); i &lt; len; ++i) &#123;</span><br><span class="line">        //if (i == 1) break;</span><br><span class="line">        const View* view = _views-&gt;getData(i);</span><br><span class="line">        BaseRenderer::render(*view, scene);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    scene-&gt;removeModels();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">void BaseRenderer::render(const View&amp; view, const Scene* scene)</span><br><span class="line">&#123;</span><br><span class="line">    // setup framebuffer</span><br><span class="line">    _device-&gt;setFrameBuffer(view.frameBuffer);</span><br><span class="line">    </span><br><span class="line">    // setup viewport</span><br><span class="line">    _device-&gt;setViewport(view.rect.x,</span><br><span class="line">                         view.rect.y,</span><br><span class="line">                         view.rect.w,</span><br><span class="line">                         view.rect.h);</span><br><span class="line">    </span><br><span class="line">    // setup clear</span><br><span class="line">    Color4F clearColor;</span><br><span class="line">    if (ClearFlag::COLOR &amp; view.clearFlags)</span><br><span class="line">        clearColor = view.color;</span><br><span class="line">    _device-&gt;clear(view.clearFlags, &amp;clearColor, view.depth, view.stencil);</span><br><span class="line">    </span><br><span class="line">    // get all draw items</span><br><span class="line">    // 获取当前场景中所有需要绘制的元素</span><br><span class="line">    _drawItems-&gt;reset();</span><br><span class="line">    for (const auto&amp; model : scene-&gt;getModels())</span><br><span class="line">    &#123;</span><br><span class="line">        int modelMask = model-&gt;getCullingMask();</span><br><span class="line">        if ((modelMask &amp; view.cullingMask) == 0)</span><br><span class="line">            continue;</span><br><span class="line">        </span><br><span class="line">        DrawItem* drawItem = _drawItems-&gt;add();</span><br><span class="line">        model-&gt;extractDrawItem(*drawItem);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // dispatch draw items to different stage</span><br><span class="line">    _stageInfos-&gt;reset();</span><br><span class="line">    StageItem stageItem;</span><br><span class="line">    for (const auto&amp; stage : view.stages)</span><br><span class="line">    &#123;</span><br><span class="line">        StageInfo* stageInfo = _stageInfos-&gt;add();</span><br><span class="line">        stageInfo-&gt;stage = stage;</span><br><span class="line">        stageInfo-&gt;items.clear();</span><br><span class="line">        // 添加当前 Stage 需要绘制的元素</span><br><span class="line">        for (size_t i = 0, len = _drawItems-&gt;getLength(); i &lt; len; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            const DrawItem* item = _drawItems-&gt;getData(i);</span><br><span class="line">            </span><br><span class="line">            stageItem.passes.clear();</span><br><span class="line">            for (const Pass* p : item-&gt;effect-&gt;getPasses())</span><br><span class="line">            &#123;</span><br><span class="line">                if (p-&gt;getStage() == stage)</span><br><span class="line">                &#123;</span><br><span class="line">                    stageItem.passes.push_back(p);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            if (stageItem.passes.size() == 0)</span><br><span class="line">            &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            stageItem.model = item-&gt;model;</span><br><span class="line">            stageItem.ia = item-&gt;ia;</span><br><span class="line">            stageItem.effect = item-&gt;effect;</span><br><span class="line">            stageItem.sortKey = -1;</span><br><span class="line">            </span><br><span class="line">            stageInfo-&gt;items.push_back(stageItem);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // render stages</span><br><span class="line">    std::unordered_map&lt;std::string, const StageCallback&gt;::iterator foundIter;</span><br><span class="line">    for (size_t i = 0, len = _stageInfos-&gt;getLength(); i &lt; len; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        StageInfo* stageInfo = _stageInfos-&gt;getData(i);</span><br><span class="line">        foundIter = _stage2fn.find(stageInfo-&gt;stage);</span><br><span class="line">        __android_log_print(ANDROID_LOG_DEBUG, &quot;TestStart&quot;, &quot;TestStart TestRender cocos2d-x-lite BaseRenderer::render %s&quot;,stageInfo-&gt;stage.c_str());</span><br><span class="line">        if (_stage2fn.end() != foundIter)</span><br><span class="line">        &#123;</span><br><span class="line">            auto&amp; fn = foundIter-&gt;second;</span><br><span class="line">            fn(view, stageInfo-&gt;items);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ForwardRenderer::drawItems</code> 用来绘制当前 Stage 的所有显示元素。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">void ForwardRenderer::drawItems(const std::vector&lt;StageItem&gt;&amp; items)</span><br><span class="line">&#123;</span><br><span class="line">    size_t count = _shadowLights.size();</span><br><span class="line">    __android_log_print(ANDROID_LOG_DEBUG, &quot;TestStart&quot;,&quot;TestRender %i&quot;,count);</span><br><span class="line">    if (count == 0 &amp;&amp; _numLights == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        for (size_t i = 0, l = items.size(); i &lt; l; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            draw(items.at(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        for (const auto&amp; item : items)</span><br><span class="line">        &#123;</span><br><span class="line">            for(int i = 0; i &lt; count; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                Light* light = _shadowLights.at(i);</span><br><span class="line">                _device-&gt;setTexture(cc_shadow_map[i], light-&gt;getShadowMap(), allocTextureUnit());</span><br><span class="line">            &#125;</span><br><span class="line">            draw(item);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Label-字体绘制渲染流程"><a href="#Label-字体绘制渲染流程" class="headerlink" title="Label 字体绘制渲染流程"></a>Label 字体绘制渲染流程</h2><p>下面以 Lable 字体的渲染来了解一下 2d 渲染流程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">├── CCLabel._applyFontTexture() // engine CCLabel.js</span><br><span class="line">    ├── CCSpriteFrame.onTextureLoaded // 如果是BitmapFont会走这里。</span><br><span class="line">    ├── Texture2D.initWithElement</span><br><span class="line">    ├── TTFAssembler.updateRenderData  //engine core/renderer/utils/label/ttf.js</span><br><span class="line">        ├── TTFAssembler._updateTexture  //engine ttf.js</span><br><span class="line">            ├── _context.fillText  //engine ttf.js</span><br><span class="line">                ├── js_engine_CanvasRenderingContext2D_fillText  jsb_cocos2d_auto.cpp</span><br><span class="line">                    ├── CanvasRenderingContext2D.fillText  CCCanvasRenderingContext2D-android.cpp</span><br><span class="line">                        ├── CanvasRenderingContext2D.recreateBufferIfNeeded()</span><br><span class="line">                        ├── CanvasRenderingContext2DImpl.fillText   //CCCanvasRenderingContext2D-android.cpp</span><br><span class="line">                            ├── JniHelper::callObjectVoidMethod</span><br><span class="line">                                ├── CanvasRenderingContext2DImpl.fillText  //CanvasRenderingContext2DImpl.java</span><br><span class="line">                            ├── CanvasRenderingContext2DImpl.fillData() //CCCanvasRenderingContext2D-android.cpp</span><br><span class="line">                        ├── _canvasBufferUpdatedCB()</span><br><span class="line">            ├── CCTexture2D.handleLoadedTexture // engine CCTexture2D.js</span><br><span class="line">                ├── Texture2D.update // jsb-adapter renderer/jsb-gfx.js</span><br><span class="line">                    ├── Texture2D.updateNative </span><br><span class="line">                        ├── js_gfx_Texture2D_update // cocos2d-x-lite jsb-gfx-auto.cpp</span><br><span class="line">                            ├── seval_to_TextureOptions</span><br><span class="line">                            ├── Texture2D::update // cocos2d-x-lite Texture2D.cpp</span><br><span class="line">                                ├── glActiveTexture</span><br><span class="line">                                ├── glBindTexture</span><br><span class="line">                                ├── Texture2D::setMipmap</span><br><span class="line">                                    ├── Texture2D::setImage</span><br><span class="line">                                        ├── glCompressedTexImage2D</span><br><span class="line">                                        ├── glTexImage2D</span><br><span class="line">                                ├── Texture2D::setTexInfo</span><br><span class="line">                                ├── DeviceGraphics::restoreTexture // cocos2d-x-lite DeviceGraphics.cpp</span><br><span class="line">                                    ├── glBindTexture</span><br></pre></td></tr></table></figure>
+<p>获取Canvas：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">_getAssemblerData () &#123;</span><br><span class="line">    _sharedLabelData = Label._canvasPool.get();</span><br><span class="line">    _sharedLabelData.canvas.width = _sharedLabelData.canvas.height = 1;</span><br><span class="line">    console.log(&apos;Test label ttf _getAssemblerData&apos;)</span><br><span class="line">    return _sharedLabelData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="创建buffer"><a href="#创建buffer" class="headerlink" title="创建buffer"></a>创建buffer</h3><p>创建一个 Bitmap 绑定 Canvas：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private void recreateBuffer(float w, float h) &#123;</span><br><span class="line">     Log.d(TAG, &quot;TestRender CanvasRenderingContext2DImpl recreateBuffer:&quot; + w + &quot;, &quot; + h);</span><br><span class="line">    if (mBitmap != null) &#123;</span><br><span class="line">        mBitmap.recycle();</span><br><span class="line">    &#125;</span><br><span class="line">    mBitmap = Bitmap.createBitmap((int)Math.ceil(w), (int)Math.ceil(h), Bitmap.Config.ARGB_8888);</span><br><span class="line">    mCanvas.setBitmap(mBitmap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="绘制字体"><a href="#绘制字体" class="headerlink" title="绘制字体"></a>绘制字体</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// CanvasRenderingContext2DImpl.java</span><br><span class="line"></span><br><span class="line">    private void fillText(String text, float x, float y, float maxWidth) &#123;</span><br><span class="line">        Log.d(TAG, &quot;TestRender this: &quot; + this + &quot;, fillText: &quot; + text + &quot;, &quot; + x + &quot;, &quot; + y + &quot;, &quot; + &quot;, &quot; + maxWidth);</span><br><span class="line">        createTextPaintIfNeeded();</span><br><span class="line">        mTextPaint.setARGB(mFillStyleA, mFillStyleR, mFillStyleG, mFillStyleB);</span><br><span class="line">        mTextPaint.setStyle(Paint.Style.FILL);</span><br><span class="line">        scaleX(mTextPaint, text, maxWidth);</span><br><span class="line">        Point pt = convertDrawPoint(new Point(x, y), text);</span><br><span class="line">        mCanvas.drawText(text, pt.x, pt.y, mTextPaint);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="获取纹理数据"><a href="#获取纹理数据" class="headerlink" title="获取纹理数据"></a>获取纹理数据</h3><p>绘制完字体后获取数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">// CCCanvasRenderingContext2D-android.cpp</span><br><span class="line"></span><br><span class="line">    void fillText(const std::string&amp; text, float x, float y, float maxWidth)</span><br><span class="line">    &#123;</span><br><span class="line">        SE_LOGD(&quot;CanvasRenderingContext2DImpl fillText&quot;);</span><br><span class="line">        if (text.empty() || _bufferWidth &lt; 1.0f || _bufferHeight &lt; 1.0f)</span><br><span class="line">            return;</span><br><span class="line">        JniHelper::callObjectVoidMethod(_obj, JCLS_CANVASIMPL, &quot;fillText&quot;, text, x, y, maxWidth);</span><br><span class="line">        fillData();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    void fillData()</span><br><span class="line">    &#123;</span><br><span class="line">        jbyteArray arr = JniHelper::callObjectByteArrayMethod(_obj, JCLS_CANVASIMPL, &quot;getDataRef&quot;);</span><br><span class="line">        jsize len  = JniHelper::getEnv()-&gt;GetArrayLength(arr);</span><br><span class="line">        jbyte* jbarray = (jbyte *)malloc(len * sizeof(jbyte));</span><br><span class="line">        JniHelper::getEnv()-&gt;GetByteArrayRegion(arr,0,len,jbarray);</span><br><span class="line">        unMultiplyAlpha( (unsigned char*) jbarray, len);</span><br><span class="line">        _data.fastSet((unsigned char*) jbarray, len); //IDEA: DON&apos;T create new jbarray every time.</span><br><span class="line">        JniHelper::getEnv()-&gt;DeleteLocalRef(arr);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><code>getDataRef</code> 方法的实现也在 CanvasRenderingContext2DImpl.java，把 mBitmap 的数据进行复制。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//CanvasRenderingContext2DImpl.java</span><br><span class="line"></span><br><span class="line">    private byte[] getDataRef() &#123;</span><br><span class="line">        Log.d(TAG, &quot;TestRender this: &quot; + this + &quot;, getDataRef ...&quot;);</span><br><span class="line">        if (mBitmap != null) &#123;</span><br><span class="line">            final int len = mBitmap.getWidth() * mBitmap.getHeight() * 4;</span><br><span class="line">            final byte[] pixels = new byte[len];</span><br><span class="line">            final ByteBuffer buf = ByteBuffer.wrap(pixels);</span><br><span class="line">            buf.order(ByteOrder.nativeOrder());</span><br><span class="line">            mBitmap.copyPixelsToBuffer(buf);</span><br><span class="line"></span><br><span class="line">            return pixels;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Log.e(TAG, &quot;getDataRef return null&quot;);</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>_canvasBufferUpdatedCB 就是前面在 <code>HTMLCanvasElement.getContext()</code> 方法中创建的回调函数，Android端通过C++端把数据回传回来。</p>
+<h2 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h2><p>绘制完成后，就开始通过 handleLoadedTexture 把绘制完成的纹理更新到场景中，等待下个tick周期进行渲染到屏幕上。</p>
+<h2 id="推荐文章"><a href="#推荐文章" class="headerlink" title="推荐文章"></a>推荐文章</h2><p><a href="http://www.doc88.com/p-0901392998074.html" target="_blank" rel="noopener">基于WebGL的Canvas元素2D绘制加速</a><br><a href="https://zhuanlan.zhihu.com/p/96475666" target="_blank" rel="noopener">Cocos Creator 2.2 的渲染流程(原生渲染）</a>：这部分在2.3版本后已经变更，native 渲染部分在 c++ 里面实现。<br><a href="https://www.jianshu.com/p/a678028fc583" target="_blank" rel="noopener">cocos creator2.1渲染流程分析</a><br><a href="https://blog.csdn.net/6346289/article/details/99626005?depth_1-utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-2&amp;utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-2" target="_blank" rel="noopener">https://blog.csdn.net/6346289/article/details/99626005?depth_1-utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-2&amp;utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-2</a><br><a href="https://blog.csdn.net/wjf1616/article/details/105250690/" target="_blank" rel="noopener">https://blog.csdn.net/wjf1616/article/details/105250690/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cocos/" rel="tag"># cocos</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/10/cocos/cocos-creator-res-load/" rel="next" title="Cocos Creator --  资源文件加载流程">
+                <i class="fa fa-chevron-left"></i> Cocos Creator --  资源文件加载流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/20/cocos/cocos-creator-web-render-process/" rel="prev" title="Cocos Creator --  Web游戏渲染流程">
+                Cocos Creator --  Web游戏渲染流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染初始化"><span class="nav-number">2.</span> <span class="nav-text">渲染初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绘制流程"><span class="nav-number">3.</span> <span class="nav-text">绘制流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染流程"><span class="nav-number">4.</span> <span class="nav-text">渲染流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Label-字体绘制渲染流程"><span class="nav-number">5.</span> <span class="nav-text">Label 字体绘制渲染流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建buffer"><span class="nav-number">5.1.</span> <span class="nav-text">创建buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绘制字体"><span class="nav-number">5.2.</span> <span class="nav-text">绘制字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取纹理数据"><span class="nav-number">5.3.</span> <span class="nav-text">获取纹理数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新数据"><span class="nav-number">6.</span> <span class="nav-text">更新数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐文章"><span class="nav-number">7.</span> <span class="nav-text">推荐文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

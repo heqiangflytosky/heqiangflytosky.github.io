@@ -1,0 +1,917 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="SystemUI,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍媒体控制器相关">
+<meta name="keywords" content="SystemUI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SystemUI -- 多媒体通知">
+<meta property="og:url" content="http://yoursite.com/2021/11/16/Android SystemUI/android-systemui-panel-media-controller/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="介绍媒体控制器相关">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/android-systemui-panel-media-controller/image.png">
+<meta property="og:updated_time" content="2022-02-16T03:20:09.166Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SystemUI -- 多媒体通知">
+<meta name="twitter:description" content="介绍媒体控制器相关">
+<meta name="twitter:image" content="http://yoursite.com/images/android-systemui-panel-media-controller/image.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/11/16/Android SystemUI/android-systemui-panel-media-controller/">
+
+
+
+
+
+  <title> SystemUI -- 多媒体通知 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/11/16/Android SystemUI/android-systemui-panel-media-controller/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SystemUI -- 多媒体通知
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-16T12:00:00+08:00">
+                2021-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-SystemUI/" itemprop="url" rel="index">
+                    <span itemprop="name">Android SystemUI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2021/11/16/Android SystemUI/android-systemui-panel-media-controller/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2021/11/16/Android SystemUI/android-systemui-panel-media-controller/" class="leancloud_visitors" data-flag-title="SystemUI -- 多媒体通知">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  介绍媒体控制器相关
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 Android 中可以把媒体通知显示在 QS 上，这个特性可以通过下面的开关来配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">packages/SystemUI/src/com/android/systemui/util/Utils.java</span><br><span class="line"></span><br><span class="line">    public static boolean useQsMediaPlayer(Context context) &#123;</span><br><span class="line">        int flag = Settings.Global.getInt(context.getContentResolver(),</span><br><span class="line">                Settings.Global.SHOW_MEDIA_ON_QUICK_SETTINGS, 1);</span><br><span class="line">        return flag &gt; 0;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>如果不显示在QS上，那么就显示在通知中心里面。</p>
+<p>在 Android S上面分别有四个位置可以承载媒体控制器，分别时QQS、QS和锁屏，另外还有个动画切换的场景，这四个位置动态添加 MediaScrollView 来实现切换场景时媒体控制器的位置的变换。<br>如图：</p>
+<p><img src="/images/android-systemui-panel-media-controller/image.png" width="676" height="1134"></p>
+<p>媒体控制器容器布局在 R.layout.media_carousel，媒体控制器布局是 R.layout.media_view。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">UniqueObjectHostView</span><br><span class="line">    FrameLayout</span><br><span class="line">        MediaScrollView(R.id.media_carousel_scroller)</span><br><span class="line">            LinearLayout(R.id.media_carousel)</span><br><span class="line">                TransitionLayout(R.id.qs_media_controls)</span><br><span class="line">                    Guideline(R.id.center_vertical_guideline)</span><br><span class="line">                    FrameLayout(R.id.notification_media_progress_time)</span><br><span class="line">                    TextView(R.id.media_elapsed_time)</span><br><span class="line">                    SeekBar(R.id.media_progress_bar)</span><br><span class="line">                    ......</span><br><span class="line">        PageIndicator()</span><br><span class="line">        ImageView(R.id.settings_cog)</span><br></pre></td></tr></table></figure>
+<p>相关的类：</p>
+<ul>
+<li>MediaHierarchyManager 管理媒体控制器在不同host view之间的切换已经它们之间的切换动画</li>
+<li>MediaHost</li>
+<li>UniqueObjectHostView 承载媒体控制器的容器，它是 MediaHost 的一个变量，一个 MediaHost 对应一个 UniqueObjectHostView</li>
+<li>MediaCarouselController</li>
+<li>MediaControlPanel 控制多媒体播放</li>
+</ul>
+<p>在 MediaHierarchyManager 中定义了媒体控制器的四个位置场景。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">// MediaHierarchyManager.kt</span><br><span class="line">    companion object &#123;</span><br><span class="line">        /**</span><br><span class="line">         * Attached in expanded quick settings</span><br><span class="line">         * 添加在QS面板下方</span><br><span class="line">         */</span><br><span class="line">        const val LOCATION_QS = 0</span><br><span class="line"></span><br><span class="line">        /**</span><br><span class="line">         * Attached in the collapsed QS</span><br><span class="line">         * QS折叠时添加在QQS下方</span><br><span class="line">         */</span><br><span class="line">        const val LOCATION_QQS = 1</span><br><span class="line"></span><br><span class="line">        /**</span><br><span class="line">         * Attached on the lock screen</span><br><span class="line">         * 锁屏时添加到通知面板上方</span><br><span class="line">         */</span><br><span class="line">        const val LOCATION_LOCKSCREEN = 2</span><br><span class="line"></span><br><span class="line">        /**</span><br><span class="line">         * Attached at the root of the hierarchy in an overlay</span><br><span class="line">         * 媒体控制器在ViewGroupOverlay，这时正在做手势切换动画</span><br><span class="line">         */</span><br><span class="line">        const val IN_OVERLAY = -1000</span><br></pre></td></tr></table></figure>
+<p>定义了一个数组 mediaHosts 来保存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private val mediaHosts = arrayOfNulls&lt;MediaHost&gt;(LOCATION_LOCKSCREEN + 1)</span><br></pre></td></tr></table></figure>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>三个场景分别定义了三个 MediaHost，并且实例化了三个 UniqueObjectHostView View，这三个View是在 SystemUI初始化时就创建的，然后添加到各个场景的UI中去，不管此时有没有媒体创建的需求。</p>
+<p>锁屏初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KeyguardMediaController.kt</span><br><span class="line"></span><br><span class="line">    init &#123;</span><br><span class="line">        // First let&apos;s set the desired state that we want for this host</span><br><span class="line">        mediaHost.expansion = MediaHostState.COLLAPSED</span><br><span class="line">        mediaHost.showsOnlyActiveMedia = true // 设置是否常显示</span><br><span class="line">        mediaHost.falsingProtectionNeeded = true</span><br><span class="line"></span><br><span class="line">        // Let&apos;s now initialize this view, which also creates the host view for us.</span><br><span class="line">        mediaHost.init(MediaHierarchyManager.LOCATION_LOCKSCREEN)    </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>QS初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">QSPanelController.java</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onInit() &#123;</span><br><span class="line">        mMediaHost.setExpansion(1);</span><br><span class="line">        mMediaHost.setShowsOnlyActiveMedia(false); //当媒体不Active时不显示</span><br><span class="line">        mMediaHost.init(MediaHierarchyManager.LOCATION_QS);</span><br><span class="line">        ....</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>QQS 初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">QuickQSPanelController.java</span><br><span class="line">    @Override</span><br><span class="line">    protected void onInit() &#123;</span><br><span class="line">        super.onInit();</span><br><span class="line">        mMediaHost.setExpansion(0.0f);</span><br><span class="line">        mMediaHost.setShowsOnlyActiveMedia(true);</span><br><span class="line">        mMediaHost.init(MediaHierarchyManager.LOCATION_QQS);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>MediaHost 初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MediaHost.init()</span><br><span class="line">    MediaHierarchyManager.register()</span><br><span class="line">        MediaHierarchyManager.createUniqueObjectHost() //生成 UniqueObjectHostView</span><br><span class="line">            new UniqueObjectHostView()</span><br><span class="line">        MediaHost.addVisibilityChangeListener() //注册监听器，当MediaHost.updateViewVisibility()时回调</span><br><span class="line">        mediaHosts[mediaObject.location] = mediaObject // 添加到数组里面</span><br><span class="line">        MediaHierarchyManager.updateDesiredLocation() //更新位置</span><br></pre></td></tr></table></figure>
+<h2 id="添加流程"><a href="#添加流程" class="headerlink" title="添加流程"></a>添加流程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MediaDataCombineLatest.onMediaDeviceChanged()</span><br><span class="line">    MediaDataCombineLatest.update()</span><br><span class="line">        MediaDataCombineLatest.Listener.onMediaDataLoaded()</span><br><span class="line">            MediaDataFilter.onMediaDataLoaded()</span><br><span class="line">                MediaHost.listener.onMediaDataLoaded()</span><br><span class="line">                    MediaHost.updateViewVisibility()</span><br><span class="line">                        MediaHierarchyManager.register.updateDesiredLocation()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">MediaHierarchyManager.updateDesiredLocation()</span><br><span class="line">    MediaHierarchyManager.calculateLocation() // 计算当前应该处的位置</span><br><span class="line">    MediaHierarchyManager.performTransitionToNewLocation() //切换到新的位置</span><br><span class="line">        MediaHierarchyManager.updateTargetState() //更新需要绑定的View</span><br><span class="line">            MediaHierarchyManager.getHost() // 根据位置获取Host View</span><br><span class="line">        MediaHierarchyManager.cancelAnimationAndApplyDesiredState() //开始应用到新位置，不用动画</span><br><span class="line">            MediaHierarchyManager.applyState()</span><br><span class="line">                MediaHierarchyManager.updateHostAttachment()</span><br><span class="line">                    MediaHierarchyManager.updateHostAttachment()</span><br><span class="line">                        //位置有改变时添加View</span><br><span class="line">                        (mediaFrame.parent as ViewGroup?)?.removeView(mediaFrame) // 先把mediaFrame从原来的位置移除</span><br><span class="line">                        rootOverlay!!.add() //如果在做动画，就添加到 ViewGroupOverlay</span><br><span class="line">                        UniqueObjectHostView.addView() // 动画完成添加到新的Host</span><br></pre></td></tr></table></figure>
+<h2 id="可见性更新流程"><a href="#可见性更新流程" class="headerlink" title="可见性更新流程"></a>可见性更新流程</h2><p>MediaHost 提供了 addVisibilityChangeListener() 方法，当媒体通知的可见性发生变化时会通知监听者响应的变化。<br>在 KeyguardMediaController 、 MediaHierarchyManager 和 QSPanelControllerBase 都创建了监听。QSPanelControllerBase 收到监听后会把变化通过 mMediaVisibilityChangedListener 通知到 QSFragment (setCollapsedMediaVisibilityChangedListener())，在通知到 NotificationPanelViewController (setMediaVisibilityChangedListener())。</p>
+<h2 id="切换动画流程"><a href="#切换动画流程" class="headerlink" title="切换动画流程"></a>切换动画流程</h2><p>切换动画是在 ViewGroupOverlay 上面做的，根据手势的移动位置来计算出 mediaFrame 的显示区域，然后通过不断更新显示区域来实现移动的动画效果。<br>媒体控制器内部的联动动画是通过 TransitionLayout 来实现的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">NotificationPanelViewController.updateQsExpansion()</span><br><span class="line">    MediaHierarchyManager.setQsExpansion()</span><br><span class="line">        MediaHierarchyManager.updateDesiredLocation() // 更新location</span><br><span class="line">        MediaHierarchyManager.getQSTransformationProgress() // 获取当前位移的进度，如果返回值大于0，才会走下面的位置更新等逻辑。下面介绍</span><br><span class="line">        MediaHierarchyManager.updateTargetState() </span><br><span class="line">            MediaHierarchyManager.getTransformationProgress() // 获取当前移动的位置</span><br><span class="line">                MediaHierarchyManager.getQSTransformationProgress()</span><br><span class="line">                    return qsExpansion</span><br><span class="line">            MediaHierarchyManager.interpolateBounds() // 根据进度计算 mediaFrame 的区域</span><br><span class="line">        MediaHierarchyManager.applyTargetStateIfNotAnimating()</span><br><span class="line">            MediaHierarchyManager.applyState()</span><br><span class="line">               MediaCarouselController.setCurrentState()</span><br><span class="line">                   MediaCarouselController.updatePlayerToState()</span><br><span class="line">                       MediaViewController.setCurrentState()</span><br><span class="line">                           TransitionLayoutController.getInterpolatedState() //根据起始位置和最终位置以及进度信息差值计算当前View的位置，透明度，缩放信息。</span><br><span class="line">                           TransitionLayoutController.setState()//将当前状态应用到视图上</span><br><span class="line">                               TransitionLayoutController.applyStateToLayout()</span><br><span class="line">                                   TransitionLayout.setState()</span><br><span class="line">                                       TransitionLayout.applyCurrentState()//更新视图</span><br><span class="line">               mediaFrame.setLeftTopRightBottom() // 将计算的区域应用给 mediaFrame</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">PlayerViewHolder.kt</span><br><span class="line"></span><br><span class="line">        val controlsIds = setOf(</span><br><span class="line">                R.id.icon,</span><br><span class="line">                R.id.app_name,</span><br><span class="line">                R.id.album_art,</span><br><span class="line">                R.id.header_title,</span><br><span class="line">                R.id.header_artist,</span><br><span class="line">                R.id.media_seamless,</span><br><span class="line">                R.id.media_seamless_fallback,</span><br><span class="line">                R.id.notification_media_progress_time,</span><br><span class="line">                R.id.media_progress_bar,</span><br><span class="line">                R.id.action0,</span><br><span class="line">                R.id.action1,</span><br><span class="line">                R.id.action2,</span><br><span class="line">                R.id.action3,</span><br><span class="line">                R.id.action4,</span><br><span class="line">                R.id.icon</span><br><span class="line">        )</span><br><span class="line">        val gutsIds = setOf(</span><br><span class="line">                R.id.remove_text,</span><br><span class="line">                R.id.cancel,</span><br><span class="line">                R.id.dismiss,</span><br><span class="line">                R.id.settings</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<h2 id="方法详解"><a href="#方法详解" class="headerlink" title="方法详解"></a>方法详解</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">//MediaHierarchyManager.kt</span><br><span class="line">    private fun calculateLocation(): Int &#123;</span><br><span class="line">        if (blockLocationChanges) &#123;</span><br><span class="line">            // Keep the current location until we&apos;re allowed to again</span><br><span class="line">            return desiredLocation</span><br><span class="line">        &#125;</span><br><span class="line">        val onLockscreen = (!bypassController.bypassEnabled &amp;&amp;</span><br><span class="line">            (statusbarState == StatusBarState.KEYGUARD ||</span><br><span class="line">                statusbarState == StatusBarState.FULLSCREEN_USER_SWITCHER))</span><br><span class="line">        val allowedOnLockscreen = notifLockscreenUserManager.shouldShowLockscreenNotifications()</span><br><span class="line">        val location = when &#123;</span><br><span class="line">            // 非锁屏下刚开始下拉时，位置设置为 LOCATION_QS</span><br><span class="line">            qsExpansion &gt; 0.0f &amp;&amp; !onLockscreen -&gt; LOCATION_QS</span><br><span class="line">            // 锁屏界面下拉超过0.4时，修改位置为 LOCATION_QS，锁屏状态下状态栏下滑</span><br><span class="line">            qsExpansion &gt; 0.4f &amp;&amp; onLockscreen -&gt; LOCATION_QS</span><br><span class="line">            // 如果 QQS host 不可见，返回QS</span><br><span class="line">            !hasActiveMedia -&gt; LOCATION_QS</span><br><span class="line">            // 锁屏界面切换到QQS时，设置位置为 LOCATION_QQS，比如：锁屏状态下下滑通知栏</span><br><span class="line">            onLockscreen &amp;&amp; isTransformingToFullShadeAndInQQS() -&gt; LOCATION_QQS</span><br><span class="line">            // 锁屏界面下如果允许在锁屏显示通知，那么就设置位置为 LOCATION_LOCKSCREEN</span><br><span class="line">            onLockscreen &amp;&amp; allowedOnLockscreen -&gt; LOCATION_LOCKSCREEN</span><br><span class="line">            else -&gt; LOCATION_QQS</span><br><span class="line">        &#125;</span><br><span class="line">        // 如果在锁屏界面，且媒体控制器不显示，那么就要设置在 LOCATION_QS</span><br><span class="line">        if (location == LOCATION_LOCKSCREEN &amp;&amp; getHost(location)?.visible != true &amp;&amp;</span><br><span class="line">            !statusBarStateController.isDozing) &#123;</span><br><span class="line">            return LOCATION_QS</span><br><span class="line">        &#125;</span><br><span class="line">        if (location == LOCATION_LOCKSCREEN &amp;&amp; desiredLocation == LOCATION_QS &amp;&amp;</span><br><span class="line">            collapsingShadeFromQS) &#123;</span><br><span class="line">            // When collapsing on the lockscreen, we want to remain in QS</span><br><span class="line">            return LOCATION_QS</span><br><span class="line">        &#125;</span><br><span class="line">        if (location != LOCATION_LOCKSCREEN &amp;&amp; desiredLocation == LOCATION_LOCKSCREEN &amp;&amp;</span><br><span class="line">            !fullyAwake) &#123;</span><br><span class="line">            // When unlocking from dozing / while waking up, the media shouldn&apos;t be transitioning</span><br><span class="line">            // in an animated way. Let&apos;s keep it in the lockscreen until we&apos;re fully awake and</span><br><span class="line">            // reattach it without an animation</span><br><span class="line">            return LOCATION_LOCKSCREEN</span><br><span class="line">        &#125;</span><br><span class="line">        return location</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private fun getHost(@MediaLocation location: Int): MediaHost? &#123;</span><br><span class="line">    if (location &lt; 0) &#123;</span><br><span class="line">        return null</span><br><span class="line">    &#125;</span><br><span class="line">    return mediaHosts[location]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private fun updateViewVisibility() &#123;</span><br><span class="line">    // 根据 showsOnlyActiveMedia 来为 visible 赋值</span><br><span class="line">    // showsOnlyActiveMedia 在前面 HostView 初始化时配置</span><br><span class="line">    state.visible = if (showsOnlyActiveMedia) &#123;</span><br><span class="line">        mediaDataManager.hasActiveMedia()</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        mediaDataManager.hasAnyMedia()</span><br><span class="line">    &#125;</span><br><span class="line">    val newVisibility = if (visible) View.VISIBLE else View.GONE</span><br><span class="line">    // 如果 MediaHost 可见性状态和 UniqueObjectHostView 不一致，就调用 VisibilityChangeListener 回调</span><br><span class="line">    if (newVisibility != hostView.visibility) &#123;</span><br><span class="line">        hostView.visibility = newVisibility</span><br><span class="line">        visibleChangedListeners.forEach &#123;</span><br><span class="line">            it.invoke(visible)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">private fun getQSTransformationProgress(): Float &#123;</span><br><span class="line">    val currentHost = getHost(desiredLocation)</span><br><span class="line">    val previousHost = getHost(previousLocation)</span><br><span class="line">    // 如果 QQS 的Host是可见的，满足 desiredLocation 和 previousLocation 条件时，才会去计算位移进度</span><br><span class="line">    // 也就是说如果QQS的HostView是不可见的，那么就不会去做这个动画</span><br><span class="line">    if (hasActiveMedia &amp;&amp; currentHost?.location == LOCATION_QS) &#123;</span><br><span class="line">        if (previousHost?.location == LOCATION_QQS) &#123;</span><br><span class="line">            if (previousHost.visible || statusbarState != StatusBarState.KEYGUARD) &#123;</span><br><span class="line">                return qsExpansion</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return -1.0f</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 以LOCATION_QQS的可见性来判断是否有 ActiveMedia</span><br><span class="line">private var hasActiveMedia: Boolean = false</span><br><span class="line">    get() = mediaHosts.get(LOCATION_QQS)?.visible == true</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SystemUI/" rel="tag"># SystemUI</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/11/15/Android SystemUI/android-systemui-notificationshadedepthcontroller/" rel="next" title="SystemUI -- NotificationShadeDepthController">
+                <i class="fa fa-chevron-left"></i> SystemUI -- NotificationShadeDepthController
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/11/20/Android SystemUI/android-systemui-quick-settings-tile/" rel="prev" title="Android -- SystemUI -- QS Tile">
+                Android -- SystemUI -- QS Tile <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">2.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加流程"><span class="nav-number">3.</span> <span class="nav-text">添加流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可见性更新流程"><span class="nav-number">4.</span> <span class="nav-text">可见性更新流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切换动画流程"><span class="nav-number">5.</span> <span class="nav-text">切换动画流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法详解"><span class="nav-number">6.</span> <span class="nav-text">方法详解</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

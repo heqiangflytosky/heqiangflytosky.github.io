@@ -1,0 +1,895 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android 线程,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="孤舟蓑笠翁，独钓寒江雪" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="本文介绍 HandlerThread 的使用及源码分析">
+<meta name="keywords" content="Android 线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 线程 -- HandlerThread 使用及源码分析">
+<meta property="og:url" content="http://yoursite.com/2015/10/10/Android 线程/android-thread-handlerthread-source-code/index.html">
+<meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
+<meta property="og:description" content="本文介绍 HandlerThread 的使用及源码分析">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-13T08:32:36.563Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 线程 -- HandlerThread 使用及源码分析">
+<meta name="twitter:description" content="本文介绍 HandlerThread 的使用及源码分析">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6377131610457769000',
+      author: '寒江蓑笠'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/10/10/Android 线程/android-thread-handlerthread-source-code/">
+
+
+
+
+
+  <title> Android 线程 -- HandlerThread 使用及源码分析 | 孤舟蓑笠翁，独钓寒江雪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261134288&web_id=1261134288" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">孤舟蓑笠翁，独钓寒江雪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">程序猿的世界</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-users"></i> <br>
+            
+            友情链接
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/10/Android 线程/android-thread-handlerthread-source-code/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="寒江蓑笠">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/icon.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="孤舟蓑笠翁，独钓寒江雪">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="孤舟蓑笠翁，独钓寒江雪" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 线程 -- HandlerThread 使用及源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-10T10:00:00+08:00">
+                2015-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-线程/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/10/10/Android 线程/android-thread-handlerthread-source-code/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/10/10/Android 线程/android-thread-handlerthread-source-code/" class="leancloud_visitors" data-flag-title="Android 线程 -- HandlerThread 使用及源码分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+              <div class="post-description">
+                  本文介绍 HandlerThread 的使用及源码分析
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文是介绍 <code>HandlerThread</code> 这个类的使用以及源码分析，单从这个类的名称上看，我们就知道这个类可能会和 <code>Handler</code> 和 <code>Thread</code> 有关系。<br>进入正题以前，我们先来看一下 <code>Handler</code>、<code>Thread</code> 和 <code>Looper</code> 的关系。</p>
+<h2 id="Handler、Thread-和-Looper-的关系"><a href="#Handler、Thread-和-Looper-的关系" class="headerlink" title="Handler、Thread 和 Looper 的关系"></a>Handler、Thread 和 Looper 的关系</h2><ol>
+<li><code>Looper</code> 类别用来为一个线程开启一个消息循环。默认情况下 Android 中新诞生的线程是没有开启消息循环的。（主线程除外，主线程系统会自动为其创建 <code>Looper</code> 对象，开启消息循环）。<br><code>Looper</code> 对象通过 <code>MessageQueue</code> 来存放消息和事件。一个线程只能有一个 <code>Looper</code>，对应一个 <code>MessageQueue</code>。<br>通常是通过 <code>Handler</code> 对象来与 <code>Looper</code> 交互的。<code>Handler</code> 可看做是 <code>Looper</code> 的一个接口，用来向指定的 <code>Looper</code> 发送消息及定义处理方法。</li>
+<li>默认情况下 <code>Handler</code> 会与其被定义时所在线程的 <code>Looper</code> 绑定，比如，在主线程中定义，其是与主线程的 <code>Looper</code> 绑定。<br><code>mainHandler = new Handler()</code> 等价于 <code>new Handler(Looper.myLooper())</code><br><code>Looper.myLooper()</code> 用来获取当前进程的 <code>Looper</code> 对象。<br>还有一个类似的 <code>Looper.getMainLooper()</code> 用于获取主线程的 <code>Looper</code> 对象。</li>
+<li><p>在非主线程中直接 <code>new Handler()</code> 会报如下的错误:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.RuntimeException: Can&apos;t create handler inside thread that has not called Looper.prepare()</span><br></pre></td></tr></table></figure>
+<p>原因是非主线程中默认没有创建 <code>Looper</code> 对象，需要先调用 <code>Looper.prepare()</code> 启用 <code>Looper</code>。</p>
+</li>
+<li>需要先调用 <code>Looper.prepare()</code> 启用 <code>Looper</code>。<br>调用 <code>Looper.loop()</code> 让 <code>Looper</code> 开始工作，从消息队列里取消息，处理消息。<br>注意：写在 <code>Looper.loop()</code> 之后的代码不会被执行，这个函数内部应该是一个循环，当调用 <code>mHandler.getLooper().quit()</code> 后，loop 才会中止，其后的代码才能得以运行。</li>
+</ol>
+<h2 id="Handler和Thread结合"><a href="#Handler和Thread结合" class="headerlink" title="Handler和Thread结合"></a>Handler和Thread结合</h2><p>了解了上面的知识，如果我们想在一个子线程里面处理消息，就需要实现下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class LooperThread extends Thread &#123;</span><br><span class="line">    public Handler mHandler;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        // 初始化Looper</span><br><span class="line">        Looper.prepare();</span><br><span class="line">        // 必须在初始化Looper之后创建Handler，否则会报错</span><br><span class="line">        mHandler = new Handler() &#123;</span><br><span class="line">            public void handleMessage(Message msg) &#123;</span><br><span class="line">                // 这里处理消息</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        // 开启消息循环</span><br><span class="line">        Looper.loop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到实现起来比较麻烦。<br>那么在这种情况下，<code>HandlerThread</code> 应运而生。</p>
+<h2 id="HandlerThread-的用法"><a href="#HandlerThread-的用法" class="headerlink" title="HandlerThread 的用法"></a>HandlerThread 的用法</h2><p><code>HandlerThread</code> 是一个包含 <code>Looper</code> 的 <code>Thread</code>，我们可以直接使用这个 <code>Looper</code> 创建 <code>Handler</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">private HandlerThread mUpdateStatusThread;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    // 初始化 HandlerThread</span><br><span class="line">    mUpdateStatusThread = new HandlerThread(&quot;update_download_status_thread&quot;);</span><br><span class="line">    mUpdateStatusThread.start();</span><br><span class="line">    // 初始化 Handler</span><br><span class="line">    mUpdateStatusHandler = new UpdateStatusHandler(mUpdateStatusThread.getLooper(), this);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private static class UpdateStatusHandler extends Handler &#123;</span><br><span class="line">    static final int MSG_UPDATE_PROGRESS = 0;</span><br><span class="line">    private WeakReference&lt;DownloadObserver&gt; mWeakReference;</span><br><span class="line"></span><br><span class="line">    UpdateStatusHandler(Looper looper) &#123;</span><br><span class="line">        super(looper);</span><br><span class="line">        mWeakReference = new WeakReference&lt;&gt;(downloadObserver);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void handleMessage(Message msg) &#123;</span><br><span class="line">        ....</span><br><span class="line">        switch (msg.what) &#123;</span><br><span class="line">            case MSG_UPDATE_PROGRESS:</span><br><span class="line">                ......</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">       // 发送消息</span><br><span class="line">       mUpdateStatusHandler.obtainMessage(UpdateStatusHandler.MSG_UPDATE_PROGRESS, downloadId)</span><br><span class="line">                .sendToTarget();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">        // 退出</span><br><span class="line">        mUpdateStatusHandler.removeCallbacksAndMessages(null);</span><br><span class="line">        mUpdateStatusThread.quitSafely();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>HandlerThread</code> 相当于给 <code>Handler</code> 提供了一个 <code>Looper</code>，那么多个 <code>Handler</code> 共用一个 <code>HandlerThread</code>，显然也是可以的。<br>比如我们需要在后台处理多中任务，可能需要建多个 <code>Handler</code>（当然在一个 <code>Handler</code> 处理也是可行的），那么我们就可以只创建一个 <code>HandlerThread</code>，多个 <code>Handler</code> 通过 <code>HandlerThread.getLooper()</code> 来获取 <code>Looper</code> 对象来创建 <code>Handler</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class LooperUtils &#123;</span><br><span class="line"></span><br><span class="line">    public static HandlerThread mThread;</span><br><span class="line"></span><br><span class="line">    private static final String BACKGROUND_THREAD=&quot;background_thread&quot;;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        mThread = new HandlerThread(BACKGROUND_THREAD);</span><br><span class="line">        mThread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Looper getThreadLooper()&#123;</span><br><span class="line">        return mThread.getLooper();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Looper getMainThreadLooper()&#123;</span><br><span class="line">        return Looper.getMainLooper();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mUpdateStatusHandler = new UpdateStatusHandler(LooperUtils.getThreadLooper(), this);</span><br></pre></td></tr></table></figure>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">public class HandlerThread extends Thread &#123;</span><br><span class="line">    int mPriority;</span><br><span class="line">    int mTid = -1;</span><br><span class="line">    Looper mLooper;</span><br><span class="line">    // 构造方法，设置线程的名称，默认的优先级</span><br><span class="line">    public HandlerThread(String name) &#123;</span><br><span class="line">        super(name);</span><br><span class="line">        mPriority = Process.THREAD_PRIORITY_DEFAULT;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 构造方法，设置线程的名称以及优先级</span><br><span class="line">    // 注意使用的是 android.os.Process 而不是 java.lang.Thread 的优先级</span><br><span class="line">    public HandlerThread(String name, int priority) &#123;</span><br><span class="line">        super(name);</span><br><span class="line">        mPriority = priority;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 回调方法</span><br><span class="line">    protected void onLooperPrepared() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    // 调用Thread start 方法，就会执行 run方法，开启循环</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        mTid = Process.myTid();</span><br><span class="line">        Looper.prepare();</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            mLooper = Looper.myLooper();</span><br><span class="line">            notifyAll();</span><br><span class="line">        &#125;</span><br><span class="line">        Process.setThreadPriority(mPriority);</span><br><span class="line">        onLooperPrepared();</span><br><span class="line">        Looper.loop();</span><br><span class="line">        mTid = -1;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 获取当前 Thread 的Looper</span><br><span class="line">    public Looper getLooper() &#123;</span><br><span class="line">        if (!isAlive()) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        // If the thread has been started, wait until the looper has been created.</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            while (isAlive() &amp;&amp; mLooper == null) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    wait();</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return mLooper;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 退出 Looper，清空所有的消息队列，包含非延迟消息和延迟消息</span><br><span class="line">    public boolean quit() &#123;</span><br><span class="line">        Looper looper = getLooper();</span><br><span class="line">        if (looper != null) &#123;</span><br><span class="line">            looper.quit();</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 退出 Looper，退出之前会派发所有的非延迟消息。</span><br><span class="line">    public boolean quitSafely() &#123;</span><br><span class="line">        Looper looper = getLooper();</span><br><span class="line">        if (looper != null) &#123;</span><br><span class="line">            looper.quitSafely();</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns the identifier of this thread. See Process.myTid().</span><br><span class="line">     */</span><br><span class="line">    public int getThreadId() &#123;</span><br><span class="line">        return mTid;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-线程/" rel="tag"># Android 线程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/09/Android性能优化/android-performance-optimization-tools-leak-canary/" rel="next" title="Android 性能优化工具篇 -- LeakCanary 检测内存泄漏">
+                <i class="fa fa-chevron-left"></i> Android 性能优化工具篇 -- LeakCanary 检测内存泄漏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/18/Java/java-basic-concurrent-map-collection/" rel="prev" title="Java 基础 -- 并发集合的使用">
+                Java 基础 -- 并发集合的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/icon.png" alt="寒江蓑笠">
+          <p class="site-author-name" itemprop="name">寒江蓑笠</p>
+          <p class="site-description motion-element" itemprop="description">技术博客</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">287</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heqiangflytosky/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/heqiangflytosky/" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Handler、Thread-和-Looper-的关系"><span class="nav-number">1.</span> <span class="nav-text">Handler、Thread 和 Looper 的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Handler和Thread结合"><span class="nav-number">2.</span> <span class="nav-text">Handler和Thread结合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HandlerThread-的用法"><span class="nav-number">3.</span> <span class="nav-text">HandlerThread 的用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">4.</span> <span class="nav-text">源码分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒江蓑笠</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "d2475abece3649debc94c21b166fc009",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6zbrLyUbhXLbd7RqUSMnxhg4-gzGzoHsz", "fb9g4GyEWQysqnpY9t5CPhpU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
