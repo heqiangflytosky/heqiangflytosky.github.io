@@ -1,4 +1,3 @@
-
 ---
 title: Android View -- ConstraintLayout
 categories: Android

@@ -146,6 +146,10 @@ ln -sf ${REAL_PROJECT_PATH}/frameworks/libs ${LINKED_PROJECT_PATH}/frameworks
 mkdir -p ${LINKED_PROJECT_PATH}/packages/apps
 ln -sf ${REAL_PROJECT_PATH}/packages/apps/Launcher3 ${LINKED_PROJECT_PATH}/packages/apps
 
+# 链接 packages/apps/Settings ，用于设置应用的开发。
+mkdir -p ${LINKED_PROJECT_PATH}/packages/apps
+ln -sf ${REAL_PROJECT_PATH}/packages/apps/Settings ${LINKED_PROJECT_PATH}/packages/apps
+
 # 链接 out ，用于给Android Studio添加依赖，解决代码报红的问题。
 mkdir -p ${LINKED_PROJECT_PATH}/out/target/common
 ln -sf ${REAL_PROJECT_PATH}/out/target/common/obj ${LINKED_PROJECT_PATH}/out/target/common/
