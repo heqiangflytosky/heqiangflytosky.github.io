@@ -621,6 +621,7 @@ OverviewProxyService.onStatusBarMotionEvent()
 第二种情况是OverviewProxyService + NotificationPanelViewController 来处理。因为已经设置了shade view可见，然后它就可以接收事件开始处理动画了。此时后面的Down，Move，Up事件都由 shade view 处理了，那么它会OverviewProxyService 收到一个CANCEL事件。
 接下来就是 NotificationPanelViewController 接收Down和Move事件来处理通知面板的整体滑动操作。和状态栏下拉处理比较类似，具体看上面介绍。这种情况下会在 shouldGestureWaitForTouchSlop() 中设置 mExpectingSynthesizedDown = false，那么OverviewProxyService收到cancel事件时就不会处理fling。
 如果 OverviewProxyService 没有收到 CANCEL事件，表示 NotificationPanelViewController 没有来得及去处理事件，那么就在OverviewProxyService.ACTION_UP中处理下拉面板的状态，这就是第一种情况。
+现在来介绍另外一个小知识：为什么同一个事件触发流程会在两个窗口之间跨窗口传递。是因为桌面在向SystemUI传递Down事件时，通过 `setWindowSlippery()` 方法为桌面窗口设置了FLAG_SLIPPERY 属性。设置了这个属性后，如果设置了SystemUI 的View可见，就相当于覆盖在了桌面上面，那么这个事件就会向当前页面（桌面）发送CANCEL事件，把事件分发给覆盖的窗口--SystemUI进行处理。
 
 ## 滑动QS
 
