@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="介绍一些关于处理 ANR 问题的理论知识">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-08-21T07:21:51.912Z">
+<meta property="og:updated_time" content="2022-05-31T06:34:19.332Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化理论篇 -- ANR">
 <meta name="twitter:description" content="介绍一些关于处理 ANR 问题的理论知识">
@@ -439,6 +439,20 @@
 <li>使用 adb bugreprot <file></file></li>
 <li>使用 adb pull /data/anr/traces.txt <file></file></li>
 </ul>
+<p>对于service、broadcast、provider、input发生ANR后，中控系统会马上去抓取现场的信息，用于调试分析。收集的信息包括如下：    </p>
+<ul>
+<li>将am_anr信息输出到EventLog，也就是说ANR触发的时间点最接近的就是EventLog中输出的am_anr信息。</li>
+<li>收集以下重要进程的各个线程调用栈trace信息，保存在data/anr/traces.txt文件 <ul>
+<li>当前发生ANR的进程，system_server进程以及所有persistent进程</li>
+<li>audioserver, cameraserver, mediaserver, surfaceflinger等重要的native进程</li>
+<li>CPU使用率排名前5的进程</li>
+</ul>
+</li>
+<li>将发生ANR的reason以及CPU使用情况信息输出到main log</li>
+<li>将traces文件和CPU使用情况信息保存到dropbox，即data/system/dropbox目录</li>
+<li>对用户可感知的进程则弹出ANR对话框告知用户，对用户不可感知的进程发生ANR则直接杀掉</li>
+</ul>
+<p>整个ANR信息收集过程比较耗时，其中抓取进程的trace信息，每抓取一个等待200ms，可见persistent越多，等待时间越长。关于抓取trace命令，对于Java进程可通过在adb shell环境下执行kill -3 [pid]可抓取相应pid的调用栈；对于Native进程在adb shell环境下执行debuggerd -b [pid]可抓取相应pid的调用栈。对于ANR问题发生后的蛛丝马迹(trace)在traces.txt和dropbox目录中保存记录。<br>有了现场信息，可以调试分析，先定位发生ANR时间点，然后查看trace信息，接着分析是否有耗时的message、binder调用，锁的竞争，CPU资源的抢占，以及结合具体场景的上下文来分析，调试手段就需要针对前面说到的message、binder、锁等资源从系统角度细化更多debug信息。    </p>
 <h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><p>下面分析看一下各种日志对我们分析 ANR 的作用。</p>
 <table>
 <thead>
@@ -552,7 +566,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">synchronized(obj) &#123;</span><br><span class="line">………</span><br><span class="line">obj.wait();</span><br><span class="line">………</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>线程的执行中，先用 synchronized 获得了这个对象的 Monitor（对应于 locked <0x0b2886e9> ）。当执行到 obj.wait(), 线程即放弃了 Monitor的所有权，进入 “wait set”队列（对应于 waiting on <0x0b2886e9> ）。<br>往往在你的程序中，会出现多个类似的线程，他们都有相似的 DUMP信息。这也可能是正常的。比如，在程序中，有多个服务线程，设计成从一个队列里面读取请求数据。这个队列就是 lock以及 waiting on的对象。当队列为空的时候，这些线程都会在这个队列上等待，直到队列有了数据，这些线程被 Notify，当然只有一个线程获得了 lock，继续执行，而其它线程继续等待。</0x0b2886e9></0x0b2886e9></p>
 <h2 id="io-分析"><a href="#io-分析" class="headerlink" title="io 分析"></a>io 分析</h2><p>如果 anr 时你发现 iowait 数值很高（在 30% 以上），这时要注意了，需要分析一下是不是由于 io 操作导致了 anr，看主线程中是否有进行 io 操作。<br>看看当前的调用堆栈，或者在这段ANR点往前看0~4s，看看当时做的什么文件操作，这种场景有遇到过，常见解决方法是对耗时文件操作采取异步操作。<br>假如和有关情况，一般blocked的位置应该是在io文件操作上。<br>iowait 就是系统因为 io 导致的进程 wait。这时候系统在做 io ，导致没有进程在干活，cpu 在执行 idle 进程空转，所以说 iowait 的产生要满足两个条件，一是进程在等 io ，二是等 io 时没有进程可运行。<br>iowait = (cpu idle time)/(all cpu time)。<br>如果想实时查看 IO 读写情况，可以使用 vmstat 命令，此命令还可以查看CPU使用率，内存使用，虚拟内存交换情况等。</p>
-<h2 id="一般分析套路"><a href="#一般分析套路" class="headerlink" title="一般分析套路"></a>一般分析套路</h2>
+<h2 id="一般分析套路"><a href="#一般分析套路" class="headerlink" title="一般分析套路"></a>一般分析套路</h2><p>发生ANR时从trace来看主线程却处于空闲状态或者停留在非耗时代码的原因有哪些？可以是抓取trace过于耗时而错过现场，可以是主线程消息队列堆积大量消息而最后抓取快照一刻只是瞬时状态，可以是广播的“queued-work-looper”一直在处理SP操作。    </p>
+
       
     </div>
 

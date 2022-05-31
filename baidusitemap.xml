@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://yoursite.com/2018/01/08/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/android-performance-optimization-anr/</loc>
+    <lastmod>2022-05-31</lastmod>
+  </url>
+  <url>
     <loc>http://yoursite.com/2021/11/06/Android%20SystemUI/android-systemui-events-transfer-process/</loc>
     <lastmod>2022-05-30</lastmod>
   </url>
@@ -135,10 +139,6 @@
   <url>
     <loc>http://yoursite.com/2018/10/10/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/android-performance-optimization-tools-ram-analysis/</loc>
     <lastmod>2021-09-02</lastmod>
-  </url>
-  <url>
-    <loc>http://yoursite.com/2018/01/08/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/android-performance-optimization-anr/</loc>
-    <lastmod>2021-08-21</lastmod>
   </url>
   <url>
     <loc>http://yoursite.com/2020/04/04/OpenGL/opengl-es-basic-knowledge/</loc>
@@ -1009,11 +1009,11 @@
     <lastmod>2018-05-29</lastmod>
   </url>
   <url>
-    <loc>http://yoursite.com/2018/03/02/Weex/open-source-weex-android-introduction/</loc>
+    <loc>http://yoursite.com/2018/03/15/Weex/open-source-weex-android-init/</loc>
     <lastmod>2018-05-29</lastmod>
   </url>
   <url>
-    <loc>http://yoursite.com/2018/03/15/Weex/open-source-weex-android-init/</loc>
+    <loc>http://yoursite.com/2018/03/02/Weex/open-source-weex-android-introduction/</loc>
     <lastmod>2018-05-29</lastmod>
   </url>
   <url>
@@ -1089,11 +1089,11 @@
     <lastmod>2017-12-01</lastmod>
   </url>
   <url>
-    <loc>http://yoursite.com/2017/01/13/React%20Native/react-native-image/</loc>
+    <loc>http://yoursite.com/2017/01/13/React%20Native/react-native-flexbox/</loc>
     <lastmod>2017-12-01</lastmod>
   </url>
   <url>
-    <loc>http://yoursite.com/2017/01/13/React%20Native/react-native-flexbox/</loc>
+    <loc>http://yoursite.com/2017/01/13/React%20Native/react-native-image/</loc>
     <lastmod>2017-12-01</lastmod>
   </url>
   <url>
