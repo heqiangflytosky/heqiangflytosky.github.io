@@ -71,6 +71,21 @@ ANR 问题发生了，我们首先要获取日志，才能接下来进一步分�
  - 使用 adb bugreprot <file>
  - 使用 adb pull /data/anr/traces.txt <file>
 
+对于service、broadcast、provider、input发生ANR后，中控系统会马上去抓取现场的信息，用于调试分析。收集的信息包括如下：    
+
+ - 将am_anr信息输出到EventLog，也就是说ANR触发的时间点最接近的就是EventLog中输出的am_anr信息。
+ - 收集以下重要进程的各个线程调用栈trace信息，保存在data/anr/traces.txt文件 
+  - 当前发生ANR的进程，system_server进程以及所有persistent进程
+  - audioserver, cameraserver, mediaserver, surfaceflinger等重要的native进程
+  - CPU使用率排名前5的进程
+ - 将发生ANR的reason以及CPU使用情况信息输出到main log
+ - 将traces文件和CPU使用情况信息保存到dropbox，即data/system/dropbox目录
+ - 对用户可感知的进程则弹出ANR对话框告知用户，对用户不可感知的进程发生ANR则直接杀掉
+
+整个ANR信息收集过程比较耗时，其中抓取进程的trace信息，每抓取一个等待200ms，可见persistent越多，等待时间越长。关于抓取trace命令，对于Java进程可通过在adb shell环境下执行kill -3 [pid]可抓取相应pid的调用栈；对于Native进程在adb shell环境下执行debuggerd -b [pid]可抓取相应pid的调用栈。对于ANR问题发生后的蛛丝马迹(trace)在traces.txt和dropbox目录中保存记录。    
+有了现场信息，可以调试分析，先定位发生ANR时间点，然后查看trace信息，接着分析是否有耗时的message、binder调用，锁的竞争，CPU资源的抢占，以及结合具体场景的上下文来分析，调试手段就需要针对前面说到的message、binder、锁等资源从系统角度细化更多debug信息。    
+
+
 ## 小技巧
 
 下面分析看一下各种日志对我们分析 ANR 的作用。
@@ -528,3 +543,4 @@ iowait = (cpu idle time)/(all cpu time)。
 
 ## 一般分析套路
 
+发生ANR时从trace来看主线程却处于空闲状态或者停留在非耗时代码的原因有哪些？可以是抓取trace过于耗时而错过现场，可以是主线程消息队列堆积大量消息而最后抓取快照一刻只是瞬时状态，可以是广播的“queued-work-looper”一直在处理SP操作。    
