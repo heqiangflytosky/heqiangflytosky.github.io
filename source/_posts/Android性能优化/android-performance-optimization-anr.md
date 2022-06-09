@@ -52,7 +52,7 @@ ActivityManagerService.java
  - 主线程被其它线程 Block
  - 被 Binder 对端 Block
  - Binder 被占满导致主线程无法和 SystemServer 通信
- - 得不到系统资源（CPU/RAM/IO）
+ - 得不到系统资源（CPU/RAM/IO）：CPU占用率过高，负载过大，IO操作太多，导致主线程无法得到CPU时间片等系统资源去执行，而产生ANR.
 
 从进程的角度看：
 
@@ -71,7 +71,7 @@ ANR 问题发生了，我们首先要获取日志，才能接下来进一步分�
  - 使用 adb bugreprot <file>
  - 使用 adb pull /data/anr/traces.txt <file>
 
-对于service、broadcast、provider、input发生ANR后，中控系统会马上去抓取现场的信息，用于调试分析。收集的信息包括如下：    
+对于service、broadcast、provider、input发生ANR后，系统会马上去抓取现场的信息，用于调试分析。收集的信息包括如下：    
 
  - 将am_anr信息输出到EventLog，也就是说ANR触发的时间点最接近的就是EventLog中输出的am_anr信息。
  - 收集以下重要进程的各个线程调用栈trace信息，保存在data/anr/traces.txt文件 
@@ -367,6 +367,8 @@ DALVIK THREADS (15):
   at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:873)
 ```
 
+### main 线程分析
+
 **第一行**： `"main" prio=5 tid=1 Sleeping`
 这一行的信息主要包括：
 
@@ -429,7 +431,7 @@ enum ThreadState {
 **第四行**：`  | state=S schedstat=( 173407732 13795308 237 ) utm=14 stm=2 core=5 HZ=100`
 主要信息包括当前线程的上下文信息：
 
- - 分别是线程调度状态（state=S）S表示Sleeping，另外还有 R（Running），D（DEAD）
+ - 分别是线程调度状态（state=S）S表示Sleeping，另外还有 "R (running)", "S (sleeping)", "D (disk sleep)", "T (stopped)", "t (tracing stop)", "Z (zombie)", "X (dead)", "x (dead)", "K (wakekill)", "W (waking)",），通常一般的Process 处于的状态都是S (sleeping), 而如果一旦发现处于如D (disk sleep), T (stopped), Z (zombie) 等就要认真审查。
  - schedstat=( 173407732 13795308 237 ) 从 /proc/[pid]/task/[tid]/schedstat读出，三个值分别表示线程在cpu上执行的时间、线程的等待时间和线程执行的时间片长度，有的android内核版本不支持这项信息，得到的三个值都是0
  - 线程用户态下使用的时间值(单位是jiffies）（utm=14） 
  - 内核态下得调度时间值（stm=2）
@@ -441,23 +443,46 @@ enum ThreadState {
  - 线程栈的地址（stack=0x7ff4d74000-0x7ff4d76000）
  - 栈大小（stackSize=8MB）；
 
-另外，
 
-```
-Total number of allocations 50059
-Total bytes allocated 12MB
-Total bytes freed 977KB
-Free memory 2MB
-Free memory until GC 2MB
-Free memory until OOME 244MB
-Total memory 13MB
-Max memory 256MB
-```
+再后面就是线程的调用栈信息，也是我们分析ANR的关键信息。    
+由于上面的log是在主线程中调用 Thread.sleep 导致的，直接通过调用栈信息就可以定位到问题发生的原因，这里不再介绍。    
+
+### Memory 信息分析
 
 这里介绍了进程的内存使用情况，有时可以辅助我们分析 ANR。
 
-再后面就是线程的调用栈信息，也是我们分析ANR的关键信息。
-由于上面的log是在主线程中调用 Thread.sleep 导致的，直接通过调用栈信息就可以定位到问题发生的原因，这里不再介绍。
+```
+Total number of allocations 50059    //进程创建到现在一共创建了多少对象
+Total bytes allocated 12MB           //进程创建到现在一共申请了多少内存
+Total bytes freed 977KB              //进程创建到现在一共释放了多少内存
+Free memory 2MB                      //不扩展堆的情况下可用的内存
+Free memory until GC 2MB             //GC前的可用内存
+Free memory until OOME 244MB         //OOM之前的可用内存
+Total memory 13MB                    // 当前总内存（已用+可用）
+Max memory 256MB                     //进程最多能申请的内存 
+```
+
+```
+Heap: 0% free, 191MB/192MB; 3566339 objects
+Total GC count: 1279
+Total GC time: 831.277s
+```
+
+关注一下内存使用以及 GC 的情况，如果内存占用很高，GC的时间很长，那么有可能是内存泄漏等原因导致。
+
+### CPU 占用分析
+
+如果 ANR 发生时你发现有个应用占用 CPU 很高，导致发生 ANR 应用的UI线程拿不到 CPU， 从而导致 ANR 发生。
+
+
+## io 分析
+
+如果 anr 时你发现 iowait 数值很高（在 30% 以上），这时要注意了，需要分析一下是不是由于 io 操作导致了 anr，看主线程中是否有进行 io 操作。
+看看当前的调用堆栈，或者在这段ANR点往前看0~4s，看看当时做的什么文件操作，这种场景有遇到过，常见解决方法是对耗时文件操作采取异步操作。
+假如和有关情况，一般blocked的位置应该是在io文件操作上。
+iowait 就是系统因为 io 导致的进程 wait。这时候系统在做 io ，导致没有进程在干活，cpu 在执行 idle 进程空转，所以说 iowait 的产生要满足两个条件，一是进程在等 io ，二是等 io 时没有进程可运行。
+iowait = (cpu idle time)/(all cpu time)。
+如果想实时查看 IO 读写情况，可以使用 vmstat 命令，此命令还可以查看CPU使用率，内存使用，虚拟内存交换情况等。
 
 ## 分析binder调用
 
@@ -502,9 +527,11 @@ context binder
 可以看到通信的binder进程号为 19307，线程号为 19320。
 接下来就可以分析一下 19307 进程，看看 19320 线程进行的一些操作。
 
+`IPCThreadState::talkWithDriver` 一般表示在等待对端进程的响应。
+
 ### binder 线程池占满
 
-另外，如果 Binder 线程池被占满（16个），导致处理不了其他的 binder 请求，从而导致 anr。
+另外，如果 Binder 线程池被占满（16个），导致主线程处理不了其他的 binder 请求，从而导致 anr。
 判断Binder是否用完，可以在trace中搜索关键字"binder_f"，如果搜索到则表示已经用完，然后就要找log其他地方看是谁一直在消耗binder或者是有死锁发生。
 
 ## 线程状态分析
@@ -531,15 +558,6 @@ obj.wait();
 
 线程的执行中，先用 synchronized 获得了这个对象的 Monitor（对应于 locked <0x0b2886e9> ）。当执行到 obj.wait(), 线程即放弃了 Monitor的所有权，进入 “wait set”队列（对应于 waiting on <0x0b2886e9> ）。
 往往在你的程序中，会出现多个类似的线程，他们都有相似的 DUMP信息。这也可能是正常的。比如，在程序中，有多个服务线程，设计成从一个队列里面读取请求数据。这个队列就是 lock以及 waiting on的对象。当队列为空的时候，这些线程都会在这个队列上等待，直到队列有了数据，这些线程被 Notify，当然只有一个线程获得了 lock，继续执行，而其它线程继续等待。
-
-## io 分析
-
-如果 anr 时你发现 iowait 数值很高（在 30% 以上），这时要注意了，需要分析一下是不是由于 io 操作导致了 anr，看主线程中是否有进行 io 操作。
-看看当前的调用堆栈，或者在这段ANR点往前看0~4s，看看当时做的什么文件操作，这种场景有遇到过，常见解决方法是对耗时文件操作采取异步操作。
-假如和有关情况，一般blocked的位置应该是在io文件操作上。
-iowait 就是系统因为 io 导致的进程 wait。这时候系统在做 io ，导致没有进程在干活，cpu 在执行 idle 进程空转，所以说 iowait 的产生要满足两个条件，一是进程在等 io ，二是等 io 时没有进程可运行。
-iowait = (cpu idle time)/(all cpu time)。
-如果想实时查看 IO 读写情况，可以使用 vmstat 命令，此命令还可以查看CPU使用率，内存使用，虚拟内存交换情况等。
 
 ## 一般分析套路
 
