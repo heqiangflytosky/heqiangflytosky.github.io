@@ -17,6 +17,7 @@ Android 中关于的工具很多，参考下表。所以我们要灵活地选用
 |:-------------:|:-------------:|:-------------:|:-------------:|
 | top/procrank | 内存占用过大，内存泄漏 | 发现 |  |
 | meminfo |  |  |  |
+| dmabug_dump | 分析ION内存 |  |  |
 | StrickMode | Activity 内存泄漏 | 自动发现+初步定位 |  |
 | LeakCanary | Activity 内存泄漏 | 自动发现+定位 |  |
 | Systrace | GC导致的卡顿 | 发现 |  |
@@ -114,6 +115,8 @@ Total RAM: 7,791,836K (status normal)
      ZRAM:        12K physical used for         0K in swap (4,194,300K total swap)
    Tuning: 256 (large 512), oom   322,560K, restore limit   107,520K (high-end-gfx)
 ```
+
+ION:
 
 我们可以使用下面的命令来查看某个进程使用内存的情况：
 
