@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="孤舟蓑笠翁，独钓寒江雪">
 <meta property="og:description" content="内存查看和分析工具汇总，并简单介绍一下procrank和dumpsys meminfo的用法">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-09-02T07:50:41.215Z">
+<meta property="og:updated_time" content="2022-06-28T02:48:17.083Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 性能优化工具篇 -- 内存查看和分析工具">
 <meta name="twitter:description" content="内存查看和分析工具汇总，并简单介绍一下procrank和dumpsys meminfo的用法">
@@ -426,6 +426,12 @@
 <td style="text-align:center"></td>
 </tr>
 <tr>
+<td style="text-align:center">dmabug_dump</td>
+<td style="text-align:center">分析ION内存</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
 <td style="text-align:center">StrickMode</td>
 <td style="text-align:center">Activity 内存泄漏</td>
 <td style="text-align:center">自动发现+初步定位</td>
@@ -490,6 +496,7 @@
 <h2 id="showmap"><a href="#showmap" class="headerlink" title="showmap"></a>showmap</h2><p>adb shell showmap <pid>  查看一个进程的showmap，这对于我们来说非常有用，可以确定进程中哪些库占用内存比较多。</pid></p>
 <h2 id="dumpsys-meminfo"><a href="#dumpsys-meminfo" class="headerlink" title="dumpsys meminfo"></a>dumpsys meminfo</h2><p>可以使用 <code>adb shell dumpsys meminfo</code> 来看系统内所有进程的内存使用情况：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Applications Memory Usage (in Kilobytes):</span><br><span class="line">Uptime: 3915314 Realtime: 3950084</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Total RSS by process:</span><br><span class="line">    524,336K: system (pid 1117)</span><br><span class="line">    445,240K: com.android.systemui (pid 17043)</span><br><span class="line">    ......</span><br><span class="line">Total RSS by OOM adjustment:</span><br><span class="line">  3,059,892K: Native</span><br><span class="line">        179,708K: zygote64 (pid 760)</span><br><span class="line">        159,160K: zygote (pid 761)</span><br><span class="line">        ......</span><br><span class="line">Total RSS by category:</span><br><span class="line">  3,307,236K: .so mmap</span><br><span class="line">  1,637,356K: Native</span><br><span class="line">  1,605,492K: .jar mmap</span><br><span class="line">  ......</span><br><span class="line">Total PSS by process:</span><br><span class="line">    288,965K: com.android.systemui (pid 17043)</span><br><span class="line">    256,555K: system (pid 1117)</span><br><span class="line">    ......</span><br><span class="line">Total PSS by OOM adjustment:</span><br><span class="line">    819,647K: Native</span><br><span class="line">         79,490K: logd (pid 617)</span><br><span class="line">         61,451K: android.hardware.camera.provider@2.4-service_64 (pid 896)</span><br><span class="line">    .....</span><br><span class="line">Total RAM: 7,791,836K (status normal)</span><br><span class="line"> Free RAM: 3,359,799K (  209,011K cached pss + 2,498,404K cached kernel +   652,384K free)</span><br><span class="line">      ION:   183,008K (   18,008K mapped +   165,000K unmapped +         0K pools)</span><br><span class="line"> Used RAM: 4,059,695K (2,771,419K used pss + 1,288,276K kernel)</span><br><span class="line"> Lost RAM:   372,330K</span><br><span class="line">     ZRAM:        12K physical used for         0K in swap (4,194,300K total swap)</span><br><span class="line">   Tuning: 256 (large 512), oom   322,560K, restore limit   107,520K (high-end-gfx)</span><br></pre></td></tr></table></figure>
+<p>ION:</p>
 <p>我们可以使用下面的命令来查看某个进程使用内存的情况：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell dumpsys meminfo -a &lt;进程名称&gt;</span><br></pre></td></tr></table></figure>
 <p>输出结果：</p>
