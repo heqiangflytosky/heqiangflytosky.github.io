@@ -86,6 +86,7 @@ date: 2015-3-7 10:00:00
 
  - `git commit --amend` ：对最后一次的 commit进行修改
  - `git commit --amend -m "Test"` 对最后一次的 commit进行修改，并修改提交信息
+ - `git commit --amend --no-edit`对最后一次的 commit进行修改，不对修改提交信息修改直接commit
  - `git commit -s`：添加 Signed-off-by: 信息
 
 ## git rebase
@@ -120,6 +121,7 @@ $ git rebase origin
 
  - `git push origin --delete <branch_name>`：删除远程分支
  - `git push origin <branch_name>`：将本地分支推到远程，然后再调用 `git branch --set-upstream-to=origin/V3.3 V3.3` 将本地分支和远程分支关联
+ - `git push -o topic=systemui-migrate`:添加topic信息，可以把一些提交按照topic归类
 
 ## patch
 `git format-patch -n`：为前面的n次提交生成一个patch
